@@ -26,6 +26,7 @@
     "test.unit.ui": "vitest --ui components",
     "test": "bun run test.unit --run",
     "ci": "CI=true bun run test.e2e",
+    "postinstall": "npx playwright install",
     "qwik": "qwik"
   },
   "devDependencies": {
