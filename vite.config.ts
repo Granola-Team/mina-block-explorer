@@ -16,5 +16,9 @@ export default defineConfig(() => {
         "Cache-Control": "public, max-age=600",
       },
     },
+    test: {
+      exclude: ['tests/*','node_modules/*'],
+      include: ['src/**/*.{test,spec}.?(c|m)[jt]s?(x)']
+    },
   };
 });
