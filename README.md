@@ -1,5 +1,24 @@
 # Mina Block Explorer
-For explorering the MINA blockchain
 
-# Quickstart
+The Mina Block Explorer is a website that allows users to explore and
+view details about blocks, transactions, addresses, validators and
+other relevant network information. It provides a user-friendly user
+interface to interact with the Mina blockchain. This document
+describes how to build such an application.
+
+## Quickstart
+
 * `nix-shell --command "bun start"`
+
+## License (See LICENSE file for full license)
+
+Copyright 2023 Mina Foundation, Inc.
+
+Free use of this software is granted under the terms of the Mozilla
+Public License 2.0.
+
+## Contributing
+
+This project uses [C4(Collective Code Construction
+Contract)](https://rfc.zeromq.org/spec/42/) process for contributions.
+
