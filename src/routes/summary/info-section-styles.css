@@ -1,0 +1,10 @@
+.summary-section__info {
+    display: flex;
+}
+.summary-section__label,.summary-section__data{
+    margin: 0.5rem;
+    margin-left: 0;
+}
+.summary-section__label {
+    font-weight: bold;
+}
