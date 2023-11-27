@@ -27,6 +27,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: bun ci
+    - run: bun install
     - run: bun run build.client
+    - run: bun ci
     - run: bun test
