@@ -21,22 +21,31 @@
     "lint": "eslint \"src/**/*.ts*\"",
     "preview": "qwik build preview && vite preview --open",
     "start": "vite --open --mode ssr",
+    "test.e2e": "playwright test",
+    "test.unit": "vitest components",
+    "test.unit.ui": "vitest --ui components",
+    "test": "bun run test.unit --run",
+    "ci": "CI=true bun run test.e2e",
     "qwik": "qwik"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.8.1",
     "@builder.io/qwik": "^1.2.19",
     "@builder.io/qwik-city": "^1.2.19",
+    "@playwright/test": "^1.38.1",
     "@types/eslint": "^8.44.4",
     "@types/node": "^20.8.4",
     "@typescript-eslint/eslint-plugin": "^6.7.5",
     "@typescript-eslint/parser": "^6.7.5",
+    "@vitest/ui": "^0.34.6",
     "eslint": "^8.51.0",
     "eslint-plugin-qwik": "^1.2.19",
     "prettier": "^3.0.3",
     "typescript": "^5.2.2",
     "undici": "^5.26.0",
     "vite": "^4.4.11",
-    "vite-tsconfig-paths": "^4.2.1"
+    "vite-tsconfig-paths": "^4.2.1",
+    "vitest": "^0.34.6"
   },
   "dependencies": {
     "sharp": "latest"
