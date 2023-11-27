@@ -22,7 +22,7 @@
     "preview": "qwik build preview && vite preview --open",
     "start": "vite --open --mode ssr",
     "test.e2e": "npx playwright test",
-    "test.unit": "vitest components",
+    "test.unit": "vitest --run",
     "test.unit.ui": "vitest --ui components",
     "test": "bun run test.unit --run",
     "ci": "CI=true bun run test.e2e",
