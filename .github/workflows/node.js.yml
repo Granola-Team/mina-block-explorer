@@ -29,5 +29,5 @@ jobs:
         cache: 'npm'
     - run: bun install
     - run: bun run build.client
-    - run: bun ci
-    - run: bun test
+    - run: bun run ci
+    - run: bun run test
