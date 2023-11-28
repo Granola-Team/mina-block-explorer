@@ -1,6 +1,5 @@
 import { component$, useResource$, Resource } from "@builder.io/qwik";
-import InfoSection from "./info-section";
-
+import InfoSection from "../../components/info-section/info-section";
 
 export default component$(() => {
 

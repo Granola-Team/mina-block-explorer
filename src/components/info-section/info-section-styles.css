@@ -1,0 +1,11 @@
+.info-section__info {
+    display: flex;
+    align-items: baseline;
+}
+.info-section__label,.info-section__data{
+    margin: 0.5rem;
+    margin-left: 0;
+}
+.info-section__label {
+    font-weight: bold;
+}
