@@ -4,7 +4,7 @@ import styles from './info-section-styles.css?inline';
 
 interface InfoProps {
     label: string
-    value: string|number
+    value?: string|number
 }
 
 export default component$<InfoProps>((props) => {
