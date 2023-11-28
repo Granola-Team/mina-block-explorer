@@ -5,9 +5,6 @@
     "node": ">=15.0.0"
   },
   "private": true,
-  "trustedDependencies": [
-    "sharp"
-  ],
   "scripts": {
     "build": "qwik build",
     "build.client": "vite build",
@@ -21,12 +18,12 @@
     "lint": "eslint \"src/**/*.ts*\"",
     "preview": "qwik build preview && vite preview --open",
     "start": "vite --open --mode ssr",
-    "test.e2e": "npx playwright test",
+    "test.e2e": "bunx playwright test",
     "test.unit": "vitest --run",
     "test.unit.ui": "vitest --ui components",
     "test": "bun run test.unit --run",
     "ci": "CI=true bun run test.e2e",
-    "postinstall": "npx playwright install",
+    "postinstall": "bunx playwright install",
     "qwik": "qwik"
   },
   "devDependencies": {
@@ -49,6 +46,6 @@
     "vitest": "^0.34.6"
   },
   "dependencies": {
-    "sharp": "latest"
+    "sharp": "^0.32.6"
   }
 }

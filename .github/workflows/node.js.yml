@@ -22,12 +22,14 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - uses: oven-sh/setup-bun@v1
+    - uses: Borales/actions-yarn@v4.2.0      
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: bun install
+    - run: yarn add sharp #workaround to get sharp properly installed
     - run: bun run build.client
     - run: bun run ci
     - run: bun run test
