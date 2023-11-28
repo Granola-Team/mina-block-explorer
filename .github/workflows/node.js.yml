@@ -28,10 +28,10 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: bun install
-    - name: Yarn setup
-      uses: DerYeger/yarn-setup-action@master
+    - name: add sharp
+      uses: CultureHQ/actions-yarn@master
       with:
-        node-version: ${{ matrix.node-version }}    
+        args: add sharp #workaround   
     - run: bun run build.client
     - run: bun run ci
     - run: bun run test
