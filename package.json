@@ -20,7 +20,7 @@
     "start": "vite --open --mode ssr",
     "test.e2e": "bunx playwright test",
     "test.unit": "vitest --run",
-    "test.unit.ui": "vitest --ui components",
+    "test.unit.ui": "vitest --ui",
     "test": "bun run test.unit --run",
     "ci": "CI=true bun run test.e2e",
     "postinstall": "bunx playwright install",
