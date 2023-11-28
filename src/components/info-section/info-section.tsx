@@ -12,7 +12,7 @@ export default component$<InfoProps>((props) => {
     return (
         <div class="info-section__info">
             <label class="info-section__label" for="totalCurrency">{props.label}:</label>
-            <div class="info-section__data" id="totalCurrency">{props?.value}</div>
+            {props?.value && <div class="info-section__data" id="totalCurrency">{props.value}</div>}
             <Slot/>
         </div>
     )
