@@ -1,5 +1,5 @@
 [package]
-name = "leptos-tutorial"
+name = "tailwind-csr-trunk"
 version = "0.1.0"
 edition = "2021"
 
