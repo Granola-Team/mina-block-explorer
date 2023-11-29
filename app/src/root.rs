@@ -8,7 +8,7 @@ use crate::summary::Summary;
 pub fn Root() -> impl IntoView {
   view! {
     <Nav />
-    <main>
+    <main class="m-1.5">
       <Router>
         <Routes>
           <Route path="/" view=Summary />

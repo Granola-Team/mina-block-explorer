@@ -48,8 +48,8 @@ enum ItemValue {
 #[component]
 fn Item(label: String, value: ItemValue, id: String) -> impl IntoView {
     view! {
-        <div>
-            <label for={id.clone()}>{label}</label>
+        <div class="flex">
+            <label for={id.clone()}>{label}:</label>
             <div id={id.clone()}>{
                 match value {
                     ItemValue::StrValue(s) => view! {{s}}.into_view(),
@@ -74,7 +74,7 @@ pub fn Summary() -> impl IntoView {
                     <div>"Loading..." </div>
                 }.into_view(),
                 Some(Ok(summary)) => view! {
-                    <section>
+                    <section class="grid grid-cols-2 gap-1">
                         <Item id="blockchainLength".to_string() label="Height".to_string() value={ItemValue::Int64Value(summary.blockchainLength)} />
                         <Item id="circulatingSupply".to_string() label="Circulating Supply".to_string() value={ItemValue::StrValue(summary.circulatingSupply)} />
                         <Item id="epoch".to_string() label="Epoch".to_string() value={ItemValue::Int16Value(summary.epoch)} />
