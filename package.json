@@ -1,8 +1,8 @@
 {
-  "name": "my-qwik-empty-starter",
-  "description": "App with Routing built-in ready to create your app",
+  "name": "mina-block-explorer",
+  "description": "A Mina Blockchain Explorer",
   "engines": {
-    "node": ">=15.0.0"
+    "node": ">=16.0.0"
   },
   "private": true,
   "scripts": {
