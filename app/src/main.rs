@@ -1,5 +1,11 @@
 use leptos::*;
+mod root;
+mod nav;
+mod summary;
+
+use root::Root;
 
 fn main() {
-    mount_to_body(|| view! { <p>"Hello, world!"</p> })
+    leptos::mount_to_body(|| view! { <Root/> })
 }
+
