@@ -1,27 +1,6 @@
 use leptos::*;
-use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Serialize, Debug, Clone)]
-#[allow(non_snake_case)]
-struct BlockchainSummary {
-    pub blockchainLength: u64,
-    pub circulatingSupply: String,
-    pub epoch: u16,
-    pub slot: u16,
-    pub totalCurrency: String,
-}
-
-#[derive(Serialize, Deserialize, Clone, Debug)]
-enum MyError {
-    NetworkError(String),
-    ParseError(String), // other error variants
-}
-
-impl From<reqwest::Error> for MyError {
-    fn from(err: reqwest::Error) -> Self {
-        MyError::NetworkError(err.to_string())
-    }
-}
+use crate::api_models::{BlockchainSummary, MyError};
 
 async fn load_data() -> Result<BlockchainSummary, MyError> {
     let response = reqwest::get("https://api.minaexplorer.com/summary")
