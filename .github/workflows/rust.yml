@@ -16,7 +16,25 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 18
     - name: Build
-      run: cd app && cargo build --verbose
+      working-directory: app/
+      run: |
+        cargo build
+        cargo install trunk
     - name: Run tests
-      run: cd app && cargo test --verbose
+      working-directory: app/
+      run: cargo test --verbose
+    - name: Npm install
+      working-directory: app/
+      run: npm install
+    - name: Install playwright deps
+      working-directory: app/
+      run: npx playwright install --with-deps
+    - name: Run playwright tests
+      working-directory: app/
+      run: |
+        rustup target add wasm32-unknown-unknown
+        npx playwright test
