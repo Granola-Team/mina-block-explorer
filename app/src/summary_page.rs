@@ -19,30 +19,34 @@ async fn load_data() -> Result<BlockchainSummary, MyError> {
 }
 
 #[component]
-pub fn Summary() -> impl IntoView {
+pub fn SummaryPage() -> impl IntoView {
     let blockchain_summary_resource: Resource<(), Result<BlockchainSummary, MyError>> =
         create_resource(|| (), |_| async move { load_data().await });
 
     view! {
         <h1>Summary</h1>
+        {move || match blockchain_summary_resource.get() {
+            None => view! {
+                <div>"Loading..." </div>
+            }.into_view(),
+            Some(Ok(summary)) => view! { <SummaryGrid summary=summary /> },
+            Some(Err(my_error)) => view! {
+                <div> { format!("Error: {:#?}", my_error)}</div>
+            }.into_view()
+        }}
+    }
+}
 
-            {move || match blockchain_summary_resource.get() {
-                None => view! {
-                    <div>"Loading..." </div>
-                }.into_view(),
-                Some(Ok(summary)) => view! {
-                    <section class="grid grid-cols-2 gap-1">
-                        <SummaryItem id="blockchainLength".to_string() label="Height".to_string() value={SummaryItemKind::Int64Value(summary.blockchainLength)} />
-                        <SummaryItem id="circulatingSupply".to_string() label="Circulating Supply".to_string() value={SummaryItemKind::StrValue(summary.circulatingSupply)} />
-                        <SummaryItem id="epoch".to_string() label="Epoch".to_string() value={SummaryItemKind::Int16Value(summary.epoch)} />
-                        <SummaryItem id="slot".to_string() label="Slot".to_string() value={SummaryItemKind::Int16Value(summary.slot)} />
-                        <SummaryItem id="totalCurrency".to_string() label="Total Currency".to_string() value={SummaryItemKind::StrValue(summary.totalCurrency)} />
-                    </section>
-                }.into_view(),
-                Some(Err(my_error)) => view! {
-                    <div> { format!("Error: {:#?}", my_error)}</div>
-                }.into_view()
-            }}
+#[component]
+fn SummaryGrid(summary: BlockchainSummary) -> impl IntoView {
+    view! {
+        <section class="grid grid-cols-2 gap-1">
+            <SummaryItem id="blockchainLength".to_string() label="Height".to_string() value={SummaryItemKind::Int64Value(summary.blockchainLength)} />
+            <SummaryItem id="circulatingSupply".to_string() label="Circulating Supply".to_string() value={SummaryItemKind::StrValue(summary.circulatingSupply)} />
+            <SummaryItem id="epoch".to_string() label="Epoch".to_string() value={SummaryItemKind::Int16Value(summary.epoch)} />
+            <SummaryItem id="slot".to_string() label="Slot".to_string() value={SummaryItemKind::Int16Value(summary.slot)} />
+            <SummaryItem id="totalCurrency".to_string() label="Total Currency".to_string() value={SummaryItemKind::StrValue(summary.totalCurrency)} />
+        </section>
     }
 }
 
