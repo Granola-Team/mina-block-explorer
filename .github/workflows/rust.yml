@@ -2,9 +2,9 @@ name: Rust
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "leptos-reset" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "leptos-reset" ]
 
 env:
   CARGO_TERM_COLOR: always
