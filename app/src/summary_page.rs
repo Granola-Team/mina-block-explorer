@@ -64,11 +64,16 @@ fn SummaryItem(label: String, value: SummaryItemKind, id: String) -> impl IntoVi
             <label for={id.clone()}>{label}:</label>
             <div id={id.clone()}>{
                 match value {
-                    SummaryItemKind::StrValue(s) => view! {{s}}.into_view(),
-                    SummaryItemKind::Int64Value(i) => view! {{i.to_string()}}.into_view(),
-                    SummaryItemKind::Int16Value(i) => view! {{i.to_string()}}.into_view()
+                    SummaryItemKind::StrValue(s) => s,
+                    SummaryItemKind::Int64Value(i) => i.to_string(),
+                    SummaryItemKind::Int16Value(i) => i.to_string()
                 }
             }</div>
         </div>
     }
+}
+
+#[test]
+fn fake_test() {
+    assert_eq!(true, true)
 }
