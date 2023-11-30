@@ -2,6 +2,7 @@ use leptos::*;
 mod root;
 mod nav;
 mod summary;
+mod api_models;
 
 use root::Root;
 
