@@ -18,28 +18,6 @@ async fn load_data() -> Result<BlockchainSummary, MyError> {
     }
 }
 
-enum ItemValue {
-    StrValue(String),
-    Int64Value(u64),
-    Int16Value(u16),
-}
-
-#[component]
-fn Item(label: String, value: ItemValue, id: String) -> impl IntoView {
-    view! {
-        <div class="flex">
-            <label for={id.clone()}>{label}:</label>
-            <div id={id.clone()}>{
-                match value {
-                    ItemValue::StrValue(s) => view! {{s}}.into_view(),
-                    ItemValue::Int64Value(i) => view! {{i.to_string()}}.into_view(),
-                    ItemValue::Int16Value(i) => view! {{i.to_string()}}.into_view()
-                }
-            }</div>
-        </div>
-    }
-}
-
 #[component]
 pub fn Summary() -> impl IntoView {
     let blockchain_summary_resource: Resource<(), Result<BlockchainSummary, MyError>> =
@@ -54,16 +32,39 @@ pub fn Summary() -> impl IntoView {
                 }.into_view(),
                 Some(Ok(summary)) => view! {
                     <section class="grid grid-cols-2 gap-1">
-                        <Item id="blockchainLength".to_string() label="Height".to_string() value={ItemValue::Int64Value(summary.blockchainLength)} />
-                        <Item id="circulatingSupply".to_string() label="Circulating Supply".to_string() value={ItemValue::StrValue(summary.circulatingSupply)} />
-                        <Item id="epoch".to_string() label="Epoch".to_string() value={ItemValue::Int16Value(summary.epoch)} />
-                        <Item id="slot".to_string() label="Slot".to_string() value={ItemValue::Int16Value(summary.slot)} />
-                        <Item id="totalCurrency".to_string() label="Total Currency".to_string() value={ItemValue::StrValue(summary.totalCurrency)} />
+                        <SummaryItem id="blockchainLength".to_string() label="Height".to_string() value={SummaryItemKind::Int64Value(summary.blockchainLength)} />
+                        <SummaryItem id="circulatingSupply".to_string() label="Circulating Supply".to_string() value={SummaryItemKind::StrValue(summary.circulatingSupply)} />
+                        <SummaryItem id="epoch".to_string() label="Epoch".to_string() value={SummaryItemKind::Int16Value(summary.epoch)} />
+                        <SummaryItem id="slot".to_string() label="Slot".to_string() value={SummaryItemKind::Int16Value(summary.slot)} />
+                        <SummaryItem id="totalCurrency".to_string() label="Total Currency".to_string() value={SummaryItemKind::StrValue(summary.totalCurrency)} />
                     </section>
                 }.into_view(),
                 Some(Err(my_error)) => view! {
                     <div> { format!("Error: {:#?}", my_error)}</div>
                 }.into_view()
             }}
+    }
+}
+
+
+enum SummaryItemKind {
+    StrValue(String),
+    Int64Value(u64),
+    Int16Value(u16),
+}
+
+#[component]
+fn SummaryItem(label: String, value: SummaryItemKind, id: String) -> impl IntoView {
+    view! {
+        <div class="flex">
+            <label for={id.clone()}>{label}:</label>
+            <div id={id.clone()}>{
+                match value {
+                    SummaryItemKind::StrValue(s) => view! {{s}}.into_view(),
+                    SummaryItemKind::Int64Value(i) => view! {{i.to_string()}}.into_view(),
+                    SummaryItemKind::Int16Value(i) => view! {{i.to_string()}}.into_view()
+                }
+            }</div>
+        </div>
     }
 }
