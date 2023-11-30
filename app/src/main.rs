@@ -1,7 +1,8 @@
 use leptos::*;
 mod root;
 mod nav;
-mod summary;
+mod summary_page;
+mod api_models;
 
 use root::Root;
 
