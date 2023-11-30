@@ -904,6 +904,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6877bb514081ee2a7ff5ef9de3281f14a4dd4bceac4c09388074a6b5df8a139a"
 
 [[package]]
+name = "mina-block-explorer"
+version = "0.1.0"
+dependencies = [
+ "leptos",
+ "leptos_router",
+ "reqwest",
+ "serde",
+]
+
+[[package]]
 name = "minimal-lexical"
 version = "0.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1583,16 +1593,6 @@ checksum = "a75fb188eb626b924683e3b95e3a48e63551fcfb51949de2f06a9d91dbee93c9"
 dependencies = [
  "core-foundation-sys",
  "libc",
-]
-
-[[package]]
-name = "tailwind-csr-trunk"
-version = "0.1.0"
-dependencies = [
- "leptos",
- "leptos_router",
- "reqwest",
- "serde",
 ]
 
 [[package]]

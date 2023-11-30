@@ -1,5 +1,5 @@
 [package]
-name = "tailwind-csr-trunk"
+name = "mina-block-explorer"
 version = "0.1.0"
 edition = "2021"
 
