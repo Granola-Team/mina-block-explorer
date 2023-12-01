@@ -8,7 +8,18 @@ describes how to build such an application.
 
 ## Quickstart
 
-* `nix-shell --command "bun start"`
+* Install Rust 
+```
+curl https://sh.rustup.rs -sSf | sh
+source "$HOME/.cargo/env"
+```
+
+* Serve app 
+```
+cd app 
+cargo build
+trunk serve --open
+```
 
 ## License (See LICENSE file for full license)
 
@@ -21,4 +32,3 @@ Public License 2.0.
 
 This project uses [C4(Collective Code Construction
 Contract)](https://rfc.zeromq.org/spec/42/) process for contributions.
-
