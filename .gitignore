@@ -1,2 +1,7 @@
 app/dist
 app/target
+app/node_modules/
+app/test-results/
+app/playwright-report/
+app/blob-report/
+app/playwright/.cache/
