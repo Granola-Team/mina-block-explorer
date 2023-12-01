@@ -1,0 +1,40 @@
+name: Rust
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 18
+    - name: Build
+      working-directory: app/
+      run: |
+        cargo build
+        cargo install trunk
+    - name: Run tests
+      working-directory: app/
+      run: cargo test --verbose
+    - name: Npm install
+      working-directory: app/
+      run: npm install
+    - name: Install playwright deps
+      working-directory: app/
+      run: npx playwright install --with-deps
+    - name: Run playwright tests
+      working-directory: app/
+      run: |
+        rustup target add wasm32-unknown-unknown
+        npx playwright test
