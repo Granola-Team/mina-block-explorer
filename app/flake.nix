@@ -5,9 +5,13 @@
     nixpkgs.url      = "github:NixOS/nixpkgs/nixos-unstable";
     rust-overlay.url = "github:oxalica/rust-overlay";
     flake-utils.url  = "github:numtide/flake-utils";
+    flake-compat     = {
+      url = "github:edolstra/flake-compat";
+      flake = false;
+    };
   };
 
-  outputs = { self, nixpkgs, rust-overlay, flake-utils, ... }:
+  outputs = { self, nixpkgs, rust-overlay, flake-utils, flake-compat, ... }:
     flake-utils.lib.eachDefaultSystem (system:
       let
         overlays = [ (import rust-overlay) ];
