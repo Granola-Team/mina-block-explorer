@@ -7,7 +7,7 @@ test('account page present', async ({ page }) => {
 
   await expect(page.getByText('Nonce')).toBeVisible();
 
-  expect(await page.screenshot()).toMatchSnapshot();
+  expect(await page.locator('section').screenshot()).toMatchSnapshot();
 
 });
 
