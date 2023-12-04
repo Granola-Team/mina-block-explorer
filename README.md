@@ -21,6 +21,23 @@ cargo build
 trunk serve --open
 ```
 
+## Nix flakes
+
+This project utilizes Nix Flakes for development and building. Install
+Nix [here](https://nixos.org/download.html) and enable Flakes using
+the guide [here](https://nixos.wiki/wiki/Flakes). No additional
+dependencies are needed.
+
+### Setting Up the Development Environment
+
+Create your development environment using `nix develop`. This prepares
+your system with the necessary dependencies, compilers, and
+development tools, eliminating the need for an independent Rust
+installation. For VSCode, enhance your experience with the `Nix
+Environment Selector` extension by linking it to
+`shell.nix`. Alternatively, configure your IDE environment with
+`direnv`.
+
 ## License (See LICENSE file for full license)
 
 Copyright 2023 Mina Foundation, Inc.
