@@ -134,7 +134,6 @@ pub fn AccountSummary() -> impl IntoView {
 
     view! {
         <h1>"Account Summary"</h1>
-        <div>{format!("{}", fixture_data_switch)}</div>
         {move || match resource.get() {
             None => view! { <div>"Loading"</div>}.into_view(),
             Some(Ok(res)) => view! { <AccountSummarySection summary=res /> },
