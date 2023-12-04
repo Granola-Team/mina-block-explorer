@@ -21,6 +21,12 @@ cargo build
 trunk serve --open
 ```
 
+* Playwright Tests
+```
+cd app
+npx playwright test
+```
+
 ## Nix flakes
 
 This project utilizes Nix Flakes for development and building. Install
