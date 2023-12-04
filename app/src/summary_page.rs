@@ -1,6 +1,7 @@
 use leptos::*;
 
 use crate::api_models::{BlockchainSummary, MyError};
+use crate::summary_item::{SummaryItem,SummaryItemKind};
 
 async fn load_data() -> Result<BlockchainSummary, MyError> {
     let response = reqwest::get("https://api.minaexplorer.com/summary")
@@ -47,29 +48,6 @@ fn SummaryGrid(summary: BlockchainSummary) -> impl IntoView {
             <SummaryItem id="slot".to_string() label="Slot".to_string() value={SummaryItemKind::Int16Value(summary.slot)} />
             <SummaryItem id="totalCurrency".to_string() label="Total Currency".to_string() value={SummaryItemKind::StrValue(summary.totalCurrency)} />
         </section>
-    }
-}
-
-
-enum SummaryItemKind {
-    StrValue(String),
-    Int64Value(u64),
-    Int16Value(u16),
-}
-
-#[component]
-fn SummaryItem(label: String, value: SummaryItemKind, id: String) -> impl IntoView {
-    view! {
-        <div class="flex">
-            <label for={id.clone()}>{label}:</label>
-            <div id={id.clone()}>{
-                match value {
-                    SummaryItemKind::StrValue(s) => s,
-                    SummaryItemKind::Int64Value(i) => i.to_string(),
-                    SummaryItemKind::Int16Value(i) => i.to_string()
-                }
-            }</div>
-        </div>
     }
 }
 
