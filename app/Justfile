@@ -10,7 +10,7 @@ clean:
 test: test-unit
 
 test-e2e:
-  npm ci
+  npm install
   npx playwright install --with-deps
   npx playwright test
 
