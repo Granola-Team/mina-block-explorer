@@ -61,32 +61,9 @@ async fn load_data(id: &str) -> Result<AccountResponse, MyError> {
     }
 }
 
-async fn load_fixture_data() -> Result<AccountResponse, MyError> {
-    let fixture_account_balance = AccountBalance {
-        total: String::from("358.334")
-    };
-    let fixture_account_summary = AccountSummary {
-        publicKey: String::from("B62qpWaQoQoPL5AGta7Hz2DgJ9CJonpunjzCGTdw8KiCCD1hX8fNHuR"),
-        balance: fixture_account_balance,
-        nonce: 36,
-        countPendingTransactions: 1,
-        receiptChainHash: String::from("2mzubGsgiNhFjoJAqzYsVi97yMUMSwydjMtzybB6wb4SYgBhUY9v"),
-        delegate: String::from("B62qopHVr6nGCsQgrvsBsoxDm1E5CEdMkDSN3jneRnxKpR5iiXnTbas"),
-        votingFor: String::from("3NK2tkzqqK5spR2sZ7tujjqPksL45M3UUrcA4WhCkeiPtnugyE2x"),
-        totalTx: 78,
-        username: String::from("OKEX Wallet")
-    };
-    let fixture_account_response = AccountResponse {
-        account: fixture_account_summary
-    };
-
-    Ok(fixture_account_response)
-}
-
 #[component]
 pub fn AccountSummary() -> impl IntoView {
     let url_params = use_params::<URLParams>();
-    let q_params = use_query::<QueryParams>();
 
     let public_key_fn = move || {
         url_params.with(|url_params| {
@@ -97,23 +74,9 @@ pub fn AccountSummary() -> impl IntoView {
         })
     };
 
-    let use_fixture_data_fn = move || {
-        q_params.with(|q_params| {
-            q_params
-                .as_ref()
-                .map(|q_params| q_params.f.clone())
-                .unwrap_or_default()
-        })
-    };
-
     let public_key = match public_key_fn() {
         Some(pc) => pc,
         None => todo!(),
-    };
-
-    let fixture_data_switch: bool = match use_fixture_data_fn() {
-        Some(f) => f,
-        None => false
     };
 
     let resource: Resource<(), Result<AccountResponse, MyError>> = {
@@ -122,12 +85,7 @@ pub fn AccountSummary() -> impl IntoView {
             || (),
             move |_| {
                 let public_key_for_async = public_key_clone.clone();
-                async move { 
-                    match fixture_data_switch {
-                        true => load_fixture_data().await,
-                        false => load_data(&public_key_for_async).await 
-                    }
-                }
+                async move {  load_data(&public_key_for_async).await }
             },
         )
     };
