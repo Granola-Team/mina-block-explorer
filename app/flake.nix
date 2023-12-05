@@ -23,10 +23,13 @@
       {
         devShells.default = mkShell {
           buildInputs = [
+            cacert
+            cargo-audit
+            cargo-machete
+            cargo-nextest
+            just
             openssl
             pkg-config
-            cacert
-            cargo-make
             trunk
             (rust-bin.selectLatestNightlyWith( toolchain: toolchain.default.override {
               extensions= [ "rust-src" "rust-analyzer" ];
