@@ -2,7 +2,7 @@
 const { test, expect } = require('@playwright/test');
 
 test('account page present', async ({ page }) => {
-  await page.goto('/accounts/fake-data?f=true');
+  await page.goto('/accounts/B62qpWaQoQoPL5AGta7Hz2DgJ9CJonpunjzCGTdw8KiCCD1hX8fNHuR');
 
   await expect(page.getByText("Public Key")).toBeVisible();
   await expect(page.getByText("Username")).toBeVisible();
