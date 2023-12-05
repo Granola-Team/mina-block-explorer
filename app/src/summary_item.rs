@@ -5,7 +5,7 @@ pub enum SummaryItemKind {
     Int64(u64),
     Int16(u16),
     Int32(u32),
-    Float64(f64)
+    Float64(f64),
 }
 
 #[component]

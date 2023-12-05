@@ -1,7 +1,7 @@
 use leptos::*;
 
 use crate::api_models::{BlockchainSummary, MyError};
-use crate::summary_item::{SummaryItem,SummaryItemKind};
+use crate::summary_item::{SummaryItem, SummaryItemKind};
 
 async fn load_data() -> Result<BlockchainSummary, MyError> {
     let response = reqwest::get("https://api.minaexplorer.com/summary")

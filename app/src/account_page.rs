@@ -3,19 +3,17 @@ use leptos_router::*;
 use serde::{Deserialize, Serialize};
 
 use crate::api_models::MyError;
-use crate::summary_item::{SummaryItem,SummaryItemKind};
+use crate::summary_item::{SummaryItem, SummaryItemKind};
 
 #[derive(Params, PartialEq)]
 struct URLParams {
-    id: Option<String>
+    id: Option<String>,
 }
-
 
 #[derive(Params, PartialEq)]
 struct QueryParams {
-    f: Option<bool>
+    f: Option<bool>,
 }
-
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
 struct AccountBalance {
@@ -39,7 +37,7 @@ struct AccountSummary {
     totalTx: u32,
     countPendingTransactions: u32,
     username: String,
-    balance: AccountBalance
+    balance: AccountBalance,
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
@@ -85,7 +83,7 @@ pub fn AccountSummary() -> impl IntoView {
             || (),
             move |_| {
                 let public_key_for_async = public_key_clone.clone();
-                async move {  load_data(&public_key_for_async).await }
+                async move { load_data(&public_key_for_async).await }
             },
         )
     };
