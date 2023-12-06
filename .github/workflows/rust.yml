@@ -16,31 +16,21 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
+    - uses: cachix/install-nix-action@v22
       with:
-        node-version: 18
+        github_access_token: ${{ secrets.GITHUB_TOKEN }}
     - name: Build
       working-directory: app/
-      run: |
-        cargo build
-        cargo install trunk
+      run: nix-shell --run "cargo build"
     - name: Run tests
       working-directory: app/
-      run: cargo test --verbose
+      run: nix-shell --run "cargo test"
     - name: Npm install
       working-directory: app/
-      run: npm install
+      run: nix-shell --run "npm install"
     - name: Install playwright deps
       working-directory: app/
-      run: npx playwright install --with-deps
+      run: nix-shell --run "npx playwright install --with-deps"
     - name: Run playwright tests
       working-directory: app/
-      run: |
-        rustup target add wasm32-unknown-unknown
-        npx playwright test
-    - uses: actions/upload-artifact@v3
-      if: always()
-      with:
-        name: playwright-report
-        path: playwright-report/
-        retention-days: 30
+      run: nix-shell --run "npx playwright test"
