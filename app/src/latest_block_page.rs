@@ -10,7 +10,7 @@ struct LatestBlocksResponse {
 #[derive(Debug, Deserialize, Serialize, Clone)]
 #[allow(non_snake_case)]
 struct Block {
-    blockHeight: i32,
+    blockHeight: u64,
     dateTime: String,
     creatorAccount: CreatorAccount,
     transactions: Transactions,
@@ -28,7 +28,7 @@ struct CreatorAccount {
 #[derive(Debug, Deserialize, Serialize, Clone)]
 #[allow(non_snake_case)]
 struct Transactions {
-    coinbase: i64,
+    coinbase: u64,
     coinbaseReceiverAccount: CoinbaseReceiverAccount,
     userCommands: Vec<UserCommand>,
 }
@@ -47,7 +47,7 @@ struct CoinbaseReceiverAccount {
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
 struct ConsensusState {
-    slot: i32,
+    slot: u32,
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
