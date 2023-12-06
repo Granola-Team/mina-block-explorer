@@ -19,6 +19,7 @@ jobs:
     - uses: cachix/install-nix-action@v22
       with:
         github_access_token: ${{ secrets.GITHUB_TOKEN }}
+        nix_path: nixpkgs=channel:nixos-unstable
     - name: Build
       working-directory: app/
       run: nix-shell --run "cargo build"
