@@ -1,7 +1,7 @@
 use leptos::*;
 
 use crate::api_models::{BlockchainSummary, MyError};
-use crate::summary_item::{SummaryItem,SummaryItemKind};
+use crate::summary_item::{SummaryItem, SummaryItemKind};
 
 async fn load_data() -> Result<BlockchainSummary, MyError> {
     let response = reqwest::get("https://api.minaexplorer.com/summary")
@@ -42,11 +42,11 @@ pub fn SummaryPage() -> impl IntoView {
 fn SummaryGrid(summary: BlockchainSummary) -> impl IntoView {
     view! {
         <section class="grid grid-cols-2 gap-1">
-            <SummaryItem id="blockchainLength".to_string() label="Height".to_string() value={SummaryItemKind::Int64Value(summary.blockchainLength)} />
-            <SummaryItem id="circulatingSupply".to_string() label="Circulating Supply".to_string() value={SummaryItemKind::StrValue(summary.circulatingSupply)} />
-            <SummaryItem id="epoch".to_string() label="Epoch".to_string() value={SummaryItemKind::Int16Value(summary.epoch)} />
-            <SummaryItem id="slot".to_string() label="Slot".to_string() value={SummaryItemKind::Int16Value(summary.slot)} />
-            <SummaryItem id="totalCurrency".to_string() label="Total Currency".to_string() value={SummaryItemKind::StrValue(summary.totalCurrency)} />
+            <SummaryItem id="blockchainLength".to_string() label="Height".to_string() value={SummaryItemKind::Int64(summary.blockchainLength)} />
+            <SummaryItem id="circulatingSupply".to_string() label="Circulating Supply".to_string() value={SummaryItemKind::Str(summary.circulatingSupply)} />
+            <SummaryItem id="epoch".to_string() label="Epoch".to_string() value={SummaryItemKind::Int16(summary.epoch)} />
+            <SummaryItem id="slot".to_string() label="Slot".to_string() value={SummaryItemKind::Int16(summary.slot)} />
+            <SummaryItem id="totalCurrency".to_string() label="Total Currency".to_string() value={SummaryItemKind::Str(summary.totalCurrency)} />
         </section>
     }
 }

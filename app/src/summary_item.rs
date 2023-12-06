@@ -1,11 +1,11 @@
 use leptos::*;
 
 pub enum SummaryItemKind {
-    StrValue(String),
-    Int64Value(u64),
-    Int16Value(u16),
-    Int32Value(u32),
-    Float64Value(f64)
+    Str(String),
+    Int64(u64),
+    Int16(u16),
+    Int32(u32),
+    Float64(f64),
 }
 
 #[component]
@@ -15,11 +15,11 @@ pub fn SummaryItem(label: String, value: SummaryItemKind, id: String) -> impl In
             <label for={id.clone()}>{label}:</label>
             <div id={id.clone()}>{
                 match value {
-                    SummaryItemKind::StrValue(s) => s,
-                    SummaryItemKind::Int64Value(i) => i.to_string(),
-                    SummaryItemKind::Int32Value(i) => i.to_string(),
-                    SummaryItemKind::Int16Value(i) => i.to_string(),
-                    SummaryItemKind::Float64Value(i) => format!("{:.2}", i).parse::<f64>().unwrap().to_string()
+                    SummaryItemKind::Str(s) => s,
+                    SummaryItemKind::Int64(i) => i.to_string(),
+                    SummaryItemKind::Int32(i) => i.to_string(),
+                    SummaryItemKind::Int16(i) => i.to_string(),
+                    SummaryItemKind::Float64(i) => format!("{:.2}", i).parse::<f64>().unwrap().to_string()
                 }
             }</div>
         </div>

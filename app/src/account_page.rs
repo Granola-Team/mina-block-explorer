@@ -3,19 +3,17 @@ use leptos_router::*;
 use serde::{Deserialize, Serialize};
 
 use crate::api_models::MyError;
-use crate::summary_item::{SummaryItem,SummaryItemKind};
+use crate::summary_item::{SummaryItem, SummaryItemKind};
 
 #[derive(Params, PartialEq)]
 struct URLParams {
-    id: Option<String>
+    id: Option<String>,
 }
-
 
 #[derive(Params, PartialEq)]
 struct QueryParams {
-    f: Option<bool>
+    f: Option<bool>,
 }
-
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
 struct AccountBalance {
@@ -39,7 +37,7 @@ struct AccountSummary {
     totalTx: u32,
     countPendingTransactions: u32,
     username: String,
-    balance: AccountBalance
+    balance: AccountBalance,
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
@@ -48,7 +46,7 @@ struct AccountResponse {
 }
 
 async fn load_data(id: &str) -> Result<AccountResponse, MyError> {
-    let response = reqwest::get(String::from("https://api.minaexplorer.com/accounts/") + &id).await;
+    let response = reqwest::get(format!("https://api.minaexplorer.com/accounts/{}", id)).await;
 
     match response {
         Ok(res) => match res.json::<AccountResponse>().await {
@@ -85,7 +83,7 @@ pub fn AccountSummary() -> impl IntoView {
             || (),
             move |_| {
                 let public_key_for_async = public_key_clone.clone();
-                async move {  load_data(&public_key_for_async).await }
+                async move { load_data(&public_key_for_async).await }
             },
         )
     };
@@ -104,14 +102,14 @@ pub fn AccountSummary() -> impl IntoView {
 fn AccountSummarySection(summary: AccountResponse) -> impl IntoView {
     view! {
         <section class="grid grid-cols-2 gap-1">
-            <SummaryItem id="publicKey".to_string() label="Public Key".to_string() value={SummaryItemKind::StrValue(summary.account.publicKey)} />
-            <SummaryItem id="username".to_string() label="Username".to_string() value={SummaryItemKind::StrValue(summary.account.username)} />
-            <SummaryItem id="balance".to_string() label="Balance".to_string() value={SummaryItemKind::Float64Value(summary.account.balance.total())} />
-            <SummaryItem id="nonce".to_string() label="Nonce".to_string() value={SummaryItemKind::Int32Value(summary.account.nonce)} />
-            <SummaryItem id="receiptChainHash".to_string() label="Receipt Chain Hash".to_string() value={SummaryItemKind::StrValue(summary.account.receiptChainHash)} />
-            <SummaryItem id="delegate".to_string() label="Delegate".to_string() value={SummaryItemKind::StrValue(summary.account.delegate)} />
-            <SummaryItem id="votingFor".to_string() label="Voting For".to_string() value={SummaryItemKind::StrValue(summary.account.votingFor)} />
-            <SummaryItem id="pendingTransactions".to_string() label="Pending Transactions".to_string() value={SummaryItemKind::Int32Value(summary.account.countPendingTransactions)} />
+            <SummaryItem id="publicKey".to_string() label="Public Key".to_string() value={SummaryItemKind::Str(summary.account.publicKey)} />
+            <SummaryItem id="username".to_string() label="Username".to_string() value={SummaryItemKind::Str(summary.account.username)} />
+            <SummaryItem id="balance".to_string() label="Balance".to_string() value={SummaryItemKind::Float64(summary.account.balance.total())} />
+            <SummaryItem id="nonce".to_string() label="Nonce".to_string() value={SummaryItemKind::Int32(summary.account.nonce)} />
+            <SummaryItem id="receiptChainHash".to_string() label="Receipt Chain Hash".to_string() value={SummaryItemKind::Str(summary.account.receiptChainHash)} />
+            <SummaryItem id="delegate".to_string() label="Delegate".to_string() value={SummaryItemKind::Str(summary.account.delegate)} />
+            <SummaryItem id="votingFor".to_string() label="Voting For".to_string() value={SummaryItemKind::Str(summary.account.votingFor)} />
+            <SummaryItem id="pendingTransactions".to_string() label="Pending Transactions".to_string() value={SummaryItemKind::Int32(summary.account.countPendingTransactions)} />
         </section>
     }
 }
