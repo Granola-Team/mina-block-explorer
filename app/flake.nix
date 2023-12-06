@@ -28,6 +28,7 @@
             cacert
             cargo-make
             trunk
+            nodejs_18
             (rust-bin.selectLatestNightlyWith( toolchain: toolchain.default.override {
               extensions= [ "rust-src" "rust-analyzer" ];
               targets = [ "wasm32-unknown-unknown" ];
