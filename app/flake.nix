@@ -28,6 +28,7 @@
             cargo-machete
             cargo-nextest
             just
+            nodejs_18
             openssl
             pkg-config
             trunk
