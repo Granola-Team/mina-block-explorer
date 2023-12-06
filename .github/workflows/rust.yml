@@ -28,7 +28,7 @@ jobs:
       run: nix-shell --run "cargo test"
     - name: Npm install
       working-directory: app/
-      run: nix-shell --run "npm ci"
+      run: nix-shell --run "npm install"
     - name: Install playwright deps and run tests
       working-directory: app/
       run: nix-shell --run "node --version && npx playwright install --with-deps && npx playwright test"
