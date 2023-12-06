@@ -22,7 +22,7 @@
       with pkgs;
       {
         devShells.default = mkShell {
-          nativeBuildInputs = with pkgs; [
+          nativeBuildInputs = [
             playwright-driver.browsers
           ];
           buildInputs = [
