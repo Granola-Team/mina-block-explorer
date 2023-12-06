@@ -44,9 +44,6 @@
           ;
 
           shellHook = ''
-            export PLAYWRIGHT_BROWSERS_PATH=${playwright-driver.browsers}
-            echo ${PLAYWRIGHT_BROWSERS_PATH}
-            export PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
             '';
         };
       }
