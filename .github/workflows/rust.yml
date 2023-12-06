@@ -22,7 +22,7 @@ jobs:
         nix_path: nixpkgs=channel:nixos-unstable
     - name: Build
       working-directory: app/
-      run: nix-shell --run "cargo build"
+      run: nix-shell --run "node --version && cargo build"
     - name: Run tests
       working-directory: app/
       run: nix-shell --run "cargo test"
