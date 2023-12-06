@@ -32,6 +32,7 @@
             openssl
             pkg-config
             playwright-test
+            playwright-driver
             trunk
             (rust-bin.selectLatestNightlyWith( toolchain: toolchain.default.override {
               extensions= [ "rust-src" "rust-analyzer" ];
