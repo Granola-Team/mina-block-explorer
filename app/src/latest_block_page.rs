@@ -1,6 +1,6 @@
 use leptos::*;
-use leptos_router::*;
 use serde::{Deserialize, Serialize};
+// use crate::api_models::MyError;
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
 struct LatestBlocksResponse {
@@ -19,11 +19,13 @@ struct Blocks {
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
+#[allow(non_snake_case)]
 struct CreatorAccount {
     publicKey: String
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
+#[allow(non_snake_case)]
 struct Transactions {
     coinbase: i32,
     coinbaseReceiverAccount: CoinbaseReceiverAccount,
@@ -31,12 +33,14 @@ struct Transactions {
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
+#[allow(non_snake_case)]
 struct ProtocolState {
     consensusState: ConsensusState,
     stateHash: String
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
+#[allow(non_snake_case)]
 struct CoinbaseReceiverAccount {
     publicKey: String
 }
@@ -46,22 +50,48 @@ struct ConsensusState {
     slot: i32
 }
 
+#[derive(Debug, Deserialize, Serialize, Clone)]
 struct UserCommand;
+#[derive(Debug, Deserialize, Serialize, Clone)]
 struct SnarkJob;
 
-async fn load_data() -> Result<LatestBlocksResponse, MyError> {
-    let response = reqwest::get("https://api.minaexplorer.com/blocks")
-        .await
-        .map_err(|e| MyError::NetworkError(e.to_string()))?;
+// async fn load_data() -> Result<LatestBlocksResponse, MyError> {
+//     let response = reqwest::get("https://api.minaexplorer.com/blocks")
+//         .await
+//         .map_err(|e| MyError::NetworkError(e.to_string()))?;
 
-    if response.status().is_success() {
-        let summary = response
-            .json::<LatestBlocksResponse>()
-            .await
-            .map_err(|e| MyError::ParseError(e.to_string()))?;
-        Ok(summary)
-    } else {
-        Err(MyError::NetworkError("Failed to fetch data".into()))
+//     if response.status().is_success() {
+//         let summary = response
+//             .json::<LatestBlocksResponse>()
+//             .await
+//             .map_err(|e| MyError::ParseError(e.to_string()))?;
+//         Ok(summary)
+//     } else {
+//         Err(MyError::NetworkError("Failed to fetch data".into()))
+//     }
+// }
+
+#[component]
+fn Table(columns: Vec<String>) -> impl IntoView {
+     view! {
+        <table>
+            <tr>
+                {columns.into_iter()
+                    .map(|s| view! { <th>{s}</th>})
+                    .collect::<Vec<_>>()}
+            </tr>
+        </table>
+     }
+}
+
+#[component]
+pub fn TableWrapper() -> impl IntoView {
+    let mut cols = Vec::new();
+    cols.push(String::from("one"));
+    cols.push(String::from("two"));
+    cols.push(String::from("three"));
+    view! {
+        <Table columns=cols/>
     }
 }
 
