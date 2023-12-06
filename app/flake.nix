@@ -22,6 +22,9 @@
       with pkgs;
       {
         devShells.default = mkShell {
+          nativeBuildInputs = with pkgs; [
+            playwright-driver.browsers
+          ];
           buildInputs = [
             cacert
             cargo-audit
@@ -31,8 +34,8 @@
             nodejs_18
             openssl
             pkg-config
-            playwright-test
-            playwright-driver.browsers
+            # playwright-test
+            # playwright-driver.browsers
             trunk
             (rust-bin.selectLatestNightlyWith( toolchain: toolchain.default.override {
               extensions= [ "rust-src" "rust-analyzer" ];
