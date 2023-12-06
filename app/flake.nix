@@ -34,7 +34,7 @@
             nodejs_18
             openssl
             pkg-config
-            # playwright-test
+            playwright-test
             # playwright-driver.browsers
             trunk
             (rust-bin.selectLatestNightlyWith( toolchain: toolchain.default.override {
