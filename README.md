@@ -1,5 +1,7 @@
 # Mina Block Explorer
 
+[![Build status](https://badge.buildkite.com/1f8c338cb4ede4e41a4d84de89479fb2eddf9a6f64b72dcf36.svg)](https://buildkite.com/granola/mina-block-explorer)
+
 The Mina Block Explorer is a website that allows users to explore and
 view details about blocks, transactions, addresses, validators and
 other relevant network information. It provides a user-friendly user
