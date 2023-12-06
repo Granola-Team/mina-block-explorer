@@ -31,4 +31,4 @@ jobs:
       run: nix-shell --run "npm install"
     - name: Install playwright deps and run tests
       working-directory: app/
-      run: nix-shell --run "node --version && npx playwright install --with-deps && npx playwright test"
+      run: nix-shell --run "node --version && npx playwright install-deps && npx playwright test"
