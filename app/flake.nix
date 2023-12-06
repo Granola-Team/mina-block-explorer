@@ -31,6 +31,7 @@
             nodejs_18
             openssl
             pkg-config
+            playwright-test
             trunk
             (rust-bin.selectLatestNightlyWith( toolchain: toolchain.default.override {
               extensions= [ "rust-src" "rust-analyzer" ];
@@ -43,6 +44,8 @@
           ;
 
           shellHook = ''
+            export PLAYWRIGHT_BROWSERS_PATH=${playwright-driver.browsers}
+            export PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
             '';
         };
       }

@@ -10,10 +10,8 @@ clean:
 test: test-unit
 
 test-e2e:
-  echo "Testing E2E"
-  # npm install
-  # npx playwright install --with-deps
-  # npx playwright test
+  npm install
+  npx playwright test
 
 test-unit: build
   cargo nextest run
