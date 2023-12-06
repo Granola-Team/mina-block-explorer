@@ -2,6 +2,7 @@ default:
   @just --list --justfile {{justfile()}}
 
 build:
+  sudo ls
   cargo build
 
 clean:
