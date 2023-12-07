@@ -78,11 +78,10 @@ pub fn AccountSummary() -> impl IntoView {
     };
 
     let resource: Resource<(), Result<AccountResponse, MyError>> = {
-        let public_key_clone = public_key.clone();
         create_resource(
             || (),
             move |_| {
-                let public_key_for_async = public_key_clone.clone();
+                let public_key_for_async = public_key.clone();
                 async move { load_data(&public_key_for_async).await }
             },
         )
