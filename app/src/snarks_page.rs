@@ -64,7 +64,7 @@ impl TableData for SnarksResponse {
 async fn load_data() -> Result<SnarksResponse, MyError> {
     let client = reqwest::Client::new();
     let response = client.post("https://graphql.minaexplorer.com")
-        .body(r#"{"query":"query MyQuery {\n  snarks {\n    blockHeight\n    dateTime\n    prover\n    workIds\n    block {\n      stateHash\n    }\n    fee\n  }\n}\n","variables":null,"operationName":"MyQuery"}"#)
+        .body(r#"{"query":"query MyQuery {\n  snarks(sortBy: BLOCKHEIGHT_DESC, limit: 25) {\n    blockHeight\n    dateTime\n    prover\n    workIds\n    block {\n      stateHash\n    }\n    fee\n  }\n}\n","variables":null,"operationName":"MyQuery"}"#)
         .send()
         .await
         .map_err(|e| MyError::NetworkError(e.to_string()))?;
