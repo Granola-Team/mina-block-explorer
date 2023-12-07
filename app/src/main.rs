@@ -6,6 +6,7 @@ mod root;
 mod summary_item;
 mod summary_page;
 mod latest_block_page;
+mod transactions_page;
 
 use root::Root;
 
