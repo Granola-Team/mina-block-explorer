@@ -1,6 +1,6 @@
 use leptos::*;
 use serde::{Deserialize, Serialize};
-use crate::api_models::MyError;
+use crate::{api_models::MyError, table::{TableData, Table}};
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
 struct LatestBlocksResponse {
@@ -60,6 +60,42 @@ struct SnarkJob {
     dateTime: String
 }
 
+impl TableData for LatestBlocksResponse {
+    fn get_columns(&self) -> Vec<String> {
+        vec![
+                String::from("Height"),
+                String::from("Date"),
+                String::from("Block Producer"),
+                String::from("Coinbase"),
+                String::from("Transactions"),
+                String::from("SNARKs"),
+                String::from("Slot"),
+                String::from("State Hash"),
+                String::from("Coinbase Receiver"),
+            ]
+    }
+
+    fn get_rows(&self) -> Vec<Vec<String>> {
+        let mut rows = Vec::new();
+        for block in &self.blocks {
+            let data = vec![
+                block.blockHeight.to_string(),
+                block.dateTime.to_string(),
+                block.creatorAccount.publicKey.to_string(),
+                block.transactions.coinbase.to_string(),
+                block.transactions.userCommands.len().to_string(),
+                block.snarkJobs.len().to_string(),
+                block.protocolState.consensusState.slot.to_string(),
+                block.stateHash.to_string(),
+                block.transactions.coinbaseReceiverAccount.publicKey.to_string(),
+            ];
+            rows.push(data);
+        }
+        rows
+    }
+}
+
+
 async fn load_data() -> Result<LatestBlocksResponse, MyError> {
     let response = reqwest::get("https://api.minaexplorer.com/blocks?limit=10")
         .await
@@ -77,55 +113,21 @@ async fn load_data() -> Result<LatestBlocksResponse, MyError> {
 }
 
 #[component]
-fn Table(columns: Vec<String>, data: LatestBlocksResponse) -> impl IntoView {
-    view! {
-       <table>
-           <tr>
-               {columns.into_iter()
-                   .map(|s| view! { <th>{s}</th>})
-                   .collect::<Vec<_>>()}
-           </tr>
-           {data.blocks.into_iter()
-            .map(|d| view! { <tr>
-                <td>{d.blockHeight}</td>
-                <td>{d.dateTime}</td>
-                <td>{d.creatorAccount.publicKey}</td>
-                <td>{d.transactions.coinbase}</td>
-                <td>{d.transactions.userCommands.len()}</td>
-                <td>{d.snarkJobs.len()}</td>
-                <td>{d.protocolState.consensusState.slot}</td>
-                <td>{d.stateHash}</td>
-                <td>{d.transactions.coinbaseReceiverAccount.publicKey}</td>
-            </tr>})
-            .collect::<Vec<_>>()}
-       </table>
-    }
-}
-
-#[component]
 pub fn LatestBlocksPage() -> impl IntoView {
     let resource = create_resource(|| (), |_| async move { load_data().await });
 
     view! {
         <h1>"Latest Blocks"</h1>
+        <section>
         {move || match resource.get() {
             None => view! {
                 <div>"Loading..." </div>
             }.into_view(),
-            Some(Ok(data)) => view! { <Table columns=vec![
-                String::from("Height"),
-                String::from("Date"),
-                String::from("Block Producer"),
-                String::from("Coinbase"),
-                String::from("Transactions"),
-                String::from("SNARKs"),
-                String::from("Slot"),
-                String::from("State Hash"),
-                String::from("Coinbase Receiver"),
-            ] data=data/> },
+            Some(Ok(data)) => view! { <Table data=data/> },
             Some(Err(my_error)) => view! {
                 <div> { format!("Error: {:#?}", my_error)}</div>
             }.into_view()
         }}
+        </section>
     }
 }
