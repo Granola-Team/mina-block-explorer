@@ -5,6 +5,7 @@ use crate::account_page::AccountSummary;
 use crate::nav::Nav;
 use crate::summary_page::SummaryPage;
 use crate::latest_block_page::LatestBlocksPage;
+use crate::transactions_page::TransactionsPage;
 
 #[component]
 pub fn Root() -> impl IntoView {
@@ -17,6 +18,7 @@ pub fn Root() -> impl IntoView {
             <Route path="/summary" view=SummaryPage />
             <Route path="/accounts/:id" view=AccountSummary />
             <Route path="/blocks" view=LatestBlocksPage />
+            <Route path="/transactions" view=TransactionsPage />
           </Routes>
         </Router>
       </main>
