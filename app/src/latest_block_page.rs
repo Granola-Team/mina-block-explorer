@@ -117,6 +117,7 @@ pub fn LatestBlocksPage() -> impl IntoView {
 
     view! {
         <h1>"Latest Blocks"</h1>
+        <section>
         {move || match resource.get() {
             None => view! {
                 <div>"Loading..." </div>
@@ -126,5 +127,6 @@ pub fn LatestBlocksPage() -> impl IntoView {
                 <div> { format!("Error: {:#?}", my_error)}</div>
             }.into_view()
         }}
+        </section>
     }
 }
