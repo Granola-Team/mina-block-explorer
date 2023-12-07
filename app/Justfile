@@ -11,6 +11,7 @@ test: test-unit
 
 test-e2e:
   npm install
+  npx playwright install
   npx playwright test
 
 test-unit: build
