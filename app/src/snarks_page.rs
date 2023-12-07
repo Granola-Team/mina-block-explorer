@@ -15,20 +15,20 @@ struct Data {
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
-#[allow(non_snake_case)]
+#[serde(rename_all = "camelCase")]
 struct Snark {
-    workIds: Vec<u64>,
+    work_ids: Vec<u64>,
     block: Block,
-    blockHeight: u64,
-    dateTime: String,
+    block_height: u64,
+    date_time: String,
     fee: u64,
     prover: String
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
-#[allow(non_snake_case)]
+#[serde(rename_all = "camelCase")]
 struct Block {
-    stateHash: String
+    state_hash: String
 }
 
 impl TableData for SnarksResponse {
@@ -47,11 +47,11 @@ impl TableData for SnarksResponse {
         let mut rows = Vec::new();
         for snark in &self.data.snarks {
             let data = vec![
-                snark.blockHeight.to_string(),
-                snark.dateTime.to_string(),
+                snark.block_height.to_string(),
+                snark.date_time.to_string(),
                 snark.prover.to_string(),
-                snark.workIds.iter().map(|&x| x.to_string()).collect::<Vec<_>>().join(", "),
-                snark.block.stateHash.to_string(),
+                snark.work_ids.iter().map(|&x| x.to_string()).collect::<Vec<_>>().join(", "),
+                snark.block.state_hash.to_string(),
                 snark.fee.to_string()
             ];
             rows.push(data);

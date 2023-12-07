@@ -27,15 +27,15 @@ impl AccountBalance {
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
-#[allow(non_snake_case)]
+#[serde(rename_all = "camelCase")]
 struct AccountSummary {
-    publicKey: String,
+    public_key: String,
     nonce: u32,
-    receiptChainHash: String,
+    receipt_chain_hash: String,
     delegate: String,
-    votingFor: String,
-    totalTx: u32,
-    countPendingTransactions: u32,
+    voting_for: String,
+    total_tx: u32,
+    count_pending_transactions: u32,
     username: String,
     balance: AccountBalance,
 }
@@ -102,14 +102,14 @@ pub fn AccountSummary() -> impl IntoView {
 fn AccountSummarySection(summary: AccountResponse) -> impl IntoView {
     view! {
         <section class="grid grid-cols-2 gap-1">
-            <SummaryItem id="publicKey".to_string() label="Public Key".to_string() value={SummaryItemKind::Str(summary.account.publicKey)} />
+            <SummaryItem id="publicKey".to_string() label="Public Key".to_string() value={SummaryItemKind::Str(summary.account.public_key)} />
             <SummaryItem id="username".to_string() label="Username".to_string() value={SummaryItemKind::Str(summary.account.username)} />
             <SummaryItem id="balance".to_string() label="Balance".to_string() value={SummaryItemKind::Float64(summary.account.balance.total())} />
             <SummaryItem id="nonce".to_string() label="Nonce".to_string() value={SummaryItemKind::Int32(summary.account.nonce)} />
-            <SummaryItem id="receiptChainHash".to_string() label="Receipt Chain Hash".to_string() value={SummaryItemKind::Str(summary.account.receiptChainHash)} />
+            <SummaryItem id="receiptChainHash".to_string() label="Receipt Chain Hash".to_string() value={SummaryItemKind::Str(summary.account.receipt_chain_hash)} />
             <SummaryItem id="delegate".to_string() label="Delegate".to_string() value={SummaryItemKind::Str(summary.account.delegate)} />
-            <SummaryItem id="votingFor".to_string() label="Voting For".to_string() value={SummaryItemKind::Str(summary.account.votingFor)} />
-            <SummaryItem id="pendingTransactions".to_string() label="Pending Transactions".to_string() value={SummaryItemKind::Int32(summary.account.countPendingTransactions)} />
+            <SummaryItem id="votingFor".to_string() label="Voting For".to_string() value={SummaryItemKind::Str(summary.account.voting_for)} />
+            <SummaryItem id="pendingTransactions".to_string() label="Pending Transactions".to_string() value={SummaryItemKind::Int32(summary.account.count_pending_transactions)} />
         </section>
     }
 }

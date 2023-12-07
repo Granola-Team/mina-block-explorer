@@ -27,15 +27,15 @@ struct Transaction {
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
-#[allow(non_snake_case)]
+#[serde(rename_all = "camelCase")]
 struct Block {
-    dateTime: String,
+    date_time: String,
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
-#[allow(non_snake_case)]
+#[serde(rename_all = "camelCase")]
 struct Receiver {
-    publicKey: String,
+    public_key: String,
 }
 
 impl TableData for TransactionsResponse {
@@ -54,9 +54,9 @@ impl TableData for TransactionsResponse {
         let mut rows = Vec::new();
         for transaction in &self.data.transactions {
             let data = vec![
-                transaction.block.dateTime.to_string(),
+                transaction.block.date_time.to_string(),
                 transaction.from.to_string(),
-                transaction.receiver.publicKey.to_string(),
+                transaction.receiver.public_key.to_string(),
                 transaction.fee.to_string(),
                 transaction.hash.to_string(),
                 transaction.amount.to_string(),

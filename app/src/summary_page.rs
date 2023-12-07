@@ -42,11 +42,11 @@ pub fn SummaryPage() -> impl IntoView {
 fn SummaryGrid(summary: BlockchainSummary) -> impl IntoView {
     view! {
         <section class="grid grid-cols-2 gap-1">
-            <SummaryItem id="blockchainLength".to_string() label="Height".to_string() value={SummaryItemKind::Int64(summary.blockchainLength)} />
-            <SummaryItem id="circulatingSupply".to_string() label="Circulating Supply".to_string() value={SummaryItemKind::Str(summary.circulatingSupply)} />
+            <SummaryItem id="blockchainLength".to_string() label="Height".to_string() value={SummaryItemKind::Int64(summary.blockchain_length)} />
+            <SummaryItem id="circulatingSupply".to_string() label="Circulating Supply".to_string() value={SummaryItemKind::Str(summary.circulating_supply)} />
             <SummaryItem id="epoch".to_string() label="Epoch".to_string() value={SummaryItemKind::Int16(summary.epoch)} />
             <SummaryItem id="slot".to_string() label="Slot".to_string() value={SummaryItemKind::Int16(summary.slot)} />
-            <SummaryItem id="totalCurrency".to_string() label="Total Currency".to_string() value={SummaryItemKind::Str(summary.totalCurrency)} />
+            <SummaryItem id="totalCurrency".to_string() label="Total Currency".to_string() value={SummaryItemKind::Str(summary.total_currency)} />
         </section>
     }
 }

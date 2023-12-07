@@ -1,13 +1,13 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
-#[allow(non_snake_case)]
+#[serde(rename_all = "camelCase")]
 pub struct BlockchainSummary {
-    pub blockchainLength: u64,
-    pub circulatingSupply: String,
+    pub blockchain_length: u64,
+    pub circulating_supply: String,
     pub epoch: u16,
     pub slot: u16,
-    pub totalCurrency: String,
+    pub total_currency: String,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]

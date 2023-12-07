@@ -8,56 +8,58 @@ struct LatestBlocksResponse {
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
-#[allow(non_snake_case)]
+#[serde(rename_all = "camelCase")]
 struct Block {
-    blockHeight: u64,
-    dateTime: String,
-    creatorAccount: CreatorAccount,
+    block_height: u64,
+    date_time: String,
+    creator_account: CreatorAccount,
     transactions: Transactions,
-    snarkJobs: Vec<SnarkJob>,
-    protocolState: ProtocolState,
-    stateHash: String,
+    snark_jobs: Vec<SnarkJob>,
+    protocol_state: ProtocolState,
+    state_hash: String,
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
-#[allow(non_snake_case)]
+#[serde(rename_all = "camelCase")]
 struct CreatorAccount {
-    publicKey: String,
+    public_key: String,
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
-#[allow(non_snake_case)]
+#[serde(rename_all = "camelCase")]
 struct Transactions {
     coinbase: u64,
-    coinbaseReceiverAccount: CoinbaseReceiverAccount,
-    userCommands: Vec<UserCommand>,
+    coinbase_receiver_account: CoinbaseReceiverAccount,
+    user_commands: Vec<UserCommand>,
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
-#[allow(non_snake_case)]
+#[serde(rename_all = "camelCase")]
 struct ProtocolState {
-    consensusState: ConsensusState
+    consensus_state: ConsensusState
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
-#[allow(non_snake_case)]
+#[serde(rename_all = "camelCase")]
 struct CoinbaseReceiverAccount {
-    publicKey: String,
+    public_key: String,
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
+#[serde(rename_all = "camelCase")]
 struct ConsensusState {
     slot: u32,
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
+#[serde(rename_all = "camelCase")]
 struct UserCommand {
     hash: String
 }
 #[derive(Debug, Deserialize, Serialize, Clone)]
-#[allow(non_snake_case)]
+#[serde(rename_all = "camelCase")]
 struct SnarkJob {
-    dateTime: String
+    date_time: String
 }
 
 impl TableData for LatestBlocksResponse {
@@ -79,15 +81,15 @@ impl TableData for LatestBlocksResponse {
         let mut rows = Vec::new();
         for block in &self.blocks {
             let data = vec![
-                block.blockHeight.to_string(),
-                block.dateTime.to_string(),
-                block.creatorAccount.publicKey.to_string(),
+                block.block_height.to_string(),
+                block.date_time.to_string(),
+                block.creator_account.public_key.to_string(),
                 block.transactions.coinbase.to_string(),
-                block.transactions.userCommands.len().to_string(),
-                block.snarkJobs.len().to_string(),
-                block.protocolState.consensusState.slot.to_string(),
-                block.stateHash.to_string(),
-                block.transactions.coinbaseReceiverAccount.publicKey.to_string(),
+                block.transactions.user_commands.len().to_string(),
+                block.snark_jobs.len().to_string(),
+                block.protocol_state.consensus_state.slot.to_string(),
+                block.state_hash.to_string(),
+                block.transactions.coinbase_receiver_account.public_key.to_string(),
             ];
             rows.push(data);
         }
