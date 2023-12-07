@@ -1,16 +1,19 @@
 use leptos::*;
 use serde::{Deserialize, Serialize};
 
-use crate::{table::{TableData, Table}, api_models::MyError};
+use crate::{
+    api_models::MyError,
+    table::{Table, TableData},
+};
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
 struct TransactionsResponse {
-    data: Data
+    data: Data,
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
 struct Data {
-    transactions: Vec<Transaction>
+    transactions: Vec<Transaction>,
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
@@ -20,49 +23,49 @@ struct Transaction {
     block: Block,
     fee: u64,
     from: String,
-    receiver: Receiver
+    receiver: Receiver,
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
 #[allow(non_snake_case)]
 struct Block {
-    dateTime: String
+    dateTime: String,
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
 #[allow(non_snake_case)]
 struct Receiver {
-    publicKey: String
+    publicKey: String,
 }
 
 impl TableData for TransactionsResponse {
     fn get_columns(&self) -> Vec<String> {
         vec![
-                String::from("Date"),
-                String::from("From"),
-                String::from("To"),
-                String::from("Hash"),
-                String::from("Fee"),
-                String::from("Amount")
-            ]
+            String::from("Date"),
+            String::from("From"),
+            String::from("To"),
+            String::from("Hash"),
+            String::from("Fee"),
+            String::from("Amount"),
+        ]
     }
 
     fn get_rows(&self) -> Vec<Vec<String>> {
         let mut rows = Vec::new();
         for transaction in &self.data.transactions {
-            let mut data = Vec::new();
-            data.push(transaction.block.dateTime.to_string());
-            data.push(transaction.from.to_string());
-            data.push(transaction.receiver.publicKey.to_string());
-            data.push(transaction.fee.to_string());
-            data.push(transaction.hash.to_string());
-            data.push(transaction.amount.to_string());
+            let data = vec![
+                transaction.block.dateTime.to_string(),
+                transaction.from.to_string(),
+                transaction.receiver.publicKey.to_string(),
+                transaction.fee.to_string(),
+                transaction.hash.to_string(),
+                transaction.amount.to_string(),
+            ];
             rows.push(data);
         }
         rows
     }
 }
-
 
 async fn load_data() -> Result<TransactionsResponse, MyError> {
     let client = reqwest::Client::new();
@@ -83,7 +86,6 @@ async fn load_data() -> Result<TransactionsResponse, MyError> {
     }
 }
 
-
 #[component]
 pub fn TransactionsPage() -> impl IntoView {
     let resource = create_resource(|| (), |_| async move { load_data().await });
@@ -103,5 +105,3 @@ pub fn TransactionsPage() -> impl IntoView {
         </section>
     }
 }
-
-

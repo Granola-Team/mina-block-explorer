@@ -78,16 +78,17 @@ impl TableData for LatestBlocksResponse {
     fn get_rows(&self) -> Vec<Vec<String>> {
         let mut rows = Vec::new();
         for block in &self.blocks {
-            let mut data = Vec::new();
-            data.push(block.blockHeight.to_string());
-            data.push(block.dateTime.to_string());
-            data.push(block.creatorAccount.publicKey.to_string());
-            data.push(block.transactions.coinbase.to_string());
-            data.push(block.transactions.userCommands.len().to_string());
-            data.push(block.snarkJobs.len().to_string());
-            data.push(block.protocolState.consensusState.slot.to_string());
-            data.push(block.stateHash.to_string());
-            data.push(block.transactions.coinbaseReceiverAccount.publicKey.to_string());
+            let data = vec![
+                block.blockHeight.to_string(),
+                block.dateTime.to_string(),
+                block.creatorAccount.publicKey.to_string(),
+                block.transactions.coinbase.to_string(),
+                block.transactions.userCommands.len().to_string(),
+                block.snarkJobs.len().to_string(),
+                block.protocolState.consensusState.slot.to_string(),
+                block.stateHash.to_string(),
+                block.transactions.coinbaseReceiverAccount.publicKey.to_string(),
+            ];
             rows.push(data);
         }
         rows
