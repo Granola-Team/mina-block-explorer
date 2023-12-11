@@ -13,7 +13,7 @@ pub fn SummaryItem(label: String, value: SummaryItemKind, id: String) -> impl In
     view! {
         <div class="flex">
             <label for={id.clone()}>{label}:</label>
-            <div id={id.clone()}>{
+            <div id={id}>{
                 match value {
                     SummaryItemKind::Str(s) => s,
                     SummaryItemKind::Int64(i) => i.to_string(),
