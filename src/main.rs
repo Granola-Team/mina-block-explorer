@@ -9,6 +9,7 @@ mod latest_block_page;
 mod transactions_page;
 mod table;
 mod snarks_page;
+mod stakes_page;
 
 use root::Root;
 
