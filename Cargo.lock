@@ -911,6 +911,7 @@ dependencies = [
  "leptos_router",
  "reqwest",
  "serde",
+ "serde_json",
 ]
 
 [[package]]

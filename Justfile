@@ -30,3 +30,6 @@ disallow-unused-cargo-deps:
 
 audit:
   cargo audit
+
+serve:
+  trunk serve --open
