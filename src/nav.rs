@@ -9,6 +9,7 @@ pub fn Nav() -> impl IntoView {
             <a class="m-1.5" href="/accounts">Accounts</a>
             <a class="m-1.5" href="/transactions">Transactions</a>
             <a class="m-1.5" href="/snarks">SNARKs</a>
+            <a class="m-1.5" href="/stakes">Staking</a>
         </nav>
     }
 }
