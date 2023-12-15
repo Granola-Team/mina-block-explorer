@@ -554,28 +554,29 @@ video {
   top: 0px;
 }
 
+.top-full {
+  top: 100%;
+}
+
 .m-0 {
   margin: 0px;
+}
+
+.mx-4 {
+  margin-left: 1rem;
+  margin-right: 1rem;
 }
 
 .mb-2 {
   margin-bottom: 0.5rem;
 }
 
-.ml-1 {
-  margin-left: 0.25rem;
-}
-
 .ml-4 {
   margin-left: 1rem;
 }
 
-.mt-2 {
-  margin-top: 0.5rem;
-}
-
-.mt-64 {
-  margin-top: 16rem;
+.mt-8 {
+  margin-top: 2rem;
 }
 
 .block {
@@ -604,6 +605,10 @@ video {
 
 .h-0\.5 {
   height: 0.125rem;
+}
+
+.h-8 {
+  height: 2rem;
 }
 
 .h-full {
@@ -635,17 +640,25 @@ video {
   align-items: center;
 }
 
+.justify-center {
+  justify-content: center;
+}
+
 .gap-1 {
   gap: 0.25rem;
+}
+
+.overflow-hidden {
+  overflow: hidden;
 }
 
 .rounded-sm {
   border-radius: 0.125rem;
 }
 
-.bg-blue-800 {
+.bg-black {
   --tw-bg-opacity: 1;
-  background-color: rgb(30 64 175 / var(--tw-bg-opacity));
+  background-color: rgb(0 0 0 / var(--tw-bg-opacity));
 }
 
 .bg-white {
@@ -659,10 +672,6 @@ video {
 
 .text-left {
   text-align: left;
-}
-
-.text-center {
-  text-align: center;
 }
 
 .uppercase {
@@ -705,10 +714,10 @@ video {
   width: 2rem;
 }
 
-.before\:bg-white::before {
+.before\:bg-black::before {
   content: var(--tw-content);
   --tw-bg-opacity: 1;
-  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+  background-color: rgb(0 0 0 / var(--tw-bg-opacity));
 }
 
 .after\:absolute::after {
@@ -746,13 +755,47 @@ video {
   border-radius: 0.125rem;
 }
 
-.after\:bg-white::after {
+.after\:bg-black::after {
   content: var(--tw-content);
   --tw-bg-opacity: 1;
-  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+  background-color: rgb(0 0 0 / var(--tw-bg-opacity));
 }
 
 .peer\/menu:checked ~ .peer-checked\/menu\:scale-y-100 {
   --tw-scale-y: 1;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+@media (min-width: 640px) {
+  .sm\:mb-0 {
+    margin-bottom: 0px;
+  }
+
+  .sm\:\!flex {
+    display: flex !important;
+  }
+
+  .sm\:flex {
+    display: flex;
+  }
+
+  .sm\:hidden {
+    display: none;
+  }
+
+  .sm\:items-center {
+    align-items: center;
+  }
+
+  .sm\:items-stretch {
+    align-items: stretch;
+  }
+
+  .sm\:justify-around {
+    justify-content: space-around;
+  }
+
+  .sm\:\[all\:unset\] {
+    all: unset;
+  }
 }
