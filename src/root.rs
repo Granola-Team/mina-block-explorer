@@ -2,18 +2,18 @@ use leptos::*;
 use leptos_router::*;
 
 use crate::account_page::AccountSummary;
-use crate::nav::Nav;
 use crate::snarks_page::SnarksPage;
 use crate::stakes_page::StakesPage;
 use crate::summary_page::SummaryPage;
 use crate::latest_block_page::LatestBlocksPage;
 use crate::transactions_page::TransactionsPage;
+use crate::header::Header;
 
 #[component]
 pub fn Root() -> impl IntoView {
     view! {
-      <Nav />
-      <main class="m-1.5">
+      <Header />
+      <main class="mt-12">
         <Router>
           <Routes>
             <Route path="/" view=SummaryPage />
