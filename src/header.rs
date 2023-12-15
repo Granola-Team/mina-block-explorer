@@ -6,8 +6,8 @@ use crate::nav::Nav;
 pub fn Header() -> impl IntoView {
     
     view! {
-        <header class="bg-blue-800 fixed top-0 left-0 w-screen text-center">
-            <h1 class="mt-2 mb-2">Logo</h1>
+        <header class="flex sm:justify-around justify-center items-center fixed top-0 left-0 w-screen h-8">
+            <h1>Logo</h1>
             <Nav />
         </header>
     }
