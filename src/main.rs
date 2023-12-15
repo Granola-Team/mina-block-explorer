@@ -10,6 +10,7 @@ mod transactions_page;
 mod table;
 mod snarks_page;
 mod stakes_page;
+mod header;
 
 use root::Root;
 
