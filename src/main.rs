@@ -11,6 +11,7 @@ mod table;
 mod snarks_page;
 mod stakes_page;
 mod header;
+mod table_section;
 
 use root::Root;
 
