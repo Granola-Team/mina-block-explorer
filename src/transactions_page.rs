@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     api_models::MyError,
-    table::{Table, TableData},
+    table::{Table, TableData}, table_section::TableSection,
 };
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
@@ -91,17 +91,18 @@ pub fn TransactionsPage() -> impl IntoView {
     let resource = create_resource(|| (), |_| async move { load_data().await });
 
     view! {
-        <h1>"Transactions"</h1>
-        <section>
         {move || match resource.get() {
             None => view! {
                 <div>"Loading..." </div>
             }.into_view(),
-            Some(Ok(data)) => view! { <Table data=data/> },
+            Some(Ok(data)) => view! { 
+                <TableSection section_heading="Transactions".to_owned()>
+                    <Table data=data/>
+                </TableSection>
+             },
             Some(Err(my_error)) => view! {
                 <div> { format!("Error: {:#?}", my_error)}</div>
             }.into_view()
         }}
-        </section>
     }
 }
