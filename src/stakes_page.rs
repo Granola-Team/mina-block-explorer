@@ -2,7 +2,7 @@ use leptos::*;
 use leptos_router::*;
 
 use serde::{Deserialize,Serialize};
-use crate::{table::{TableData, Table}};
+use crate::{table::{TableData, Table}, table_section::TableSection};
 
 
 #[derive(Params, PartialEq)]
@@ -624,8 +624,6 @@ pub fn StakesPage() -> impl IntoView {
     let data = get_data();
 
     view! {
-        <h1>"Stakes"</h1>
-        <section>
         // {move || match resource.get() {
         //     None => view! {
         //         <div>"Loading..." </div>
@@ -636,9 +634,12 @@ pub fn StakesPage() -> impl IntoView {
         //     }.into_view()
         // }}
         {match data {
-            Ok(d)=>view!{<Table data=d/>},
+            Ok(data) => view! { 
+                <TableSection section_heading="Stakes".to_owned()>
+                    <Table data=data/>
+                </TableSection>
+             },
             Err(err) => view! {<div> { format!("Error: {:#?}", err)}</div> }.into_view()
         }}
-        </section>
     }
 }

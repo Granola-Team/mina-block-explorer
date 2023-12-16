@@ -13,7 +13,7 @@ use crate::header::Header;
 pub fn Root() -> impl IntoView {
     view! {
       <Header />
-      <main class="grid grid-cols-none mt-12 col-auto md:col-start-2 md:col-end-3">
+      <main class="grid grid-cols-none pt-20 col-auto md:col-start-2 md:col-end-3">
         <Router>
           <Routes>
             <Route path="/" view=SummaryPage />
