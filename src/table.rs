@@ -12,7 +12,7 @@ pub fn Table<T: TableData>(data: T) -> impl IntoView {
     let rows = data.get_rows();
 
     view! {
-       <table>
+       <table class="table-fixed w-full">
            <tr>
                {columns.into_iter()
                    .map(|s| view! { <th>{s}</th>})
@@ -21,7 +21,7 @@ pub fn Table<T: TableData>(data: T) -> impl IntoView {
            {rows.into_iter()
             .map(|row| view! {
                 <tr>
-                    {row.into_iter().map(|cell| view! { <td>{cell}</td>}).collect::<Vec<_>>()}
+                    {row.into_iter().map(|cell| view! { <td class="overflow-hidden whitespace-nowrap text-ellipsis">{cell}</td>}).collect::<Vec<_>>()}
                 </tr>
             })
             .collect::<Vec<_>>()}
