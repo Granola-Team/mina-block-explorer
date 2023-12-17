@@ -2,6 +2,7 @@ default:
   @just --list --justfile {{justfile()}}
 
 build:
+  npm install
   cargo build
 
 build-release:
