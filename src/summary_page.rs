@@ -1,7 +1,42 @@
 use leptos::*;
+use serde::{Deserialize, Serialize};
 
-use crate::api_models::{BlockchainSummary, MyError};
+use crate::api_models::{MyError};
 use crate::summary_item::{SummaryItem, SummaryItemKind};
+
+
+#[derive(Deserialize, Serialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct BlockchainSummary {
+    pub blockchain_length: u64,
+    pub circulating_supply: String,
+    pub epoch: u16,
+    pub slot: u16,
+    pub total_currency: String,
+}
+
+impl BlockchainSummary {
+    fn circ_supply(&self) -> f64 {
+        self.circulating_supply.trim().parse().expect("Cannot parse circulating_supply")
+    }
+    fn tot_currency(&self) -> f64 {
+        self.total_currency.trim().parse().expect("Cannot parse total_currency")
+    }
+}
+
+#[test]
+fn test_parsing_floats(){
+    let bs = BlockchainSummary {
+        circulating_supply: "2345345.4312431243".to_owned(),
+        blockchain_length: 314394,
+        epoch: 67,
+        slot: 4194,
+        total_currency: "1105297372.840039233".to_owned(),
+    };
+    assert_eq!(bs.circ_supply(), 2345345.4312431243);
+    assert_eq!(bs.tot_currency(), 1_105_297_372.840_039_3)
+}
+
 
 async fn load_data() -> Result<BlockchainSummary, MyError> {
     let response = reqwest::get("https://api.minaexplorer.com/summary")
@@ -25,7 +60,7 @@ pub fn SummaryPage() -> impl IntoView {
         create_resource(|| (), |_| async move { load_data().await });
 
     view! {
-        <h1>Summary</h1>
+        <h1 class="h-0 w-0 overflow-hidden">Summary</h1>
         {move || match blockchain_summary_resource.get() {
             None => view! {
                 <div>"Loading..." </div>
@@ -41,17 +76,12 @@ pub fn SummaryPage() -> impl IntoView {
 #[component]
 fn SummaryGrid(summary: BlockchainSummary) -> impl IntoView {
     view! {
-        <section class="grid grid-cols-2 gap-1">
+        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4 md:p-0 pt-0">
             <SummaryItem id="blockchainLength".to_string() label="Height".to_string() value={SummaryItemKind::Int64(summary.blockchain_length)} />
-            <SummaryItem id="circulatingSupply".to_string() label="Circulating Supply".to_string() value={SummaryItemKind::Str(summary.circulating_supply)} />
+            <SummaryItem id="circulatingSupply".to_string() label="Circulating Supply".to_string() value={SummaryItemKind::Float64(summary.circ_supply())} />
             <SummaryItem id="epoch".to_string() label="Epoch".to_string() value={SummaryItemKind::Int16(summary.epoch)} />
             <SummaryItem id="slot".to_string() label="Slot".to_string() value={SummaryItemKind::Int16(summary.slot)} />
-            <SummaryItem id="totalCurrency".to_string() label="Total Currency".to_string() value={SummaryItemKind::Str(summary.total_currency)} />
+            <SummaryItem id="totalCurrency".to_string() label="Total Currency".to_string() value={SummaryItemKind::Float64(summary.tot_currency())} />
         </section>
     }
-}
-
-#[test]
-fn fake_test() {
-    assert_eq!(true, true)
 }
