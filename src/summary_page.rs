@@ -34,7 +34,7 @@ fn test_parsing_floats(){
         total_currency: "1105297372.840039233".to_owned(),
     };
     assert_eq!(bs.circ_supply(), 2345345.4312431243);
-    assert_eq!(bs.tot_currency(), 1105297372.840039233)
+    assert_eq!(bs.tot_currency(), 1_105_297_372.840_039_3)
 }
 
 
