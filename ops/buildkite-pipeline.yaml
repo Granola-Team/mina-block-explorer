@@ -4,11 +4,11 @@ steps:
   command: |
     echo HOME=$HOME
     echo PATH=$PATH
-    nix-shell app/shell.nix --run "just --justfile app/Justfile"
+    nix-shell shell.nix --run "just --justfile Justfile"
   key: prereqs
 
 - label: "Lint, Audit, Build, and Test"
   command: |
-    nix-shell app/shell.nix --run "just --justfile app/Justfile test-ci"
+    nix-shell shell.nix --run "just --justfile Justfile test-ci"
   key: build
   depends_on: prereqs
