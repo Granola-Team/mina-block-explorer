@@ -1,7 +1,7 @@
 {
-  "name": "mina-block-explorer",
+  "name": "mina-block-explorer-dev",
   "version": "0.1.0",
-  "description": "The Mina Block Explorer is a website that allows users to explore and view details about blocks, transactions, addresses, validators and other relevant network information. It provides a user-friendly user interface to interact with the Mina blockchain.",
+  "description": "",
   "main": "index.js",
   "scripts": {},
   "keywords": [],
