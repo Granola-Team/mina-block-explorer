@@ -19,7 +19,7 @@ pub fn Nav() -> impl IntoView {
             </ul>
         </nav>
         <label for="nav-toggle" class="md:hidden absolute top-0 left-0 h-full ml-4 flex items-center ">
-            <span class="relative rounded-sm block bg-black h-0.5 w-8 after:absolute after:rounded-sm after:block after:bg-black after:h-0.5 after:w-8 after:bottom-1 before:absolute before:roudned-sm before:block before:bg-black before:h-0.5 before:w-8 before:top-1"></span>
+            <span class="relative rounded-lg block bg-black h-0.5 w-8 after:absolute after:rounded-lg after:block after:bg-black after:h-0.5 after:w-8 after:bottom-1 before:absolute before:roudned-sm before:block before:bg-black before:h-0.5 before:w-8 before:top-1"></span>
         </label>
     }
 }
