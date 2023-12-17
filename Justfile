@@ -2,9 +2,14 @@ default:
   @just --list --justfile {{justfile()}}
 
 build:
+  npm install
   cargo build
 
+build-release:
+  cargo build --release
+
 clean:
+  trunk clean
   cargo clean
 
 test: test-unit
@@ -31,5 +36,9 @@ disallow-unused-cargo-deps:
 audit:
   cargo audit
 
-serve:
+serve: && build
   trunk serve --open
+
+release: && build-release
+  trunk build --release
+

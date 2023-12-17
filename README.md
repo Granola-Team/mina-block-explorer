@@ -2,49 +2,37 @@
 
 [![Build status](https://badge.buildkite.com/1f8c338cb4ede4e41a4d84de89479fb2eddf9a6f64b72dcf36.svg)](https://buildkite.com/granola/mina-block-explorer)
 
-The Mina Block Explorer is a website that allows users to explore and
-view details about blocks, transactions, addresses, validators and
-other relevant network information. It provides a user-friendly user
-interface to interact with the Mina blockchain. This document
-describes how to build such an application.
+The Mina Block Explorer is a user-friendly website for exploring the
+Mina Blockchain. It offers a straightforward interface to view details
+about blocks, transactions, addresses, and validators, simplifying
+interaction with the network.
 
-## Quickstart
+## Getting Started
 
-* Install Rust 
-```
-curl https://sh.rustup.rs -sSf | sh
-source "$HOME/.cargo/env"
-```
+This project utilizes Nix to ensure consistent and reproducible
+development environment. This choice streamlines our development
+process, allowing us to focus on delivering value with minimal concern
+for varying system configurations or dependency conflicts.
 
-* Serve app 
-```
-cd app 
-cargo build
-trunk serve --open
-```
+### Installing Nix
 
-* Playwright Tests
-```
-cd app
-npx playwright test
-```
+1. Install Nix: Visit [Nix download
+   page](https://nixos.org/download.html) and follow the installation
+   instructions.
 
-## Nix flakes
+2. Enable Nix Flakes: Refer to the [Nix Flakes
+   guide](https://nixos.wiki/wiki/Flakes) for enabling Flakes in Nix.
 
-This project utilizes Nix Flakes for development and building. Install
-Nix [here](https://nixos.org/download.html) and enable Flakes using
-the guide [here](https://nixos.wiki/wiki/Flakes). No additional
-dependencies are needed.
+No additional dependencies are needed beyond this setup.
 
-### Setting Up the Development Environment
+## Quick Start Guide
 
-Create your development environment using `nix develop`. This prepares
-your system with the necessary dependencies, compilers, and
-development tools, eliminating the need for an independent Rust
-installation. For VSCode, enhance your experience with the `Nix
-Environment Selector` extension by linking it to
-`shell.nix`. Alternatively, configure your IDE environment with
-`direnv`.
+1. Setup Environment: Run `nix develop` in your terminal to prepare your
+   development environment.
+
+2. Start the Server: Execute `just serve` to start the server.
+
+These two steps will get your environment ready and your server running quickly.
 
 ## License (See LICENSE file for full license)
 
