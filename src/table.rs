@@ -110,12 +110,13 @@ where
                 let page_data_inner = page_data_clone.clone();
                 match page_data_inner {
                     Some(pg) => view! {
-                        <div class="flex">
-                            <span>
+                        <div class="grid grid-cols-3 h-12 bg-table-header-fill">
+                            <span class="col-start-1 text-xs flex items-center font-bold pl-8">
                                 {format!("Showing {} to {} of {} records", pg.start_index(), pg.end_index(), pg.total_records)}
                             </span>
-                            <span>
+                            <span class="col-start-2 text-xs font-bold flex items-center justify-center">
                                 <button on:click=move |_| (pg.prev_page)()>"<< Previous Page"</button>
+                                <span class="text-md m-4 underline">{pg.current_page}</span>
                                 <button on:click=move |_| (pg.next_page)()>"Next Page>>"</button>
                             </span>
                         </div>        
