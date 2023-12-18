@@ -23,21 +23,21 @@ impl Pagination {
         self.current_page * self.records_per_page
     }
 
-    fn total_pages(&self) -> i32 {
-        self.total_records / self.records_per_page + (self.total_records % self.records_per_page).signum()
-    }
+    // fn total_pages(&self) -> i32 {
+    //     self.total_records / self.records_per_page + (self.total_records % self.records_per_page).signum()
+    // }
 
 }
 
 #[test]
 fn test_indexes_first_page() {
-    
+    fn noop() {}
     let pd = Pagination {
         current_page: 1,
         records_per_page: 15,
         total_records: 90,
-        next_page: todo!(),
-        prev_page: todo!(),
+        next_page: noop,
+        prev_page: noop,
     };
     assert_eq!(pd.start_index(), 1);
     assert_eq!(pd.end_index(), 15)
@@ -45,36 +45,38 @@ fn test_indexes_first_page() {
 
 #[test]
 fn test_indexes_second_page() {
+    fn noop() {}
     let pd = Pagination {
         current_page: 2,
         records_per_page: 15,
         total_records: 90,
-        next_page: todo!(),
-        prev_page: todo!(),
+        next_page: noop,
+        prev_page: noop,
     };
     assert_eq!(pd.start_index(), 16);
     assert_eq!(pd.end_index(), 30)
 }
 
-#[test]
-fn test_total_pages() {
-    let pd = Pagination {
-        current_page: 2,
-        records_per_page: 15,
-        total_records: 90,
-        next_page: todo!(),
-        prev_page: todo!(),
-    };
-    assert_eq!(pd.total_pages(), 6);
-    let pd = Pagination {
-        current_page: 2,
-        records_per_page: 15,
-        total_records: 91,
-        next_page: todo!(),
-        prev_page: todo!(),
-    };
-    assert_eq!(pd.total_pages(), 7);
-}
+// #[test]
+// fn test_total_pages() {
+//     fn noop() {}
+//     let pd = Pagination {
+//         current_page: 2,
+//         records_per_page: 15,
+//         total_records: 90,
+//         next_page: noop,
+//         prev_page: noop,
+//     };
+//     assert_eq!(pd.total_pages(), 6);
+//     let pd = Pagination {
+//         current_page: 2,
+//         records_per_page: 15,
+//         total_records: 91,
+//         next_page: noop,
+//         prev_page: noop,
+//     };
+//     assert_eq!(pd.total_pages(), 7);
+// }
 
 #[component]
 pub fn Table<T>(
