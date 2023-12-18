@@ -1,10 +1,15 @@
 use leptos::*;
 use serde::{Deserialize, Serialize};
-use crate::{api_models::MyError, table::{TableData, Table, Pagination}, table_section::TableSection};
+use crate::{api_models::MyError, table::{TableData, Table}, table_section::TableSection};
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
 struct LatestBlocksResponse {
-    blocks: Vec<Block>,
+    data: Blocks,
+}
+
+#[derive(Debug, Deserialize, Serialize, Clone)]
+struct Blocks {
+    blocks: Vec<Block>
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
@@ -28,7 +33,7 @@ struct CreatorAccount {
 #[derive(Debug, Deserialize, Serialize, Clone)]
 #[serde(rename_all = "camelCase")]
 struct Transactions {
-    coinbase: u64,
+    coinbase: String,
     coinbase_receiver_account: CoinbaseReceiverAccount,
     user_commands: Vec<UserCommand>,
 }
@@ -79,7 +84,7 @@ impl TableData for LatestBlocksResponse {
 
     fn get_rows(&self) -> Vec<Vec<String>> {
         let mut rows = Vec::new();
-        for block in &self.blocks {
+        for block in &self.data.blocks {
             let data = vec![
                 block.block_height.to_string(),
                 block.date_time.to_string(),
@@ -97,9 +102,13 @@ impl TableData for LatestBlocksResponse {
     }
 }
 
+async fn load_data(limit: i32) -> Result<LatestBlocksResponse, MyError> {
+    let client = reqwest::Client::new();
+    let query = r#"{"query":"query MyQuery {\n  blocks(limit: ::limit::, sortBy: BLOCKHEIGHT_DESC) {\n    blockHeight\n    dateTime\n    creatorAccount {\n      publicKey\n    }\n    snarkJobs {\n      dateTime\n    }\n    transactions {\n      coinbase\n      coinbaseReceiverAccount {\n        publicKey\n      }\n      userCommands {\n        hash\n      }\n    }\n    protocolState {\n      consensusState {\n        slot\n      }\n    }\n    stateHash\n  }\n}\n","variables":null,"operationName":"MyQuery"}"#;
 
-async fn load_data() -> Result<LatestBlocksResponse, MyError> {
-    let response = reqwest::get("https://api.minaexplorer.com/blocks?limit=10")
+    let response = client.post("https://graphql.minaexplorer.com")
+        .body(query.replace("::limit::", &limit.to_string()))
+        .send()
         .await
         .map_err(|e| MyError::NetworkError(e.to_string()))?;
 
@@ -116,25 +125,20 @@ async fn load_data() -> Result<LatestBlocksResponse, MyError> {
 
 #[component]
 pub fn LatestBlocksPage() -> impl IntoView {
-    let resource = create_resource(|| (), |_| async move { load_data().await });
-    // let pg = Pagination {
-    //     current_page:1,
-    //     records_per_page: 15,
-    //     total_records: 30,
-    //     next_page: todo!(),
-    //     prev_page: todo!(),
-    // };
+    let resource = create_resource(|| (), move |_| async move { 
+        load_data(10).await 
+    });
+    
 
     view! {
         {move || {
-            // let pg_inner = pg.clone();
             match resource.get() {
                 None => view! {
                     <div>"Loading..." </div>
                 }.into_view(),
                 Some(Ok(data)) => view! { 
                     <TableSection section_heading="Latest Blocks".to_owned()>
-                        <Table data=data/>
+                        <Table data=data />
                     </TableSection>
                 },
                 Some(Err(my_error)) => view! {
