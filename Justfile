@@ -41,11 +41,18 @@ audit:
   cargo audit
 
 serve: && build
-  trunk serve --open
+  trunk serve --open --port=$((5170 + $RANDOM % 10))
 
 release: && build-release
   trunk build --release --filehash true
 
+pre_build:
+  npx tailwindcss -i assets/css/input.css -o assets/css/styles.css --minify
+  mkdir -p $TRUNK_STAGING_DIR/assets/img/
+  cp assets/img/* $TRUNK_STAGING_DIR/assets/img/
+  cp assets/robots.txt $TRUNK_STAGING_DIR
+
 publish: release
   aws cloudfront create-invalidation --distribution-id {{dist_id}} --paths "/*"
   aws s3 cp dist s3://{{bucket_id}} --recursive
+

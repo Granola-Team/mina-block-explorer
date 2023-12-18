@@ -1,5 +1,5 @@
 [[hooks]]
 stage = "pre_build"
 command = "sh"
-command_arguments = ["-c", "npx tailwindcss -i input.css -o style/output.css && cp public/robots.txt $TRUNK_STAGING_DIR"]
+command_arguments = ["-c", "just pre_build"]
 

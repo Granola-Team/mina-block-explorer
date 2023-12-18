@@ -9,10 +9,12 @@ pub enum SummaryItemKind {
 }
 
 #[component]
-pub fn SummaryItem(label: String, value: SummaryItemKind, id: String) -> impl IntoView {
+pub fn SummaryItem(label: String, value: SummaryItemKind, id: String, #[prop(optional)] imgsrc: String) -> impl IntoView {
     view! {
         <div class="h-24 w-96 p-4 max-w-full grid gap-1 grid-cols-[100px_auto] bg-white rounded-md">
-            <div class="cols-span-1 row-start-1 row-end-3 bg-slate-100 rounded-md"/>
+            <div class="cols-span-1 row-start-1 row-end-3 bg-light-granola-orange rounded-md flex justify-center items-center">
+                <img src=imgsrc width=45 height=45 alt="logo"/>
+            </div>
             <div class="col-start-2 col-end-3 font-bold text-xl flex justify-start items-end" id={id.clone()}>{
                 match value {
                     SummaryItemKind::Str(s) => s,
