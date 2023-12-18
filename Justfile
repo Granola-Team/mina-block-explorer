@@ -44,6 +44,8 @@ release: && build-release
 
 pre_build:
   npx tailwindcss -i assets/css/input.css -o assets/css/styles.css --minify
-  cp assets/robots.txt $TRUNK_DIST_DIR
+  mkdir -p $TRUNK_STAGING_DIR/assets/img/
+  cp assets/img/* $TRUNK_STAGING_DIR/assets/img/
+  cp assets/robots.txt $TRUNK_STAGING_DIR
 
 
