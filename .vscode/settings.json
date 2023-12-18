@@ -2,5 +2,6 @@
     "nixEnvSelector.nixFile": "${workspaceRoot}/shell.nix",
     "rust-analyzer.linkedProjects": [
         "./Cargo.toml",
-    ]
+    ],
+    "rust-analyzer.diagnostics.disabled": ["unresolved-proc-macro"]
 }
