@@ -14,7 +14,7 @@ pub fn Nav() -> impl IntoView {
         <nav class="md:col-start-3 md:col-end-4 md:[all:unset] bg-main-background peer-checked/menu:scale-y-100 scale-y-0 transition-transform origin-top w-screen text-left absolute top-full left-0">
             <ul class="md:flex md:justify-end m-0 p-0">
             {nav_items.into_iter()
-                .map(|(link,title)| view! { <li class="md:mb-0 mb-2 mx-4"><a class="font-bold text-sm uppercase text-white hover:text-granola-orange hover:underline hover:decoration-2" href=link>{title}</a></li>})
+                .map(|(link,title)| view! { <li class="md:mb-0 mb-2 mx-2"><a class="font-bold text-sm uppercase text-white hover:text-granola-orange hover:underline hover:decoration-2" href=link>{title}</a></li>})
                 .collect::<Vec<_>>()}
             </ul>
         </nav>
