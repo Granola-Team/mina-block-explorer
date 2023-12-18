@@ -90,7 +90,7 @@ where
     let rows = data.get_rows();
 
     view! {
-        <div class="w-full overflow-x-auto">
+        <div class="w-full overflow-auto h-full">
             <table class="md:rounded-b-lg table-fixed w-[300%] md:w-[150%] lg:w-full ">
             <tr class="h-12 bg-table-header-fill">
                 {columns.into_iter()
