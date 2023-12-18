@@ -12,6 +12,10 @@ module.exports = {
         },
         colors: {
             ...colors,
+            'granola-orange': "#E39844",
+            'light-granola-orange': "#FBF3EA",
+            'main-background': "#21252D",
+            'secondary-background': "#F8F8F8",
             'table-section': "#FFFFFF",
             'background': '#F9F9F8',
             'table-header-fill': '#EEEDF7',
