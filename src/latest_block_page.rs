@@ -1,6 +1,6 @@
 use leptos::*;
 use serde::{Deserialize, Serialize};
-use crate::{api_models::MyError, table::{TableData, Table}, table_section::TableSection};
+use crate::{api_models::MyError, table::{TableData, Table, Pagination}, table_section::TableSection};
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
 struct LatestBlocksResponse {
@@ -117,20 +117,30 @@ async fn load_data() -> Result<LatestBlocksResponse, MyError> {
 #[component]
 pub fn LatestBlocksPage() -> impl IntoView {
     let resource = create_resource(|| (), |_| async move { load_data().await });
+    // let pg = Pagination {
+    //     current_page:1,
+    //     records_per_page: 15,
+    //     total_records: 30,
+    //     next_page: todo!(),
+    //     prev_page: todo!(),
+    // };
 
     view! {
-        {move || match resource.get() {
-            None => view! {
-                <div>"Loading..." </div>
-            }.into_view(),
-            Some(Ok(data)) => view! { 
-                <TableSection section_heading="Latest Blocks".to_owned()>
-                    <Table data=data/>
-                </TableSection>
-             },
-            Some(Err(my_error)) => view! {
-                <div> { format!("Error: {:#?}", my_error)}</div>
-            }.into_view()
+        {move || {
+            // let pg_inner = pg.clone();
+            match resource.get() {
+                None => view! {
+                    <div>"Loading..." </div>
+                }.into_view(),
+                Some(Ok(data)) => view! { 
+                    <TableSection section_heading="Latest Blocks".to_owned()>
+                        <Table data=data/>
+                    </TableSection>
+                },
+                Some(Err(my_error)) => view! {
+                    <div> { format!("Error: {:#?}", my_error)}</div>
+                }.into_view()
+            }
         }}
     }
 }
