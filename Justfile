@@ -1,9 +1,13 @@
+dist_id   := "E3U00NZ5JCWMHS"
+bucket_id := "minasearch.com"
+
 default:
   @just --list --justfile {{justfile()}}
 
 build:
   npm install
   cargo build
+  trunk build
 
 build-release:
   cargo build --release
@@ -40,5 +44,8 @@ serve: && build
   trunk serve --open
 
 release: && build-release
-  trunk build --release
+  trunk build --release --filehash true
 
+publish: release
+  aws cloudfront create-invalidation --distribution-id {{dist_id}} --paths "/*"
+  aws s3 cp dist s3://{{bucket_id}} --recursive
