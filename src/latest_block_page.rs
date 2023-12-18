@@ -4,12 +4,7 @@ use crate::{api_models::MyError, table::{TableData, Table}, table_section::Table
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
 struct LatestBlocksResponse {
-    data: Blocks,
-}
-
-#[derive(Debug, Deserialize, Serialize, Clone)]
-struct Blocks {
-    blocks: Vec<Block>
+    blocks: Vec<Block>,
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
@@ -33,7 +28,7 @@ struct CreatorAccount {
 #[derive(Debug, Deserialize, Serialize, Clone)]
 #[serde(rename_all = "camelCase")]
 struct Transactions {
-    coinbase: String,
+    coinbase: u64,
     coinbase_receiver_account: CoinbaseReceiverAccount,
     user_commands: Vec<UserCommand>,
 }
@@ -84,7 +79,7 @@ impl TableData for LatestBlocksResponse {
 
     fn get_rows(&self) -> Vec<Vec<String>> {
         let mut rows = Vec::new();
-        for block in &self.data.blocks {
+        for block in &self.blocks {
             let data = vec![
                 block.block_height.to_string(),
                 block.date_time.to_string(),
@@ -102,13 +97,9 @@ impl TableData for LatestBlocksResponse {
     }
 }
 
-async fn load_data(limit: i32) -> Result<LatestBlocksResponse, MyError> {
-    let client = reqwest::Client::new();
-    let query = r#"{"query":"query MyQuery {\n  blocks(limit: ::limit::, sortBy: BLOCKHEIGHT_DESC) {\n    blockHeight\n    dateTime\n    creatorAccount {\n      publicKey\n    }\n    snarkJobs {\n      dateTime\n    }\n    transactions {\n      coinbase\n      coinbaseReceiverAccount {\n        publicKey\n      }\n      userCommands {\n        hash\n      }\n    }\n    protocolState {\n      consensusState {\n        slot\n      }\n    }\n    stateHash\n  }\n}\n","variables":null,"operationName":"MyQuery"}"#;
 
-    let response = client.post("https://graphql.minaexplorer.com")
-        .body(query.replace("::limit::", &limit.to_string()))
-        .send()
+async fn load_data() -> Result<LatestBlocksResponse, MyError> {
+    let response = reqwest::get("https://api.minaexplorer.com/blocks?limit=10")
         .await
         .map_err(|e| MyError::NetworkError(e.to_string()))?;
 
@@ -125,26 +116,21 @@ async fn load_data(limit: i32) -> Result<LatestBlocksResponse, MyError> {
 
 #[component]
 pub fn LatestBlocksPage() -> impl IntoView {
-    let resource = create_resource(|| (), move |_| async move { 
-        load_data(10).await 
-    });
-    
+    let resource = create_resource(|| (), |_| async move { load_data().await });
 
     view! {
-        {move || {
-            match resource.get() {
-                None => view! {
-                    <div>"Loading..." </div>
-                }.into_view(),
-                Some(Ok(data)) => view! { 
-                    <TableSection section_heading="Latest Blocks".to_owned()>
-                        <Table data=data />
-                    </TableSection>
-                },
-                Some(Err(my_error)) => view! {
-                    <div> { format!("Error: {:#?}", my_error)}</div>
-                }.into_view()
-            }
+        {move || match resource.get() {
+            None => view! {
+                <div>"Loading..." </div>
+            }.into_view(),
+            Some(Ok(data)) => view! { 
+                <TableSection section_heading="Latest Blocks".to_owned()>
+                    <Table data=data/>
+                </TableSection>
+             },
+            Some(Err(my_error)) => view! {
+                <div> { format!("Error: {:#?}", my_error)}</div>
+            }.into_view()
         }}
     }
 }
