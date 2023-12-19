@@ -23,6 +23,7 @@
       {
         devShells.default = mkShell {
           buildInputs = [
+            awscli
             cacert
             cargo-audit
             cargo-machete
