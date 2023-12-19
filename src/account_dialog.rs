@@ -4,16 +4,31 @@ use leptos::*;
 
 #[component]
 pub fn AccountDialog() -> impl IntoView {
-    let items_with_pills = vec![("Balance", "96891652.921500000"), ("Nonce", "15")];
-    let other_summary_items = vec![("Receipt Chain Hash", "2n1YWuNHnjj6Y8C9SC1viqxXBLz99Mxks58VduA2X7uusZeS3XFG"), 
-        ("Delegate", "3NK2tkzqqK5spR2sZ7tujjqPksL45M3UUrcA4WhCkeiPtnugyE2x"), 
-        ("Voting For", "5GK2tkzqqK5spR2sZ7tujjqPksL45M3UUrcA4WhCkeiPtnugyP8c")];
+    let summary_items = vec![
+        ("Balance", "96891652.921500000",true),
+        ("Nonce", "15",true),
+        (
+            "Receipt Chain Hash",
+            "2n1YWuNHnjj6Y8C9SC1viqxXBLz99Mxks58VduA2X7uusZeS3XFG",
+            false
+        ),
+        (
+            "Delegate",
+            "3NK2tkzqqK5spR2sZ7tujjqPksL45M3UUrcA4WhCkeiPtnugyE2x",
+            false
+        ),
+        (
+            "Voting For",
+            "5GK2tkzqqK5spR2sZ7tujjqPksL45M3UUrcA4WhCkeiPtnugyP8c",
+            false
+        ),
+    ];
 
     view! {
         <dialog id="accountdialog" class="w-full max-w-3xl h-screen fixed top-0 mr-0 ml-auto flex flex-col items-stretch p-4 bg-background">
             <section>
                 <div class="flex justify-between">
-                    <h1 class="text-bold text-xl">"Account Overview"</h1>
+                    <h2 class="text-bold text-xl">"Account Overview"</h2>
                     <button>X</button>
                 </div>
                 <div class="flex flex-col items-center mt-16 bg-light-granola-orange rounded-3xl h-36">
@@ -28,24 +43,32 @@ pub fn AccountDialog() -> impl IntoView {
                     </div>
                 </div>
                 <div class="bg-white rounded-xl flex flex-col items-stretch mt-8 p-4">
-                    {items_with_pills.into_iter()
-                        .map(|(label, value)| view! {
-                            <div class="flex flex-col items-start md:flex-row md:items-baseline md:justify-start">
-                                <span class="w-1/4 text-slate-400 text-sm whitespace-nowrap">{label}:</span>
-                                <span class="rounded-full bg-light-granola-orange p-1 text-sm">{value}</span>
-                            </div>
+                    {summary_items.into_iter()
+                        .map(|(label, value, has_pill)| view! {
+                            <OverviewEntry label=label.to_owned() value=value.to_owned() has_pill=has_pill />
                         })
                         .collect::<Vec<_>>()}
-                    {other_summary_items.into_iter()
-                        .map(|(label, value)| view! {
-                            <div class="flex flex-col items-start md:flex-row md:items-baseline md:justify-start">
-                                <span class="w-1/4 text-slate-400 text-sm whitespace-nowrap">{label}:</span>
-                                <span class="w-3/4 text-sm text-ellipsis p-1 overflow-hidden">{value}</span>
-                            </div>
-                        })
-                        .collect::<Vec<_>>()}
+
                 </div>
             </section>
+            
         </dialog>
+    }
+}
+
+#[component]
+fn OverviewEntry(label: String, value: String, has_pill: bool) -> impl IntoView {
+    let value_class_str_base = "py-1 my-1 text-sm";
+
+    let value_class_str = match has_pill {
+        true => format!("{} {}",value_class_str_base.to_owned(),"p-1 rounded-full bg-light-granola-orange"),
+        false => format!("{} {}",value_class_str_base.to_owned(),"w-3/4 text-ellipsis overflow-hidden"),
+    };
+
+    view! {
+        <div class="flex flex-col items-start md:flex-row md:items-baseline md:justify-start">
+            <span class="w-1/4 text-slate-400 text-sm whitespace-nowrap">{label}:</span>
+            <span class=value_class_str>{value}</span>
+        </div>
     }
 }
