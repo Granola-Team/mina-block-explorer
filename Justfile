@@ -1,8 +1,7 @@
-dist_id   := "E3U00NZ5JCWMHS"
-bucket_id := "minasearch.com"
-
 default:
   @just --list --justfile {{justfile()}}
+
+set dotenv-load := true
 
 build:
   npm install
@@ -40,10 +39,10 @@ disallow-unused-cargo-deps:
 audit:
   cargo audit
 
-serve: && build
+serve: build
   trunk serve --open --port=$((5170 + $RANDOM % 10))
 
-release: && build-release
+release: build-release
   trunk build --release --filehash true
 
 pre_build:
@@ -53,6 +52,5 @@ pre_build:
   cp assets/robots.txt $TRUNK_STAGING_DIR
 
 publish: release
-  aws cloudfront create-invalidation --distribution-id {{dist_id}} --paths "/*"
-  aws s3 cp dist s3://{{bucket_id}} --recursive
-
+  aws cloudfront create-invalidation --distribution-id "$DIST_ID" --paths "/*"
+  aws s3 cp dist "s3://$BUCKET_NAME" --recursive
