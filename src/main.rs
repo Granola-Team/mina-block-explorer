@@ -12,6 +12,7 @@ mod snarks_page;
 mod stakes_page;
 mod header;
 mod table_section;
+mod account_dialog;
 
 use root::Root;
 
