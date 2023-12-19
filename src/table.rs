@@ -1,8 +1,14 @@
 use leptos::*;
+use std::collections::HashMap;
+
 
 pub trait TableData {
     fn get_columns(&self) -> Vec<String>;
     fn get_rows(&self) -> Vec<Vec<String>>;
+    fn get_linkable_cols(&self) -> HashMap<i32, String> {
+        let linkcols: HashMap<i32, String> = HashMap::new();
+        linkcols
+    }
 }
 
 #[derive(Clone)]
@@ -88,6 +94,7 @@ where
 {
     let columns = data.get_columns();
     let rows = data.get_rows();
+    let linkable_cols = data.get_linkable_cols();
 
     view! {
         <div class="w-full overflow-auto h-full">
@@ -100,7 +107,24 @@ where
             {rows.into_iter()
                 .map(|row| view! {
                     <tr class="h-12 bg-table-row-fill">
-                        {row.into_iter().map(|cell| view! { <td class="first:pl-8 text-table-row-text-color font-medium text-sm text-left overflow-hidden whitespace-nowrap text-ellipsis">{cell}</td>}).collect::<Vec<_>>()}
+                        {
+                            row.iter().enumerate().map(|(index, cell)| {
+
+                                let cell_class = "first:pl-8 text-table-row-text-color font-medium text-sm text-left overflow-hidden whitespace-nowrap text-ellipsis";
+                                let cell_content = match linkable_cols.get(&(index as i32)) {
+                                    Some(&ref value) => {
+                                        let link_href = value.replace(":token", cell);
+                                        view! { <span><a href={link_href}>{cell}</a></span> } 
+                                    }
+                                    None => view! { <span>{cell}</span> }, 
+                                };
+                                view! {
+                                    <td class={cell_class}>{cell_content}</td>
+                                }
+
+                            }).collect::<Vec<_>>()
+
+                        }
                     </tr>
                 })
                 .collect::<Vec<_>>()}
