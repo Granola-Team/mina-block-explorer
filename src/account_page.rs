@@ -28,7 +28,7 @@ impl AccountBalance {
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
 #[serde(rename_all = "camelCase")]
-struct AccountSummary {
+pub struct AccountSummary {
     public_key: String,
     nonce: u32,
     receipt_chain_hash: String,
