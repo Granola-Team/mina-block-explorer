@@ -8,6 +8,7 @@ use crate::summary_page::SummaryPage;
 use crate::latest_block_page::LatestBlocksPage;
 use crate::transactions_page::TransactionsPage;
 use crate::header::Header;
+use crate::account_dialog::AccountDialog;
 
 #[component]
 pub fn Root() -> impl IntoView {
@@ -19,7 +20,10 @@ pub fn Root() -> impl IntoView {
             <Route path="/" view=SummaryPage />
             <Route path="/summary" view=SummaryPage />
             <Route path="/accounts/:id" view=AccountSummary />
-            <Route path="/blocks" view=LatestBlocksPage />
+            <Route path="/blocks" view=LatestBlocksPage>
+              <Route path="accounts/:id" view=AccountDialog/>
+              <Route path="" view=|| view! { <span />}/>
+            </Route>
             <Route path="/transactions" view=TransactionsPage />
             <Route path="/snarks" view=SnarksPage />
             <Route path="/stakes" view=StakesPage />
