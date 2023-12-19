@@ -1,4 +1,5 @@
 use leptos::*;
+use leptos_router::*;
 
 enum Status {
     Pending,
@@ -7,6 +8,9 @@ enum Status {
 
 #[component]
 pub fn AccountDialog() -> impl IntoView {
+    let memo_params_map = use_params_map();
+    let id = memo_params_map.with(|params| params.get("id").cloned()).unwrap_or_default();
+
     let summary_items = vec![
         ("Balance", "96891652.921500000",true),
         ("Nonce", "15",true),
@@ -42,10 +46,10 @@ pub fn AccountDialog() -> impl IntoView {
                 </div>
                 <div class="flex flex-col items-center mt-16 bg-light-granola-orange rounded-3xl h-36">
                     <div class="w-20 h-20 rounded-full bg-main-background flex justify-center items-center translate-y-[-25%]">
-                        <img src="assets/img/account_balance_wallet.svg" alt="account balance wallet logo"/>
+                        <img src="/assets/img/account_balance_wallet.svg" alt="account balance wallet logo"/>
                     </div>
                     <div class="text-granola-orange text-base text-bold text-ellipsis w-10/12 overflow-hidden">
-                        "B62qrQKS9ghd91shs73TCmBJRW9GzvTJK443DPx2YbqcyoLc56g1ny9"
+                        {id}
                     </div>
                     <div class="text-slate-400 text-sm">
                         "Username: Aura Wallet"
@@ -88,8 +92,8 @@ pub fn AccountDialog() -> impl IntoView {
 fn Transaction(status: Status, date:String, moments_ago:String, from:String, to:String, fee:String, amount:String, hash:String) -> impl IntoView {
 
     let img_attr = match status {
-        Status::Pending => ("assets/img/timelapse.svg","Pending"),
-        Status::Complete => ("assets/img/down-arrow.svg","Complete")
+        Status::Pending => ("/assets/img/timelapse.svg","Pending"),
+        Status::Complete => ("/assets/img/down-arrow.svg","Complete")
     };
 
     let entries = vec![
