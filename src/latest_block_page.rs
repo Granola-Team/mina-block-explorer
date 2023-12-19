@@ -1,6 +1,6 @@
 use leptos::*;
 use serde::{Deserialize, Serialize};
-use crate::{api_models::MyError, table::{TableData, Table}, table_section::TableSection};
+use crate::{api_models::MyError, table::{TableData, Table}, table_section::TableSection, account_dialog::AccountDialog};
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
 struct LatestBlocksResponse {
@@ -124,10 +124,11 @@ pub fn LatestBlocksPage() -> impl IntoView {
                 <div>"Loading..." </div>
             }.into_view(),
             Some(Ok(data)) => view! { 
+                <AccountDialog />
                 <TableSection section_heading="Latest Blocks".to_owned()>
                     <Table data=data/>
                 </TableSection>
-             },
+             }.into_view(),
             Some(Err(my_error)) => view! {
                 <div> { format!("Error: {:#?}", my_error)}</div>
             }.into_view()
