@@ -6,3 +6,5 @@ playwright-report/
 blob-report/
 playwright/.cache/
 assets/css/styles.css
+.env
+package-lock.json
