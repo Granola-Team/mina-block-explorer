@@ -1,32 +1,53 @@
 use leptos::*;
 use leptos_router::*;
 
+use crate::api_models::MyError;
+use crate::account_page::{AccountSummary, AccountResponse, load_data as load_account_summary};
+
 enum Status {
     Pending,
     Complete
 }
 
-#[component]
-pub fn AccountDialog() -> impl IntoView {
+pub fn AccountDialogView() -> impl IntoView {
     let memo_params_map = use_params_map();
     let id = memo_params_map.with(|params| params.get("id").cloned()).unwrap_or_default();
 
+    let resource: Resource<(), Result<AccountResponse, MyError>> = {
+        create_resource(
+            || (),
+            move |_| {
+                let id_clone = id.clone();
+                async move { load_account_summary(&id_clone).await }
+            },
+        )
+    };
+
+    {move || match resource.get() {
+        None => view! { <div/> }.into_view(),
+        Some(Ok(res)) => view! { <AccountDialog account=res.account /> },
+        Some(Err(err)) => view! { <div class="visibility-hidden">{format!("{:#?}", err)}</div> }.into_view()
+    }}
+}
+
+#[component]
+fn AccountDialog(account: AccountSummary) -> impl IntoView {
     let summary_items = vec![
-        ("Balance", "96891652.921500000",true),
-        ("Nonce", "15",true),
+        ("Balance", account.balance.total ,true),
+        ("Nonce", account.nonce.to_string(),true),
         (
             "Receipt Chain Hash",
-            "2n1YWuNHnjj6Y8C9SC1viqxXBLz99Mxks58VduA2X7uusZeS3XFG",
+            account.receipt_chain_hash,
             false
         ),
         (
             "Delegate",
-            "3NK2tkzqqK5spR2sZ7tujjqPksL45M3UUrcA4WhCkeiPtnugyE2x",
+            account.delegate,
             false
         ),
         (
             "Voting For",
-            "5GK2tkzqqK5spR2sZ7tujjqPksL45M3UUrcA4WhCkeiPtnugyP8c",
+            account.voting_for,
             false
         ),
     ];
@@ -49,7 +70,7 @@ pub fn AccountDialog() -> impl IntoView {
                         <img src="/assets/img/account_balance_wallet.svg" alt="account balance wallet logo"/>
                     </div>
                     <div class="text-granola-orange text-base text-bold text-ellipsis w-10/12 overflow-hidden">
-                        {id}
+                        {account.public_key}
                     </div>
                     <div class="text-slate-400 text-sm">
                         "Username: Aura Wallet"
