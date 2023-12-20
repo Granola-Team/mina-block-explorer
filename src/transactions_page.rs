@@ -7,35 +7,36 @@ use crate::{
 };
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
-struct TransactionsResponse {
-    data: Data,
+pub struct TransactionsResponse {
+    pub data: Data,
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
-struct Data {
-    transactions: Vec<Transaction>,
+pub struct Data {
+    pub transactions: Vec<Transaction>,
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
-struct Transaction {
-    hash: String,
-    amount: u64,
-    block: Block,
-    fee: u64,
-    from: String,
-    receiver: Receiver,
-}
-
-#[derive(Debug, Deserialize, Serialize, Clone)]
-#[serde(rename_all = "camelCase")]
-struct Block {
-    date_time: String,
+pub struct Transaction {
+    pub hash: String,
+    pub amount: u64,
+    pub block: Block,
+    pub fee: u64,
+    pub from: String,
+    pub receiver: Receiver,
+    pub to: String
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
 #[serde(rename_all = "camelCase")]
-struct Receiver {
-    public_key: String,
+pub struct Block {
+    pub date_time: String,
+}
+
+#[derive(Debug, Deserialize, Serialize, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct Receiver {
+    pub public_key: String,
 }
 
 impl TableData for TransactionsResponse {
@@ -67,10 +68,19 @@ impl TableData for TransactionsResponse {
     }
 }
 
-async fn load_data() -> Result<TransactionsResponse, MyError> {
+pub async fn load_data(limit: i32, public_key: Option<String>) -> Result<TransactionsResponse, MyError> {
+    let mut query = String::from(r#"{"query":"query MyQuery {\n  transactions(limit: ::limit::, sortBy: DATETIME_DESC::query::) {\n    amount\n    fee\n    to\n    from\n    hash\n    block {\n      dateTime\n    }\n    receiver {\n      publicKey\n    }\n  }\n}\n","variables":null,"operationName":"MyQuery"}"#);
+    query = query.replace("::limit::", &limit.to_string());
+    if let Some(key) = public_key {
+        let substring_string = ", query: {from: \\\"::public_key::\\\"}".replace("::public_key::", &key);
+        query = query.replace("::query::", &substring_string);
+    } else {
+        query = query.replace("::query::", "");
+    }
+    
     let client = reqwest::Client::new();
     let response = client.post("https://graphql.minaexplorer.com")
-        .body(r#"{"query":"query MyQuery {\n  transactions(limit: 10, query: {}) {\n    amount\n    fee\n    from\n    hash\n    block {\n      dateTime\n    }\n    receiver {\n      publicKey\n    }\n  }\n}\n","variables":null,"operationName":"MyQuery"}"#)
+        .body(query)
         .send()
         .await
         .map_err(|e| MyError::NetworkError(e.to_string()))?;
@@ -88,7 +98,10 @@ async fn load_data() -> Result<TransactionsResponse, MyError> {
 
 #[component]
 pub fn TransactionsPage() -> impl IntoView {
-    let resource = create_resource(|| (), |_| async move { load_data().await });
+    let resource = create_resource(|| (), |_| async move { 
+        let limit = 10;
+        load_data(limit, None).await 
+    });
 
     view! {
         {move || match resource.get() {
