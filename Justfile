@@ -9,6 +9,7 @@ build:
   trunk build
 
 build-release:
+  npm install
   cargo build --release
 
 clean:
