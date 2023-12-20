@@ -1,37 +1,77 @@
 use leptos::*;
 use leptos_router::*;
+use web_sys::console;
 
-use crate::api_models::MyError;
-use crate::account_page::{AccountSummary, AccountResponse, load_data as load_account_summary};
+
+use chrono::{DateTime, Utc, Duration};
+use crate::account_page::{AccountSummary, load_data as load_account_summary};
+use crate::transactions_page::{TransactionsResponse, Data as TransactionData, Transaction, load_data as load_transaction_data};
 
 enum Status {
     Pending,
     Complete
 }
 
+// Function to format the duration in a human-readable way
+fn format_duration(duration: &Duration) -> String {
+    let total_minutes = duration.num_minutes();
+    let hours = total_minutes / 60;
+    let minutes = total_minutes % 60;
+    format!("{} hour(s) and {} minute(s) ago", hours, minutes)
+}
+
+// Function to calculate and print the time elapsed since the given timestamp
+fn print_time_since(timestamp: &str) -> String {
+    // Parse the input timestamp
+    let past_time = match timestamp.parse::<DateTime<Utc>>() {
+        Ok(time) => time,
+        Err(e) => {
+            Utc::now()
+        }
+    };
+
+    // Get the current time
+    let now = Utc::now();
+
+    // Calculate the duration since the given timestamp
+    let duration_since = now.signed_duration_since(past_time);
+
+    // Format and print the duration
+    format_duration(&duration_since)
+}
+
 pub fn AccountDialogView() -> impl IntoView {
     let memo_params_map = use_params_map();
     let id = memo_params_map.with(|params| params.get("id").cloned()).unwrap_or_default();
+    let id_for_other = id.clone();
 
-    let resource: Resource<(), Result<AccountResponse, MyError>> = {
-        create_resource(
-            || (),
-            move |_| {
-                let id_clone = id.clone();
-                async move { load_account_summary(&id_clone).await }
+    let account_resource = create_resource(|| (), move |_| {
+        let id_clone_for_async = id.clone(); // Clone the ID for the async block
+        async move { 
+            load_account_summary(&id_clone_for_async).await
+        }
+    });
+    
+    let trans_resource = create_resource(|| (), move |_| {
+        let id_clone_for_async = id_for_other.clone(); // Clone the ID for the async block
+        async move { 
+            let limit = 3;
+            load_transaction_data(limit, Some(id_clone_for_async)).await 
+        }
+    });
+
+    view! {
+        {move || match (account_resource.get(), trans_resource.get()) {
+            (Some(Ok(a_res)), Some(Ok(t_res))) => view!{
+                <AccountDialog account=a_res.account transactions=t_res.data.transactions />
             },
-        )
-    };
-
-    {move || match resource.get() {
-        None => view! { <div/> }.into_view(),
-        Some(Ok(res)) => view! { <AccountDialog account=res.account /> },
-        Some(Err(err)) => view! { <div class="visibility-hidden">{format!("{:#?}", err)}</div> }.into_view()
-    }}
+            _ => view! { <span/>   }.into_view()
+        }}
+    }
 }
 
 #[component]
-fn AccountDialog(account: AccountSummary) -> impl IntoView {
+fn AccountDialog(account: AccountSummary, transactions: Vec<Transaction>) -> impl IntoView {
     let summary_items = vec![
         ("Balance", account.balance.total ,true),
         ("Nonce", account.nonce.to_string(),true),
@@ -51,12 +91,7 @@ fn AccountDialog(account: AccountSummary) -> impl IntoView {
             false
         ),
     ];
-
-    let transactions = vec![
-        (Status::Pending, "2023-12-15 06:54:00", "29 minutes ago", "2n1YWuNHnjj6Y8C9SC1viqxXBLz99Mxks58VduA2X7uusZeS3XFG", "3n1YWuNHnjj6Y8C9SC1viqxXBLz99Mxks58VduA2X7uusZeS3XHI", "0.300000000", "4970037.516000000", "5PM2tkzqqK5spR2sZ7tujjqPksL45M3UUrcA4WhCkeiPtnugyE5y"),
-        (Status::Complete, "2023-12-15 06:57:00", "32 minutes ago", "2n1YWuNHnjj6Y8C9SC1viqxXBLz99Mxks58VduA2X7uusZeS3XFG", "3n1YWuNHnjj6Y8C9SC1viqxXBLz99Mxks58VduA2X7uusZeS3XHI", "0.300000000", "4970037.516000000", "5PM2tkzqqK5spR2sZ7tujjqPksL45M3UUrcA4WhCkeiPtnugyE5y"),
-        (Status::Complete, "2023-12-15 06:51:00", "38 minutes ago", "2n1YWuNHnjj6Y8C9SC1viqxXBLz99Mxks58VduA2X7uusZeS3XFG", "3n1YWuNHnjj6Y8C9SC1viqxXBLz99Mxks58VduA2X7uusZeS3XHI", "0.300000000", "4970037.516000000", "5PM2tkzqqK5spR2sZ7tujjqPksL45M3UUrcA4WhCkeiPtnugyE5y"),
-    ];
+   
 
     view! {
         <dialog id="accountdialog" class="w-full max-w-3xl h-screen fixed top-0 mr-0 ml-auto flex flex-col items-stretch p-4 bg-background">
@@ -73,7 +108,7 @@ fn AccountDialog(account: AccountSummary) -> impl IntoView {
                         {account.public_key}
                     </div>
                     <div class="text-slate-400 text-sm">
-                        "Username: Aura Wallet"
+                        "Username: "{account.username}
                     </div>
                 </div>
                 <div class="bg-white rounded-xl flex flex-col items-stretch mt-8 p-4">
@@ -92,15 +127,15 @@ fn AccountDialog(account: AccountSummary) -> impl IntoView {
                 </div>
                 <div class="flex flex-col md:flex-row md:flex-wrap overflow-y-auto">
                     {transactions.into_iter()
-                        .map(|(status, date, moments_ago, from, to, fee, amount, hash)| view! {
-                            <Transaction status=status
-                                date=date.to_owned()
-                                moments_ago=moments_ago.to_owned()
-                                from=from.to_owned()
-                                to=to.to_owned()
-                                fee=fee.to_owned()
-                                amount=amount.to_owned()
-                                hash=hash.to_owned() />
+                        .map(|transaction| view! {
+                            <Transaction status=Status::Complete
+                                date=transaction.block.date_time.to_owned()
+                                moments_ago=print_time_since(&transaction.block.date_time)
+                                from=transaction.from.to_owned()
+                                to=transaction.to.to_owned()
+                                fee=transaction.fee.to_string()
+                                amount=transaction.amount.to_string()
+                                hash=transaction.hash.to_owned() />
                         })
                         .collect::<Vec<_>>()}
                 </div>
