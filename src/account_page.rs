@@ -16,8 +16,8 @@ struct QueryParams {
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
-struct AccountBalance {
-    total: String,
+pub struct AccountBalance {
+    pub total: String,
 }
 
 impl AccountBalance {
@@ -28,24 +28,24 @@ impl AccountBalance {
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
 #[serde(rename_all = "camelCase")]
-struct AccountSummary {
-    public_key: String,
-    nonce: u32,
-    receipt_chain_hash: String,
-    delegate: String,
-    voting_for: String,
-    total_tx: u32,
-    count_pending_transactions: u32,
-    username: String,
-    balance: AccountBalance,
+pub struct AccountSummary {
+    pub public_key: String,
+    pub nonce: u32,
+    pub receipt_chain_hash: String,
+    pub delegate: String,
+    pub voting_for: String,
+    pub total_tx: u32,
+    pub count_pending_transactions: u32,
+    pub username: String,
+    pub balance: AccountBalance,
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
-struct AccountResponse {
-    account: AccountSummary,
+pub struct AccountResponse {
+    pub account: AccountSummary,
 }
 
-async fn load_data(id: &str) -> Result<AccountResponse, MyError> {
+pub async fn load_data(id: &str) -> Result<AccountResponse, MyError> {
     let response = reqwest::get(format!("https://api.minaexplorer.com/accounts/{}", id)).await;
 
     match response {
@@ -61,21 +61,8 @@ async fn load_data(id: &str) -> Result<AccountResponse, MyError> {
 
 #[component]
 pub fn AccountSummary() -> impl IntoView {
-    let url_params = use_params::<URLParams>();
-
-    let public_key_fn = move || {
-        url_params.with(|url_params| {
-            url_params
-                .as_ref()
-                .map(|url_params| url_params.id.clone())
-                .unwrap_or_default()
-        })
-    };
-
-    let public_key = match public_key_fn() {
-        Some(pc) => pc,
-        None => todo!(),
-    };
+    let memo_params_map = use_params_map();
+    let public_key = memo_params_map.with(|params| params.get("id").cloned()).unwrap_or_default();
 
     let resource: Resource<(), Result<AccountResponse, MyError>> = {
         create_resource(
