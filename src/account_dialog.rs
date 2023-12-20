@@ -1,33 +1,46 @@
 use leptos::*;
 use leptos_router::*;
-use web_sys::console;
-
 
 use chrono::{DateTime, Utc, Duration};
 use crate::account_page::{AccountSummary, load_data as load_account_summary};
-use crate::transactions_page::{TransactionsResponse, Data as TransactionData, Transaction, load_data as load_transaction_data};
+use crate::transactions_page::{Transaction, load_data as load_transaction_data};
 
 enum Status {
     Pending,
-    Complete
+    Complete,
+    Unknown
 }
 
-// Function to format the duration in a human-readable way
 fn format_duration(duration: &Duration) -> String {
-    let total_minutes = duration.num_minutes();
-    let hours = total_minutes / 60;
-    let minutes = total_minutes % 60;
-    format!("{} hour(s) and {} minute(s) ago", hours, minutes)
+    if duration.num_days() > 0 {
+        format!("{} days ago", duration.num_days())
+    } else if duration.num_hours() > 0 {
+        format!("{} hours ago", duration.num_hours())
+    } else {
+        format!("{} minutes ago", duration.num_minutes())
+    }
 }
+
+fn get_status(timestamp: &str) -> Status {
+    match timestamp.parse::<DateTime<Utc>>() {
+        Ok(parsed_timestamp) => {
+            if Utc::now() < parsed_timestamp {
+                Status::Pending
+            } else {
+                Status::Complete
+            }
+        },
+        Err(_) => Status::Unknown,
+    }
+}
+
 
 // Function to calculate and print the time elapsed since the given timestamp
 fn print_time_since(timestamp: &str) -> String {
     // Parse the input timestamp
     let past_time = match timestamp.parse::<DateTime<Utc>>() {
         Ok(time) => time,
-        Err(e) => {
-            Utc::now()
-        }
+        Err(_e) => return String::from("Unknown")
     };
 
     // Get the current time
@@ -36,10 +49,11 @@ fn print_time_since(timestamp: &str) -> String {
     // Calculate the duration since the given timestamp
     let duration_since = now.signed_duration_since(past_time);
 
-    // Format and print the duration
+    // Format and return the duration
     format_duration(&duration_since)
 }
 
+#[component]
 pub fn AccountDialogView() -> impl IntoView {
     let memo_params_map = use_params_map();
     let id = memo_params_map.with(|params| params.get("id").cloned()).unwrap_or_default();
@@ -128,7 +142,7 @@ fn AccountDialog(account: AccountSummary, transactions: Vec<Transaction>) -> imp
                 <div class="flex flex-col md:flex-row md:flex-wrap overflow-y-auto">
                     {transactions.into_iter()
                         .map(|transaction| view! {
-                            <Transaction status=Status::Complete
+                            <Transaction status=get_status(&transaction.block.date_time)
                                 date=transaction.block.date_time.to_owned()
                                 moments_ago=print_time_since(&transaction.block.date_time)
                                 from=transaction.from.to_owned()
@@ -149,7 +163,8 @@ fn Transaction(status: Status, date:String, moments_ago:String, from:String, to:
 
     let img_attr = match status {
         Status::Pending => ("/assets/img/timelapse.svg","Pending"),
-        Status::Complete => ("/assets/img/down-arrow.svg","Complete")
+        Status::Complete => ("/assets/img/down-arrow.svg","Complete"),
+        Status::Unknown => ("","Unknown")
     };
 
     let entries = vec![
@@ -164,7 +179,12 @@ fn Transaction(status: Status, date:String, moments_ago:String, from:String, to:
         <div class="flex justify-between w-full">
             <div class="flex items-center">
                 <img src=img_attr.0 alt=img_attr.1 />
-                <span class="text-sm">{img_attr.1}</span>
+                {move || match status {
+                    Status::Complete => view! {<span class="text-sm">{date.clone()}</span>}.into_view(),
+                    Status::Pending => view! {<span class="text-sm">"Pending"</span>}.into_view(),
+                    Status::Unknown => view! {<span class="text-sm">"Unkonwn"</span>}.into_view(),
+                }}
+                
             </div>
             <div class="text-xs text-slate-400">{moments_ago}</div>
         </div>
@@ -197,3 +217,34 @@ fn OverviewEntry(label: String, value: String, has_pill: bool) -> impl IntoView 
         </div>
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use chrono::Duration;
+
+    #[test]
+    fn test_format_duration_days() {
+        let duration = Duration::days(3);
+        assert_eq!(format_duration(&duration), "3 days ago");
+    }
+
+    #[test]
+    fn test_format_duration_hours() {
+        let duration = Duration::hours(5);
+        assert_eq!(format_duration(&duration), "5 hours ago");
+    }
+
+    #[test]
+    fn test_format_duration_minutes() {
+        let duration = Duration::minutes(45);
+        assert_eq!(format_duration(&duration), "45 minutes ago");
+    }
+
+    #[test]
+    fn test_format_duration_mix() {
+        let duration = Duration::hours(26);
+        assert_eq!(format_duration(&duration), "1 days ago");
+    }
+}
+
