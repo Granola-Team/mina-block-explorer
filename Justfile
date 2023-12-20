@@ -37,7 +37,7 @@ lint: && audit disallow-unused-cargo-deps
   cargo clippy --all-targets --all-features -- -D warnings
   cargo check
 
-test-ci: tailwind lint test-unit test-e2e
+test-ci: build tailwind lint test-unit test-e2e
 
 disallow-unused-cargo-deps:
   cargo machete Cargo.toml
