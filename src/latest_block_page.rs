@@ -1,4 +1,6 @@
 use leptos::*;
+use std::collections::HashMap;
+use leptos_router::Outlet;
 use serde::{Deserialize, Serialize};
 use crate::{api_models::MyError, table::{TableData, Table}, table_section::TableSection};
 
@@ -95,6 +97,13 @@ impl TableData for LatestBlocksResponse {
         }
         rows
     }
+
+    fn get_linkable_cols(&self) -> HashMap<i32, String> {
+        let mut linkcols: HashMap<i32, String> = HashMap::new();
+        linkcols.insert(2, "/blocks/accounts/:token".to_owned());
+        linkcols.insert(8, "/blocks/accounts/:token".to_owned());
+        linkcols
+    }
 }
 
 
@@ -124,10 +133,12 @@ pub fn LatestBlocksPage() -> impl IntoView {
                 <div>"Loading..." </div>
             }.into_view(),
             Some(Ok(data)) => view! { 
+                
                 <TableSection section_heading="Latest Blocks".to_owned()>
-                    <Table data=data/>
+                    <Table data=data/>           
                 </TableSection>
-             },
+                <Outlet />
+            }.into_view(),
             Some(Err(my_error)) => view! {
                 <div> { format!("Error: {:#?}", my_error)}</div>
             }.into_view()

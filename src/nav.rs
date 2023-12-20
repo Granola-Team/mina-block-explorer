@@ -5,7 +5,6 @@ pub fn Nav() -> impl IntoView {
     let nav_items = vec![
         ("/summary", "Summary"),
         ("/blocks", "Blocks"),
-        ("/accounts", "Accounts"),
         ("/transactions", "Transactions"),
         ("/snarks", "SNARKs"),
     ];
