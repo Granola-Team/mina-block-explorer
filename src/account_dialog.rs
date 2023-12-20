@@ -90,7 +90,11 @@ pub fn AccountDialogView() -> impl IntoView {
             (Some(Ok(a_res)), Some(Ok(t_res))) => view!{
                 <AccountDialog path_base=base.to_owned() account=a_res.account transactions=t_res.data.transactions />
             },
-            _ => view! { <span/>  }.into_view()
+            // (Some(Ok(a_res)), Some(Err(t_res))) => view! { <div>{format!("{:#?}", t_res)}</div>}.into_view(),
+            // (Some(Err(a_res)), Some(Ok(t_res))) => view! { <div>{format!("{:#?}", a_res)}</div>}.into_view(),
+            // (Some(Err(a_res)), Some(Err(t_res))) => view! { <div>{format!("{:#?}", a_res)}{format!("{:#?}", t_res)}</div>}.into_view(),
+            // (None, None) => view! { <div>"Loading..."</div>}.into_view(),
+            _ => view! { <span>"loading"</span>  }.into_view()
         }}
     }
 }
