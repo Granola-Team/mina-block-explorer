@@ -114,7 +114,7 @@ where
                                 let cell_content = match linkable_cols.get(&(index as i32)) {
                                     Some(value) => {
                                         let link_href = value.replace(":token", cell);
-                                        view! { <span><a href={link_href}>{cell}</a></span> } 
+                                        view! { <span><a class="hover:text-granola-orange hover:underline hover:decoration-2" href={link_href}>{cell}</a></span> } 
                                     }
                                     None => view! { <span>{cell}</span> }, 
                                 };

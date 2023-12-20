@@ -97,6 +97,7 @@ pub fn AccountDialogView() -> impl IntoView {
 
 #[component]
 fn AccountDialog(path_base: String, account: AccountSummary, transactions: Vec<Transaction>) -> impl IntoView {
+    // let id = account.public_key.clone();
     let summary_items = vec![
         ("Balance", account.balance.total ,true),
         ("Nonce", account.nonce.to_string(),true),
@@ -167,6 +168,12 @@ fn AccountDialog(path_base: String, account: AccountSummary, transactions: Vec<T
                         .collect::<Vec<_>>()}
                 </div>
             </section>
+            <div class="absolute bottom-0 left-0 w-full h-20 flex justify-stretch items-center bg-white">
+                <button disabled class="disabled:bg-slate-400 disabled:text-slate-200 disabled:cursor-not-allowed bg-granola-orange text-white uppercase mx-8 h-11 w-full rounded-lg">
+                    // <a href={format!("/accounts/{}", id)}>"View all details"</a>
+                    "View all details"
+                </button>
+            </div>
         </dialog>
     }
 }
