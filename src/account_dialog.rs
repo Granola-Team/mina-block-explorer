@@ -53,8 +53,19 @@ fn print_time_since(timestamp: &str) -> String {
     format_duration(&duration_since)
 }
 
+fn get_base_page_path(location: Location) -> String {
+    let path = location.pathname.with(|path| path.clone());
+    let path_parts: Vec<&str> = path.split("/accounts").collect();
+    match path_parts.first() {
+        Some(base) => base.to_string(),
+        None => "/".to_string(),
+    }
+}
+
 #[component]
 pub fn AccountDialogView() -> impl IntoView {
+    let location = use_location();
+    let base = get_base_page_path(location);
     let memo_params_map = use_params_map();
     let id = memo_params_map.with(|params| params.get("id").cloned()).unwrap_or_default();
     let id_for_other = id.clone();
@@ -77,15 +88,15 @@ pub fn AccountDialogView() -> impl IntoView {
     view! {
         {move || match (account_resource.get(), trans_resource.get()) {
             (Some(Ok(a_res)), Some(Ok(t_res))) => view!{
-                <AccountDialog account=a_res.account transactions=t_res.data.transactions />
+                <AccountDialog path_base=base.to_owned() account=a_res.account transactions=t_res.data.transactions />
             },
-            _ => view! { <span/>   }.into_view()
+            _ => view! { <span/>  }.into_view()
         }}
     }
 }
 
 #[component]
-fn AccountDialog(account: AccountSummary, transactions: Vec<Transaction>) -> impl IntoView {
+fn AccountDialog(path_base: String, account: AccountSummary, transactions: Vec<Transaction>) -> impl IntoView {
     let summary_items = vec![
         ("Balance", account.balance.total ,true),
         ("Nonce", account.nonce.to_string(),true),
@@ -112,7 +123,9 @@ fn AccountDialog(account: AccountSummary, transactions: Vec<Transaction>) -> imp
             <section>
                 <div class="flex justify-between">
                     <h2 class="text-bold text-xl">"Account Overview"</h2>
-                    <button>X</button>
+                    <button>
+                        <a href=path_base>X</a>
+                    </button>
                 </div>
                 <div class="flex flex-col items-center mt-16 bg-light-granola-orange rounded-3xl h-36">
                     <div class="w-20 h-20 rounded-full bg-main-background flex justify-center items-center translate-y-[-25%]">
@@ -137,7 +150,7 @@ fn AccountDialog(account: AccountSummary, transactions: Vec<Transaction>) -> imp
             <section class="flex flex-col bg-white rounded-xl flex flex-col items-stretch mt-8 p-4 h-[100%]">
                 <div class="flex justify-between w-full">
                     <h2 class="text-xl">"Transactions"</h2>
-                    <span class="text-table-row-text-color text-xs">"Showing 5 of 110"</span>
+                    <span class="text-table-row-text-color text-xs">{format!("Showing latest {} transactions", transactions.len())}</span>
                 </div>
                 <div class="flex flex-col md:flex-row md:flex-wrap overflow-y-auto">
                     {transactions.into_iter()
