@@ -18,6 +18,7 @@ build-release:
   cargo build --release
 
 clean:
+  rm -rf dist
   trunk clean
   cargo clean
 
