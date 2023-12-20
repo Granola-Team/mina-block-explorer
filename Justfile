@@ -3,12 +3,18 @@ default:
 
 set dotenv-load := true
 
+tailwind:
+  npx tailwindcss -i assets/css/input.css -o assets/css/styles.css --minify
+
 build:
   npm install
+  just tailwind
   cargo build
   trunk build
 
 build-release:
+  npm install
+  just tailwind
   cargo build --release
 
 clean:
@@ -39,14 +45,13 @@ disallow-unused-cargo-deps:
 audit:
   cargo audit
 
-serve: build
+serve: tailwind build 
   trunk serve --open --port=$((5170 + $RANDOM % 10))
 
 release: build-release
   trunk build --release --filehash true
 
 pre_build:
-  npx tailwindcss -i assets/css/input.css -o assets/css/styles.css --minify
   mkdir -p $TRUNK_STAGING_DIR/assets/img/
   cp assets/img/* $TRUNK_STAGING_DIR/assets/img/
   cp assets/robots.txt $TRUNK_STAGING_DIR
