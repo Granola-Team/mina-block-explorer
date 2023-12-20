@@ -112,7 +112,7 @@ where
 
                                 let cell_class = "first:pl-8 text-table-row-text-color font-medium text-sm text-left overflow-hidden whitespace-nowrap text-ellipsis";
                                 let cell_content = match linkable_cols.get(&(index as i32)) {
-                                    Some(&ref value) => {
+                                    Some(value) => {
                                         let link_href = value.replace(":token", cell);
                                         view! { <span><a href={link_href}>{cell}</a></span> } 
                                     }
