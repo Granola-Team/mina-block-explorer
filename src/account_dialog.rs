@@ -94,7 +94,7 @@ pub fn AccountDialogView() -> impl IntoView {
             // (Some(Err(a_res)), Some(Ok(t_res))) => view! { <div>{format!("{:#?}", a_res)}</div>}.into_view(),
             // (Some(Err(a_res)), Some(Err(t_res))) => view! { <div>{format!("{:#?}", a_res)}{format!("{:#?}", t_res)}</div>}.into_view(),
             // (None, None) => view! { <div>"Loading..."</div>}.into_view(),
-            _ => view! { <span>"loading"</span>  }.into_view()
+            _ => view! { <span/>  }.into_view()
         }}
     }
 }
