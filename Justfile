@@ -51,14 +51,14 @@ disallow-unused-cargo-deps:
 audit:
   cargo audit
 
-serve: tailwind-watch build 
+serve: build 
   trunk serve --open --port=$((5170 + $RANDOM % 10))
 
 release: build-release
   trunk build --release --filehash true
 
 pre_build:
-  mkdir -p $TRUNK_STAGING_DIR/assets/img/
+  mkdir -p $TRUNK_STAGING_DIR/assets/img/ $TRUNK_STAGING_DIR/assets/css/
   cp assets/img/* $TRUNK_STAGING_DIR/assets/img/
   cp assets/robots.txt $TRUNK_STAGING_DIR
 
