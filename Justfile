@@ -24,12 +24,14 @@ clean:
 
 test: test-unit
 
-test-e2e:
-  echo "Testing E2E"
-  # npm install
-  # npx playwright install --with-deps
-  # npx playwright test
+kill-server:
+  kill $(cat .pid 2>/dev/null) 2>/dev/null || true
 
+test-e2e: && kill-server
+  trunk serve --port=5274 & pid=$!; echo "$pid" > .pid
+  sleep 5
+  CI=true npx cypress run
+  
 test-unit: build
   cargo nextest run
 
