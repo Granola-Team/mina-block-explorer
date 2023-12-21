@@ -58,7 +58,7 @@ release: build-release
   trunk build --release --filehash true
 
 pre_build:
-  mkdir -p $TRUNK_STAGING_DIR/assets/img/
+  mkdir -p $TRUNK_STAGING_DIR/assets/img/ $TRUNK_STAGING_DIR/assets/css/
   cp assets/img/* $TRUNK_STAGING_DIR/assets/img/
   cp assets/robots.txt $TRUNK_STAGING_DIR
 
