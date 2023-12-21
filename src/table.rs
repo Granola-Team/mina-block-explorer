@@ -95,13 +95,14 @@ where
     let columns = data.get_columns();
     let rows = data.get_rows();
     let linkable_cols = data.get_linkable_cols();
+    let cell_padding_class = "first:pl-8 pl-2";
 
     view! {
         <div class="w-full overflow-auto h-full">
             <table class="md:rounded-b-lg table-fixed w-[300%] md:w-[150%] lg:w-full ">
             <tr class="h-12 bg-table-header-fill">
                 {columns.into_iter()
-                    .map(|s| view! { <th class="first:pl-8 text-table-header-text-color font-semibold uppercase text-xs text-left">{s}</th>})
+                    .map(|s| view! { <th class={format!("{} text-table-header-text-color font-semibold uppercase text-xs text-left", cell_padding_class)}>{s}</th>})
                     .collect::<Vec<_>>()}
             </tr>
             {rows.into_iter()
@@ -110,16 +111,17 @@ where
                         {
                             row.iter().enumerate().map(|(index, cell)| {
 
-                                let cell_class = "first:pl-8 text-table-row-text-color font-medium text-sm text-left overflow-hidden whitespace-nowrap text-ellipsis";
+                                let cell_ellipsis_class = "w-full text-ellipsis overflow-hidden";
                                 let cell_content = match linkable_cols.get(&(index as i32)) {
                                     Some(value) => {
                                         let link_href = value.replace(":token", cell);
-                                        view! { <div><a class="block hover:text-granola-orange hover:underline hover:decoration-2" href={link_href}>{cell}</a></div> } 
+                                        view! { <div class=cell_ellipsis_class><a class=format!("{} block hover:text-granola-orange hover:underline hover:decoration-2",cell_ellipsis_class) href={link_href}>{cell}</a></div> } 
                                     }
-                                    None => view! { <div>{cell}</div> }, 
+                                    None => view! { <div class=cell_ellipsis_class>{cell}</div> }, 
                                 };
+                                let cell_class = format!("{} {} first:pl-8 pl-2 text-table-row-text-color font-medium text-sm text-left whitespace-nowrap", cell_padding_class, cell_ellipsis_class);
                                 view! {
-                                    <td class={cell_class}>{cell_content}</td>
+                                    <td class=cell_class>{cell_content}</td>
                                 }
 
                             }).collect::<Vec<_>>()
