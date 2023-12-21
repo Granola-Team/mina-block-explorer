@@ -1,14 +1,14 @@
 use leptos::*;
 
-use crate::transactions_page::Transaction;
-
 use super::functions::*;
 use super::models::*;
+use crate::transactions::components::TransactionsSubsection;
 
 #[component]
-pub fn AccountDialog(path_base: String, account: AccountSummary, transactions: Vec<Transaction>) -> impl IntoView {
+pub fn AccountDialog(path_base: String, account: AccountSummary) -> impl IntoView {
     // let id = account.public_key.clone();
     let summary_items = get_summary_items(account.clone());
+    let public_key = account.public_key.clone();
     
     view! {
         <dialog id="accountdialog" class="w-full max-w-3xl h-screen fixed top-0 mr-0 ml-auto flex flex-col items-stretch p-4 bg-background">
@@ -21,13 +21,7 @@ pub fn AccountDialog(path_base: String, account: AccountSummary, transactions: V
                 </div>
                 <AccountSummarySubsection summary_items=summary_items public_key=account.public_key username=account.username />
             </section>
-            <section class="flex flex-col bg-white rounded-xl flex flex-col items-stretch mt-8 p-4 h-[100%]">
-                <div class="flex justify-between w-full">
-                    <h2 class="text-xl">"Transactions"</h2>
-                    <span class="text-table-row-text-color text-xs">{format!("Showing latest {} transactions", transactions.len())}</span>
-                </div>
-                <TransactionsSubsection transactions=transactions />
-            </section>
+            <TransactionsSubsection limit=3 account_id=public_key />
             <div class="absolute bottom-0 left-0 w-full h-20 flex justify-stretch items-center bg-white">
                 <button disabled class="disabled:bg-slate-400 disabled:text-slate-200 disabled:cursor-not-allowed bg-granola-orange text-white uppercase mx-8 h-11 w-full rounded-lg">
                     // <a href={format!("/accounts/{}", id)}>"View all details"</a>
@@ -35,28 +29,9 @@ pub fn AccountDialog(path_base: String, account: AccountSummary, transactions: V
                 </button>
             </div>
         </dialog>
-    }
+    }.into_view()
 }
 
-#[component]
-pub fn TransactionsSubsection(transactions: Vec<Transaction>) -> impl IntoView {
-    view! {
-        <div class="flex flex-col md:flex-row md:flex-wrap overflow-y-auto">
-            {transactions.into_iter()
-                .map(|transaction| view! {
-                    <TransactionEntry status=get_status(&transaction.block.date_time)
-                        date=transaction.block.date_time.to_owned()
-                        moments_ago=print_time_since(&transaction.block.date_time)
-                        from=transaction.from.to_owned()
-                        to=transaction.to.to_owned()
-                        fee=transaction.fee.to_string()
-                        amount=transaction.amount.to_string()
-                        hash=transaction.hash.to_owned() />
-                })
-                .collect::<Vec<_>>()}
-        </div>
-    }
-}
 
 #[component]
 pub fn AccountSummarySubsection(summary_items: Vec<(String, String, bool)>, username: String, public_key: String) -> impl IntoView {
@@ -80,49 +55,6 @@ pub fn AccountSummarySubsection(summary_items: Vec<(String, String, bool)>, user
                 .collect::<Vec<_>>()}
 
         </div>
-    }
-}
-
-#[component]
-fn TransactionEntry(status: Status, date:String, moments_ago:String, from:String, to:String, fee:String, amount:String, hash:String) -> impl IntoView {
-
-    let img_attr = match status {
-        Status::Pending => ("/assets/img/timelapse.svg","Pending"),
-        Status::Complete => ("/assets/img/down-arrow.svg","Complete"),
-        Status::Unknown => ("","Unknown")
-    };
-
-    let entries = vec![
-        ("From", from),
-        ("To", to),
-        ("Fee", fee),
-        ("Amount", amount),
-        ("Hash", hash)
-    ];
-
-    view! {
-        <div class="flex justify-between w-full">
-            <div class="flex items-center">
-                <img src=img_attr.0 alt=img_attr.1 />
-                {move || match status {
-                    Status::Complete => view! {<span class="text-sm">{date.clone()}</span>}.into_view(),
-                    Status::Pending => view! {<span class="text-sm">"Pending"</span>}.into_view(),
-                    Status::Unknown => view! {<span class="text-sm">"Unkonwn"</span>}.into_view(),
-                }}
-                
-            </div>
-            <div class="text-xs text-slate-400">{moments_ago}</div>
-        </div>
-        {entries.into_iter()
-            .map(|(label, value)| view! {
-                <div class="w-full md:w-1/2 flex my-1">
-                    <span class="text-xs text-slate-400 w-1/4">{label}:</span>
-                    <span class="text-xs overflow-hidden text-ellipsis w-3/4">{value}</span>
-                </div>        
-            })
-            .collect::<Vec<_>>()}
-        <div class="border-b border-slate-100 my-2 h-1 w-full" />
-        
     }
 }
 
