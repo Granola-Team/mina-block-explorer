@@ -37,7 +37,7 @@ lint: && audit disallow-unused-cargo-deps
   cargo clippy --all-targets --all-features -- -D warnings
   cargo check
 
-test-ci: build tailwind lint test-unit test-e2e
+test-ci: lint test-unit test-e2e
 
 disallow-unused-cargo-deps:
   cargo machete Cargo.toml
@@ -56,6 +56,6 @@ pre_build:
   cp assets/img/* $TRUNK_STAGING_DIR/assets/img/
   cp assets/robots.txt $TRUNK_STAGING_DIR
 
-publish: tailwind release
+publish: release
   aws cloudfront create-invalidation --distribution-id "$DIST_ID" --paths "/*"
   aws s3 cp dist "s3://$BUCKET_NAME" --recursive
