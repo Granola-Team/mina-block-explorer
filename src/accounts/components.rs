@@ -1,106 +1,12 @@
 use leptos::*;
-use leptos_router::*;
 
-use chrono::{DateTime, Utc, Duration};
-use crate::account_page::{AccountSummary, load_data as load_account_summary};
-use crate::transactions_page::{Transaction, load_data as load_transaction_data};
+use crate::transactions_page::Transaction;
 
-enum Status {
-    Pending,
-    Complete,
-    Unknown
-}
-
-fn format_duration(duration: &Duration) -> String {
-    if duration.num_days() > 0 {
-        format!("{} days ago", duration.num_days())
-    } else if duration.num_hours() > 0 {
-        format!("{} hours ago", duration.num_hours())
-    } else {
-        format!("{} minutes ago", duration.num_minutes())
-    }
-}
-
-fn get_status(timestamp: &str) -> Status {
-    match timestamp.parse::<DateTime<Utc>>() {
-        Ok(parsed_timestamp) => {
-            if Utc::now() < parsed_timestamp {
-                Status::Pending
-            } else {
-                Status::Complete
-            }
-        },
-        Err(_) => Status::Unknown,
-    }
-}
-
-
-// Function to calculate and print the time elapsed since the given timestamp
-fn print_time_since(timestamp: &str) -> String {
-    // Parse the input timestamp
-    let past_time = match timestamp.parse::<DateTime<Utc>>() {
-        Ok(time) => time,
-        Err(_e) => return String::from("Unknown")
-    };
-
-    // Get the current time
-    let now = Utc::now();
-
-    // Calculate the duration since the given timestamp
-    let duration_since = now.signed_duration_since(past_time);
-
-    // Format and return the duration
-    format_duration(&duration_since)
-}
-
-fn get_base_page_path(location: Location) -> String {
-    let path = location.pathname.with(|path| path.clone());
-    let path_parts: Vec<&str> = path.split("/accounts").collect();
-    match path_parts.first() {
-        Some(base) => base.to_string(),
-        None => "/".to_string(),
-    }
-}
+use super::functions::*;
+use super::models::*;
 
 #[component]
-pub fn AccountDialogView() -> impl IntoView {
-    let location = use_location();
-    let base = get_base_page_path(location);
-    let memo_params_map = use_params_map();
-    let id = memo_params_map.with(|params| params.get("id").cloned()).unwrap_or_default();
-    let id_for_other = id.clone();
-
-    let account_resource = create_resource(|| (), move |_| {
-        let id_clone_for_async = id.clone(); // Clone the ID for the async block
-        async move { 
-            load_account_summary(&id_clone_for_async).await
-        }
-    });
-    
-    let trans_resource = create_resource(|| (), move |_| {
-        let id_clone_for_async = id_for_other.clone(); // Clone the ID for the async block
-        async move { 
-            let limit = 3;
-            load_transaction_data(limit, Some(id_clone_for_async)).await 
-        }
-    });
-
-    view! {
-        {move || match (account_resource.get(), trans_resource.get()) {
-            (Some(Ok(a_res)), Some(Ok(t_res))) => view!{
-                <AccountDialog path_base=base.to_owned() account=a_res.account transactions=t_res.data.transactions />
-            },
-            // (Some(Ok(a_res)), Some(Err(t_res))) => view! { <div>{format!("{:#?}", t_res)}</div>}.into_view(),
-            // (Some(Err(a_res)), Some(Ok(t_res))) => view! { <div>{format!("{:#?}", a_res)}</div>}.into_view(),
-            // (Some(Err(a_res)), Some(Err(t_res))) => view! { <div>{format!("{:#?}", a_res)}{format!("{:#?}", t_res)}</div>}.into_view(),
-            // (None, None) => view! { <div>"Loading..."</div>}.into_view(),
-            _ => view! { <span/>  }.into_view()
-        }}
-    }
-}
-
-#[component]
-fn AccountDialog(path_base: String, account: AccountSummary, transactions: Vec<Transaction>) -> impl IntoView {
+pub fn AccountDialog(path_base: String, account: AccountSummary, transactions: Vec<Transaction>) -> impl IntoView {
     // let id = account.public_key.clone();
     let summary_items = vec![
         (String::from("Balance"), account.balance.total ,true),
@@ -255,34 +161,3 @@ fn OverviewEntry(label: String, value: String, has_pill: bool) -> impl IntoView 
         </div>
     }
 }
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use chrono::Duration;
-
-    #[test]
-    fn test_format_duration_days() {
-        let duration = Duration::days(3);
-        assert_eq!(format_duration(&duration), "3 days ago");
-    }
-
-    #[test]
-    fn test_format_duration_hours() {
-        let duration = Duration::hours(5);
-        assert_eq!(format_duration(&duration), "5 hours ago");
-    }
-
-    #[test]
-    fn test_format_duration_minutes() {
-        let duration = Duration::minutes(45);
-        assert_eq!(format_duration(&duration), "45 minutes ago");
-    }
-
-    #[test]
-    fn test_format_duration_mix() {
-        let duration = Duration::hours(26);
-        assert_eq!(format_duration(&duration), "1 days ago");
-    }
-}
-

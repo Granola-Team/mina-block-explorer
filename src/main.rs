@@ -1,5 +1,4 @@
 use leptos::*;
-mod account_page;
 mod api_models;
 mod nav;
 mod root;
@@ -12,7 +11,7 @@ mod snarks_page;
 mod stakes_page;
 mod header;
 mod table_section;
-mod account_dialog;
+mod accounts;
 
 use root::Root;
 
