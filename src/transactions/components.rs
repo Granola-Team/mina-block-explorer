@@ -6,9 +6,8 @@ use super::{functions::*, models::*};
 pub fn TransactionsSubsection(limit: i32, account_id: String) -> impl IntoView {
     let resource = create_resource(|| (), move |_| {
         let account_id_clone = account_id.clone(); 
-        let limit_clone = limit.clone();
         async move { 
-            load_data(limit_clone, Some(account_id_clone)).await 
+            load_data(limit, Some(account_id_clone)).await 
         }
     });
 
