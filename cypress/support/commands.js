@@ -24,13 +24,21 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
-Cypress.Commands.add('accountOverviewDialog', (linkSelector) => {
-    cy.get(linkSelector).first().click();
+Cypress.Commands.add('closeAccountDialog', () => {
+  cy.get('dialog button#closedialog a').click();
+  cy.get('dialog').should('not.exist');
+});
 
-    cy.get('dialog').should('be.visible');
-    cy.get('dialog').contains('Account Overview').should('be.visible');
+Cypress.Commands.add('openAccountDialog', (linkSelector) => {
+  cy.get(linkSelector).first().click();
+  cy.get('dialog').should('be.visible');
+  cy.get('dialog').contains('Account Overview').should('be.visible');
+});
 
-    cy.get('dialog button a').click();
+Cypress.Commands.add('accountDialogToAccount', () => {
+  cy.get('dialog button#viewmore a').click();
+  cy.get('dialog').should('not.exist');
 
-    cy.get('dialog').should('not.exist');
-  })
+  cy.url().should('contain', 'http://localhost:5274/accounts')
+});
+

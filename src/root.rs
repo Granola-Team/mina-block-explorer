@@ -1,14 +1,15 @@
 use leptos::*;
 use leptos_router::*;
 
-use crate::account_page::AccountSummary;
+
 use crate::snarks_page::SnarksPage;
 use crate::stakes_page::StakesPage;
 use crate::summary_page::SummaryPage;
 use crate::latest_block_page::LatestBlocksPage;
-use crate::transactions_page::TransactionsPage;
+use crate::transactions::transactions_page::TransactionsPage;
 use crate::header::Header;
-use crate::account_dialog::AccountDialogView;
+use crate::accounts::account_dialog::AccountDialogView;
+use crate::accounts::account_page::AccountSummaryPage;
 
 #[component]
 pub fn Root() -> impl IntoView {
@@ -22,7 +23,7 @@ pub fn Root() -> impl IntoView {
               <Route path="accounts/:id" view=AccountDialogView/>
               <Route path="" view=|| view! { <span />}/>
             </Route>
-            <Route path="/accounts/:id" view=AccountSummary />
+            <Route path="/accounts/:id" view=AccountSummaryPage />
             <Route path="/blocks" view=LatestBlocksPage>
               <Route path="accounts/:id" view=AccountDialogView/>
               <Route path="" view=|| view! { <span />}/>
