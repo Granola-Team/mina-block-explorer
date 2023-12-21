@@ -1,66 +1,15 @@
 use leptos::*;
 use leptos_router::*;
-use serde::{Deserialize, Serialize};
+
+use super::models::*;
+use super::functions::*;
 
 use crate::api_models::MyError;
 use crate::summary_item::{SummaryItem, SummaryItemKind};
 
-#[derive(Params, PartialEq)]
-struct URLParams {
-    id: Option<String>,
-}
-
-#[derive(Params, PartialEq)]
-struct QueryParams {
-    f: Option<bool>,
-}
-
-#[derive(Debug, Deserialize, Serialize, Clone)]
-pub struct AccountBalance {
-    pub total: String,
-}
-
-impl AccountBalance {
-    fn total(&self) -> f64 {
-        self.total.trim().parse().expect("Cannot parse total")
-    }
-}
-
-#[derive(Debug, Deserialize, Serialize, Clone)]
-#[serde(rename_all = "camelCase")]
-pub struct AccountSummary {
-    pub public_key: String,
-    pub nonce: u32,
-    pub receipt_chain_hash: String,
-    pub delegate: String,
-    pub voting_for: String,
-    pub total_tx: u32,
-    pub count_pending_transactions: u32,
-    pub username: String,
-    pub balance: AccountBalance,
-}
-
-#[derive(Debug, Deserialize, Serialize, Clone)]
-pub struct AccountResponse {
-    pub account: AccountSummary,
-}
-
-pub async fn load_data(id: &str) -> Result<AccountResponse, MyError> {
-    let response = reqwest::get(format!("https://api.minaexplorer.com/accounts/{}", id)).await;
-
-    match response {
-        Ok(res) => match res.json::<AccountResponse>().await {
-            Ok(account) => Ok(account),
-            Err(_) => Err(MyError::ParseError(String::from(
-                "Error deserializing JSON",
-            ))),
-        },
-        Err(_) => Err(MyError::NetworkError(String::from("API error"))),
-    }
-}
 
 #[component]
-pub fn AccountSummary() -> impl IntoView {
+pub fn AccountSummaryPage() -> impl IntoView {
     let memo_params_map = use_params_map();
     let public_key = memo_params_map.with(|params| params.get("id").cloned()).unwrap_or_default();
 
