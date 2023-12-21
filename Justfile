@@ -51,7 +51,7 @@ disallow-unused-cargo-deps:
 audit:
   cargo audit
 
-serve: tailwind-watch build 
+serve: build 
   trunk serve --open --port=$((5170 + $RANDOM % 10))
 
 release: build-release
