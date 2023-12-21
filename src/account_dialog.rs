@@ -103,20 +103,20 @@ pub fn AccountDialogView() -> impl IntoView {
 fn AccountDialog(path_base: String, account: AccountSummary, transactions: Vec<Transaction>) -> impl IntoView {
     // let id = account.public_key.clone();
     let summary_items = vec![
-        ("Balance", account.balance.total ,true),
-        ("Nonce", account.nonce.to_string(),true),
+        (String::from("Balance"), account.balance.total ,true),
+        (String::from("Nonce"), account.nonce.to_string(),true),
         (
-            "Receipt Chain Hash",
+            String::from("Receipt Chain Hash"),
             account.receipt_chain_hash,
             false
         ),
         (
-            "Delegate",
+            String::from("Delegate"),
             account.delegate,
             false
         ),
         (
-            "Voting For",
+            String::from("Voting For"),
             account.voting_for,
             false
         ),
@@ -132,45 +132,14 @@ fn AccountDialog(path_base: String, account: AccountSummary, transactions: Vec<T
                         <a href=path_base>X</a>
                     </button>
                 </div>
-                <div class="flex flex-col items-center mt-16 bg-light-granola-orange rounded-3xl h-36">
-                    <div class="w-20 h-20 rounded-full bg-main-background flex justify-center items-center translate-y-[-25%]">
-                        <img src="/assets/img/account_balance_wallet.svg" alt="account balance wallet logo"/>
-                    </div>
-                    <div class="text-granola-orange text-base text-bold text-ellipsis w-10/12 overflow-hidden">
-                        {account.public_key}
-                    </div>
-                    <div class="text-slate-400 text-sm">
-                        "Username: "{account.username}
-                    </div>
-                </div>
-                <div class="bg-white rounded-xl flex flex-col items-stretch mt-8 p-4">
-                    {summary_items.into_iter()
-                        .map(|(label, value, has_pill)| view! {
-                            <OverviewEntry label=label.to_owned() value=value.to_owned() has_pill=has_pill />
-                        })
-                        .collect::<Vec<_>>()}
-
-                </div>
+                <AccountSummarySubsection summary_items=summary_items public_key=account.public_key username=account.username />
             </section>
             <section class="flex flex-col bg-white rounded-xl flex flex-col items-stretch mt-8 p-4 h-[100%]">
                 <div class="flex justify-between w-full">
                     <h2 class="text-xl">"Transactions"</h2>
                     <span class="text-table-row-text-color text-xs">{format!("Showing latest {} transactions", transactions.len())}</span>
                 </div>
-                <div class="flex flex-col md:flex-row md:flex-wrap overflow-y-auto">
-                    {transactions.into_iter()
-                        .map(|transaction| view! {
-                            <Transaction status=get_status(&transaction.block.date_time)
-                                date=transaction.block.date_time.to_owned()
-                                moments_ago=print_time_since(&transaction.block.date_time)
-                                from=transaction.from.to_owned()
-                                to=transaction.to.to_owned()
-                                fee=transaction.fee.to_string()
-                                amount=transaction.amount.to_string()
-                                hash=transaction.hash.to_owned() />
-                        })
-                        .collect::<Vec<_>>()}
-                </div>
+                <TransactionsSubsection transactions=transactions />
             </section>
             <div class="absolute bottom-0 left-0 w-full h-20 flex justify-stretch items-center bg-white">
                 <button disabled class="disabled:bg-slate-400 disabled:text-slate-200 disabled:cursor-not-allowed bg-granola-orange text-white uppercase mx-8 h-11 w-full rounded-lg">
@@ -183,7 +152,52 @@ fn AccountDialog(path_base: String, account: AccountSummary, transactions: Vec<T
 }
 
 #[component]
-fn Transaction(status: Status, date:String, moments_ago:String, from:String, to:String, fee:String, amount:String, hash:String) -> impl IntoView {
+pub fn TransactionsSubsection(transactions: Vec<Transaction>) -> impl IntoView {
+    view! {
+        <div class="flex flex-col md:flex-row md:flex-wrap overflow-y-auto">
+            {transactions.into_iter()
+                .map(|transaction| view! {
+                    <TransactionEntry status=get_status(&transaction.block.date_time)
+                        date=transaction.block.date_time.to_owned()
+                        moments_ago=print_time_since(&transaction.block.date_time)
+                        from=transaction.from.to_owned()
+                        to=transaction.to.to_owned()
+                        fee=transaction.fee.to_string()
+                        amount=transaction.amount.to_string()
+                        hash=transaction.hash.to_owned() />
+                })
+                .collect::<Vec<_>>()}
+        </div>
+    }
+}
+
+#[component]
+pub fn AccountSummarySubsection(summary_items: Vec<(String, String, bool)>, username: String, public_key: String) -> impl IntoView {
+    view! {
+        <div class="flex flex-col items-center mt-16 bg-light-granola-orange rounded-3xl h-36">
+            <div class="w-20 h-20 rounded-full bg-main-background flex justify-center items-center translate-y-[-25%]">
+                <img src="/assets/img/account_balance_wallet.svg" alt="account balance wallet logo"/>
+            </div>
+            <div class="text-granola-orange text-base text-bold text-ellipsis w-10/12 overflow-hidden">
+                {public_key}
+            </div>
+            <div class="text-slate-400 text-sm">
+                "Username: "{username}
+            </div>
+        </div>
+        <div class="bg-white rounded-xl flex flex-col items-stretch mt-8 p-4">
+            {summary_items.into_iter()
+                .map(|(label, value, has_pill)| view! {
+                    <OverviewEntry label=label.to_owned() value=value.to_owned() has_pill=has_pill />
+                })
+                .collect::<Vec<_>>()}
+
+        </div>
+    }
+}
+
+#[component]
+fn TransactionEntry(status: Status, date:String, moments_ago:String, from:String, to:String, fee:String, amount:String, hash:String) -> impl IntoView {
 
     let img_attr = match status {
         Status::Pending => ("/assets/img/timelapse.svg","Pending"),
