@@ -117,27 +117,17 @@ pub fn SummaryPage() -> impl IntoView {
 
     view! {
         {move || match blockchain_summary_resource.get() {
-            None => view! {
-                <div>"Loading..." </div>
-            }.into_view(),
             Some(Ok(summary)) => view! { <SummaryGrid summary=summary /> },
-            Some(Err(my_error)) => view! {
-                <div> { format!("Error: {:#?}", my_error)}</div>
-            }.into_view()
+            _ => view! { <span /> }.into_view()
         }}
         {move || match latest_blocks_resource.get() {
-            None => view! {
-                <div>"Loading..." </div>
-            }.into_view(),
             Some(Ok(data)) => view! { 
                 <TableSection section_heading="Latest Blocks".to_owned()>
                     <Table data=OverrideLatestBlockResponse(data)/>           
                 </TableSection>
                 <Outlet />
             }.into_view(),
-            Some(Err(my_error)) => view! {
-                <div> { format!("Error: {:#?}", my_error)}</div>
-            }.into_view()
+            _ => view! { <span /> }.into_view()
         }}
     }
 }
