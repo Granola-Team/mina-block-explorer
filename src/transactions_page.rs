@@ -72,10 +72,10 @@ pub async fn load_data(limit: i32, public_key: Option<String>) -> Result<Transac
     let mut query = String::from(r#"{"query":"query MyQuery {\n  transactions(limit: ::limit::, sortBy: DATETIME_DESC::query::) {\n    amount\n    fee\n    to\n    from\n    hash\n    block {\n      dateTime\n    }\n    receiver {\n      publicKey\n    }\n  }\n}\n","variables":null,"operationName":"MyQuery"}"#);
     query = query.replace("::limit::", &limit.to_string());
     if let Some(key) = public_key {
-        let substring_string = ", query: {from: \\\"::public_key::\\\"}".replace("::public_key::", &key);
+        let substring_string = ", query: {from: \\\"::public_key::\\\", canonical: true}".replace("::public_key::", &key);
         query = query.replace("::query::", &substring_string);
     } else {
-        query = query.replace("::query::", "");
+        query = query.replace("::query::", ", query: {canonical: true}");
     }
     
     let client = reqwest::Client::new();
