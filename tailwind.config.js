@@ -1,7 +1,5 @@
 /** @type {import('tailwindcss').Config} */
 
-const colors = require('tailwindcss/colors')
-
 module.exports = {
     content: {
         files: ["*.html","./src/**/*.{html,rs}"],
@@ -11,7 +9,7 @@ module.exports = {
             sans: ['Inter', 'sans-serif'],
         },
         colors: {
-            ...colors,
+            ...require('tailwindcss/colors'),
             'granola-orange': "#E39844",
             'light-granola-orange': "#FBF3EA",
             'main-background': "#21252D",
@@ -25,6 +23,8 @@ module.exports = {
           },
         extend: {},
     },
-    plugins: [],
+    plugins: [
+        require('@tailwindcss/container-queries'),
+    ],
     
 }

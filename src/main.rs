@@ -1,18 +1,17 @@
 use leptos::*;
-mod account_page;
 mod api_models;
 mod nav;
 mod root;
 mod summary_item;
 mod summary_page;
 mod latest_block_page;
-mod transactions_page;
+mod transactions;
 mod table;
 mod snarks_page;
 mod stakes_page;
 mod header;
 mod table_section;
-mod account_dialog;
+mod accounts;
 
 use root::Root;
 
