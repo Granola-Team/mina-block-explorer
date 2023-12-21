@@ -8,27 +8,8 @@ use super::models::*;
 #[component]
 pub fn AccountDialog(path_base: String, account: AccountSummary, transactions: Vec<Transaction>) -> impl IntoView {
     // let id = account.public_key.clone();
-    let summary_items = vec![
-        (String::from("Balance"), account.balance.total ,true),
-        (String::from("Nonce"), account.nonce.to_string(),true),
-        (
-            String::from("Receipt Chain Hash"),
-            account.receipt_chain_hash,
-            false
-        ),
-        (
-            String::from("Delegate"),
-            account.delegate,
-            false
-        ),
-        (
-            String::from("Voting For"),
-            account.voting_for,
-            false
-        ),
-    ];
-   
-
+    let summary_items = get_summary_items(account.clone());
+    
     view! {
         <dialog id="accountdialog" class="w-full max-w-3xl h-screen fixed top-0 mr-0 ml-auto flex flex-col items-stretch p-4 bg-background">
             <section>
@@ -80,18 +61,18 @@ pub fn TransactionsSubsection(transactions: Vec<Transaction>) -> impl IntoView {
 #[component]
 pub fn AccountSummarySubsection(summary_items: Vec<(String, String, bool)>, username: String, public_key: String) -> impl IntoView {
     view! {
-        <div class="flex flex-col items-center mt-16 bg-light-granola-orange rounded-3xl h-36">
-            <div class="w-20 h-20 rounded-full bg-main-background flex justify-center items-center translate-y-[-25%]">
+        <div class="@lg:grid @lg:grid-cols-[10rem_5rem_auto_10rem] @lg:grid-rows-[2.5rem_2.5rem] @lg:gap-x-[2rem] @lg:h-auto flex flex-col items-center mt-16 bg-light-granola-orange rounded-3xl h-36">
+            <div class="@lg:col-start-2 @lg:col-end-3 @lg:row-start-1 @lg:row-end-2 w-20 h-20 rounded-full bg-main-background flex justify-center items-center translate-y-[-25%]">
                 <img src="/assets/img/account_balance_wallet.svg" alt="account balance wallet logo"/>
             </div>
-            <div class="text-granola-orange text-base text-bold text-ellipsis w-10/12 overflow-hidden">
+            <div class="@lg:col-start-3 text-granola-orange text-base text-bold text-ellipsis w-10/12 overflow-hidden">
                 {public_key}
             </div>
-            <div class="text-slate-400 text-sm">
+            <div class="@lg:col-start-3 @lg:row-start-2 text-slate-400 text-sm">
                 "Username: "{username}
             </div>
         </div>
-        <div class="bg-white rounded-xl flex flex-col items-stretch mt-8 p-4">
+        <div class="@lg:grid @lg:grid-cols-[10rem_auto_10rem] bg-white rounded-xl flex flex-col items-stretch mt-8 p-4">
             {summary_items.into_iter()
                 .map(|(label, value, has_pill)| view! {
                     <OverviewEntry label=label.to_owned() value=value.to_owned() has_pill=has_pill />
@@ -155,7 +136,7 @@ fn OverviewEntry(label: String, value: String, has_pill: bool) -> impl IntoView 
     };
 
     view! {
-        <div class="flex flex-col items-start md:flex-row md:items-baseline md:justify-start">
+        <div class="@lg:col-start-2 @lg:col-end-3 flex flex-col items-start md:flex-row md:items-baseline md:justify-start">
             <span class="w-1/4 text-slate-400 text-sm whitespace-nowrap">{label}:</span>
             <span class=value_class_str>{value}</span>
         </div>

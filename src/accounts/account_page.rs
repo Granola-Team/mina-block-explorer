@@ -3,6 +3,7 @@ use leptos_router::*;
 
 use super::models::*;
 use super::functions::*;
+use super::components::*;
 
 use crate::api_models::MyError;
 use crate::summary_item::{SummaryItem, SummaryItemKind};
@@ -24,11 +25,14 @@ pub fn AccountSummaryPage() -> impl IntoView {
     };
 
     view! {
-        <h1>"Account Summary"</h1>
         {move || match resource.get() {
-            None => view! { <div>"Loading"</div>}.into_view(),
-            Some(Ok(res)) => view! { <AccountSummarySection summary=res /> },
-            Some(Err(err)) => view! { <div>{format!("{:#?}", err)}</div>}.into_view()
+            Some(Ok(res)) =>view! {
+                <section class="@container md:col-start-2 md:col-end-3 md:rounded-lg bg-table-section p-0 md:p-4">
+                    <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-start items-center">"Account Overview"</h1>
+                    <AccountSummarySubsection summary_items=get_summary_items(res.account.clone()) username=res.account.username public_key=res.account.public_key />
+                </section>
+            }.into_view(),
+            _ => view! { <span/>  }.into_view()
         }}
     }
 }
