@@ -6,6 +6,9 @@ set dotenv-load := true
 tailwind:
   npx tailwindcss -i assets/css/input.css -o assets/css/styles.css --minify
 
+tailwind-watch:
+  just tailwind &
+
 build:
   npm install
   just tailwind
@@ -45,7 +48,7 @@ disallow-unused-cargo-deps:
 audit:
   cargo audit
 
-serve: tailwind build 
+serve: tailwind-watch build 
   trunk serve --open --port=$((5170 + $RANDOM % 10))
 
 release: build-release
