@@ -105,17 +105,12 @@ pub fn TransactionsPage() -> impl IntoView {
 
     view! {
         {move || match resource.get() {
-            None => view! {
-                <div>"Loading..." </div>
-            }.into_view(),
             Some(Ok(data)) => view! { 
                 <TableSection section_heading="Transactions".to_owned()>
                     <Table data=data/>
                 </TableSection>
              },
-            Some(Err(my_error)) => view! {
-                <div> { format!("Error: {:#?}", my_error)}</div>
-            }.into_view()
+             _ => view! { <span /> }.into_view()
         }}
     }
 }

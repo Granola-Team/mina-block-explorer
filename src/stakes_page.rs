@@ -596,43 +596,9 @@ fn get_data() -> Result<StakesResponse, serde_json::Error> {
 #[component]
 pub fn StakesPage() -> impl IntoView {
 
-    // let url_params = use_params::<URLParams>();
-
-    // let public_key_fn = move || {
-    //     url_params.with(|url_params| {
-    //         url_params
-    //             .as_ref()
-    //             .map(|url_params| url_params.ledger_hash.clone())
-    //             .unwrap_or_default()
-    //     })
-    // };
-
-    // let ledger_hash = match public_key_fn() {
-    //     Some(pc) => pc,
-    //     None => "current".to_string()
-    // };
-
-    // let resource: Resource<(), Result<StakesResponse, MyError>> = {
-    //     create_resource(
-    //         || (),
-    //         move |_| {
-    //             let ledger_hash_for_async = ledger_hash.clone();
-    //             async move { load_data(&ledger_hash_for_async).await }
-    //         },
-    //     )
-    // };
     let data = get_data();
 
     view! {
-        // {move || match resource.get() {
-        //     None => view! {
-        //         <div>"Loading..." </div>
-        //     }.into_view(),
-        //     Some(Ok(data)) => view! { <Table data=data/> },
-        //     Some(Err(my_error)) => view! {
-        //         <div> { format!("Error: {:#?}", my_error)}</div>
-        //     }.into_view()
-        // }}
         {match data {
             Ok(data) => view! { 
                 <TableSection section_heading="Stakes".to_owned()>
