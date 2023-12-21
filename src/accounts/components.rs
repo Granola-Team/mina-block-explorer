@@ -15,7 +15,7 @@ pub fn AccountDialog(path_base: String, account: AccountSummary) -> impl IntoVie
             <section>
                 <div class="flex justify-between">
                     <h2 class="text-bold text-xl">"Account Overview"</h2>
-                    <button>
+                    <button id="closedialog">
                         <a href=path_base>X</a>
                     </button>
                 </div>
@@ -23,7 +23,7 @@ pub fn AccountDialog(path_base: String, account: AccountSummary) -> impl IntoVie
             </section>
             <TransactionsSubsection limit=3 account_id=public_key />
             <div class="absolute bottom-0 left-0 w-full h-20 flex justify-stretch items-center bg-white">
-                <button class="disabled:bg-slate-400 disabled:text-slate-200 disabled:cursor-not-allowed bg-granola-orange text-white uppercase mx-8 h-11 w-full rounded-lg">
+                <button id="viewmore" class="disabled:bg-slate-400 disabled:text-slate-200 disabled:cursor-not-allowed bg-granola-orange text-white uppercase mx-8 h-11 w-full rounded-lg">
                     <a href={format!("/accounts/{}", id)}>"View all details"</a>
                 </button>
             </div>
