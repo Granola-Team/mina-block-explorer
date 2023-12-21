@@ -6,12 +6,12 @@ use crate::transactions::components::TransactionsSubsection;
 
 #[component]
 pub fn AccountDialog(path_base: String, account: AccountSummary) -> impl IntoView {
-    // let id = account.public_key.clone();
+    let id = account.public_key.clone();
     let summary_items = get_summary_items(account.clone());
     let public_key = account.public_key.clone();
     
     view! {
-        <dialog id="accountdialog" class="w-full max-w-3xl h-screen fixed top-0 mr-0 ml-auto flex flex-col items-stretch p-4 bg-background">
+        <dialog id="accountdialog" class="z-20 w-full max-w-3xl h-screen fixed top-0 mr-0 ml-auto flex flex-col items-stretch p-4 bg-background">
             <section>
                 <div class="flex justify-between">
                     <h2 class="text-bold text-xl">"Account Overview"</h2>
@@ -23,9 +23,8 @@ pub fn AccountDialog(path_base: String, account: AccountSummary) -> impl IntoVie
             </section>
             <TransactionsSubsection limit=3 account_id=public_key />
             <div class="absolute bottom-0 left-0 w-full h-20 flex justify-stretch items-center bg-white">
-                <button disabled class="disabled:bg-slate-400 disabled:text-slate-200 disabled:cursor-not-allowed bg-granola-orange text-white uppercase mx-8 h-11 w-full rounded-lg">
-                    // <a href={format!("/accounts/{}", id)}>"View all details"</a>
-                    "View all details"
+                <button class="disabled:bg-slate-400 disabled:text-slate-200 disabled:cursor-not-allowed bg-granola-orange text-white uppercase mx-8 h-11 w-full rounded-lg">
+                    <a href={format!("/accounts/{}", id)}>"View all details"</a>
                 </button>
             </div>
         </dialog>
