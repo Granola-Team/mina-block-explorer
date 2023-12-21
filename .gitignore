@@ -7,3 +7,4 @@ blob-report/
 playwright/.cache/
 .env
 package-lock.json
+.pid
