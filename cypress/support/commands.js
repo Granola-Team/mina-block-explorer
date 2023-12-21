@@ -24,7 +24,7 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
-Cypress.Commands.add('accountOverviewDialog', (linkSelector) => {
+Cypress.Commands.add('openCloseAccountDialog', (linkSelector) => {
     cy.get(linkSelector).first().click();
 
     cy.get('dialog').should('be.visible');
@@ -33,4 +33,5 @@ Cypress.Commands.add('accountOverviewDialog', (linkSelector) => {
     cy.get('dialog button a').click();
 
     cy.get('dialog').should('not.exist');
-  })
+});
+
