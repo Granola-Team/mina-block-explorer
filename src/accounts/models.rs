@@ -42,9 +42,3 @@ pub struct AccountSummary {
 pub struct AccountResponse {
     pub account: AccountSummary,
 }
-
-pub enum Status {
-    Pending,
-    Complete,
-    Unknown
-}
