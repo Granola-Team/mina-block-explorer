@@ -6,7 +6,7 @@ module.exports = {
     },
     theme: {
         fontFamily: {
-            sans: ['Inter', 'sans-serif'],
+            sans: ['system-ui', 'sans-serif'],
         },
         colors: {
             ...require('tailwindcss/colors'),
