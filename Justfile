@@ -58,10 +58,7 @@ release: build-release
   trunk build --release --filehash true
 
 pre_build:
-  mkdir -p $TRUNK_STAGING_DIR/assets/img/ $TRUNK_STAGING_DIR/assets/css/
-  cp assets/img/* $TRUNK_STAGING_DIR/assets/img/
-  cp assets/robots.txt $TRUNK_STAGING_DIR
-  cp assets/favicon.ico $TRUNK_STAGING_DIR
+  rsync -av assets/* $TRUNK_STAGING_DIR
 
 publish: release
   aws cloudfront create-invalidation --distribution-id "$DIST_ID" --paths "/*"
