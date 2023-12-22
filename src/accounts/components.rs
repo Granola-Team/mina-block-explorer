@@ -37,7 +37,7 @@ pub fn AccountSummarySubsection(summary_items: Vec<(String, String, bool)>, user
     view! {
         <div class="@lg:grid @lg:grid-cols-[10rem_5rem_auto_10rem] @lg:grid-rows-[2.5rem_2.5rem] @lg:gap-x-[2rem] @lg:h-auto flex flex-col items-center mt-16 bg-light-granola-orange rounded-3xl h-36">
             <div class="@lg:col-start-2 @lg:col-end-3 @lg:row-start-1 @lg:row-end-2 w-20 h-20 rounded-full bg-main-background flex justify-center items-center translate-y-[-25%]">
-                <img src="/assets/img/account_balance_wallet.svg" alt="account balance wallet logo"/>
+                <img src="/img/account_balance_wallet.svg" alt="account balance wallet logo"/>
             </div>
             <div class="@lg:col-start-3 text-granola-orange text-base text-bold text-ellipsis w-10/12 overflow-hidden">
                 {public_key}
