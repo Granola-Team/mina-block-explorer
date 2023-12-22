@@ -8,3 +8,4 @@ playwright/.cache/
 .env
 package-lock.json
 .pid
+assets/css/styles.css
