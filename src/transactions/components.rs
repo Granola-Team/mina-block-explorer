@@ -47,8 +47,8 @@ pub fn TransactionsSubsection(limit: i32, account_id: String) -> impl IntoView {
 fn TransactionEntry(status: Status, date:String, moments_ago:String, from:String, to:String, fee:String, amount:String, hash:String) -> impl IntoView {
 
     let img_attr = match status {
-        Status::Pending => ("/assets/img/timelapse.svg","Pending"),
-        Status::Complete => ("/assets/img/down-arrow.svg","Complete"),
+        Status::Pending => ("/img/timelapse.svg","Pending"),
+        Status::Complete => ("/img/down-arrow.svg","Complete"),
         Status::Unknown => ("","Unknown")
     };
 
