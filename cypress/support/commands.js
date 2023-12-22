@@ -39,6 +39,13 @@ Cypress.Commands.add('accountDialogToAccount', () => {
   cy.get('dialog button#viewmore a').click();
   cy.get('dialog').should('not.exist');
 
-  cy.url().should('contain', '//accounts')
+  cy.url().should('contain', '/accounts')
 });
+
+Cypress.Commands.add('openMobileMenu', () => {
+  cy.get('nav').should('not.be.visible');
+  cy.get('label[for="nav-toggle"]').click();
+  cy.get('nav').should('be.visible');
+});
+
 
