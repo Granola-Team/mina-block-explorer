@@ -12,7 +12,7 @@ tailwind-watch:
 build:
   npm install
   just tailwind
-  cargo build
+  cargo build --target=wasm32-unknown-unknown
   trunk build
 
 build-release:
