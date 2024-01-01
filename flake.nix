@@ -1,5 +1,5 @@
 {
-  description = "A development environment and build system for mina-block-explorer";
+  description = "A development environment and build system for the mina-block-explorer project";
 
   inputs = {
     nixpkgs.url      = "github:NixOS/nixpkgs/nixos-unstable";
@@ -32,6 +32,7 @@
             nodejs_18
             openssl
             pkg-config
+            rsync
             trunk
             (rust-bin.selectLatestNightlyWith( toolchain: toolchain.default.override {
               extensions= [ "rust-src" "rust-analyzer" ];
