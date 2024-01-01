@@ -3,9 +3,9 @@ const pages = require('../../pages.json');
 
 describe('desktop menu look and feel', () => {
     pages.forEach(page => {
-        it(`opens and closes the desktop menu on the ${page} page`, () => {
+        it(`captures desktop menu on the ${page} page`, () => {
             cy.visit(page);
-            cy.get('nav').screenshot();
+            cy.get('header').screenshot();
         });
     });
 
