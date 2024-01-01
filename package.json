@@ -1,12 +1,7 @@
 {
+  "private": true,
   "name": "mina-block-explorer-dev",
-  "version": "0.1.0",
-  "description": "",
-  "main": "index.js",
   "scripts": {},
-  "keywords": [],
-  "author": "",
-  "license": "MPLv2",
   "devDependencies": {
     "@tailwindcss/container-queries": "^0.1.1",
     "cypress": "^13.6.1",
