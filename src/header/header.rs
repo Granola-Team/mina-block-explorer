@@ -1,4 +1,5 @@
 use leptos::*;
+use leptos_router::use_location;
 
 enum Icon {
     Home,
@@ -9,6 +10,8 @@ enum Icon {
 
 #[component]
 pub fn Header() -> impl IntoView {
+
+    let location = use_location();
 
     let (open, set_open) = create_signal(false);
     let nav_items = vec![
@@ -21,6 +24,7 @@ pub fn Header() -> impl IntoView {
     let toggle = move |_| set_open.update(|value| *value = !*value);
 
     let base_class = "md:col-start-3 md:col-end-4 md:[all:unset] bg-main-background scale-y-0 transition-transform origin-top w-screen text-left absolute top-full left-0";
+    let base_link_class = "flex font-bold text-sm uppercase hover:text-granola-orange hover:underline hover:decoration-2";
     let open_class = "scale-y-100";
     
     view! {
@@ -33,18 +37,21 @@ pub fn Header() -> impl IntoView {
             <nav class={move || format!("{} {}", base_class, if open.get() { open_class } else { "" })}>
                 <ul class="md:flex md:justify-end m-0 p-0">
                     {nav_items.into_iter()
-                        .map(|(link, title, icon)| view! {
-                            <li class="md:mb-0 mb-2 mx-2">
-                                <a on:click=toggle class="flex font-bold text-sm uppercase text-white hover:text-granola-orange hover:underline hover:decoration-2" href=link>
-                                    {match icon {
-                                        Icon::Home => view! { <HomeIcon /> },
-                                        Icon::Blocks => view! { <BlockIcon /> },
-                                        Icon::Transactions => view! { <TransactionIcon /> },
-                                        Icon::SNARKs => view! { <SnarkIcon /> },
-                                    }}
-                                    <div class="ml-1">{title}</div>
-                                </a>
-                            </li>
+                        .map(|(link, title, icon)| {
+                            let pathname = move || location.pathname.get();
+                            view! {
+                                <li class="md:mb-0 mb-2 mx-2">
+                                    <a on:click=toggle class={move || format!("{} {}",base_link_class, if pathname() == link {"text-granola-orange"} else {"text-white"})} href=link>
+                                        {match icon {
+                                            Icon::Home => view! { <HomeIcon /> },
+                                            Icon::Blocks => view! { <BlockIcon /> },
+                                            Icon::Transactions => view! { <TransactionIcon /> },
+                                            Icon::SNARKs => view! { <SnarkIcon /> },
+                                        }}
+                                        <div class="ml-1">{title}</div>
+                                    </a>
+                                </li>
+                            }
                         }).collect::<Vec<_>>()}
                 </ul>
             </nav>
