@@ -11,6 +11,7 @@ mod stakes_page;
 mod table_section;
 mod accounts;
 mod header;
+mod footer;
 
 use root::Root;
 
