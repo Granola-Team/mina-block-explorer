@@ -8,7 +8,7 @@ describe('desktop footer', () => {
             it(`exist on ${page} page on device ${device}`, () => {
                 cy.viewport(device);
                 cy.visit(page);
-                cy.get('footer').screenshot();
+                cy.get('footer').matchImageSnapshot(`${page}-${device}-footer`);
             });
         });
     })
