@@ -10,15 +10,14 @@ use crate::transactions::transactions_page::TransactionsPage;
 use crate::header::navigation::Header;
 use crate::accounts::account_dialog::AccountDialogView;
 use crate::accounts::account_page::AccountSummaryPage;
+use crate::footer::Footer;
 
 #[component]
 pub fn Root() -> impl IntoView {
-    view! {
-      
-      
+    view! {    
         <Router>
           <Header />
-          <main class="grid grid-cols-1 md:grid-cols-[10%_80%_10%] bg-secondary-background rounded-t-3xl pt-6 p-2 sm:p-0 sm:pt-6">
+          <main class="grid grid-cols-1 md:grid-cols-[10%_80%_10%] bg-secondary-background rounded-t-3xl py-6 px-2 sm:px-0 grow">
             <Routes>
               <Route path="/" view=SummaryPage />
               <Route path="/summary" view=SummaryPage>
@@ -35,6 +34,7 @@ pub fn Root() -> impl IntoView {
               <Route path="/stakes" view=StakesPage />
             </Routes>
           </main>
+          <Footer />
         </Router>
       
     }

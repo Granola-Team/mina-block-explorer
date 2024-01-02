@@ -7,14 +7,14 @@ describe('mobile menu look and feel', () => {
             cy.viewport('iphone-xr');
             cy.visit(page);
             cy.openMobileMenu();
-            cy.get('nav').screenshot();
+            cy.get('nav').matchImageSnapshot(`${page}-nav`);
         });
     });
 
     it('has a header',() => {
         cy.viewport('iphone-xr');
         cy.visit("/");
-        cy.get('header').screenshot();
+        cy.get('header').matchImageSnapshot('homepage-nav');
     })
     
   })

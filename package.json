@@ -3,6 +3,7 @@
   "name": "mina-block-explorer-dev",
   "scripts": {},
   "devDependencies": {
+    "@simonsmith/cypress-image-snapshot": "^9.0.1",
     "@tailwindcss/container-queries": "^0.1.1",
     "cypress": "^13.6.1",
     "tailwindcss": "^3.4.0"
