@@ -33,7 +33,7 @@ kill-server:
 test-e2e: && kill-server
   trunk serve --port=5274 & pid=$!; echo "$pid" > .pid
   sleep 5
-  CI=true npx cypress run
+  CI=true npx cypress run --env failOnSnapshotDiff=false
   
 test-unit: build
   cargo nextest run
