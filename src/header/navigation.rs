@@ -1,7 +1,6 @@
 use leptos::*;
 use leptos_router::use_location;
 use crate::icons::*;
-use crate::styles::*;
 
 enum Icon {
     Home,
@@ -28,12 +27,10 @@ pub fn Header() -> impl IntoView {
     let base_class = "md:col-start-3 md:col-end-4 md:[all:unset] bg-main-background scale-y-0 transition-transform origin-top w-screen text-left absolute top-full left-0";
     let base_link_class = "flex font-bold text-sm uppercase hover:text-granola-orange hover:underline hover:decoration-2";
     let open_class = "scale-y-100";
-    let breakout_container_styles = get_desktop_breakout_container_styles(Some(vec!["20%".to_string(),"60%".to_string()])).to_styles_string();
-    let breakout_child_styles = get_desktop_breakout_child_styles().to_styles_string();
     
     view! {
-        <header class={format!("z-10 bg-main-background flex justify-center items-center fixed top-0 left-0 w-screen h-16 {}",breakout_container_styles)}>
-            <div class={format!("flex items-center justify-start {}",breakout_child_styles)}>
+        <header class="z-10 bg-main-background flex justify-center items-center md:grid md:grid-cols-[10%_20%_60%_10%] md:col-start-2 md:col-end-3 fixed top-0 left-0 w-screen h-16">
+            <div class="md:col-start-2 md:col-end-3 flex items-center justify-start">
                 <img src="/img/logo.svg" width="45px" height="29px" alt="Minasearch" />
                 <span class="ml-1 text-white font-bold text-xl">Mina</span><span class="text-granola-orange font-bold text-xl">Search</span>
             </div>

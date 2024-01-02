@@ -5,7 +5,6 @@ use leptos_router::*;
 use serde::{Deserialize, Serialize};
 
 use crate::api_models::{MyError};
-use crate::styles::*;
 use crate::summary_item::{SummaryItem, SummaryItemKind};
 use crate::latest_block_page::{LatestBlocksResponse,load_data as load_latest_blocks};
 use crate::table::TableData;
@@ -135,9 +134,8 @@ pub fn SummaryPage() -> impl IntoView {
 
 #[component]
 fn SummaryGrid(summary: BlockchainSummary) -> impl IntoView {
-    let breakout_child_styles = get_desktop_breakout_child_styles().to_styles_string();
     view! {        
-        <section class={format!("grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 auto-rows-min gap-4 py-4 pt-0 {}",breakout_child_styles)}>
+        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 md:col-start-2 auto-rows-min gap-4 py-4 pt-0">
             <h1 class="h-0 w-0 overflow-hidden absolute">Summary</h1>
             <SummaryItem imgsrc="/img/blockchain_length.svg".to_string() id="blockchainLength".to_string() label="Height".to_string() value={SummaryItemKind::Int64(summary.blockchain_length)} />
             <SummaryItem imgsrc="/img/circulating_supply.svg".to_string() id="circulatingSupply".to_string() label="Circulating Supply".to_string() value={SummaryItemKind::Float64(summary.circ_supply())} />

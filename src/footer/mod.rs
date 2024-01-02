@@ -1,7 +1,6 @@
 use leptos::*;
 
 use crate::icons::*;
-use crate::styles::*;
 
 enum Icon {
     Docs,
@@ -18,12 +17,9 @@ pub fn Footer() -> impl IntoView {
         ("Terms", "https://docs.minaexplorer.com/minaexplorer/website-terms-of-service", Icon::Terms),
         ("Support", "https://docs.minaexplorer.com/minaexplorer/get-help", Icon::Support),
     ];
-    let breakout_container_styles = get_desktop_breakout_container_styles(None).to_styles_string();
-    let breakout_child_styles = get_desktop_breakout_child_styles().to_styles_string();
-
     view! {
-        <footer class={format!("bg-main-background w-full h-12 flex flex-wrap justify-end {}",breakout_container_styles)}>
-            <div class={format!("w-full flex justify-between sm:justify-end p-4 sm:px-0 {}",breakout_child_styles)}>    
+        <footer class="bg-main-background w-full h-12 flex flex-wrap justify-end">
+            <div class="w-full flex justify-between sm:max-w-md sm:justify-end p-4">    
                 {links.into_iter()
                     .map(|(name, link, icon)| view! {
                         <a class="mr-4 flex items-center text-white text-xs uppercase hover:text-granola-orange hover:underline" href=link>

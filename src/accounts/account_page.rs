@@ -8,7 +8,7 @@ use super::components::*;
 use crate::api_models::MyError;
 use crate::transactions::transactions_page::TransactionsSection;
 use crate::summary_item::{SummaryItem, SummaryItemKind};
-use crate::styles::*;
+
 
 #[component]
 pub fn AccountSummaryPage() -> impl IntoView {
@@ -25,12 +25,10 @@ pub fn AccountSummaryPage() -> impl IntoView {
         )
     };
 
-    let breakout_child_styles = get_desktop_breakout_child_styles().to_styles_string();
-
     view! {
         {move || match resource.get() {
             Some(Ok(res)) =>view! {
-                <section class={format!("@container md:rounded-lg bg-table-section p-0 md:p-4 mb-2 {}",breakout_child_styles)}>
+                <section class="@container md:col-start-2 md:col-end-3 md:rounded-lg bg-table-section p-0 md:p-4 mb-2">
                     <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-start items-center">"Account Overview"</h1>
                     <AccountSummarySubsection summary_items=get_summary_items(res.account.clone()) username=res.account.username public_key=res.account.public_key />
                 </section>
