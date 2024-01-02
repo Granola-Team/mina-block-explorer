@@ -8,19 +8,19 @@ enum Icon {
     Terms,
     Support
 }
-pub struct Link {
-    label: String, 
-    href: String, 
+pub struct Link<'a> {
+    label: &'a str,
+    href: &'a str,
     icon: Icon
 }
 
 #[component]
 pub fn Footer() -> impl IntoView {
     let links = vec![
-        Link { label: String::from("Docs"), href: String::from("#https://docs.minaexplorer.com/"), icon: Icon::Docs},
-        Link { label: String::from("Feedback"), href: String::from("#https://discord.gg/Sc2JeqCPnX"), icon: Icon::Feedback},
-        Link { label: String::from("Terms"), href: String::from("#https://docs.minaexplorer.com/minaexplorer/website-terms-of-service"), icon: Icon::Terms},
-        Link { label: String::from("Support"), href: String::from("#https://docs.minaexplorer.com/minaexplorer/get-help"),   icon: Icon::Support},
+        Link { label: "Docs", href: "#", icon: Icon::Docs},
+        Link { label: "Feedback", href: "#", icon: Icon::Feedback},
+        Link { label: "Terms", href: "#", icon: Icon::Terms},
+        Link { label: "Support", href: "#", icon: Icon::Support},
     ];
     view! {
         <footer class="bg-main-background w-full h-12 flex flex-wrap justify-end md:grid md:grid-cols-[10%_80%_10%]">
