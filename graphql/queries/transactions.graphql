@@ -1,0 +1,15 @@
+query TransactionsQuery($limit: Int = 25, $sort_by: TransactionSortByInput!, $query: TransactionQueryInput!) {
+  transactions(limit: $limit, sortBy: $sort_by, query: $query ) {
+    amount
+    fee
+    to
+    from
+    hash
+    block {
+      dateTime
+    }
+    receiver {
+      publicKey
+    }
+  }
+}

@@ -17,7 +17,7 @@ pub fn TransactionsSection() -> impl IntoView {
         {move || match resource.get() {
             Some(Ok(data)) => view! { 
                 <TableSection section_heading="Transactions".to_owned()>
-                    <Table data=data/>
+                    <Table data=data.transactions/>
                 </TableSection>
              },
             _ => view! { <span /> }.into_view()

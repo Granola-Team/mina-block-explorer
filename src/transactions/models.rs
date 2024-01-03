@@ -1,70 +1,36 @@
-use serde::{Deserialize, Serialize};
-
 use crate::table::TableData;
 
-#[derive(Debug, Deserialize, Serialize, Clone)]
-pub struct TransactionsResponse {
-    pub data: Data,
-}
+use super::{graphql::transactions_query::TransactionsQueryTransactions, functions::{get_block_datetime, get_from, get_receiver_public_key, get_fee, get_hash, get_amount}};
 
-#[derive(Debug, Deserialize, Serialize, Clone)]
-pub struct Data {
-    pub transactions: Vec<Transaction>,
-}
-
-#[derive(Debug, Deserialize, Serialize, Clone)]
-pub struct Transaction {
-    pub hash: String,
-    pub amount: u64,
-    pub block: Block,
-    pub fee: u64,
-    pub from: String,
-    pub receiver: Receiver,
-    pub to: String
-}
-
-#[derive(Debug, Deserialize, Serialize, Clone)]
-#[serde(rename_all = "camelCase")]
-pub struct Block {
-    pub date_time: String,
-}
-
-#[derive(Debug, Deserialize, Serialize, Clone)]
-#[serde(rename_all = "camelCase")]
-pub struct Receiver {
-    pub public_key: String,
-}
-
-impl TableData for TransactionsResponse {
+impl TableData for Vec<Option<TransactionsQueryTransactions>> {
     fn get_columns(&self) -> Vec<String> {
-        vec![
-            String::from("Date"),
-            String::from("From"),
-            String::from("To"),
-            String::from("Hash"),
-            String::from("Fee"),
-            String::from("Amount"),
-        ]
+        vec!["Date", "From", "To", "Hash", "Fee", "Amount"]
+            .iter()
+            .map(ToString::to_string)
+            .collect::<Vec<_>>()
     }
 
     fn get_rows(&self) -> Vec<Vec<String>> {
-        let mut rows = Vec::new();
-        for transaction in &self.data.transactions {
-            let data = vec![
-                transaction.block.date_time.to_string(),
-                transaction.from.to_string(),
-                transaction.receiver.public_key.to_string(),
-                transaction.fee.to_string(),
-                transaction.hash.to_string(),
-                transaction.amount.to_string(),
-            ];
-            rows.push(data);
-        }
-        rows
+        self.iter()
+            .map(|opt_trans| {
+                match opt_trans {
+                    Some(transaction) => vec![
+                        get_block_datetime(transaction),
+                        get_from(transaction),
+                        get_receiver_public_key(transaction),
+                        get_fee(transaction),
+                        get_hash(transaction),
+                        get_amount(transaction),
+                    ],
+                    None => vec![]
+                }
+            })
+            .collect::<Vec<_>>()
     }
 }
+
 pub enum Status {
     Pending,
     Complete,
-    Unknown
+    Unknown,
 }
