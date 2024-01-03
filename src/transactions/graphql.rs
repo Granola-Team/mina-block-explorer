@@ -14,6 +14,7 @@ type Long = i32;
 )]
 pub struct TransactionsQuery;
 
+#[allow(clippy::derivable_impls)]
 impl Default for TransactionQueryInput {
     fn default() -> Self {
         TransactionQueryInput {
