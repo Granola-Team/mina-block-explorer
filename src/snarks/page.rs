@@ -54,7 +54,7 @@ impl TableData for Vec<Option<SnarksQuerySnarks>> {
 
 #[component]
 pub fn SnarksPage() -> impl IntoView {
-    let resource = create_resource(|| (), |_| async move { load_data().await });
+    let resource = create_resource(|| (), |_| async move { load_data(None).await });
 
     view! {
         {move || match resource.get() {
