@@ -18,8 +18,8 @@ impl TableData for Vec<Option<TransactionsQueryTransactions>> {
                         get_block_datetime(transaction),
                         get_from(transaction),
                         get_receiver_public_key(transaction),
-                        get_fee(transaction),
                         get_hash(transaction),
+                        get_fee(transaction),
                         get_amount(transaction),
                     ],
                     None => vec![]
