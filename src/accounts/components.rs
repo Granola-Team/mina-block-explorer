@@ -39,7 +39,7 @@ pub fn AccountSummarySubsection(summary_items: Vec<(String, String, bool)>, user
             <div class="@lg:col-start-2 @lg:col-end-3 @lg:row-start-1 @lg:row-end-2 w-20 h-20 rounded-full bg-main-background flex justify-center items-center translate-y-[-25%]">
                 <img src="/img/account_balance_wallet.svg" alt="account balance wallet logo"/>
             </div>
-            <div class="@lg:col-start-3 text-granola-orange text-base text-bold text-ellipsis w-10/12 overflow-hidden">
+            <div class="@lg:col-start-3 text-granola-orange text-base text-bold text-ellipsis w-10/12 overflow-hidden text-center @lg:text-left">
                 {public_key}
             </div>
             <div class="@lg:col-start-3 @lg:row-start-2 text-slate-400 text-sm">
