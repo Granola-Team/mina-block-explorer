@@ -9,7 +9,7 @@ use crate::latest_block_page::LatestBlocksPage;
 use crate::transactions::transactions_page::TransactionsPage;
 use crate::header::navigation::Header;
 use crate::accounts::account_dialog::AccountDialogView;
-use crate::accounts::account_page::AccountSummaryPage;
+use crate::accounts::page::AccountSummaryPage;
 use crate::footer::Footer;
 
 #[component]
