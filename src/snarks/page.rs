@@ -1,24 +1,11 @@
-use chrono::Utc;
-use graphql_client::{reqwest::post_graphql, GraphQLQuery};
 use leptos::*;
-
+use super::graphql::*;
+use super::functions::*;
+use snarks_query::SnarksQuerySnarks;
 use crate::{
-    api_models::MyError,
     table::{Table, TableData},
     table_section::TableSection,
 };
-
-use self::snarks_query::SnarksQuerySnarks;
-
-type DateTime = chrono::DateTime<Utc>;
-
-#[derive(GraphQLQuery)]
-#[graphql(
-    schema_path = "graphql/schemas/mina-explorer.graphql",
-    query_path = "graphql/queries/snarks.graphql",
-    response_derives = "Serialize,PartialEq,Debug,Clone"
-)]
-pub struct SnarksQuery;
 
 impl TableData for Vec<Option<SnarksQuerySnarks>> {
     fn get_columns(&self) -> Vec<String> {
@@ -63,26 +50,6 @@ impl TableData for Vec<Option<SnarksQuerySnarks>> {
             })
             .collect::<Vec<_>>()
     }
-}
-
-async fn load_data() -> Result<snarks_query::ResponseData, MyError> {
-    let url = "https://graphql.minaexplorer.com";
-    let variables = snarks_query::Variables {
-        sort_by: snarks_query::SnarkSortByInput::BLOCKHEIGHT_DESC,
-        limit: Some(25),
-    };
-
-    let client = reqwest::Client::new();
-
-    let response = post_graphql::<SnarksQuery, _>(&client, url, variables)
-        .await
-        .map_err(|e| MyError::NetworkError(e.to_string()))?;
-
-    if let Some(errors) = response.errors {
-        return Err(MyError::GraphQLError(errors));
-    }
-
-    response.data.ok_or(MyError::GraphQLEmpty("No data available".to_string()))
 }
 
 #[component]

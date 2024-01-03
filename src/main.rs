@@ -6,7 +6,7 @@ mod summary_page;
 mod latest_block_page;
 mod transactions;
 mod table;
-mod snarks_page;
+mod snarks;
 mod stakes_page;
 mod table_section;
 mod accounts;
