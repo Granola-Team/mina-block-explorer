@@ -9,7 +9,7 @@ use crate::{
 
 impl TableData for Vec<Option<SnarksQuerySnarks>> {
     fn get_columns(&self) -> Vec<String> {
-        vec!["Height", "Date", "Prover", "Work Ids", "State Hash", "Fee"]
+        ["Height", "Date", "Prover", "Work Ids", "State Hash", "Fee"]
             .iter()
             .map(ToString::to_string)
             .collect::<Vec<_>>()

@@ -4,7 +4,7 @@ use super::{graphql::transactions_query::TransactionsQueryTransactions, function
 
 impl TableData for Vec<Option<TransactionsQueryTransactions>> {
     fn get_columns(&self) -> Vec<String> {
-        vec!["Date", "From", "To", "Hash", "Fee", "Amount"]
+        ["Date", "From", "To", "Hash", "Fee", "Amount"]
             .iter()
             .map(ToString::to_string)
             .collect::<Vec<_>>()

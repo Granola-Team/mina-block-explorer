@@ -117,37 +117,6 @@ pub fn get_status(timestamp: &str) -> Status {
         Err(_) => Status::Unknown,
     }
 }
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use chrono::Duration;
-
-    #[test]
-    fn test_format_duration_days() {
-        let duration = Duration::days(3);
-        assert_eq!(format_duration(&duration), "3 days ago");
-    }
-
-    #[test]
-    fn test_format_duration_hours() {
-        let duration = Duration::hours(5);
-        assert_eq!(format_duration(&duration), "5 hours ago");
-    }
-
-    #[test]
-    fn test_format_duration_minutes() {
-        let duration = Duration::minutes(45);
-        assert_eq!(format_duration(&duration), "45 minutes ago");
-    }
-
-    #[test]
-    fn test_format_duration_mix() {
-        let duration = Duration::hours(26);
-        assert_eq!(format_duration(&duration), "1 days ago");
-    }
-}
-
 fn build_query(public_key: Option<String>) -> transactions_query::TransactionQueryInput {
     transactions_query::TransactionQueryInput {
         from: public_key,
@@ -296,5 +265,36 @@ fn build_query(public_key: Option<String>) -> transactions_query::TransactionQue
         token_in: None,
         to_lt: None,
         to: None,
+    }
+}
+
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use chrono::Duration;
+
+    #[test]
+    fn test_format_duration_days() {
+        let duration = Duration::days(3);
+        assert_eq!(format_duration(&duration), "3 days ago");
+    }
+
+    #[test]
+    fn test_format_duration_hours() {
+        let duration = Duration::hours(5);
+        assert_eq!(format_duration(&duration), "5 hours ago");
+    }
+
+    #[test]
+    fn test_format_duration_minutes() {
+        let duration = Duration::minutes(45);
+        assert_eq!(format_duration(&duration), "45 minutes ago");
+    }
+
+    #[test]
+    fn test_format_duration_mix() {
+        let duration = Duration::hours(26);
+        assert_eq!(format_duration(&duration), "1 days ago");
     }
 }
