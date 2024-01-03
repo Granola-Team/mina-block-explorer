@@ -22,14 +22,10 @@ pub struct SnarksQuery;
 
 impl TableData for Vec<Option<SnarksQuerySnarks>> {
     fn get_columns(&self) -> Vec<String> {
-        vec![
-            String::from("Height"),
-            String::from("Date"),
-            String::from("Prover"),
-            String::from("Work Ids"),
-            String::from("State Hash"),
-            String::from("Fee"),
-        ]
+        vec!["Height", "Date", "Prover", "Work Ids", "State Hash", "Fee"]
+            .iter()
+            .map(ToString::to_string)
+            .collect::<Vec<_>>()
     }
 
     fn get_rows(&self) -> Vec<Vec<String>> {
