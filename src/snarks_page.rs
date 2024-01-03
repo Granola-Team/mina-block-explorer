@@ -1,37 +1,23 @@
 
+use chrono::Utc;
 use leptos::*;
-use serde::{Deserialize, Serialize};
+use graphql_client::{reqwest::post_graphql, GraphQLQuery};
 
 use crate::{table::{TableData, Table}, api_models::MyError, table_section::TableSection};
 
-#[derive(Debug, Deserialize, Serialize, Clone)]
-struct SnarksResponse {
-    data: Data
-}
+use self::snarks_query::SnarksQuerySnarks;
 
-#[derive(Debug, Deserialize, Serialize, Clone)]
-struct Data {
-    snarks: Vec<Snark>
-}
+type DateTime = chrono::DateTime<Utc>;
 
-#[derive(Debug, Deserialize, Serialize, Clone)]
-#[serde(rename_all = "camelCase")]
-struct Snark {
-    work_ids: Vec<u64>,
-    block: Block,
-    block_height: u64,
-    date_time: String,
-    fee: u64,
-    prover: String
-}
+#[derive(GraphQLQuery)]
+#[graphql(
+    schema_path = "graphql/schemas/mina-explorer.graphql",
+    query_path = "graphql/queries/snarks.graphql",
+    response_derives = "Serialize,PartialEq,Debug,Clone",
+)]
+pub struct SnarksQuery;
 
-#[derive(Debug, Deserialize, Serialize, Clone)]
-#[serde(rename_all = "camelCase")]
-struct Block {
-    state_hash: String
-}
-
-impl TableData for SnarksResponse {
+impl TableData for Vec<Option<SnarksQuerySnarks>> {
     fn get_columns(&self) -> Vec<String> {
         vec![
             String::from("Height"),
@@ -44,40 +30,50 @@ impl TableData for SnarksResponse {
     }
 
     fn get_rows(&self) -> Vec<Vec<String>> {
-        let mut rows = Vec::new();
-        for snark in &self.data.snarks {
-            let data = vec![
-                snark.block_height.to_string(),
-                snark.date_time.to_string(),
-                snark.prover.to_string(),
-                snark.work_ids.iter().map(|&x| x.to_string()).collect::<Vec<_>>().join(", "),
-                snark.block.state_hash.to_string(),
-                snark.fee.to_string()
-            ];
-            rows.push(data);
-        }
-        rows
+        self.into_iter()
+            .map(|opt_snark| {
+                match opt_snark {
+                    Some(snark) => vec![
+                        snark.block_height.map_or(String::new(), |o| o.to_string()),
+                        snark.date_time.map_or(String::new(), |o| o.to_string()),
+                        snark.prover.clone().map_or(String::new(), |o| o.to_string()),
+                        snark.work_ids.clone().map_or(String::new(), 
+                            |o| o.iter().map(
+                                |o1| o1.map_or(String::new(), 
+                                    |o2| o2.to_string()))
+                            .collect::<Vec<_>>().join(", ")
+                        ),
+                        snark.block.clone().map_or(String::new(), |o| o.state_hash.map_or(String::new(), |o1| o1.to_string())),
+                        snark.fee.map_or(String::new(), |o| o.to_string()),
+                    ],
+                    None => vec![],
+                }
+            }).collect::<Vec<_>>()
+        
     }
 }
 
 
-async fn load_data() -> Result<SnarksResponse, MyError> {
-    let client = reqwest::Client::new();
-    let response = client.post("https://graphql.minaexplorer.com")
-        .body(r#"{"query":"query MyQuery {\n  snarks(sortBy: BLOCKHEIGHT_DESC, limit: 25) {\n    blockHeight\n    dateTime\n    prover\n    workIds\n    block {\n      stateHash\n    }\n    fee\n  }\n}\n","variables":null,"operationName":"MyQuery"}"#)
-        .send()
-        .await
-        .map_err(|e| MyError::NetworkError(e.to_string()))?;
+async fn load_data() -> Result<snarks_query::ResponseData, MyError> {
+    let url = "https://graphql.minaexplorer.com";
+    let variables = snarks_query::Variables {
+        sort_by: snarks_query::SnarkSortByInput::BLOCKHEIGHT_DESC,
+        limit: Some(25)
+    };
 
-    if response.status().is_success() {
-        let summary = response
-            .json::<SnarksResponse>()
-            .await
-            .map_err(|e| MyError::ParseError(e.to_string()))?;
-        Ok(summary)
+    let client = reqwest::Client::new();
+
+    let response = post_graphql::<SnarksQuery, _>(&client, url, variables)
+        .await
+        .map_err(|e| MyError::NetworkError(e.to_string()))
+        .unwrap();
+
+    if let Some(errors) = response.errors {
+        Err(MyError::GraphQLError(errors))
     } else {
-        Err(MyError::NetworkError("Failed to fetch data".into()))
+        Ok(response.data.unwrap())
     }
+
 }
 
 #[component]
@@ -88,10 +84,10 @@ pub fn SnarksPage() -> impl IntoView {
         {move || match resource.get() {
             Some(Ok(data)) => view! { 
                 <TableSection section_heading="SNARKs".to_owned()>
-                    <Table data=data/>
+                    <Table data=data.snarks/>
                 </TableSection>
-             },
-             _ => view! { <span /> }.into_view()
+            },
+            _ => view! { <span /> }.into_view()
         }}
     }
 }
