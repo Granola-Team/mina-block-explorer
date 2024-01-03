@@ -98,7 +98,7 @@ where
     let cell_padding_class = "first:pl-8 pl-2";
 
     view! {
-        <div class="w-full overflow-auto h-full">
+        <div class="w-full overflow-auto">
             <table class="md:rounded-b-lg table-fixed w-[300%] md:w-[150%] lg:w-full ">
             <tr class="h-12 bg-table-header-fill">
                 {columns.into_iter()
