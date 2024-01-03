@@ -29,7 +29,7 @@ impl TableData for Vec<Option<SnarksQuerySnarks>> {
     }
 
     fn get_rows(&self) -> Vec<Vec<String>> {
-        self.iter() // Change `into_iter` to `iter` to avoid taking ownership
+        self.iter() 
             .map(|opt_snark| {
                 match opt_snark {
                     Some(snark) => vec![
@@ -40,7 +40,7 @@ impl TableData for Vec<Option<SnarksQuerySnarks>> {
                         snark
                             .prover
                             .as_ref()
-                            .map_or_else(String::new, |o| o.to_string()), // Borrowing with as_ref()
+                            .map_or_else(String::new, |o| o.to_string()), 
                         snark
                             .work_ids
                             .as_ref()
