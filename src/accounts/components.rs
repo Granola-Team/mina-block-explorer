@@ -2,7 +2,7 @@ use leptos::*;
 
 use super::functions::*;
 use super::models::*;
-use crate::transactions::components::TransactionsSubsection;
+use crate::transactions::components::AccountDialogTransactionSection;
 
 #[component]
 pub fn AccountDialog(path_base: String, account: AccountSummary) -> impl IntoView {
@@ -21,7 +21,12 @@ pub fn AccountDialog(path_base: String, account: AccountSummary) -> impl IntoVie
                 </div>
                 <AccountSummarySubsection summary_items=summary_items public_key=account.public_key username=account.username />
             </section>
-            <TransactionsSubsection limit=3 account_id=public_key />
+            <div class="overflow-y-auto flex flex-col pb-20">
+                <AccountDialogTransactionSection limit=3 account_id=public_key />
+                // <AccountSectionContainer title=String::from("SNARK Jobs") showing_message=String::from("Showing x of y")>
+                //     <span>"child"</span>
+                // </AccountSectionContainer>
+            </div>
             <div class="absolute bottom-0 left-0 w-full h-20 flex justify-stretch items-center bg-white">
                 <button id="viewmore" class="disabled:bg-slate-400 disabled:text-slate-200 disabled:cursor-not-allowed bg-granola-orange text-white uppercase mx-8 h-11 w-full rounded-lg">
                     <a href={format!("/accounts/{}", id)}>"View all details"</a>
@@ -31,6 +36,18 @@ pub fn AccountDialog(path_base: String, account: AccountSummary) -> impl IntoVie
     }.into_view()
 }
 
+#[component]
+pub fn AccountSectionContainer(title: String, showing_message: String, children: Children) -> impl IntoView {
+    view! {
+        <section class="flex flex-col bg-white rounded-xl flex flex-col items-stretch mt-8 p-4 h-fit">
+            <div class="flex justify-between w-full mb-4">
+                <h2 class="text-xl">{title}</h2>
+                <span class="text-table-row-text-color text-xs">{showing_message}</span>
+            </div>
+            {children()}
+        </section>
+    }.into_view()
+}
 
 #[component]
 pub fn AccountSummarySubsection(summary_items: Vec<(String, String, bool)>, username: String, public_key: String) -> impl IntoView {

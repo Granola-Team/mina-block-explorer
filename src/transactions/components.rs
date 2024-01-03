@@ -1,9 +1,11 @@
 use leptos::*;
 
+use crate::accounts::components::AccountSectionContainer;
+
 use super::{functions::*, models::*};
 
 #[component]
-pub fn TransactionsSubsection(limit: i32, account_id: String) -> impl IntoView {
+pub fn AccountDialogTransactionSection(limit: i32, account_id: String) -> impl IntoView {
     let resource = create_resource(|| (), move |_| {
         let account_id_clone = account_id.clone(); 
         async move { 
@@ -14,32 +16,26 @@ pub fn TransactionsSubsection(limit: i32, account_id: String) -> impl IntoView {
     view! {
         {move || match resource.get() {
             Some(Ok(res)) => view! {
-                <section class="flex flex-col bg-white rounded-xl flex flex-col items-stretch mt-8 p-4 h-[100%]">
-                    <div class="flex justify-between w-full">
-                        <h2 class="text-xl">"Transactions"</h2>
-                        <span class="text-table-row-text-color text-xs">{format!("Showing latest {} transactions", res.transactions.len())}</span>
-                    </div>
-                    <div class="flex flex-col md:flex-row md:flex-wrap overflow-y-auto">
-                        {res.transactions.into_iter()
-                            .map(|opt_transaction| {
-                                match opt_transaction {
-                                    Some(transaction) => view! {
-                                        <TransactionEntry status=get_status(&get_block_datetime(&transaction))
-                                            date=get_block_datetime(&transaction)
-                                            moments_ago=print_time_since(&get_block_datetime(&transaction))
-                                            from=get_from(&transaction)
-                                            to=get_to(&transaction)
-                                            fee=get_fee(&transaction)
-                                            amount=get_amount(&transaction)
-                                            hash=get_hash(&transaction) />
-                                    },
-                                    None => view! { <span /> }.into_view()
-                                }
-                            })
-                            .collect::<Vec<_>>()}
-                    </div>
-                </section>
-            }.into_view(),
+                <AccountSectionContainer title=String::from("Transactions") showing_message={format!("Showing latest {} transactions", res.transactions.len())}>
+                    {res.transactions.into_iter()
+                        .map(|opt_transaction| {
+                            match opt_transaction {
+                                Some(transaction) => view! {
+                                    <TransactionEntry status=get_status(&get_block_datetime(&transaction))
+                                        date=get_block_datetime(&transaction)
+                                        moments_ago=print_time_since(&get_block_datetime(&transaction))
+                                        from=get_from(&transaction)
+                                        to=get_to(&transaction)
+                                        fee=get_fee(&transaction)
+                                        amount=get_amount(&transaction)
+                                        hash=get_hash(&transaction) />
+                                },
+                                None => view! { <span /> }.into_view()
+                            }
+                        })
+                        .collect::<Vec<_>>()}
+                </AccountSectionContainer>   
+            },
             _ => view! { <span /> }.into_view()
             
         }}
