@@ -1,6 +1,6 @@
 use leptos::*;
 
-use crate::accounts::components::AccountSectionContainer;
+use crate::accounts::components::AccountDialogSectionContainer;
 
 use super::{functions::*, models::*};
 
@@ -16,7 +16,7 @@ pub fn AccountDialogTransactionSection(limit: i32, account_id: String) -> impl I
     view! {
         {move || match resource.get() {
             Some(Ok(res)) => view! {
-                <AccountSectionContainer title=String::from("Transactions") showing_message={format!("Showing latest {} transactions", res.transactions.len())}>
+                <AccountDialogSectionContainer title=String::from("Transactions") showing_message={format!("Showing latest {} transactions", res.transactions.len())}>
                     {res.transactions.into_iter()
                         .map(|opt_transaction| {
                             match opt_transaction {
@@ -34,7 +34,7 @@ pub fn AccountDialogTransactionSection(limit: i32, account_id: String) -> impl I
                             }
                         })
                         .collect::<Vec<_>>()}
-                </AccountSectionContainer>   
+                </AccountDialogSectionContainer>   
             },
             _ => view! { <span /> }.into_view()
             

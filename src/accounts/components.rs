@@ -23,9 +23,9 @@ pub fn AccountDialog(path_base: String, account: AccountSummary) -> impl IntoVie
             </section>
             <div class="overflow-y-auto flex flex-col pb-20">
                 <AccountDialogTransactionSection limit=3 account_id=public_key />
-                // <AccountSectionContainer title=String::from("SNARK Jobs") showing_message=String::from("Showing x of y")>
+                // <AccountDialogSectionContainer title=String::from("SNARK Jobs") showing_message=String::from("Showing x of y")>
                 //     <span>"child"</span>
-                // </AccountSectionContainer>
+                // </AccountDialogSectionContainer>
             </div>
             <div class="absolute bottom-0 left-0 w-full h-20 flex justify-stretch items-center bg-white">
                 <button id="viewmore" class="disabled:bg-slate-400 disabled:text-slate-200 disabled:cursor-not-allowed bg-granola-orange text-white uppercase mx-8 h-11 w-full rounded-lg">
@@ -37,7 +37,7 @@ pub fn AccountDialog(path_base: String, account: AccountSummary) -> impl IntoVie
 }
 
 #[component]
-pub fn AccountSectionContainer(title: String, showing_message: String, children: Children) -> impl IntoView {
+pub fn AccountDialogSectionContainer(title: String, showing_message: String, children: Children) -> impl IntoView {
     view! {
         <section class="flex flex-col bg-white rounded-xl flex flex-col items-stretch mt-8 p-4 h-fit">
             <div class="flex justify-between w-full mb-4">
