@@ -1,45 +1,88 @@
-
 use crate::api_models::MyError;
-use chrono::{DateTime, Utc, Duration};
+use chrono::{DateTime, Duration, Utc};
+use graphql_client::reqwest::post_graphql;
 
+use super::graphql::transactions_query::TransactionsQueryTransactions;
+use super::graphql::{transactions_query, TransactionsQuery};
 use super::models::*;
 
+pub fn get_block_datetime(transaction: &TransactionsQueryTransactions) -> String {
+    transaction.block.as_ref().map_or_else(String::new, |o| {
+        o.date_time.map_or_else(String::new, |o1| o1.to_string())
+    })
+}
 
-pub async fn load_data(limit: i32, public_key: Option<String>) -> Result<TransactionsResponse, MyError> {
-    let mut query = String::from(r#"{"query":"query MyQuery {\n  transactions(limit: ::limit::, sortBy: DATETIME_DESC::query::) {\n    amount\n    fee\n    to\n    from\n    hash\n    block {\n      dateTime\n    }\n    receiver {\n      publicKey\n    }\n  }\n}\n","variables":null,"operationName":"MyQuery"}"#);
-    query = query.replace("::limit::", &limit.to_string());
-    if let Some(key) = public_key {
-        let substring_string = ", query: {from: \\\"::public_key::\\\", canonical: true}".replace("::public_key::", &key);
-        query = query.replace("::query::", &substring_string);
-    } else {
-        query = query.replace("::query::", ", query: {canonical: true}");
-    }
-    
+pub fn get_from(transaction: &TransactionsQueryTransactions) -> String {
+    transaction
+        .from
+        .as_ref()
+        .map_or_else(String::new, |o| o.to_string())
+}
+
+pub fn get_receiver_public_key(transaction: &TransactionsQueryTransactions) -> String {
+    transaction.receiver.as_ref().map_or_else(String::new, |o| {
+        o.public_key
+            .as_ref()
+            .map_or_else(String::new, |o| o.to_string())
+    })
+}
+
+pub fn get_fee(transaction: &TransactionsQueryTransactions) -> String {
+    transaction.fee.map_or_else(String::new, |o| o.to_string())
+}
+
+pub fn get_hash(transaction: &TransactionsQueryTransactions) -> String {
+    transaction
+        .hash
+        .as_ref()
+        .map_or_else(String::new, |o| o.to_string())
+}
+
+pub fn get_amount(transaction: &TransactionsQueryTransactions) -> String {
+    transaction
+        .amount
+        .map_or_else(String::new, |o| o.to_string())
+}
+
+pub fn get_to(transaction: &TransactionsQueryTransactions) -> String {
+    transaction
+        .to
+        .as_ref()
+        .map_or_else(String::new, |o| o.to_string())
+}
+
+pub async fn load_data(
+    limit: i32,
+    public_key: Option<String>,
+) -> Result<transactions_query::ResponseData, MyError> {
+    let url = "https://graphql.minaexplorer.com";
+    let variables = transactions_query::Variables {
+        sort_by: transactions_query::TransactionSortByInput::DATETIME_DESC,
+        limit: Some(limit.into()),
+        query: build_query(public_key),
+    };
+
     let client = reqwest::Client::new();
-    let response = client.post("https://graphql.minaexplorer.com")
-        .body(query)
-        .send()
+
+    let response = post_graphql::<TransactionsQuery, _>(&client, url, variables)
         .await
         .map_err(|e| MyError::NetworkError(e.to_string()))?;
 
-    if response.status().is_success() {
-        let summary = response
-            .json::<TransactionsResponse>()
-            .await
-            .map_err(|e| MyError::ParseError(e.to_string()))?;
-        Ok(summary)
-    } else {
-        Err(MyError::NetworkError("Failed to fetch data".into()))
+    if let Some(errors) = response.errors {
+        return Err(MyError::GraphQLError(errors));
     }
-}
 
+    response
+        .data
+        .ok_or(MyError::GraphQLEmpty("No data available".to_string()))
+}
 
 // Function to calculate and print the time elapsed since the given timestamp
 pub fn print_time_since(timestamp: &str) -> String {
     // Parse the input timestamp
     let past_time = match timestamp.parse::<DateTime<Utc>>() {
         Ok(time) => time,
-        Err(_e) => return String::from("Unknown")
+        Err(_e) => return String::from("Unknown"),
     };
 
     // Get the current time
@@ -70,8 +113,15 @@ pub fn get_status(timestamp: &str) -> Status {
             } else {
                 Status::Complete
             }
-        },
+        }
         Err(_) => Status::Unknown,
+    }
+}
+fn build_query(public_key: Option<String>) -> transactions_query::TransactionQueryInput {
+    transactions_query::TransactionQueryInput {
+        from: public_key,
+        canonical: Some(true),
+        ..Default::default()
     }
 }
 
@@ -105,6 +155,3 @@ mod tests {
         assert_eq!(format_duration(&duration), "1 days ago");
     }
 }
-
-
-

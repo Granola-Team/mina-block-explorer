@@ -17,19 +17,24 @@ pub fn TransactionsSubsection(limit: i32, account_id: String) -> impl IntoView {
                 <section class="flex flex-col bg-white rounded-xl flex flex-col items-stretch mt-8 p-4 h-[100%]">
                     <div class="flex justify-between w-full">
                         <h2 class="text-xl">"Transactions"</h2>
-                        <span class="text-table-row-text-color text-xs">{format!("Showing latest {} transactions", res.data.transactions.len())}</span>
+                        <span class="text-table-row-text-color text-xs">{format!("Showing latest {} transactions", res.transactions.len())}</span>
                     </div>
                     <div class="flex flex-col md:flex-row md:flex-wrap overflow-y-auto">
-                        {res.data.transactions.into_iter()
-                            .map(|transaction| view! {
-                                <TransactionEntry status=get_status(&transaction.block.date_time)
-                                    date=transaction.block.date_time.to_owned()
-                                    moments_ago=print_time_since(&transaction.block.date_time)
-                                    from=transaction.from.to_owned()
-                                    to=transaction.to.to_owned()
-                                    fee=transaction.fee.to_string()
-                                    amount=transaction.amount.to_string()
-                                    hash=transaction.hash.to_owned() />
+                        {res.transactions.into_iter()
+                            .map(|opt_transaction| {
+                                match opt_transaction {
+                                    Some(transaction) => view! {
+                                        <TransactionEntry status=get_status(&get_block_datetime(&transaction))
+                                            date=get_block_datetime(&transaction)
+                                            moments_ago=print_time_since(&get_block_datetime(&transaction))
+                                            from=get_from(&transaction)
+                                            to=get_to(&transaction)
+                                            fee=get_fee(&transaction)
+                                            amount=get_amount(&transaction)
+                                            hash=get_hash(&transaction) />
+                                    },
+                                    None => view! { <span /> }.into_view()
+                                }
                             })
                             .collect::<Vec<_>>()}
                     </div>

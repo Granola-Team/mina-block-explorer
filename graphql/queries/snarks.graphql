@@ -1,0 +1,12 @@
+query SnarksQuery($sort_by: SnarkSortByInput!, $limit: Int = 25) {
+  snarks(sortBy: $sort_by, limit: $limit) {
+    blockHeight
+    dateTime
+    prover
+    workIds
+    block {
+      stateHash
+    }
+    fee
+  }
+}

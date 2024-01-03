@@ -2,7 +2,7 @@ use leptos::*;
 use leptos_router::*;
 
 
-use crate::snarks_page::SnarksPage;
+use crate::snarks::page::SnarksPage;
 use crate::stakes_page::StakesPage;
 use crate::summary_page::SummaryPage;
 use crate::latest_block_page::LatestBlocksPage;
