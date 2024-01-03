@@ -135,12 +135,11 @@ pub fn SummaryPage() -> impl IntoView {
 #[component]
 fn SummaryGrid(summary: BlockchainSummary) -> impl IntoView {
     view! {        
-        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 md:col-start-2 auto-rows-min gap-4 py-4 pt-0">
+        <section class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-4 md:col-start-2 auto-rows-min gap-4 py-4 pt-0">
             <h1 class="h-0 w-0 overflow-hidden absolute">Summary</h1>
             <SummaryItem imgsrc="/img/blockchain_length.svg".to_string() id="blockchainLength".to_string() label="Height".to_string() value={SummaryItemKind::Int64(summary.blockchain_length)} />
             <SummaryItem imgsrc="/img/circulating_supply.svg".to_string() id="circulatingSupply".to_string() label="Circulating Supply".to_string() value={SummaryItemKind::Float64(summary.circ_supply())} />
             <SummaryItem imgsrc="/img/circulating_supply.svg".to_string() id="epoch".to_string() label="Epoch".to_string() value={SummaryItemKind::Int16(summary.epoch)} />
-            <SummaryItem imgsrc="/img/circulating_supply.svg".to_string() id="slot".to_string() label="Slot".to_string() value={SummaryItemKind::Int16(summary.slot)} />
             <SummaryItem imgsrc="/img/total_currency.svg".to_string() id="totalCurrency".to_string() label="Total Currency".to_string() value={SummaryItemKind::Float64(summary.tot_currency())} />
         </section>
     }
