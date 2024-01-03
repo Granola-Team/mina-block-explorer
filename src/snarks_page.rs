@@ -76,14 +76,13 @@ async fn load_data() -> Result<snarks_query::ResponseData, MyError> {
 
     let response = post_graphql::<SnarksQuery, _>(&client, url, variables)
         .await
-        .map_err(|e| MyError::NetworkError(e.to_string()))
-        .unwrap();
+        .map_err(|e| MyError::NetworkError(e.to_string()))?;
 
     if let Some(errors) = response.errors {
-        Err(MyError::GraphQLError(errors))
-    } else {
-        Ok(response.data.unwrap())
+        return Err(MyError::GraphQLError(errors));
     }
+
+    response.data.ok_or(MyError::GraphQLEmpty("No data available".to_string()))
 }
 
 #[component]

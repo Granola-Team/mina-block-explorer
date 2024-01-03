@@ -5,7 +5,8 @@ use graphql_client::Error;
 pub enum MyError {
     NetworkError(String),
     ParseError(String), // other error variants
-    GraphQLError(Vec<Error>)
+    GraphQLError(Vec<Error>),
+    GraphQLEmpty(String),
 }
 
 impl From<reqwest::Error> for MyError {
