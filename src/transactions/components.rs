@@ -64,13 +64,29 @@ fn TransactionEntry(
         ("Hash", hash),
     ];
 
+    let grouped: Vec<[(&str, String); 2]> = entries
+        .chunks(2)
+        .map(|chunk| match chunk {
+            [a, b] => [a.clone(), b.clone()],        // For chunks of size 2
+            [a] => [a.clone(), ("", String::new())], // For the last chunk of size 1, with a default/filler value
+            _ => unreachable!(),                     // This case will never happen with chunks(2)
+        })
+        .collect();
+
     view! {
         <AccountDialogSectionEntryHeader date=date status=status moments_ago=moments_ago />
-        {entries.into_iter()
-            .map(|(label, value)| view! {
-                <AccountDialogSectionSubEntry label=label.to_string() value=value />
-            })
-            .collect::<Vec<_>>()}
+        {grouped.into_iter()
+            .map(|e| view! {
+                <div class="w-full flex justify-between">
+                    {e.into_iter()
+                        .map(|(label, value)| view! {
+                            <AccountDialogSectionSubEntry label=label.to_string() value=value />
+                        })
+                        .collect::<Vec<_>>()}
+                </div>
+            }.into_view())
+        .collect::<Vec<_>>()}
+
         <AccountDialogEntryDivider />
 
     }

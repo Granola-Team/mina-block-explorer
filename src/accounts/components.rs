@@ -55,11 +55,14 @@ pub fn AccountDialogSectionContainer(
 
 #[component]
 pub fn AccountDialogSectionSubEntry(label: String, value: String) -> impl IntoView {
-    view! {
-        <div class="w-full md:w-1/2 flex my-1">
-            <span class="text-xs text-slate-400 w-1/4">{label}:</span>
-            <span class="text-xs overflow-hidden text-ellipsis w-3/4">{value}</span>
-        </div>
+    match label.len() {
+        0 => view! {<div />},
+        _ => view! {
+            <div class="w-full md:w-1/2 flex my-1">
+                <span class="text-xs text-slate-400 w-1/4">{label}:</span>
+                <span class="text-xs overflow-hidden text-ellipsis w-3/4">{value}</span>
+            </div>
+        }
     }
 }
 
@@ -80,7 +83,7 @@ pub fn AccountDialogSectionEntryHeader(
             alt: "Pending",
         },
         Status::Complete => StatusImg {
-            src: "/img/down-arrow.svg",
+            src: "/img/success.svg",
             alt: "Complete",
         },
         Status::Unknown => StatusImg {
@@ -91,7 +94,7 @@ pub fn AccountDialogSectionEntryHeader(
     view! {
         <div class="flex justify-between w-full">
             <div class="flex items-center">
-                <img src=img_attr.src alt=img_attr.alt />
+                <img src=img_attr.src alt=img_attr.alt class="mr-2"/>
                 {move || match status {
                     Status::Complete => view! {<span class="text-sm">{date.clone()}</span>}.into_view(),
                     Status::Pending => view! {<span class="text-sm">"Pending"</span>}.into_view(),
