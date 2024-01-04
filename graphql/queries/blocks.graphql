@@ -1,0 +1,27 @@
+query BlocksQuery($query: BlockQueryInput!, $limit: Int = 10, $sort_by: BlockSortByInput!) {
+  blocks(query: $query, limit: 10, sortBy: $sort_by) {
+    blockHeight
+    dateTime
+    stateHash
+    transactions {
+      coinbase
+      coinbaseReceiverAccount {
+        publicKey
+      }
+      userCommands {
+        id
+      }
+    }
+    creatorAccount {
+      publicKey
+    }
+    snarkJobs {
+      blockHeight
+    }
+    protocolState {
+      consensusState {
+        slot
+      }
+    }
+  }
+}
