@@ -4,7 +4,7 @@ use leptos::*;
 use leptos_router::*;
 use serde::{Deserialize, Serialize};
 
-use crate::api_models::{MyError};
+use crate::common::models::{MyError};
 use crate::summary_item::{SummaryItem, SummaryItemKind};
 use crate::blocks::page::{LatestBlocksResponse,load_data as load_latest_blocks};
 use crate::table::TableData;

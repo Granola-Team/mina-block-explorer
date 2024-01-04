@@ -5,7 +5,7 @@ use super::models::*;
 use super::functions::*;
 use super::components::*;
 
-use crate::api_models::MyError;
+use crate::common::models::MyError;
 use crate::transactions::transactions_page::TransactionsSection;
 use crate::summary_item::{SummaryItem, SummaryItemKind};
 

@@ -1,5 +1,5 @@
 use super::graphql::{snarks_query::SnarksQuerySnarks, *};
-use crate::api_models::MyError;
+use crate::common::models::MyError;
 use graphql_client::reqwest::post_graphql;
 
 pub async fn load_data(

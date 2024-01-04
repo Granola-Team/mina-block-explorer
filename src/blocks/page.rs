@@ -2,7 +2,7 @@ use leptos::*;
 use std::collections::HashMap;
 use leptos_router::Outlet;
 use serde::{Deserialize, Serialize};
-use crate::{api_models::MyError, table::{TableData, Table}, table_section::TableSection};
+use crate::{common::models::MyError, table::{TableData, Table}, table_section::TableSection};
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct LatestBlocksResponse {
