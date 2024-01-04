@@ -1,5 +1,5 @@
-query SnarksQuery($sort_by: SnarkSortByInput!, $limit: Int = 25) {
-  snarks(sortBy: $sort_by, limit: $limit) {
+query SnarksQuery($sort_by: SnarkSortByInput!, $limit: Int = 25, $query: SnarkQueryInput!) {
+  snarks(sortBy: $sort_by, limit: $limit, query: $query ) {
     blockHeight
     dateTime
     prover

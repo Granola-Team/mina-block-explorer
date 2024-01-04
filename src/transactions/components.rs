@@ -1,92 +1,93 @@
 use leptos::*;
 
-use super::{functions::*, models::*};
+use super::functions::*;
+use crate::accounts::components::*;
+use crate::common::functions::*;
+use crate::common::models::*;
 
 #[component]
-pub fn TransactionsSubsection(limit: i32, account_id: String) -> impl IntoView {
-    let resource = create_resource(|| (), move |_| {
-        let account_id_clone = account_id.clone(); 
-        async move { 
-            load_data(limit, Some(account_id_clone)).await 
-        }
-    });
+pub fn AccountDialogTransactionSection(limit: i32, account_id: String) -> impl IntoView {
+    let resource = create_resource(
+        || (),
+        move |_| {
+            let account_id_clone = account_id.clone();
+            async move { load_data(limit, Some(account_id_clone)).await }
+        },
+    );
 
     view! {
         {move || match resource.get() {
             Some(Ok(res)) => view! {
-                <section class="flex flex-col bg-white rounded-xl flex flex-col items-stretch mt-8 p-4 h-[100%]">
-                    <div class="flex justify-between w-full">
-                        <h2 class="text-xl">"Transactions"</h2>
-                        <span class="text-table-row-text-color text-xs">{format!("Showing latest {} transactions", res.transactions.len())}</span>
-                    </div>
-                    <div class="flex flex-col md:flex-row md:flex-wrap overflow-y-auto">
-                        {res.transactions.into_iter()
-                            .map(|opt_transaction| {
-                                match opt_transaction {
-                                    Some(transaction) => view! {
-                                        <TransactionEntry status=get_status(&get_block_datetime(&transaction))
-                                            date=get_block_datetime(&transaction)
-                                            moments_ago=print_time_since(&get_block_datetime(&transaction))
-                                            from=get_from(&transaction)
-                                            to=get_to(&transaction)
-                                            fee=get_fee(&transaction)
-                                            amount=get_amount(&transaction)
-                                            hash=get_hash(&transaction) />
-                                    },
-                                    None => view! { <span /> }.into_view()
-                                }
-                            })
-                            .collect::<Vec<_>>()}
-                    </div>
-                </section>
-            }.into_view(),
+                <AccountDialogSectionContainer title=String::from("Transactions") showing_message={format!("Showing latest {} transactions", res.transactions.len())}>
+                    {res.transactions.into_iter()
+                        .map(|opt_transaction| {
+                            match opt_transaction {
+                                Some(transaction) => view! {
+                                    <TransactionEntry status=get_status(&get_block_datetime(&transaction))
+                                        date=get_block_datetime(&transaction)
+                                        moments_ago=print_time_since(&get_block_datetime(&transaction))
+                                        from=get_from(&transaction)
+                                        to=get_to(&transaction)
+                                        fee=get_fee(&transaction)
+                                        amount=get_amount(&transaction)
+                                        hash=get_hash(&transaction) />
+                                },
+                                None => view! { <span /> }.into_view()
+                            }
+                        })
+                        .collect::<Vec<_>>()}
+                </AccountDialogSectionContainer>
+            },
             _ => view! { <span /> }.into_view()
-            
+
         }}
-        
+
     }
 }
 
-
 #[component]
-fn TransactionEntry(status: Status, date:String, moments_ago:String, from:String, to:String, fee:String, amount:String, hash:String) -> impl IntoView {
-
-    let img_attr = match status {
-        Status::Pending => ("/img/timelapse.svg","Pending"),
-        Status::Complete => ("/img/down-arrow.svg","Complete"),
-        Status::Unknown => ("","Unknown")
-    };
-
+fn TransactionEntry(
+    status: Status,
+    date: String,
+    moments_ago: String,
+    from: String,
+    to: String,
+    fee: String,
+    amount: String,
+    hash: String,
+) -> impl IntoView {
     let entries = vec![
         ("From", from),
         ("To", to),
         ("Fee", fee),
         ("Amount", amount),
-        ("Hash", hash)
+        ("Hash", hash),
     ];
 
+    let grouped: Vec<[(&str, String); 2]> = entries
+        .chunks(2)
+        .map(|chunk| match chunk {
+            [a, b] => [a.clone(), b.clone()],        // For chunks of size 2
+            [a] => [a.clone(), ("", String::new())], // For the last chunk of size 1, with a default/filler value
+            _ => unreachable!(),                     // This case will never happen with chunks(2)
+        })
+        .collect();
+
     view! {
-        <div class="flex justify-between w-full">
-            <div class="flex items-center">
-                <img src=img_attr.0 alt=img_attr.1 />
-                {move || match status {
-                    Status::Complete => view! {<span class="text-sm">{date.clone()}</span>}.into_view(),
-                    Status::Pending => view! {<span class="text-sm">"Pending"</span>}.into_view(),
-                    Status::Unknown => view! {<span class="text-sm">"Unkonwn"</span>}.into_view(),
-                }}
-                
-            </div>
-            <div class="text-xs text-slate-400">{moments_ago}</div>
-        </div>
-        {entries.into_iter()
-            .map(|(label, value)| view! {
-                <div class="w-full md:w-1/2 flex my-1">
-                    <span class="text-xs text-slate-400 w-1/4">{label}:</span>
-                    <span class="text-xs overflow-hidden text-ellipsis w-3/4">{value}</span>
-                </div>        
-            })
-            .collect::<Vec<_>>()}
-        <div class="border-b border-slate-100 my-2 h-1 w-full" />
-        
+        <AccountDialogSectionEntryHeader date=date status=status moments_ago=moments_ago />
+        {grouped.into_iter()
+            .map(|e| view! {
+                <div class="w-full flex justify-between">
+                    {e.into_iter()
+                        .map(|(label, value)| view! {
+                            <AccountDialogSectionSubEntry label=label.to_string() value=value />
+                        })
+                        .collect::<Vec<_>>()}
+                </div>
+            }.into_view())
+        .collect::<Vec<_>>()}
+
+        <AccountDialogEntryDivider />
+
     }
 }

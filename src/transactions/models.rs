@@ -29,8 +29,3 @@ impl TableData for Vec<Option<TransactionsQueryTransactions>> {
     }
 }
 
-pub enum Status {
-    Pending,
-    Complete,
-    Unknown,
-}
