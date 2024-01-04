@@ -1,7 +1,7 @@
 use chrono::Utc;
 use graphql_client::GraphQLQuery;
 
-use self::blocks_query::BlockQueryInput;
+use self::blocks_query::{BlockQueryInput, BlocksQueryBlocks};
 
 type DateTime = chrono::DateTime<Utc>;
 type Long = i32;
@@ -93,6 +93,7 @@ impl Default for BlockQueryInput {
     }
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for blocks_query::BlockCreatorAccountQueryInput {
     fn default() -> Self {
         blocks_query::BlockCreatorAccountQueryInput { 
