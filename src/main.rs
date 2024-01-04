@@ -3,7 +3,7 @@ mod api_models;
 mod root;
 mod summary_item;
 mod summary_page;
-mod latest_block_page;
+mod blocks;
 mod transactions;
 mod table;
 mod snarks;

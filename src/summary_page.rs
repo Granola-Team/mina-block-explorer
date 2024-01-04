@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::api_models::{MyError};
 use crate::summary_item::{SummaryItem, SummaryItemKind};
-use crate::latest_block_page::{LatestBlocksResponse,load_data as load_latest_blocks};
+use crate::blocks::page::{LatestBlocksResponse,load_data as load_latest_blocks};
 use crate::table::TableData;
 use crate::{table::{Table}, table_section::TableSection};
 
