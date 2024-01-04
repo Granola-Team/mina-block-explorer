@@ -14,6 +14,7 @@ type Long = i32;
 )]
 pub struct SnarksQuery;
 
+#[allow(clippy::derivable_impls)]
 impl Default for SnarkQueryInput {
     fn default() -> Self {
         SnarkQueryInput { 
