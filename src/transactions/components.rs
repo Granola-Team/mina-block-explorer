@@ -1,17 +1,19 @@
 use leptos::*;
 
-use crate::accounts::components::AccountDialogSectionContainer;
-
-use super::{functions::*, models::*};
+use super::functions::*;
+use crate::accounts::components::*;
+use crate::common::functions::*;
+use crate::common::models::*;
 
 #[component]
 pub fn AccountDialogTransactionSection(limit: i32, account_id: String) -> impl IntoView {
-    let resource = create_resource(|| (), move |_| {
-        let account_id_clone = account_id.clone(); 
-        async move { 
-            load_data(limit, Some(account_id_clone)).await 
-        }
-    });
+    let resource = create_resource(
+        || (),
+        move |_| {
+            let account_id_clone = account_id.clone();
+            async move { load_data(limit, Some(account_id_clone)).await }
+        },
+    );
 
     view! {
         {move || match resource.get() {
@@ -34,55 +36,42 @@ pub fn AccountDialogTransactionSection(limit: i32, account_id: String) -> impl I
                             }
                         })
                         .collect::<Vec<_>>()}
-                </AccountDialogSectionContainer>   
+                </AccountDialogSectionContainer>
             },
             _ => view! { <span /> }.into_view()
-            
+
         }}
-        
+
     }
 }
 
-
 #[component]
-fn TransactionEntry(status: Status, date:String, moments_ago:String, from:String, to:String, fee:String, amount:String, hash:String) -> impl IntoView {
-
-    let img_attr = match status {
-        Status::Pending => ("/img/timelapse.svg","Pending"),
-        Status::Complete => ("/img/down-arrow.svg","Complete"),
-        Status::Unknown => ("","Unknown")
-    };
-
+fn TransactionEntry(
+    status: Status,
+    date: String,
+    moments_ago: String,
+    from: String,
+    to: String,
+    fee: String,
+    amount: String,
+    hash: String,
+) -> impl IntoView {
     let entries = vec![
         ("From", from),
         ("To", to),
         ("Fee", fee),
         ("Amount", amount),
-        ("Hash", hash)
+        ("Hash", hash),
     ];
 
     view! {
-        <div class="flex justify-between w-full">
-            <div class="flex items-center">
-                <img src=img_attr.0 alt=img_attr.1 />
-                {move || match status {
-                    Status::Complete => view! {<span class="text-sm">{date.clone()}</span>}.into_view(),
-                    Status::Pending => view! {<span class="text-sm">"Pending"</span>}.into_view(),
-                    Status::Unknown => view! {<span class="text-sm">"Unkonwn"</span>}.into_view(),
-                }}
-                
-            </div>
-            <div class="text-xs text-slate-400">{moments_ago}</div>
-        </div>
+        <AccountDialogSectionEntryHeader date=date status=status moments_ago=moments_ago />
         {entries.into_iter()
             .map(|(label, value)| view! {
-                <div class="w-full md:w-1/2 flex my-1">
-                    <span class="text-xs text-slate-400 w-1/4">{label}:</span>
-                    <span class="text-xs overflow-hidden text-ellipsis w-3/4">{value}</span>
-                </div>        
+                <AccountDialogSectionSubEntry label=label.to_string() value=value />
             })
             .collect::<Vec<_>>()}
-        <div class="border-b border-slate-100 my-2 h-1 w-full" />
-        
+        <AccountDialogEntryDivider />
+
     }
 }

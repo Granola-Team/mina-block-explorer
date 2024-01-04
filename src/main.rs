@@ -13,6 +13,7 @@ mod accounts;
 mod header;
 mod footer;
 mod icons;
+mod common;
 
 use root::Root;
 
