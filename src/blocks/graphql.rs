@@ -92,3 +92,21 @@ impl Default for BlockQueryInput {
         }
     }
 }
+
+impl Default for blocks_query::BlockCreatorAccountQueryInput {
+    fn default() -> Self {
+        blocks_query::BlockCreatorAccountQueryInput { 
+            public_key_exists: None, 
+            public_key_ne: None,
+            public_key_lte: None, 
+            or: None, 
+            public_key_gte: None, 
+            public_key_lt: None, 
+            public_key_in: None, 
+            and: None, 
+            public_key: None, 
+            public_key_nin: None, 
+            public_key_gt: None 
+        }
+    }
+}
