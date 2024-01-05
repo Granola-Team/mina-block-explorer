@@ -3,10 +3,13 @@ use crate::common::components::*;
 use super::functions::load_data;
 
 #[component]
-pub fn TransactionsSection() -> impl IntoView {
-    let resource = create_resource(|| (), |_| async move { 
-        let limit = 10;
-        load_data(limit, None).await 
+pub fn TransactionsSection(public_key: Option<String>) -> impl IntoView {
+    let resource = create_resource(|| (), move |_| {
+        let pk = public_key.clone();
+        async move { 
+            let limit = 10;
+            load_data(limit, pk).await 
+        }
     });
 
     view! {
@@ -24,6 +27,6 @@ pub fn TransactionsSection() -> impl IntoView {
 #[component]
 pub fn TransactionsPage() -> impl IntoView {
     view! {
-        <TransactionsSection />
+        <TransactionsSection public_key=None/>
     }
 }

@@ -80,3 +80,27 @@ fn AccountDialogSnarkJobEntry(snark: SnarksQuerySnarks) -> impl IntoView {
         </div>
     }.into_view()
 }
+
+#[component]
+pub fn AccountOverviewSnarkJobTable(public_key: Option<String>) -> impl IntoView {
+
+    let resource = create_resource(|| (), move |_| {
+        let public_key_inner = public_key.clone();
+        async move { load_data(3,public_key_inner).await }
+    });
+
+    view! {
+        {move || match resource.get() {
+            Some(Ok(data)) => view! {
+                {
+                    match data.snarks.len() {
+                        0 => view! { <EmptyTable message="This public key has not completed any SNARK work".to_string() /> },
+                        _ => view! { <Table data=data.snarks /> }
+                    }
+                }
+            },
+            _ => view! { <span /> }.into_view(),
+        }}
+        
+    }
+}
