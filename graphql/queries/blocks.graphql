@@ -1,5 +1,5 @@
 query BlocksQuery($query: BlockQueryInput!, $limit: Int = 10, $sort_by: BlockSortByInput!) {
-  blocks(query: $query, limit: 10, sortBy: $sort_by) {
+  blocks(query: $query, limit: $limit, sortBy: $sort_by) {
     blockHeight
     dateTime
     stateHash

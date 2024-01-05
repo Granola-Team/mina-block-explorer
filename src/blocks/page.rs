@@ -22,30 +22,21 @@ impl TableData for Vec<Option<BlocksQueryBlocks>> {
     }
 
     fn get_rows(&self) -> Vec<Vec<String>> {
-        // let mut rows = Vec::new();
-        // for block in &self.blocks {
-        //     let data = vec![
-        //         block.block_height.to_string(),
-        //         block.date_time.to_string(),
-        //         block.creator_account.public_key.to_string(),
-        //         block.transactions.coinbase.to_string(),
-        //         block.transactions.user_commands.len().to_string(),
-        //         block.snark_jobs.len().to_string(),
-        //         block.protocol_state.consensus_state.slot.to_string(),
-        //         block.state_hash.to_string(),
-        //         block.transactions.coinbase_receiver_account.public_key.to_string(),
-        //     ];
-        //     rows.push(data);
-        // }
-        // rows
         self.iter()
-            .map(|opt_blocks| {
-                match opt_blocks {
-                    Some(block) => vec![
-
-                    ],
-                    None => vec![],
-                }
+            .map(|opt_blocks| match opt_blocks {
+                Some(block) => vec![
+                    get_block_height(&block),
+                    get_date_time(&block),
+                    get_creator_account(&block),
+                    get_coinbase(&block),
+                    get_transaction_count(&block),
+                    get_snark_job_count(&block),
+                    get_slot(&block),
+                    get_state_hash(&block),
+                    get_coinbase_receiver(&block)
+                ],
+                None => vec![],
+            
             }).collect::<Vec<_>>()
     }
 
@@ -65,13 +56,16 @@ pub fn LatestBlocksPage() -> impl IntoView {
 
     view! {
         {move || match resource.get() {
-            Some(Ok(data)) => view! { 
-                <TableSection section_heading="Latest Blocks".to_owned()>
-                    <Table data=data.blocks/>           
-                </TableSection>
-                <Outlet />
-            }.into_view(),
-            _ => view! { <span /> }.into_view()
+            Some(Ok(data)) => {
+                logging::log!("{}", data.blocks.len());
+                view! { 
+                    <TableSection section_heading="Latest Blocks".to_owned()>
+                        <Table data=data.blocks/>           
+                    </TableSection>
+                    <Outlet />
+                }.into_view()
+            },
+            _ => view! { <span/> }.into_view()
         }}
     }
 }

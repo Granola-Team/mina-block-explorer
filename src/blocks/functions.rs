@@ -21,7 +21,7 @@ pub fn get_creator_account(block: &BlocksQueryBlocks) -> String {
 
 pub fn get_coinbase(block: &BlocksQueryBlocks) -> String {
     block.transactions.as_ref().map_or_else(String::new, |o| {
-        o.coinbase.map_or_else(String::new, |o1| o1.to_string())
+        o.coinbase.as_ref().map_or_else(String::new, |o1| o1.to_string())
     })
 }
 
@@ -48,7 +48,6 @@ pub fn get_slot(block: &BlocksQueryBlocks) -> String {
 
 pub fn get_state_hash(block: &BlocksQueryBlocks) -> String {
     block.state_hash.as_ref().map_or_else(String::new, |o| o.to_string())
-    //         block.transactions.coinbase_receiver_account.public_key.to_string(),
 }
 
 pub fn get_coinbase_receiver(block: &BlocksQueryBlocks) -> String {
