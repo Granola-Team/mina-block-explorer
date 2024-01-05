@@ -6,7 +6,7 @@ use crate::snarks::page::SnarksPage;
 use crate::stakes_page::StakesPage;
 use crate::summary::page::SummaryPage;
 use crate::blocks::page::LatestBlocksPage;
-use crate::transactions::transactions_page::TransactionsPage;
+use crate::transactions::page::TransactionsPage;
 use crate::header::navigation::Header;
 use crate::accounts::account_dialog::AccountDialogView;
 use crate::accounts::page::AccountSummaryPage;

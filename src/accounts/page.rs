@@ -8,7 +8,7 @@ use super::components::*;
 use crate::blocks::components::AccountOverviewBlocksTable;
 use crate::common::models::MyError;
 use crate::snarks::components::AccountOverviewSnarkJobTable;
-use crate::transactions::transactions_page::TransactionsSection;
+use crate::transactions::page::TransactionsSection;
 use crate::common::components::*;
 
 #[component]
