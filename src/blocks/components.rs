@@ -1,22 +1,23 @@
 use leptos::*;
 use leptos_router::Outlet;
 
+use super::functions::*;
+use super::graphql::blocks_query::BlocksQueryBlocks;
 use crate::accounts::components::*;
 use crate::common::components::EmptyTable;
 use crate::common::functions::*;
 use crate::table::*;
 use crate::table_section::*;
-use super::functions::*;
-use super::graphql::blocks_query::BlocksQueryBlocks;
-
 
 #[component]
 pub fn AccountDialogBlocksSection(public_key: Option<String>) -> impl IntoView {
-
-    let resource = create_resource(|| (), move |_| {
-        let public_key_inner = public_key.clone();
-        async move { load_data(3,public_key_inner).await }
-    });
+    let resource = create_resource(
+        || (),
+        move |_| {
+            let public_key_inner = public_key.clone();
+            async move { load_data(3, public_key_inner).await }
+        },
+    );
 
     view! {
         {move || match resource.get() {
@@ -34,7 +35,7 @@ pub fn AccountDialogBlocksSection(public_key: Option<String>) -> impl IntoView {
                                                 let date_time = get_date_time(&block);
                                                 let status = get_status(&date_time);
                                                 view! {
-                                                    <AccountDialogSectionEntryHeader 
+                                                    <AccountDialogSectionEntryHeader
                                                         status=status
                                                         date=date_time
                                                         moments_ago=moments_ago/>
@@ -43,7 +44,7 @@ pub fn AccountDialogBlocksSection(public_key: Option<String>) -> impl IntoView {
                                                 }.into_view()
                                             },
                                             None => view! { <span /> }.into_view(),
-                                        }       
+                                        }
                                     }).collect::<Vec<_>>()}
                             }.into_view()
                         }
@@ -52,14 +53,13 @@ pub fn AccountDialogBlocksSection(public_key: Option<String>) -> impl IntoView {
             },
             _ => view! { <span /> }.into_view(),
         }}
-        
+
     }
 }
 
-
 struct SubEntry {
     label: String,
-    value: String
+    value: String,
 }
 
 #[component]
@@ -67,12 +67,12 @@ fn AccountDialogBlockEntry(block: BlocksQueryBlocks) -> impl IntoView {
     let sub_entries = vec![
         SubEntry {
             label: String::from("Hash"),
-            value: get_state_hash(&block)
+            value: get_state_hash(&block),
         },
         SubEntry {
             label: String::from("Coinbase"),
-            value: get_coinbase(&block)
-        }
+            value: get_coinbase(&block),
+        },
     ];
     view! {
         <div class="w-full flex justify-between">
@@ -80,9 +80,10 @@ fn AccountDialogBlockEntry(block: BlocksQueryBlocks) -> impl IntoView {
                 .map(|se| view! {
                     <AccountDialogSectionSubEntry label=se.label value=se.value />
                 })
-            .collect::<Vec<_>>()}            
+            .collect::<Vec<_>>()}
         </div>
-    }.into_view()
+    }
+    .into_view()
 }
 
 #[component]
