@@ -1,7 +1,7 @@
 use super::functions::*;
 use super::graphql::blocks_query::BlocksQueryBlocks;
 use super::components::*;
-use crate::table::*;
+use crate::common::components::*;
 use leptos::*;
 use std::collections::HashMap;
 

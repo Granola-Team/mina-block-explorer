@@ -1,9 +1,5 @@
 use leptos::*;
-
-use crate::{
-    table::{Table}, table_section::TableSection
-};
-
+use crate::common::components::*;
 use super::functions::load_data;
 
 #[component]

@@ -6,8 +6,7 @@ use super::graphql::blocks_query::BlocksQueryBlocks;
 use crate::accounts::components::*;
 use crate::common::components::EmptyTable;
 use crate::common::functions::*;
-use crate::table::*;
-use crate::table_section::*;
+use crate::common::components::*;
 
 #[component]
 pub fn AccountDialogBlocksSection(public_key: Option<String>) -> impl IntoView {

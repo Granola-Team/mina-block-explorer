@@ -1,5 +1,4 @@
-use crate::table::TableData;
-
+use crate::common::components::*;
 use super::{graphql::transactions_query::TransactionsQueryTransactions, functions::{get_block_datetime, get_from, get_receiver_public_key, get_fee, get_hash, get_amount}};
 
 impl TableData for Vec<Option<TransactionsQueryTransactions>> {
