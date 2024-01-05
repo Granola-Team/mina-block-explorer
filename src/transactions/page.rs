@@ -1,6 +1,6 @@
-use super::functions::load_data;
-use crate::common::components::*;
 use leptos::*;
+
+use super::components::TransactionsSection;
 
 #[component]
 pub fn TransactionsPage() -> impl IntoView {
