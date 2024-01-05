@@ -2,6 +2,7 @@ use leptos::*;
 
 use super::functions::*;
 use crate::accounts::components::*;
+use crate::common::components::*;
 use crate::common::functions::*;
 use crate::common::models::*;
 
@@ -89,5 +90,45 @@ fn TransactionEntry(
 
         <AccountDialogEntryDivider />
 
+    }
+}
+
+
+#[component]
+pub fn TransactionsSection(
+    public_key: Option<String>,
+    #[prop(default = false)] with_link: bool,
+) -> impl IntoView {
+    let resource = create_resource(|| (), {
+        let pk = public_key.clone(); // Clone for use in async block
+        move |_| {
+            let pk_clone = pk.clone();
+            async move {
+                let limit = 10;
+                load_data(limit, pk_clone).await
+            }
+        }
+    });
+
+    let (href, _set_href) = create_signal(
+        public_key
+            .as_ref()
+            .map(|pk| format!("/transactions?account={}", pk))
+            .unwrap_or_else(|| "/transactions".to_string()),
+    );
+
+    view! {
+        {move || match resource.get() {
+            Some(Ok(data)) => view! {
+                <TableSection section_heading="Transactions".to_owned()>
+                    <Table data=data.transactions/>
+                    {match with_link {
+                        false => view! {<div />}.into_view(),
+                        true => view! { <TableLink href=href.get() text="See all transactions".to_string() />}
+                    }}
+                </TableSection>
+             },
+            _ => view! { <span /> }.into_view()
+        }}
     }
 }
