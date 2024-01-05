@@ -5,10 +5,11 @@ use super::models::*;
 use super::functions::*;
 use super::components::*;
 
-use crate::api_models::MyError;
+use crate::blocks::components::AccountOverviewBlocksTable;
+use crate::common::models::MyError;
+use crate::snarks::components::AccountOverviewSnarkJobTable;
 use crate::transactions::transactions_page::TransactionsSection;
-use crate::summary_item::{SummaryItem, SummaryItemKind};
-
+use crate::common::components::*;
 
 #[component]
 pub fn AccountSummaryPage() -> impl IntoView {
@@ -25,19 +26,35 @@ pub fn AccountSummaryPage() -> impl IntoView {
         )
     };
 
+    
     view! {
         {move || match resource.get() {
-            Some(Ok(res)) =>view! {
-                <section class="@container md:col-start-2 md:col-end-3 md:rounded-lg bg-table-section p-0 md:p-4 mb-2">
-                    <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-start items-center">"Account Overview"</h1>
-                    <AccountSummarySubsection summary_items=get_summary_items(res.account.clone()) username=res.account.username public_key=res.account.public_key />
-                </section>
-                <TransactionsSection />
-            }.into_view(),
+            Some(Ok(res)) =>{
+                let pk =res.account.public_key.clone();
+                view! {
+                    <section class="@container md:col-start-2 md:col-end-3 md:rounded-lg bg-table-section p-0 md:p-4 mb-2">
+                        <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-start items-center">"Account Overview"</h1>
+                        <AccountSummarySubsection summary_items=get_summary_items(res.account.clone()) username=res.account.username public_key=pk.clone() />
+                    </section>
+                    <TransactionsSection public_key=Some(pk.clone())/>
+                    <div class="md:col-start-2 md:col-end-3 grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <section class="md:col-start-1 md:col-end-2 md:rounded-lg bg-table-section">
+                            <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-start items-center">"Snark Jobs"</h1>    
+                            <AccountOverviewSnarkJobTable public_key=Some(pk.clone())/>
+                        </section>
+                        <section class="md:col-start-2 md:col-end-3 md:rounded-lg bg-table-section">
+                            <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-start items-center">"Block Production"</h1>    
+                            <AccountOverviewBlocksTable public_key=Some(pk) />
+                        </section>
+                    </div>
+                }.into_view()
+            },
             _ => view! { <span/>  }.into_view()
         }}
     }
+    
 }
+
 
 #[component]
 fn AccountSummarySection(summary: AccountResponse) -> impl IntoView {

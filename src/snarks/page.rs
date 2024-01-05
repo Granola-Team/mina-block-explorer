@@ -1,9 +1,6 @@
 use super::functions::*;
 use super::graphql::*;
-use crate::{
-    table::{Table, TableData},
-    table_section::TableSection,
-};
+use crate::common::components::*;
 use leptos::*;
 use snarks_query::SnarksQuerySnarks;
 

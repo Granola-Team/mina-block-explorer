@@ -2,6 +2,7 @@ use leptos::*;
 
 use super::functions::*;
 use super::models::*;
+use crate::blocks::components::AccountDialogBlocksSection;
 use crate::common::models::*;
 use crate::snarks::components::AccountDialogSnarkJobSection;
 use crate::transactions::components::AccountDialogTransactionSection;
@@ -25,7 +26,8 @@ pub fn AccountDialog(path_base: String, account: AccountSummary) -> impl IntoVie
             </section>
             <div class="overflow-y-auto flex flex-col pb-20">
                 <AccountDialogTransactionSection limit=3 account_id=public_key.clone() />
-                <AccountDialogSnarkJobSection public_key=Some(public_key)/>
+                <AccountDialogSnarkJobSection public_key=Some(public_key.clone())/>
+                <AccountDialogBlocksSection public_key=Some(public_key)/>
             </div>
             <div class="absolute bottom-0 left-0 w-full h-20 flex justify-stretch items-center bg-white">
                 <button id="viewmore" class="disabled:bg-slate-400 disabled:text-slate-200 disabled:cursor-not-allowed bg-granola-orange text-white uppercase mx-8 h-11 w-full rounded-lg">
@@ -58,7 +60,7 @@ pub fn AccountDialogSectionSubEntry(label: String, value: String) -> impl IntoVi
     match label.len() {
         0 => view! {<div />},
         _ => view! {
-            <div class="w-full md:w-1/2 flex my-1">
+            <div class="w-1/2 flex my-1">
                 <span class="text-xs text-slate-400 w-1/4">{label}:</span>
                 <span class="text-xs overflow-hidden text-ellipsis w-3/4">{value}</span>
             </div>
@@ -120,18 +122,18 @@ pub fn AccountSummarySubsection(
     public_key: String,
 ) -> impl IntoView {
     view! {
-        <div class="@lg:grid @lg:grid-cols-[10rem_5rem_auto_10rem] @lg:grid-rows-[2.5rem_2.5rem] @lg:gap-x-[2rem] @lg:h-auto flex flex-col items-center mt-16 bg-light-granola-orange rounded-3xl h-36">
-            <div class="@lg:col-start-2 @lg:col-end-3 @lg:row-start-1 @lg:row-end-2 w-20 h-20 rounded-full bg-main-background flex justify-center items-center translate-y-[-25%]">
+        <div class="@3xl:grid @3xl:grid-cols-[10rem_5rem_auto_10rem] @3xl:grid-rows-[2.5rem_2.5rem] @3xl:gap-x-[2rem] @3xl:h-auto flex flex-col items-center mt-16 bg-light-granola-orange rounded-3xl h-36">
+            <div class="@3xl:col-start-2 @3xl:col-end-3 @3xl:row-start-1 @3xl:row-end-2 w-20 h-20 rounded-full bg-main-background flex justify-center items-center translate-y-[-25%]">
                 <img src="/img/account_balance_wallet.svg" alt="account balance wallet logo"/>
             </div>
-            <div class="@lg:col-start-3 text-granola-orange text-base text-bold text-ellipsis w-10/12 overflow-hidden text-center @lg:text-left">
+            <div class="@3xl:col-start-3 text-granola-orange text-base text-bold text-ellipsis w-10/12 overflow-hidden text-center @3xl:text-left">
                 {public_key}
             </div>
-            <div class="@lg:col-start-3 @lg:row-start-2 text-slate-400 text-sm">
+            <div class="@3xl:col-start-3 @3xl:row-start-2 text-slate-400 text-sm">
                 "Username: "{username}
             </div>
         </div>
-        <div class="@lg:grid @lg:grid-cols-[10rem_auto_10rem] bg-white rounded-xl flex flex-col items-stretch mt-8 p-4">
+        <div class="@3xl:grid @3xl:grid-cols-[10rem_auto_10rem] bg-white rounded-xl flex flex-col items-stretch mt-8 p-4">
             {summary_items.into_iter()
                 .map(|(label, value, has_pill)| view! {
                     <OverviewEntry label=label.to_owned() value=value.to_owned() has_pill=has_pill />
@@ -160,7 +162,7 @@ fn OverviewEntry(label: String, value: String, has_pill: bool) -> impl IntoView 
     };
 
     view! {
-        <div class="@lg:col-start-2 @lg:col-end-3 flex flex-col items-start md:flex-row md:items-baseline md:justify-start">
+        <div class="@3xl:col-start-2 @3xl:col-end-3 flex flex-col items-start md:flex-row md:items-baseline md:justify-start">
             <span class="w-1/4 text-slate-400 text-sm whitespace-nowrap">{label}:</span>
             <span class=value_class_str>{value}</span>
         </div>

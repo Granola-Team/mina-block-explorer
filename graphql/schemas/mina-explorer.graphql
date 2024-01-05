@@ -98,7 +98,7 @@ input BlockTransactionUserCommandReceiverQueryInput {
 }
 
 type BlockTransaction {
-  coinbase: Long
+  coinbase: String
   coinbaseReceiverAccount: BlockTransactionCoinbaseReceiverAccount
   feeTransfer: [BlockTransactionFeeTransfer]
   userCommands: [BlockTransactionUserCommand]

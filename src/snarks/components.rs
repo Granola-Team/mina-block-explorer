@@ -4,8 +4,8 @@ use crate::accounts::components::*;
 use super::functions::load_data;
 use super::graphql::snarks_query::SnarksQuerySnarks;
 use super::functions::*;
-use crate::icons::*;
 use crate::common::functions::*;
+use crate::common::components::*;
 
 #[component]
 pub fn AccountDialogSnarkJobSection(public_key: Option<String>) -> impl IntoView {
@@ -21,7 +21,7 @@ pub fn AccountDialogSnarkJobSection(public_key: Option<String>) -> impl IntoView
                 <AccountDialogSectionContainer title=String::from("SNARK Jobs") showing_message={format!("Showing latest {} SNARK jobs", data.snarks.len())} >
                     {
                         match data.snarks.len() {
-                            0 => view! { <NoSnarkJobs /> },
+                            0 => view! { <EmptyTable message="This public key has not completed any SNARK work".to_string() /> },
                             _ => view! {
                                 {data.snarks.into_iter()
                                     .map(|opt_snark| {
@@ -59,16 +59,6 @@ struct SubEntry {
 }
 
 #[component]
-fn NoSnarkJobs() -> impl IntoView {
-    view! { 
-        <div class="flex text-base text-slate-400 items-center justify-center p-8">
-            <NoIcon /> 
-            <span class="text-sm">"This public key has not completed any SNARK work"</span>
-        </div>
-    }
-}
-
-#[component]
 fn AccountDialogSnarkJobEntry(snark: SnarksQuerySnarks) -> impl IntoView {
     let sub_entries = vec![
         SubEntry {
@@ -89,4 +79,28 @@ fn AccountDialogSnarkJobEntry(snark: SnarksQuerySnarks) -> impl IntoView {
             .collect::<Vec<_>>()}            
         </div>
     }.into_view()
+}
+
+#[component]
+pub fn AccountOverviewSnarkJobTable(public_key: Option<String>) -> impl IntoView {
+
+    let resource = create_resource(|| (), move |_| {
+        let public_key_inner = public_key.clone();
+        async move { load_data(5,public_key_inner).await }
+    });
+
+    view! {
+        {move || match resource.get() {
+            Some(Ok(data)) => view! {
+                {
+                    match data.snarks.len() {
+                        0 => view! { <EmptyTable message="This public key has not completed any SNARK work".to_string() /> },
+                        _ => view! { <Table data=data.snarks /> }
+                    }
+                }
+            },
+            _ => view! { <span /> }.into_view(),
+        }}
+        
+    }
 }

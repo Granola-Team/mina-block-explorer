@@ -2,7 +2,7 @@ use leptos::*;
 use leptos_router::*;
 
 use serde::{Deserialize,Serialize};
-use crate::{table::{TableData, Table}, table_section::TableSection};
+use crate::common::components::*;
 
 
 #[derive(Params, PartialEq)]

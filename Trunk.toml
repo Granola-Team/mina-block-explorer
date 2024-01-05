@@ -4,4 +4,4 @@ command = "sh"
 command_arguments = ["-c", "just pre_build"]
 
 [watch]
-watch = ["index.html", "src", "assets"]
+watch = ["index.html", "src", "assets", "graphql"]

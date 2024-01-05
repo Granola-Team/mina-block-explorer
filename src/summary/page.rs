@@ -1,61 +1,9 @@
-use std::collections::HashMap;
-
 use leptos::*;
-use leptos_router::*;
 use serde::{Deserialize, Serialize};
 
-use crate::api_models::{MyError};
-use crate::summary_item::{SummaryItem, SummaryItemKind};
-use crate::latest_block_page::{LatestBlocksResponse,load_data as load_latest_blocks};
-use crate::table::TableData;
-use crate::{table::{Table}, table_section::TableSection};
-
-struct OverrideLatestBlockResponse(LatestBlocksResponse);
-
-impl TableData for OverrideLatestBlockResponse {
-    fn get_columns(&self) -> Vec<String> {
-        vec![
-                String::from("Height"),
-                String::from("Date"),
-                String::from("Block Producer"),
-                String::from("Coinbase"),
-                String::from("Transactions"),
-                String::from("SNARKs"),
-                String::from("Slot"),
-                String::from("State Hash"),
-                String::from("Coinbase Receiver"),
-            ]
-    }
-
-    fn get_rows(&self) -> Vec<Vec<String>> {
-        let mut rows = Vec::new();
-        for block in &self.0.blocks {
-            let data = vec![
-                block.block_height.to_string(),
-                block.date_time.to_string(),
-                block.creator_account.public_key.to_string(),
-                block.transactions.coinbase.to_string(),
-                block.transactions.user_commands.len().to_string(),
-                block.snark_jobs.len().to_string(),
-                block.protocol_state.consensus_state.slot.to_string(),
-                block.state_hash.to_string(),
-                block.transactions.coinbase_receiver_account.public_key.to_string(),
-            ];
-            rows.push(data);
-        }
-        rows
-    }
-
-    fn get_linkable_cols(&self) -> HashMap<i32, String> {
-        let mut linkcols: HashMap<i32, String> = HashMap::new();
-        linkcols.insert(2, "/summary/accounts/:token".to_owned());
-        linkcols.insert(8, "/summary/accounts/:token".to_owned());
-        linkcols
-    }
-}
-
-
-
+use crate::blocks::components::SummaryPageBlocksSection;
+use crate::common::models::{MyError};
+use crate::common::components::*;
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
@@ -111,24 +59,12 @@ pub fn SummaryPage() -> impl IntoView {
     let blockchain_summary_resource = 
         create_resource(|| (), |_| async move { load_data().await });
 
-    let latest_blocks_resource = 
-        create_resource(|| (), |_| async move { load_latest_blocks().await });
-
-
     view! {
         {move || match blockchain_summary_resource.get() {
             Some(Ok(summary)) => view! { <SummaryGrid summary=summary /> },
             _ => view! { <span /> }.into_view()
         }}
-        {move || match latest_blocks_resource.get() {
-            Some(Ok(data)) => view! { 
-                <TableSection section_heading="Latest Blocks".to_owned()>
-                    <Table data=OverrideLatestBlockResponse(data)/>           
-                </TableSection>
-                <Outlet />
-            }.into_view(),
-            _ => view! { <span /> }.into_view()
-        }}
+        <SummaryPageBlocksSection />
     }
 }
 

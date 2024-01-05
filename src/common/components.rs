@@ -1,4 +1,5 @@
 use leptos::*;
+use crate::icons::NoIcon;
 use std::collections::HashMap;
 
 
@@ -98,8 +99,8 @@ where
     let cell_padding_class = "first:pl-8 pl-2";
 
     view! {
-        <div class="w-full overflow-auto">
-            <table class="md:rounded-b-lg table-fixed w-[300%] md:w-[150%] lg:w-full ">
+        <div class="@container w-full overflow-auto">
+            <table class="md:rounded-b-lg table-fixed w-full @xs:w-[300%] @md:w-[200%] @2xl:w-[150%] @7xl:w-full">
             <tr class="h-12 bg-table-header-fill">
                 {columns.into_iter()
                     .map(|s| view! { <th class={format!("{} text-table-header-text-color font-semibold uppercase text-xs text-left", cell_padding_class)}>{s}</th>})
@@ -154,5 +155,56 @@ where
             }
         }
         
+    }
+}
+
+
+#[component]
+pub fn EmptyTable(message: String) -> impl IntoView {
+    view! { 
+        <div class="flex text-base text-slate-400 items-center justify-center p-8">
+            <NoIcon /> 
+            <span class="text-sm">{message}</span>
+        </div>
+    }
+}
+
+#[component]
+pub fn TableSection(section_heading: String, children: Children) -> impl IntoView {
+    view! {
+        <section class="md:col-start-2 md:col-end-3 md:rounded-lg bg-table-section mb-4">
+            <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-start items-center">{section_heading}</h1>    
+            {children()}
+        </section>
+    }
+}
+
+
+pub enum SummaryItemKind {
+    Str(String),
+    Int64(u64),
+    Int16(u16),
+    Int32(u32),
+    Float64(f64),
+}
+
+#[component]
+pub fn SummaryItem(label: String, value: SummaryItemKind, id: String, #[prop(optional)] imgsrc: String) -> impl IntoView {
+    view! {
+        <div class="h-24 w-96 p-4 max-w-full grid gap-1 grid-cols-[100px_auto] bg-white rounded-md">
+            <div class="cols-span-1 row-start-1 row-end-3 bg-light-granola-orange rounded-md flex justify-center items-center">
+                <img src=imgsrc width=45 height=45 alt="logo"/>
+            </div>
+            <div class="col-start-2 col-end-3 font-bold text-xl flex justify-start items-end" id={id.clone()}>{
+                match value {
+                    SummaryItemKind::Str(s) => s,
+                    SummaryItemKind::Int64(i) => i.to_string(),
+                    SummaryItemKind::Int32(i) => i.to_string(),
+                    SummaryItemKind::Int16(i) => i.to_string(),
+                    SummaryItemKind::Float64(i) => format!("{:.2}", i).parse::<f64>().unwrap().to_string()
+                }
+            }</div>
+            <label class="row-start-2 col-start-2 col-end-3 text-sm flex justify-start items-start" for={id.clone()}>{label}</label>
+        </div>
     }
 }

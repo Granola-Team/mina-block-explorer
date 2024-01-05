@@ -1,4 +1,4 @@
-use crate::api_models::MyError;
+use crate::common::models::MyError;
 use graphql_client::reqwest::post_graphql;
 
 use super::graphql::transactions_query::TransactionsQueryTransactions;

@@ -1,14 +1,10 @@
 use leptos::*;
-mod api_models;
 mod root;
-mod summary_item;
-mod summary_page;
-mod latest_block_page;
+mod summary;
+mod blocks;
 mod transactions;
-mod table;
 mod snarks;
 mod stakes_page;
-mod table_section;
 mod accounts;
 mod header;
 mod footer;

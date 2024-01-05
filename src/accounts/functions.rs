@@ -1,7 +1,7 @@
 use leptos::*;
 use leptos_router::*;
 
-use crate::api_models::MyError;
+use crate::common::models::MyError;
 
 use super::models::*;
 
