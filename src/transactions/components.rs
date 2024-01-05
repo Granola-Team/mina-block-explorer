@@ -121,10 +121,17 @@ pub fn TransactionsSection(
         {move || match resource.get() {
             Some(Ok(data)) => view! {
                 <TableSection section_heading="Transactions".to_owned()>
-                    <Table data=data.transactions/>
                     {match with_link {
                         false => view! {<div />}.into_view(),
-                        true => view! { <TableLink href=href.get() text="See all transactions".to_string() />}
+                        true => {
+                            match data.transactions.len() {
+                                0 => view! { <EmptyTable message="This public key has no transactions".to_string() /> },
+                                _ => view! { 
+                                    <Table data=data.transactions/>
+                                    <TableLink href=href.get() text="See all transactions".to_string() />
+                                }.into_view()
+                            } 
+                        }.into_view()
                     }}
                 </TableSection>
              },
