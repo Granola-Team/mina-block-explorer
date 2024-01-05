@@ -2,6 +2,7 @@ use leptos::*;
 
 use super::functions::*;
 use crate::accounts::components::*;
+use crate::common::components::*;
 use crate::common::functions::*;
 use crate::common::models::*;
 
@@ -89,5 +90,49 @@ fn TransactionEntry(
 
         <AccountDialogEntryDivider />
 
+    }
+}
+
+
+#[component]
+pub fn TransactionsSection(
+    public_key: Option<String>,
+    #[prop(default = false)] with_link: bool,
+) -> impl IntoView {
+    let (pk, _set_public_key) = create_signal(public_key.unwrap_or_default());
+
+    let resource = create_resource(move || pk.get(), move |value| {
+            async move {
+                let limit = 10;
+                load_data(limit, Some(value)).await
+            }
+        }
+    );
+
+    view! {
+        {move || match resource.get() {
+            Some(Ok(data)) => view! {
+                <TableSection section_heading="Transactions".to_owned()>
+                    {match data.transactions.len() {
+                        0 => view! { <EmptyTable message="This public key has no transactions".to_string() /> },
+                        _ => view! { 
+                            <Table data=data.transactions/>
+                            {match with_link {
+                                false => view! {<div />}.into_view(),
+                                true => {
+                                    let pk_inner = pk.get();
+                                    let link = match pk_inner.len() { 
+                                        0 => "/transactions".to_string(),
+                                        _ => format!("/transactions?account={}", pk_inner)
+                                    };
+                                    view! {<TableLink href=link text="See all transactions".to_string() />}
+                                }.into_view()
+                            }}
+                        }.into_view()
+                    }}
+                </TableSection>
+             },
+            _ => view! { <span /> }.into_view()
+        }}
     }
 }

@@ -84,10 +84,19 @@ fn AccountDialogSnarkJobEntry(snark: SnarksQuerySnarks) -> impl IntoView {
 #[component]
 pub fn AccountOverviewSnarkJobTable(public_key: Option<String>) -> impl IntoView {
 
+    let pk=public_key.clone();
     let resource = create_resource(|| (), move |_| {
         let public_key_inner = public_key.clone();
         async move { load_data(5,public_key_inner).await }
     });
+
+    
+    let (href, _set_href) = create_signal(
+        pk
+            .as_ref()
+            .map(|pk| format!("/snarks?account={}", pk))
+            .unwrap_or_else(|| "/snarks".to_string()),
+    );
 
     view! {
         {move || match resource.get() {
@@ -95,7 +104,10 @@ pub fn AccountOverviewSnarkJobTable(public_key: Option<String>) -> impl IntoView
                 {
                     match data.snarks.len() {
                         0 => view! { <EmptyTable message="This public key has not completed any SNARK work".to_string() /> },
-                        _ => view! { <Table data=data.snarks /> }
+                        _ => view! { 
+                            <Table data=data.snarks /> 
+                            <TableLink href=href.get() text="See all snark jobs".to_string()/>
+                        }.into_view()
                     }
                 }
             },
