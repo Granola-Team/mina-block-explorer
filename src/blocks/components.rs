@@ -1,8 +1,11 @@
 use leptos::*;
+use leptos_router::Outlet;
 
 use crate::accounts::components::*;
 use crate::common::components::EmptyTable;
 use crate::common::functions::*;
+use crate::table::*;
+use crate::table_section::*;
 use super::functions::*;
 use super::graphql::blocks_query::BlocksQueryBlocks;
 
@@ -80,4 +83,21 @@ fn AccountDialogBlockEntry(block: BlocksQueryBlocks) -> impl IntoView {
             .collect::<Vec<_>>()}            
         </div>
     }.into_view()
+}
+
+#[component]
+pub fn BlocksSection() -> impl IntoView {
+    let resource = create_resource(|| (), |_| async move { load_data(10, None).await });
+
+    view! {
+        {move || match resource.get() {
+            Some(Ok(data)) => view! {
+                <TableSection section_heading="Blocks".to_owned()>
+                    <Table data=data.blocks/>
+                </TableSection>
+                <Outlet />
+            }.into_view(),
+            _ => view! { <span/> }.into_view()
+        }}
+    }
 }
