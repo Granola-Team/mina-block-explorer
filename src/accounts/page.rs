@@ -36,7 +36,7 @@ pub fn AccountSummaryPage() -> impl IntoView {
                         <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-start items-center">"Account Overview"</h1>
                         <AccountSummarySubsection summary_items=get_summary_items(res.account.clone()) username=res.account.username public_key=pk.clone() />
                     </section>
-                    <TransactionsSection public_key=Some(pk.clone())/>
+                    <TransactionsSection public_key=Some(pk.clone()) with_link=true/>
                     <div class="md:col-start-2 md:col-end-3 grid grid-cols-1 md:grid-cols-2 gap-4">
                         <section class="md:col-start-1 md:col-end-2 md:rounded-lg bg-table-section">
                             <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-start items-center">"SNARK Jobs"</h1>    

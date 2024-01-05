@@ -1,5 +1,5 @@
 use leptos::*;
-use crate::icons::NoIcon;
+use crate::icons::*;
 use std::collections::HashMap;
 
 
@@ -179,6 +179,19 @@ pub fn TableSection(section_heading: String, children: Children) -> impl IntoVie
     }
 }
 
+#[component]
+pub fn TableLink(href: String, text: String) -> impl IntoView {
+    view! {
+        <div class="w-full bg-inherit flex justify-center items-center py-3">
+            <a href={href} class="font-bold uppercase text-sm flex justify-center align-center hover:underline hover:text-granola-orange">
+                <TransactionIcon />
+                <span class="mx-1">{text}</span>
+                <ChevronRight />
+            </a>
+        </div>
+    }.into_view()
+    
+}
 
 pub enum SummaryItemKind {
     Str(String),
