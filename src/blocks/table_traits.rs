@@ -27,15 +27,15 @@ impl TableData for Vec<Option<BlocksQueryBlocks>> {
         self.iter()
             .map(|opt_blocks| match opt_blocks {
                 Some(block) => vec![
-                    get_block_height(&block),
-                    get_date_time(&block),
-                    get_creator_account(&block),
-                    get_coinbase(&block),
-                    get_transaction_count(&block),
-                    get_snark_job_count(&block),
-                    get_slot(&block),
-                    get_state_hash(&block),
-                    get_coinbase_receiver(&block),
+                    get_block_height(block),
+                    get_date_time(block),
+                    get_creator_account(block),
+                    get_coinbase(block),
+                    get_transaction_count(block),
+                    get_snark_job_count(block),
+                    get_slot(block),
+                    get_state_hash(block),
+                    get_coinbase_receiver(block),
                 ],
                 None => vec![],
             })

@@ -69,7 +69,7 @@ pub async fn load_data(
         query: blocks_query::BlockQueryInput {
             canonical: Some(true),
             creator_account: Some(blocks_query::BlockCreatorAccountQueryInput {
-                public_key: public_key,
+                public_key,
                 ..Default::default()
             }),
             ..Default::default()
