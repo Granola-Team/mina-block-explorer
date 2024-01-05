@@ -99,8 +99,8 @@ where
     let cell_padding_class = "first:pl-8 pl-2";
 
     view! {
-        <div class="w-full overflow-auto">
-            <table class="md:rounded-b-lg table-fixed w-[300%] md:w-[150%] lg:w-full ">
+        <div class="@container w-full overflow-auto">
+            <table class="md:rounded-b-lg table-fixed w-full @xs:w-[300%] @md:w-[200%] @2xl:w-[150%] @7xl:w-full">
             <tr class="h-12 bg-table-header-fill">
                 {columns.into_iter()
                     .map(|s| view! { <th class={format!("{} text-table-header-text-color font-semibold uppercase text-xs text-left", cell_padding_class)}>{s}</th>})
@@ -172,7 +172,7 @@ pub fn EmptyTable(message: String) -> impl IntoView {
 #[component]
 pub fn TableSection(section_heading: String, children: Children) -> impl IntoView {
     view! {
-        <section class="md:col-start-2 md:col-end-3 md:rounded-lg bg-table-section">
+        <section class="md:col-start-2 md:col-end-3 md:rounded-lg bg-table-section mb-4">
             <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-start items-center">{section_heading}</h1>    
             {children()}
         </section>
