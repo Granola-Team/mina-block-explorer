@@ -4,7 +4,7 @@ use leptos_router::*;
 
 use crate::snarks::page::SnarksPage;
 use crate::stakes_page::StakesPage;
-use crate::summary_page::SummaryPage;
+use crate::summary::page::SummaryPage;
 use crate::blocks::page::LatestBlocksPage;
 use crate::transactions::transactions_page::TransactionsPage;
 use crate::header::navigation::Header;

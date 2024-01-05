@@ -1,7 +1,7 @@
 use leptos::*;
 mod root;
 mod summary_item;
-mod summary_page;
+mod summary;
 mod blocks;
 mod transactions;
 mod table;
