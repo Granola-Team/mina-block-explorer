@@ -1,14 +1,14 @@
 use leptos::*;
 
 use crate::accounts::components::*;
-use super::functions::load_data;
-use super::graphql::snarks_query::SnarksQuerySnarks;
-use super::functions::*;
+use crate::common::components::EmptyTable;
 use crate::common::functions::*;
-use crate::common::components::*;
+use super::functions::*;
+use super::graphql::blocks_query::BlocksQueryBlocks;
+
 
 #[component]
-pub fn AccountDialogSnarkJobSection(public_key: Option<String>) -> impl IntoView {
+pub fn AccountDialogBlocksSection(public_key: Option<String>) -> impl IntoView {
 
     let resource = create_resource(|| (), move |_| {
         let public_key_inner = public_key.clone();
@@ -18,24 +18,24 @@ pub fn AccountDialogSnarkJobSection(public_key: Option<String>) -> impl IntoView
     view! {
         {move || match resource.get() {
             Some(Ok(data)) => view! {
-                <AccountDialogSectionContainer title=String::from("SNARK Jobs") showing_message={format!("Showing latest {} SNARK jobs", data.snarks.len())} >
+                <AccountDialogSectionContainer title=String::from("Block Production") showing_message={format!("Showing latest {} blocks", data.blocks.len())} >
                     {
-                        match data.snarks.len() {
-                            0 => view! { <EmptyTable message="This public key has not completed any SNARK work".to_string() /> },
+                        match data.blocks.len() {
+                            0 => view! { <EmptyTable message="This public key has no block production".to_string() /> },
                             _ => view! {
-                                {data.snarks.into_iter()
-                                    .map(|opt_snark| {
-                                        match opt_snark {
-                                            Some(snark) => {
-                                                let moments_ago = print_time_since(&get_snark_date_time(&snark));
-                                                let date_time = get_snark_date_time(&snark);
+                                {data.blocks.into_iter()
+                                    .map(|opt_block| {
+                                        match opt_block {
+                                            Some(block) => {
+                                                let moments_ago = print_time_since(&get_date_time(&block));
+                                                let date_time = get_date_time(&block);
                                                 let status = get_status(&date_time);
                                                 view! {
                                                     <AccountDialogSectionEntryHeader 
                                                         status=status
                                                         date=date_time
                                                         moments_ago=moments_ago/>
-                                                    <AccountDialogSnarkJobEntry snark=snark/>
+                                                    <AccountDialogBlockEntry block=block/>
                                                     <AccountDialogEntryDivider />
                                                 }.into_view()
                                             },
@@ -53,21 +53,22 @@ pub fn AccountDialogSnarkJobSection(public_key: Option<String>) -> impl IntoView
     }
 }
 
+
 struct SubEntry {
     label: String,
     value: String
 }
 
 #[component]
-fn AccountDialogSnarkJobEntry(snark: SnarksQuerySnarks) -> impl IntoView {
+fn AccountDialogBlockEntry(block: BlocksQueryBlocks) -> impl IntoView {
     let sub_entries = vec![
         SubEntry {
             label: String::from("Hash"),
-            value: snark.block.map_or_else(String::new, |b| b.state_hash.map_or_else(String::new, |sh| sh.to_string()))
+            value: get_state_hash(&block)
         },
         SubEntry {
-            label: String::from("Fees Earned"),
-            value: snark.fee.map_or_else(String::new, |o| o.to_string())
+            label: String::from("Coinbase"),
+            value: get_coinbase(&block)
         }
     ];
     view! {

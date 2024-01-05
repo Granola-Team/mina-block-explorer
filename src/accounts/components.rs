@@ -2,6 +2,7 @@ use leptos::*;
 
 use super::functions::*;
 use super::models::*;
+use crate::blocks::components::AccountDialogBlocksSection;
 use crate::common::models::*;
 use crate::snarks::components::AccountDialogSnarkJobSection;
 use crate::transactions::components::AccountDialogTransactionSection;
@@ -25,7 +26,8 @@ pub fn AccountDialog(path_base: String, account: AccountSummary) -> impl IntoVie
             </section>
             <div class="overflow-y-auto flex flex-col pb-20">
                 <AccountDialogTransactionSection limit=3 account_id=public_key.clone() />
-                <AccountDialogSnarkJobSection public_key=Some(public_key)/>
+                <AccountDialogSnarkJobSection public_key=Some(public_key.clone())/>
+                <AccountDialogBlocksSection public_key=Some(public_key)/>
             </div>
             <div class="absolute bottom-0 left-0 w-full h-20 flex justify-stretch items-center bg-white">
                 <button id="viewmore" class="disabled:bg-slate-400 disabled:text-slate-200 disabled:cursor-not-allowed bg-granola-orange text-white uppercase mx-8 h-11 w-full rounded-lg">
