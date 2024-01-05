@@ -1,6 +1,5 @@
 use leptos::*;
 mod root;
-mod summary_item;
 mod summary;
 mod blocks;
 mod transactions;

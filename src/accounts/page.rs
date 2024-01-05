@@ -7,7 +7,7 @@ use super::components::*;
 
 use crate::common::models::MyError;
 use crate::transactions::transactions_page::TransactionsSection;
-use crate::summary_item::{SummaryItem, SummaryItemKind};
+use crate::common::components::*;
 
 
 #[component]

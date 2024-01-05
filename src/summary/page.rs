@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::blocks::components::SummaryPageBlocksSection;
 use crate::common::models::{MyError};
-use crate::summary_item::{SummaryItem, SummaryItemKind};
+use crate::common::components::*;
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
