@@ -99,38 +99,35 @@ pub fn TransactionsSection(
     public_key: Option<String>,
     #[prop(default = false)] with_link: bool,
 ) -> impl IntoView {
-    let resource = create_resource(|| (), {
-        let pk = public_key.clone(); // Clone for use in async block
-        move |_| {
-            let pk_clone = pk.clone();
+    let (pk, _set_public_key) = create_signal(public_key.unwrap_or(String::new()));
+
+    let resource = create_resource(move || pk.get(), move |value| {
             async move {
                 let limit = 10;
-                load_data(limit, pk_clone).await
+                load_data(limit, Some(value)).await
             }
         }
-    });
-
-    let (href, _set_href) = create_signal(
-        public_key
-            .as_ref()
-            .map(|pk| format!("/transactions?account={}", pk))
-            .unwrap_or_else(|| "/transactions".to_string()),
     );
 
     view! {
         {move || match resource.get() {
             Some(Ok(data)) => view! {
                 <TableSection section_heading="Transactions".to_owned()>
-                    {match with_link {
-                        false => view! {<div />}.into_view(),
-                        true => {
-                            match data.transactions.len() {
-                                0 => view! { <EmptyTable message="This public key has no transactions".to_string() /> },
-                                _ => view! { 
-                                    <Table data=data.transactions/>
-                                    <TableLink href=href.get() text="See all transactions".to_string() />
+                    {match data.transactions.len() {
+                        0 => view! { <EmptyTable message="This public key has no transactions".to_string() /> },
+                        _ => view! { 
+                            <Table data=data.transactions/>
+                            {match with_link {
+                                false => view! {<div />}.into_view(),
+                                true => {
+                                    let pk_inner = pk.get();
+                                    let link = match pk_inner.len() { 
+                                        0 => "/transactions".to_string(),
+                                        _ => format!("/transactions?account={}", pk_inner)
+                                    };
+                                    view! {<TableLink href=link text="See all transactions".to_string() />}
                                 }.into_view()
-                            } 
+                            }}
                         }.into_view()
                     }}
                 </TableSection>

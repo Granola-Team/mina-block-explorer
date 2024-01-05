@@ -1,5 +1,5 @@
 use leptos::*;
-use leptos_router::Outlet;
+use leptos_router::*;
 
 use super::functions::*;
 use super::graphql::blocks_query::BlocksQueryBlocks;
@@ -88,7 +88,13 @@ fn AccountDialogBlockEntry(block: BlocksQueryBlocks) -> impl IntoView {
 
 #[component]
 pub fn BlocksSection() -> impl IntoView {
-    let resource = create_resource(|| (), |_| async move { load_data(10, None).await });
+
+    let query_params_map = use_query_map();
+
+    let resource = create_resource(move || query_params_map.get(), |value| async move { 
+        let public_key = value.get("account");
+        load_data(10, public_key.cloned()).await 
+    });
 
     view! {
         {move || match resource.get() {
