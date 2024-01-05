@@ -99,7 +99,7 @@ pub fn TransactionsSection(
     public_key: Option<String>,
     #[prop(default = false)] with_link: bool,
 ) -> impl IntoView {
-    let (pk, _set_public_key) = create_signal(public_key.unwrap_or(String::new()));
+    let (pk, _set_public_key) = create_signal(public_key.unwrap_or_default());
 
     let resource = create_resource(move || pk.get(), move |value| {
             async move {
