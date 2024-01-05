@@ -120,3 +120,29 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
     }
 }
 
+
+#[component]
+pub fn AccountOverviewBlocksTable(public_key: Option<String>) -> impl IntoView {
+
+    let resource = create_resource(|| (), move |_| {
+        let public_key_inner = public_key.clone();
+        async move { load_data(5,public_key_inner).await }
+    });
+
+    view! {
+        {move || match resource.get() {
+            Some(Ok(data)) => view! {
+                {
+                    match data.blocks.len() {
+                        0 => view! { <EmptyTable message="This public key has no block production".to_string() /> },
+                        _ => view! { <Table data=data.blocks /> }
+                    }
+                }
+            },
+            _ => view! { <span /> }.into_view(),
+        }}
+        
+    }
+}
+
+

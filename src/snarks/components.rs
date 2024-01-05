@@ -86,7 +86,7 @@ pub fn AccountOverviewSnarkJobTable(public_key: Option<String>) -> impl IntoView
 
     let resource = create_resource(|| (), move |_| {
         let public_key_inner = public_key.clone();
-        async move { load_data(3,public_key_inner).await }
+        async move { load_data(5,public_key_inner).await }
     });
 
     view! {
