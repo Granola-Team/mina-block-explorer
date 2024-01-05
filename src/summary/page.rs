@@ -1,7 +1,7 @@
 use leptos::*;
 use serde::{Deserialize, Serialize};
 
-use crate::blocks::components::BlocksSection;
+use crate::blocks::components::SummaryPageBlocksSection;
 use crate::common::models::{MyError};
 use crate::summary_item::{SummaryItem, SummaryItemKind};
 
@@ -64,7 +64,7 @@ pub fn SummaryPage() -> impl IntoView {
             Some(Ok(summary)) => view! { <SummaryGrid summary=summary /> },
             _ => view! { <span /> }.into_view()
         }}
-        <BlocksSection />
+        <SummaryPageBlocksSection />
     }
 }
 

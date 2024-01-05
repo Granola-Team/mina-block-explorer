@@ -3,6 +3,7 @@ use leptos_router::Outlet;
 
 use super::functions::*;
 use super::graphql::blocks_query::BlocksQueryBlocks;
+use super::models::*;
 use crate::accounts::components::*;
 use crate::common::components::EmptyTable;
 use crate::common::functions::*;
@@ -101,3 +102,21 @@ pub fn BlocksSection() -> impl IntoView {
         }}
     }
 }
+
+#[component]
+pub fn SummaryPageBlocksSection() -> impl IntoView {
+    let resource = create_resource(|| (), |_| async move { load_data(10, None).await });
+
+    view! {
+        {move || match resource.get() {
+            Some(Ok(data)) => view! {
+                <TableSection section_heading="Blocks".to_owned()>
+                    <Table data=SummaryPageBlocksQueryBlocks(data.blocks)/>
+                </TableSection>
+                <Outlet />
+            }.into_view(),
+            _ => view! { <span/> }.into_view()
+        }}
+    }
+}
+
