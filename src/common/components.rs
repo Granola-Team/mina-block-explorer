@@ -1,14 +1,9 @@
 use crate::icons::*;
-use leptos::*;
-use std::collections::HashMap;
+use leptos::{html::AnyElement, *};
 
 pub trait TableData {
     fn get_columns(&self) -> Vec<String>;
-    fn get_rows(&self) -> Vec<Vec<String>>;
-    fn get_linkable_cols(&self) -> HashMap<i32, String> {
-        let linkcols: HashMap<i32, String> = HashMap::new();
-        linkcols
-    }
+    fn get_rows(&self) -> Vec<Vec<HtmlElement<AnyElement>>>;
 }
 
 #[derive(Clone)]
@@ -90,7 +85,6 @@ where
 {
     let columns = data.get_columns();
     let rows = data.get_rows();
-    let linkable_cols = data.get_linkable_cols();
     let cell_padding_class = "first:pl-8 pl-2";
 
     view! {
@@ -105,19 +99,12 @@ where
                 .map(|row| view! {
                     <tr class="h-12 bg-table-row-fill">
                         {
-                            row.iter().enumerate().map(|(index, cell)| {
+                            row.iter().map(|cell| {
 
                                 let cell_ellipsis_class = "w-full text-ellipsis overflow-hidden";
-                                let cell_content = match linkable_cols.get(&(index as i32)) {
-                                    Some(value) => {
-                                        let link_href = value.replace(":token", cell);
-                                        view! { <div class=cell_ellipsis_class><a class=format!("{} block hover:text-granola-orange hover:underline hover:decoration-2",cell_ellipsis_class) href={link_href}>{cell}</a></div> }
-                                    }
-                                    None => view! { <div class=cell_ellipsis_class>{cell}</div> },
-                                };
                                 let cell_class = format!("{} {} first:pl-8 pl-2 text-table-row-text-color font-medium text-sm text-left whitespace-nowrap", cell_padding_class, cell_ellipsis_class);
                                 view! {
-                                    <td class=cell_class>{cell_content}</td>
+                                    <td class=cell_class>{cell.clone().into_view()}</td>
                                 }
 
                             }).collect::<Vec<_>>()

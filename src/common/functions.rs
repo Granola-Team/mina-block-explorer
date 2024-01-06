@@ -1,4 +1,5 @@
 use chrono::{DateTime, Duration, Utc};
+use leptos::*;
 
 use super::models::Status;
 
@@ -41,6 +42,24 @@ pub fn get_status(timestamp: &str) -> Status {
         }
         Err(_) => Status::Unknown,
     }
+}
+
+pub fn convert_to_span(data: String) -> HtmlElement<html::AnyElement> {
+    html::span().child(data).into()
+}
+
+pub fn convert_to_link(data: String, href: String) -> HtmlElement<html::AnyElement> {
+    html::div()
+        .attr("class", "w-full text-ellipsis overflow-hidden")
+        .child(
+            html::a()
+                .attr("href", href)
+                .attr(
+                    "class",
+                    "hover:text-granola-orange hover:underline hover:decoration-2",
+                )
+                .child(data),
+        ).into()
 }
 
 #[cfg(test)]

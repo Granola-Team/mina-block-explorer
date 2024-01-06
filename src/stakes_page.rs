@@ -1,7 +1,7 @@
 use leptos::*;
 use leptos_router::*;
 
-use crate::common::components::*;
+use crate::common::{components::*, functions::*};
 use serde::{Deserialize, Serialize};
 
 #[derive(Params, PartialEq)]
@@ -42,7 +42,7 @@ impl TableData for StakesResponse {
         ]
     }
 
-    fn get_rows(&self) -> Vec<Vec<String>> {
+    fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
         let mut rows = Vec::new();
         for stake in &self.data {
             let data = vec![
@@ -52,7 +52,10 @@ impl TableData for StakesResponse {
                 stake.percent_of_stake.to_string(),
                 stake.block_chance.to_string(),
                 stake.delegates.to_string(),
-            ];
+            ]
+            .into_iter()
+            .map(convert_to_span)
+            .collect();
             rows.push(data);
         }
         rows
