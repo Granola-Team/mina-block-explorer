@@ -1,9 +1,14 @@
 use leptos::*;
 
+pub enum SpotlightPillVariant {
+    Green,
+    Blue 
+}
+
 pub struct SpotlightEntry {
     pub label: String,
     pub value: String,
-    pub is_pill: bool,
+    pub pill_variant: Option<SpotlightPillVariant>,
 }
 
 #[component]
@@ -40,17 +45,18 @@ pub fn Spotlight(
 fn SpotlightRow(entry: SpotlightEntry) -> impl IntoView {
     let value_class_str_base = "py-1 my-1 text-sm";
 
-    let value_class_str = match entry.is_pill {
-        true => format!(
+    let value_class_str = match entry.pill_variant {
+        Some(SpotlightPillVariant::Green) => format!(
             "{} {}",
             value_class_str_base.to_owned(),
             "p-1 rounded-full bg-light-granola-orange"
         ),
-        false => format!(
+        Some(SpotlightPillVariant::Blue) => format!(
             "{} {}",
             value_class_str_base.to_owned(),
             "w-3/4 text-ellipsis overflow-hidden"
         ),
+        None => String::new()
     };
 
     view! {
