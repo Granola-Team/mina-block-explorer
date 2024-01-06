@@ -1,5 +1,5 @@
-pub mod page;
 pub mod components;
-mod graphql;
 mod functions;
+mod graphql;
+pub mod page;
 mod table_trait;

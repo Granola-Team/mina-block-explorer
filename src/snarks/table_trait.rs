@@ -1,5 +1,3 @@
-
-
 use crate::common::components::*;
 
 use super::graphql::snarks_query;

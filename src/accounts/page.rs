@@ -1,20 +1,22 @@
 use leptos::*;
 use leptos_router::*;
 
-use super::models::*;
-use super::functions::*;
 use super::components::*;
+use super::functions::*;
+use super::models::*;
 
 use crate::blocks::components::AccountOverviewBlocksTable;
+use crate::common::components::*;
 use crate::common::models::MyError;
 use crate::snarks::components::AccountOverviewSnarkJobTable;
 use crate::transactions::components::*;
-use crate::common::components::*;
 
 #[component]
 pub fn AccountSummaryPage() -> impl IntoView {
     let memo_params_map = use_params_map();
-    let public_key = memo_params_map.with(|params| params.get("id").cloned()).unwrap_or_default();
+    let public_key = memo_params_map
+        .with(|params| params.get("id").cloned())
+        .unwrap_or_default();
 
     let resource: Resource<(), Result<AccountResponse, MyError>> = {
         create_resource(
@@ -26,7 +28,6 @@ pub fn AccountSummaryPage() -> impl IntoView {
         )
     };
 
-    
     view! {
         {move || match resource.get() {
             Some(Ok(res)) =>{
@@ -39,11 +40,11 @@ pub fn AccountSummaryPage() -> impl IntoView {
                     <TransactionsSection public_key=Some(pk.clone()) with_link=true/>
                     <div class="md:col-start-2 md:col-end-3 grid grid-cols-1 md:grid-cols-2 gap-4">
                         <section class="md:col-start-1 md:col-end-2 md:rounded-lg bg-table-section">
-                            <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-start items-center">"SNARK Jobs"</h1>    
+                            <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-start items-center">"SNARK Jobs"</h1>
                             <AccountOverviewSnarkJobTable public_key=Some(pk.clone())/>
                         </section>
                         <section class="md:col-start-2 md:col-end-3 md:rounded-lg bg-table-section">
-                            <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-start items-center">"Block Production"</h1>    
+                            <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-start items-center">"Block Production"</h1>
                             <AccountOverviewBlocksTable public_key=Some(pk) />
                         </section>
                     </div>
@@ -52,9 +53,7 @@ pub fn AccountSummaryPage() -> impl IntoView {
             _ => view! { <span/>  }.into_view()
         }}
     }
-    
 }
-
 
 #[component]
 fn AccountSummarySection(summary: AccountResponse) -> impl IntoView {

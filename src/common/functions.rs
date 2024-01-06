@@ -1,4 +1,3 @@
-
 use chrono::{DateTime, Duration, Utc};
 
 use super::models::Status;
@@ -43,7 +42,6 @@ pub fn get_status(timestamp: &str) -> Status {
         Err(_) => Status::Unknown,
     }
 }
-
 
 #[cfg(test)]
 mod tests {

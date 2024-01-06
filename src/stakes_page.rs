@@ -1,9 +1,8 @@
 use leptos::*;
 use leptos_router::*;
 
-use serde::{Deserialize,Serialize};
 use crate::common::components::*;
-
+use serde::{Deserialize, Serialize};
 
 #[derive(Params, PartialEq)]
 struct URLParams {
@@ -12,7 +11,7 @@ struct URLParams {
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
 struct StakesResponse {
-    data: Vec<Stake>
+    data: Vec<Stake>,
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
@@ -23,14 +22,13 @@ struct Stake {
     delegates: i32,
     name: String,
     percent_of_stake: String,
-    id: Id
+    id: Id,
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
 struct Id {
-    delegate: String
+    delegate: String,
 }
-
 
 impl TableData for StakesResponse {
     fn get_columns(&self) -> Vec<String> {
@@ -53,14 +51,13 @@ impl TableData for StakesResponse {
                 stake.stake.to_string(),
                 stake.percent_of_stake.to_string(),
                 stake.block_chance.to_string(),
-                stake.delegates.to_string()
+                stake.delegates.to_string(),
             ];
             rows.push(data);
         }
         rows
     }
 }
-
 
 // async fn load_data(ledger_hash: &str) -> Result<StakesResponse, MyError> {
 //     let response = reqwest::get("https://minaexplorer.com/staking-data/".to_owned()+ledger_hash)
@@ -588,19 +585,18 @@ fn get_data() -> Result<StakesResponse, serde_json::Error> {
         ]
     }"#;
 
-    let r: Result<StakesResponse,serde_json::Error> = serde_json::from_str(data);
+    let r: Result<StakesResponse, serde_json::Error> = serde_json::from_str(data);
 
     r
 }
 
 #[component]
 pub fn StakesPage() -> impl IntoView {
-
     let data = get_data();
 
     view! {
         {match data {
-            Ok(data) => view! { 
+            Ok(data) => view! {
                 <TableSection section_heading="Stakes".to_owned()>
                     <Table data=data/>
                 </TableSection>

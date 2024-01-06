@@ -1,5 +1,5 @@
-pub mod components;
-mod models;
-mod functions;
-pub mod page;
 pub mod account_dialog;
+pub mod components;
+mod functions;
+mod models;
+pub mod page;

@@ -3,8 +3,8 @@ use leptos_router::*;
 
 use crate::common::models::MyError;
 
-use super::functions::*;
 use super::components::*;
+use super::functions::*;
 
 #[component]
 pub fn AccountDialogView() -> impl IntoView {
@@ -12,19 +12,19 @@ pub fn AccountDialogView() -> impl IntoView {
     let base = get_base_page_path(location);
     let memo_params_map = use_params_map();
 
-    let account_resource = create_resource(move || memo_params_map.get(), |value| {
-        async move {
+    let account_resource = create_resource(
+        move || memo_params_map.get(),
+        |value| async move {
             if let Some(id) = value.get("id").cloned() {
-                
                 let id_clone = id.clone();
                 load_data(&id_clone).await
             } else {
-                Err(MyError::ParseError(String::from("Could not parse id parameter from url")))
+                Err(MyError::ParseError(String::from(
+                    "Could not parse id parameter from url",
+                )))
             }
-        }
-    });
-    
-    
+        },
+    );
 
     view! {
         {move || match account_resource.get() {
@@ -35,4 +35,3 @@ pub fn AccountDialogView() -> impl IntoView {
         }}
     }
 }
-

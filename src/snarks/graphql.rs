@@ -17,7 +17,7 @@ pub struct SnarksQuery;
 #[allow(clippy::derivable_impls)]
 impl Default for SnarkQueryInput {
     fn default() -> Self {
-        SnarkQueryInput { 
+        SnarkQueryInput {
             block_height_lt: None,
             fee_in: None,
             prover_gte: None,
@@ -65,6 +65,6 @@ impl Default for SnarkQueryInput {
             fee_ne: None,
             block_height: None,
             canonical_exists: None,
-         }
+        }
     }
 }

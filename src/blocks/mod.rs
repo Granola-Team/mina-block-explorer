@@ -1,6 +1,6 @@
-pub mod page;
-mod graphql;
-mod functions;
 pub mod components;
-pub mod table_traits;
+mod functions;
+mod graphql;
 pub mod models;
+pub mod page;
+pub mod table_traits;
