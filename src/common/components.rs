@@ -1,7 +1,6 @@
-use leptos::*;
 use crate::icons::*;
+use leptos::*;
 use std::collections::HashMap;
-
 
 pub trait TableData {
     fn get_columns(&self) -> Vec<String>;
@@ -18,12 +17,12 @@ pub struct Pagination {
     pub records_per_page: i32,
     pub total_records: i32,
     pub next_page: fn(),
-    pub prev_page: fn()
+    pub prev_page: fn(),
 }
 
 impl Pagination {
     fn start_index(&self) -> i32 {
-        self.current_page * self.records_per_page - self.records_per_page + 1 
+        self.current_page * self.records_per_page - self.records_per_page + 1
     }
 
     fn end_index(&self) -> i32 {
@@ -33,7 +32,6 @@ impl Pagination {
     // fn total_pages(&self) -> i32 {
     //     self.total_records / self.records_per_page + (self.total_records % self.records_per_page).signum()
     // }
-
 }
 
 #[test]
@@ -86,12 +84,9 @@ fn test_indexes_second_page() {
 // }
 
 #[component]
-pub fn Table<T>(
-    data: T, 
-    #[prop(optional)]
-    pagination: Option<Pagination>) -> impl IntoView
-where 
-    T: TableData
+pub fn Table<T>(data: T, #[prop(optional)] pagination: Option<Pagination>) -> impl IntoView
+where
+    T: TableData,
 {
     let columns = data.get_columns();
     let rows = data.get_rows();
@@ -116,9 +111,9 @@ where
                                 let cell_content = match linkable_cols.get(&(index as i32)) {
                                     Some(value) => {
                                         let link_href = value.replace(":token", cell);
-                                        view! { <div class=cell_ellipsis_class><a class=format!("{} block hover:text-granola-orange hover:underline hover:decoration-2",cell_ellipsis_class) href={link_href}>{cell}</a></div> } 
+                                        view! { <div class=cell_ellipsis_class><a class=format!("{} block hover:text-granola-orange hover:underline hover:decoration-2",cell_ellipsis_class) href={link_href}>{cell}</a></div> }
                                     }
-                                    None => view! { <div class=cell_ellipsis_class>{cell}</div> }, 
+                                    None => view! { <div class=cell_ellipsis_class>{cell}</div> },
                                 };
                                 let cell_class = format!("{} {} first:pl-8 pl-2 text-table-row-text-color font-medium text-sm text-left whitespace-nowrap", cell_padding_class, cell_ellipsis_class);
                                 view! {
@@ -148,22 +143,21 @@ where
                                 <span class="text-md m-4 underline">{pg.current_page}</span>
                                 <button on:click=move |_| (pg.next_page)()>"Next Page>>"</button>
                             </span>
-                        </div>        
+                        </div>
                     },
                     None => view! { <div/> }
                 }
             }
         }
-        
+
     }
 }
 
-
 #[component]
 pub fn EmptyTable(message: String) -> impl IntoView {
-    view! { 
+    view! {
         <div class="flex text-base text-slate-400 items-center justify-center p-8">
-            <NoIcon /> 
+            <NoIcon />
             <span class="text-sm">{message}</span>
         </div>
     }
@@ -173,7 +167,7 @@ pub fn EmptyTable(message: String) -> impl IntoView {
 pub fn TableSection(section_heading: String, children: Children) -> impl IntoView {
     view! {
         <section class="md:col-start-2 md:col-end-3 md:rounded-lg bg-table-section mb-4">
-            <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-start items-center">{section_heading}</h1>    
+            <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-start items-center">{section_heading}</h1>
             {children()}
         </section>
     }
@@ -190,7 +184,6 @@ pub fn TableLink(href: String, text: String, children: Children) -> impl IntoVie
             </a>
         </div>
     }.into_view()
-    
 }
 
 pub enum SummaryItemKind {
@@ -202,7 +195,12 @@ pub enum SummaryItemKind {
 }
 
 #[component]
-pub fn SummaryItem(label: String, value: SummaryItemKind, id: String, #[prop(optional)] imgsrc: String) -> impl IntoView {
+pub fn SummaryItem(
+    label: String,
+    value: SummaryItemKind,
+    id: String,
+    #[prop(optional)] imgsrc: String,
+) -> impl IntoView {
     view! {
         <div class="h-24 w-96 p-4 max-w-full grid gap-1 grid-cols-[100px_auto] bg-white rounded-md">
             <div class="cols-span-1 row-start-1 row-end-3 bg-light-granola-orange rounded-md flex justify-center items-center">

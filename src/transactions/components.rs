@@ -94,7 +94,6 @@ fn TransactionEntry(
     }
 }
 
-
 #[component]
 pub fn TransactionsSection(
     public_key: Option<String>,
@@ -102,12 +101,12 @@ pub fn TransactionsSection(
 ) -> impl IntoView {
     let (pk, _set_public_key) = create_signal(public_key.unwrap_or_default());
 
-    let resource = create_resource(move || pk.get(), move |value| {
-            async move {
-                let limit = 10;
-                load_data(limit, Some(value)).await
-            }
-        }
+    let resource = create_resource(
+        move || pk.get(),
+        move |value| async move {
+            let limit = 10;
+            load_data(limit, Some(value)).await
+        },
     );
 
     view! {
@@ -116,13 +115,13 @@ pub fn TransactionsSection(
                 <TableSection section_heading="Transactions".to_owned()>
                     {match data.transactions.len() {
                         0 => view! { <EmptyTable message="This public key has no transactions".to_string() /> },
-                        _ => view! { 
+                        _ => view! {
                             <Table data=data.transactions/>
                             {match with_link {
                                 false => view! {<div />}.into_view(),
                                 true => {
                                     let pk_inner = pk.get();
-                                    let link = match pk_inner.len() { 
+                                    let link = match pk_inner.len() {
                                         0 => "/transactions".to_string(),
                                         _ => format!("/transactions?account={}", pk_inner)
                                     };

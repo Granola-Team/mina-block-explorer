@@ -23,7 +23,6 @@ impl AccountBalance {
     }
 }
 
-
 #[derive(Debug, Deserialize, Serialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct AccountSummary {

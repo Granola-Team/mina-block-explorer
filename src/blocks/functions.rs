@@ -14,27 +14,36 @@ pub fn get_date_time(block: &BlocksQueryBlocks) -> String {
 }
 
 pub fn get_creator_account(block: &BlocksQueryBlocks) -> String {
-    block.creator_account.as_ref().map_or_else(String::new, |o| {
-        o.public_key.as_ref().map_or_else(String::new, |o1| o1.to_string())
-    })
+    block
+        .creator_account
+        .as_ref()
+        .map_or_else(String::new, |o| {
+            o.public_key
+                .as_ref()
+                .map_or_else(String::new, |o1| o1.to_string())
+        })
 }
 
 pub fn get_coinbase(block: &BlocksQueryBlocks) -> String {
     block.transactions.as_ref().map_or_else(String::new, |o| {
-        o.coinbase.as_ref().map_or_else(String::new, |o1| o1.to_string())
+        o.coinbase
+            .as_ref()
+            .map_or_else(String::new, |o1| o1.to_string())
     })
 }
 
 pub fn get_transaction_count(block: &BlocksQueryBlocks) -> String {
     block.transactions.as_ref().map_or_else(String::new, |o| {
-        o.user_commands.as_ref()
+        o.user_commands
+            .as_ref()
             .map_or_else(String::new, |o1| o1.len().to_string())
     })
 }
 
 pub fn get_snark_job_count(block: &BlocksQueryBlocks) -> String {
     block
-        .snark_jobs.as_ref()
+        .snark_jobs
+        .as_ref()
         .map_or_else(String::new, |o| o.len().to_string())
 }
 
@@ -47,14 +56,21 @@ pub fn get_slot(block: &BlocksQueryBlocks) -> String {
 }
 
 pub fn get_state_hash(block: &BlocksQueryBlocks) -> String {
-    block.state_hash.as_ref().map_or_else(String::new, |o| o.to_string())
+    block
+        .state_hash
+        .as_ref()
+        .map_or_else(String::new, |o| o.to_string())
 }
 
 pub fn get_coinbase_receiver(block: &BlocksQueryBlocks) -> String {
     block.transactions.as_ref().map_or_else(String::new, |o| {
-        o.coinbase_receiver_account.as_ref().map_or_else(String::new, |o| {
-            o.public_key.as_ref().map_or_else(String::new, |o| o.to_string())
-        })
+        o.coinbase_receiver_account
+            .as_ref()
+            .map_or_else(String::new, |o| {
+                o.public_key
+                    .as_ref()
+                    .map_or_else(String::new, |o| o.to_string())
+            })
     })
 }
 

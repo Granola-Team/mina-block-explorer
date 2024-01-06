@@ -1,5 +1,5 @@
-use serde::{Deserialize, Serialize};
 use graphql_client::Error;
+use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub enum MyError {

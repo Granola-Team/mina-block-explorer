@@ -28,24 +28,16 @@ pub async fn load_data(id: &str) -> Result<AccountResponse, MyError> {
     }
 }
 
-pub fn get_summary_items(account: AccountSummary) -> Vec<(String, String, bool)>{
+pub fn get_summary_items(account: AccountSummary) -> Vec<(String, String, bool)> {
     vec![
-        (String::from("Balance"), account.balance.total ,true),
-        (String::from("Nonce"), account.nonce.to_string(),true),
+        (String::from("Balance"), account.balance.total, true),
+        (String::from("Nonce"), account.nonce.to_string(), true),
         (
             String::from("Receipt Chain Hash"),
             account.receipt_chain_hash,
-            false
+            false,
         ),
-        (
-            String::from("Delegate"),
-            account.delegate,
-            false
-        ),
-        (
-            String::from("Voting For"),
-            account.voting_for,
-            false
-        ),
+        (String::from("Delegate"), account.delegate, false),
+        (String::from("Voting For"), account.voting_for, false),
     ]
 }

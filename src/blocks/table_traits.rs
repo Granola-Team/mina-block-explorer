@@ -56,19 +56,22 @@ impl TableData for SummaryPageBlocksQueryBlocks {
     }
 
     fn get_rows(&self) -> Vec<Vec<String>> {
-        self.0.iter()
+        self.0
+            .iter()
             .filter_map(|block_opt| block_opt.as_ref())
-            .map(|block| vec![
-                get_block_height(block),
-                get_date_time(block),
-                get_creator_account(block),
-                get_coinbase(block),
-                get_transaction_count(block),
-                get_snark_job_count(block),
-                get_slot(block),
-                get_state_hash(block),
-                get_coinbase_receiver(block),
-            ])
+            .map(|block| {
+                vec![
+                    get_block_height(block),
+                    get_date_time(block),
+                    get_creator_account(block),
+                    get_coinbase(block),
+                    get_transaction_count(block),
+                    get_snark_job_count(block),
+                    get_slot(block),
+                    get_state_hash(block),
+                    get_coinbase_receiver(block),
+                ]
+            })
             .collect()
     }
 
@@ -79,4 +82,3 @@ impl TableData for SummaryPageBlocksQueryBlocks {
         linkcols
     }
 }
-

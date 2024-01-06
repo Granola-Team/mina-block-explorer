@@ -1,20 +1,22 @@
 use leptos::*;
 
-use crate::accounts::components::*;
-use crate::icons::*;
 use super::functions::load_data;
-use super::graphql::snarks_query::SnarksQuerySnarks;
 use super::functions::*;
-use crate::common::functions::*;
+use super::graphql::snarks_query::SnarksQuerySnarks;
+use crate::accounts::components::*;
 use crate::common::components::*;
+use crate::common::functions::*;
+use crate::icons::*;
 
 #[component]
 pub fn AccountDialogSnarkJobSection(public_key: Option<String>) -> impl IntoView {
-
-    let resource = create_resource(|| (), move |_| {
-        let public_key_inner = public_key.clone();
-        async move { load_data(3,public_key_inner).await }
-    });
+    let resource = create_resource(
+        || (),
+        move |_| {
+            let public_key_inner = public_key.clone();
+            async move { load_data(3, public_key_inner).await }
+        },
+    );
 
     view! {
         {move || match resource.get() {
@@ -32,7 +34,7 @@ pub fn AccountDialogSnarkJobSection(public_key: Option<String>) -> impl IntoView
                                                 let date_time = get_snark_date_time(&snark);
                                                 let status = get_status(&date_time);
                                                 view! {
-                                                    <AccountDialogSectionEntryHeader 
+                                                    <AccountDialogSectionEntryHeader
                                                         status=status
                                                         date=date_time
                                                         moments_ago=moments_ago/>
@@ -41,7 +43,7 @@ pub fn AccountDialogSnarkJobSection(public_key: Option<String>) -> impl IntoView
                                                 }.into_view()
                                             },
                                             None => view! { <span /> }.into_view(),
-                                        }       
+                                        }
                                     }).collect::<Vec<_>>()}
                             }.into_view()
                         }
@@ -50,13 +52,13 @@ pub fn AccountDialogSnarkJobSection(public_key: Option<String>) -> impl IntoView
             },
             _ => view! { <span /> }.into_view(),
         }}
-        
+
     }
 }
 
 struct SubEntry {
     label: String,
-    value: String
+    value: String,
 }
 
 #[component]
@@ -64,12 +66,14 @@ fn AccountDialogSnarkJobEntry(snark: SnarksQuerySnarks) -> impl IntoView {
     let sub_entries = vec![
         SubEntry {
             label: String::from("Hash"),
-            value: snark.block.map_or_else(String::new, |b| b.state_hash.map_or_else(String::new, |sh| sh.to_string()))
+            value: snark.block.map_or_else(String::new, |b| {
+                b.state_hash.map_or_else(String::new, |sh| sh.to_string())
+            }),
         },
         SubEntry {
             label: String::from("Fees Earned"),
-            value: snark.fee.map_or_else(String::new, |o| o.to_string())
-        }
+            value: snark.fee.map_or_else(String::new, |o| o.to_string()),
+        },
     ];
     view! {
         <div class="w-full flex justify-between">
@@ -77,24 +81,25 @@ fn AccountDialogSnarkJobEntry(snark: SnarksQuerySnarks) -> impl IntoView {
                 .map(|se| view! {
                     <AccountDialogSectionSubEntry label=se.label value=se.value />
                 })
-            .collect::<Vec<_>>()}            
+            .collect::<Vec<_>>()}
         </div>
-    }.into_view()
+    }
+    .into_view()
 }
 
 #[component]
 pub fn AccountOverviewSnarkJobTable(public_key: Option<String>) -> impl IntoView {
+    let pk = public_key.clone();
+    let resource = create_resource(
+        || (),
+        move |_| {
+            let public_key_inner = public_key.clone();
+            async move { load_data(5, public_key_inner).await }
+        },
+    );
 
-    let pk=public_key.clone();
-    let resource = create_resource(|| (), move |_| {
-        let public_key_inner = public_key.clone();
-        async move { load_data(5,public_key_inner).await }
-    });
-
-    
     let (href, _set_href) = create_signal(
-        pk
-            .as_ref()
+        pk.as_ref()
             .map(|pk| format!("/snarks?account={}", pk))
             .unwrap_or_else(|| "/snarks".to_string()),
     );
@@ -105,8 +110,8 @@ pub fn AccountOverviewSnarkJobTable(public_key: Option<String>) -> impl IntoView
                 {
                     match data.snarks.len() {
                         0 => view! { <EmptyTable message="This public key has not completed any SNARK work".to_string() /> },
-                        _ => view! { 
-                            <Table data=data.snarks /> 
+                        _ => view! {
+                            <Table data=data.snarks />
                             <TableLink href=href.get() text="See all snark jobs".to_string()>
                                 <SnarkIcon />
                             </TableLink>
@@ -116,6 +121,6 @@ pub fn AccountOverviewSnarkJobTable(public_key: Option<String>) -> impl IntoView
             },
             _ => view! { <span /> }.into_view(),
         }}
-        
+
     }
 }

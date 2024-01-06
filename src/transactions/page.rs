@@ -9,7 +9,7 @@ pub fn TransactionsPage() -> impl IntoView {
 
     let binding = query_params_map.get();
     let public_key = binding.get("account");
-    
+
     view! {
         <TransactionsSection public_key=public_key.cloned()/>
     }

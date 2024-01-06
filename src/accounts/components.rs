@@ -64,7 +64,7 @@ pub fn AccountDialogSectionSubEntry(label: String, value: String) -> impl IntoVi
                 <span class="text-xs text-slate-400 w-1/4">{label}:</span>
                 <span class="text-xs overflow-hidden text-ellipsis w-3/4">{value}</span>
             </div>
-        }
+        },
     }
 }
 

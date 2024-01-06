@@ -6,8 +6,8 @@ use super::graphql::blocks_query::BlocksQueryBlocks;
 use super::models::*;
 use crate::accounts::components::*;
 use crate::common::components::EmptyTable;
-use crate::common::functions::*;
 use crate::common::components::*;
+use crate::common::functions::*;
 use crate::icons::*;
 
 #[component]
@@ -89,13 +89,15 @@ fn AccountDialogBlockEntry(block: BlocksQueryBlocks) -> impl IntoView {
 
 #[component]
 pub fn BlocksSection() -> impl IntoView {
-
     let query_params_map = use_query_map();
 
-    let resource = create_resource(move || query_params_map.get(), |value| async move { 
-        let public_key = value.get("account");
-        load_data(10, public_key.cloned()).await 
-    });
+    let resource = create_resource(
+        move || query_params_map.get(),
+        |value| async move {
+            let public_key = value.get("account");
+            load_data(10, public_key.cloned()).await
+        },
+    );
 
     view! {
         {move || match resource.get() {
@@ -127,20 +129,19 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
     }
 }
 
-
 #[component]
 pub fn AccountOverviewBlocksTable(public_key: Option<String>) -> impl IntoView {
-
     let pk = public_key.clone();
-    let resource = create_resource(|| (), move |_| {
-        let public_key_inner = public_key.clone();
-        async move { load_data(5,public_key_inner).await }
-    });
-
+    let resource = create_resource(
+        || (),
+        move |_| {
+            let public_key_inner = public_key.clone();
+            async move { load_data(5, public_key_inner).await }
+        },
+    );
 
     let (href, _set_href) = create_signal(
-        pk
-            .as_ref()
+        pk.as_ref()
             .map(|pk| format!("/blocks?account={}", pk))
             .unwrap_or_else(|| "/blocks".to_string()),
     );
@@ -151,8 +152,8 @@ pub fn AccountOverviewBlocksTable(public_key: Option<String>) -> impl IntoView {
                 {
                     match data.blocks.len() {
                         0 => view! { <EmptyTable message="This public key has no block production".to_string() /> },
-                        _ => view! { 
-                            <Table data=data.blocks /> 
+                        _ => view! {
+                            <Table data=data.blocks />
                             <TableLink href=href.get() text="See all block production".to_string()>
                                 <BlockIcon />
                             </TableLink>
@@ -162,8 +163,6 @@ pub fn AccountOverviewBlocksTable(public_key: Option<String>) -> impl IntoView {
             },
             _ => view! { <span /> }.into_view(),
         }}
-        
+
     }
 }
-
-

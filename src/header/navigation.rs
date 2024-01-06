@@ -1,17 +1,16 @@
+use crate::icons::*;
 use leptos::*;
 use leptos_router::use_location;
-use crate::icons::*;
 
 enum Icon {
     Home,
     Blocks,
     Transactions,
-    SNARKs
+    SNARKs,
 }
 
 #[component]
 pub fn Header() -> impl IntoView {
-
     let location = use_location();
 
     let (open, set_open) = create_signal(false);
@@ -27,7 +26,7 @@ pub fn Header() -> impl IntoView {
     let base_class = "md:col-start-3 md:col-end-4 md:[all:unset] bg-main-background scale-y-0 transition-transform origin-top w-screen text-left absolute top-full left-0";
     let base_link_class = "flex font-bold text-sm uppercase hover:text-granola-orange hover:underline hover:decoration-2";
     let open_class = "scale-y-100";
-    
+
     view! {
         <header class="z-10 bg-main-background flex justify-center items-center md:grid md:grid-cols-[10%_20%_60%_10%] md:col-start-2 md:col-end-3 fixed top-0 left-0 w-screen h-16">
             <div class="md:col-start-2 md:col-end-3 flex items-center justify-start">

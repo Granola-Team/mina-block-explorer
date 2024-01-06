@@ -1,15 +1,15 @@
 use leptos::*;
-mod root;
-mod summary;
+mod accounts;
 mod blocks;
-mod transactions;
+mod common;
+mod footer;
+mod header;
+mod icons;
+mod root;
 mod snarks;
 mod stakes_page;
-mod accounts;
-mod header;
-mod footer;
-mod icons;
-mod common;
+mod summary;
+mod transactions;
 
 use root::Root;
 

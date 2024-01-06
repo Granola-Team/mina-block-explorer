@@ -38,7 +38,6 @@ pub fn SupportIcon(#[prop(default = 20)] width: i8) -> impl IntoView {
     }
 }
 
-
 #[component]
 pub fn HomeIcon(#[prop(default = 20)] width: i8) -> impl IntoView {
     view! {
@@ -56,7 +55,6 @@ pub fn BlockIcon(#[prop(default = 20)] width: i8) -> impl IntoView {
         </svg>
     }
 }
-
 
 #[component]
 pub fn AccountIcon(#[prop(default = 20)] width: i8) -> impl IntoView {
@@ -85,7 +83,6 @@ pub fn SnarkIcon(#[prop(default = 20)] width: i8) -> impl IntoView {
     }
 }
 
-
 #[component]
 pub fn StakingIcon(#[prop(default = 20)] width: i8) -> impl IntoView {
     view! {
@@ -112,5 +109,3 @@ pub fn ChevronRight(#[prop(default = 20)] width: i8) -> impl IntoView {
         </svg>
     }
 }
-
-
