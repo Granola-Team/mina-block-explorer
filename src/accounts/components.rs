@@ -4,13 +4,15 @@ use super::functions::*;
 use super::models::*;
 use crate::blocks::components::AccountDialogBlocksSection;
 use crate::common::models::*;
+use crate::common::spotlight::*;
+use crate::icons::*;
 use crate::snarks::components::AccountDialogSnarkJobSection;
 use crate::transactions::components::AccountDialogTransactionSection;
 
 #[component]
 pub fn AccountDialog(path_base: String, account: AccountSummary) -> impl IntoView {
     let id = account.public_key.clone();
-    let summary_items = get_summary_items(account.clone());
+    let summary_items = get_spotlight_data(account.clone());
     let public_key = account.public_key.clone();
 
     view! {
@@ -22,7 +24,9 @@ pub fn AccountDialog(path_base: String, account: AccountSummary) -> impl IntoVie
                         <a href=path_base>X</a>
                     </button>
                 </div>
-                <AccountSummarySubsection summary_items=summary_items public_key=account.public_key username=account.username />
+                <Spotlight summary_items=summary_items public_key=account.public_key username=account.username>
+                    <WalletIcon width=40/>
+                </Spotlight>
             </section>
             <div class="overflow-y-auto flex flex-col pb-20">
                 <AccountDialogTransactionSection limit=3 account_id=public_key.clone() />
@@ -112,59 +116,5 @@ pub fn AccountDialogSectionEntryHeader(
 pub fn AccountDialogEntryDivider() -> impl IntoView {
     view! {
         <div class="border-b border-slate-100 my-2 h-1 w-full" />
-    }
-}
-
-#[component]
-pub fn AccountSummarySubsection(
-    summary_items: Vec<(String, String, bool)>,
-    username: String,
-    public_key: String,
-) -> impl IntoView {
-    view! {
-        <div class="@3xl:grid @3xl:grid-cols-[10rem_5rem_auto_10rem] @3xl:grid-rows-[2.5rem_2.5rem] @3xl:gap-x-[2rem] @3xl:h-auto flex flex-col items-center mt-16 bg-light-granola-orange rounded-3xl h-36">
-            <div class="@3xl:col-start-2 @3xl:col-end-3 @3xl:row-start-1 @3xl:row-end-2 w-20 h-20 rounded-full bg-main-background flex justify-center items-center translate-y-[-25%]">
-                <img src="/img/account_balance_wallet.svg" alt="account balance wallet logo"/>
-            </div>
-            <div class="@3xl:col-start-3 text-granola-orange text-base text-bold text-ellipsis w-10/12 overflow-hidden text-center @3xl:text-left">
-                {public_key}
-            </div>
-            <div class="@3xl:col-start-3 @3xl:row-start-2 text-slate-400 text-sm">
-                "Username: "{username}
-            </div>
-        </div>
-        <div class="@3xl:grid @3xl:grid-cols-[10rem_auto_10rem] bg-white rounded-xl flex flex-col items-stretch mt-8 p-4">
-            {summary_items.into_iter()
-                .map(|(label, value, has_pill)| view! {
-                    <OverviewEntry label=label.to_owned() value=value.to_owned() has_pill=has_pill />
-                })
-                .collect::<Vec<_>>()}
-
-        </div>
-    }
-}
-
-#[component]
-fn OverviewEntry(label: String, value: String, has_pill: bool) -> impl IntoView {
-    let value_class_str_base = "py-1 my-1 text-sm";
-
-    let value_class_str = match has_pill {
-        true => format!(
-            "{} {}",
-            value_class_str_base.to_owned(),
-            "p-1 rounded-full bg-light-granola-orange"
-        ),
-        false => format!(
-            "{} {}",
-            value_class_str_base.to_owned(),
-            "w-3/4 text-ellipsis overflow-hidden"
-        ),
-    };
-
-    view! {
-        <div class="@3xl:col-start-2 @3xl:col-end-3 flex flex-col items-start md:flex-row md:items-baseline md:justify-start">
-            <span class="w-1/4 text-slate-400 text-sm whitespace-nowrap">{label}:</span>
-            <span class=value_class_str>{value}</span>
-        </div>
     }
 }

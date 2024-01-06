@@ -1,7 +1,7 @@
 use leptos::*;
 use leptos_router::*;
 
-use crate::common::models::MyError;
+use crate::common::{models::MyError, spotlight::SpotlightEntry};
 
 use super::models::*;
 
@@ -28,16 +28,32 @@ pub async fn load_data(id: &str) -> Result<AccountResponse, MyError> {
     }
 }
 
-pub fn get_summary_items(account: AccountSummary) -> Vec<(String, String, bool)> {
+pub fn get_spotlight_data(account: AccountSummary) -> Vec<SpotlightEntry> {
     vec![
-        (String::from("Balance"), account.balance.total, true),
-        (String::from("Nonce"), account.nonce.to_string(), true),
-        (
-            String::from("Receipt Chain Hash"),
-            account.receipt_chain_hash,
-            false,
-        ),
-        (String::from("Delegate"), account.delegate, false),
-        (String::from("Voting For"), account.voting_for, false),
+        SpotlightEntry {
+            label: String::from("Balance"),
+            value: account.balance.total,
+            is_pill: true,
+        },
+        SpotlightEntry {
+            label: String::from("Nonce"),
+            value: account.nonce.to_string(),
+            is_pill: true,
+        },
+        SpotlightEntry {
+            label: String::from("Receipt Chain Hash"),
+            value: account.receipt_chain_hash,
+            is_pill: false,
+        },
+        SpotlightEntry {
+            label: String::from("Delegate"),
+            value: account.delegate,
+            is_pill: false,
+        },
+        SpotlightEntry {
+            label: String::from("Voting For"),
+            value: account.voting_for,
+            is_pill: false,
+        },
     ]
 }
