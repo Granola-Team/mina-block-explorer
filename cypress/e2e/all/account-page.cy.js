@@ -6,11 +6,20 @@ describe('account page', () => {
         });
     });
 
-    ["See all transactions", "See all snark jobs", "See all block production"].forEach(text => {
-        it(`has links to ${text}`,() => {
+    [{
+        dest:"transactions",
+        href:"/transactions?account=B62qq3TQ8AP7MFYPVtMx5tZGF3kWLJukfwG1A1RGvaBW1jfTPTkDBW6"
+    }, {
+        dest:"snarks",
+        href:"/snarks?account=B62qq3TQ8AP7MFYPVtMx5tZGF3kWLJukfwG1A1RGvaBW1jfTPTkDBW6"
+    }, {
+        dest:"blocks",
+        href:"/blocks?account=B62qq3TQ8AP7MFYPVtMx5tZGF3kWLJukfwG1A1RGvaBW1jfTPTkDBW6"
+    }].forEach(link => {
+        it(`has links to ${link.dest} page`,() => {
             cy.visit('/accounts/B62qq3TQ8AP7MFYPVtMx5tZGF3kWLJukfwG1A1RGvaBW1jfTPTkDBW6');
-            let link = cy.get('a').contains(text, {timeout: 60000})
-            link.parent().matchImageSnapshot(`${text}-link`);
+            let el = cy.get(`a[href="${link.href}"]`, {timeout: 60000})
+            el.matchImageSnapshot(`${link.dest}-link`);
         })
     })
 })
