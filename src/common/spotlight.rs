@@ -2,7 +2,7 @@ use leptos::*;
 
 pub struct SpotlightEntry {
     pub label: String,
-    pub value: String,
+    pub value: HtmlElement<html::AnyElement>,
     pub is_pill: bool,
 }
 
