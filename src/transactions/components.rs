@@ -5,6 +5,7 @@ use crate::accounts::components::*;
 use crate::common::components::*;
 use crate::common::functions::*;
 use crate::common::models::*;
+use crate::icons::*;
 
 #[component]
 pub fn AccountDialogTransactionSection(limit: i32, account_id: String) -> impl IntoView {
@@ -125,7 +126,11 @@ pub fn TransactionsSection(
                                         0 => "/transactions".to_string(),
                                         _ => format!("/transactions?account={}", pk_inner)
                                     };
-                                    view! {<TableLink href=link text="See all transactions".to_string() />}
+                                    view! {
+                                        <TableLink href=link text="See all transactions".to_string() >
+                                            <TransactionIcon />
+                                        </TableLink>
+                                    }
                                 }.into_view()
                             }}
                         }.into_view()

@@ -1,6 +1,7 @@
 use leptos::*;
 
 use crate::accounts::components::*;
+use crate::icons::*;
 use super::functions::load_data;
 use super::graphql::snarks_query::SnarksQuerySnarks;
 use super::functions::*;
@@ -106,7 +107,9 @@ pub fn AccountOverviewSnarkJobTable(public_key: Option<String>) -> impl IntoView
                         0 => view! { <EmptyTable message="This public key has not completed any SNARK work".to_string() /> },
                         _ => view! { 
                             <Table data=data.snarks /> 
-                            <TableLink href=href.get() text="See all snark jobs".to_string()/>
+                            <TableLink href=href.get() text="See all snark jobs".to_string()>
+                                <SnarkIcon />
+                            </TableLink>
                         }.into_view()
                     }
                 }
