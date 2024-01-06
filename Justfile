@@ -39,9 +39,9 @@ test-unit: build
   cargo nextest run
 
 lint: && audit disallow-unused-cargo-deps
+  cargo fmt --check
   cargo clippy -- -D warnings
   cargo clippy --all-targets --all-features -- -D warnings
-  cargo check
 
 test-ci: lint test-unit test-e2e
 
