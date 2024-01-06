@@ -1,7 +1,7 @@
 use leptos::*;
 use leptos_router::*;
 
-use crate::common::{models::MyError, spotlight::SpotlightEntry, functions::*};
+use crate::common::{models::MyError, spotlight::SpotlightEntry};
 
 use super::models::*;
 
@@ -32,27 +32,27 @@ pub fn get_spotlight_data(account: AccountSummary) -> Vec<SpotlightEntry> {
     vec![
         SpotlightEntry {
             label: String::from("Balance"),
-            value: convert_to_span(account.balance.total),
+            value: account.balance.total,
             is_pill: true,
         },
         SpotlightEntry {
             label: String::from("Nonce"),
-            value: convert_to_span(account.nonce.to_string()),
+            value: account.nonce.to_string(),
             is_pill: true,
         },
         SpotlightEntry {
             label: String::from("Receipt Chain Hash"),
-            value: convert_to_span(account.receipt_chain_hash),
+            value: account.receipt_chain_hash,
             is_pill: false,
         },
         SpotlightEntry {
             label: String::from("Delegate"),
-            value: convert_to_span(account.delegate),
+            value: account.delegate,
             is_pill: false,
         },
         SpotlightEntry {
             label: String::from("Voting For"),
-            value: convert_to_span(account.voting_for),
+            value: account.voting_for,
             is_pill: false,
         },
     ]
