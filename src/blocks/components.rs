@@ -8,6 +8,7 @@ use crate::accounts::components::*;
 use crate::common::components::EmptyTable;
 use crate::common::functions::*;
 use crate::common::components::*;
+use crate::icons::*;
 
 #[component]
 pub fn AccountDialogBlocksSection(public_key: Option<String>) -> impl IntoView {
@@ -152,7 +153,9 @@ pub fn AccountOverviewBlocksTable(public_key: Option<String>) -> impl IntoView {
                         0 => view! { <EmptyTable message="This public key has no block production".to_string() /> },
                         _ => view! { 
                             <Table data=data.blocks /> 
-                            <TableLink href=href.get() text="See all block production".to_string()/>
+                            <TableLink href=href.get() text="See all block production".to_string()>
+                                <BlockIcon />
+                            </TableLink>
                         }.into_view()
                     }
                 }
