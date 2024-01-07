@@ -77,6 +77,7 @@ pub fn get_coinbase_receiver(block: &BlocksQueryBlocks) -> String {
 pub async fn load_data(
     limit: i64,
     public_key: Option<String>,
+    state_hash: Option<String>
 ) -> Result<blocks_query::ResponseData, MyError> {
     let url = "https://graphql.minaexplorer.com";
     let variables = blocks_query::Variables {
@@ -84,6 +85,7 @@ pub async fn load_data(
         limit: Some(limit),
         query: blocks_query::BlockQueryInput {
             canonical: Some(true),
+            state_hash,
             creator_account: Some(blocks_query::BlockCreatorAccountQueryInput {
                 public_key,
                 ..Default::default()
