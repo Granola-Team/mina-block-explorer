@@ -43,20 +43,25 @@ pub fn Spotlight(
 
 #[component]
 fn SpotlightRow(entry: SpotlightEntry) -> impl IntoView {
-    let value_class_str_base = "py-1 my-1 text-sm";
+    let value_class_str_base = "p-1 my-1 text-sm";
+    let pill_class_str_base = format!("{} {}",value_class_str_base, "px-4 rounded-full");
 
     let value_class_str = match entry.pill_variant {
         Some(SpotlightPillVariant::Green) => format!(
             "{} {}",
-            value_class_str_base.to_owned(),
-            "p-1 rounded-full bg-light-granola-orange"
+            pill_class_str_base.to_owned(),
+            "bg-pill-green"
         ),
         Some(SpotlightPillVariant::Blue) => format!(
+            "{} {}",
+            pill_class_str_base.to_owned(),
+            "bg-pill-blue"
+        ),
+        None => format!(
             "{} {}",
             value_class_str_base.to_owned(),
             "w-3/4 text-ellipsis overflow-hidden"
         ),
-        None => String::new()
     };
 
     view! {

@@ -20,6 +20,8 @@ module.exports = {
             'table-row-fill': '#FFFFFF',
             'table-row-text-color': '#25213B',
             'table-header-text-color': '#25213B',
+            'pill-green': '#56D05F',
+            'pill-blue': '#14DBF6'
           },
         extend: {},
     },
