@@ -14,7 +14,7 @@ pub struct SpotlightEntry {
 #[component]
 pub fn Spotlight(
     summary_items: Vec<SpotlightEntry>,
-    username: String,
+    meta: String,
     id: String,
     children: Children,
 ) -> impl IntoView {
@@ -27,7 +27,7 @@ pub fn Spotlight(
                 {id}
             </div>
             <div class="@3xl:col-start-3 @3xl:row-start-2 text-slate-400 text-sm">
-                "Username: "{username}
+                {meta}
             </div>
         </div>
         <div class="@3xl:grid @3xl:grid-cols-[10rem_auto_10rem] bg-white rounded-xl flex flex-col items-stretch mt-8 p-4">
