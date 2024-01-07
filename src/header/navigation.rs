@@ -41,7 +41,7 @@ pub fn Header() -> impl IntoView {
                             let pathname = move || location.pathname.get();
                             view! {
                                 <li class="md:mb-0 mb-5 mx-2">
-                                    <a on:click=toggle class={move || format!("{} {}",base_link_class, if pathname() == link {"text-granola-orange"} else {"text-white"})} href=link>
+                                    <a on:click=toggle class={move || format!("{} {}",base_link_class, if pathname().contains(&link) {"text-granola-orange"} else {"text-white"})} href=link>
                                         {match icon {
                                             Icon::Home => view! { <HomeIcon /> },
                                             Icon::Blocks => view! { <BlockIcon /> },
