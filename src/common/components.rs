@@ -206,3 +206,17 @@ pub fn SummaryItem(
         </div>
     }
 }
+
+#[component]
+pub fn ErrorView<E: std::fmt::Debug>(err: E) -> impl IntoView {
+    view! {
+        <div class="error">
+            { format!("Error: {:#?}", err) }
+        </div>
+    }
+}
+
+#[component]
+pub fn NullView() -> impl IntoView {
+    view! {}
+}

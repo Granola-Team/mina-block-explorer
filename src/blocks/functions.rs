@@ -62,6 +62,68 @@ pub fn get_state_hash(block: &BlocksQueryBlocks) -> String {
         .map_or_else(String::new, |o| o.to_string())
 }
 
+pub fn get_snarked_ledger_hash(block: &BlocksQueryBlocks) -> String {
+    block.protocol_state
+        .as_ref()
+        .and_then(|o| o.blockchain_state.as_ref())
+        .and_then(|o1| o1.snarked_ledger_hash.as_ref())
+        .map_or_else(|| "".to_string(), ToString::to_string)
+}
+
+pub fn get_winning_account(block: &BlocksQueryBlocks) -> String {
+    block.winner_account
+        .as_ref()
+        .and_then(|o| o.public_key.as_ref())
+        .map_or_else(|| "".to_string(), ToString::to_string)
+}
+
+pub fn get_global_slot(block: &BlocksQueryBlocks) -> String {
+    block.protocol_state
+        .as_ref()
+        .and_then(|o| o.consensus_state.as_ref())
+        .and_then(|o| o.slot_since_genesis)
+        .map_or_else(String::new, |o| o.to_string())
+}
+
+pub fn get_epoch(block: &BlocksQueryBlocks) -> String {
+    block.protocol_state
+        .as_ref()
+        .and_then(|o| o.consensus_state.as_ref())
+        .and_then(|o| o.epoch)
+        .map_or_else(String::new, |o| o.to_string())
+}
+
+pub fn get_previous_state_hash(block: &BlocksQueryBlocks) -> String {
+    block.protocol_state
+        .as_ref()
+        .and_then(|o| o.previous_state_hash.as_ref())
+        .map_or_else(String::new, |o| o.to_string())
+}
+
+pub fn get_staged_ledger_hash(block: &BlocksQueryBlocks) -> String {
+    block.protocol_state
+        .as_ref()
+        .and_then(|o| o.blockchain_state.as_ref())
+        .and_then(|o1| o1.staged_ledger_hash.as_ref())
+        .map_or_else(|| "".to_string(), ToString::to_string)
+}
+
+pub fn get_transaction_fees(block: &BlocksQueryBlocks) -> String {
+    block.tx_fees.as_ref().map_or_else(String::new, |o| o.to_string())
+}
+
+pub fn get_snark_fees(block: &BlocksQueryBlocks) -> String {
+    block.snark_fees.as_ref().map_or_else(String::new, |o| o.to_string())
+}
+
+pub fn get_total_currency(block: &BlocksQueryBlocks) -> String {
+    block.protocol_state
+        .as_ref()
+        .and_then(|o| o.consensus_state.as_ref())
+        .and_then(|o| o.total_currency)
+        .map_or_else(String::new, |o| o.to_string())
+}
+
 pub fn get_coinbase_receiver(block: &BlocksQueryBlocks) -> String {
     block.transactions.as_ref().map_or_else(String::new, |o| {
         o.coinbase_receiver_account
@@ -77,7 +139,7 @@ pub fn get_coinbase_receiver(block: &BlocksQueryBlocks) -> String {
 pub async fn load_data(
     limit: i64,
     public_key: Option<String>,
-    state_hash: Option<String>
+    state_hash: Option<String>,
 ) -> Result<blocks_query::ResponseData, MyError> {
     let url = "https://graphql.minaexplorer.com";
     let variables = blocks_query::Variables {

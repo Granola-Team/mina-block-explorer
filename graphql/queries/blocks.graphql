@@ -19,9 +19,22 @@ query BlocksQuery($query: BlockQueryInput!, $limit: Int = 10, $sort_by: BlockSor
       blockHeight
     }
     protocolState {
+      previousStateHash
+      blockchainState {
+        snarkedLedgerHash
+        stagedLedgerHash
+      }
       consensusState {
+        epoch
+        slotSinceGenesis
         slot
+        totalCurrency
       }
     }
+    winnerAccount {
+      publicKey
+    }
+    snarkFees
+    txFees
   }
 }
