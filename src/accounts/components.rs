@@ -24,7 +24,7 @@ pub fn AccountDialog(path_base: String, account: AccountSummary) -> impl IntoVie
                         <a href=path_base>X</a>
                     </button>
                 </div>
-                <Spotlight summary_items=summary_items public_key=account.public_key username=account.username>
+                <Spotlight summary_items=summary_items id=account.public_key username=account.username>
                     <WalletIcon width=40/>
                 </Spotlight>
             </section>

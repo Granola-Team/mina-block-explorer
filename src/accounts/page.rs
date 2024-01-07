@@ -36,7 +36,7 @@ pub fn AccountSummaryPage() -> impl IntoView {
                 view! {
                     <section class="@container md:col-start-2 md:col-end-3 md:rounded-lg bg-table-section p-0 md:p-4 mb-2">
                         <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-start items-center">"Account Overview"</h1>
-                        <Spotlight summary_items=get_spotlight_data(res.account.clone()) username=res.account.username public_key=pk.clone()>
+                        <Spotlight summary_items=get_spotlight_data(res.account.clone()) username=res.account.username id=pk.clone()>
                             <WalletIcon width=40/>
                         </Spotlight>
                     </section>
