@@ -1,4 +1,4 @@
-use crate::icons::*;
+use crate::{icons::*, common::functions::*};
 use leptos::{html::AnyElement, *, web_sys::MouseEvent};
 
 pub trait TableData {
@@ -24,9 +24,9 @@ impl Pagination {
         self.current_page * self.records_per_page
     }
 
-    // fn total_pages(&self) -> usize {
-    //     self.total_records / self.records_per_page + (self.total_records % self.records_per_page).signum()
-    // }
+    fn total_pages(&self) -> usize {
+        self.total_records / self.records_per_page + (self.total_records % self.records_per_page).clamp(0, 1)
+    }
 }
 
 #[test]
@@ -98,6 +98,7 @@ where
     let columns = data.get_columns();
     let rows = data.get_rows();
     let cell_padding_class = "first:pl-8 pl-2";
+    let page_number_class= "text-md m-1 h-6 w-6 flex justify-center items-center font-semibold";
 
     view! {
         <div class="@container w-full overflow-auto">
@@ -132,23 +133,63 @@ where
             move || {
                 let page_data_inner = page_data_clone.clone();
                 match page_data_inner {
-                    Some(pg) => view! {
-                        <div class="grid grid-cols-3 h-12 bg-table-header-fill">
-                            <span class="col-start-1 text-xs flex items-center font-bold pl-8">
-                                {format!("Showing {} to {} of {} records", pg.start_index(), pg.end_index(), pg.total_records)}
-                            </span>
-                            <span class="col-start-2 text-xs font-bold flex items-center justify-center">
-                                <button on:click=move |event: MouseEvent| { pg.prev_page.call(event); }>"<< Previous Page"</button>
-                                <span class="text-md m-4 underline">{pg.current_page}</span>
-                                <button on:click=move |event: MouseEvent| { pg.next_page.call(event); }>"Next Page>>"</button>
-                            </span>
-                        </div>
+                    Some(pg) => {
+                        let x_pages_around = x_surrounding_pages(pg.current_page, pg.total_pages());
+                        let x_preceding_pages = &x_pages_around[0];
+                        let x_following_pages = &x_pages_around[1];
+                        view! {
+                            <div class="grid grid-cols-3 h-12 bg-table-header-fill">
+                                <span class="col-start-1 text-xs flex items-center font-bold pl-8">
+                                    {format!("Showing {} to {} of {} records", pg.start_index(), pg.end_index(), pg.total_records)}
+                                </span>
+                                <span class="col-start-2 text-xs font-bold flex items-center justify-center">
+                                    <PaginationButton on_click=pg.prev_page disabled=x_preceding_pages.len() == 0>
+                                        <ChevronLeft width=16/>
+                                    </PaginationButton>
+                                    {x_preceding_pages.into_iter()
+                                        .map(|p| view! {
+                                            <div class=page_number_class>{*p}</div>        
+                                        })
+                                        .collect::<Vec<_>>()
+                                    }
+                                    <span class=format!("text-white rounded-md bg-granola-orange {}",page_number_class)>{pg.current_page}</span>
+                                    {x_following_pages.into_iter()
+                                        .map(|p| view! {
+                                            <div class=page_number_class>{*p}</div>        
+                                        })
+                                        .collect::<Vec<_>>()
+                                    }
+                                    <PaginationButton on_click=pg.next_page disabled=x_following_pages.len() == 0>
+                                        <ChevronRight width=16/>
+                                    </PaginationButton>
+                                </span>
+                            </div>
+                        }.into_view()
                     },
-                    None => view! { <div/> }
+                    None => view! { <NullView/> }
                 }
             }
         }
 
+    }
+}
+
+#[component]
+fn PaginationButton(children: Children, on_click: Callback<MouseEvent>, disabled: bool) -> impl IntoView {
+    let button_class_base="font-semibold";
+    let button_class = match disabled {
+        true => format!("{} {}", button_class_base, "text-slate-400 hover:cursor-not-allowed"),
+        false => format!("{} {}", button_class_base, "hover:cursor-pointer hover:text-granola-orange hover:underline")
+    };
+    view! {
+        <div class=button_class type="button" on:click=move |event: MouseEvent| {
+            if disabled {
+                return;
+            }
+            on_click.call(event)
+        }>
+            {children()}
+        </div>
     }
 }
 

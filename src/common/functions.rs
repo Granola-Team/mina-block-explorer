@@ -62,6 +62,84 @@ pub fn convert_to_link(data: String, href: String) -> HtmlElement<html::AnyEleme
         ).into()
 }
 
+pub fn x_surrounding_pages(x: usize, l: usize) -> Vec<Vec<usize>> {
+    let mut preceding = Vec::new();
+    let mut following = Vec::new();
+
+    // Start with calculating preceding pages
+    let mut start = if x > 3 { x - 3 } else { 1 };
+    while start < x {
+        preceding.push(start);
+        start += 1;
+    }
+
+    // Calculate following pages, aiming for a total of 6 pages
+    let total_required = 6 - preceding.len();
+    let mut end = x + 1;
+    while end <= l && following.len() < total_required {
+        following.push(end);
+        end += 1;
+    }
+
+    // If following pages are not enough, add more preceding pages if possible
+    if following.len() < total_required {
+        let additional_required = total_required - following.len();
+        start = if x > additional_required + 3 { x - (additional_required + 3) } else { 1 };
+        preceding.clear();
+        while start < x {
+            preceding.push(start);
+            start += 1;
+        }
+    }
+
+    vec![preceding, following]
+}
+
+
+#[cfg(test)]
+mod x_surrounding_pages_tests {
+    use super::*;
+
+    #[test]
+    fn test_middle_range() {
+        let pages = x_surrounding_pages(5, 10);
+        assert_eq!(pages, vec![vec![2, 3, 4], vec![6, 7, 8]]);
+    }
+
+    #[test]
+    fn test_near_start() {
+        let pages = x_surrounding_pages(2, 10);
+        assert_eq!(pages, vec![vec![1], vec![3, 4, 5, 6, 7]]);
+    }
+
+    #[test]
+    fn test_near_end() {
+        let pages = x_surrounding_pages(9, 10);
+        assert_eq!(pages, vec![vec![4, 5, 6, 7, 8], vec![10]]);
+    }
+
+    #[test]
+    fn test_small_range() {
+        let pages = x_surrounding_pages(2, 4);
+        assert_eq!(pages, vec![vec![1], vec![3, 4]]);
+    }
+
+    #[test]
+    fn test_boundary_conditions() {
+        let pages_at_start = x_surrounding_pages(1, 10);
+        assert_eq!(pages_at_start, vec![vec![], vec![2, 3, 4, 5, 6, 7]]);
+
+        let pages_at_end = x_surrounding_pages(10, 10);
+        assert_eq!(pages_at_end, vec![vec![4, 5, 6, 7, 8, 9], vec![]]);
+    }
+
+    #[test]
+    fn test_x_equals_l() {
+        let pages = x_surrounding_pages(5, 5);
+        assert_eq!(pages, vec![vec![1, 2, 3, 4], vec![]]);
+    }
+}
+
 pub fn get_ranges(vec_len: usize, range_size: usize) -> Vec<[usize; 2]> {
     let mut ranges = Vec::new();
     let mut start = 0;
