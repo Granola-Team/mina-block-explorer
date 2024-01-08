@@ -40,7 +40,10 @@ impl TableData for Vec<Option<BlocksQueryBlocks>> {
                     convert_to_span(get_transaction_count(block)),
                     convert_to_span(get_snark_job_count(block)),
                     convert_to_span(get_slot(block)),
-                    convert_to_span(get_state_hash(block)),
+                    convert_to_link(
+                        get_state_hash(block),
+                        format!("/blocks/{}", get_state_hash(block)),
+                    ),
                     convert_to_link(
                         get_coinbase_receiver(block),
                         format!("/blocks/accounts/{}", get_coinbase_receiver(block)),
