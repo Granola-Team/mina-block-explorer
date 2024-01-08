@@ -15,19 +15,20 @@ use crate::transactions::components::*;
 #[component]
 pub fn AccountSummaryPage() -> impl IntoView {
     let memo_params_map = use_params_map();
-    let public_key = memo_params_map
-        .with(|params| params.get("id").cloned())
-        .unwrap_or_default();
 
-    let resource: Resource<(), Result<AccountResponse, MyError>> = {
-        create_resource(
-            || (),
-            move |_| {
-                let public_key_for_async = public_key.clone();
-                async move { load_data(&public_key_for_async).await }
-            },
-        )
-    };
+    let resource = create_resource(
+        move || memo_params_map.get(),
+        |value| async move {
+            if let Some(id) = value.get("id").cloned() {
+                let id_clone = id.clone();
+                load_data(&id_clone).await
+            } else {
+                Err(MyError::ParseError(String::from(
+                    "Could not parse id parameter from url",
+                )))
+            }
+        },
+    );
 
     view! {
         {move || match resource.get() {
