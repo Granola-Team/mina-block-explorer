@@ -60,23 +60,23 @@ where
                                     {format!("Showing {} to {} of {} records", pg.start_index(), pg.end_index(), pg.total_records)}
                                 </span>
                                 <span class="col-start-2 text-xs font-bold flex items-center justify-center my-2">
-                                    <PaginationButton on_click=pg.prev_page disabled=x_preceding_pages.len() == 0>
+                                    <PaginationButton on_click=pg.prev_page disabled=x_preceding_pages.is_empty()>
                                         <ChevronLeft width=16/>
                                     </PaginationButton>
-                                    {x_preceding_pages.into_iter()
+                                    {x_preceding_pages.iter()
                                         .map(|p| view! {
                                             <div class=page_number_class>{*p}</div>
                                         })
                                         .collect::<Vec<_>>()
                                     }
                                     <span class=format!("text-white rounded-md bg-granola-orange {}",page_number_class)>{pg.current_page}</span>
-                                    {x_following_pages.into_iter()
+                                    {x_following_pages.iter()
                                         .map(|p| view! {
                                             <div class=page_number_class>{*p}</div>
                                         })
                                         .collect::<Vec<_>>()
                                     }
-                                    <PaginationButton on_click=pg.next_page disabled=x_following_pages.len() == 0>
+                                    <PaginationButton on_click=pg.next_page disabled=x_following_pages.is_empty()>
                                         <ChevronRight width=16/>
                                     </PaginationButton>
                                 </span>

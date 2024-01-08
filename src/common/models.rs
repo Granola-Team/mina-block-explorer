@@ -46,6 +46,12 @@ impl Pagination {
     }
 }
 
+pub enum PillVariant {
+    Green,
+    Blue,
+    Orange,
+}
+
 #[cfg(test)]
 mod pagination_tests {
     use super::*;
@@ -58,11 +64,11 @@ mod pagination_tests {
             records_per_page: 15,
             total_records: 90,
             next_page: Callback::from(move |_| {
-                let set_current_page_inner = set_page.clone();
+                let set_current_page_inner = set_page;
                 set_current_page_inner.update(|cp| *cp += 1);
             }),
             prev_page: Callback::from(move |_| {
-                let set_current_page_inner = set_page.clone();
+                let set_current_page_inner = set_page;
                 set_current_page_inner.update(|cp| *cp -= 1);
             }),
         };
@@ -78,11 +84,11 @@ mod pagination_tests {
             records_per_page: 15,
             total_records: 90,
             next_page: Callback::from(move |_| {
-                let set_current_page_inner = set_page.clone();
+                let set_current_page_inner = set_page;
                 set_current_page_inner.update(|cp| *cp += 1);
             }),
             prev_page: Callback::from(move |_| {
-                let set_current_page_inner = set_page.clone();
+                let set_current_page_inner = set_page;
                 set_current_page_inner.update(|cp| *cp -= 1);
             }),
         };
@@ -98,11 +104,11 @@ mod pagination_tests {
             records_per_page: 15,
             total_records: 90,
             next_page: Callback::from(move |_| {
-                let set_current_page_inner = set_page.clone();
+                let set_current_page_inner = set_page;
                 set_current_page_inner.update(|cp| *cp += 1);
             }),
             prev_page: Callback::from(move |_| {
-                let set_current_page_inner = set_page.clone();
+                let set_current_page_inner = set_page;
                 set_current_page_inner.update(|cp| *cp -= 1);
             }),
         };
@@ -112,20 +118,14 @@ mod pagination_tests {
             records_per_page: 15,
             total_records: 91,
             next_page: Callback::from(move |_| {
-                let set_current_page_inner = set_page.clone();
+                let set_current_page_inner = set_page;
                 set_current_page_inner.update(|cp| *cp += 1);
             }),
             prev_page: Callback::from(move |_| {
-                let set_current_page_inner = set_page.clone();
+                let set_current_page_inner = set_page;
                 set_current_page_inner.update(|cp| *cp -= 1);
             }),
         };
         assert_eq!(pd.total_pages(), 7);
     }
-}
-
-pub enum PillVariant {
-    Green,
-    Blue,
-    Orange,
 }

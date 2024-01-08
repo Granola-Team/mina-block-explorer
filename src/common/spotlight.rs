@@ -36,7 +36,7 @@ pub fn Spotlight(
                 .map(|chunk| {
                     view! {
                         <div class="@3xl:col-start-2 @3xl:col-end-3 @7xl:flex">
-                            { chunk.get(0) } {chunk.get(1)}
+                            { chunk.first() } {chunk.get(1)}
                         </div>
                     }
                 }) // Wrap each chunk in a view
