@@ -1,5 +1,7 @@
 use leptos::*;
 
+use crate::common::models::*;
+
 pub struct SpotlightEntry {
     pub label: String,
     pub value: String,
@@ -46,7 +48,7 @@ pub fn Spotlight(
 
 #[component]
 fn SpotlightRow(entry: SpotlightEntry) -> impl IntoView {
-    let value_class_str_base = "p-1 my-1 text-sm";
+    let value_class_str_base = "p-1 my-1 text-sm text-white";
     let pill_class_str_base = format!("{} {}",value_class_str_base, "px-4 rounded-full");
 
     let value_class_str = match entry.pill_variant {
@@ -59,6 +61,11 @@ fn SpotlightRow(entry: SpotlightEntry) -> impl IntoView {
             "{} {}",
             pill_class_str_base.to_owned(),
             "bg-pill-blue"
+        ),
+        Some(PillVariant::Orange) => format!(
+            "{} {}",
+            pill_class_str_base.to_owned(),
+            "bg-granola-orange"
         ),
         None => format!(
             "{} {}",

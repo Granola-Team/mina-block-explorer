@@ -1,7 +1,7 @@
 use chrono::{DateTime, Duration, Utc};
 use leptos::*;
 
-use super::{models::Status, spotlight::PillVariant};
+use super::models::*;
 
 // Function to calculate and print the time elapsed since the given timestamp
 pub fn print_time_since(timestamp: &str) -> String {
@@ -48,7 +48,29 @@ pub fn convert_to_span(data: String) -> HtmlElement<html::AnyElement> {
     html::span().child(data).into()
 }
 
-pub fn convert_to_pill(data: String, )
+pub fn convert_to_pill(data: String, pill_variant: PillVariant) -> HtmlElement<html::AnyElement> {
+    let value_class_str_base = "text-white p-1 text-sm";
+    let pill_class_str_base = format!("{} {}",value_class_str_base, "px-2 rounded-full");
+
+    let pill_class_str = match pill_variant {
+        PillVariant::Green => format!(
+            "{} {}",
+            pill_class_str_base.to_owned(),
+            "bg-pill-green"
+        ),
+        PillVariant::Blue => format!(
+            "{} {}",
+            pill_class_str_base.to_owned(),
+            "bg-pill-blue"
+        ),
+        PillVariant::Orange => format!(
+            "{} {}",
+            pill_class_str_base.to_owned(),
+            "bg-granola-orange"
+        )
+    };
+    html::span().attr("class", pill_class_str).child(data).into()
+}
 
 pub fn convert_to_link(data: String, href: String) -> HtmlElement<html::AnyElement> {
     html::div()
