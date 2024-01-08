@@ -1,6 +1,7 @@
-use crate::common::components::*;
+use crate::common::{components::*, functions::convert_to_span};
 
 use super::graphql::snarks_query;
+use leptos::*;
 use snarks_query::SnarksQuerySnarks;
 
 impl TableData for Vec<Option<SnarksQuerySnarks>> {
@@ -11,7 +12,7 @@ impl TableData for Vec<Option<SnarksQuerySnarks>> {
             .collect::<Vec<_>>()
     }
 
-    fn get_rows(&self) -> Vec<Vec<String>> {
+    fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
         self.iter()
             .map(|opt_snark| match opt_snark {
                 Some(snark) => vec![
@@ -39,7 +40,10 @@ impl TableData for Vec<Option<SnarksQuerySnarks>> {
                             .map_or_else(String::new, |o| o.to_string())
                     }),
                     snark.fee.map_or_else(String::new, |o| o.to_string()),
-                ],
+                ]
+                .into_iter()
+                .map(convert_to_span)
+                .collect(),
                 None => vec![],
             })
             .collect::<Vec<_>>()

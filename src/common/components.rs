@@ -1,87 +1,11 @@
-use crate::icons::*;
-use leptos::*;
-use std::collections::HashMap;
+use super::models::*;
+use crate::{common::functions::*, icons::*};
+use leptos::{html::AnyElement, web_sys::MouseEvent, *};
 
 pub trait TableData {
     fn get_columns(&self) -> Vec<String>;
-    fn get_rows(&self) -> Vec<Vec<String>>;
-    fn get_linkable_cols(&self) -> HashMap<i32, String> {
-        let linkcols: HashMap<i32, String> = HashMap::new();
-        linkcols
-    }
+    fn get_rows(&self) -> Vec<Vec<HtmlElement<AnyElement>>>;
 }
-
-#[derive(Clone)]
-pub struct Pagination {
-    pub current_page: i32,
-    pub records_per_page: i32,
-    pub total_records: i32,
-    pub next_page: fn(),
-    pub prev_page: fn(),
-}
-
-impl Pagination {
-    fn start_index(&self) -> i32 {
-        self.current_page * self.records_per_page - self.records_per_page + 1
-    }
-
-    fn end_index(&self) -> i32 {
-        self.current_page * self.records_per_page
-    }
-
-    // fn total_pages(&self) -> i32 {
-    //     self.total_records / self.records_per_page + (self.total_records % self.records_per_page).signum()
-    // }
-}
-
-#[test]
-fn test_indexes_first_page() {
-    fn noop() {}
-    let pd = Pagination {
-        current_page: 1,
-        records_per_page: 15,
-        total_records: 90,
-        next_page: noop,
-        prev_page: noop,
-    };
-    assert_eq!(pd.start_index(), 1);
-    assert_eq!(pd.end_index(), 15)
-}
-
-#[test]
-fn test_indexes_second_page() {
-    fn noop() {}
-    let pd = Pagination {
-        current_page: 2,
-        records_per_page: 15,
-        total_records: 90,
-        next_page: noop,
-        prev_page: noop,
-    };
-    assert_eq!(pd.start_index(), 16);
-    assert_eq!(pd.end_index(), 30)
-}
-
-// #[test]
-// fn test_total_pages() {
-//     fn noop() {}
-//     let pd = Pagination {
-//         current_page: 2,
-//         records_per_page: 15,
-//         total_records: 90,
-//         next_page: noop,
-//         prev_page: noop,
-//     };
-//     assert_eq!(pd.total_pages(), 6);
-//     let pd = Pagination {
-//         current_page: 2,
-//         records_per_page: 15,
-//         total_records: 91,
-//         next_page: noop,
-//         prev_page: noop,
-//     };
-//     assert_eq!(pd.total_pages(), 7);
-// }
 
 #[component]
 pub fn Table<T>(data: T, #[prop(optional)] pagination: Option<Pagination>) -> impl IntoView
@@ -90,8 +14,8 @@ where
 {
     let columns = data.get_columns();
     let rows = data.get_rows();
-    let linkable_cols = data.get_linkable_cols();
     let cell_padding_class = "first:pl-8 pl-2";
+    let page_number_class = "text-md m-1 h-6 w-6 flex justify-center items-center font-semibold";
 
     view! {
         <div class="@container w-full overflow-auto">
@@ -105,19 +29,12 @@ where
                 .map(|row| view! {
                     <tr class="h-12 bg-table-row-fill">
                         {
-                            row.iter().enumerate().map(|(index, cell)| {
+                            row.iter().map(|cell| {
 
                                 let cell_ellipsis_class = "w-full text-ellipsis overflow-hidden";
-                                let cell_content = match linkable_cols.get(&(index as i32)) {
-                                    Some(value) => {
-                                        let link_href = value.replace(":token", cell);
-                                        view! { <div class=cell_ellipsis_class><a class=format!("{} block hover:text-granola-orange hover:underline hover:decoration-2",cell_ellipsis_class) href={link_href}>{cell}</a></div> }
-                                    }
-                                    None => view! { <div class=cell_ellipsis_class>{cell}</div> },
-                                };
                                 let cell_class = format!("{} {} first:pl-8 pl-2 text-table-row-text-color font-medium text-sm text-left whitespace-nowrap", cell_padding_class, cell_ellipsis_class);
                                 view! {
-                                    <td class=cell_class>{cell_content}</td>
+                                    <td class=cell_class>{cell.clone().into_view()}</td>
                                 }
 
                             }).collect::<Vec<_>>()
@@ -133,23 +50,73 @@ where
             move || {
                 let page_data_inner = page_data_clone.clone();
                 match page_data_inner {
-                    Some(pg) => view! {
-                        <div class="grid grid-cols-3 h-12 bg-table-header-fill">
-                            <span class="col-start-1 text-xs flex items-center font-bold pl-8">
-                                {format!("Showing {} to {} of {} records", pg.start_index(), pg.end_index(), pg.total_records)}
-                            </span>
-                            <span class="col-start-2 text-xs font-bold flex items-center justify-center">
-                                <button on:click=move |_| (pg.prev_page)()>"<< Previous Page"</button>
-                                <span class="text-md m-4 underline">{pg.current_page}</span>
-                                <button on:click=move |_| (pg.next_page)()>"Next Page>>"</button>
-                            </span>
-                        </div>
+                    Some(pg) => {
+                        let x_pages_around = x_surrounding_pages(pg.current_page, pg.total_pages());
+                        let x_preceding_pages = &x_pages_around[0];
+                        let x_following_pages = &x_pages_around[1];
+                        view! {
+                            <div class="flex flex-col md:grid md:grid-cols-3 min-h-12 bg-table-header-fill">
+                                <span class="col-start-1 text-xs flex justify-center md:justify-start items-center font-bold pl-8 my-2">
+                                    {format!("Showing {} to {} of {} records", pg.start_index(), pg.end_index(), pg.total_records)}
+                                </span>
+                                <span class="col-start-2 text-xs font-bold flex items-center justify-center my-2">
+                                    <PaginationButton on_click=pg.prev_page disabled=x_preceding_pages.is_empty()>
+                                        <ChevronLeft width=16/>
+                                    </PaginationButton>
+                                    {x_preceding_pages.iter()
+                                        .map(|p| view! {
+                                            <div class=page_number_class>{*p}</div>
+                                        })
+                                        .collect::<Vec<_>>()
+                                    }
+                                    <span class=format!("text-white rounded-md bg-granola-orange {}",page_number_class)>{pg.current_page}</span>
+                                    {x_following_pages.iter()
+                                        .map(|p| view! {
+                                            <div class=page_number_class>{*p}</div>
+                                        })
+                                        .collect::<Vec<_>>()
+                                    }
+                                    <PaginationButton on_click=pg.next_page disabled=x_following_pages.is_empty()>
+                                        <ChevronRight width=16/>
+                                    </PaginationButton>
+                                </span>
+                            </div>
+                        }.into_view()
                     },
-                    None => view! { <div/> }
+                    None => view! { <NullView/> }
                 }
             }
         }
 
+    }
+}
+
+#[component]
+fn PaginationButton(
+    children: Children,
+    on_click: Callback<MouseEvent>,
+    disabled: bool,
+) -> impl IntoView {
+    let button_class_base = "font-semibold";
+    let button_class = match disabled {
+        true => format!(
+            "{} {}",
+            button_class_base, "text-slate-400 hover:cursor-not-allowed"
+        ),
+        false => format!(
+            "{} {}",
+            button_class_base, "hover:cursor-pointer hover:text-granola-orange hover:underline"
+        ),
+    };
+    view! {
+        <div class=button_class type="button" on:click=move |event: MouseEvent| {
+            if disabled {
+                return;
+            }
+            on_click.call(event)
+        }>
+            {children()}
+        </div>
     }
 }
 
@@ -218,4 +185,18 @@ pub fn SummaryItem(
             <label class="row-start-2 col-start-2 col-end-3 text-sm flex justify-start items-start" for={id.clone()}>{label}</label>
         </div>
     }
+}
+
+#[component]
+pub fn ErrorView<E: std::fmt::Debug>(err: E) -> impl IntoView {
+    view! {
+        <div class="error">
+            { format!("Error: {:#?}", err) }
+        </div>
+    }
+}
+
+#[component]
+pub fn NullView() -> impl IntoView {
+    view! {}
 }

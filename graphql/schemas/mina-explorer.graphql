@@ -2360,12 +2360,12 @@ type Block {
   dateTime: DateTime
   protocolState: BlockProtocolState
   receivedTime: DateTime
-  snarkFees: Long
+  snarkFees: String
   snarkJobs: [BlockSnarkJob]
   stateHash: String
   stateHashField: String
   transactions: BlockTransaction
-  txFees: Long
+  txFees: String
   winnerAccount: BlockWinnerAccount
 }
 

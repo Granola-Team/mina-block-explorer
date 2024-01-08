@@ -99,13 +99,13 @@ pub fn TransactionsSection(
     public_key: Option<String>,
     #[prop(default = false)] with_link: bool,
 ) -> impl IntoView {
-    let (pk, _set_public_key) = create_signal(public_key.unwrap_or_default());
+    let (pk, _set_public_key) = create_signal(public_key);
 
     let resource = create_resource(
         move || pk.get(),
         move |value| async move {
             let limit = 10;
-            load_data(limit, Some(value)).await
+            load_data(limit, value).await
         },
     );
 
@@ -118,13 +118,19 @@ pub fn TransactionsSection(
                         _ => view! {
                             <Table data=data.transactions/>
                             {match with_link {
-                                false => view! {<div />}.into_view(),
+                                false => view! { <NullView /> },
                                 true => {
                                     let pk_inner = pk.get();
-                                    let link = match pk_inner.len() {
-                                        0 => "/transactions".to_string(),
-                                        _ => format!("/transactions?account={}", pk_inner)
-                                    };
+                                    let link = pk_inner.map_or_else(
+                                        || "/transactions".to_string(),
+                                        |mpk| {
+                                            if mpk.is_empty() {
+                                                "/transactions".to_string()
+                                            } else {
+                                                format!("/transactions?account={}", mpk)
+                                            }
+                                        },
+                                    );
                                     view! {
                                         <TableLink href=link text="See all transactions".to_string() >
                                             <TransactionIcon />

@@ -1,7 +1,39 @@
 use graphql_client::reqwest::post_graphql;
 
-use super::graphql::{blocks_query::BlocksQueryBlocks, *};
+use super::graphql::{
+    blocks_query::{BlocksQueryBlocks, BlocksQueryBlocksTransactionsUserCommands},
+    *,
+};
 use crate::common::models::MyError;
+
+pub fn get_user_commands(
+    block: &BlocksQueryBlocks,
+) -> Option<Vec<Option<BlocksQueryBlocksTransactionsUserCommands>>> {
+    block
+        .transactions
+        .as_ref()
+        .and_then(|t| t.user_commands.clone())
+}
+
+pub fn get_user_command_from(uc: &BlocksQueryBlocksTransactionsUserCommands) -> String {
+    uc.from.as_ref().map_or("".to_string(), |o| o.to_string())
+}
+
+pub fn get_user_command_to(uc: &BlocksQueryBlocksTransactionsUserCommands) -> String {
+    uc.to.as_ref().map_or("".to_string(), |o| o.to_string())
+}
+
+pub fn get_user_command_hash(uc: &BlocksQueryBlocksTransactionsUserCommands) -> String {
+    uc.hash.as_ref().map_or("".to_string(), |o| o.to_string())
+}
+
+pub fn get_user_command_fee(uc: &BlocksQueryBlocksTransactionsUserCommands) -> String {
+    uc.fee.as_ref().map_or("".to_string(), |o| o.to_string())
+}
+
+pub fn get_user_command_amount(uc: &BlocksQueryBlocksTransactionsUserCommands) -> String {
+    uc.amount.as_ref().map_or("".to_string(), |o| o.to_string())
+}
 
 pub fn get_block_height(block: &BlocksQueryBlocks) -> String {
     block
@@ -62,6 +94,81 @@ pub fn get_state_hash(block: &BlocksQueryBlocks) -> String {
         .map_or_else(String::new, |o| o.to_string())
 }
 
+pub fn get_snarked_ledger_hash(block: &BlocksQueryBlocks) -> String {
+    block
+        .protocol_state
+        .as_ref()
+        .and_then(|o| o.blockchain_state.as_ref())
+        .and_then(|o1| o1.snarked_ledger_hash.as_ref())
+        .map_or_else(|| "".to_string(), ToString::to_string)
+}
+
+pub fn get_winning_account(block: &BlocksQueryBlocks) -> String {
+    block
+        .winner_account
+        .as_ref()
+        .and_then(|o| o.public_key.as_ref())
+        .map_or_else(|| "".to_string(), ToString::to_string)
+}
+
+pub fn get_global_slot(block: &BlocksQueryBlocks) -> String {
+    block
+        .protocol_state
+        .as_ref()
+        .and_then(|o| o.consensus_state.as_ref())
+        .and_then(|o| o.slot_since_genesis)
+        .map_or_else(String::new, |o| o.to_string())
+}
+
+pub fn get_epoch(block: &BlocksQueryBlocks) -> String {
+    block
+        .protocol_state
+        .as_ref()
+        .and_then(|o| o.consensus_state.as_ref())
+        .and_then(|o| o.epoch)
+        .map_or_else(String::new, |o| o.to_string())
+}
+
+pub fn get_previous_state_hash(block: &BlocksQueryBlocks) -> String {
+    block
+        .protocol_state
+        .as_ref()
+        .and_then(|o| o.previous_state_hash.as_ref())
+        .map_or_else(String::new, |o| o.to_string())
+}
+
+pub fn get_staged_ledger_hash(block: &BlocksQueryBlocks) -> String {
+    block
+        .protocol_state
+        .as_ref()
+        .and_then(|o| o.blockchain_state.as_ref())
+        .and_then(|o1| o1.staged_ledger_hash.as_ref())
+        .map_or_else(|| "".to_string(), ToString::to_string)
+}
+
+pub fn get_transaction_fees(block: &BlocksQueryBlocks) -> String {
+    block
+        .tx_fees
+        .as_ref()
+        .map_or_else(String::new, |o| o.to_string())
+}
+
+pub fn get_snark_fees(block: &BlocksQueryBlocks) -> String {
+    block
+        .snark_fees
+        .as_ref()
+        .map_or_else(String::new, |o| o.to_string())
+}
+
+pub fn get_total_currency(block: &BlocksQueryBlocks) -> String {
+    block
+        .protocol_state
+        .as_ref()
+        .and_then(|o| o.consensus_state.as_ref())
+        .and_then(|o| o.total_currency)
+        .map_or_else(String::new, |o| o.to_string())
+}
+
 pub fn get_coinbase_receiver(block: &BlocksQueryBlocks) -> String {
     block.transactions.as_ref().map_or_else(String::new, |o| {
         o.coinbase_receiver_account
@@ -77,6 +184,7 @@ pub fn get_coinbase_receiver(block: &BlocksQueryBlocks) -> String {
 pub async fn load_data(
     limit: i64,
     public_key: Option<String>,
+    state_hash: Option<String>,
 ) -> Result<blocks_query::ResponseData, MyError> {
     let url = "https://graphql.minaexplorer.com";
     let variables = blocks_query::Variables {
@@ -84,6 +192,7 @@ pub async fn load_data(
         limit: Some(limit),
         query: blocks_query::BlockQueryInput {
             canonical: Some(true),
+            state_hash,
             creator_account: Some(blocks_query::BlockCreatorAccountQueryInput {
                 public_key,
                 ..Default::default()

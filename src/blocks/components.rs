@@ -16,7 +16,7 @@ pub fn AccountDialogBlocksSection(public_key: Option<String>) -> impl IntoView {
         || (),
         move |_| {
             let public_key_inner = public_key.clone();
-            async move { load_data(3, public_key_inner).await }
+            async move { load_data(3, public_key_inner, None).await }
         },
     );
 
@@ -95,7 +95,7 @@ pub fn BlocksSection() -> impl IntoView {
         move || query_params_map.get(),
         |value| async move {
             let public_key = value.get("account");
-            load_data(10, public_key.cloned()).await
+            load_data(10, public_key.cloned(), None).await
         },
     );
 
@@ -114,7 +114,7 @@ pub fn BlocksSection() -> impl IntoView {
 
 #[component]
 pub fn SummaryPageBlocksSection() -> impl IntoView {
-    let resource = create_resource(|| (), |_| async move { load_data(10, None).await });
+    let resource = create_resource(|| (), |_| async move { load_data(10, None, None).await });
 
     view! {
         {move || match resource.get() {
@@ -136,7 +136,7 @@ pub fn AccountOverviewBlocksTable(public_key: Option<String>) -> impl IntoView {
         || (),
         move |_| {
             let public_key_inner = public_key.clone();
-            async move { load_data(5, public_key_inner).await }
+            async move { load_data(5, public_key_inner, None).await }
         },
     );
 

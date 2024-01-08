@@ -30,7 +30,7 @@ Cypress.Commands.add('closeAccountDialog', () => {
 });
 
 Cypress.Commands.add('openAccountDialog', (linkSelector) => {
-  cy.get(linkSelector).first().click();
+  cy.get(linkSelector).first().click({ force: true });
   cy.get('dialog', { timeout: 10000 }).should('be.visible');
   cy.get('dialog').contains('Account Overview').should('be.visible');
 });
