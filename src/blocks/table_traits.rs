@@ -71,12 +71,13 @@ impl TableData for &[Option<BlocksQueryBlocksTransactionsUserCommands>] {
         self.iter()
             .map(|opt_user_command| match opt_user_command {
                 Some(user_command) => vec![
-                    get_user_command_from(user_command), 
+                    get_user_command_from(user_command),
                     get_user_command_to(user_command),
                     get_user_command_hash(user_command),
                     get_user_command_fee(user_command),
                     get_user_command_amount(user_command),
-                ].into_iter()
+                ]
+                .into_iter()
                 .map(convert_to_span)
                 .collect(),
                 None => vec![],

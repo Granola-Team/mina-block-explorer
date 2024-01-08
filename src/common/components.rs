@@ -1,6 +1,6 @@
-use crate::{icons::*, common::functions::*};
-use leptos::{html::AnyElement, *, web_sys::MouseEvent};
 use super::models::*;
+use crate::{common::functions::*, icons::*};
+use leptos::{html::AnyElement, web_sys::MouseEvent, *};
 
 pub trait TableData {
     fn get_columns(&self) -> Vec<String>;
@@ -15,7 +15,7 @@ where
     let columns = data.get_columns();
     let rows = data.get_rows();
     let cell_padding_class = "first:pl-8 pl-2";
-    let page_number_class= "text-md m-1 h-6 w-6 flex justify-center items-center font-semibold";
+    let page_number_class = "text-md m-1 h-6 w-6 flex justify-center items-center font-semibold";
 
     view! {
         <div class="@container w-full overflow-auto">
@@ -65,14 +65,14 @@ where
                                     </PaginationButton>
                                     {x_preceding_pages.into_iter()
                                         .map(|p| view! {
-                                            <div class=page_number_class>{*p}</div>        
+                                            <div class=page_number_class>{*p}</div>
                                         })
                                         .collect::<Vec<_>>()
                                     }
                                     <span class=format!("text-white rounded-md bg-granola-orange {}",page_number_class)>{pg.current_page}</span>
                                     {x_following_pages.into_iter()
                                         .map(|p| view! {
-                                            <div class=page_number_class>{*p}</div>        
+                                            <div class=page_number_class>{*p}</div>
                                         })
                                         .collect::<Vec<_>>()
                                     }
@@ -92,11 +92,21 @@ where
 }
 
 #[component]
-fn PaginationButton(children: Children, on_click: Callback<MouseEvent>, disabled: bool) -> impl IntoView {
-    let button_class_base="font-semibold";
+fn PaginationButton(
+    children: Children,
+    on_click: Callback<MouseEvent>,
+    disabled: bool,
+) -> impl IntoView {
+    let button_class_base = "font-semibold";
     let button_class = match disabled {
-        true => format!("{} {}", button_class_base, "text-slate-400 hover:cursor-not-allowed"),
-        false => format!("{} {}", button_class_base, "hover:cursor-pointer hover:text-granola-orange hover:underline")
+        true => format!(
+            "{} {}",
+            button_class_base, "text-slate-400 hover:cursor-not-allowed"
+        ),
+        false => format!(
+            "{} {}",
+            button_class_base, "hover:cursor-pointer hover:text-granola-orange hover:underline"
+        ),
     };
     view! {
         <div class=button_class type="button" on:click=move |event: MouseEvent| {

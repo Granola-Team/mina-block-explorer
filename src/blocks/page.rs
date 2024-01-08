@@ -1,12 +1,12 @@
-use super::functions::*;
 use super::components::*;
-use leptos::*;
-use leptos_router::*;
+use super::functions::*;
 use crate::common::components::*;
 use crate::common::functions::*;
 use crate::common::models::*;
 use crate::common::spotlight::{Spotlight, SpotlightEntry};
 use crate::icons::*;
+use leptos::*;
+use leptos_router::*;
 
 #[component]
 pub fn LatestBlocksPage() -> impl IntoView {
@@ -89,10 +89,10 @@ pub fn BlockSpotlight() -> impl IntoView {
                     _ => view! { <NullView /> },
                 }
             }
-            
+
             Some(Err(errors)) => view! { <ErrorView err=errors/> },
             _ => view! { <NullView /> }
         }}
-        
+
     }
 }

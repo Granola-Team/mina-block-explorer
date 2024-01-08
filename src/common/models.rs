@@ -1,5 +1,5 @@
 use graphql_client::Error;
-use leptos::{*, web_sys::MouseEvent};
+use leptos::{web_sys::MouseEvent, *};
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
@@ -22,7 +22,6 @@ pub enum Status {
     Unknown,
 }
 
-
 #[derive(Clone)]
 pub struct Pagination {
     pub current_page: usize,
@@ -42,14 +41,15 @@ impl Pagination {
     }
 
     pub fn total_pages(&self) -> usize {
-        self.total_records / self.records_per_page + (self.total_records % self.records_per_page).clamp(0, 1)
+        self.total_records / self.records_per_page
+            + (self.total_records % self.records_per_page).clamp(0, 1)
     }
 }
 
 #[cfg(test)]
 mod pagination_tests {
     use super::*;
-    
+
     #[test]
     fn test_indexes_first_page() {
         let (_, set_page) = create_signal(1);
@@ -127,5 +127,5 @@ mod pagination_tests {
 pub enum PillVariant {
     Green,
     Blue,
-    Orange
+    Orange,
 }

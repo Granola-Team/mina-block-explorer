@@ -50,26 +50,19 @@ pub fn convert_to_span(data: String) -> HtmlElement<html::AnyElement> {
 
 pub fn convert_to_pill(data: String, pill_variant: PillVariant) -> HtmlElement<html::AnyElement> {
     let value_class_str_base = "text-white p-0.5 text-sm";
-    let pill_class_str_base = format!("{} {}",value_class_str_base, "px-2 rounded-full");
+    let pill_class_str_base = format!("{} {}", value_class_str_base, "px-2 rounded-full");
 
     let pill_class_str = match pill_variant {
-        PillVariant::Green => format!(
-            "{} {}",
-            pill_class_str_base.to_owned(),
-            "bg-pill-green"
-        ),
-        PillVariant::Blue => format!(
-            "{} {}",
-            pill_class_str_base.to_owned(),
-            "bg-pill-blue"
-        ),
-        PillVariant::Orange => format!(
-            "{} {}",
-            pill_class_str_base.to_owned(),
-            "bg-granola-orange"
-        )
+        PillVariant::Green => format!("{} {}", pill_class_str_base.to_owned(), "bg-pill-green"),
+        PillVariant::Blue => format!("{} {}", pill_class_str_base.to_owned(), "bg-pill-blue"),
+        PillVariant::Orange => {
+            format!("{} {}", pill_class_str_base.to_owned(), "bg-granola-orange")
+        }
     };
-    html::span().attr("class", pill_class_str).child(data).into()
+    html::span()
+        .attr("class", pill_class_str)
+        .child(data)
+        .into()
 }
 
 pub fn convert_to_link(data: String, href: String) -> HtmlElement<html::AnyElement> {
@@ -83,7 +76,8 @@ pub fn convert_to_link(data: String, href: String) -> HtmlElement<html::AnyEleme
                     "hover:text-granola-orange hover:underline hover:decoration-2",
                 )
                 .child(data),
-        ).into()
+        )
+        .into()
 }
 
 pub fn x_surrounding_pages(x: usize, l: usize) -> Vec<Vec<usize>> {
@@ -108,7 +102,11 @@ pub fn x_surrounding_pages(x: usize, l: usize) -> Vec<Vec<usize>> {
     // If following pages are not enough, add more preceding pages if possible
     if following.len() < total_required {
         let additional_required = total_required - following.len();
-        start = if x > additional_required + 3 { x - (additional_required + 3) } else { 1 };
+        start = if x > additional_required + 3 {
+            x - (additional_required + 3)
+        } else {
+            1
+        };
         preceding.clear();
         while start < x {
             preceding.push(start);
@@ -118,7 +116,6 @@ pub fn x_surrounding_pages(x: usize, l: usize) -> Vec<Vec<usize>> {
 
     vec![preceding, following]
 }
-
 
 #[cfg(test)]
 mod x_surrounding_pages_tests {
@@ -170,7 +167,7 @@ pub fn get_ranges(vec_len: usize, range_size: usize) -> Vec<[usize; 2]> {
 
     while start < vec_len {
         let end = std::cmp::min(start + range_size, vec_len);
-        ranges.push([start, end]); 
+        ranges.push([start, end]);
         start += range_size;
     }
 
@@ -221,7 +218,6 @@ mod get_ranges_tests {
         assert_eq!(get_ranges(vec_len, range_size), expected);
     }
 }
-
 
 #[cfg(test)]
 mod format_duration_tests {

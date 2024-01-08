@@ -29,10 +29,10 @@ pub fn Spotlight(
         </div>
         <div id="spotlight-info" class="@3xl:grid @3xl:grid-cols-[10rem_auto_10rem] bg-white rounded-xl flex flex-col items-stretch mt-8 p-4">
             {summary_items.into_iter()
-                .map(|entry| view! { <SpotlightRow entry=entry /> }) 
-                .collect::<Vec<_>>() 
-                .as_slice() 
-                .chunks(2) 
+                .map(|entry| view! { <SpotlightRow entry=entry /> })
+                .collect::<Vec<_>>()
+                .as_slice()
+                .chunks(2)
                 .map(|chunk| {
                     view! {
                         <div class="@3xl:col-start-2 @3xl:col-end-3 @7xl:flex">
@@ -49,24 +49,16 @@ pub fn Spotlight(
 #[component]
 fn SpotlightRow(entry: SpotlightEntry) -> impl IntoView {
     let value_class_str_base = "p-1 my-1 text-sm text-white";
-    let pill_class_str_base = format!("{} {}",value_class_str_base, "px-4 rounded-full");
+    let pill_class_str_base = format!("{} {}", value_class_str_base, "px-4 rounded-full");
 
     let value_class_str = match entry.pill_variant {
-        Some(PillVariant::Green) => format!(
-            "{} {}",
-            pill_class_str_base.to_owned(),
-            "bg-pill-green"
-        ),
-        Some(PillVariant::Blue) => format!(
-            "{} {}",
-            pill_class_str_base.to_owned(),
-            "bg-pill-blue"
-        ),
-        Some(PillVariant::Orange) => format!(
-            "{} {}",
-            pill_class_str_base.to_owned(),
-            "bg-granola-orange"
-        ),
+        Some(PillVariant::Green) => {
+            format!("{} {}", pill_class_str_base.to_owned(), "bg-pill-green")
+        }
+        Some(PillVariant::Blue) => format!("{} {}", pill_class_str_base.to_owned(), "bg-pill-blue"),
+        Some(PillVariant::Orange) => {
+            format!("{} {}", pill_class_str_base.to_owned(), "bg-granola-orange")
+        }
         None => format!(
             "{} {}",
             value_class_str_base.to_owned(),

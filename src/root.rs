@@ -3,7 +3,7 @@ use leptos_router::*;
 
 use crate::accounts::account_dialog::AccountDialogView;
 use crate::accounts::page::AccountSummaryPage;
-use crate::blocks::page::{LatestBlocksPage, BlockSpotlight};
+use crate::blocks::page::{BlockSpotlight, LatestBlocksPage};
 use crate::footer::Footer;
 use crate::header::navigation::Header;
 use crate::snarks::page::SnarksPage;

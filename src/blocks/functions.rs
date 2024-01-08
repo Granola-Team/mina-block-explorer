@@ -1,11 +1,18 @@
 use graphql_client::reqwest::post_graphql;
 
-use super::graphql::{blocks_query::{BlocksQueryBlocks, BlocksQueryBlocksTransactionsUserCommands}, *};
+use super::graphql::{
+    blocks_query::{BlocksQueryBlocks, BlocksQueryBlocksTransactionsUserCommands},
+    *,
+};
 use crate::common::models::MyError;
 
-pub fn get_user_commands(block: &BlocksQueryBlocks) -> Option<Vec<Option<BlocksQueryBlocksTransactionsUserCommands>>> {
-    block.transactions.as_ref()
-        .and_then(|t| t.user_commands.clone())  
+pub fn get_user_commands(
+    block: &BlocksQueryBlocks,
+) -> Option<Vec<Option<BlocksQueryBlocksTransactionsUserCommands>>> {
+    block
+        .transactions
+        .as_ref()
+        .and_then(|t| t.user_commands.clone())
 }
 
 pub fn get_user_command_from(uc: &BlocksQueryBlocksTransactionsUserCommands) -> String {
@@ -88,7 +95,8 @@ pub fn get_state_hash(block: &BlocksQueryBlocks) -> String {
 }
 
 pub fn get_snarked_ledger_hash(block: &BlocksQueryBlocks) -> String {
-    block.protocol_state
+    block
+        .protocol_state
         .as_ref()
         .and_then(|o| o.blockchain_state.as_ref())
         .and_then(|o1| o1.snarked_ledger_hash.as_ref())
@@ -96,14 +104,16 @@ pub fn get_snarked_ledger_hash(block: &BlocksQueryBlocks) -> String {
 }
 
 pub fn get_winning_account(block: &BlocksQueryBlocks) -> String {
-    block.winner_account
+    block
+        .winner_account
         .as_ref()
         .and_then(|o| o.public_key.as_ref())
         .map_or_else(|| "".to_string(), ToString::to_string)
 }
 
 pub fn get_global_slot(block: &BlocksQueryBlocks) -> String {
-    block.protocol_state
+    block
+        .protocol_state
         .as_ref()
         .and_then(|o| o.consensus_state.as_ref())
         .and_then(|o| o.slot_since_genesis)
@@ -111,7 +121,8 @@ pub fn get_global_slot(block: &BlocksQueryBlocks) -> String {
 }
 
 pub fn get_epoch(block: &BlocksQueryBlocks) -> String {
-    block.protocol_state
+    block
+        .protocol_state
         .as_ref()
         .and_then(|o| o.consensus_state.as_ref())
         .and_then(|o| o.epoch)
@@ -119,14 +130,16 @@ pub fn get_epoch(block: &BlocksQueryBlocks) -> String {
 }
 
 pub fn get_previous_state_hash(block: &BlocksQueryBlocks) -> String {
-    block.protocol_state
+    block
+        .protocol_state
         .as_ref()
         .and_then(|o| o.previous_state_hash.as_ref())
         .map_or_else(String::new, |o| o.to_string())
 }
 
 pub fn get_staged_ledger_hash(block: &BlocksQueryBlocks) -> String {
-    block.protocol_state
+    block
+        .protocol_state
         .as_ref()
         .and_then(|o| o.blockchain_state.as_ref())
         .and_then(|o1| o1.staged_ledger_hash.as_ref())
@@ -134,15 +147,22 @@ pub fn get_staged_ledger_hash(block: &BlocksQueryBlocks) -> String {
 }
 
 pub fn get_transaction_fees(block: &BlocksQueryBlocks) -> String {
-    block.tx_fees.as_ref().map_or_else(String::new, |o| o.to_string())
+    block
+        .tx_fees
+        .as_ref()
+        .map_or_else(String::new, |o| o.to_string())
 }
 
 pub fn get_snark_fees(block: &BlocksQueryBlocks) -> String {
-    block.snark_fees.as_ref().map_or_else(String::new, |o| o.to_string())
+    block
+        .snark_fees
+        .as_ref()
+        .map_or_else(String::new, |o| o.to_string())
 }
 
 pub fn get_total_currency(block: &BlocksQueryBlocks) -> String {
-    block.protocol_state
+    block
+        .protocol_state
         .as_ref()
         .and_then(|o| o.consensus_state.as_ref())
         .and_then(|o| o.total_currency)
