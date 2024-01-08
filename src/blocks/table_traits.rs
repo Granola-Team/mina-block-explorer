@@ -103,10 +103,13 @@ impl TableData for SummaryPageBlocksQueryBlocks {
                         format!("/summary/accounts/{}", get_creator_account(block)),
                     ),
                     convert_to_span(get_coinbase(block)),
-                    convert_to_span(get_transaction_count(block)),
-                    convert_to_span(get_snark_job_count(block)),
-                    convert_to_span(get_slot(block)),
-                    convert_to_span(get_state_hash(block)),
+                    convert_to_pill(get_transaction_count(block), PillVariant::Green),
+                    convert_to_pill(get_snark_job_count(block), PillVariant::Blue),
+                    convert_to_pill(get_slot(block), PillVariant::Orange),
+                    convert_to_link(
+                        get_state_hash(block),
+                        format!("/blocks/{}", get_state_hash(block)),
+                    ),
                     convert_to_link(
                         get_coinbase_receiver(block),
                         format!("/summary/accounts/{}", get_coinbase_receiver(block)),
