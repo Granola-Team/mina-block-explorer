@@ -121,15 +121,16 @@ pub fn TransactionsSection(
                                 false => view! { <NullView /> },
                                 true => {
                                     let pk_inner = pk.get();
-                                    let link = match pk_inner {
-                                        Some(mpk) => {
-                                            match mpk.len() {
-                                                0 => "/transactions".to_string(),
-                                                _ => format!("/transactions?account={}", mpk)
+                                    let link = pk_inner.map_or_else(
+                                        || "/transactions".to_string(),
+                                        |mpk| {
+                                            if mpk.is_empty() {
+                                                "/transactions".to_string()
+                                            } else {
+                                                format!("/transactions?account={}", mpk)
                                             }
                                         },
-                                        None => "/transactions".to_string()
-                                    };
+                                    );
                                     view! {
                                         <TableLink href=link text="See all transactions".to_string() >
                                             <TransactionIcon />
