@@ -4,7 +4,7 @@ use leptos::*;
 use leptos_router::*;
 use crate::common::components::*;
 use crate::common::functions::*;
-use crate::common::functions::print_time_since;
+use crate::common::models::*;
 use crate::common::spotlight::SpotlightPillVariant;
 use crate::common::spotlight::{Spotlight, SpotlightEntry};
 use crate::icons::*;
