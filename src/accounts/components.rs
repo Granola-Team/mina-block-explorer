@@ -19,7 +19,7 @@ pub fn AccountDialog(path_base: String, account: AccountSummary) -> impl IntoVie
         <dialog id="accountdialog" class="z-20 w-full max-w-3xl h-screen fixed top-0 mr-0 ml-auto flex flex-col items-stretch p-4 bg-background">
             <section>
                 <div class="flex justify-between">
-                    <h2 class="text-bold text-xl">"Account Overview"</h2>
+                    <h2 class="text-bold text-xl">"Account Spotlight"</h2>
                     <button id="closedialog">
                         <a href=path_base>X</a>
                     </button>
