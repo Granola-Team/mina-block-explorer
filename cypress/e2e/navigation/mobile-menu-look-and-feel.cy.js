@@ -1,9 +1,9 @@
 
 const pages = require('../../pages.json');
 
-describe('mobile menu look and feel', () => {
+describe('mobile', () => {
     
-    it(`opens and closes the mobile menu`, () => {
+    it(`has menu`, () => {
         cy.viewport('iphone-xr');
         cy.visit("/summary");
         cy.openMobileMenu();
@@ -12,7 +12,7 @@ describe('mobile menu look and feel', () => {
         cy.get('nav').should('not.be.visible');
     });
 
-    it('has a header',() => {
+    it('has header',() => {
         cy.viewport('iphone-xr');
         cy.visit("/");
         cy.get('header').matchImageSnapshot('homepage-header');

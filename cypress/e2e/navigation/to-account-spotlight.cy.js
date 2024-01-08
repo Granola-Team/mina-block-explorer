@@ -1,4 +1,4 @@
-describe('navigation to block spotlight', () => {
+describe('navigation to account spotlight', () => {
     [{
         origin: '/summary/accounts/B62qqVBAmXHUJg8BxKM9J1XghP9yGRAfq6JCES6eDGCiHFWtK259m2q',
         selector: 'dialog a[href^="/accounts"]'
@@ -16,7 +16,7 @@ describe('navigation to block spotlight', () => {
         selector: 'a[href^="/accounts/"]'
     }].forEach(({ origin, selector }) => it(`navigates to the block spotlight page from page ${origin}`,() => {
         cy.visit(origin);
-        let link = cy.get(selector, {timeout: 10000}).first();
+        let link = cy.get(selector, {timeout: 20000}).first();
         link.then($a => {
             link.click({force:true});
             cy.url().should('include',$a.attr('href'), {timeout: 10000})

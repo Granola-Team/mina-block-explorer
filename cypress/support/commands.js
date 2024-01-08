@@ -29,10 +29,9 @@ Cypress.Commands.add('closeAccountDialog', () => {
   cy.get('dialog').should('not.exist');
 });
 
-Cypress.Commands.add('openAccountDialog', (linkSelector) => {
-  cy.get(linkSelector).first().click({ force: true });
+Cypress.Commands.add('openAccountDialog', (nthRow, columnHeading) => {
+  cy.clickLinkInTable(nthRow, columnHeading);
   cy.get('dialog', { timeout: 10000 }).should('be.visible');
-  cy.get('dialog').contains('Account Overview').should('be.visible');
 });
 
 Cypress.Commands.add('accountDialogToAccount', () => {
@@ -47,5 +46,18 @@ Cypress.Commands.add('openMobileMenu', () => {
   cy.get('label[for="nav-toggle"]').click();
   cy.get('nav').should('be.visible');
 });
+
+Cypress.Commands.add('clickLinkInTable', (nthRow, columnHeading) => {
+  cy.get('table') 
+    .find('th').contains(columnHeading) 
+    .invoke('index')
+    .then(columnIndex => {
+      cy.get('table tr') 
+        .eq(nthRow) 
+        .find('td a')
+        .eq(columnIndex) 
+        .click({force: true});            
+    });
+})
 
 

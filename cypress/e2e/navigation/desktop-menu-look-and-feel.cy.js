@@ -1,12 +1,11 @@
 
 const pages = require('../../pages.json');
 
-describe('desktop menu look and feel', () => {
+describe('desktop', () => {
     
-    it(`captures desktop menu`, () => {
-        cy.visit("/");
+    it(`has menu in header`, () => {
+        cy.visit("/summary");
         cy.get('header').matchImageSnapshot(`desktop-header`);
     });
-    
     
 });
