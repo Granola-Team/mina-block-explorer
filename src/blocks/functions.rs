@@ -1,7 +1,32 @@
 use graphql_client::reqwest::post_graphql;
 
-use super::graphql::{blocks_query::BlocksQueryBlocks, *};
+use super::graphql::{blocks_query::{BlocksQueryBlocks, BlocksQueryBlocksTransactionsUserCommands}, *};
 use crate::common::models::MyError;
+
+pub fn get_user_commands(block: &BlocksQueryBlocks) -> Option<Vec<Option<BlocksQueryBlocksTransactionsUserCommands>>> {
+    block.transactions.as_ref()
+        .and_then(|t| t.user_commands.clone())  
+}
+
+pub fn get_user_command_from(uc: &BlocksQueryBlocksTransactionsUserCommands) -> String {
+    uc.from.as_ref().map_or("".to_string(), |o| o.to_string())
+}
+
+pub fn get_user_command_to(uc: &BlocksQueryBlocksTransactionsUserCommands) -> String {
+    uc.to.as_ref().map_or("".to_string(), |o| o.to_string())
+}
+
+pub fn get_user_command_hash(uc: &BlocksQueryBlocksTransactionsUserCommands) -> String {
+    uc.hash.as_ref().map_or("".to_string(), |o| o.to_string())
+}
+
+pub fn get_user_command_fee(uc: &BlocksQueryBlocksTransactionsUserCommands) -> String {
+    uc.fee.as_ref().map_or("".to_string(), |o| o.to_string())
+}
+
+pub fn get_user_command_amount(uc: &BlocksQueryBlocksTransactionsUserCommands) -> String {
+    uc.amount.as_ref().map_or("".to_string(), |o| o.to_string())
+}
 
 pub fn get_block_height(block: &BlocksQueryBlocks) -> String {
     block

@@ -10,6 +10,11 @@ query BlocksQuery($query: BlockQueryInput!, $limit: Int = 10, $sort_by: BlockSor
       }
       userCommands {
         id
+        from 
+        to
+        hash 
+        fee 
+        amount
       }
     }
     creatorAccount {
