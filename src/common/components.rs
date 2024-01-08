@@ -138,11 +138,11 @@ where
                         let x_preceding_pages = &x_pages_around[0];
                         let x_following_pages = &x_pages_around[1];
                         view! {
-                            <div class="grid grid-cols-3 h-12 bg-table-header-fill">
-                                <span class="col-start-1 text-xs flex items-center font-bold pl-8">
+                            <div class="flex flex-col md:grid md:grid-cols-3 min-h-12 bg-table-header-fill">
+                                <span class="col-start-1 text-xs flex justify-center md:justify-start items-center font-bold pl-8 my-2">
                                     {format!("Showing {} to {} of {} records", pg.start_index(), pg.end_index(), pg.total_records)}
                                 </span>
-                                <span class="col-start-2 text-xs font-bold flex items-center justify-center">
+                                <span class="col-start-2 text-xs font-bold flex items-center justify-center my-2">
                                     <PaginationButton on_click=pg.prev_page disabled=x_preceding_pages.len() == 0>
                                         <ChevronLeft width=16/>
                                     </PaginationButton>
