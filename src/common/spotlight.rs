@@ -49,7 +49,10 @@ pub fn Spotlight(
 #[component]
 fn SpotlightRow(entry: SpotlightEntry) -> impl IntoView {
     let value_class_str_base = "p-1 my-1 text-sm";
-    let pill_class_str_base = format!("{} {}", value_class_str_base, "px-4 rounded-full text-white");
+    let pill_class_str_base = format!(
+        "{} {}",
+        value_class_str_base, "px-4 rounded-full text-white"
+    );
 
     let value_class_str = match entry.pill_variant {
         Some(PillVariant::Green) => {
