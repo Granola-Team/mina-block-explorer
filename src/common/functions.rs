@@ -1,7 +1,7 @@
 use chrono::{DateTime, Duration, Utc};
 use leptos::*;
 
-use super::models::Status;
+use super::{models::Status, spotlight::PillVariant};
 
 // Function to calculate and print the time elapsed since the given timestamp
 pub fn print_time_since(timestamp: &str) -> String {
@@ -47,6 +47,8 @@ pub fn get_status(timestamp: &str) -> Status {
 pub fn convert_to_span(data: String) -> HtmlElement<html::AnyElement> {
     html::span().child(data).into()
 }
+
+pub fn convert_to_pill(data: String, )
 
 pub fn convert_to_link(data: String, href: String) -> HtmlElement<html::AnyElement> {
     html::div()

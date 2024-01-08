@@ -123,3 +123,9 @@ mod pagination_tests {
         assert_eq!(pd.total_pages(), 7);
     }
 }
+
+pub enum PillVariant {
+    Green,
+    Blue,
+    Orange
+}

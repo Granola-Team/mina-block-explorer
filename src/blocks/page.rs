@@ -5,7 +5,6 @@ use leptos_router::*;
 use crate::common::components::*;
 use crate::common::functions::*;
 use crate::common::models::*;
-use crate::common::spotlight::SpotlightPillVariant;
 use crate::common::spotlight::{Spotlight, SpotlightEntry};
 use crate::icons::*;
 
@@ -44,8 +43,8 @@ pub fn BlockSpotlight() -> impl IntoView {
                             SpotlightEntry { label: "Coinbase Receiver".to_string(), value: get_coinbase_receiver(&block), pill_variant: None},
                             SpotlightEntry { label: "Winning Account".to_string(), value: get_winning_account(&block), pill_variant: None},
                             SpotlightEntry { label: "SNARK Fees".to_string(), value: get_snark_fees(&block), pill_variant: None},
-                            SpotlightEntry { label: "Global Slot".to_string(), value: get_global_slot(&block), pill_variant: Some(SpotlightPillVariant::Blue)},
-                            SpotlightEntry { label: "Slot".to_string(), value: get_slot(&block), pill_variant: Some(SpotlightPillVariant::Green)},
+                            SpotlightEntry { label: "Global Slot".to_string(), value: get_global_slot(&block), pill_variant: Some(PillVariant::Blue)},
+                            SpotlightEntry { label: "Slot".to_string(), value: get_slot(&block), pill_variant: Some(PillVariant::Green)},
                             SpotlightEntry { label: "Epoch".to_string(), value: get_epoch(&block), pill_variant: None},
                             SpotlightEntry { label: "Transaction Fees".to_string(), value: get_transaction_fees(&block), pill_variant: None},
                             SpotlightEntry { label: "Blockchain Length".to_string(), value: get_block_height(&block), pill_variant: None},
