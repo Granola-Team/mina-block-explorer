@@ -2,6 +2,7 @@ use leptos::*;
 
 use super::functions::*;
 use super::graphql::blocks_query::BlocksQueryBlocks;
+use super::graphql::blocks_query::BlocksQueryBlocksTransactionsUserCommands;
 use super::models::*;
 use crate::common::components::*;
 use crate::common::functions::*;
@@ -45,6 +46,35 @@ impl TableData for Vec<Option<BlocksQueryBlocks>> {
                         format!("/blocks/accounts/{}", get_coinbase_receiver(block)),
                     ),
                 ],
+                None => vec![],
+            })
+            .collect()
+    }
+}
+
+impl TableData for &[Option<BlocksQueryBlocksTransactionsUserCommands>] {
+    fn get_columns(&self) -> Vec<String> {
+        vec![
+            String::from("From"),
+            String::from("To"),
+            String::from("Hash"),
+            String::from("Fee"),
+            String::from("Amount"),
+        ]
+    }
+
+    fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
+        self.iter()
+            .map(|opt_user_command| match opt_user_command {
+                Some(user_command) => vec![
+                    get_user_command_from(user_command), 
+                    get_user_command_to(user_command),
+                    get_user_command_hash(user_command),
+                    get_user_command_fee(user_command),
+                    get_user_command_amount(user_command),
+                ].into_iter()
+                .map(convert_to_span)
+                .collect(),
                 None => vec![],
             })
             .collect()

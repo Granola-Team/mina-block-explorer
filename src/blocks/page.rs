@@ -3,6 +3,7 @@ use super::components::*;
 use leptos::*;
 use leptos_router::*;
 use crate::common::components::*;
+use crate::common::functions::*;
 use crate::common::functions::print_time_since;
 use crate::common::spotlight::SpotlightPillVariant;
 use crate::common::spotlight::{Spotlight, SpotlightEntry};
@@ -56,10 +57,27 @@ pub fn BlockSpotlight() -> impl IntoView {
                                 </Spotlight>
                             </section>
                             <TableSection section_heading="User Commands".to_string()>
-                                {match get_user_commands(&block) {
-                                    Some(user_commands) => view! { <Table data=user_commands/> },
-                                    None => view! { <NullView /> }
-                                }}
+                                {
+                                    match get_user_commands(&block) {
+                                        Some(user_commands) => {
+                                            let current_page = 1;
+                                            let records_per_page = 10;
+                                            let total_records = user_commands.len();
+                                            let ranges = get_ranges(total_records, records_per_page);
+                                            let range = ranges[current_page-1];
+                                            let user_commands_subset = &user_commands[range[0]..range[1]];
+                                            let pag = Pagination {
+                                                current_page,
+                                                records_per_page,
+                                                total_records,
+                                                next_page: noop,
+                                                prev_page: noop,
+                                            };
+                                            view! { <Table data=user_commands_subset pagination=pag/> }
+                                        },
+                                        None => view! { <NullView /> }
+                                    }
+                                }
                             </TableSection>
                         }.into_view()
                     },

@@ -62,8 +62,69 @@ pub fn convert_to_link(data: String, href: String) -> HtmlElement<html::AnyEleme
         ).into()
 }
 
+pub fn noop() {}
+
+pub fn get_ranges(vec_len: usize, range_size: usize) -> Vec<[usize; 2]> {
+    let mut ranges = Vec::new();
+    let mut start = 0;
+
+    while start < vec_len {
+        let end = std::cmp::min(start + range_size, vec_len);
+        ranges.push([start, end]); 
+        start += range_size;
+    }
+
+    ranges
+}
+
 #[cfg(test)]
-mod tests {
+mod get_ranges_tests {
+    use super::*;
+
+    #[test]
+    fn test_exact_divisible_range() {
+        let vec_len = 20;
+        let range_size = 10;
+        let expected = vec![[0, 10], [10, 20]];
+        assert_eq!(get_ranges(vec_len, range_size), expected);
+    }
+
+    #[test]
+    fn test_not_exact_divisible_range() {
+        let vec_len = 25;
+        let range_size = 10;
+        let expected = vec![[0, 10], [10, 20], [20, 25]];
+        assert_eq!(get_ranges(vec_len, range_size), expected);
+    }
+
+    #[test]
+    fn test_empty_vector() {
+        let vec_len = 0;
+        let range_size = 10;
+        let expected: Vec<[usize; 2]> = Vec::new();
+        assert_eq!(get_ranges(vec_len, range_size), expected);
+    }
+
+    #[test]
+    fn test_range_size_larger_than_vector() {
+        let vec_len = 5;
+        let range_size = 10;
+        let expected = vec![[0, 5]];
+        assert_eq!(get_ranges(vec_len, range_size), expected);
+    }
+
+    #[test]
+    fn test_range_size_one() {
+        let vec_len = 3;
+        let range_size = 1;
+        let expected = vec![[0, 1], [1, 2], [2, 3]];
+        assert_eq!(get_ranges(vec_len, range_size), expected);
+    }
+}
+
+
+#[cfg(test)]
+mod format_duration_tests {
     use super::*;
     use chrono::Duration;
 

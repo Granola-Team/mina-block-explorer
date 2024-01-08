@@ -8,23 +8,23 @@ pub trait TableData {
 
 #[derive(Clone)]
 pub struct Pagination {
-    pub current_page: i32,
-    pub records_per_page: i32,
-    pub total_records: i32,
+    pub current_page: usize,
+    pub records_per_page: usize,
+    pub total_records: usize,
     pub next_page: fn(),
     pub prev_page: fn(),
 }
 
 impl Pagination {
-    fn start_index(&self) -> i32 {
+    fn start_index(&self) -> usize {
         self.current_page * self.records_per_page - self.records_per_page + 1
     }
 
-    fn end_index(&self) -> i32 {
+    fn end_index(&self) -> usize {
         self.current_page * self.records_per_page
     }
 
-    // fn total_pages(&self) -> i32 {
+    // fn total_pages(&self) -> usize {
     //     self.total_records / self.records_per_page + (self.total_records % self.records_per_page).signum()
     // }
 }
