@@ -1,5 +1,5 @@
 use crate::icons::*;
-use leptos::{html::AnyElement, *};
+use leptos::{html::AnyElement, *, web_sys::MouseEvent};
 
 pub trait TableData {
     fn get_columns(&self) -> Vec<String>;
@@ -11,8 +11,8 @@ pub struct Pagination {
     pub current_page: usize,
     pub records_per_page: usize,
     pub total_records: usize,
-    pub next_page: fn(),
-    pub prev_page: fn(),
+    pub next_page: Callback<MouseEvent>,
+    pub prev_page: Callback<MouseEvent>,
 }
 
 impl Pagination {
@@ -31,13 +31,19 @@ impl Pagination {
 
 #[test]
 fn test_indexes_first_page() {
-    fn noop() {}
+    let (_, set_page) = create_signal(1);
     let pd = Pagination {
         current_page: 1,
         records_per_page: 15,
         total_records: 90,
-        next_page: noop,
-        prev_page: noop,
+        next_page: Callback::from(move |_| {
+            let set_current_page_inner = set_page.clone();
+            set_current_page_inner.update(|cp| *cp += 1);
+        }),
+        prev_page: Callback::from(move |_| {
+            let set_current_page_inner = set_page.clone();
+            set_current_page_inner.update(|cp| *cp -= 1);
+        }),
     };
     assert_eq!(pd.start_index(), 1);
     assert_eq!(pd.end_index(), 15)
@@ -45,13 +51,19 @@ fn test_indexes_first_page() {
 
 #[test]
 fn test_indexes_second_page() {
-    fn noop() {}
+    let (_, set_page) = create_signal(1);
     let pd = Pagination {
         current_page: 2,
         records_per_page: 15,
         total_records: 90,
-        next_page: noop,
-        prev_page: noop,
+        next_page: Callback::from(move |_| {
+            let set_current_page_inner = set_page.clone();
+            set_current_page_inner.update(|cp| *cp += 1);
+        }),
+        prev_page: Callback::from(move |_| {
+            let set_current_page_inner = set_page.clone();
+            set_current_page_inner.update(|cp| *cp -= 1);
+        }),
     };
     assert_eq!(pd.start_index(), 16);
     assert_eq!(pd.end_index(), 30)
@@ -126,9 +138,9 @@ where
                                 {format!("Showing {} to {} of {} records", pg.start_index(), pg.end_index(), pg.total_records)}
                             </span>
                             <span class="col-start-2 text-xs font-bold flex items-center justify-center">
-                                <button on:click=move |_| (pg.prev_page)()>"<< Previous Page"</button>
+                                <button on:click=move |event: MouseEvent| { pg.prev_page.call(event); }>"<< Previous Page"</button>
                                 <span class="text-md m-4 underline">{pg.current_page}</span>
-                                <button on:click=move |_| (pg.next_page)()>"Next Page>>"</button>
+                                <button on:click=move |event: MouseEvent| { pg.next_page.call(event); }>"Next Page>>"</button>
                             </span>
                         </div>
                     },

@@ -62,8 +62,6 @@ pub fn convert_to_link(data: String, href: String) -> HtmlElement<html::AnyEleme
         ).into()
 }
 
-pub fn noop() {}
-
 pub fn get_ranges(vec_len: usize, range_size: usize) -> Vec<[usize; 2]> {
     let mut ranges = Vec::new();
     let mut start = 0;
