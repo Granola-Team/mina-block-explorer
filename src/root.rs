@@ -9,7 +9,7 @@ use crate::header::navigation::Header;
 use crate::snarks::page::SnarksPage;
 use crate::stakes_page::StakesPage;
 use crate::summary::page::SummaryPage;
-use crate::transactions::page::{TransactionsPage, TransactionSpotlightPage};
+use crate::transactions::page::{TransactionSpotlightPage, TransactionsPage};
 
 #[component]
 pub fn Root() -> impl IntoView {

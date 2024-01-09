@@ -1,12 +1,12 @@
 use leptos::*;
 use leptos_router::*;
 
-use super::functions::*;
 use super::components::*;
+use super::functions::*;
 use crate::common::components::*;
 use crate::common::functions::*;
-use crate::common::spotlight::*;
 use crate::common::models::*;
+use crate::common::spotlight::*;
 use crate::icons::*;
 
 #[component]
@@ -32,7 +32,7 @@ pub fn TransactionSpotlightPage() -> impl IntoView {
         },
     );
 
-    view! { 
+    view! {
         { move || match resource.get() {
             Some(Ok(data)) => {
                 match data.transactions.first() {
