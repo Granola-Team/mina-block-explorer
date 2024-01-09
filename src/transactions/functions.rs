@@ -5,9 +5,39 @@ use super::graphql::transactions_query::TransactionsQueryTransactions;
 use super::graphql::*;
 
 pub fn get_block_datetime(transaction: &TransactionsQueryTransactions) -> String {
-    transaction.block.as_ref().map_or_else(String::new, |o| {
-        o.date_time.map_or_else(String::new, |o1| o1.to_string())
-    })
+    transaction.block.as_ref()
+        .and_then(|b| b.date_time)
+        .map_or_else(String::new, |o1| o1.to_string())
+}
+
+pub fn get_block_height(transaction: &TransactionsQueryTransactions) -> String {
+    transaction.block_height.map_or_else(String::new, |o| o.to_string())
+}
+
+pub fn get_canonical(transaction: &TransactionsQueryTransactions) -> String {
+    transaction.canonical.map_or_else(String::new, |o| o.to_string())
+}
+
+pub fn get_kind(transaction: &TransactionsQueryTransactions) -> String {
+    transaction.kind.as_ref().map_or_else(String::new, |o| o.to_string())
+}
+
+pub fn get_payment_id(transaction: &TransactionsQueryTransactions) -> String {
+    transaction.id.as_ref().map_or_else(String::new, |o| o.to_string())
+}
+
+pub fn get_nonce(transaction: &TransactionsQueryTransactions) -> String {
+    transaction.nonce.map_or_else(String::new, |o| o.to_string())
+}
+
+pub fn get_memo(transaction: &TransactionsQueryTransactions) -> String {
+    transaction.memo.as_ref().map_or_else(String::new, |o| o.to_string())
+}
+
+pub fn get_block_state_hash(transaction: &TransactionsQueryTransactions) -> String {
+    transaction.block.as_ref()
+        .and_then(|b| b.state_hash.as_ref())
+        .map_or_else(String::new, |o1| o1.to_string())
 }
 
 pub fn get_from(transaction: &TransactionsQueryTransactions) -> String {
