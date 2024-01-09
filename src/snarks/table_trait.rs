@@ -1,6 +1,7 @@
-use crate::common::{components::*, functions::convert_to_span};
+use crate::common::{components::*, functions::*};
 
-use super::graphql::snarks_query;
+use super::{functions::*, graphql::snarks_query};
+use crate::common::models::*;
 use leptos::*;
 use snarks_query::SnarksQuerySnarks;
 
@@ -16,34 +17,21 @@ impl TableData for Vec<Option<SnarksQuerySnarks>> {
         self.iter()
             .map(|opt_snark| match opt_snark {
                 Some(snark) => vec![
-                    snark
-                        .block_height
-                        .map_or_else(String::new, |o| o.to_string()),
-                    snark.date_time.map_or_else(String::new, |o| o.to_string()),
-                    snark
-                        .prover
-                        .as_ref()
-                        .map_or_else(String::new, |o| o.to_string()),
-                    snark
-                        .work_ids
-                        .as_ref()
-                        .map_or_else(String::new, |work_ids| {
-                            work_ids
-                                .iter()
-                                .map(|o| o.map_or_else(String::new, |o1| o1.to_string()))
-                                .collect::<Vec<_>>()
-                                .join(", ")
-                        }),
-                    snark.block.as_ref().map_or_else(String::new, |o| {
-                        o.state_hash
-                            .as_ref()
-                            .map_or_else(String::new, |o| o.to_string())
-                    }),
-                    snark.fee.map_or_else(String::new, |o| o.to_string()),
-                ]
-                .into_iter()
-                .map(convert_to_span)
-                .collect(),
+                    convert_to_span(get_block_height(snark)),
+                    convert_to_span(get_date_time(snark)),
+                    convert_to_link(
+                        get_prover(snark),
+                        format!("/accounts/{}", get_prover(snark)),
+                    ),
+                    convert_array_to_span(
+                        get_work_ids(snark)
+                            .iter()
+                            .map(|w| convert_to_pill(w.to_string(), PillVariant::Grey))
+                            .collect::<Vec<_>>(),
+                    ),
+                    convert_to_span(get_block_state_hash(snark)),
+                    convert_to_span(get_fee(snark)),
+                ],
                 None => vec![],
             })
             .collect::<Vec<_>>()

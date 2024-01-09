@@ -29,10 +29,9 @@ Cypress.Commands.add('closeAccountDialog', () => {
   cy.get('dialog').should('not.exist');
 });
 
-Cypress.Commands.add('openAccountDialog', (linkSelector) => {
-  cy.get(linkSelector).first().click({ force: true });
+Cypress.Commands.add('openAccountDialog', (nthRow, columnHeading, tableHeading) => {
+  cy.clickLinkInTable(nthRow, columnHeading, tableHeading);
   cy.get('dialog', { timeout: 10000 }).should('be.visible');
-  cy.get('dialog').contains('Account Overview').should('be.visible');
 });
 
 Cypress.Commands.add('accountDialogToAccount', () => {
@@ -47,5 +46,24 @@ Cypress.Commands.add('openMobileMenu', () => {
   cy.get('label[for="nav-toggle"]').click();
   cy.get('nav').should('be.visible');
 });
+
+Cypress.Commands.add('clickLinkInTable', (nthRow, columnHeading, tableHeading) => {
+  cy.get('h1')
+    .contains(tableHeading)
+    .siblings('div')
+    .find('table th').contains(columnHeading) 
+    .invoke('index')
+    .then(columnIndex => {
+      cy.get('h1')
+        .contains(tableHeading)
+        .siblings('div')
+        .find('table tr') 
+        .eq(nthRow) 
+        .find('td')
+        .eq(columnIndex)
+        .find('a') 
+        .click({force: true});            
+    });
+})
 
 

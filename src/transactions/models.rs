@@ -1,7 +1,7 @@
 use leptos::*;
 
 use super::{functions::*, graphql::transactions_query::TransactionsQueryTransactions};
-use crate::common::{components::*, functions::convert_to_span};
+use crate::common::{components::*, functions::*, models::PillVariant};
 
 impl TableData for Vec<Option<TransactionsQueryTransactions>> {
     fn get_columns(&self) -> Vec<String> {
@@ -15,16 +15,19 @@ impl TableData for Vec<Option<TransactionsQueryTransactions>> {
         self.iter()
             .map(|opt_trans| match opt_trans {
                 Some(transaction) => vec![
-                    get_block_datetime(transaction),
-                    get_from(transaction),
-                    get_receiver_public_key(transaction),
-                    get_hash(transaction),
-                    get_fee(transaction),
-                    get_amount(transaction),
-                ]
-                .into_iter()
-                .map(convert_to_span)
-                .collect(),
+                    convert_to_span(get_block_datetime(transaction)),
+                    convert_to_link(
+                        get_from(transaction),
+                        format!("/accounts/{}", get_from(transaction)),
+                    ),
+                    convert_to_link(
+                        get_receiver_public_key(transaction),
+                        format!("/accounts/{}", get_receiver_public_key(transaction)),
+                    ),
+                    convert_to_span(get_hash(transaction)),
+                    convert_to_pill(get_fee(transaction), PillVariant::Orange),
+                    convert_to_pill(get_amount(transaction), PillVariant::Green),
+                ],
                 None => vec![],
             })
             .collect::<Vec<_>>()

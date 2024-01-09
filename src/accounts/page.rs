@@ -15,19 +15,20 @@ use crate::transactions::components::*;
 #[component]
 pub fn AccountSummaryPage() -> impl IntoView {
     let memo_params_map = use_params_map();
-    let public_key = memo_params_map
-        .with(|params| params.get("id").cloned())
-        .unwrap_or_default();
 
-    let resource: Resource<(), Result<AccountResponse, MyError>> = {
-        create_resource(
-            || (),
-            move |_| {
-                let public_key_for_async = public_key.clone();
-                async move { load_data(&public_key_for_async).await }
-            },
-        )
-    };
+    let resource = create_resource(
+        move || memo_params_map.get(),
+        |value| async move {
+            if let Some(id) = value.get("id").cloned() {
+                let id_clone = id.clone();
+                load_data(&id_clone).await
+            } else {
+                Err(MyError::ParseError(String::from(
+                    "Could not parse id parameter from url",
+                )))
+            }
+        },
+    );
 
     view! {
         {move || match resource.get() {
@@ -35,7 +36,7 @@ pub fn AccountSummaryPage() -> impl IntoView {
                 let pk =res.account.public_key.clone();
                 view! {
                     <section class="@container md:col-start-2 md:col-end-3 md:rounded-lg bg-table-section p-0 md:p-4 mb-2">
-                        <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-start items-center">"Account Overview"</h1>
+                        <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-start items-center">"Account Spotlight"</h1>
                         <Spotlight summary_items=get_spotlight_data(res.account.clone()) meta=format!("Username: {}",res.account.username) id=pk.clone()>
                             <WalletIcon width=40/>
                         </Spotlight>

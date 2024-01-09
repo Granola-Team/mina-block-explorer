@@ -62,6 +62,7 @@ fn SpotlightRow(entry: SpotlightEntry) -> impl IntoView {
         Some(PillVariant::Orange) => {
             format!("{} {}", pill_class_str_base.to_owned(), "bg-granola-orange")
         }
+        Some(PillVariant::Grey) => format!("{} {}", pill_class_str_base.to_owned(), "bg-slate-400"),
         None => format!(
             "{} {}",
             value_class_str_base.to_owned(),
