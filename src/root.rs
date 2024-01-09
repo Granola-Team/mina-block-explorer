@@ -9,7 +9,7 @@ use crate::header::navigation::Header;
 use crate::snarks::page::SnarksPage;
 use crate::stakes_page::StakesPage;
 use crate::summary::page::SummaryPage;
-use crate::transactions::page::TransactionsPage;
+use crate::transactions::page::{TransactionsPage, TransactionSpotlightPage};
 
 #[component]
 pub fn Root() -> impl IntoView {
@@ -29,7 +29,8 @@ pub fn Root() -> impl IntoView {
                 <Route path="" view=|| view! {}.into_view()/>
               </Route>
               <Route path="/blocks/:id" view=BlockSpotlight/>
-              <Route path="/transactions" view=TransactionsPage />
+              <Route path="/transactions" view=TransactionsPage/>
+              <Route path="/transactions/:id" view=TransactionSpotlightPage/>
               <Route path="/snarks" view=SnarksPage />
               <Route path="/stakes" view=StakesPage />
             </Routes>

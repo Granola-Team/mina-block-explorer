@@ -1,6 +1,7 @@
 use leptos::*;
 use leptos_router::*;
 
+use crate::common::components::*;
 use super::components::TransactionsSection;
 
 #[component]
@@ -13,4 +14,9 @@ pub fn TransactionsPage() -> impl IntoView {
     view! {
         <TransactionsSection public_key=public_key.cloned()/>
     }
+}
+
+#[component]
+pub fn TransactionSpotlightPage() -> impl IntoView {
+    view! { <span>"spotlight page"</span> }
 }
