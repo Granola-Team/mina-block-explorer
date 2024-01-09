@@ -9,10 +9,3 @@ describe('navigation to snarks page', () => {
         cy.url().should('contain', href);
     }));
 });
-
-
-// [{
-// }, {
-    
-// }, 
-// })

@@ -8,4 +8,14 @@ describe('navigation to block page', () => {
         cy.get('a').contains("See all transactions", {timeout: 60000}).click();
         cy.url().should('contain', href);
     }));
+
+    let pages = [
+        { origin: '/transactions', column: 'Hash', tableHeader: 'Transactions'},
+    ];
+
+    pages.forEach(({ origin, column, tableHeader }) => it(`navigates to the transaction spotlight ${origin} by clicking link in '${column}'`,() => {
+        cy.visit(origin);
+        cy.clickLinkInTable(1, column, tableHeader);
+        cy.url().should('include', '/transactions/')
+    }));
 });
