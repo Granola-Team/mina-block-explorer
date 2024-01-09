@@ -13,6 +13,8 @@ describe('navigation to account spotlight', () => {
         { origin: '/accounts/B62qq3TQ8AP7MFYPVtMx5tZGF3kWLJukfwG1A1RGvaBW1jfTPTkDBW6', column: 'To', tableHeader: 'Transactions' },
         { origin: '/accounts/B62qq3TQ8AP7MFYPVtMx5tZGF3kWLJukfwG1A1RGvaBW1jfTPTkDBW6', column: 'Block Producer', tableHeader: 'Block Production' },
         { origin: '/accounts/B62qq3TQ8AP7MFYPVtMx5tZGF3kWLJukfwG1A1RGvaBW1jfTPTkDBW6', column: 'Coinbase Receiver', tableHeader: 'Block Production' },
+        { origin: '/accounts/B62qq3TQ8AP7MFYPVtMx5tZGF3kWLJukfwG1A1RGvaBW1jfTPTkDBW6', column: 'Prover', tableHeader: 'SNARK Jobs' },
+        { origin: '/snarks', column: 'Prover', tableHeader: 'SNARKs' },
         { origin: '/transactions', column: 'From', tableHeader: 'Transactions'},
         { origin: '/transactions', column: 'To', tableHeader: 'Transactions'},
     ];
