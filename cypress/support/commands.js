@@ -29,8 +29,8 @@ Cypress.Commands.add('closeAccountDialog', () => {
   cy.get('dialog').should('not.exist');
 });
 
-Cypress.Commands.add('openAccountDialog', (nthRow, columnHeading) => {
-  cy.clickLinkInTable(nthRow, columnHeading);
+Cypress.Commands.add('openAccountDialog', (nthRow, columnHeading, tableHeading) => {
+  cy.clickLinkInTable(nthRow, columnHeading, tableHeading);
   cy.get('dialog', { timeout: 10000 }).should('be.visible');
 });
 
@@ -47,15 +47,21 @@ Cypress.Commands.add('openMobileMenu', () => {
   cy.get('nav').should('be.visible');
 });
 
-Cypress.Commands.add('clickLinkInTable', (nthRow, columnHeading) => {
-  cy.get('table') 
-    .find('th').contains(columnHeading) 
+Cypress.Commands.add('clickLinkInTable', (nthRow, columnHeading, tableHeading) => {
+  cy.get('h1')
+    .contains(tableHeading)
+    .siblings('div')
+    .find('table th').contains(columnHeading) 
     .invoke('index')
     .then(columnIndex => {
-      cy.get('table tr') 
+      cy.get('h1')
+        .contains(tableHeading)
+        .siblings('div')
+        .find('table tr') 
         .eq(nthRow) 
-        .find('td a')
-        .eq(columnIndex) 
+        .find('td')
+        .eq(columnIndex)
+        .find('a') 
         .click({force: true});            
     });
 })

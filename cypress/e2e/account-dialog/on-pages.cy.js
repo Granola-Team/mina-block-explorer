@@ -5,9 +5,17 @@ describe('account dialog', () => {
       '/blocks'
     ];
 
-    pages_with_account_dialog.forEach(page => it(`is mounted on ${page}`,() => {
-      cy.visit(page);
-      cy.openAccountDialog(1, 'Block Producer');
-      cy.closeAccountDialog();
-    }))
+    let columns = [
+      'Block Producer',
+      'Coinbase Receiver'
+    ]
+
+    pages_with_account_dialog.forEach(page => {
+      columns.forEach(col => it(`is launched on ${page} by click link in '${col}'`,() => {
+        cy.visit(page);
+        cy.openAccountDialog(1, col, 'Blocks');
+        cy.closeAccountDialog();
+      }));
+    });
+    
 });
