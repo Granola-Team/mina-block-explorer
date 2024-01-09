@@ -36,7 +36,7 @@ pub fn Spotlight(
                 .map(|chunk| {
                     view! {
                         <div class="@3xl:col-start-2 @3xl:col-end-3 @7xl:flex">
-                            { chunk.first() } {chunk.get(1)}
+                            { chunk.first() } {chunk.last() }
                         </div>
                     }
                 }) // Wrap each chunk in a view
@@ -66,7 +66,7 @@ fn SpotlightRow(entry: SpotlightEntry) -> impl IntoView {
         None => format!(
             "{} {}",
             value_class_str_base.to_owned(),
-            "w-1/2 text-ellipsis overflow-hidden"
+            "w-1/2 @3xl:max-w-[500px] @7xl:max-w-[400px] text-ellipsis overflow-hidden"
         ),
     };
 
