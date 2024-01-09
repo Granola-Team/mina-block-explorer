@@ -18,11 +18,11 @@ impl TableData for Vec<Option<TransactionsQueryTransactions>> {
                     convert_to_span(get_block_datetime(transaction)),
                     convert_to_link(
                         get_from(transaction),
-                        format!("/accounts/{}", get_from(transaction))
+                        format!("/accounts/{}", get_from(transaction)),
                     ),
                     convert_to_link(
                         get_receiver_public_key(transaction),
-                        format!("/accounts/{}", get_receiver_public_key(transaction))
+                        format!("/accounts/{}", get_receiver_public_key(transaction)),
                     ),
                     convert_to_span(get_hash(transaction)),
                     convert_to_pill(get_fee(transaction), PillVariant::Orange),

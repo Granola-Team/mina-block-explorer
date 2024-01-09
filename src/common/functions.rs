@@ -48,7 +48,9 @@ pub fn convert_to_span(data: String) -> HtmlElement<html::AnyElement> {
     html::span().child(data).into()
 }
 
-pub fn convert_array_to_span(els: Vec<HtmlElement<html::AnyElement>>) -> HtmlElement<html::AnyElement>{
+pub fn convert_array_to_span(
+    els: Vec<HtmlElement<html::AnyElement>>,
+) -> HtmlElement<html::AnyElement> {
     html::span().child(els).into()
 }
 
@@ -61,8 +63,8 @@ pub fn convert_to_pill(data: String, pill_variant: PillVariant) -> HtmlElement<h
         PillVariant::Blue => format!("{} {}", pill_class_str_base.to_owned(), "bg-pill-blue"),
         PillVariant::Orange => {
             format!("{} {}", pill_class_str_base.to_owned(), "bg-granola-orange")
-        },
-        PillVariant::Grey => format!("{} {}", pill_class_str_base.to_owned(), "bg-slate-400")
+        }
+        PillVariant::Grey => format!("{} {}", pill_class_str_base.to_owned(), "bg-slate-400"),
     };
     html::span()
         .attr("class", pill_class_str)

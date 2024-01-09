@@ -37,15 +37,22 @@ pub fn get_snark_date_time(snark: &SnarksQuerySnarks) -> String {
 }
 
 pub fn get_block_height(snark: &SnarksQuerySnarks) -> String {
-    snark.block_height.map_or_else(String::new, |height| height.to_string())
+    snark
+        .block_height
+        .map_or_else(String::new, |height| height.to_string())
 }
 
 pub fn get_date_time(snark: &SnarksQuerySnarks) -> String {
-    snark.date_time.map_or_else(String::new, |dt| dt.to_string())
+    snark
+        .date_time
+        .map_or_else(String::new, |dt| dt.to_string())
 }
 
 pub fn get_prover(snark: &SnarksQuerySnarks) -> String {
-    snark.prover.as_ref().map_or_else(String::new, ToString::to_string)
+    snark
+        .prover
+        .as_ref()
+        .map_or_else(String::new, ToString::to_string)
 }
 
 pub fn get_work_ids(snark: &SnarksQuerySnarks) -> Vec<String> {
@@ -67,4 +74,3 @@ pub fn get_block_state_hash(snark: &SnarksQuerySnarks) -> String {
 pub fn get_fee(snark: &SnarksQuerySnarks) -> String {
     snark.fee.map_or_else(String::new, |o| o.to_string())
 }
-

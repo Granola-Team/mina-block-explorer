@@ -50,7 +50,7 @@ pub enum PillVariant {
     Green,
     Blue,
     Orange,
-    Grey
+    Grey,
 }
 
 #[cfg(test)]
