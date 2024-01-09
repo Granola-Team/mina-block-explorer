@@ -18,6 +18,7 @@
         pkgs = import nixpkgs {
           inherit system overlays;
         };
+        toolchain = pkgs.rust-bin.fromRustupToolchainFile ./rust-toolchain.toml;
       in
       with pkgs;
       {
@@ -33,11 +34,9 @@
             openssl
             pkg-config
             rsync
+            rust-analyzer
+            toolchain
             trunk
-            (rust-bin.selectLatestNightlyWith( toolchain: toolchain.default.override {
-              extensions= [ "rust-src" "rust-analyzer" ];
-              targets = [ "wasm32-unknown-unknown" ];
-            }))
           ] ++ lib.optionals stdenv.isDarwin
             [
               darwin.apple_sdk.frameworks.SystemConfiguration
