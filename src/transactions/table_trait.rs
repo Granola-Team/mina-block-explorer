@@ -24,7 +24,10 @@ impl TableData for Vec<Option<TransactionsQueryTransactions>> {
                         get_receiver_public_key(transaction),
                         format!("/accounts/{}", get_receiver_public_key(transaction)),
                     ),
-                    convert_to_span(get_hash(transaction)),
+                    convert_to_link(
+                        get_hash(transaction),
+                        format!("/transactions/{}", get_hash(transaction)),
+                    ),
                     convert_to_pill(get_fee(transaction), PillVariant::Orange),
                     convert_to_pill(get_amount(transaction), PillVariant::Green),
                 ],
