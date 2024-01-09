@@ -35,3 +35,36 @@ pub async fn load_data(
 pub fn get_snark_date_time(snark: &SnarksQuerySnarks) -> String {
     snark.date_time.map_or_else(String::new, |o| o.to_string())
 }
+
+pub fn get_block_height(snark: &SnarksQuerySnarks) -> String {
+    snark.block_height.map_or_else(String::new, |height| height.to_string())
+}
+
+pub fn get_date_time(snark: &SnarksQuerySnarks) -> String {
+    snark.date_time.map_or_else(String::new, |dt| dt.to_string())
+}
+
+pub fn get_prover(snark: &SnarksQuerySnarks) -> String {
+    snark.prover.as_ref().map_or_else(String::new, ToString::to_string)
+}
+
+pub fn get_work_ids(snark: &SnarksQuerySnarks) -> Vec<String> {
+    snark.work_ids.as_ref().map_or_else(Vec::new, |ids| {
+        ids.iter()
+            .map(|id| id.map_or_else(String::new, |id| id.to_string()))
+            .collect::<Vec<_>>()
+    })
+}
+
+pub fn get_block_state_hash(snark: &SnarksQuerySnarks) -> String {
+    snark.block.as_ref().map_or_else(String::new, |blk| {
+        blk.state_hash
+            .as_ref()
+            .map_or_else(String::new, ToString::to_string)
+    })
+}
+
+pub fn get_fee(snark: &SnarksQuerySnarks) -> String {
+    snark.fee.map_or_else(String::new, |o| o.to_string())
+}
+
