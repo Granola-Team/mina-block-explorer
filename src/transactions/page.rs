@@ -6,6 +6,7 @@ use super::components::*;
 use crate::common::components::*;
 use crate::common::functions::*;
 use crate::common::spotlight::*;
+use crate::common::models::*;
 use crate::icons::*;
 
 #[component]
@@ -45,13 +46,13 @@ pub fn TransactionSpotlightPage() -> impl IntoView {
                             SpotlightEntry { label: "Block Height".to_string(), value: get_block_height(transaction), pill_variant: None },
                             SpotlightEntry { label: "Canonical".to_string(), value: get_canonical(transaction), pill_variant: None },
                             SpotlightEntry { label: "Block State Hash".to_string(), value: get_block_state_hash(transaction), pill_variant: None },
-                            SpotlightEntry { label: "Amount".to_string(), value: get_amount(transaction), pill_variant: None },
-                            SpotlightEntry { label: "Fee".to_string(), value: get_fee(transaction), pill_variant: None },
+                            SpotlightEntry { label: "Amount".to_string(), value: get_amount(transaction), pill_variant: Some(PillVariant::Green) },
+                            SpotlightEntry { label: "Fee".to_string(), value: get_fee(transaction), pill_variant: Some(PillVariant::Orange) },
                             SpotlightEntry { label: "From".to_string(), value: get_from(transaction), pill_variant: None },
                             SpotlightEntry { label: "To".to_string(), value: get_to(transaction), pill_variant: None },
                             SpotlightEntry { label: "Nonce".to_string(), value: get_nonce(transaction), pill_variant: None },
                             SpotlightEntry { label: "Memo".to_string(), value: get_memo(transaction), pill_variant: None },
-                            SpotlightEntry { label: "Kind".to_string(), value: get_kind(transaction), pill_variant: None },
+                            SpotlightEntry { label: "Kind".to_string(), value: get_kind(transaction), pill_variant: Some(PillVariant::Blue) },
                         ];
                         view!{
                             <section class="@container md:col-start-2 md:col-end-3 md:rounded-lg bg-table-section p-0 md:p-4 mb-2">
