@@ -1,8 +1,8 @@
 use leptos::*;
 use leptos_router::*;
 
-use crate::common::components::*;
-use super::components::TransactionsSection;
+use super::functions::*;
+use super::components::*;
 
 #[component]
 pub fn TransactionsPage() -> impl IntoView {
@@ -18,5 +18,14 @@ pub fn TransactionsPage() -> impl IntoView {
 
 #[component]
 pub fn TransactionSpotlightPage() -> impl IntoView {
+    let memo_params_map = use_params_map();
+    let _resource = create_resource(
+        move || memo_params_map.get(),
+        |value| async move {
+            let state_hash = value.get("id");
+            load_data(10, None, state_hash.cloned()).await
+        },
+    );
+
     view! { <span>"spotlight page"</span> }
 }

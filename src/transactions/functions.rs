@@ -52,12 +52,18 @@ pub fn get_to(transaction: &TransactionsQueryTransactions) -> String {
 pub async fn load_data(
     limit: i32,
     public_key: Option<String>,
+    state_hash: Option<String>
 ) -> Result<transactions_query::ResponseData, MyError> {
     let url = "https://graphql.minaexplorer.com";
     let variables = transactions_query::Variables {
         sort_by: transactions_query::TransactionSortByInput::BLOCKHEIGHT_DESC,
         limit: Some(limit.into()),
-        query: build_query(public_key),
+        query: transactions_query::TransactionQueryInput {
+            from: public_key,
+            hash: state_hash,
+            canonical: Some(true),
+            ..Default::default()
+        },
     };
 
     let client = reqwest::Client::new();
@@ -75,10 +81,3 @@ pub async fn load_data(
         .ok_or(MyError::GraphQLEmpty("No data available".to_string()))
 }
 
-fn build_query(public_key: Option<String>) -> transactions_query::TransactionQueryInput {
-    transactions_query::TransactionQueryInput {
-        from: public_key,
-        canonical: Some(true),
-        ..Default::default()
-    }
-}
