@@ -17,7 +17,7 @@ pub fn AccountDialog(path_base: String, account: AccountSummary) -> impl IntoVie
 
     view! {
         <dialog id="accountdialog" class="z-20 w-full max-w-3xl h-screen fixed top-0 mr-0 ml-auto flex flex-col items-stretch p-4 bg-background">
-            <button id="closedialog" class="absolute top-0 right-0 p-4">
+            <button id="closedialog" class="absolute top-0 right-0 p-12 z-30">
                 <a href=path_base>X</a>
             </button>
             <SpotlightSection header="Account Spotlight".to_string() spotlight_items=summary_items id=account.public_key meta=format!("Username: {}",account.username)>

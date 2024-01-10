@@ -18,7 +18,7 @@ pub fn SpotlightSection(
     children: Children,
 ) -> impl IntoView {
     view! {
-        <section class="@container md:col-start-2 md:col-end-3 md:rounded-lg bg-table-section p-0 md:p-4 mb-2">
+        <section id="spotlight-section" class="@container md:col-start-2 md:col-end-3 md:rounded-lg bg-table-section p-0 md:p-4 mb-2">
             <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-start items-center">{header}</h1>
             <Spotlight spotlight_items=spotlight_items id=id meta=meta>
                 {children()}

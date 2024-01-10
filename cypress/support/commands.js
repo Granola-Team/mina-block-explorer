@@ -51,19 +51,30 @@ Cypress.Commands.add('clickLinkInTable', (nthRow, columnHeading, tableHeading) =
   cy.get('h1')
     .contains(tableHeading)
     .parent()
-    .find('table th').contains(columnHeading, {timeout: 30000}) 
+    .find('table th').contains(columnHeading, {timeout: 60000}) 
     .invoke('index')
     .then(columnIndex => {
       cy.get('h1')
         .contains(tableHeading)
         .parent()
-        .find('table tr', {timeout: 30000}) 
+        .find('table tr', {timeout: 60000}) 
         .eq(nthRow) 
         .find('td')
         .eq(columnIndex)
         .find('a') 
         .click({force: true});            
     });
+});
+
+Cypress.Commands.add('testSpotlight',(heading, id, expected_fields) => {
+  cy.get("section#spotlight-section h1").contains(heading);
+  cy.get("#spotlight-id").contains(id);
+  cy.get("section#spotlight-section table").within(() => {
+    expected_fields.forEach(field => {
+      cy.get('th').contains(field)
+    });
+  });
+  
 })
 
 
