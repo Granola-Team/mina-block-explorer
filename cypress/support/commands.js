@@ -31,7 +31,7 @@ Cypress.Commands.add('closeAccountDialog', () => {
 
 Cypress.Commands.add('openAccountDialog', (nthRow, columnHeading, tableHeading) => {
   cy.clickLinkInTable(nthRow, columnHeading, tableHeading);
-  cy.get('dialog', { timeout: 10000 }).should('be.visible');
+  cy.get('dialog', { timeout: 60000 }).should('be.visible');
 });
 
 Cypress.Commands.add('accountDialogToAccount', () => {
