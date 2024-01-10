@@ -1,6 +1,7 @@
 use leptos::*;
 
 use crate::common::models::*;
+use crate::common::functions::*;
 
 pub struct SpotlightEntry {
     pub label: String,
@@ -27,53 +28,36 @@ pub fn Spotlight(
                 {meta}
             </div>
         </div>
-        <div id="spotlight-info" class="@3xl:grid @3xl:grid-cols-[10rem_auto_10rem] bg-white rounded-xl flex flex-col items-stretch mt-8 p-4">
+        <table class="@3xl:mx-[10rem] bg-white rounded-xl mt-8 p-4 table-fixed flex flex-wrap">
             {summary_items.into_iter()
-                .map(|entry| view! { <SpotlightRow entry=entry /> })
-                .collect::<Vec<_>>()
-                .as_slice()
-                .chunks(2)
-                .map(|chunk| {
-                    view! {
-                        <div class="@3xl:col-start-2 @3xl:col-end-3 @7xl:flex">
-                            { chunk.first() } {chunk.last() }
-                        </div>
-                    }
-                }) // Wrap each chunk in a view
+                .map(|entry| view! { 
+                    <tr class="h-9 w-full @7xl:w-1/2 overflow-hidden flex">
+                        <SpotlightRow entry=entry /> 
+                    </tr>
+                })
                 .collect::<Vec<_>>()}
-
-        </div>
+        </table>
     }
 }
 
 #[component]
 fn SpotlightRow(entry: SpotlightEntry) -> impl IntoView {
-    let value_class_str_base = "p-1 my-1 text-sm";
+    let value_class_str_base = "text-sm text-ellipsis overflow-hidden";
     let pill_class_str_base = format!(
         "{} {}",
-        value_class_str_base, "px-2 py-0.5 my-1.5 rounded-full text-white"
+        value_class_str_base, "px-2 py-0.5 rounded-full text-white"
     );
 
     let value_class_str = match entry.pill_variant {
-        Some(PillVariant::Green) => {
-            format!("{} {}", pill_class_str_base.to_owned(), "bg-pill-green")
-        }
-        Some(PillVariant::Blue) => format!("{} {}", pill_class_str_base.to_owned(), "bg-pill-blue"),
-        Some(PillVariant::Orange) => {
-            format!("{} {}", pill_class_str_base.to_owned(), "bg-granola-orange")
-        }
-        Some(PillVariant::Grey) => format!("{} {}", pill_class_str_base.to_owned(), "bg-slate-400"),
-        None => format!(
-            "{} {}",
-            value_class_str_base.to_owned(),
-            "w-1/2 @3xl:max-w-[500px] @7xl:max-w-[400px] text-ellipsis overflow-hidden"
-        ),
+        Some(pill_variant) => format!("{} {}",pill_class_str_base, pill_variant_to_style_str(pill_variant)),
+        None => value_class_str_base.to_string(),
     };
+    let th_td_class_base = "flex justify-start items-center m-1 p-1 text-left";
 
     view! {
-        <div class="flex flex-row items-start items-baseline justify-start w-full @7xl:max-w-[50%]">
-            <span class="w-1/4 min-w-[150px] text-slate-400 text-sm whitespace-nowrap">{entry.label}:</span>
+        <th class=format!("{} {}",th_td_class_base,"w-36 min-w-36 text-sm font-normal text-slate-400 whitespace-nowrap")>{entry.label}:</th>
+        <td class=format!("{} {}",th_td_class_base,"block w-fit text-ellipsis overflow-hidden whitespace-nowrap")>
             <span class=value_class_str>{entry.value}</span>
-        </div>
+        </td>
     }
 }
