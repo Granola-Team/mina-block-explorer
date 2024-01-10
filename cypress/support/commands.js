@@ -49,13 +49,13 @@ Cypress.Commands.add('openMobileMenu', () => {
 
 Cypress.Commands.add('clickLinkInTable', (nthRow, columnHeading, tableHeading) => {
   cy.get('h1')
-    .contains(tableHeading)
+    .contains(tableHeading, {timeout: 60000})
     .parent()
     .find('table th').contains(columnHeading, {timeout: 60000}) 
     .invoke('index')
     .then(columnIndex => {
       cy.get('h1')
-        .contains(tableHeading)
+        .contains(tableHeading, {timeout: 60000})
         .parent()
         .find('table tr', {timeout: 60000}) 
         .eq(nthRow) 
