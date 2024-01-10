@@ -5,9 +5,58 @@ use super::graphql::transactions_query::TransactionsQueryTransactions;
 use super::graphql::*;
 
 pub fn get_block_datetime(transaction: &TransactionsQueryTransactions) -> String {
-    transaction.block.as_ref().map_or_else(String::new, |o| {
-        o.date_time.map_or_else(String::new, |o1| o1.to_string())
-    })
+    transaction
+        .block
+        .as_ref()
+        .and_then(|b| b.date_time)
+        .map_or_else(String::new, |o1| o1.to_string())
+}
+
+pub fn get_block_height(transaction: &TransactionsQueryTransactions) -> String {
+    transaction
+        .block_height
+        .map_or_else(String::new, |o| o.to_string())
+}
+
+pub fn get_canonical(transaction: &TransactionsQueryTransactions) -> String {
+    transaction
+        .canonical
+        .map_or_else(String::new, |o| o.to_string())
+}
+
+pub fn get_kind(transaction: &TransactionsQueryTransactions) -> String {
+    transaction
+        .kind
+        .as_ref()
+        .map_or_else(String::new, |o| o.to_string())
+}
+
+pub fn get_payment_id(transaction: &TransactionsQueryTransactions) -> String {
+    transaction
+        .id
+        .as_ref()
+        .map_or_else(String::new, |o| o.to_string())
+}
+
+pub fn get_nonce(transaction: &TransactionsQueryTransactions) -> String {
+    transaction
+        .nonce
+        .map_or_else(String::new, |o| o.to_string())
+}
+
+pub fn get_memo(transaction: &TransactionsQueryTransactions) -> String {
+    transaction
+        .memo
+        .as_ref()
+        .map_or_else(String::new, |o| o.to_string())
+}
+
+pub fn get_block_state_hash(transaction: &TransactionsQueryTransactions) -> String {
+    transaction
+        .block
+        .as_ref()
+        .and_then(|b| b.state_hash.as_ref())
+        .map_or_else(String::new, |o1| o1.to_string())
 }
 
 pub fn get_from(transaction: &TransactionsQueryTransactions) -> String {
@@ -52,12 +101,18 @@ pub fn get_to(transaction: &TransactionsQueryTransactions) -> String {
 pub async fn load_data(
     limit: i32,
     public_key: Option<String>,
+    state_hash: Option<String>,
 ) -> Result<transactions_query::ResponseData, MyError> {
     let url = "https://graphql.minaexplorer.com";
     let variables = transactions_query::Variables {
         sort_by: transactions_query::TransactionSortByInput::BLOCKHEIGHT_DESC,
         limit: Some(limit.into()),
-        query: build_query(public_key),
+        query: transactions_query::TransactionQueryInput {
+            from: public_key,
+            hash: state_hash,
+            canonical: Some(true),
+            ..Default::default()
+        },
     };
 
     let client = reqwest::Client::new();
@@ -73,12 +128,4 @@ pub async fn load_data(
     response
         .data
         .ok_or(MyError::GraphQLEmpty("No data available".to_string()))
-}
-
-fn build_query(public_key: Option<String>) -> transactions_query::TransactionQueryInput {
-    transactions_query::TransactionQueryInput {
-        from: public_key,
-        canonical: Some(true),
-        ..Default::default()
-    }
 }

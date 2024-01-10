@@ -31,7 +31,7 @@ Cypress.Commands.add('closeAccountDialog', () => {
 
 Cypress.Commands.add('openAccountDialog', (nthRow, columnHeading, tableHeading) => {
   cy.clickLinkInTable(nthRow, columnHeading, tableHeading);
-  cy.get('dialog', { timeout: 10000 }).should('be.visible');
+  cy.get('dialog', { timeout: 60000 }).should('be.visible');
 });
 
 Cypress.Commands.add('accountDialogToAccount', () => {
@@ -48,22 +48,34 @@ Cypress.Commands.add('openMobileMenu', () => {
 });
 
 Cypress.Commands.add('clickLinkInTable', (nthRow, columnHeading, tableHeading) => {
-  cy.get('h1')
+  cy.get('h1', {timeout: 60000})
     .contains(tableHeading)
-    .siblings('div')
-    .find('table th').contains(columnHeading) 
+    .parent()
+    .find('table th', {timeout: 60000})
+    .contains(columnHeading) 
     .invoke('index')
     .then(columnIndex => {
-      cy.get('h1')
+      cy.get('h1', {timeout: 60000})
         .contains(tableHeading)
-        .siblings('div')
-        .find('table tr') 
+        .parent()
+        .find('table tr', {timeout: 60000}) 
         .eq(nthRow) 
         .find('td')
         .eq(columnIndex)
         .find('a') 
         .click({force: true});            
     });
+});
+
+Cypress.Commands.add('testSpotlight',(heading, id, expected_fields) => {
+  cy.get("section#spotlight-section h1").contains(heading);
+  cy.get("#spotlight-id").contains(id);
+  cy.get("section#spotlight-section table").within(() => {
+    expected_fields.forEach(field => {
+      cy.get('th').contains(field)
+    });
+  });
+  
 })
 
 

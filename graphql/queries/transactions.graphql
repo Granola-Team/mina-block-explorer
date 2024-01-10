@@ -1,12 +1,19 @@
 query TransactionsQuery($limit: Int = 25, $sort_by: TransactionSortByInput!, $query: TransactionQueryInput!) {
   transactions(limit: $limit, sortBy: $sort_by, query: $query ) {
+    blockHeight
+    canonical
     amount
     fee
+    kind
+    id
     to
     from
+    nonce
+    memo
     hash
     block {
       dateTime
+      stateHash
     }
     receiver {
       publicKey

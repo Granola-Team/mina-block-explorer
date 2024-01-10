@@ -9,3 +9,5 @@ playwright/.cache/
 package-lock.json
 .pid
 assets/css/styles.css
+cypress/screenshots
+**/__diff_output__

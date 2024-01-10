@@ -1,4 +1,4 @@
-describe('navigation to block page', () => {
+describe('navigation to transaction page', () => {
     [{
         origin: '/accounts/B62qq3TQ8AP7MFYPVtMx5tZGF3kWLJukfwG1A1RGvaBW1jfTPTkDBW6',
         dest:"transactions",
@@ -7,5 +7,18 @@ describe('navigation to block page', () => {
         cy.visit(origin);
         cy.get('a').contains("See all transactions", {timeout: 60000}).click();
         cy.url().should('contain', href);
+    }));
+
+});
+
+describe('navigation to transaction spotlight', () => {
+    let pages = [
+        { origin: '/transactions', column: 'Hash', tableHeader: 'Transactions'},
+    ];
+
+    pages.forEach(({ origin, column, tableHeader }) => it(`navigates to the transaction spotlight ${origin} by clicking link in '${column}'`,() => {
+        cy.visit(origin);
+        cy.clickLinkInTable(1, column, tableHeader);
+        cy.url().should('include', '/transactions/')
     }));
 });

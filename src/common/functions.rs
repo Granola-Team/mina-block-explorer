@@ -58,14 +58,11 @@ pub fn convert_to_pill(data: String, pill_variant: PillVariant) -> HtmlElement<h
     let value_class_str_base = "text-white p-0.5 text-sm";
     let pill_class_str_base = format!("{} {}", value_class_str_base, "px-2 rounded-full");
 
-    let pill_class_str = match pill_variant {
-        PillVariant::Green => format!("{} {}", pill_class_str_base.to_owned(), "bg-pill-green"),
-        PillVariant::Blue => format!("{} {}", pill_class_str_base.to_owned(), "bg-pill-blue"),
-        PillVariant::Orange => {
-            format!("{} {}", pill_class_str_base.to_owned(), "bg-granola-orange")
-        }
-        PillVariant::Grey => format!("{} {}", pill_class_str_base.to_owned(), "bg-slate-400"),
-    };
+    let pill_class_str = format!(
+        "{} {}",
+        pill_class_str_base.to_owned(),
+        pill_variant_to_style_str(pill_variant)
+    );
     html::span()
         .attr("class", pill_class_str)
         .child(data)
@@ -253,5 +250,14 @@ mod format_duration_tests {
     fn test_format_duration_mix() {
         let duration = Duration::hours(26);
         assert_eq!(format_duration(&duration), "1 days ago");
+    }
+}
+
+pub fn pill_variant_to_style_str(pill_variant: PillVariant) -> String {
+    match pill_variant {
+        PillVariant::Green => "bg-pill-green".to_string(),
+        PillVariant::Blue => "bg-pill-blue".to_string(),
+        PillVariant::Orange => "bg-granola-orange".to_string(),
+        PillVariant::Grey => "bg-slate-400".to_string(),
     }
 }

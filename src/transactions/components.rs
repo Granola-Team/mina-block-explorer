@@ -13,7 +13,7 @@ pub fn AccountDialogTransactionSection(limit: i32, account_id: String) -> impl I
         || (),
         move |_| {
             let account_id_clone = account_id.clone();
-            async move { load_data(limit, Some(account_id_clone)).await }
+            async move { load_data(limit, Some(account_id_clone), None).await }
         },
     );
 
@@ -105,7 +105,7 @@ pub fn TransactionsSection(
         move || pk.get(),
         move |value| async move {
             let limit = 10;
-            load_data(limit, value).await
+            load_data(limit, value, None).await
         },
     );
 
