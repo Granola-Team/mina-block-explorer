@@ -48,14 +48,15 @@ Cypress.Commands.add('openMobileMenu', () => {
 });
 
 Cypress.Commands.add('clickLinkInTable', (nthRow, columnHeading, tableHeading) => {
-  cy.get('h1')
-    .contains(tableHeading, {timeout: 60000})
+  cy.get('h1', {timeout: 60000})
+    .contains(tableHeading)
     .parent()
-    .find('table th').contains(columnHeading, {timeout: 60000}) 
+    .find('table th', {timeout: 60000})
+    .contains(columnHeading) 
     .invoke('index')
     .then(columnIndex => {
-      cy.get('h1')
-        .contains(tableHeading, {timeout: 60000})
+      cy.get('h1', {timeout: 60000})
+        .contains(tableHeading)
         .parent()
         .find('table tr', {timeout: 60000}) 
         .eq(nthRow) 
