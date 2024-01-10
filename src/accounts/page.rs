@@ -7,7 +7,7 @@ use super::models::*;
 use crate::blocks::components::AccountOverviewBlocksTable;
 use crate::common::components::*;
 use crate::common::models::MyError;
-use crate::common::spotlight::Spotlight;
+use crate::common::spotlight::*;
 use crate::icons::WalletIcon;
 use crate::snarks::components::AccountOverviewSnarkJobTable;
 use crate::transactions::components::*;
@@ -35,12 +35,12 @@ pub fn AccountSummaryPage() -> impl IntoView {
             Some(Ok(res)) =>{
                 let pk =res.account.public_key.clone();
                 view! {
-                    <section class="@container md:col-start-2 md:col-end-3 md:rounded-lg bg-table-section p-0 md:p-4 mb-2">
-                        <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-start items-center">"Account Spotlight"</h1>
-                        <Spotlight summary_items=get_spotlight_data(res.account.clone()) meta=format!("Username: {}",res.account.username) id=pk.clone()>
-                            <WalletIcon width=40/>
-                        </Spotlight>
-                    </section>
+                    <SpotlightSection header="Account Spotlight".to_string()
+                        spotlight_items=get_spotlight_data(res.account.clone())
+                        meta=format!("Username: {}",res.account.username)
+                        id=pk.clone()>
+                        <WalletIcon width=40/>
+                    </SpotlightSection>
                     <TransactionsSection public_key=Some(pk.clone()) with_link=true/>
                     <div class="md:col-start-2 md:col-end-3 grid grid-cols-1 md:grid-cols-2 gap-4">
                         <section class="md:col-start-1 md:col-end-2 md:rounded-lg bg-table-section">

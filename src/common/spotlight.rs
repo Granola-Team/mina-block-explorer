@@ -1,7 +1,7 @@
 use leptos::*;
 
-use crate::common::models::*;
 use crate::common::functions::*;
+use crate::common::models::*;
 
 pub struct SpotlightEntry {
     pub label: String,
@@ -10,8 +10,26 @@ pub struct SpotlightEntry {
 }
 
 #[component]
-pub fn Spotlight(
-    summary_items: Vec<SpotlightEntry>,
+pub fn SpotlightSection(
+    header: String,
+    spotlight_items: Vec<SpotlightEntry>,
+    id: String,
+    meta: String,
+    children: Children,
+) -> impl IntoView {
+    view! {
+        <section class="@container md:col-start-2 md:col-end-3 md:rounded-lg bg-table-section p-0 md:p-4 mb-2">
+            <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-start items-center">{header}</h1>
+            <Spotlight spotlight_items=spotlight_items id=id meta=meta>
+                {children()}
+            </Spotlight>
+        </section>
+    }
+}
+
+#[component]
+fn Spotlight(
+    spotlight_items: Vec<SpotlightEntry>,
     meta: String,
     id: String,
     children: Children,
@@ -29,10 +47,10 @@ pub fn Spotlight(
             </div>
         </div>
         <table class="@3xl:mx-[10rem] bg-white rounded-xl mt-8 p-4 table-fixed flex flex-wrap">
-            {summary_items.into_iter()
-                .map(|entry| view! { 
+            {spotlight_items.into_iter()
+                .map(|entry| view! {
                     <tr class="h-9 w-full @7xl:w-1/2 overflow-hidden flex">
-                        <SpotlightRow entry=entry /> 
+                        <SpotlightRow entry=entry />
                     </tr>
                 })
                 .collect::<Vec<_>>()}
@@ -49,7 +67,11 @@ fn SpotlightRow(entry: SpotlightEntry) -> impl IntoView {
     );
 
     let value_class_str = match entry.pill_variant {
-        Some(pill_variant) => format!("{} {}",pill_class_str_base, pill_variant_to_style_str(pill_variant)),
+        Some(pill_variant) => format!(
+            "{} {}",
+            pill_class_str_base,
+            pill_variant_to_style_str(pill_variant)
+        ),
         None => value_class_str_base.to_string(),
     };
     let th_td_class_base = "flex justify-start items-center m-1 p-1 text-left";

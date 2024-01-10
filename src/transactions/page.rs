@@ -39,7 +39,7 @@ pub fn TransactionSpotlightPage() -> impl IntoView {
                     Some(Some(transaction)) => {
                         let state_hash = get_hash(transaction);
                         let date_time = get_block_datetime(transaction);
-                        let summary_items=vec![
+                        let spotlight_items=vec![
                             SpotlightEntry { label: "Date".to_string(), value: get_block_datetime(transaction), pill_variant: None },
                             SpotlightEntry { label: "Transaction Hash".to_string(), value: get_hash(transaction), pill_variant: None },
                             SpotlightEntry { label: "Payment ID".to_string(), value: get_payment_id(transaction), pill_variant: None },
@@ -55,12 +55,9 @@ pub fn TransactionSpotlightPage() -> impl IntoView {
                             SpotlightEntry { label: "Kind".to_string(), value: get_kind(transaction), pill_variant: Some(PillVariant::Blue) },
                         ];
                         view!{
-                            <section class="@container md:col-start-2 md:col-end-3 md:rounded-lg bg-table-section p-0 md:p-4 mb-2">
-                                <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-start items-center">"Transaction Spotlight"</h1>
-                                <Spotlight summary_items=summary_items id=state_hash meta=format!("{} ({})", date_time, print_time_since(&date_time)) >
-                                    <TransactionIcon width=40/>
-                                </Spotlight>
-                            </section>
+                            <SpotlightSection header="Transaction Spotlight".to_string() spotlight_items=spotlight_items id=state_hash meta=format!("{} ({})", date_time, print_time_since(&date_time))>
+                                <TransactionIcon width=40/>
+                            </SpotlightSection>
                         }.into_view()
                     }
                     _ => view! { <NullView />}

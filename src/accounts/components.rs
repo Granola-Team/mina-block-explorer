@@ -17,17 +17,12 @@ pub fn AccountDialog(path_base: String, account: AccountSummary) -> impl IntoVie
 
     view! {
         <dialog id="accountdialog" class="z-20 w-full max-w-3xl h-screen fixed top-0 mr-0 ml-auto flex flex-col items-stretch p-4 bg-background">
-            <section>
-                <div class="flex justify-between">
-                    <h2 class="text-bold text-xl">"Account Spotlight"</h2>
-                    <button id="closedialog">
-                        <a href=path_base>X</a>
-                    </button>
-                </div>
-                <Spotlight summary_items=summary_items id=account.public_key meta=format!("Username: {}",account.username)>
-                    <WalletIcon width=40/>
-                </Spotlight>
-            </section>
+            <button id="closedialog" class="absolute top-0 right-0 p-4">
+                <a href=path_base>X</a>
+            </button>
+            <SpotlightSection header="Account Spotlight".to_string() spotlight_items=summary_items id=account.public_key meta=format!("Username: {}",account.username)>
+                <WalletIcon width=40/>
+            </SpotlightSection>
             <div class="overflow-y-auto flex flex-col pb-20">
                 <AccountDialogTransactionSection limit=3 account_id=public_key.clone() />
                 <AccountDialogSnarkJobSection public_key=Some(public_key.clone())/>

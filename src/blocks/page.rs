@@ -3,7 +3,7 @@ use super::functions::*;
 use crate::common::components::*;
 use crate::common::functions::*;
 use crate::common::models::*;
-use crate::common::spotlight::{Spotlight, SpotlightEntry};
+use crate::common::spotlight::*;
 use crate::icons::*;
 use leptos::*;
 use leptos_router::*;
@@ -34,7 +34,7 @@ pub fn BlockSpotlight() -> impl IntoView {
                     Some(Some(block)) => {
                         let state_hash = get_state_hash(&block);
                         let date_time = get_date_time(&block);
-                        let summary_items = vec![
+                        let spotlight_items = vec![
                             SpotlightEntry { label: "State Hash".to_string(), value: state_hash, pill_variant: None},
                             SpotlightEntry { label: "Previous State Hash".to_string(), value: get_previous_state_hash(&block), pill_variant: None},
                             SpotlightEntry { label: "Staged Ledger Hash".to_string(), value: get_staged_ledger_hash(&block), pill_variant: None},
@@ -51,12 +51,12 @@ pub fn BlockSpotlight() -> impl IntoView {
                             SpotlightEntry { label: "Total Currency".to_string(), value: get_total_currency(&block), pill_variant: None},
                         ];
                         view!{
-                            <section class="@container md:col-start-2 md:col-end-3 md:rounded-lg bg-table-section p-0 md:p-4 mb-2">
-                                <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-start items-center">"Block Spotlight"</h1>
-                                <Spotlight summary_items=summary_items id=get_state_hash(&block) meta=format!("{} ({})", date_time, print_time_since(&date_time)) >
-                                    <BlockIcon width=40/>
-                                </Spotlight>
-                            </section>
+                            <SpotlightSection header="Block Spotlight".to_string()
+                                spotlight_items=spotlight_items
+                                id=get_state_hash(&block)
+                                meta=format!("{} ({})", date_time, print_time_since(&date_time)) >
+                                <BlockIcon width=40/>
+                            </SpotlightSection>
                             <TableSection section_heading="User Commands".to_string()>
                                 {
                                     move || match get_user_commands(&block) {
