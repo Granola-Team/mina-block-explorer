@@ -13,6 +13,21 @@ use crate::snarks::components::AccountOverviewSnarkJobTable;
 use crate::transactions::components::*;
 
 #[component]
+pub fn AccountsPage() -> impl IntoView {
+    let query_params_map = use_query_map();
+
+    let _resource = create_resource(
+        move || query_params_map.get(),
+        |value| async move {
+            let public_key = value.get("id");
+            load_all_data(Some(0), Some(50), public_key.cloned()).await
+        },
+    );
+
+    view! { <NullView /> }
+}
+
+#[component]
 pub fn AccountSummaryPage() -> impl IntoView {
     let memo_params_map = use_params_map();
 
