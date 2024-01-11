@@ -28,6 +28,21 @@ pub async fn load_data(id: &str) -> Result<AccountResponse, MyError> {
     }
 }
 
+pub async fn load_all_data(id: &str) -> Result<AllAccountResponse, MyError> {
+    let response = reqwest::get(format!("https://api.minaexplorer.com/accounts/{}", id)).await;
+
+    match response {
+        Ok(res) => match res.json::<AllAccountResponse>().await {
+            Ok(account) => Ok(account),
+            Err(_) => Err(MyError::ParseError(String::from(
+                "Error deserializing JSON",
+            ))),
+        },
+        Err(_) => Err(MyError::NetworkError(String::from("API error"))),
+    }
+}
+
+
 pub fn get_spotlight_data(account: AccountSummary) -> Vec<SpotlightEntry> {
     vec![
         SpotlightEntry {
