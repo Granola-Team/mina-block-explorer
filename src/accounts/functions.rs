@@ -1,5 +1,6 @@
 use leptos::*;
 use leptos_router::*;
+use url::Url;
 
 use crate::common::{models::*, spotlight::*};
 
@@ -28,8 +29,22 @@ pub async fn load_data(id: &str) -> Result<AccountResponse, MyError> {
     }
 }
 
-pub async fn load_all_data(id: &str) -> Result<AllAccountResponse, MyError> {
-    let response = reqwest::get(format!("https://api.minaexplorer.com/accounts/{}", id)).await;
+pub async fn load_all_data(offset: Option<i8>, limit: Option<i8>, public_key: Option<String>) -> Result<AllAccountResponse, MyError> {
+    let base_url = "https://minaexplorer.com/all-accounts";
+
+    let mut url = Url::parse(base_url)?;
+
+    match public_key {
+        Some(pk) => {
+            url.query_pairs_mut().append_pair("search[value]", &pk);
+        },
+        None => {
+            url.query_pairs_mut().append_pair("start", &offset.unwrap_or(0).to_string());
+            url.query_pairs_mut().append_pair("length", &limit.unwrap_or(50).to_string());
+        }
+    }
+
+    let response = reqwest::get(url.as_str()).await;
 
     match response {
         Ok(res) => match res.json::<AllAccountResponse>().await {
