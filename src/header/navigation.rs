@@ -6,7 +6,7 @@ enum Icon {
     Home,
     Blocks,
     Transactions,
-    Accounts,
+    // Accounts,
     SNARKs,
 }
 
@@ -19,7 +19,7 @@ pub fn Header() -> impl IntoView {
         ("/summary", "Summary", Icon::Home),
         ("/blocks", "Blocks", Icon::Blocks),
         ("/transactions", "Transactions", Icon::Transactions),
-        ("/accounts", "Accounts", Icon::Accounts),
+        // ("/accounts", "Accounts", Icon::Accounts),
         ("/snarks", "SNARKs", Icon::SNARKs),
     ];
 
@@ -48,7 +48,7 @@ pub fn Header() -> impl IntoView {
                                             Icon::Home => view! { <HomeIcon /> },
                                             Icon::Blocks => view! { <BlockIcon /> },
                                             Icon::Transactions => view! { <TransactionIcon /> },
-                                            Icon::Accounts => view! { <AccountIcon /> },
+                                            // Icon::Accounts => view! { <AccountIcon /> },
                                             Icon::SNARKs => view! { <SnarkIcon /> },
                                         }}
                                         <div class="ml-1">{title}</div>

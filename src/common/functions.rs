@@ -51,7 +51,7 @@ pub fn convert_to_span(data: String) -> HtmlElement<html::AnyElement> {
 pub fn convert_array_to_span(
     els: Vec<HtmlElement<html::AnyElement>>,
 ) -> HtmlElement<html::AnyElement> {
-    html::span().child(els).into()
+    html::span().attr("class", "flex").child(els).into()
 }
 
 pub fn convert_to_pill(data: String, pill_variant: PillVariant) -> HtmlElement<html::AnyElement> {

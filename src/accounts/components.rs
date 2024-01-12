@@ -62,6 +62,11 @@ pub fn AccountCard(
     };
     let info = vec![
         AccountCardData {
+            label: "Username".to_string(),
+            symbol: view! { <UserIcon width=22 /> },
+            value: convert_to_span(username)
+        },
+        AccountCardData {
             label: "MINA".to_string(),
             symbol: view! { <MinaIcon width=22 /> },
             value: convert_to_pill(balance.trunc().to_string(), PillVariant::Orange)
@@ -70,9 +75,9 @@ pub fn AccountCard(
                 }),
         },
         AccountCardData {
-            label: "Public Key".to_string(),
-            symbol: view! { <IDIcon width=22/> },
-            value: convert_to_link(public_key.clone(), format!("/accounts/{}", public_key)),
+            label: "Nonce".to_string(),
+            symbol: view! { <NonceIcon width=22 /> },
+            value: convert_to_pill(nonce.to_string(), PillVariant::Blue)
         },
         AccountCardData {
             label: "Delegating To".to_string(),
@@ -99,15 +104,14 @@ pub fn AccountCard(
     view! {
         <div class=format!("w-full max-w-[640px] rounded-lg flex flex-col items-center p-4 grid grid-cols-1 gap-4 {}",card_bg_color)>
             <div class=format!("text-xs flex justify-between items-center {}",card_text_color)>
-                <a class="font-bold text-xl hover:underline" href=format!("/accounts/{}",public_key)>{username}</a>
-                {convert_to_pill(format!("nonce: {}",nonce.to_string()), PillVariant::Blue)}
+                <a class="overflow-hidden text-ellipsis whitespace-nowrap font-medium text-xl hover:underline" href=format!("/accounts/{}",public_key)>{public_key}</a>
             </div>
             <div class="grid grid-cols-[25px_115px_1fr] gap-1">
                 {info.into_iter()
                     .map(|i| view! {
-                        <span class="m-1 font-normal text-slate-700 col-start-1 col-end-2">{i.symbol}</span>
-                        <span class="m-1 font-normal text-slate-700 col-start-2 col-end-3">{i.label}:</span>
-                        <span class="m-1 font-medium col-start-3 col-end-4 overflow-hidden text-ellipsis whitespace-nowrap">{i.value}</span>
+                        <span class="m-1 font-light text-slate-700 col-start-1 col-end-2">{i.symbol}</span>
+                        <span class="m-1 font-light text-slate-700 col-start-2 col-end-3">{i.label}:</span>
+                        <span class="m-1 font-normal col-start-3 col-end-4 overflow-hidden text-ellipsis whitespace-nowrap">{i.value}</span>
                     })
                     .collect::<Vec<_>>()}
             </div>
