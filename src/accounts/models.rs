@@ -44,7 +44,7 @@ pub struct AccountResponse {
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct AllAccountResponse {
-    pub data: Vec<AccountSummary>,
+    pub data: Vec<AllAccountSummary>,
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
@@ -58,5 +58,11 @@ pub struct AllAccountSummary {
     pub voting_for: String,
     pub public_key: String,
     pub username: String
+}
+
+pub enum AccountCardVariant {
+    Purple,
+    Blue,
+    Green
 }
 

@@ -1,9 +1,11 @@
 use leptos::*;
+use leptos::html::AnyElement;
 
 use super::functions::*;
 use super::models::*;
 use crate::blocks::components::AccountDialogBlocksSection;
 use crate::common::models::*;
+use crate::common::functions::*;
 use crate::common::spotlight::*;
 use crate::icons::*;
 use crate::snarks::components::AccountDialogSnarkJobSection;
@@ -35,6 +37,47 @@ pub fn AccountDialog(path_base: String, account: AccountSummary) -> impl IntoVie
             </div>
         </dialog>
     }.into_view()
+}
+
+struct AccountCardData {
+    label: String,
+    symbol: View,
+    value: HtmlElement<AnyElement>
+}
+
+#[component]
+pub fn AccountCard(username: String, balance: f64, is_unlocked: bool, public_key: String, delegate: String, variant: AccountCardVariant) -> impl IntoView {
+    let lock_icon = if is_unlocked { view! {<LockOpenIcon width=22 />} } else { view! {<LockClosedIcon />} };
+    let info = vec![
+        AccountCardData { label: "MINA".to_string(), symbol: lock_icon, value: convert_to_pill(balance.trunc().to_string(), PillVariant::Orange) },
+        AccountCardData { label: "Public Key".to_string(), symbol: view! { <IDIcon width=22/> }, value: convert_to_link(public_key.clone(), format!("/accounts/{}",public_key)) },
+        AccountCardData { label: "Delegating To".to_string(), symbol: view! { <DelegateIcon width=22 />}, value: convert_to_link(if public_key == delegate { "Self".to_string() } else { delegate.clone() }, format!("/accounts/{}",delegate)) },
+    ];
+    let card_bg_color = match variant {
+        AccountCardVariant::Purple => "bg-card-purple",
+        AccountCardVariant::Blue => "bg-card-blue",
+        AccountCardVariant::Green => "bg-card-green",
+    };
+    let card_text_color = match variant {
+        AccountCardVariant::Purple => "text-card-text-purple",
+        _ => "text-card-text-blue",
+    };
+    view! {
+        <div class=format!("w-full max-w-[640px] rounded-lg flex flex-col items-center p-4 grid grid-cols-1 gap-4 {}",card_bg_color)>
+            <span class=format!("font-bold text-xl flex justify-center hover:underline {}",card_text_color)>
+                <a href=format!("/accounts/{}",public_key)>{username}</a>
+            </span>
+            <div class="grid grid-cols-[25px_115px_1fr] gap-1">
+                {info.into_iter()
+                    .map(|i| view! {
+                        <span class="m-1 font-normal text-slate-700 col-start-1 col-end-2">{i.symbol}</span>
+                        <span class="m-1 font-normal text-slate-700 col-start-2 col-end-3">{i.label}:</span>
+                        <span class="m-1 font-medium col-start-3 col-end-4 overflow-hidden text-ellipsis whitespace-nowrap">{i.value}</span>
+                    })
+                    .collect::<Vec<_>>()}
+            </div>
+        </div>
+    }
 }
 
 #[component]

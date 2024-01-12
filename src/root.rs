@@ -16,7 +16,7 @@ pub fn Root() -> impl IntoView {
     view! {
         <Router>
           <Header />
-          <main class="grid grid-cols-1 md:grid-cols-[10%_80%_10%] bg-secondary-background rounded-t-3xl py-6 px-2 sm:px-0 grow">
+          <main class="grid grid-cols-1 md:grid-cols-[10%_80%_10%] bg-secondary-background rounded-t-3xl py-6 sm:px-0 grow">
             <Routes>
               <Route path="/" view=SummaryPage />
               <Route path="/summary" view=SummaryPage>

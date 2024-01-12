@@ -21,7 +21,12 @@ module.exports = {
             'table-row-text-color': '#25213B',
             'table-header-text-color': '#25213B',
             'pill-green': '#56D05F',
-            'pill-blue': '#14DBF6'
+            'pill-blue': '#14DBF6',
+            'card-purple': '#F4F2FF',
+            'card-blue': '#ECFBFF',
+            'card-green': '#EEFCEF',
+            'card-text-purple': '#8572E6',
+            'card-text-blue': '#25B4D6'
           },
         extend: {},
     },
