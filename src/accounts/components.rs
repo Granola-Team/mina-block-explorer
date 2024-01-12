@@ -64,7 +64,7 @@ pub fn AccountCard(username: String, balance: f64, is_unlocked: bool, public_key
     };
     view! {
         <div class=format!("w-full max-w-[640px] rounded-lg flex flex-col items-center p-4 grid grid-cols-1 gap-4 {}",card_bg_color)>
-            <span class=format!("font-bold text-xl flex justify-center hover:underline {}",card_text_color)>
+            <span class=format!("font-bold text-xl flex justify-start hover:underline {}",card_text_color)>
                 <a href=format!("/accounts/{}",public_key)>{username}</a>
             </span>
             <div class="grid grid-cols-[25px_115px_1fr] gap-1">
