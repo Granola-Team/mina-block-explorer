@@ -29,7 +29,11 @@ pub async fn load_data(id: &str) -> Result<AccountResponse, MyError> {
     }
 }
 
-pub async fn load_all_data(offset: Option<i8>, limit: Option<i8>, public_key: Option<String>) -> Result<AllAccountResponse, MyError> {
+pub async fn load_all_data(
+    offset: Option<i8>,
+    limit: Option<i8>,
+    public_key: Option<String>,
+) -> Result<AllAccountResponse, MyError> {
     let base_url = "https://minaexplorer.com/all-accounts";
 
     let mut url = Url::parse(base_url)?;
@@ -37,10 +41,12 @@ pub async fn load_all_data(offset: Option<i8>, limit: Option<i8>, public_key: Op
     match public_key {
         Some(pk) => {
             url.query_pairs_mut().append_pair("search[value]", &pk);
-        },
+        }
         None => {
-            url.query_pairs_mut().append_pair("start", &offset.unwrap_or(0).to_string());
-            url.query_pairs_mut().append_pair("length", &limit.unwrap_or(50).to_string());
+            url.query_pairs_mut()
+                .append_pair("start", &offset.unwrap_or(0).to_string());
+            url.query_pairs_mut()
+                .append_pair("length", &limit.unwrap_or(50).to_string());
         }
     }
 
@@ -56,7 +62,6 @@ pub async fn load_all_data(offset: Option<i8>, limit: Option<i8>, public_key: Op
         Err(_) => Err(MyError::NetworkError(String::from("API error"))),
     }
 }
-
 
 pub fn get_spotlight_data(account: AccountSummary) -> Vec<SpotlightEntry> {
     vec![

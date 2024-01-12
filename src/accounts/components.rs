@@ -1,11 +1,11 @@
-use leptos::*;
 use leptos::html::AnyElement;
+use leptos::*;
 
 use super::functions::*;
 use super::models::*;
 use crate::blocks::components::AccountDialogBlocksSection;
-use crate::common::models::*;
 use crate::common::functions::*;
+use crate::common::models::*;
 use crate::common::spotlight::*;
 use crate::icons::*;
 use crate::snarks::components::AccountDialogSnarkJobSection;
@@ -42,16 +42,46 @@ pub fn AccountDialog(path_base: String, account: AccountSummary) -> impl IntoVie
 struct AccountCardData {
     label: String,
     symbol: View,
-    value: HtmlElement<AnyElement>
+    value: HtmlElement<AnyElement>,
 }
 
 #[component]
-pub fn AccountCard(username: String, balance: f64, is_unlocked: bool, public_key: String, delegate: String, variant: AccountCardVariant) -> impl IntoView {
-    let lock_icon = if is_unlocked { view! {<LockOpenIcon width=22 />} } else { view! {<LockClosedIcon />} };
+pub fn AccountCard(
+    username: String,
+    balance: f64,
+    is_unlocked: bool,
+    public_key: String,
+    delegate: String,
+    variant: AccountCardVariant,
+) -> impl IntoView {
+    let lock_icon = if is_unlocked {
+        view! {<LockOpenIcon width=22 />}
+    } else {
+        view! {<LockClosedIcon />}
+    };
     let info = vec![
-        AccountCardData { label: "MINA".to_string(), symbol: lock_icon, value: convert_to_pill(balance.trunc().to_string(), PillVariant::Orange) },
-        AccountCardData { label: "Public Key".to_string(), symbol: view! { <IDIcon width=22/> }, value: convert_to_link(public_key.clone(), format!("/accounts/{}",public_key)) },
-        AccountCardData { label: "Delegating To".to_string(), symbol: view! { <DelegateIcon width=22 />}, value: convert_to_link(if public_key == delegate { "Self".to_string() } else { delegate.clone() }, format!("/accounts/{}",delegate)) },
+        AccountCardData {
+            label: "MINA".to_string(),
+            symbol: lock_icon,
+            value: convert_to_pill(balance.trunc().to_string(), PillVariant::Orange),
+        },
+        AccountCardData {
+            label: "Public Key".to_string(),
+            symbol: view! { <IDIcon width=22/> },
+            value: convert_to_link(public_key.clone(), format!("/accounts/{}", public_key)),
+        },
+        AccountCardData {
+            label: "Delegating To".to_string(),
+            symbol: view! { <DelegateIcon width=22 />},
+            value: convert_to_link(
+                if public_key == delegate {
+                    "Self".to_string()
+                } else {
+                    delegate.clone()
+                },
+                format!("/accounts/{}", delegate),
+            ),
+        },
     ];
     let card_bg_color = match variant {
         AccountCardVariant::Purple => "bg-card-purple",

@@ -57,12 +57,11 @@ pub struct AllAccountSummary {
     pub receipt_chain_hash: String,
     pub voting_for: String,
     pub public_key: String,
-    pub username: String
+    pub username: String,
 }
 
 pub enum AccountCardVariant {
     Purple,
     Blue,
-    Green
+    Green,
 }
-

@@ -4,6 +4,7 @@ use leptos_router::*;
 use super::functions::*;
 use super::models::*;
 
+use super::components::*;
 use crate::blocks::components::AccountOverviewBlocksTable;
 use crate::common::components::*;
 use crate::common::models::MyError;
@@ -11,7 +12,6 @@ use crate::common::spotlight::*;
 use crate::icons::WalletIcon;
 use crate::snarks::components::AccountOverviewSnarkJobTable;
 use crate::transactions::components::*;
-use super::components::*;
 
 #[component]
 pub fn AccountsPage() -> impl IntoView {
@@ -25,16 +25,16 @@ pub fn AccountsPage() -> impl IntoView {
         },
     );
 
-    view! { 
+    view! {
         <section class="md:col-start-2 md:col-end-3 md:rounded-lg bg-table-section mb-4">
             <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-start items-center">"Accounts"</h1>
             <div class="sm:p-8 grid grid-cols-1 gap-2 md:grid-cols-2 xl:grid-cols-3">
                 {move || match resource.get() {
-                    Some(Ok(data)) =>  { 
+                    Some(Ok(data)) =>  {
                         data.data.into_iter()
                             .enumerate()
                             .map(|(i, account)| view! {
-                                <AccountCard username=account.username 
+                                <AccountCard username=account.username
                                     balance=account.balance
                                     is_unlocked=true
                                     public_key=account.public_key
@@ -51,7 +51,7 @@ pub fn AccountsPage() -> impl IntoView {
                 }}
             </div>
         </section>
-        
+
     }
 }
 

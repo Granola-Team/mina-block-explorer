@@ -163,8 +163,3 @@ pub fn DelegateIcon(#[prop(default = 20)] width: i8) -> impl IntoView {
         </svg>
     }
 }
-
-
-
-
-
