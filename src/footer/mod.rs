@@ -43,7 +43,7 @@ pub fn Footer() -> impl IntoView {
             <div class="md:col-start-2 md:col-end-3 w-full flex justify-between sm:justify-end p-4">
                 {links.into_iter()
                     .map(|link| view! {
-                        <a class="ml-4 flex items-center text-white text-xs uppercase hover:text-granola-orange hover:underline" href=link.href>
+                        <a class="ml-1 sm:ml-4 flex items-center text-white text-xs uppercase hover:text-granola-orange hover:underline" href=link.href>
                             {match link.icon {
                                 Icon::Docs => view! { <DocsIcon width=12/> },
                                 Icon::Feedback => view! { <FeedbackIcon width=12 /> },

@@ -48,6 +48,7 @@ struct AccountCardData {
 #[component]
 pub fn AccountCard(
     username: String,
+    nonce: i32,
     balance: f64,
     is_unlocked: bool,
     public_key: String,
@@ -55,15 +56,18 @@ pub fn AccountCard(
     variant: AccountCardVariant,
 ) -> impl IntoView {
     let lock_icon = if is_unlocked {
-        view! {<LockOpenIcon width=22 />}
+        view! {<LockOpenIcon width=12 />}
     } else {
-        view! {<LockClosedIcon />}
+        view! {<LockClosedIcon width=12/>}
     };
     let info = vec![
         AccountCardData {
             label: "MINA".to_string(),
-            symbol: lock_icon,
-            value: convert_to_pill(balance.trunc().to_string(), PillVariant::Orange),
+            symbol: view! { <MinaIcon width=22 /> },
+            value: convert_to_pill(balance.trunc().to_string(), PillVariant::Orange)
+                .child(view! { 
+                    <span class="ml-1">{lock_icon}</span> 
+                }),
         },
         AccountCardData {
             label: "Public Key".to_string(),
@@ -94,9 +98,10 @@ pub fn AccountCard(
     };
     view! {
         <div class=format!("w-full max-w-[640px] rounded-lg flex flex-col items-center p-4 grid grid-cols-1 gap-4 {}",card_bg_color)>
-            <span class=format!("font-bold text-xl flex justify-start hover:underline {}",card_text_color)>
-                <a href=format!("/accounts/{}",public_key)>{username}</a>
-            </span>
+            <div class=format!("text-xs flex justify-between items-center {}",card_text_color)>
+                <a class="font-bold text-xl hover:underline" href=format!("/accounts/{}",public_key)>{username}</a>
+                {convert_to_pill(format!("nonce: {}",nonce.to_string()), PillVariant::Blue)}
+            </div>
             <div class="grid grid-cols-[25px_115px_1fr] gap-1">
                 {info.into_iter()
                     .map(|i| view! {

@@ -55,7 +55,7 @@ pub fn convert_array_to_span(
 }
 
 pub fn convert_to_pill(data: String, pill_variant: PillVariant) -> HtmlElement<html::AnyElement> {
-    let value_class_str_base = "text-white p-0.5 text-sm";
+    let value_class_str_base = "text-white p-0.5 text-sm flex justify-center items-center w-fit";
     let pill_class_str_base = format!("{} {}", value_class_str_base, "px-2 rounded-full");
 
     let pill_class_str = format!(

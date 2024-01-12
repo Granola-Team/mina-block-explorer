@@ -36,6 +36,7 @@ pub fn AccountsPage() -> impl IntoView {
                             .map(|(i, account)| view! {
                                 <AccountCard username=account.username
                                     balance=account.balance
+                                    nonce=account.nonce
                                     is_unlocked=true
                                     public_key=account.public_key
                                     delegate=account.delegate
