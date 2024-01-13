@@ -1,9 +1,6 @@
 use leptos::*;
 use leptos_router::*;
 use crate::icons::*;
-use std::collections::HashMap;
-
-
 
 #[component]
 pub fn SearchBar() -> impl IntoView {

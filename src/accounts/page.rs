@@ -20,7 +20,10 @@ pub fn AccountsPage() -> impl IntoView {
     let resource = create_resource(
         move || query_params_map.get(),
         |value| async move {
-            let public_key = value.get("id");
+            let mut public_key = value.get("id");
+            if let None = public_key {
+                public_key = value.get("query");
+            }
             load_all_data(Some(0), Some(50), public_key.cloned()).await
         },
     );
