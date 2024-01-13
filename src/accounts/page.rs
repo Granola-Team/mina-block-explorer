@@ -21,7 +21,7 @@ pub fn AccountsPage() -> impl IntoView {
         move || query_params_map.get(),
         |value| async move {
             let mut public_key = value.get("id");
-            if let None = public_key {
+            if public_key.is_none() {
                 public_key = value.get("query");
             }
             load_all_data(Some(0), Some(50), public_key.cloned()).await

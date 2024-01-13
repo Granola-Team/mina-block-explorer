@@ -64,20 +64,19 @@ pub fn AccountCard(
         AccountCardData {
             label: "Username".to_string(),
             symbol: view! { <UserIcon width=22 /> },
-            value: convert_to_span(username)
+            value: convert_to_span(username),
         },
         AccountCardData {
             label: "MINA".to_string(),
             symbol: view! { <MinaIcon width=22 /> },
-            value: convert_to_pill(balance.trunc().to_string(), PillVariant::Orange)
-                .child(view! { 
-                    <span class="ml-1">{lock_icon}</span> 
-                }),
+            value: convert_to_pill(balance.trunc().to_string(), PillVariant::Orange).child(view! {
+                <span class="ml-1">{lock_icon}</span>
+            }),
         },
         AccountCardData {
             label: "Nonce".to_string(),
             symbol: view! { <NonceIcon width=22 /> },
-            value: convert_to_pill(nonce.to_string(), PillVariant::Blue)
+            value: convert_to_pill(nonce.to_string(), PillVariant::Blue),
         },
         AccountCardData {
             label: "Delegating To".to_string(),
