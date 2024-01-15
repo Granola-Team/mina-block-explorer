@@ -69,10 +69,6 @@ pub fn convert_to_pill(data: String, pill_variant: PillVariant) -> HtmlElement<h
         .into()
 }
 
-pub fn map_string_to_i64(opt_string: Option<String>) -> Option<i64> {
-    opt_string.map(|s| s.parse::<i64>().unwrap_or_default())
-}
-
 pub fn convert_to_link(data: String, href: String) -> HtmlElement<html::AnyElement> {
     html::div()
         .attr("class", "w-full text-ellipsis overflow-hidden")
