@@ -21,7 +21,7 @@ pub fn StakesPage() -> impl IntoView {
     let resource = create_resource(
         move || (current_epoch(), query_params_map.get()),
         move |(c_epoch, value)| async move {
-            let q_str_epoch = value.get("epoch").clone();
+            let q_str_epoch = value.get("epoch");
             let resolved_epoch = match (c_epoch, q_str_epoch) {
                 (Some(epoch), None) => Some(epoch as i64),
                 _ => q_str_epoch.and_then(|s| s.parse::<i64>().ok()),
@@ -91,12 +91,12 @@ fn EpochButton(
         EpochStyleVariant::Primary => format!(
             "{} {}",
             button_base_styles,
-            "text-white bg-granola-orange".to_string()
+            "text-white bg-granola-orange"
         ),
         EpochStyleVariant::Secondary => format!(
             "{} {}",
             button_base_styles,
-            "text-granola-orange bg-white".to_string()
+            "text-granola-orange bg-white"
         ),
     };
     button_variant_styles = match disabled {
