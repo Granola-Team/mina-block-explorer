@@ -200,3 +200,12 @@ pub fn ErrorView<E: std::fmt::Debug>(err: E) -> impl IntoView {
 pub fn NullView() -> impl IntoView {
     view! {}
 }
+
+#[component]
+pub fn MainContainer(children: Children) -> impl IntoView {
+    view! {
+        <main class="grid grid-cols-1 md:grid-cols-[10%_80%_10%] bg-secondary-background rounded-t-3xl py-6 px-2 sm:px-0 grow">
+            {children()}
+        </main>
+    }
+}

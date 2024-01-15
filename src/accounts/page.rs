@@ -29,32 +29,34 @@ pub fn AccountsPage() -> impl IntoView {
     );
 
     view! {
-        <section class="md:col-start-2 md:col-end-3 md:rounded-lg bg-table-section mb-4">
-            <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-start items-center">"Accounts"</h1>
-            <div class="sm:p-8 grid grid-cols-1 gap-2 md:grid-cols-2 xl:grid-cols-3">
-                {move || match resource.get() {
-                    Some(Ok(data)) =>  {
-                        data.data.into_iter()
-                            .enumerate()
-                            .map(|(i, account)| view! {
-                                <AccountCard username=account.username
-                                    balance=account.balance
-                                    nonce=account.nonce
-                                    is_unlocked=true
-                                    public_key=account.public_key
-                                    delegate=account.delegate
-                                    variant={match i%3 {
-                                        0 => AccountCardVariant::Purple,
-                                        1 => AccountCardVariant::Green,
-                                        _ => AccountCardVariant::Blue
-                                    }}/>
-                            })
-                            .collect::<Vec<_>>()
-                    }.into_view(),
-                    _ => view! {<NullView />}
-                }}
-            </div>
-        </section>
+        <MainContainer>
+            <section class="md:col-start-2 md:col-end-3 md:rounded-lg bg-table-section mb-4">
+                <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-start items-center">"Accounts"</h1>
+                <div class="sm:p-8 grid grid-cols-1 gap-2 md:grid-cols-2 xl:grid-cols-3">
+                    {move || match resource.get() {
+                        Some(Ok(data)) =>  {
+                            data.data.into_iter()
+                                .enumerate()
+                                .map(|(i, account)| view! {
+                                    <AccountCard username=account.username
+                                        balance=account.balance
+                                        nonce=account.nonce
+                                        is_unlocked=true
+                                        public_key=account.public_key
+                                        delegate=account.delegate
+                                        variant={match i%3 {
+                                            0 => AccountCardVariant::Purple,
+                                            1 => AccountCardVariant::Green,
+                                            _ => AccountCardVariant::Blue
+                                        }}/>
+                                })
+                                .collect::<Vec<_>>()
+                        }.into_view(),
+                        _ => view! {<NullView />}
+                    }}
+                </div>
+            </section>
+        </MainContainer>
 
     }
 }
@@ -78,31 +80,33 @@ pub fn AccountSummaryPage() -> impl IntoView {
     );
 
     view! {
-        {move || match resource.get() {
-            Some(Ok(res)) =>{
-                let pk =res.account.public_key.clone();
-                view! {
-                    <SpotlightSection header="Account Spotlight".to_string()
-                        spotlight_items=get_spotlight_data(res.account.clone())
-                        meta=format!("Username: {}",res.account.username)
-                        id=pk.clone()>
-                        <WalletIcon width=40/>
-                    </SpotlightSection>
-                    <TransactionsSection public_key=Some(pk.clone()) with_link=true/>
-                    <div class="md:col-start-2 md:col-end-3 grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <section class="md:col-start-1 md:col-end-2 md:rounded-lg bg-table-section">
-                            <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-start items-center">"SNARK Jobs"</h1>
-                            <AccountOverviewSnarkJobTable public_key=Some(pk.clone())/>
-                        </section>
-                        <section class="md:col-start-2 md:col-end-3 md:rounded-lg bg-table-section">
-                            <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-start items-center">"Block Production"</h1>
-                            <AccountOverviewBlocksTable public_key=Some(pk) />
-                        </section>
-                    </div>
-                }.into_view()
-            },
-            _ => view! { <span/>  }.into_view()
-        }}
+        <MainContainer>
+            {move || match resource.get() {
+                Some(Ok(res)) =>{
+                    let pk =res.account.public_key.clone();
+                    view! {
+                        <SpotlightSection header="Account Spotlight".to_string()
+                            spotlight_items=get_spotlight_data(res.account.clone())
+                            meta=format!("Username: {}",res.account.username)
+                            id=pk.clone()>
+                            <WalletIcon width=40/>
+                        </SpotlightSection>
+                        <TransactionsSection public_key=Some(pk.clone()) with_link=true/>
+                        <div class="md:col-start-2 md:col-end-3 grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <section class="md:col-start-1 md:col-end-2 md:rounded-lg bg-table-section">
+                                <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-start items-center">"SNARK Jobs"</h1>
+                                <AccountOverviewSnarkJobTable public_key=Some(pk.clone())/>
+                            </section>
+                            <section class="md:col-start-2 md:col-end-3 md:rounded-lg bg-table-section">
+                                <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-start items-center">"Block Production"</h1>
+                                <AccountOverviewBlocksTable public_key=Some(pk) />
+                            </section>
+                        </div>
+                    }.into_view()
+                },
+                _ => view! { <span/>  }.into_view()
+            }}
+        </MainContainer>
     }
 }
 
