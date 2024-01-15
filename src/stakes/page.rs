@@ -3,6 +3,7 @@ use crate::common::components::*;
 use crate::common::functions::*;
 use leptos::*;
 use leptos_router::use_query_map;
+use crate::summary::functions::load_data as load_summary_data;
 
 #[component]
 pub fn StakesPage() -> impl IntoView {
@@ -16,13 +17,23 @@ pub fn StakesPage() -> impl IntoView {
         },
     );
 
+    let summary_resource = create_resource(||(), |_| async move {
+        load_summary_data().await
+    });
+
     view! {
         {move || match resource.get() {
-            Some(Ok(data)) => view! {
-                <TableSection section_heading="Stakes".to_string()>
-                    <Table data=data.stakes/>
-                </TableSection>
-             },
+            Some(Ok(data)) => {
+                let section_heading = match summary_resource.get() {
+                    Some(Ok(r_data)) => format!("Stakes (Epoch {})", r_data.epoch),
+                    _ => "Stakes".to_string()
+                };
+                view! {
+                    <TableSection section_heading=section_heading>
+                        <Table data=data.stakes/>
+                    </TableSection>
+                }
+            },
             _ => view! { <NullView /> }
         }}
     }
