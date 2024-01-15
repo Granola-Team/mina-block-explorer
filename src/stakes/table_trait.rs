@@ -18,7 +18,10 @@ impl TableData for Vec<Option<StakesQueryStakes>> {
         self.iter()
             .map(|opt_stake| match opt_stake {
                 Some(stake) => vec![
-                    convert_to_span(get_public_key(stake)),
+                    convert_to_link(
+                        get_public_key(stake),
+                        format!("/accounts/{}", get_public_key(stake)),
+                    ),
                     convert_to_pill(get_balance(stake), PillVariant::Green),
                     convert_to_link(
                         if get_public_key(stake) == get_delegate(stake) {

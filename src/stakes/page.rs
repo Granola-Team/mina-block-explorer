@@ -9,7 +9,7 @@ use std::cmp::{max, min};
 pub fn StakesPage() -> impl IntoView {
     let query_params_map = use_query_map();
 
-    let epoch = move || query_params_map.with(|params| params.get("epoch").cloned());
+    let query_string_epoch = move || query_params_map.with(|params| params.get("epoch").cloned());
 
     let summary_resource = create_resource(|| (), |_| async move { load_summary_data().await });
 
@@ -33,7 +33,7 @@ pub fn StakesPage() -> impl IntoView {
     view! {
         {move || match resource.get() {
             Some(Ok(data)) => {
-                let (previous_epoch, next_epoch, section_heading) = match (current_epoch(), epoch()) {
+                let (previous_epoch, next_epoch, section_heading) = match (current_epoch(), query_string_epoch()) {
                     (Some(curr_epoch), Some(qs_epoch)) => {
                         let i_curr_epoch = curr_epoch as i64;
                         match qs_epoch.parse::<i64>() {
