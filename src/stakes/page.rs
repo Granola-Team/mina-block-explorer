@@ -88,16 +88,12 @@ fn EpochButton(
 ) -> impl IntoView {
     let button_base_styles = "text-sm rounded-md p-2 h-9 font-semibold mx-2 flex justify-center items-center border border-granola-orange border-[1px]";
     let mut button_variant_styles = match style_variant {
-        EpochStyleVariant::Primary => format!(
-            "{} {}",
-            button_base_styles,
-            "text-white bg-granola-orange"
-        ),
-        EpochStyleVariant::Secondary => format!(
-            "{} {}",
-            button_base_styles,
-            "text-granola-orange bg-white"
-        ),
+        EpochStyleVariant::Primary => {
+            format!("{} {}", button_base_styles, "text-white bg-granola-orange")
+        }
+        EpochStyleVariant::Secondary => {
+            format!("{} {}", button_base_styles, "text-granola-orange bg-white")
+        }
     };
     button_variant_styles = match disabled {
         true => format!(
