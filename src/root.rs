@@ -11,30 +11,36 @@ use crate::stakes_page::StakesPage;
 use crate::summary::page::SummaryPage;
 use crate::transactions::page::{TransactionSpotlightPage, TransactionsPage};
 use crate::common::components::NullView;
+use crate::common::search::*;
 
 #[component]
 pub fn Root() -> impl IntoView {
     view! {
         <Router>
           <Header />
-          <Routes>
-            <Route path="/" view=SummaryPage />
-            <Route path="/summary" view=SummaryPage>
-              <Route path="accounts/:id" view=AccountDialogView/>
-              <Route path="" view=NullView/>
-            </Route>
-            <Route path="/accounts" view=AccountsPage />
-            <Route path="/accounts/:id" view=AccountSummaryPage />
-            <Route path="/blocks" view=LatestBlocksPage>
-              <Route path="accounts/:id" view=AccountDialogView/>
-              <Route path="" view=NullView/>
-            </Route>
-            <Route path="/blocks/:id" view=BlockSpotlight/>
-            <Route path="/transactions" view=TransactionsPage/>
-            <Route path="/transactions/:id" view=TransactionSpotlightPage/>
-            <Route path="/snarks" view=SnarksPage />
-            <Route path="/stakes" view=StakesPage />
-          </Routes>
+          <main>
+            <Routes>
+              <Route path="/" view=SummaryPage />
+              <Route path="/summary" view=SummaryPage>
+                <Route path="accounts/:id" view=AccountDialogView/>
+                <Route path="" view=NullView/>
+              </Route>
+              <Route path="/accounts" view=|| view! {
+                <SearchBar />
+                <AccountsPage/>
+              } />
+              <Route path="/accounts/:id" view=AccountSummaryPage />
+              <Route path="/blocks" view=LatestBlocksPage>
+                <Route path="accounts/:id" view=AccountDialogView/>
+                <Route path="" view=NullView/>
+              </Route>
+              <Route path="/blocks/:id" view=BlockSpotlight/>
+              <Route path="/transactions" view=TransactionsPage/>
+              <Route path="/transactions/:id" view=TransactionSpotlightPage/>
+              <Route path="/snarks" view=SnarksPage />
+              <Route path="/stakes" view=StakesPage />
+            </Routes>
+          </main>
           <Footer />
         </Router>
 

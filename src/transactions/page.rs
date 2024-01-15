@@ -18,9 +18,9 @@ pub fn TransactionsPage() -> impl IntoView {
     };
 
     view! {
-        <MainContainer>
+        <PageContainer>
             <TransactionsSection public_key=public_key()/>
-        </MainContainer>
+        </PageContainer>
     }
 }
 
@@ -36,7 +36,7 @@ pub fn TransactionSpotlightPage() -> impl IntoView {
     );
 
     view! {
-        <MainContainer>
+        <PageContainer>
             { move || match resource.get() {
                 Some(Ok(data)) => {
                     match data.transactions.first() {
@@ -69,6 +69,6 @@ pub fn TransactionSpotlightPage() -> impl IntoView {
                 },
                 _ => view! { <NullView /> },
             }}
-        </MainContainer>
+        </PageContainer>
     }
 }

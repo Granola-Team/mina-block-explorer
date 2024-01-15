@@ -29,7 +29,7 @@ pub fn AccountsPage() -> impl IntoView {
     );
 
     view! {
-        <MainContainer>
+        <PageContainer>
             <section class="md:col-start-2 md:col-end-3 md:rounded-lg bg-table-section mb-4">
                 <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-start items-center">"Accounts"</h1>
                 <div class="sm:p-8 grid grid-cols-1 gap-2 md:grid-cols-2 xl:grid-cols-3">
@@ -56,7 +56,7 @@ pub fn AccountsPage() -> impl IntoView {
                     }}
                 </div>
             </section>
-        </MainContainer>
+        </PageContainer>
 
     }
 }
@@ -80,7 +80,7 @@ pub fn AccountSummaryPage() -> impl IntoView {
     );
 
     view! {
-        <MainContainer>
+        <PageContainer>
             {move || match resource.get() {
                 Some(Ok(res)) =>{
                     let pk =res.account.public_key.clone();
@@ -106,7 +106,7 @@ pub fn AccountSummaryPage() -> impl IntoView {
                 },
                 _ => view! { <span/>  }.into_view()
             }}
-        </MainContainer>
+        </PageContainer>
     }
 }
 

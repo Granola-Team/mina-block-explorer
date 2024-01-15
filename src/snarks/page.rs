@@ -16,7 +16,7 @@ pub fn SnarksPage() -> impl IntoView {
     );
 
     view! {
-        <MainContainer>
+        <PageContainer>
             {move || match resource.get() {
                 Some(Ok(data)) => view! {
                     <TableSection section_heading="SNARKs".to_owned()>
@@ -25,6 +25,6 @@ pub fn SnarksPage() -> impl IntoView {
                 },
                 _ => view! { <span /> }.into_view()
             }}
-        </MainContainer>
+        </PageContainer>
     }
 }

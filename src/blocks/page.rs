@@ -10,7 +10,11 @@ use leptos_router::*;
 
 #[component]
 pub fn LatestBlocksPage() -> impl IntoView {
-    view! { <BlocksSection /> }
+    view! { 
+        <PageContainer>
+            <BlocksSection /> 
+        </PageContainer>
+    }
 }
 
 #[component]
@@ -27,7 +31,7 @@ pub fn BlockSpotlight() -> impl IntoView {
     let (current_page, set_current_page) = create_signal(1);
 
     view! {
-        <MainContainer>
+        <PageContainer>
             {move || match resource.get() {
                 Some(Ok(data)) => {
                     let blocks = data.blocks.clone();
@@ -94,6 +98,6 @@ pub fn BlockSpotlight() -> impl IntoView {
                 Some(Err(errors)) => view! { <ErrorView err=errors/> },
                 _ => view! { <NullView /> }
             }}
-        </MainContainer>
+        </PageContainer>
     }
 }
