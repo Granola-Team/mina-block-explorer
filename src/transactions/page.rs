@@ -13,9 +13,7 @@ use crate::icons::*;
 pub fn TransactionsPage() -> impl IntoView {
     let query_params_map: Memo<ParamsMap> = use_query_map();
 
-    let public_key = move || {
-        query_params_map.with(|params| params.get("account").cloned())
-    };
+    let public_key = move || query_params_map.with(|params| params.get("account").cloned());
 
     view! {
         <PageContainer>

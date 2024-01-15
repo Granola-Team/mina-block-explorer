@@ -10,9 +10,9 @@ use leptos_router::*;
 
 #[component]
 pub fn LatestBlocksPage() -> impl IntoView {
-    view! { 
+    view! {
         <PageContainer>
-            <BlocksSection /> 
+            <BlocksSection />
         </PageContainer>
     }
 }
