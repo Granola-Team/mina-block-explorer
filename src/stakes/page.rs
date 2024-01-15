@@ -6,14 +6,13 @@ use leptos_router::use_query_map;
 
 #[component]
 pub fn StakesPage() -> impl IntoView {
-
     let query_params_map = use_query_map();
 
     let resource = create_resource(
         move || query_params_map.get(),
-        |value| async move { 
+        |value| async move {
             let epoch = map_string_to_i64(value.get("epoch").cloned());
-            load_data(10, epoch, None).await 
+            load_data(10, epoch, None).await
         },
     );
 
