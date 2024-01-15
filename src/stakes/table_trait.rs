@@ -1,38 +1,34 @@
-use leptos::{HtmlElement, html};
-
-use crate::common::functions::*;
 use crate::common::components::*;
-use super::models::*;
+use crate::common::functions::*;
+use crate::common::models::*;
 
-impl TableData for StakesResponse {
+use super::{functions::*, graphql::stakes_query};
+use leptos::*;
+use stakes_query::StakesQueryStakes;
+
+impl TableData for Vec<Option<StakesQueryStakes>> {
     fn get_columns(&self) -> Vec<String> {
-        vec![
-            String::from("Key"),
-            String::from("Name"),
-            String::from("Stake"),
-            String::from("% Of Total Stake"),
-            String::from("Block Win %"),
-            String::from("Delegators"),
-        ]
+        ["Kye", "Stake", "Delegate", "Delegators", "Ledger Hash"]
+            .iter()
+            .map(ToString::to_string)
+            .collect::<Vec<_>>()
     }
 
     fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
-        let mut rows = Vec::new();
-        for stake in &self.data {
-            let data = vec![
-                stake.id.delegate.to_string(),
-                stake.name.to_string(),
-                stake.stake.to_string(),
-                stake.percent_of_stake.to_string(),
-                stake.block_chance.to_string(),
-                stake.delegates.to_string(),
-            ]
-            .into_iter()
-            .map(convert_to_span)
-            .collect();
-            rows.push(data);
-        }
-        rows
+        self.iter()
+            .map(|opt_stake| match opt_stake {
+                Some(stake) => vec![
+                    convert_to_span(get_public_key(stake)),
+                    convert_to_pill(get_balance(stake), PillVariant::Green),
+                    convert_to_link(
+                        get_delegate(stake),
+                        format!("/accounts/{}", get_delegate(stake)),
+                    ),
+                    convert_to_pill(get_delegators_count(stake), PillVariant::Blue),
+                    convert_to_span(get_ledger_hash(stake)),
+                ],
+                None => vec![],
+            })
+            .collect::<Vec<_>>()
     }
 }
-
