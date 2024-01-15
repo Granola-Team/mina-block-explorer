@@ -1,12 +1,20 @@
 use super::functions::*;
 use crate::common::components::*;
+use crate::common::functions::*;
 use leptos::*;
+use leptos_router::use_query_map;
 
 #[component]
 pub fn StakesPage() -> impl IntoView {
+
+    let query_params_map = use_query_map();
+
     let resource = create_resource(
-        || (),
-        |_| async move { load_data(10, Some(69), None).await },
+        move || query_params_map.get(),
+        |value| async move { 
+            let epoch = map_string_to_i64(value.get("epoch").cloned());
+            load_data(10, epoch, None).await 
+        },
     );
 
     view! {
