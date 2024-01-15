@@ -8,7 +8,7 @@ use stakes_query::StakesQueryStakes;
 
 impl TableData for Vec<Option<StakesQueryStakes>> {
     fn get_columns(&self) -> Vec<String> {
-        ["Kye", "Stake", "Delegate", "Delegators", "Ledger Hash"]
+        ["Key", "Stake", "Delegate", "Delegators", "Ledger Hash"]
             .iter()
             .map(ToString::to_string)
             .collect::<Vec<_>>()
