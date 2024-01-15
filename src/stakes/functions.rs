@@ -1,10 +1,13 @@
 use graphql_client::reqwest::post_graphql;
 
-use crate::common::models::*;
 use super::graphql::{stakes_query, stakes_query::StakesQueryStakes, StakesQuery};
+use crate::common::models::*;
 
 pub fn get_public_key(stake: &StakesQueryStakes) -> String {
-    stake.public_key.as_ref().map_or_else(String::new, ToString::to_string)
+    stake
+        .public_key
+        .as_ref()
+        .map_or_else(String::new, ToString::to_string)
 }
 
 pub fn get_balance(stake: &StakesQueryStakes) -> String {
@@ -12,20 +15,29 @@ pub fn get_balance(stake: &StakesQueryStakes) -> String {
 }
 
 pub fn get_delegate(stake: &StakesQueryStakes) -> String {
-    stake.delegate.as_ref().map_or_else(String::new, ToString::to_string)
+    stake
+        .delegate
+        .as_ref()
+        .map_or_else(String::new, ToString::to_string)
 }
 pub fn get_delegators_count(stake: &StakesQueryStakes) -> String {
-    stake.delegation_totals.as_ref().and_then(|o| o.count_delegates)
+    stake
+        .delegation_totals
+        .as_ref()
+        .and_then(|o| o.count_delegates)
         .map_or("0".to_string(), |o| o.to_string())
 }
 pub fn get_ledger_hash(stake: &StakesQueryStakes) -> String {
-    stake.ledger_hash.as_ref().map_or_else(String::new, ToString::to_string)
+    stake
+        .ledger_hash
+        .as_ref()
+        .map_or_else(String::new, ToString::to_string)
 }
 
 pub async fn load_data(
     limit: i64,
     epoch: Option<i64>,
-    public_key: Option<String>
+    public_key: Option<String>,
 ) -> Result<stakes_query::ResponseData, MyError> {
     let url = "https://graphql.minaexplorer.com";
     let variables = stakes_query::Variables {
