@@ -1,9 +1,9 @@
 use leptos::*;
 
-use crate::blocks::components::SummaryPageBlocksSection;
-use crate::common::components::*;
 use super::functions::*;
 use super::models::*;
+use crate::blocks::components::SummaryPageBlocksSection;
+use crate::common::components::*;
 
 #[component]
 pub fn SummaryPage() -> impl IntoView {

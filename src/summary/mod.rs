@@ -1,3 +1,3 @@
-pub mod page;
 pub mod functions;
 mod models;
+pub mod page;

@@ -10,8 +10,7 @@ pub struct BlockchainSummary {
     pub total_currency: String,
 }
 
-
-impl BlockchainSummary{
+impl BlockchainSummary {
     pub fn circ_supply(&self) -> f64 {
         self.circulating_supply
             .trim()

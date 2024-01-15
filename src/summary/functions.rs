@@ -1,5 +1,5 @@
-use crate::common::models::*;
 use super::models::BlockchainSummary;
+use crate::common::models::*;
 
 pub async fn load_data() -> Result<BlockchainSummary, MyError> {
     let response = reqwest::get("https://api.minaexplorer.com/summary")
