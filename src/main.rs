@@ -7,7 +7,7 @@ mod header;
 mod icons;
 mod root;
 mod snarks;
-mod stakes_page;
+mod stakes;
 mod summary;
 mod transactions;
 

@@ -7,7 +7,7 @@ use crate::blocks::page::{BlockSpotlight, LatestBlocksPage};
 use crate::footer::Footer;
 use crate::header::navigation::Header;
 use crate::snarks::page::SnarksPage;
-use crate::stakes_page::StakesPage;
+use crate::stakes::page::StakesPage;
 use crate::summary::page::SummaryPage;
 use crate::transactions::page::{TransactionSpotlightPage, TransactionsPage};
 
