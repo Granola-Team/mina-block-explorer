@@ -7,7 +7,7 @@ enum Icon {
     Blocks,
     Transactions,
     SNARKs,
-    Staking
+    Staking,
 }
 
 #[component]
