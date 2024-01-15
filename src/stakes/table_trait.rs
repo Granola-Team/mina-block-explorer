@@ -21,7 +21,7 @@ impl TableData for Vec<Option<StakesQueryStakes>> {
                     convert_to_span(get_public_key(stake)),
                     convert_to_pill(get_balance(stake), PillVariant::Green),
                     convert_to_link(
-                        get_delegate(stake),
+                        if get_public_key(stake) == get_delegate(stake) { "Self".to_string() } else { get_delegate(stake) } ,
                         format!("/accounts/{}", get_delegate(stake)),
                     ),
                     convert_to_pill(get_delegators_count(stake), PillVariant::Blue),
