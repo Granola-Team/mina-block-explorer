@@ -1,6 +1,7 @@
 use crate::icons::*;
 use leptos::*;
 use leptos_router::*;
+use leptos_use::signal_debounced;
 
 #[component]
 pub fn SearchBar(#[prop(default="Exact search for public key".to_string())] placeholder: String) -> impl IntoView {
@@ -20,8 +21,15 @@ fn SearchInput(placeholder: String) -> impl IntoView {
     let params_map = query_params_map.get();
     let initial_query = params_map.get("query").cloned();
 
-    let handle_input = move |event| {
-        let input_value = event_target_value(&event);
+    let (input, set_input) = create_signal("".to_string());
+    let debounced: Signal<String> = signal_debounced(input, 500.0);
+
+    create_effect(move |_| {
+        let input_value = debounced.get();
+
+        if input_value.len() == 0 {
+            return;
+        }
 
         let pathname = location.pathname.get();
         let mut pm = query_params_map.get();
@@ -39,12 +47,13 @@ fn SearchInput(placeholder: String) -> impl IntoView {
                 state: State(None),
             },
         );
-    };
+    });
+
     view! {
         <input id="searchbar"
             type="text"
             placeholder=initial_query.unwrap_or(placeholder)
-            on:input=handle_input
+            on:input=move |event| set_input.update(|e| *e = event_target_value(&event))
             class="h-14 flex justify-start items-center text-base text-white pl-14 placeholder:text-slate-400 placeholder:font-medium placeholder:text-base focus:outline-none box-border w-full rounded-2xl bg-[#383B42]" />
             <span class="text-white absolute top-0 left-0 translate-x-3/4 translate-y-3/4"><SearchIcon width=22 /></span>
     }
