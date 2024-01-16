@@ -114,7 +114,13 @@ pub fn BlocksSection() -> impl IntoView {
 
 #[component]
 pub fn SummaryPageBlocksSection() -> impl IntoView {
-    let resource = create_resource(|| (), |_| async move { load_data(10, None, None).await });
+    let query_params_map = use_query_map();
+    let resource = create_resource(
+        move || query_params_map.get(), 
+        |value| async move { 
+            let state_hash = value.get("query");
+            load_data(10, None, state_hash.cloned()).await 
+        });
 
     view! {
         {move || match resource.get() {
