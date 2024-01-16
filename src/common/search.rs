@@ -4,7 +4,9 @@ use leptos_router::*;
 use leptos_use::signal_debounced;
 
 #[component]
-pub fn SearchBar(#[prop(default="Exact search for public key".to_string())] placeholder: String) -> impl IntoView {
+pub fn SearchBar(
+    #[prop(default="Exact search for public key".to_string())] placeholder: String,
+) -> impl IntoView {
     view! {
         <div class="flex self-stretch relative flex items-stretch md:mx-[10%] mb-4">
             <SearchInput placeholder=placeholder/>
@@ -60,7 +62,11 @@ fn SearchInput(placeholder: String) -> impl IntoView {
 }
 
 #[component]
-pub fn TitledSearchBar(title: String, subtext: String, search_placeholder:String) -> impl IntoView {
+pub fn TitledSearchBar(
+    title: String,
+    subtext: String,
+    search_placeholder: String,
+) -> impl IntoView {
     view! {
         <div class="flex flex-col md:flex-row md:px-[10vw] mb-4">
             <div class="pl-8 md:pl-0 flex flex-col md:pr-4">
