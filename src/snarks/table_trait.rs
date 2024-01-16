@@ -29,8 +29,11 @@ impl TableData for Vec<Option<SnarksQuerySnarks>> {
                             .map(|w| convert_to_pill(w.to_string(), PillVariant::Grey))
                             .collect::<Vec<_>>(),
                     ),
-                    convert_to_span(get_block_state_hash(snark)),
-                    convert_to_span(get_fee(snark)),
+                    convert_to_link(
+                        get_block_state_hash(snark),
+                        format!("/blocks/{}",get_block_state_hash(snark))
+                    ),
+                    convert_to_pill(get_fee(snark), PillVariant::Orange),
                 ],
                 None => vec![],
             })

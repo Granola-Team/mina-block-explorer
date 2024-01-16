@@ -69,6 +69,24 @@ pub fn convert_to_pill(data: String, pill_variant: PillVariant) -> HtmlElement<h
         .into()
 }
 
+pub fn string_to_f64(str: &String) -> Option<f64> {
+    let float_val: Result<f64, _> = str.parse();
+    match float_val {
+        Ok(val) => Some(val),
+        Err(_) => None
+    }
+}
+
+pub fn nanomina_to_mina<T, U>(nanomina: T) -> U
+where
+    T: Into<f64>, 
+    U: From<f64>, 
+{
+    let factor = 1e9;
+    let mina_value = nanomina.into() / factor;
+    U::from(mina_value)
+}
+
 pub fn convert_to_link(data: String, href: String) -> HtmlElement<html::AnyElement> {
     html::div()
         .attr("class", "w-full text-ellipsis overflow-hidden")
