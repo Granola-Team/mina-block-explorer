@@ -27,7 +27,13 @@ pub fn Root() -> impl IntoView {
                   />
                 <SummaryPage />
               }/>
-              <Route path="/summary" view=SummaryPage>
+              <Route path="/summary" view=|| view! {
+                <TitledSearchBar title="Blockchain Explorer".to_string() 
+                  subtext="Powered by Mina".to_string()
+                  search_placeholder="Exact search for block hash".to_string()
+                  />
+                <SummaryPage />
+              }>
                 <Route path="accounts/:id" view=AccountDialogView/>
                 <Route path="" view=NullView/>
               </Route>
