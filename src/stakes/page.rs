@@ -31,46 +31,48 @@ pub fn StakesPage() -> impl IntoView {
     );
 
     view! {
-        {move || match resource.get() {
-            Some(Ok(data)) => {
-                let (previous_epoch, next_epoch, section_heading) = match (current_epoch(), query_string_epoch()) {
-                    (Some(curr_epoch), Some(qs_epoch)) => {
-                        let i_curr_epoch = curr_epoch as i64;
-                        match qs_epoch.parse::<i64>() {
-                            Ok(i_qs_epoch) => {
-                                let i_next_epoch = min(i_curr_epoch, i_qs_epoch+1);
-                                let i_prev_epoch = max(0, i_qs_epoch-1);
-                                let header = if i_next_epoch == i_qs_epoch { "Current Staking Ledger".to_string() } else { format!("Epoch {} Staking Ledger",i_qs_epoch)};
-                                (i_prev_epoch,i_next_epoch,header)
-                            },
-                            _ => (0,0, "".to_string())
-                        }
+        <PageContainer>
+            {move || match resource.get() {
+                Some(Ok(data)) => {
+                    let (previous_epoch, next_epoch, section_heading) = match (current_epoch(), query_string_epoch()) {
+                        (Some(curr_epoch), Some(qs_epoch)) => {
+                            let i_curr_epoch = curr_epoch as i64;
+                            match qs_epoch.parse::<i64>() {
+                                Ok(i_qs_epoch) => {
+                                    let i_next_epoch = min(i_curr_epoch, i_qs_epoch+1);
+                                    let i_prev_epoch = max(0, i_qs_epoch-1);
+                                    let header = if i_next_epoch == i_qs_epoch { "Current Staking Ledger".to_string() } else { format!("Epoch {} Staking Ledger",i_qs_epoch)};
+                                    (i_prev_epoch,i_next_epoch,header)
+                                },
+                                _ => (0,0, "".to_string())
+                            }
 
-                    },
-                    (Some(curr_epoch), None) => {
-                        ((curr_epoch-1) as i64, (curr_epoch+1) as i64, "Current Staking Ledger".to_string())
-                    },
-                    _ => (0,0, "".to_string())
-                };
-                view! {
-                    <AppSection>
-                        <span class="w-full flex justify-between">
-                            <AppHeading heading=section_heading />
-                            <div class="self-stretch flex items-center pr-4">
-                                <EpochButton text="Previous".to_string()
-                                    style_variant=EpochStyleVariant::Secondary
-                                    epoch_target=previous_epoch/>
-                                <EpochButton text="Next".to_string()
-                                    style_variant=EpochStyleVariant::Primary
-                                    epoch_target=next_epoch/>
-                            </div>
-                        </span>
-                        <Table data=data.stakes/>
-                    </AppSection>
-                }
-            },
-            _ => view! { <NullView /> }
-        }}
+                        },
+                        (Some(curr_epoch), None) => {
+                            ((curr_epoch-1) as i64, (curr_epoch+1) as i64, "Current Staking Ledger".to_string())
+                        },
+                        _ => (0,0, "".to_string())
+                    };
+                    view! {
+                        <AppSection>
+                            <span class="w-full flex justify-between">
+                                <AppHeading heading=section_heading />
+                                <div class="self-stretch flex items-center pr-4">
+                                    <EpochButton text="Previous".to_string()
+                                        style_variant=EpochStyleVariant::Secondary
+                                        epoch_target=previous_epoch/>
+                                    <EpochButton text="Next".to_string()
+                                        style_variant=EpochStyleVariant::Primary
+                                        epoch_target=next_epoch/>
+                                </div>
+                            </span>
+                            <Table data=data.stakes/>
+                        </AppSection>
+                    }
+                },
+                _ => view! { <NullView /> }
+            }}
+        </PageContainer>
     }
 }
 
