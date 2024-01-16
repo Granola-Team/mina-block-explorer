@@ -62,11 +62,11 @@ Cypress.Commands.add('clickLinkInTable', (nthRow, columnHeading, tableHeading) =
     });
 });
 
-Cypress.Commands.add('tableHasOneRow', (tableHeading) => {
+Cypress.Commands.add('tableHasNRows', (tableHeading, n) => {
   cy.contains('section',tableHeading)
     .find('table tr:not(:has(th))', {timeout: 60000})
     .should(($tr) => {
-      expect($tr).to.have.length(1);
+      expect($tr).to.have.length(n);
     })
 });
 

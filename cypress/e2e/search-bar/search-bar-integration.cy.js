@@ -8,6 +8,6 @@ describe('search bar',() => {
     pages.forEach(({origin, input, tableHeading}) => it(`works on ${origin} page`, () => {
         cy.visit(origin);
         cy.get("input#searchbar").type(input);
-        cy.tableHasOneRow(tableHeading)
+        cy.tableHasNRows(tableHeading, 1)
     }))
 })
