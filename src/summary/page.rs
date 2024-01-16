@@ -4,7 +4,6 @@ use super::functions::*;
 use super::models::*;
 use crate::blocks::components::SummaryPageBlocksSection;
 use crate::common::components::*;
-use crate::common::functions::*;
 
 #[component]
 pub fn SummaryPage() -> impl IntoView {

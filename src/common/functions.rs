@@ -87,6 +87,18 @@ where
     U::from(mina_value)
 }
 
+#[cfg(test)] 
+mod nanomina_to_mina_tests {
+
+    use super::nanomina_to_mina;
+
+    #[test]
+    fn test_nanomina_conversion() {
+        assert_eq!(nanomina_to_mina::<f64, f64>(1e9), 1.0);
+    }
+    
+}
+
 pub fn convert_to_link(data: String, href: String) -> HtmlElement<html::AnyElement> {
     html::div()
         .attr("class", "w-full text-ellipsis overflow-hidden")
