@@ -29,7 +29,7 @@ fn SearchInput(placeholder: String) -> impl IntoView {
     create_effect(move |_| {
         let input_value = debounced.get();
 
-        if input_value.len() == 0 {
+        if input_value.is_empty() {
             return;
         }
 
