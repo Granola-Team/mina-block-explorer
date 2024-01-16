@@ -31,7 +31,7 @@ impl TableData for Vec<Option<SnarksQuerySnarks>> {
                     ),
                     convert_to_link(
                         get_block_state_hash(snark),
-                        format!("/blocks/{}",get_block_state_hash(snark))
+                        format!("/blocks/{}", get_block_state_hash(snark)),
                     ),
                     convert_to_pill(get_fee(snark), PillVariant::Orange),
                 ],

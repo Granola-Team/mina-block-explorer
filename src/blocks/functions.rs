@@ -4,7 +4,10 @@ use super::graphql::{
     blocks_query::{BlocksQueryBlocks, BlocksQueryBlocksTransactionsUserCommands},
     *,
 };
-use crate::common::{models::MyError, functions::{nanomina_to_mina, string_to_f64}};
+use crate::common::{
+    functions::{nanomina_to_mina, string_to_f64},
+    models::MyError,
+};
 
 pub fn get_user_commands(
     block: &BlocksQueryBlocks,
@@ -61,7 +64,10 @@ pub fn get_creator_account(block: &BlocksQueryBlocks) -> String {
 }
 
 pub fn get_coinbase(block: &BlocksQueryBlocks) -> String {
-    block.transactions.as_ref().and_then(|o| o.coinbase.as_ref())
+    block
+        .transactions
+        .as_ref()
+        .and_then(|o| o.coinbase.as_ref())
         .and_then(string_to_f64)
         .and_then(nanomina_to_mina)
         .map_or_else(String::new, |o1| o1.to_string())

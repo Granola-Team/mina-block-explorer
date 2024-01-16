@@ -76,7 +76,8 @@ pub fn get_receiver_public_key(transaction: &TransactionsQueryTransactions) -> S
 }
 
 pub fn get_fee(transaction: &TransactionsQueryTransactions) -> String {
-    transaction.fee
+    transaction
+        .fee
         .and_then(nanomina_to_mina)
         .map_or_else(String::new, |o| o.to_string())
 }

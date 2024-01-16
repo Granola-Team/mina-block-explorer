@@ -2,9 +2,9 @@ use leptos::*;
 use leptos_router::*;
 use url::Url;
 
-use crate::common::models::*; 
-use crate::common::spotlight::*;
 use crate::common::functions::*;
+use crate::common::models::*;
+use crate::common::spotlight::*;
 
 use super::models::*;
 
