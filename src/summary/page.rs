@@ -81,7 +81,7 @@ fn SummaryGrid(summary: BlockchainSummary) -> impl IntoView {
             <h1 class="h-0 w-0 overflow-hidden absolute">Summary</h1>
             <SummaryItem imgsrc="/img/blockchain_length.svg".to_string() id="blockchainLength".to_string() label="Height".to_string() value={SummaryItemKind::Int64(summary.blockchain_length)} />
             <SummaryItem imgsrc="/img/circulating_supply.svg".to_string() id="circulatingSupply".to_string() label="Circulating Supply".to_string() value={SummaryItemKind::Float64(summary.circ_supply())} />
-            <SummaryItem imgsrc="/img/circulating_supply.svg".to_string() id="epoch".to_string() label="Epoch".to_string() value={SummaryItemKind::Int16(summary.epoch)} />
+            <SummaryItem imgsrc="/img/epoch.svg".to_string() id="epoch".to_string() label="Epoch".to_string() value={SummaryItemKind::Int16(summary.epoch)} />
             <SummaryItem imgsrc="/img/total_currency.svg".to_string() id="totalCurrency".to_string() label="Total Currency".to_string() value={SummaryItemKind::Float64(summary.tot_currency())} />
         </section>
     }
