@@ -69,7 +69,7 @@ pub fn convert_to_pill(data: String, pill_variant: PillVariant) -> HtmlElement<h
         .into()
 }
 
-pub fn string_to_f64(str: &String) -> Option<f64> {
+pub fn string_to_f64(str: &str) -> Option<f64> {
     let float_val: Result<f64, _> = str.parse();
     match float_val {
         Ok(val) => Some(val),
