@@ -67,7 +67,7 @@ pub fn get_coinbase(block: &BlocksQueryBlocks) -> String {
     block
         .transactions
         .as_ref()
-        .and_then(|o| o.coinbase.as_ref())
+        .and_then(|o| o.coinbase.as_deref())
         .and_then(string_to_f64)
         .and_then(nanomina_to_mina)
         .map_or_else(String::new, |o1| o1.to_string())
@@ -158,7 +158,7 @@ pub fn get_staged_ledger_hash(block: &BlocksQueryBlocks) -> String {
 pub fn get_transaction_fees(block: &BlocksQueryBlocks) -> String {
     block
         .tx_fees
-        .as_ref()
+        .as_deref()
         .and_then(string_to_f64)
         .and_then(nanomina_to_mina)
         .map_or_else(String::new, |o| o.to_string())
@@ -167,7 +167,7 @@ pub fn get_transaction_fees(block: &BlocksQueryBlocks) -> String {
 pub fn get_snark_fees(block: &BlocksQueryBlocks) -> String {
     block
         .snark_fees
-        .as_ref()
+        .as_deref()
         .and_then(string_to_f64)
         .and_then(nanomina_to_mina)
         .map_or_else(String::new, |o| o.to_string())
