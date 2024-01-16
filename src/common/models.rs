@@ -8,6 +8,13 @@ pub enum MyError {
     ParseError(String), // other error variants
     GraphQLError(Vec<Error>),
     GraphQLEmpty(String),
+    UrlParseError(String),
+}
+
+impl From<url::ParseError> for MyError {
+    fn from(err: url::ParseError) -> MyError {
+        MyError::UrlParseError(err.to_string())
+    }
 }
 
 impl From<reqwest::Error> for MyError {

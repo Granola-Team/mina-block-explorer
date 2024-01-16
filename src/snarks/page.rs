@@ -16,13 +16,15 @@ pub fn SnarksPage() -> impl IntoView {
     );
 
     view! {
-        {move || match resource.get() {
-            Some(Ok(data)) => view! {
-                <TableSection section_heading="SNARKs".to_owned()>
-                    <Table data=data.snarks/>
-                </TableSection>
-            },
-            _ => view! { <span /> }.into_view()
-        }}
+        <PageContainer>
+            {move || match resource.get() {
+                Some(Ok(data)) => view! {
+                    <TableSection section_heading="SNARKs".to_owned()>
+                        <Table data=data.snarks/>
+                    </TableSection>
+                },
+                _ => view! { <span /> }.into_view()
+            }}
+        </PageContainer>
     }
 }

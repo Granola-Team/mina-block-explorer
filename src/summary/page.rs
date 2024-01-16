@@ -64,11 +64,13 @@ pub fn SummaryPage() -> impl IntoView {
     let blockchain_summary_resource = create_resource(|| (), |_| async move { load_data().await });
 
     view! {
-        {move || match blockchain_summary_resource.get() {
-            Some(Ok(summary)) => view! { <SummaryGrid summary=summary /> },
-            _ => view! { <span /> }.into_view()
-        }}
-        <SummaryPageBlocksSection />
+        <PageContainer>
+            {move || match blockchain_summary_resource.get() {
+                Some(Ok(summary)) => view! { <SummaryGrid summary=summary /> },
+                _ => view! { <span /> }.into_view()
+            }}
+            <SummaryPageBlocksSection />
+        </PageContainer>
     }
 }
 
