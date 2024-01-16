@@ -1,0 +1,19 @@
+query StakesQuery($limit: Int = 10, $sort_by: StakeSortByInput!, $query: StakeQueryInput!) {
+  stakes(limit: $limit, sortBy: $sort_by, query: $query ) {
+    balance
+    chainId
+    delegate
+    epoch
+    ledgerHash
+    nonce
+    pk
+    public_key
+    receipt_chain_hash
+    token
+    voting_for
+    delegationTotals {
+      countDelegates
+      totalDelegated
+    }
+  }
+}

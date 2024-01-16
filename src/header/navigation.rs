@@ -8,6 +8,7 @@ enum Icon {
     Transactions,
     // Accounts,
     SNARKs,
+    Staking,
 }
 
 #[component]
@@ -21,6 +22,7 @@ pub fn Header() -> impl IntoView {
         ("/transactions", "Transactions", Icon::Transactions),
         // ("/accounts", "Accounts", Icon::Accounts),
         ("/snarks", "SNARKs", Icon::SNARKs),
+        ("/stakes", "Staking", Icon::Staking),
     ];
 
     let toggle = move |_| set_open.update(|value| *value = !*value);
@@ -50,6 +52,7 @@ pub fn Header() -> impl IntoView {
                                             Icon::Transactions => view! { <TransactionIcon /> },
                                             // Icon::Accounts => view! { <AccountIcon /> },
                                             Icon::SNARKs => view! { <SnarkIcon /> },
+                                            Icon::Staking => view! { <StakingIcon /> },
                                         }}
                                         <div class="ml-1">{title}</div>
                                     </a>

@@ -133,10 +133,26 @@ pub fn EmptyTable(message: String) -> impl IntoView {
 #[component]
 pub fn TableSection(section_heading: String, children: Children) -> impl IntoView {
     view! {
+        <AppSection>
+            <AppHeading heading=section_heading />
+            {children()}
+        </AppSection>
+    }
+}
+
+#[component]
+pub fn AppSection(children: Children) -> impl IntoView {
+    view! {
         <section class="md:col-start-2 md:col-end-3 md:rounded-lg bg-table-section mb-4">
-            <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-start items-center">{section_heading}</h1>
             {children()}
         </section>
+    }
+}
+
+#[component]
+pub fn AppHeading(heading: String) -> impl IntoView {
+    view! {
+        <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-start items-center">{heading}</h1>
     }
 }
 
