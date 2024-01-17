@@ -33,13 +33,13 @@ pub fn get_user_command_hash(uc: &BlocksQueryBlocksTransactionsUserCommands) -> 
 pub fn get_user_command_fee(uc: &BlocksQueryBlocksTransactionsUserCommands) -> String {
     uc.fee
         .and_then(nanomina_to_mina)
-        .map_or("".to_string(),to_mina_string)
+        .map_or("".to_string(), to_mina_string)
 }
 
 pub fn get_user_command_amount(uc: &BlocksQueryBlocksTransactionsUserCommands) -> String {
     uc.amount
         .and_then(nanomina_to_mina)
-        .map_or("".to_string(),to_mina_string)
+        .map_or("".to_string(), to_mina_string)
 }
 
 pub fn get_block_height(block: &BlocksQueryBlocks) -> String {
@@ -70,7 +70,7 @@ pub fn get_coinbase(block: &BlocksQueryBlocks) -> String {
         .and_then(|o| o.coinbase.as_deref())
         .and_then(string_to_f64)
         .and_then(nanomina_to_mina)
-        .map_or("".to_string(),to_mina_string)
+        .map_or("".to_string(), to_mina_string)
 }
 
 pub fn get_transaction_count(block: &BlocksQueryBlocks) -> String {
@@ -161,7 +161,7 @@ pub fn get_transaction_fees(block: &BlocksQueryBlocks) -> String {
         .as_deref()
         .and_then(string_to_f64)
         .and_then(nanomina_to_mina)
-        .map_or("".to_string(),to_mina_string)
+        .map_or("".to_string(), to_mina_string)
 }
 
 pub fn get_snark_fees(block: &BlocksQueryBlocks) -> String {
@@ -170,7 +170,7 @@ pub fn get_snark_fees(block: &BlocksQueryBlocks) -> String {
         .as_deref()
         .and_then(string_to_f64)
         .and_then(nanomina_to_mina)
-        .map_or("".to_string(),to_mina_string)
+        .map_or("".to_string(), to_mina_string)
 }
 
 pub fn get_total_currency(block: &BlocksQueryBlocks) -> String {
@@ -180,7 +180,7 @@ pub fn get_total_currency(block: &BlocksQueryBlocks) -> String {
         .and_then(|o| o.consensus_state.as_ref())
         .and_then(|o| o.total_currency)
         .and_then(nanomina_to_mina)
-        .map_or("".to_string(),to_mina_string)
+        .map_or("".to_string(), to_mina_string)
 }
 
 pub fn get_coinbase_receiver(block: &BlocksQueryBlocks) -> String {
