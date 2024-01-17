@@ -118,10 +118,6 @@ mod nanomina_to_mina_tests {
     fn test_to_string() {
         assert_eq!(to_mina_string(611.918_5), "611.918500000".to_string());
         assert_eq!(
-            to_mina_string(611.918_5),
-            "611.918500000".to_string()
-        );
-        assert_eq!(
             to_mina_string(0.000_500_000_000_0),
             "0.000500000".to_string()
         );
