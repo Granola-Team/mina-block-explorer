@@ -15,7 +15,7 @@ pub fn get_balance(stake: &StakesQueryStakes) -> String {
     stake
         .balance
         .and_then(nanomina_to_mina)
-        .map_or_else(String::new, |o| o.to_string())
+        .map_or("".to_string(), to_mina_string)
 }
 
 pub fn get_delegate(stake: &StakesQueryStakes) -> String {

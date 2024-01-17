@@ -79,7 +79,7 @@ pub fn get_fee(transaction: &TransactionsQueryTransactions) -> String {
     transaction
         .fee
         .and_then(nanomina_to_mina)
-        .map_or_else(String::new, |o| o.to_string())
+        .map_or("".to_string(), to_mina_string)
 }
 
 pub fn get_hash(transaction: &TransactionsQueryTransactions) -> String {
@@ -93,7 +93,7 @@ pub fn get_amount(transaction: &TransactionsQueryTransactions) -> String {
     transaction
         .amount
         .and_then(nanomina_to_mina)
-        .map_or_else(String::new, |o| o.to_string())
+        .map_or("".to_string(), to_mina_string)
 }
 
 pub fn get_to(transaction: &TransactionsQueryTransactions) -> String {

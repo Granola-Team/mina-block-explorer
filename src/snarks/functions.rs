@@ -76,5 +76,5 @@ pub fn get_fee(snark: &SnarksQuerySnarks) -> String {
     snark
         .fee
         .and_then(nanomina_to_mina)
-        .map_or_else(String::new, |o| o.to_string())
+        .map_or("".to_string(), to_mina_string)
 }
