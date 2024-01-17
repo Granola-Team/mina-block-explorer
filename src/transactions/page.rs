@@ -8,16 +8,24 @@ use crate::common::functions::*;
 use crate::common::models::*;
 use crate::common::spotlight::*;
 use crate::icons::*;
+use crate::common::search::*;
 
 #[component]
 pub fn TransactionsPage() -> impl IntoView {
     let query_params_map: Memo<ParamsMap> = use_query_map();
 
-    let public_key = move || query_params_map.with(|params| params.get("account").cloned());
-
     view! {
+        <SearchBar placeholder="Exact search by payment ID".to_string()/>
         <PageContainer>
-            <TransactionsSection public_key=public_key()/>
+            {move || {
+                let qp_map = query_params_map.get();
+                view! {
+                    <TransactionsSection 
+                        public_key=qp_map.get("public_key").cloned() 
+                        payment_id=qp_map.get("query").cloned() />
+                }}
+            }
+            
         </PageContainer>
     }
 }
@@ -29,7 +37,7 @@ pub fn TransactionSpotlightPage() -> impl IntoView {
         move || memo_params_map.get(),
         |value| async move {
             let state_hash = value.get("id");
-            load_data(10, None, state_hash.cloned()).await
+            load_data(10, None, state_hash.cloned(), None).await
         },
     );
 
