@@ -13,7 +13,7 @@ pub fn AccountDialogTransactionSection(limit: i32, account_id: String) -> impl I
         || (),
         move |_| {
             let account_id_clone = account_id.clone();
-            async move { load_data(limit, Some(account_id_clone), None).await }
+            async move { load_data(limit, Some(account_id_clone), None, None).await }
         },
     );
 
@@ -97,15 +97,17 @@ fn TransactionEntry(
 #[component]
 pub fn TransactionsSection(
     public_key: Option<String>,
+    #[prop(default = None)] payment_id: Option<String>,
     #[prop(default = false)] with_link: bool,
 ) -> impl IntoView {
     let (pk, _set_public_key) = create_signal(public_key);
+    let (pid, _set_pid) = create_signal(payment_id);
 
     let resource = create_resource(
-        move || pk.get(),
-        move |value| async move {
+        move || (pk.get(), pid.get()),
+        move |(pk_value, pid_value)| async move {
             let limit = 10;
-            load_data(limit, value, None).await
+            load_data(limit, pk_value, None, pid_value).await
         },
     );
 
