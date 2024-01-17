@@ -1,4 +1,4 @@
-describe('navigation account page', () => {
+describe('account page', () => {
     let pages = [
         { origin: '/accounts/B62qq3TQ8AP7MFYPVtMx5tZGF3kWLJukfwG1A1RGvaBW1jfTPTkDBW6', column: 'From', tableHeader: 'Transactions' },
         { origin: '/accounts/B62qq3TQ8AP7MFYPVtMx5tZGF3kWLJukfwG1A1RGvaBW1jfTPTkDBW6', column: 'To', tableHeader: 'Transactions' },
@@ -12,7 +12,7 @@ describe('navigation account page', () => {
         { origin: '/transactions', column: 'To', tableHeader: 'Transactions'},
     ];
 
-    pages.forEach(({ origin, column, tableHeader }) => it(`navigates to the account ${origin} by clicking link in '${column}'`,() => {
+    pages.forEach(({ origin, column, tableHeader }) => it(`is navigated to from ${origin} by clicking link in '${column}'`,() => {
         cy.visit(origin);
         cy.clickLinkInTable(1, column, tableHeader);
         cy.url().should('include', '/accounts/')
