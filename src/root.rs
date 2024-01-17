@@ -5,7 +5,6 @@ use crate::accounts::account_dialog::AccountDialogView;
 use crate::accounts::page::{AccountSummaryPage, AccountsPage};
 use crate::blocks::page::{BlockSpotlight, LatestBlocksPage};
 use crate::common::components::NullView;
-use crate::common::search::*;
 use crate::footer::Footer;
 use crate::header::navigation::Header;
 use crate::snarks::page::SnarksPage;
@@ -20,27 +19,12 @@ pub fn Root() -> impl IntoView {
           <Header />
           <main>
             <Routes>
-              <Route path="/" view=|| view! {
-                <TitledSearchBar title="Blockchain Explorer".to_string()
-                  subtext="Powered by Mina".to_string()
-                  search_placeholder="Exact search for block hash".to_string()
-                  />
-                <SummaryPage />
-              }/>
-              <Route path="/summary" view=|| view! {
-                <TitledSearchBar title="Blockchain Explorer".to_string()
-                  subtext="Powered by Mina".to_string()
-                  search_placeholder="Exact search for block hash".to_string()
-                  />
-                <SummaryPage />
-              }>
+              <Route path="/" view=SummaryPage />
+              <Route path="/summary" view=SummaryPage>
                 <Route path="accounts/:id" view=AccountDialogView/>
                 <Route path="" view=NullView/>
               </Route>
-              <Route path="/accounts" view=|| view! {
-                <SearchBar />
-                <AccountsPage/>
-              } />
+              <Route path="/accounts" view=AccountsPage />
               <Route path="/accounts/:id" view=AccountSummaryPage />
               <Route path="/blocks" view=LatestBlocksPage>
                 <Route path="accounts/:id" view=AccountDialogView/>

@@ -3,6 +3,7 @@ use super::functions::*;
 use crate::common::components::*;
 use crate::common::functions::*;
 use crate::common::models::*;
+use crate::common::search::*;
 use crate::common::spotlight::*;
 use crate::icons::*;
 use leptos::*;
@@ -11,6 +12,7 @@ use leptos_router::*;
 #[component]
 pub fn LatestBlocksPage() -> impl IntoView {
     view! {
+        <SearchBar placeholder="Exact search for block hash".to_string()/>
         <PageContainer>
             <BlocksSection />
         </PageContainer>

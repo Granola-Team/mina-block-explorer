@@ -95,7 +95,8 @@ pub fn BlocksSection() -> impl IntoView {
         move || query_params_map.get(),
         |value| async move {
             let public_key = value.get("account");
-            load_data(10, public_key.cloned(), None).await
+            let block_hash = value.get("query");
+            load_data(10, public_key.cloned(), block_hash.cloned()).await
         },
     );
 
