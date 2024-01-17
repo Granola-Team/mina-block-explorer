@@ -1,8 +1,8 @@
 use super::functions::*;
 use crate::common::components::*;
+use crate::common::search::*;
 use leptos::*;
 use leptos_router::use_query_map;
-use crate::common::search::*;
 
 #[component]
 pub fn SnarksPage() -> impl IntoView {
