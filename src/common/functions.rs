@@ -121,7 +121,7 @@ mod nanomina_to_mina_tests {
             "611.918500148".to_string()
         );
         assert_eq!(
-            to_mina_string(611.918_500_000_000_0),
+            to_mina_string(611.918_5),
             "611.918500000".to_string()
         );
         assert_eq!(
