@@ -4,12 +4,16 @@ use super::functions::*;
 use super::models::*;
 use crate::blocks::components::SummaryPageBlocksSection;
 use crate::common::components::*;
+use crate::common::search::*;
 
 #[component]
 pub fn SummaryPage() -> impl IntoView {
     let blockchain_summary_resource = create_resource(|| (), |_| async move { load_data().await });
 
     view! {
+        <TitledSearchBar title="Blockchain Explorer".to_string()
+            subtext="Powered by Mina".to_string()
+            search_placeholder="Exact search for block hash".to_string()/>
         <PageContainer>
             {move || match blockchain_summary_resource.get() {
                 Some(Ok(summary)) => view! { <SummaryGrid summary=summary /> },
