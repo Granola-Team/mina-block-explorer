@@ -5,6 +5,7 @@ use super::functions::*;
 use super::models::*;
 
 use super::components::*;
+use crate::common::search::*;
 use crate::blocks::components::AccountOverviewBlocksTable;
 use crate::common::components::*;
 use crate::common::models::MyError;
@@ -29,6 +30,7 @@ pub fn AccountsPage() -> impl IntoView {
     );
 
     view! {
+        <SearchBar />
         <PageContainer>
             <section class="md:col-start-2 md:col-end-3 md:rounded-lg bg-table-section mb-4">
                 <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-start items-center">"Accounts"</h1>

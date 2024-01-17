@@ -4,7 +4,6 @@ use crate::common::components::*;
 use crate::common::functions::*;
 use crate::common::models::*;
 use crate::common::spotlight::*;
-use crate::common::search::*;
 use crate::icons::*;
 use leptos::*;
 use leptos_router::*;
@@ -32,7 +31,6 @@ pub fn BlockSpotlight() -> impl IntoView {
     let (current_page, set_current_page) = create_signal(1);
 
     view! {
-        <SearchBar />
         <PageContainer>
             {move || match resource.get() {
                 Some(Ok(data)) => {
