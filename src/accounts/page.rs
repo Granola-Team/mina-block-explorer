@@ -5,10 +5,10 @@ use super::functions::*;
 use super::models::*;
 
 use super::components::*;
-use crate::common::search::*;
 use crate::blocks::components::AccountOverviewBlocksTable;
 use crate::common::components::*;
 use crate::common::models::MyError;
+use crate::common::search::*;
 use crate::common::spotlight::*;
 use crate::icons::WalletIcon;
 use crate::snarks::components::AccountOverviewSnarkJobTable;
