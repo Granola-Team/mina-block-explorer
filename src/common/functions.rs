@@ -83,7 +83,8 @@ where
     U: From<f64>,
 {
     let factor = 1e9;
-    let mina_value = nanomina.into() / factor;
+    let nanomina_value = (nanomina.into() * factor).round() / factor;
+    let mina_value = nanomina_value / factor;
     U::from(mina_value)
 }
 
@@ -95,6 +96,8 @@ mod nanomina_to_mina_tests {
     #[test]
     fn test_nanomina_conversion() {
         assert_eq!(nanomina_to_mina::<f64, f64>(1e9), 1.0);
+        assert_eq!(nanomina_to_mina::<f64, f64>(245_145_236_987.0), 245.145_236_987);
+        assert_eq!(nanomina_to_mina::<f64, f64>(245_145_000_000.0), 245.145_000_000);
     }
 }
 
