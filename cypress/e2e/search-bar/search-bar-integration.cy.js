@@ -8,11 +8,23 @@ describe('search bar',() => {
         { origin: "/summary", input: block_hash, tableHeading: 'Blocks' },
         { origin: "/blocks", input: block_hash, tableHeading: 'Blocks' },
         { origin: "/transactions", input: payment_id, tableHeading:'Transactions'}
-    ]
+    ];
+
+    it('works on /snarks page', () => {
+        let prover = "B62qnM71LjMchDsRgWinBXyNrXR8smf9NXoJZnQrTXe74DrEQoaUStb";
+        let tableHeading = 'SNARKs';
+        let tableColumn = 'Prover';
+        cy.visit('/snarks');
+        cy.get("input#searchbar").type(prover)
+        cy.wait(1000);
+        cy.tableColumnsEqual(tableHeading, tableColumn, prover)
+    })
 
     pages.forEach(({origin, input, tableHeading}) => it(`works on ${origin} page`, () => {
         cy.visit(origin);
         cy.get("input#searchbar").type(input);
+        cy.wait(1000);
         cy.tableHasNRows(tableHeading, 1)
-    }))
+    }));
+
 })

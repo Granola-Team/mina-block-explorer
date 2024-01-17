@@ -2,6 +2,7 @@ use super::functions::*;
 use crate::common::components::*;
 use leptos::*;
 use leptos_router::use_query_map;
+use crate::common::search::*;
 
 #[component]
 pub fn SnarksPage() -> impl IntoView {
@@ -10,12 +11,16 @@ pub fn SnarksPage() -> impl IntoView {
     let resource = create_resource(
         move || query_params_map.get(),
         |value| async move {
-            let public_key = value.get("account");
+            let mut public_key = value.get("account");
+            if public_key.is_none() {
+                public_key = value.get("query");
+            }
             load_data(10, public_key.cloned()).await
         },
     );
 
     view! {
+        <SearchBar placeholder="Exact search for prover".to_string() />
         <PageContainer>
             {move || match resource.get() {
                 Some(Ok(data)) => view! {
