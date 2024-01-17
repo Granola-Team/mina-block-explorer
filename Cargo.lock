@@ -1142,7 +1142,6 @@ version = "0.1.0"
 dependencies = [
  "chrono",
  "graphql_client",
- "h2",
  "leptos",
  "leptos-use",
  "leptos_router",

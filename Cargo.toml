@@ -13,9 +13,6 @@ graphql_client = { version = "0.13.0", features = ["reqwest"] }
 url = "2.5.0"
 leptos-use = "0.9.0"
 
-[patch.crates-io]
-h2 = "0.3.24"
-
 [profile.release]
 opt-level = 'z'
 lto = true
