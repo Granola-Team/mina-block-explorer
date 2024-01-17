@@ -83,21 +83,33 @@ where
     U: From<f64>,
 {
     let factor = 1e9;
-    let nanomina_value = (nanomina.into() * factor).round() / factor;
-    let mina_value = nanomina_value / factor;
+    let mina_value = nanomina.into() / factor;
     U::from(mina_value)
+}
+
+pub fn to_mina_string(v: f64) -> String {
+    format!("{:.9}",v)
 }
 
 #[cfg(test)]
 mod nanomina_to_mina_tests {
 
     use super::nanomina_to_mina;
+    use super::to_mina_string;
 
     #[test]
     fn test_nanomina_conversion() {
         assert_eq!(nanomina_to_mina::<f64, f64>(1e9), 1.0);
         assert_eq!(nanomina_to_mina::<f64, f64>(245_145_236_987.0), 245.145_236_987);
         assert_eq!(nanomina_to_mina::<f64, f64>(245_145_000_000.0), 245.145_000_000);
+        assert_eq!(nanomina_to_mina::<f64, f64>(611_918_500_148.000_1), 611.918_500_148_000_1);
+    }
+
+    #[test]
+    fn test_to_string() {
+        assert_eq!(to_mina_string(611.918_500_148_000_1), "611.918500148".to_string());
+        assert_eq!(to_mina_string(611.918_500_000_000_0), "611.918500000".to_string());
+        assert_eq!(to_mina_string(0.000_500_000_000_0), "0.000500000".to_string());
     }
 }
 
