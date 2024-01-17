@@ -4,7 +4,10 @@ use super::graphql::{
     blocks_query::{BlocksQueryBlocks, BlocksQueryBlocksTransactionsUserCommands},
     *,
 };
-use crate::common::models::MyError;
+use crate::common::{
+    functions::{nanomina_to_mina, string_to_f64},
+    models::MyError,
+};
 
 pub fn get_user_commands(
     block: &BlocksQueryBlocks,
@@ -28,11 +31,15 @@ pub fn get_user_command_hash(uc: &BlocksQueryBlocksTransactionsUserCommands) -> 
 }
 
 pub fn get_user_command_fee(uc: &BlocksQueryBlocksTransactionsUserCommands) -> String {
-    uc.fee.as_ref().map_or("".to_string(), |o| o.to_string())
+    uc.fee
+        .and_then(nanomina_to_mina)
+        .map_or("".to_string(), |o| o.to_string())
 }
 
 pub fn get_user_command_amount(uc: &BlocksQueryBlocksTransactionsUserCommands) -> String {
-    uc.amount.as_ref().map_or("".to_string(), |o| o.to_string())
+    uc.amount
+        .and_then(nanomina_to_mina)
+        .map_or("".to_string(), |o| o.to_string())
 }
 
 pub fn get_block_height(block: &BlocksQueryBlocks) -> String {
@@ -57,11 +64,13 @@ pub fn get_creator_account(block: &BlocksQueryBlocks) -> String {
 }
 
 pub fn get_coinbase(block: &BlocksQueryBlocks) -> String {
-    block.transactions.as_ref().map_or_else(String::new, |o| {
-        o.coinbase
-            .as_ref()
-            .map_or_else(String::new, |o1| o1.to_string())
-    })
+    block
+        .transactions
+        .as_ref()
+        .and_then(|o| o.coinbase.as_deref())
+        .and_then(string_to_f64)
+        .and_then(nanomina_to_mina)
+        .map_or_else(String::new, |o1| o1.to_string())
 }
 
 pub fn get_transaction_count(block: &BlocksQueryBlocks) -> String {
@@ -149,14 +158,18 @@ pub fn get_staged_ledger_hash(block: &BlocksQueryBlocks) -> String {
 pub fn get_transaction_fees(block: &BlocksQueryBlocks) -> String {
     block
         .tx_fees
-        .as_ref()
+        .as_deref()
+        .and_then(string_to_f64)
+        .and_then(nanomina_to_mina)
         .map_or_else(String::new, |o| o.to_string())
 }
 
 pub fn get_snark_fees(block: &BlocksQueryBlocks) -> String {
     block
         .snark_fees
-        .as_ref()
+        .as_deref()
+        .and_then(string_to_f64)
+        .and_then(nanomina_to_mina)
         .map_or_else(String::new, |o| o.to_string())
 }
 
@@ -166,6 +179,7 @@ pub fn get_total_currency(block: &BlocksQueryBlocks) -> String {
         .as_ref()
         .and_then(|o| o.consensus_state.as_ref())
         .and_then(|o| o.total_currency)
+        .and_then(nanomina_to_mina)
         .map_or_else(String::new, |o| o.to_string())
 }
 

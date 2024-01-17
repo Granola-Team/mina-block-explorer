@@ -1,3 +1,4 @@
+use crate::common::functions::*;
 use crate::common::models::MyError;
 use graphql_client::reqwest::post_graphql;
 
@@ -75,7 +76,10 @@ pub fn get_receiver_public_key(transaction: &TransactionsQueryTransactions) -> S
 }
 
 pub fn get_fee(transaction: &TransactionsQueryTransactions) -> String {
-    transaction.fee.map_or_else(String::new, |o| o.to_string())
+    transaction
+        .fee
+        .and_then(nanomina_to_mina)
+        .map_or_else(String::new, |o| o.to_string())
 }
 
 pub fn get_hash(transaction: &TransactionsQueryTransactions) -> String {
@@ -88,6 +92,7 @@ pub fn get_hash(transaction: &TransactionsQueryTransactions) -> String {
 pub fn get_amount(transaction: &TransactionsQueryTransactions) -> String {
     transaction
         .amount
+        .and_then(nanomina_to_mina)
         .map_or_else(String::new, |o| o.to_string())
 }
 

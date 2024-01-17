@@ -2,7 +2,9 @@ use leptos::*;
 use leptos_router::*;
 use url::Url;
 
-use crate::common::{models::*, spotlight::*};
+use crate::common::functions::*;
+use crate::common::models::*;
+use crate::common::spotlight::*;
 
 use super::models::*;
 
@@ -67,7 +69,9 @@ pub fn get_spotlight_data(account: AccountSummary) -> Vec<SpotlightEntry> {
     vec![
         SpotlightEntry {
             label: String::from("Balance"),
-            value: account.balance.total,
+            value: string_to_f64(&account.balance.total)
+                .and_then(nanomina_to_mina)
+                .map_or("".to_string(), |o| o.to_string()),
             pill_variant: Some(PillVariant::Green),
         },
         SpotlightEntry {

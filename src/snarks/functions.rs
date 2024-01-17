@@ -1,5 +1,6 @@
 use super::graphql::{snarks_query::SnarksQuerySnarks, *};
-use crate::common::models::MyError;
+use crate::common::functions::*;
+use crate::common::models::*;
 use graphql_client::reqwest::post_graphql;
 
 pub async fn load_data(
@@ -72,5 +73,8 @@ pub fn get_block_state_hash(snark: &SnarksQuerySnarks) -> String {
 }
 
 pub fn get_fee(snark: &SnarksQuerySnarks) -> String {
-    snark.fee.map_or_else(String::new, |o| o.to_string())
+    snark
+        .fee
+        .and_then(nanomina_to_mina)
+        .map_or_else(String::new, |o| o.to_string())
 }
