@@ -8,7 +8,7 @@ describe('account spotlight', () => {
         selector: '#viewmore a'
     }];
 
-    dialogs.forEach(({ origin, selector }) => it(`can be navigated to from page ${origin}`,() => {
+    dialogs.forEach(({ origin, selector }) => it(`is navigated to from ${origin}`,() => {
         cy.visit(origin);
         let link = cy.get(selector, {timeout: 20000}).first();
         link.then($a => {
