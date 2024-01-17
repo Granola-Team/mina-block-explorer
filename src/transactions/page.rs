@@ -6,9 +6,9 @@ use super::functions::*;
 use crate::common::components::*;
 use crate::common::functions::*;
 use crate::common::models::*;
+use crate::common::search::*;
 use crate::common::spotlight::*;
 use crate::icons::*;
-use crate::common::search::*;
 
 #[component]
 pub fn TransactionsPage() -> impl IntoView {
@@ -20,12 +20,12 @@ pub fn TransactionsPage() -> impl IntoView {
             {move || {
                 let qp_map = query_params_map.get();
                 view! {
-                    <TransactionsSection 
-                        public_key=qp_map.get("public_key").cloned() 
+                    <TransactionsSection
+                        public_key=qp_map.get("public_key").cloned()
                         payment_id=qp_map.get("query").cloned() />
                 }}
             }
-            
+
         </PageContainer>
     }
 }
