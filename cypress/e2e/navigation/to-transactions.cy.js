@@ -14,6 +14,7 @@ describe('transaction page', () => {
 describe('transaction spotlight', () => {
     let pages = [
         { origin: '/transactions', column: 'Hash', tableHeader: 'Transactions'},
+        { origin: '/blocks/3NKnLbpRcFaY9WSzLFa4wYxejhnWBQNEPA2cnesvS75wcuNCr8nA', column: 'Hash', tableHeader: 'User Commands'},
     ];
 
     pages.forEach(({ origin, column, tableHeader }) => it(`is navigated to from ${origin} by clicking link in '${column}'`,() => {
