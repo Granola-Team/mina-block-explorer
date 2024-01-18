@@ -81,4 +81,19 @@ Cypress.Commands.add('testSpotlight',(heading, id, expected_fields) => {
   
 })
 
+Cypress.Commands.add('tableColumnsEqual', (heading, column, value) => {
+  cy.contains('section',heading)
+    .contains('table th', column, { timeout: 60000 }) 
+    .invoke('index')
+    .then(columnIndex => {
+      cy.contains('section',heading)
+        .find('table tr td', {timeout: 60000}) 
+        .eq(columnIndex)
+        .find('a') 
+        .each($a => {
+          cy.wrap($a).should('have.text', value)
+        });            
+    });
+})
+
 
