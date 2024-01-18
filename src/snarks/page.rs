@@ -22,14 +22,14 @@ pub fn SnarksPage() -> impl IntoView {
     view! {
         <SearchBar placeholder="Exact search for prover".to_string() />
         <PageContainer>
+            <TableSection section_heading="SNARKs".to_owned()>
             {move || match resource.get() {
                 Some(Ok(data)) => view! {
-                    <TableSection section_heading="SNARKs".to_owned()>
-                        <Table data=data.snarks/>
-                    </TableSection>
+                    <Table data=data.snarks/>
                 },
                 _ => view! { <span /> }.into_view()
             }}
+            </TableSection>
         </PageContainer>
     }
 }
