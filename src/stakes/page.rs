@@ -1,5 +1,6 @@
 use super::functions::*;
 use crate::common::components::*;
+use crate::common::search::*;
 use crate::common::table::*;
 use crate::summary::functions::load_data as load_summary_data;
 use leptos::*;
@@ -20,18 +21,20 @@ pub fn StakesPage() -> impl IntoView {
     };
 
     let resource = create_resource(
-        move || (current_epoch(), query_params_map.get()),
-        move |(c_epoch, value)| async move {
-            let q_str_epoch = value.get("epoch");
+        move || (query_params_map.get(), current_epoch()),
+        move |(params_map, c_epoch)| async move {
+            let q_str_epoch = params_map.get("epoch");
+            let public_key = params_map.get("query").cloned();
             let resolved_epoch = match (c_epoch, q_str_epoch) {
                 (Some(epoch), None) => Some(epoch as i64),
                 _ => q_str_epoch.and_then(|s| s.parse::<i64>().ok()),
             };
-            load_data(10, resolved_epoch, None).await
+            load_data(10, resolved_epoch, public_key).await
         },
     );
 
     view! {
+        <SearchBar placeholder="Exact search for public key".to_string()/>
         <PageContainer>
             {move || match resource.get() {
                 Some(Ok(data)) => {
