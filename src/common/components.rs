@@ -23,7 +23,7 @@ where
     F: Fn(Event) + 'static
 {
     view! {
-        <label class="text-sm grid grid-cols-[1em_auto] gap-1">
+        <label class="text-sm grid grid-cols-[1em_auto] gap-1 font-semibold checked:text-granola-orange">
             <input
                 on:change=handle_change
                 prop:checked=value

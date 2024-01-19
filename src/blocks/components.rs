@@ -94,11 +94,7 @@ pub fn BlocksSection() -> impl IntoView {
             let public_key = value.get("account");
             let block_hash = value.get("query");
             let include_non_canonical_qs = value.get("include_non_canonical");
-            let canonical_query = match include_non_canonical_qs {
-                Some(canonical) if canonical.as_str() == "true" => None ,
-                Some(canonical) if canonical.as_str() == "false" => Some(true),
-                _ => Some(true)
-            };
+            let canonical_query = canonical_qs_to_canonical_query_param(include_non_canonical_qs);
             load_data(
                 10,
                 public_key.cloned(),
@@ -135,14 +131,20 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
         move || query_params_map.get(),
         |value| async move {
             let state_hash = value.get("query");
-            load_data(10, None, state_hash.cloned(), Some(true)).await
+            let include_non_canonical_qs = value.get("include_non_canonical");
+            let canonical_query = canonical_qs_to_canonical_query_param(include_non_canonical_qs);
+            load_data(10, None, state_hash.cloned(), canonical_query).await
         },
     );
 
     view! {
         {move || match resource.get() {
             Some(Ok(data)) => view! {
-                <TableSection section_heading="Blocks".to_owned() controls=|| ().into_view()>
+                <TableSection section_heading="Blocks".to_owned() controls=move || view! { 
+                    <URLCheckbox 
+                    label="Include Non-Canonical".to_string() 
+                    url_param_key="include_non_canonical".to_string() />
+                }>
                     <Table data=SummaryPageBlocksQueryBlocks(data.blocks)/>
                 </TableSection>
                 <Outlet />
