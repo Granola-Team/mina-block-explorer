@@ -5,8 +5,9 @@ use super::functions::*;
 use super::graphql::blocks_query::BlocksQueryBlocks;
 use super::models::*;
 use crate::accounts::components::*;
+use crate::common::components::EmptyTable;
+use crate::common::components::*;
 use crate::common::functions::*;
-use crate::common::table::*;
 use crate::icons::*;
 
 #[component]
