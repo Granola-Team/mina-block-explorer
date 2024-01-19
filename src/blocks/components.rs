@@ -102,7 +102,7 @@ pub fn BlocksSection() -> impl IntoView {
     view! {
         {move || match resource.get() {
             Some(Ok(data)) => view! {
-                <TableSection section_heading="Blocks".to_owned()>
+                <TableSection section_heading="Blocks".to_owned() controls=|| ().into_view()>
                     <Table data=data.blocks/>
                 </TableSection>
                 <Outlet />
@@ -126,7 +126,7 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
     view! {
         {move || match resource.get() {
             Some(Ok(data)) => view! {
-                <TableSection section_heading="Blocks".to_owned()>
+                <TableSection section_heading="Blocks".to_owned() controls=|| ().into_view()>
                     <Table data=SummaryPageBlocksQueryBlocks(data.blocks)/>
                 </TableSection>
                 <Outlet />

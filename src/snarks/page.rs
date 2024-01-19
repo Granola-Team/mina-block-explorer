@@ -21,9 +21,9 @@ pub fn SnarksPage() -> impl IntoView {
     );
 
     view! {
-        <SearchBar placeholder="Exact search for prover".to_string() />
+        <SearchBar placeholder="Exact search for prover".to_string()/>
         <PageContainer>
-            <TableSection section_heading="SNARKs".to_owned()>
+            <TableSection section_heading="SNARKs".to_owned() controls=|| ().into_view()>
             {move || match resource.get() {
                 Some(Ok(data)) => view! {
                     <Table data=data.snarks/>
