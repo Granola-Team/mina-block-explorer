@@ -6,6 +6,7 @@ use super::graphql::blocks_query::BlocksQueryBlocks;
 use super::models::*;
 use crate::accounts::components::*;
 use crate::common::functions::*;
+use crate::common::components::*;
 use crate::common::table::*;
 use crate::icons::*;
 
@@ -86,22 +87,23 @@ fn AccountDialogBlockEntry(block: BlocksQueryBlocks) -> impl IntoView {
 #[component]
 pub fn BlocksSection() -> impl IntoView {
     let query_params_map = use_query_map();
-    let (i_non_canon_val_signal, set_i_non_canon_val) = create_signal(false);
-
+    
     let resource = create_resource(
-        move || (query_params_map.get(), i_non_canon_val_signal.get()),
-        |(value, include_non_canonical)| async move {
+        move || query_params_map.get(),
+        |value| async move {
             let public_key = value.get("account");
             let block_hash = value.get("query");
-            let include_non_canonical_val = match include_non_canonical {
-                true => None,
-                false => Some(true),
+            let include_non_canonical_qs = value.get("include_non_canonical");
+            let canonical_query = match include_non_canonical_qs {
+                Some(canonical) if canonical.as_str() == "true" => None ,
+                Some(canonical) if canonical.as_str() == "false" => Some(true),
+                _ => Some(true)
             };
             load_data(
                 10,
                 public_key.cloned(),
                 block_hash.cloned(),
-                include_non_canonical_val,
+                canonical_query,
             )
             .await
         },
@@ -111,22 +113,11 @@ pub fn BlocksSection() -> impl IntoView {
         {move || match resource.get() {
             Some(Ok(data)) => {
                 view! {
-                    <TableSection section_heading="Blocks".to_owned() controls=move || view! {
-                            <label class="text-sm grid grid-cols-[1em_auto] gap-1">
-                                <input
-                                    on:change=move |ev| {
-                                        set_i_non_canon_val.update(|c| {
-                                            logging::log!("new value is {}", event_target_checked(&ev));
-                                            *c = event_target_checked(&ev)
-                                        })
-                                    }
-                                    prop:checked=i_non_canon_val_signal.get()
-                                    name="checkbox"
-                                    type="checkbox"
-                                    class="accent-granola-orange" />
-                                "Include Non-Canonical"
-                            </label>
-                        }.into_view()>
+                    <TableSection section_heading="Blocks".to_owned() controls=move || view! { 
+                        <URLCheckbox 
+                        label="Include Non-Canonical".to_string() 
+                        url_param_key="include_non_canonical".to_string() />
+                    }>
                         <Table data=data.blocks/>
                     </TableSection>
                     <Outlet />

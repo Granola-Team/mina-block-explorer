@@ -1,4 +1,5 @@
-use leptos::*;
+use leptos::{*, web_sys::*};
+use leptos_router::*;
 
 #[component]
 pub fn AppSection(children: Children) -> impl IntoView {
@@ -13,6 +14,75 @@ pub fn AppSection(children: Children) -> impl IntoView {
 pub fn AppHeading(heading: String) -> impl IntoView {
     view! {
         <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-start items-center">{heading}</h1>
+    }
+}
+
+#[component] 
+pub fn Checkbox<F>(label: String, value: bool, handle_change: F) -> impl IntoView 
+where
+    F: Fn(Event) + 'static
+{
+    view! {
+        <label class="text-sm grid grid-cols-[1em_auto] gap-1">
+            <input
+                on:change=handle_change
+                prop:checked=value
+                name="checkbox"
+                type="checkbox"
+                class="accent-granola-orange" />
+            {label}
+        </label>
+    }
+}
+
+#[component]
+pub fn URLCheckbox(label: String, url_param_key: String) -> impl IntoView {
+    let query_params_map = use_query_map();
+    let navigate = use_navigate();
+    let location = use_location();
+
+    let url_param_key_clone = url_param_key.clone(); // Clone url_param_key for use in the closure
+
+    let initial_checkbox_value = move || {
+        query_params_map.with(|params| params.get(&url_param_key_clone).cloned())
+    };
+    let (checkbox_value, set_checkbox_value) = create_signal(initial_checkbox_value().map_or(false, |i| {
+        if i == "true" {
+            true
+        } else {
+            false
+        }
+    }));
+
+
+    create_effect(move |_| {
+
+        let current_checkbox_value = checkbox_value.get();
+        let pathname = location.pathname.get();
+        let mut pm = query_params_map.get();
+        pm.insert(url_param_key.to_string(), current_checkbox_value.to_string());
+
+        logging::log!("{}", pm.to_query_string());
+        logging::log!("{}", pathname);
+
+        navigate(
+            &format!("{}{}", pathname, pm.to_query_string()),
+            NavigateOptions {
+                resolve: true,
+                replace: false,
+                scroll: false,
+                state: State(None),
+            },
+        );
+    });
+
+    view! {
+        <Checkbox label=label value=checkbox_value.get() handle_change=move |ev| {
+            set_checkbox_value.update(|c| {
+                logging::log!("new value is {}", event_target_checked(&ev));
+                *c = event_target_checked(&ev)
+            })
+        }/>
     }
 }
 
