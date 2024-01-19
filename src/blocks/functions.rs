@@ -48,6 +48,10 @@ pub fn get_block_height(block: &BlocksQueryBlocks) -> String {
         .map_or_else(String::new, |o| o.to_string())
 }
 
+pub fn get_canonical(block: &BlocksQueryBlocks) -> bool {
+    block.canonical.unwrap_or_default()
+}
+
 pub fn get_date_time(block: &BlocksQueryBlocks) -> String {
     block.date_time.map_or_else(String::new, |o| o.to_string())
 }

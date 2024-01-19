@@ -49,7 +49,16 @@ impl TableData for Vec<Option<BlocksQueryBlocks>> {
                         get_coinbase_receiver(block),
                         format!("/blocks/accounts/{}", get_coinbase_receiver(block)),
                     ),
-                ],
+                ]
+                .into_iter()
+                .map(|d| {
+                    if get_canonical(&block) == true {
+                        d
+                    } else {
+                        half_opacity_decorator(d)
+                    }
+                })
+                .collect::<Vec<_>>(),
                 None => vec![],
             })
             .collect()
