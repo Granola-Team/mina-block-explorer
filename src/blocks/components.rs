@@ -12,11 +12,8 @@ use crate::icons::*;
 #[component]
 pub fn AccountDialogBlocksSection(public_key: Option<String>) -> impl IntoView {
     let resource = create_resource(
-        || (),
-        move |_| {
-            let public_key_inner = public_key.clone();
-            async move { load_data(3, public_key_inner, None).await }
-        },
+        move || public_key.clone(),
+        move |pk| async move { load_data(3, pk, None, None).await },
     );
 
     view! {
@@ -89,24 +86,52 @@ fn AccountDialogBlockEntry(block: BlocksQueryBlocks) -> impl IntoView {
 #[component]
 pub fn BlocksSection() -> impl IntoView {
     let query_params_map = use_query_map();
+    let (i_non_canon_val_signal, set_i_non_canon_val) = create_signal(false);
 
     let resource = create_resource(
-        move || query_params_map.get(),
-        |value| async move {
+        move || (query_params_map.get(), i_non_canon_val_signal.get()),
+        |(value, include_non_canonical)| async move {
             let public_key = value.get("account");
             let block_hash = value.get("query");
-            load_data(10, public_key.cloned(), block_hash.cloned()).await
+            let include_non_canonical_val = match include_non_canonical {
+                true => None,
+                false => Some(true),
+            };
+            load_data(
+                10,
+                public_key.cloned(),
+                block_hash.cloned(),
+                include_non_canonical_val,
+            )
+            .await
         },
     );
 
     view! {
         {move || match resource.get() {
-            Some(Ok(data)) => view! {
-                <TableSection section_heading="Blocks".to_owned() controls=|| ().into_view()>
-                    <Table data=data.blocks/>
-                </TableSection>
-                <Outlet />
-            }.into_view(),
+            Some(Ok(data)) => {
+                view! {
+                    <TableSection section_heading="Blocks".to_owned() controls=move || view! {
+                            <label class="text-sm grid grid-cols-[1em_auto] gap-1">
+                                <input
+                                    on:change=move |ev| {
+                                        set_i_non_canon_val.update(|c| {
+                                            logging::log!("new value is {}", event_target_checked(&ev));
+                                            *c = event_target_checked(&ev)
+                                        })
+                                    }
+                                    prop:checked=i_non_canon_val_signal.get()
+                                    name="checkbox"
+                                    type="checkbox"
+                                    class="accent-granola-orange" />
+                                "Include Non-Canonical"
+                            </label>
+                        }.into_view()>
+                        <Table data=data.blocks/>
+                    </TableSection>
+                    <Outlet />
+                }.into_view()
+            },
             _ => view! { <span/> }.into_view()
         }}
     }
@@ -119,7 +144,7 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
         move || query_params_map.get(),
         |value| async move {
             let state_hash = value.get("query");
-            load_data(10, None, state_hash.cloned()).await
+            load_data(10, None, state_hash.cloned(), Some(true)).await
         },
     );
 
@@ -143,7 +168,7 @@ pub fn AccountOverviewBlocksTable(public_key: Option<String>) -> impl IntoView {
         || (),
         move |_| {
             let public_key_inner = public_key.clone();
-            async move { load_data(5, public_key_inner, None).await }
+            async move { load_data(5, public_key_inner, None, Some(true)).await }
         },
     );
 

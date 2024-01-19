@@ -199,13 +199,14 @@ pub async fn load_data(
     limit: i64,
     public_key: Option<String>,
     state_hash: Option<String>,
+    canonical: Option<bool>,
 ) -> Result<blocks_query::ResponseData, MyError> {
     let url = "https://graphql.minaexplorer.com";
     let variables = blocks_query::Variables {
         sort_by: blocks_query::BlockSortByInput::BLOCKHEIGHT_DESC,
         limit: Some(limit),
         query: blocks_query::BlockQueryInput {
-            canonical: Some(true),
+            canonical,
             state_hash,
             creator_account: Some(blocks_query::BlockCreatorAccountQueryInput {
                 public_key,
