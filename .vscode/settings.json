@@ -3,8 +3,5 @@
     "rust-analyzer.linkedProjects": [
         "./Cargo.toml",
     ],
-    "rust-analyzer.diagnostics.disabled": [
-        "unresolved-proc-macro"
-    ],
-    "rust-analyzer.showUnlinkedFileNotification": false
+    "rust-analyzer.diagnostics.disabled": ["unresolved-proc-macro"]
 }
