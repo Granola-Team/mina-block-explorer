@@ -1,5 +1,6 @@
 use super::functions::*;
 use crate::common::components::*;
+use crate::common::table::*;
 use crate::summary::functions::load_data as load_summary_data;
 use leptos::*;
 use leptos_router::{use_location, use_navigate, use_query_map, NavigateOptions, State};
