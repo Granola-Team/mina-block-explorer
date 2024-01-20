@@ -47,11 +47,7 @@ pub fn URLCheckbox(label: String, url_param_key: String) -> impl IntoView {
         query_params_map.with(|params| params.get(&url_param_key_clone).cloned())
     };
     let (checkbox_value, set_checkbox_value) = create_signal(initial_checkbox_value().map_or(false, |i| {
-        if i == "true" {
-            true
-        } else {
-            false
-        }
+        i == "true"
     }));
 
 

@@ -207,31 +207,6 @@ pub fn canonical_qs_to_canonical_query_param(include_non_canonical_qs: Option<&S
     }
 }
 
-#[cfg(test)]
-mod tests {
-    use super::canonical_qs_to_canonical_query_param;
-
-    #[test]
-    fn query_string_true_results_in_inclusive_query() {
-        assert_eq!(canonical_qs_to_canonical_query_param(Some(&"true".to_string())), None);
-    }
-
-    #[test]
-    fn query_string_false_results_in_exclusive_query() {
-        assert_eq!(canonical_qs_to_canonical_query_param(Some(&"false".to_string())), Some(true));
-    }
-
-    #[test]
-    fn query_string_invalid_results_in_exclusive_query() {
-        assert_eq!(canonical_qs_to_canonical_query_param(Some(&"other".to_string())), Some(true));
-    }
-
-    #[test]
-    fn empty_query_string_results_in_exclusive_query() {
-        assert_eq!(canonical_qs_to_canonical_query_param(None), Some(true));
-    }
-}
-
 
 pub async fn load_data(
     limit: i64,
@@ -267,4 +242,29 @@ pub async fn load_data(
     response
         .data
         .ok_or(MyError::GraphQLEmpty("No data available".to_string()))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::canonical_qs_to_canonical_query_param;
+
+    #[test]
+    fn query_string_true_results_in_inclusive_query() {
+        assert_eq!(canonical_qs_to_canonical_query_param(Some(&"true".to_string())), None);
+    }
+
+    #[test]
+    fn query_string_false_results_in_exclusive_query() {
+        assert_eq!(canonical_qs_to_canonical_query_param(Some(&"false".to_string())), Some(true));
+    }
+
+    #[test]
+    fn query_string_invalid_results_in_exclusive_query() {
+        assert_eq!(canonical_qs_to_canonical_query_param(Some(&"other".to_string())), Some(true));
+    }
+
+    #[test]
+    fn empty_query_string_results_in_exclusive_query() {
+        assert_eq!(canonical_qs_to_canonical_query_param(None), Some(true));
+    }
 }

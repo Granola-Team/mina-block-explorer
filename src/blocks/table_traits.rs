@@ -52,7 +52,7 @@ impl TableData for Vec<Option<BlocksQueryBlocks>> {
                 ]
                 .into_iter()
                 .map(|d| {
-                    if get_canonical(&block) == true {
+                    if get_canonical(block) {
                         canonical_wrapper(d)
                     } else {
                         non_canonical_wrapper(d)
@@ -132,7 +132,7 @@ impl TableData for SummaryPageBlocksQueryBlocks {
                     ),
                 ].into_iter()
                 .map(|d| {
-                    if get_canonical(&block) == true {
+                    if get_canonical(block) {
                         canonical_wrapper(d)
                     } else {
                         non_canonical_wrapper(d)
