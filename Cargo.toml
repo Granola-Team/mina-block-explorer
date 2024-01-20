@@ -6,8 +6,8 @@ edition = "2021"
 [dependencies]
 reqwest = { version = "0.11", features = ["json"] }
 serde = { version = "1.0", features = ["derive"] }
-leptos = { version = "0.5.4", features = ["csr"] }
-leptos_router = { version = "0.5.4", features = ["csr"] }
+leptos = { version = "0.5.7", features = ["csr"] }
+leptos_router = { version = "0.5.7", features = ["csr"] }
 chrono = { version = "0.4", features = ["serde"] }
 graphql_client = { version = "0.13.0", features = ["reqwest"] }
 url = "2.5.0"
