@@ -13,7 +13,7 @@ describe('search bar',() => {
     ];
 
     it('works on /snarks page', () => {
-        let prover = "B62qnM71LjMchDsRgWinBXyNrXR8smf9NXoJZnQrTXe74DrEQoaUStb";
+        let prover = "B62qkwrHj3YCKgQsXRktpwhVFij19RiwYDgMmiwp7iggNBi8712a4W4";
         let tableHeading = 'SNARKs';
         let tableColumn = 'Prover';
         cy.visit('/snarks');
