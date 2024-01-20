@@ -49,7 +49,10 @@ pub fn convert_to_span(data: String) -> HtmlElement<html::AnyElement> {
 }
 
 pub fn non_canonical_wrapper(el: HtmlElement<html::AnyElement>) -> HtmlElement<html::AnyElement> {
-    html::span().attr("class", "non-canonical opacity-50").child(el).into()
+    html::span()
+        .attr("class", "non-canonical opacity-50")
+        .child(el)
+        .into()
 }
 
 pub fn canonical_wrapper(el: HtmlElement<html::AnyElement>) -> HtmlElement<html::AnyElement> {

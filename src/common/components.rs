@@ -1,4 +1,4 @@
-use leptos::{*, web_sys::*};
+use leptos::{web_sys::*, *};
 use leptos_router::*;
 
 #[component]
@@ -17,10 +17,10 @@ pub fn AppHeading(heading: String) -> impl IntoView {
     }
 }
 
-#[component] 
-pub fn Checkbox<F>(label: String, value: bool, handle_change: F) -> impl IntoView 
+#[component]
+pub fn Checkbox<F>(label: String, value: bool, handle_change: F) -> impl IntoView
 where
-    F: Fn(Event) + 'static
+    F: Fn(Event) + 'static,
 {
     view! {
         <label class="text-sm grid grid-cols-[1em_auto] gap-1 font-semibold checked:text-granola-orange">
@@ -43,20 +43,19 @@ pub fn URLCheckbox(label: String, url_param_key: String) -> impl IntoView {
 
     let url_param_key_clone = url_param_key.clone(); // Clone url_param_key for use in the closure
 
-    let initial_checkbox_value = move || {
-        query_params_map.with(|params| params.get(&url_param_key_clone).cloned())
-    };
-    let (checkbox_value, set_checkbox_value) = create_signal(initial_checkbox_value().map_or(false, |i| {
-        i == "true"
-    }));
-
+    let initial_checkbox_value =
+        move || query_params_map.with(|params| params.get(&url_param_key_clone).cloned());
+    let (checkbox_value, set_checkbox_value) =
+        create_signal(initial_checkbox_value().map_or(false, |i| i == "true"));
 
     create_effect(move |_| {
-
         let current_checkbox_value = checkbox_value.get();
         let pathname = location.pathname.get();
         let mut pm = query_params_map.get();
-        pm.insert(url_param_key.to_string(), current_checkbox_value.to_string());
+        pm.insert(
+            url_param_key.to_string(),
+            current_checkbox_value.to_string(),
+        );
 
         logging::log!("{}", pm.to_query_string());
         logging::log!("{}", pathname);

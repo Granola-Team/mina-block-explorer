@@ -130,7 +130,8 @@ impl TableData for SummaryPageBlocksQueryBlocks {
                         get_coinbase_receiver(block),
                         format!("/summary/accounts/{}", get_coinbase_receiver(block)),
                     ),
-                ].into_iter()
+                ]
+                .into_iter()
                 .map(|d| {
                     if get_canonical(block) {
                         canonical_wrapper(d)

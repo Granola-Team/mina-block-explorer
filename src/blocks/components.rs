@@ -87,7 +87,7 @@ fn AccountDialogBlockEntry(block: BlocksQueryBlocks) -> impl IntoView {
 #[component]
 pub fn BlocksSection() -> impl IntoView {
     let query_params_map = use_query_map();
-    
+
     let resource = create_resource(
         move || query_params_map.get(),
         |value| async move {
@@ -111,7 +111,7 @@ pub fn BlocksSection() -> impl IntoView {
                 view! {
                     <TableSection section_heading="Blocks".to_owned() controls=move || view! {
                         <URLCheckbox
-                        label="Include Non-Canonical".to_string() 
+                        label="Include Non-Canonical".to_string()
                         url_param_key="include_non_canonical".to_string() />
                     }>
                         <Table data=data.blocks/>
