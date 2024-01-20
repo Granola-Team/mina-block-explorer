@@ -199,14 +199,15 @@ pub fn get_coinbase_receiver(block: &BlocksQueryBlocks) -> String {
     })
 }
 
-pub fn canonical_qs_to_canonical_query_param(include_non_canonical_qs: Option<&String>) -> Option<bool> {
+pub fn canonical_qs_to_canonical_query_param(
+    include_non_canonical_qs: Option<&String>,
+) -> Option<bool> {
     match include_non_canonical_qs {
-        Some(canonical) if canonical.as_str() == "true" => None ,
+        Some(canonical) if canonical.as_str() == "true" => None,
         Some(canonical) if canonical.as_str() == "false" => Some(true),
-        _ => Some(true)
+        _ => Some(true),
     }
 }
-
 
 pub async fn load_data(
     limit: i64,

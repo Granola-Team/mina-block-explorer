@@ -5,8 +5,8 @@ use super::functions::*;
 use super::graphql::blocks_query::BlocksQueryBlocks;
 use super::models::*;
 use crate::accounts::components::*;
-use crate::common::functions::*;
 use crate::common::components::*;
+use crate::common::functions::*;
 use crate::common::table::*;
 use crate::icons::*;
 
@@ -109,8 +109,8 @@ pub fn BlocksSection() -> impl IntoView {
         {move || match resource.get() {
             Some(Ok(data)) => {
                 view! {
-                    <TableSection section_heading="Blocks".to_owned() controls=move || view! { 
-                        <URLCheckbox 
+                    <TableSection section_heading="Blocks".to_owned() controls=move || view! {
+                        <URLCheckbox
                         label="Include Non-Canonical".to_string() 
                         url_param_key="include_non_canonical".to_string() />
                     }>
@@ -140,9 +140,9 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
     view! {
         {move || match resource.get() {
             Some(Ok(data)) => view! {
-                <TableSection section_heading="Blocks".to_owned() controls=move || view! { 
-                    <URLCheckbox 
-                    label="Include Non-Canonical".to_string() 
+                <TableSection section_heading="Blocks".to_owned() controls=move || view! {
+                    <URLCheckbox
+                    label="Include Non-Canonical".to_string()
                     url_param_key="include_non_canonical".to_string() />
                 }>
                     <Table data=SummaryPageBlocksQueryBlocks(data.blocks)/>
