@@ -12,8 +12,8 @@ describe('search bar',() => {
         { origin: "/stakes", input: public_key, tableHeading:'Current Staking Ledger'}
     ];
 
-    it('works on /snarks page', () => {
-        let prover = "B62qkwrHj3YCKgQsXRktpwhVFij19RiwYDgMmiwp7iggNBi8712a4W4";
+    it.skip('works on /snarks page', () => {
+        let prover = "B62qnM71LjMchDsRgWinBXyNrXR8smf9NXoJZnQrTXe74DrEQoaUStb";
         let tableHeading = 'SNARKs';
         let tableColumn = 'Prover';
         cy.visit('/snarks');

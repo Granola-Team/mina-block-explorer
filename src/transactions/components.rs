@@ -5,6 +5,7 @@ use crate::accounts::components::*;
 use crate::common::components::*;
 use crate::common::functions::*;
 use crate::common::models::*;
+use crate::common::table::*;
 use crate::icons::*;
 
 #[component]

@@ -4,9 +4,9 @@ use super::functions::*;
 use super::graphql::blocks_query::BlocksQueryBlocks;
 use super::graphql::blocks_query::BlocksQueryBlocksTransactionsUserCommands;
 use super::models::*;
-use crate::common::components::*;
 use crate::common::functions::*;
 use crate::common::models::*;
+use crate::common::table::*;
 
 fn shared_get_columns() -> Vec<String> {
     vec![

@@ -5,6 +5,7 @@ use crate::common::functions::*;
 use crate::common::models::*;
 use crate::common::search::*;
 use crate::common::spotlight::*;
+use crate::common::table::*;
 use crate::icons::*;
 use leptos::*;
 use leptos_router::*;

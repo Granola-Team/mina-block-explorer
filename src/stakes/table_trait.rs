@@ -1,6 +1,6 @@
-use crate::common::components::*;
 use crate::common::functions::*;
 use crate::common::models::*;
+use crate::common::table::*;
 
 use super::{functions::*, graphql::stakes_query};
 use leptos::*;
