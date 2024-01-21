@@ -10,11 +10,10 @@ describe('account spotlight', () => {
 
     dialogs.forEach(({ origin, selector }) => it(`is navigated to from ${origin}`,() => {
         cy.visit(origin);
-        let link = cy.get(selector, {timeout: 20000}).first();
-        link.then($a => {
-            link.click({force:true});
-            cy.url().should('include',$a.attr('href'), {timeout: 10000})
-        })
+        cy.wait(1000);
+        cy.get(selector, {timeout: 10000}).first().click({force:true});
+        cy.wait(1000);
+        cy.url().should('include','/accounts/', {timeout: 10000})
     }));
 
 

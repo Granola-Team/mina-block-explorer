@@ -5,6 +5,7 @@ use super::functions::*;
 use super::graphql::blocks_query::BlocksQueryBlocks;
 use super::models::*;
 use crate::accounts::components::*;
+use crate::common::components::*;
 use crate::common::functions::*;
 use crate::common::table::*;
 use crate::icons::*;
@@ -12,11 +13,8 @@ use crate::icons::*;
 #[component]
 pub fn AccountDialogBlocksSection(public_key: Option<String>) -> impl IntoView {
     let resource = create_resource(
-        || (),
-        move |_| {
-            let public_key_inner = public_key.clone();
-            async move { load_data(3, public_key_inner, None).await }
-        },
+        move || public_key.clone(),
+        move |pk| async move { load_data(3, pk, None, None).await },
     );
 
     view! {
@@ -95,18 +93,32 @@ pub fn BlocksSection() -> impl IntoView {
         |value| async move {
             let public_key = value.get("account");
             let block_hash = value.get("query");
-            load_data(10, public_key.cloned(), block_hash.cloned()).await
+            let include_non_canonical_qs = value.get("include_non_canonical");
+            let canonical_query = canonical_qs_to_canonical_query_param(include_non_canonical_qs);
+            load_data(
+                10,
+                public_key.cloned(),
+                block_hash.cloned(),
+                canonical_query,
+            )
+            .await
         },
     );
 
     view! {
         {move || match resource.get() {
-            Some(Ok(data)) => view! {
-                <TableSection section_heading="Blocks".to_owned()>
-                    <Table data=data.blocks/>
-                </TableSection>
-                <Outlet />
-            }.into_view(),
+            Some(Ok(data)) => {
+                view! {
+                    <TableSection section_heading="Blocks".to_owned() controls=move || view! {
+                        <URLCheckbox
+                        label="Include Non-Canonical".to_string()
+                        url_param_key="include_non_canonical".to_string() />
+                    }>
+                        <Table data=data.blocks/>
+                    </TableSection>
+                    <Outlet />
+                }.into_view()
+            },
             _ => view! { <span/> }.into_view()
         }}
     }
@@ -119,14 +131,20 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
         move || query_params_map.get(),
         |value| async move {
             let state_hash = value.get("query");
-            load_data(10, None, state_hash.cloned()).await
+            let include_non_canonical_qs = value.get("include_non_canonical");
+            let canonical_query = canonical_qs_to_canonical_query_param(include_non_canonical_qs);
+            load_data(10, None, state_hash.cloned(), canonical_query).await
         },
     );
 
     view! {
         {move || match resource.get() {
             Some(Ok(data)) => view! {
-                <TableSection section_heading="Blocks".to_owned()>
+                <TableSection section_heading="Blocks".to_owned() controls=move || view! {
+                    <URLCheckbox
+                    label="Include Non-Canonical".to_string()
+                    url_param_key="include_non_canonical".to_string() />
+                }>
                     <Table data=SummaryPageBlocksQueryBlocks(data.blocks)/>
                 </TableSection>
                 <Outlet />
@@ -143,7 +161,7 @@ pub fn AccountOverviewBlocksTable(public_key: Option<String>) -> impl IntoView {
         || (),
         move |_| {
             let public_key_inner = public_key.clone();
-            async move { load_data(5, public_key_inner, None).await }
+            async move { load_data(5, public_key_inner, None, Some(true)).await }
         },
     );
 

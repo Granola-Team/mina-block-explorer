@@ -135,10 +135,19 @@ pub fn EmptyTable(message: String) -> impl IntoView {
 }
 
 #[component]
-pub fn TableSection(section_heading: String, children: Children) -> impl IntoView {
+pub fn TableSection<E, F>(section_heading: String, children: Children, controls: F) -> impl IntoView
+where
+    E: IntoView,
+    F: Fn() -> E + 'static,
+{
     view! {
         <AppSection>
-            <AppHeading heading=section_heading />
+            <span class="w-full flex justify-between">
+                <AppHeading heading=section_heading />
+                <div class="self-stretch flex items-center pr-4">
+                    { controls() }
+                </div>
+            </span>
             {children()}
         </AppSection>
     }

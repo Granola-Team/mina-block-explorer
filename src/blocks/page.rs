@@ -27,7 +27,7 @@ pub fn BlockSpotlight() -> impl IntoView {
         move || memo_params_map.get(),
         |value| async move {
             let state_hash = value.get("id");
-            load_data(10, None, state_hash.cloned()).await
+            load_data(10, None, state_hash.cloned(), None).await
         },
     );
     let records_per_page = 10;
@@ -65,7 +65,7 @@ pub fn BlockSpotlight() -> impl IntoView {
                                     meta=format!("{} ({})", date_time, print_time_since(&date_time)) >
                                     <BlockIcon width=40/>
                                 </SpotlightSection>
-                                <TableSection section_heading="User Commands".to_string()>
+                                <TableSection section_heading="User Commands".to_string() controls=|| ().into_view()>
                                     {
                                         move || match get_user_commands(&block) {
                                             Some(user_commands) => {

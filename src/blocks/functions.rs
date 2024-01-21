@@ -48,6 +48,10 @@ pub fn get_block_height(block: &BlocksQueryBlocks) -> String {
         .map_or_else(String::new, |o| o.to_string())
 }
 
+pub fn get_canonical(block: &BlocksQueryBlocks) -> bool {
+    block.canonical.unwrap_or_default()
+}
+
 pub fn get_date_time(block: &BlocksQueryBlocks) -> String {
     block.date_time.map_or_else(String::new, |o| o.to_string())
 }
@@ -195,17 +199,28 @@ pub fn get_coinbase_receiver(block: &BlocksQueryBlocks) -> String {
     })
 }
 
+pub fn canonical_qs_to_canonical_query_param(
+    include_non_canonical_qs: Option<&String>,
+) -> Option<bool> {
+    match include_non_canonical_qs {
+        Some(canonical) if canonical.as_str() == "true" => None,
+        Some(canonical) if canonical.as_str() == "false" => Some(true),
+        _ => Some(true),
+    }
+}
+
 pub async fn load_data(
     limit: i64,
     public_key: Option<String>,
     state_hash: Option<String>,
+    canonical: Option<bool>,
 ) -> Result<blocks_query::ResponseData, MyError> {
     let url = "https://graphql.minaexplorer.com";
     let variables = blocks_query::Variables {
         sort_by: blocks_query::BlockSortByInput::BLOCKHEIGHT_DESC,
         limit: Some(limit),
         query: blocks_query::BlockQueryInput {
-            canonical: Some(true),
+            canonical,
             state_hash,
             creator_account: Some(blocks_query::BlockCreatorAccountQueryInput {
                 public_key,
@@ -228,4 +243,38 @@ pub async fn load_data(
     response
         .data
         .ok_or(MyError::GraphQLEmpty("No data available".to_string()))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::canonical_qs_to_canonical_query_param;
+
+    #[test]
+    fn query_string_true_results_in_inclusive_query() {
+        assert_eq!(
+            canonical_qs_to_canonical_query_param(Some(&"true".to_string())),
+            None
+        );
+    }
+
+    #[test]
+    fn query_string_false_results_in_exclusive_query() {
+        assert_eq!(
+            canonical_qs_to_canonical_query_param(Some(&"false".to_string())),
+            Some(true)
+        );
+    }
+
+    #[test]
+    fn query_string_invalid_results_in_exclusive_query() {
+        assert_eq!(
+            canonical_qs_to_canonical_query_param(Some(&"other".to_string())),
+            Some(true)
+        );
+    }
+
+    #[test]
+    fn empty_query_string_results_in_exclusive_query() {
+        assert_eq!(canonical_qs_to_canonical_query_param(None), Some(true));
+    }
 }

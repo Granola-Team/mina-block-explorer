@@ -49,7 +49,16 @@ impl TableData for Vec<Option<BlocksQueryBlocks>> {
                         get_coinbase_receiver(block),
                         format!("/blocks/accounts/{}", get_coinbase_receiver(block)),
                     ),
-                ],
+                ]
+                .into_iter()
+                .map(|d| {
+                    if get_canonical(block) {
+                        canonical_wrapper(d)
+                    } else {
+                        non_canonical_wrapper(d)
+                    }
+                })
+                .collect::<Vec<_>>(),
                 None => vec![],
             })
             .collect()
@@ -122,6 +131,15 @@ impl TableData for SummaryPageBlocksQueryBlocks {
                         format!("/summary/accounts/{}", get_coinbase_receiver(block)),
                     ),
                 ]
+                .into_iter()
+                .map(|d| {
+                    if get_canonical(block) {
+                        canonical_wrapper(d)
+                    } else {
+                        non_canonical_wrapper(d)
+                    }
+                })
+                .collect::<Vec<_>>()
             })
             .collect()
     }

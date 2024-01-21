@@ -115,7 +115,7 @@ pub fn TransactionsSection(
     view! {
         {move || match resource.get() {
             Some(Ok(data)) => view! {
-                <TableSection section_heading="Transactions".to_owned()>
+                <TableSection section_heading="Transactions".to_owned() controls=|| ().into_view()>
                     {match data.transactions.len() {
                         0 => view! { <EmptyTable message="This public key has no transactions".to_string() /> },
                         _ => view! {

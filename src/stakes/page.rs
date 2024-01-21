@@ -58,20 +58,16 @@ pub fn StakesPage() -> impl IntoView {
                         _ => (0,0, "".to_string())
                     };
                     view! {
-                        <AppSection>
-                            <span class="w-full flex justify-between">
-                                <AppHeading heading=section_heading />
-                                <div class="self-stretch flex items-center pr-4">
-                                    <EpochButton text="Previous".to_string()
-                                        style_variant=EpochStyleVariant::Secondary
-                                        epoch_target=previous_epoch/>
-                                    <EpochButton text="Next".to_string()
-                                        style_variant=EpochStyleVariant::Primary
-                                        epoch_target=next_epoch/>
-                                </div>
-                            </span>
+                        <TableSection section_heading=section_heading controls=move || view! {
+                            <EpochButton text="Previous".to_string()
+                                style_variant=EpochStyleVariant::Secondary
+                                epoch_target=previous_epoch/>
+                            <EpochButton text="Next".to_string()
+                                style_variant=EpochStyleVariant::Primary
+                                epoch_target=next_epoch/>
+                        }>
                             <Table data=data.stakes/>
-                        </AppSection>
+                        </TableSection>
                     }
                 },
                 _ => view! { <NullView /> }

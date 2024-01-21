@@ -3,6 +3,7 @@ query BlocksQuery($query: BlockQueryInput!, $limit: Int = 10, $sort_by: BlockSor
     blockHeight
     dateTime
     stateHash
+    canonical
     transactions {
       coinbase
       coinbaseReceiverAccount {

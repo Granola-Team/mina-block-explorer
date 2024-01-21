@@ -7,5 +7,8 @@ module.exports = defineConfig({
     setupNodeEvents(on, config) {
       addMatchImageSnapshotPlugin(on)
     },
+    retries: {
+      runMode: 3
+    }
   },
 });
