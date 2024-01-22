@@ -23,5 +23,7 @@ describe('Block spotlight', () => {
         cy.tableHasNRows("User Commands", 10);
         cy.tableHasNRows("SNARK Jobs", 5);
         cy.tableColumnValuesEqual("SNARK Jobs", "Hash", block_id);
+
+        cy.tableHasNRows("Fee Transfers", 5);
     });
 });
