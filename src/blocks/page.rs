@@ -6,7 +6,9 @@ use crate::common::models::*;
 use crate::common::search::*;
 use crate::common::spotlight::*;
 use crate::common::table::*;
+use crate::fee_transfers::components::BlockSpotlightFeeTransfersTable;
 use crate::icons::*;
+use crate::snarks::components::BlockSpotlightSnarkJobTable;
 use leptos::*;
 use leptos_router::*;
 
@@ -30,6 +32,7 @@ pub fn BlockSpotlight() -> impl IntoView {
             load_data(10, None, state_hash.cloned(), None).await
         },
     );
+    let block_state_hash = move || memo_params_map.with(|p| p.get("id").cloned());
     let records_per_page = 10;
     let (current_page, set_current_page) = create_signal(1);
 
@@ -92,6 +95,15 @@ pub fn BlockSpotlight() -> impl IntoView {
                                         }
                                     }
                                 </TableSection>
+                                <SubSectionContainer>
+                                    <AppSubSection position=SubSectionPosition::Left heading="SNARK Jobs".to_string()>
+                                        <BlockSpotlightSnarkJobTable block_state_hash=block_state_hash()/>
+                                    </AppSubSection>
+                                    <AppSubSection position=SubSectionPosition::Right heading="Fee Transfers".to_string()>
+                                        <BlockSpotlightFeeTransfersTable block_state_hash=block_state_hash()/>
+                                    </AppSubSection>
+                                </SubSectionContainer>
+
                             }.into_view()
                         },
                         _ => view! { <NullView /> },

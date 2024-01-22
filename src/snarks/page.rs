@@ -16,7 +16,7 @@ pub fn SnarksPage() -> impl IntoView {
             if public_key.is_none() {
                 public_key = value.get("query");
             }
-            load_data(10, public_key.cloned()).await
+            load_data(10, public_key.cloned(), None).await
         },
     );
 

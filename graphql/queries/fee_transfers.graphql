@@ -1,0 +1,8 @@
+query FeeTransfersQuery ($sort_by: FeetransferSortByInput!, $limit: Int = 10, $query: FeetransferQueryInput!) {
+  feetransfers(sortBy: $sort_by, limit: $limit, query: $query ) {
+    fee
+    recipient
+    type
+    dateTime
+  }
+}

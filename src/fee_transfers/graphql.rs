@@ -1,23 +1,22 @@
 use chrono::Utc;
 use graphql_client::GraphQLQuery;
 
-use self::snarks_query::SnarkQueryInput;
-
+use self::fee_transfers_query::FeetransferQueryInput;
 type DateTime = chrono::DateTime<Utc>;
 type Long = i32;
 
 #[derive(GraphQLQuery)]
 #[graphql(
     schema_path = "graphql/schemas/mina-explorer.graphql",
-    query_path = "graphql/queries/snarks.graphql",
+    query_path = "graphql/queries/fee_transfers.graphql",
     response_derives = "Serialize,PartialEq,Debug,Clone"
 )]
-pub struct SnarksQuery;
+pub struct FeeTransfersQuery;
 
 #[allow(clippy::derivable_impls)]
-impl Default for snarks_query::BlockQueryInput {
+impl Default for fee_transfers_query::BlockQueryInput {
     fn default() -> Self {
-        snarks_query::BlockQueryInput {
+        fee_transfers_query::BlockQueryInput {
             creator_nin: None,
             state_hash_lte: None,
             canonical_ne: None,
@@ -94,56 +93,61 @@ impl Default for snarks_query::BlockQueryInput {
 }
 
 #[allow(clippy::derivable_impls)]
-impl Default for SnarkQueryInput {
+impl Default for FeetransferQueryInput {
     fn default() -> Self {
-        SnarkQueryInput {
-            block_height_lt: None,
-            fee_in: None,
-            prover_gte: None,
-            fee_lt: None,
+        FeetransferQueryInput {
             date_time_nin: None,
-            prover_in: None,
-            prover_ne: None,
-            block_height_gt: None,
-            prover: None,
-            block_exists: None,
-            date_time_lte: None,
-            date_time: None,
-            fee_gt: None,
-            date_time_exists: None,
-            work_ids_exists: None,
-            prover_lte: None,
-            date_time_in: None,
-            block_height_nin: None,
-            fee_exists: None,
-            canonical: None,
-            canonical_ne: None,
-            date_time_gt: None,
-            block_height_exists: None,
-            block: None,
-            block_height_ne: None,
-            block_height_gte: None,
-            work_ids_in: None,
-            fee: None,
+            recipient: None,
+            block_state_hash: None,
+            recipient_lt: None,
+            type_lte: None,
             fee_gte: None,
-            prover_nin: None,
-            and: None,
-            prover_exists: None,
-            or: None,
-            date_time_ne: None,
-            work_ids: None,
-            date_time_lt: None,
-            block_height_in: None,
             fee_nin: None,
-            work_ids_nin: None,
-            prover_lt: None,
-            prover_gt: None,
-            block_height_lte: None,
-            fee_lte: None,
+            block_height_in: None,
+            type_: None,
             date_time_gte: None,
+            type_in: None,
+            block_height_ne: None,
+            date_time: None,
             fee_ne: None,
-            block_height: None,
+            block_height_exists: None,
+            or: None,
+            type_gte: None,
             canonical_exists: None,
+            date_time_lt: None,
+            fee_exists: None,
+            date_time_gt: None,
+            type_lt: None,
+            block_height_gte: None,
+            recipient_lte: None,
+            block_height_nin: None,
+            block_height_gt: None,
+            block_height: None,
+            block_height_lt: None,
+            canonical: None,
+            type_gt: None,
+            block_state_hash_exists: None,
+            canonical_ne: None,
+            fee_gt: None,
+            recipient_gte: None,
+            and: None,
+            fee_lt: None,
+            type_exists: None,
+            recipient_in: None,
+            recipient_exists: None,
+            block_height_lte: None,
+            date_time_in: None,
+            date_time_exists: None,
+            fee_lte: None,
+            date_time_lte: None,
+            recipient_nin: None,
+            type_nin: None,
+            fee: None,
+            fee_in: None,
+            type_ne: None,
+            date_time_ne: None,
+            recipient_ne: None,
+            recipient_gt: None,
         }
     }
 }

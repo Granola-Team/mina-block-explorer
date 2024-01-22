@@ -12,6 +12,8 @@ describe('account page', () => {
         { origin: '/transactions', column: 'To', tableHeader: 'Transactions'},
         { origin: '/blocks/3NKnLbpRcFaY9WSzLFa4wYxejhnWBQNEPA2cnesvS75wcuNCr8nA', column: 'From', tableHeader: 'User Commands'},
         { origin: '/blocks/3NKnLbpRcFaY9WSzLFa4wYxejhnWBQNEPA2cnesvS75wcuNCr8nA', column: 'To', tableHeader: 'User Commands'},
+        { origin: '/blocks/3NKnLbpRcFaY9WSzLFa4wYxejhnWBQNEPA2cnesvS75wcuNCr8nA', column: 'Prover', tableHeader: 'SNARK Jobs'},
+        { origin: '/blocks/3NKnLbpRcFaY9WSzLFa4wYxejhnWBQNEPA2cnesvS75wcuNCr8nA', column: 'Recipient', tableHeader: 'Fee Transfers'},
     ];
 
     pages.forEach(({ origin, column, tableHeader }) => it(`is navigated to from ${origin} by clicking link in '${column}'`,() => {

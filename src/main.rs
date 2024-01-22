@@ -2,6 +2,7 @@ use leptos::*;
 mod accounts;
 mod blocks;
 mod common;
+mod fee_transfers;
 mod footer;
 mod header;
 mod icons;

@@ -1,6 +1,38 @@
 use leptos::{web_sys::*, *};
 use leptos_router::*;
 
+pub enum SubSectionPosition {
+    Left,
+    Right,
+}
+
+#[component]
+pub fn SubSectionContainer(children: Children) -> impl IntoView {
+    view! {
+        <div class="md:col-start-2 md:col-end-3 grid grid-cols-1 md:grid-cols-2 gap-4">
+            {children()}
+        </div>
+    }
+}
+
+#[component]
+pub fn AppSubSection(
+    heading: String,
+    children: Children,
+    position: SubSectionPosition,
+) -> impl IntoView {
+    let position_class = match position {
+        SubSectionPosition::Left => "md:col-start-1 md:col-end-2",
+        SubSectionPosition::Right => "md:col-start-2 md:col-end-3",
+    };
+    view! {
+        <section class=format!("{} md:rounded-lg bg-table-section",position_class)>
+            <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-start items-center">{heading}</h1>
+            {children()}
+        </section>
+    }
+}
+
 #[component]
 pub fn AppSection(children: Children) -> impl IntoView {
     view! {

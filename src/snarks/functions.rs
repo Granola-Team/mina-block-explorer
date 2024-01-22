@@ -6,6 +6,7 @@ use graphql_client::reqwest::post_graphql;
 pub async fn load_data(
     limit: i32,
     public_key: Option<String>,
+    block_state_hash: Option<String>,
 ) -> Result<snarks_query::ResponseData, MyError> {
     let url = "https://graphql.minaexplorer.com";
     let variables = snarks_query::Variables {
@@ -14,6 +15,10 @@ pub async fn load_data(
         query: snarks_query::SnarkQueryInput {
             prover: public_key,
             canonical: Some(true),
+            block: Some(snarks_query::BlockQueryInput {
+                state_hash: block_state_hash,
+                ..Default::default()
+            }),
             ..Default::default()
         },
     };

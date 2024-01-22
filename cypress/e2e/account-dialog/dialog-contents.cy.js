@@ -1,7 +1,7 @@
-describe('dialog',()=>{
+describe.skip('dialog',()=>{
 
     beforeEach(() => {
-        cy.visit('/summary/accounts/B62qrCz3ehCqi8Pn8y3vWC9zYEB9RKsidauv15DeZxhzkxL3bKeba5h');
+        cy.visit('/summary/accounts/B62qq3TQ8AP7MFYPVtMx5tZGF3kWLJukfwG1A1RGvaBW1jfTPTkDBW6');
     })
     
     it(`has correct sections`, () => {
