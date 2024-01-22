@@ -99,10 +99,6 @@ pub fn BlockSpotlight() -> impl IntoView {
                                         <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-start items-center">"SNARK Jobs"</h1>
                                         <BlockSpotlightSnarkJobTable block_state_hash=block_state_hash()/>
                                     </section>
-                                    // <section class="md:col-start-2 md:col-end-3 md:rounded-lg bg-table-section">
-                                    //     <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-start items-center">"Block Production"</h1>
-                                    //     <AccountOverviewBlocksTable public_key=Some(pk) />
-                                    // </section>
                                 </div>
                             }.into_view()
                         },
