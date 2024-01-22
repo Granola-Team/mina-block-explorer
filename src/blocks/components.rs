@@ -119,6 +119,14 @@ pub fn BlocksSection() -> impl IntoView {
                     <Outlet />
                 }.into_view()
             },
+            None => {
+                view! {
+                    <TableSection section_heading="Blocks".to_owned() controls=move || view! { <NullView /> }>
+                        <Table data=LoadingPlaceholder{}/>
+                    </TableSection>
+                    <Outlet />
+                }.into_view()
+            },
             _ => view! { <span/> }.into_view()
         }}
     }
