@@ -6,6 +6,7 @@ use super::graphql::snarks_query::SnarksQuerySnarks;
 use crate::accounts::components::*;
 use crate::common::functions::*;
 use crate::common::table::*;
+use crate::common::components::*;
 use crate::icons::*;
 
 #[component]
@@ -14,7 +15,7 @@ pub fn AccountDialogSnarkJobSection(public_key: Option<String>) -> impl IntoView
         || (),
         move |_| {
             let public_key_inner = public_key.clone();
-            async move { load_data(3, public_key_inner).await }
+            async move { load_data(3, public_key_inner, None).await }
         },
     );
 
@@ -94,7 +95,7 @@ pub fn AccountOverviewSnarkJobTable(public_key: Option<String>) -> impl IntoView
         || (),
         move |_| {
             let public_key_inner = public_key.clone();
-            async move { load_data(5, public_key_inner).await }
+            async move { load_data(5, public_key_inner, None).await }
         },
     );
 
@@ -122,5 +123,32 @@ pub fn AccountOverviewSnarkJobTable(public_key: Option<String>) -> impl IntoView
             _ => view! { <span /> }.into_view(),
         }}
 
+    }
+}
+
+#[component]
+pub fn BlockSpotlightSnarkJobTable(block_state_hash: Option<String>) -> impl IntoView {
+    let (bsh_signal, _set_bsh) = create_signal(block_state_hash);
+    let resource = create_resource(
+        move || bsh_signal.get(),
+        move |block_state_hash_opt| {
+            async move { load_data(5, None, block_state_hash_opt).await }
+        },
+    );
+
+    view! {
+        {move || match resource.get() {
+            Some(Ok(data)) => view! {
+                {
+                    match data.snarks.len() {
+                        0 => view! { <EmptyTable message="No SNARK work related to this block".to_string() /> },
+                        _ => view! {
+                            <Table data=data.snarks />
+                        }
+                    }
+                }
+            },
+            _ => view! { <NullView /> }
+        }}
     }
 }

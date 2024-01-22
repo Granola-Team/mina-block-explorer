@@ -7,6 +7,7 @@ use crate::common::search::*;
 use crate::common::spotlight::*;
 use crate::common::table::*;
 use crate::icons::*;
+use crate::snarks::components::BlockSpotlightSnarkJobTable;
 use leptos::*;
 use leptos_router::*;
 
@@ -30,6 +31,7 @@ pub fn BlockSpotlight() -> impl IntoView {
             load_data(10, None, state_hash.cloned(), None).await
         },
     );
+    let block_state_hash = move || memo_params_map.with(|p| p.get("id").cloned());
     let records_per_page = 10;
     let (current_page, set_current_page) = create_signal(1);
 
@@ -92,6 +94,16 @@ pub fn BlockSpotlight() -> impl IntoView {
                                         }
                                     }
                                 </TableSection>
+                                <div class="md:col-start-2 md:col-end-3 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <section class="md:col-start-1 md:col-end-2 md:rounded-lg bg-table-section">
+                                        <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-start items-center">"SNARK Jobs"</h1>
+                                        <BlockSpotlightSnarkJobTable block_state_hash=block_state_hash()/>
+                                    </section>
+                                    // <section class="md:col-start-2 md:col-end-3 md:rounded-lg bg-table-section">
+                                    //     <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-start items-center">"Block Production"</h1>
+                                    //     <AccountOverviewBlocksTable public_key=Some(pk) />
+                                    // </section>
+                                </div>
                             }.into_view()
                         },
                         _ => view! { <NullView /> },
