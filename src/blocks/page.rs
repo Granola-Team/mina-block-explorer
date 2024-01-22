@@ -8,6 +8,7 @@ use crate::common::spotlight::*;
 use crate::common::table::*;
 use crate::icons::*;
 use crate::snarks::components::BlockSpotlightSnarkJobTable;
+use crate::fee_transfers::components::BlockSpotlightFeeTransfersTable;
 use leptos::*;
 use leptos_router::*;
 
@@ -97,6 +98,9 @@ pub fn BlockSpotlight() -> impl IntoView {
                                 <SubSectionContainer>
                                     <AppSubSection position=SubSectionPosition::Left heading="SNARK Jobs".to_string()>
                                         <BlockSpotlightSnarkJobTable block_state_hash=block_state_hash()/>
+                                    </AppSubSection>
+                                    <AppSubSection position=SubSectionPosition::Right heading="Fee Transfers".to_string()>
+                                        <BlockSpotlightFeeTransfersTable block_state_hash=block_state_hash()/>
                                     </AppSubSection>
                                 </SubSectionContainer>
 
