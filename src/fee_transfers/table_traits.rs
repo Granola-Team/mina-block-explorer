@@ -1,12 +1,14 @@
+use leptos::{
+    html::{self},
+    HtmlElement,
+};
 
-use leptos::{HtmlElement, html::{self}};
-
-use crate::common::functions::*;
 use super::functions::*;
+use crate::common::functions::*;
 
-use crate::fee_transfers::graphql::fee_transfers_query::FeeTransfersQueryFeetransfers;
-use crate::common::table::TableData;
 use crate::common::models::*;
+use crate::common::table::TableData;
+use crate::fee_transfers::graphql::fee_transfers_query::FeeTransfersQueryFeetransfers;
 
 impl TableData for &[Option<FeeTransfersQueryFeetransfers>] {
     fn get_columns(&self) -> Vec<String> {
@@ -22,19 +24,11 @@ impl TableData for &[Option<FeeTransfersQueryFeetransfers>] {
                 Some(fee_transfer) => vec![
                     convert_to_link(
                         get_receipient(&fee_transfer),
-                        format!("/accounts/{}",get_receipient(&fee_transfer))
+                        format!("/accounts/{}", get_receipient(&fee_transfer)),
                     ),
-                    convert_to_pill(
-                        get_fee(&fee_transfer),
-                        PillVariant::Orange
-                    ),
-                    convert_to_pill(
-                        get_type(&fee_transfer),
-                        PillVariant::Grey
-                    ),
-                    convert_to_span(
-                        get_date_time(&fee_transfer)
-                    ),
+                    convert_to_pill(get_fee(&fee_transfer), PillVariant::Orange),
+                    convert_to_pill(get_type(&fee_transfer), PillVariant::Grey),
+                    convert_to_span(get_date_time(&fee_transfer)),
                 ],
                 None => vec![],
             })

@@ -6,9 +6,9 @@ use crate::common::models::*;
 use crate::common::search::*;
 use crate::common::spotlight::*;
 use crate::common::table::*;
+use crate::fee_transfers::components::BlockSpotlightFeeTransfersTable;
 use crate::icons::*;
 use crate::snarks::components::BlockSpotlightSnarkJobTable;
-use crate::fee_transfers::components::BlockSpotlightFeeTransfersTable;
 use leptos::*;
 use leptos_router::*;
 

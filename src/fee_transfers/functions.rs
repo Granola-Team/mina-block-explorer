@@ -1,13 +1,16 @@
 use graphql_client::reqwest::post_graphql;
 
-use crate::fee_transfers::graphql::fee_transfers_query;
 use crate::common::models::MyError;
+use crate::fee_transfers::graphql::fee_transfers_query;
 use crate::fee_transfers::graphql::fee_transfers_query::FeeTransfersQueryFeetransfers;
 
 use super::graphql::FeeTransfersQuery;
 
 pub fn get_receipient(fee_transfer: &FeeTransfersQueryFeetransfers) -> String {
-    fee_transfer.recipient.as_ref().map_or("".to_string(), |o| o.to_string())
+    fee_transfer
+        .recipient
+        .as_ref()
+        .map_or("".to_string(), |o| o.to_string())
 }
 
 pub fn get_fee(fee_transfer: &FeeTransfersQueryFeetransfers) -> String {
@@ -15,11 +18,16 @@ pub fn get_fee(fee_transfer: &FeeTransfersQueryFeetransfers) -> String {
 }
 
 pub fn get_type(fee_transfer: &FeeTransfersQueryFeetransfers) -> String {
-    fee_transfer.type_.as_ref().map_or("".to_string(), |o| o.to_string())
+    fee_transfer
+        .type_
+        .as_ref()
+        .map_or("".to_string(), |o| o.to_string())
 }
 
 pub fn get_date_time(fee_transfer: &FeeTransfersQueryFeetransfers) -> String {
-    fee_transfer.date_time.map_or("".to_string(), |o| o.to_string())
+    fee_transfer
+        .date_time
+        .map_or("".to_string(), |o| o.to_string())
 }
 
 pub async fn load_data(
