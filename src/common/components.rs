@@ -129,7 +129,7 @@ pub fn SummaryItem(
             <div class="col-start-2 col-end-3 font-bold text-xl flex justify-start items-end" id={id.clone()}>{
                 {match value {
                     Some(str_val) => view! {<span>{str_val}</span>}.into_view(),
-                    None => view! { {data_placeholder()} }.into_view()
+                    None => data_placeholder().into_view()
                 }}
             }</div>
             <label class="row-start-2 col-start-2 col-end-3 text-sm text-slate-500 font-semibold flex justify-start items-start" for={id.clone()}>{label}</label>
