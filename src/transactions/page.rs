@@ -69,9 +69,31 @@ pub fn TransactionSpotlightPage() -> impl IntoView {
                                     <TransactionIcon width=40/>
                                 </SpotlightSection>
                             }.into_view()
-                        }
+                        },
                         _ => view! { <NullView />}
                     }
+                },
+                None => {
+                    let spotlight_items=vec![
+                        SpotlightEntry { label: "Date".to_string(), value: None, pill_variant: None },
+                        SpotlightEntry { label: "Transaction Hash".to_string(), value: None, pill_variant: None },
+                        SpotlightEntry { label: "Payment ID".to_string(), value: None, pill_variant: None },
+                        SpotlightEntry { label: "Block Height".to_string(), value: None, pill_variant: None },
+                        SpotlightEntry { label: "Canonical".to_string(), value: None, pill_variant: None },
+                        SpotlightEntry { label: "Block State Hash".to_string(), value: None, pill_variant: None },
+                        SpotlightEntry { label: "Amount".to_string(), value: None, pill_variant: None },
+                        SpotlightEntry { label: "Fee".to_string(), value: None, pill_variant: None },
+                        SpotlightEntry { label: "From".to_string(), value: None, pill_variant: None },
+                        SpotlightEntry { label: "To".to_string(), value: None, pill_variant: None },
+                        SpotlightEntry { label: "Nonce".to_string(), value: None, pill_variant: None },
+                        SpotlightEntry { label: "Memo".to_string(), value: None, pill_variant: None },
+                        SpotlightEntry { label: "Kind".to_string(), value: None, pill_variant: None },
+                    ];
+                    view!{
+                        <SpotlightSection header="Transaction Spotlight".to_string() spotlight_items=spotlight_items id=None meta=None>
+                            <TransactionIcon width=40/>
+                        </SpotlightSection>
+                    }.into_view()
                 },
                 _ => view! { <NullView /> },
             }}
