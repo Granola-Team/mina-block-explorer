@@ -145,6 +145,11 @@ pub fn TransactionsSection(
                     }}
                 </TableSection>
              },
+            None => view! {
+                <TableSection section_heading="Transactions".to_owned() controls=|| ().into_view()>
+                    <Table data=LoadingPlaceholder{}/>
+                </TableSection>
+            },
             _ => view! { <span /> }.into_view()
         }}
     }
