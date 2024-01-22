@@ -4,6 +4,7 @@ use graphql_client::reqwest::post_graphql;
 
 use super::graphql::transactions_query::TransactionsQueryTransactions;
 use super::graphql::*;
+use std::error::Error;
 
 pub fn get_block_datetime(transaction: &TransactionsQueryTransactions) -> String {
     transaction
@@ -49,7 +50,7 @@ pub fn get_memo(transaction: &TransactionsQueryTransactions) -> String {
     transaction
         .memo
         .as_ref()
-        .map_or_else(String::new, |o| o.to_string())
+        .map_or_else(String::new, |o| decode_memo(o).unwrap_or("".to_string()))
 }
 
 pub fn get_block_state_hash(transaction: &TransactionsQueryTransactions) -> String {
@@ -103,6 +104,23 @@ pub fn get_to(transaction: &TransactionsQueryTransactions) -> String {
         .map_or_else(String::new, |o| o.to_string())
 }
 
+/// 0th byte is a tag to distinguish digests from other data
+/// 1st byte is length, always 32 for digests
+/// bytes 2 to 33 are data,
+/// 0-right-padded if length is less than 32
+pub fn decode_memo(encoded: &str) -> Result<String, Box<dyn Error>> {
+    let decoded = bs58::decode(encoded).into_vec()?;
+    if decoded.len() < 3 {
+        return Err(Box::from("Decoded data is too short"));
+    }
+    let length = decoded[2] as usize;
+    if decoded.len() < 3 + length {
+        return Err(Box::from("Invalid length specified"));
+    }
+
+    Ok(String::from_utf8(decoded[3..3 + length].to_vec())?)
+}
+
 pub async fn load_data(
     limit: i32,
     public_key: Option<String>,
@@ -135,4 +153,16 @@ pub async fn load_data(
     response
         .data
         .ok_or(MyError::GraphQLEmpty("No data available".to_string()))
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::transactions::functions::decode_memo;
+
+    #[test]
+    fn test_b58_decoding() {
+        let memo_hash = "E4Yf2t3NSjf3NC3D7MxX2QvXWXt1p8rxKgJxHHQjhCjdsqu795neB";
+        let memo_str = decode_memo(memo_hash).unwrap();
+        assert_eq!("Bon matin", memo_str);
+    }
 }
