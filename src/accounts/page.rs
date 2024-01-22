@@ -112,4 +112,3 @@ pub fn AccountSpotlightPage() -> impl IntoView {
         </PageContainer>
     }
 }
-
