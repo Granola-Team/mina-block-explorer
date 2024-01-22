@@ -140,7 +140,7 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
     view! {
         {move || match resource.get() {
             Some(Ok(data)) => view! {
-                <TableSection section_heading="Blocks".to_string() controls=move || view! {
+                <TableSection section_heading="Blocks".to_owned() controls=move || view! {
                     <URLCheckbox
                     label="Include Non-Canonical".to_string()
                     url_param_key="include_non_canonical".to_string() />
@@ -149,15 +149,12 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
                 </TableSection>
                 <Outlet />
             }.into_view(),
-            None => {
-                let loading_placeholder_struct = LoadingPlaceholder {};
-                view! {
-                    <TableSection section_heading="Blocks".to_string() controls=move || view! {<NullView />}>
-                        <Table data=vec![loading_placeholder_struct.clone(); 10]/>
-                    </TableSection>
-                    <Outlet />
-                }.into_view()
-            },
+            None => view! {
+                <TableSection section_heading="Blocks".to_string() controls=move || view! {<NullView />}>
+                    <Table data=LoadingPlaceholder{} />
+                </TableSection>
+                <Outlet />
+            }.into_view(),
             _ => view! { <span/> }.into_view()
         }}
     }

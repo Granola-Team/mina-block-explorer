@@ -166,18 +166,17 @@ pub fn TableLink(href: String, text: String, children: Children) -> impl IntoVie
     }.into_view()
 }
 
-#[derive(Clone)]
 pub struct LoadingPlaceholder;
 
-impl TableData for Vec<LoadingPlaceholder> {
+impl TableData for LoadingPlaceholder {
     fn get_columns(&self) -> Vec<String> {
         vec![String::new().clone(); 5]
     }
 
     fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
-        let data_placeholder_el = data_placeholder();
-        self.iter()
-            .map(|_| vec![data_placeholder_el.clone(); 5])
-            .collect::<Vec<_>>()
+        vec![vec![String::new().clone(); 5]; 10]
+            .iter()
+            .map(|o| o.iter().map(|_| data_placeholder()).collect::<Vec<_>>())
+            .collect()
     }
 }

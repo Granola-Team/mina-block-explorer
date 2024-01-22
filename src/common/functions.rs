@@ -82,7 +82,10 @@ pub fn convert_to_pill(data: String, pill_variant: PillVariant) -> HtmlElement<h
 
 pub fn data_placeholder() -> HtmlElement<html::AnyElement> {
     html::span()
-        .attr("class", "animate-pulse h-7 w-20 rounded-full bg-slate-200")
+        .attr(
+            "class",
+            "block animate-pulse h-7 w-full rounded-full bg-slate-200",
+        )
         .into()
 }
 
