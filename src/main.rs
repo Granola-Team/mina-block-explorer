@@ -10,6 +10,7 @@ mod snarks;
 mod stakes;
 mod summary;
 mod transactions;
+mod fee_transfers;
 
 use root::Root;
 
