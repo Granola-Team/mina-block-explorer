@@ -4,10 +4,10 @@ use super::functions::load_data;
 use super::functions::*;
 use super::graphql::snarks_query::SnarksQuerySnarks;
 use crate::accounts::components::*;
-use crate::common::functions::*;
-use crate::common::table::*;
-use crate::common::models::*;
 use crate::common::components::*;
+use crate::common::functions::*;
+use crate::common::models::*;
+use crate::common::table::*;
 use crate::icons::*;
 
 #[component]
@@ -132,9 +132,7 @@ pub fn BlockSpotlightSnarkJobTable(block_state_hash: Option<String>) -> impl Int
     let (bsh_signal, _set_bsh) = create_signal(block_state_hash);
     let resource = create_resource(
         move || bsh_signal.get(),
-        move |block_state_hash_opt| {
-            async move { load_data(50, None, block_state_hash_opt).await }
-        },
+        move |block_state_hash_opt| async move { load_data(50, None, block_state_hash_opt).await },
     );
 
     let records_per_page = 5;

@@ -11,10 +11,10 @@ trait SnarksQuerySnarksContainer {}
 impl SnarksQuerySnarksContainer for Vec<Option<SnarksQuerySnarks>> {}
 impl SnarksQuerySnarksContainer for &[Option<SnarksQuerySnarks>] {}
 
-
 impl<T> TableData for T
 where
-    T: AsRef<[Option<SnarksQuerySnarks>]> + SnarksQuerySnarksContainer {
+    T: AsRef<[Option<SnarksQuerySnarks>]> + SnarksQuerySnarksContainer,
+{
     fn get_columns(&self) -> Vec<String> {
         ["Height", "Date", "Prover", "Work Ids", "State Hash", "Fee"]
             .iter()
@@ -23,7 +23,8 @@ where
     }
 
     fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
-        self.as_ref().iter()
+        self.as_ref()
+            .iter()
             .map(|opt_snark| match opt_snark {
                 Some(snark) => vec![
                     convert_to_span(get_block_height(snark)),

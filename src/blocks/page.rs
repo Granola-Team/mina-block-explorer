@@ -99,7 +99,7 @@ pub fn BlockSpotlight() -> impl IntoView {
                                         <BlockSpotlightSnarkJobTable block_state_hash=block_state_hash()/>
                                     </AppSubSection>
                                 </SubSectionContainer>
-                                
+
                             }.into_view()
                         },
                         _ => view! { <NullView /> },

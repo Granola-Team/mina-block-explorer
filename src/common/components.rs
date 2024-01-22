@@ -3,7 +3,7 @@ use leptos_router::*;
 
 pub enum SubSectionPosition {
     Left,
-    Right
+    Right,
 }
 
 #[component]
@@ -16,7 +16,11 @@ pub fn SubSectionContainer(children: Children) -> impl IntoView {
 }
 
 #[component]
-pub fn AppSubSection(heading: String, children: Children, position: SubSectionPosition) -> impl IntoView {
+pub fn AppSubSection(
+    heading: String,
+    children: Children,
+    position: SubSectionPosition,
+) -> impl IntoView {
     let position_class = match position {
         SubSectionPosition::Left => "md:col-start-1 md:col-end-2",
         SubSectionPosition::Right => "md:col-start-2 md:col-end-3",
