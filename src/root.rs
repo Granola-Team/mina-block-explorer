@@ -2,7 +2,7 @@ use leptos::*;
 use leptos_router::*;
 
 use crate::accounts::account_dialog::AccountDialogView;
-use crate::accounts::page::{AccountSummaryPage, AccountsPage};
+use crate::accounts::page::{AccountSpotlightPage, AccountsPage};
 use crate::blocks::page::{BlockSpotlight, LatestBlocksPage};
 use crate::common::components::NullView;
 use crate::footer::Footer;
@@ -25,7 +25,7 @@ pub fn Root() -> impl IntoView {
                 <Route path="" view=NullView/>
               </Route>
               <Route path="/accounts" view=AccountsPage />
-              <Route path="/accounts/:id" view=AccountSummaryPage />
+              <Route path="/accounts/:id" view=AccountSpotlightPage />
               <Route path="/blocks" view=LatestBlocksPage>
                 <Route path="accounts/:id" view=AccountDialogView/>
                 <Route path="" view=NullView/>

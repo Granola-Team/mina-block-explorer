@@ -64,7 +64,7 @@ pub fn AccountsPage() -> impl IntoView {
 }
 
 #[component]
-pub fn AccountSummaryPage() -> impl IntoView {
+pub fn AccountSpotlightPage() -> impl IntoView {
     let memo_params_map = use_params_map();
 
     let resource = create_resource(
@@ -86,27 +86,28 @@ pub fn AccountSummaryPage() -> impl IntoView {
             {move || match resource.get() {
                 Some(Ok(res)) =>{
                     let pk =res.account.public_key.clone();
+                    let pk_1 =res.account.public_key.clone();
+                    let pk_2 =res.account.public_key.clone();
+                    let pk_3 =res.account.public_key.clone();
                     view! {
                         <SpotlightSection header="Account Spotlight".to_string()
                             spotlight_items=get_spotlight_data(res.account.clone())
                             meta=format!("Username: {}",res.account.username)
-                            id=pk.clone()>
+                            id=pk>
                             <WalletIcon width=40/>
                         </SpotlightSection>
-                        <TransactionsSection public_key=Some(pk.clone()) with_link=true/>
-                        <div class="md:col-start-2 md:col-end-3 grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <section class="md:col-start-1 md:col-end-2 md:rounded-lg bg-table-section">
-                                <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-start items-center">"SNARK Jobs"</h1>
-                                <AccountOverviewSnarkJobTable public_key=Some(pk.clone())/>
-                            </section>
-                            <section class="md:col-start-2 md:col-end-3 md:rounded-lg bg-table-section">
-                                <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-start items-center">"Block Production"</h1>
-                                <AccountOverviewBlocksTable public_key=Some(pk) />
-                            </section>
-                        </div>
+                        <TransactionsSection public_key=Some(pk_1) with_link=true/>
+                        <SubSectionContainer>
+                            <AppSubSection heading="SNARK Jobs".to_string() position=SubSectionPosition::Left>
+                                <AccountOverviewSnarkJobTable public_key=Some(pk_2)/>
+                            </AppSubSection>
+                            <AppSubSection heading="Block Production".to_string() position=SubSectionPosition::Right>
+                                <AccountOverviewBlocksTable public_key=Some(pk_3) />
+                            </AppSubSection>
+                        </SubSectionContainer>
                     }.into_view()
                 },
-                _ => view! { <span/>  }.into_view()
+                _ => view! { <NullView /> }
             }}
         </PageContainer>
     }

@@ -94,12 +94,12 @@ pub fn BlockSpotlight() -> impl IntoView {
                                         }
                                     }
                                 </TableSection>
-                                <div class="md:col-start-2 md:col-end-3 grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <section class="md:col-start-1 md:col-end-2 md:rounded-lg bg-table-section">
-                                        <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-start items-center">"SNARK Jobs"</h1>
+                                <SubSectionContainer>
+                                    <AppSubSection position=SubSectionPosition::Left heading="SNARK Jobs".to_string()>
                                         <BlockSpotlightSnarkJobTable block_state_hash=block_state_hash()/>
-                                    </section>
-                                </div>
+                                    </AppSubSection>
+                                </SubSectionContainer>
+                                
                             }.into_view()
                         },
                         _ => view! { <NullView /> },
