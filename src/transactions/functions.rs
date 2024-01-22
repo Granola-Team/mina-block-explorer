@@ -109,7 +109,6 @@ pub fn get_to(transaction: &TransactionsQueryTransactions) -> String {
 /// bytes 2 to 33 are data,
 /// 0-right-padded if length is less than 32
 pub fn decode_memo(encoded: &str) -> Result<String, Box<dyn Error>> {
-    println!("{}", encoded);
     let decoded = bs58::decode(encoded).into_vec()?;
     if decoded.len() < 3 {
         return Err(Box::from("Decoded data is too short"));
