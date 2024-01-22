@@ -22,7 +22,7 @@ pub fn AccountDialog(path_base: String, account: AccountSummary) -> impl IntoVie
             <button id="closedialog" class="absolute top-0 right-0 p-12 z-30">
                 <a href=path_base>X</a>
             </button>
-            <SpotlightSection header="Account Spotlight".to_string() spotlight_items=summary_items id=account.public_key meta=format!("Username: {}",account.username)>
+            <SpotlightSection header="Account Spotlight".to_string() spotlight_items=summary_items id=Some(account.public_key) meta=Some(format!("Username: {}",account.username))>
                 <WalletIcon width=40/>
             </SpotlightSection>
             <div class="overflow-y-auto flex flex-col pb-20">

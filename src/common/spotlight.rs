@@ -5,7 +5,7 @@ use crate::common::models::*;
 
 pub struct SpotlightEntry {
     pub label: String,
-    pub value: String,
+    pub value: Option<String>,
     pub pill_variant: Option<PillVariant>,
 }
 
@@ -13,8 +13,8 @@ pub struct SpotlightEntry {
 pub fn SpotlightSection(
     header: String,
     spotlight_items: Vec<SpotlightEntry>,
-    id: String,
-    meta: String,
+    id: Option<String>,
+    meta: Option<String>,
     children: Children,
 ) -> impl IntoView {
     view! {
@@ -30,8 +30,8 @@ pub fn SpotlightSection(
 #[component]
 fn Spotlight(
     spotlight_items: Vec<SpotlightEntry>,
-    meta: String,
-    id: String,
+    meta: Option<String>,
+    id: Option<String>,
     children: Children,
 ) -> impl IntoView {
     view! {
@@ -40,10 +40,16 @@ fn Spotlight(
                 {children()}
             </div>
             <div id="spotlight-id" class="@3xl:col-start-3 text-granola-orange text-base text-bold text-ellipsis w-10/12 overflow-hidden text-center @3xl:text-left">
-                {id}
+                {match id {
+                    Some(i) => view! { <span>{i}</span> }.into_view(),
+                    None => data_placeholder().into_view()
+                }}
             </div>
             <div id="spotlight-meta" class="@3xl:col-start-3 @3xl:row-start-2 text-slate-400 text-sm">
-                {meta}
+                {match meta {
+                    Some(m) => view! { <span>{m}</span> }.into_view(),
+                    None => data_placeholder().into_view()
+                }}
             </div>
         </div>
         <table class="@3xl:mx-[10rem] bg-white rounded-xl mt-8 p-4 table-fixed flex flex-wrap">
@@ -79,7 +85,11 @@ fn SpotlightRow(entry: SpotlightEntry) -> impl IntoView {
     view! {
         <th class=format!("{} {}",th_td_class_base,"w-36 min-w-36 text-sm font-normal text-slate-400 whitespace-nowrap")>{entry.label}:</th>
         <td class=format!("{} {}",th_td_class_base,"block w-fit text-ellipsis overflow-hidden whitespace-nowrap")>
-            <span class=value_class_str>{entry.value}</span>
+            {match entry.value {
+                Some(val) => view! { <span class=value_class_str>{val}</span>}.into_view(),
+                None => data_placeholder().into_view()
+            }}
+
         </td>
     }
 }

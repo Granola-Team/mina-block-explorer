@@ -84,7 +84,7 @@ pub fn data_placeholder() -> HtmlElement<html::AnyElement> {
     html::span()
         .attr(
             "class",
-            "block animate-pulse h-7 w-full rounded-full bg-slate-200",
+            "block animate-pulse h-7 w-full min-w-40 max-w-64 rounded-full bg-slate-200",
         )
         .into()
 }
