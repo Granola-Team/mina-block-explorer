@@ -17,12 +17,6 @@ pub struct AccountBalance {
     pub total: String,
 }
 
-impl AccountBalance {
-    pub fn total(&self) -> f64 {
-        self.total.trim().parse().expect("Cannot parse total")
-    }
-}
-
 #[derive(Debug, Deserialize, Serialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct AccountSummary {
