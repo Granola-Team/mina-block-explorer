@@ -23,12 +23,12 @@ impl TableData for &[Option<FeeTransfersQueryFeetransfers>] {
             .map(|opt_fee_transfer| match opt_fee_transfer {
                 Some(fee_transfer) => vec![
                     convert_to_link(
-                        get_receipient(&fee_transfer),
-                        format!("/accounts/{}", get_receipient(&fee_transfer)),
+                        get_receipient(fee_transfer),
+                        format!("/accounts/{}", get_receipient(fee_transfer)),
                     ),
-                    convert_to_pill(get_fee(&fee_transfer), PillVariant::Orange),
-                    convert_to_pill(get_type(&fee_transfer), PillVariant::Grey),
-                    convert_to_span(get_date_time(&fee_transfer)),
+                    convert_to_pill(get_fee(fee_transfer), PillVariant::Orange),
+                    convert_to_pill(get_type(fee_transfer), PillVariant::Grey),
+                    convert_to_span(get_date_time(fee_transfer)),
                 ],
                 None => vec![],
             })
