@@ -45,7 +45,7 @@ fn Spotlight(
                     None => data_placeholder().into_view()
                 }}
             </div>
-            <div id="spotlight-meta" class="@3xl:col-start-3 @3xl:row-start-2 text-slate-400 text-sm">
+            <div id="spotlight-meta" class="@3xl:col-start-3 @3xl:row-start-2 text-slate-400 text-sm max-w-80">
                 {match meta {
                     Some(m) => view! { <span>{m}</span> }.into_view(),
                     None => data_placeholder().into_view()
