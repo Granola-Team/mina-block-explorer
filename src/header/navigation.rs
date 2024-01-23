@@ -87,14 +87,14 @@ pub fn Header() -> impl IntoView {
                         .map(|nav_entry| {
                             let sub_entries = nav_entry.sub_entries.clone();
                             view! {
-                                <li>
+                                <li class="group relative">
                                     <NavLink nav_entry=nav_entry on_click=toggle />
                                     { match sub_entries {
                                         Some(s_entries) => view! {
-                                            <ul>
+                                            <ul class="md:hidden md:absolute md:top-0 md:left-0 md:bg-main-background md:shadow-md md:translate-y-3/4 group-hover:block">
                                                 {s_entries.into_iter()
                                                     .map(|sub_entry| view! {
-                                                        <li class="mb-5 ml-4 mr-2">
+                                                        <li class="ml-4">
                                                             <NavLink nav_entry=sub_entry on_click=toggle />
                                                         </li>
                                                     }).collect::<Vec<_>>()}
@@ -123,7 +123,7 @@ where
     let location = use_location();
     let pathname = move || location.pathname.get();
     let href = nav_entry.href.clone();
-    let base_link_class = "my-6 mx-4 flex font-bold text-sm uppercase hover:text-granola-orange hover:underline hover:decoration-2";
+    let base_link_class = "md:mx-1.5 my-6 mx-4 flex font-bold text-sm uppercase hover:text-granola-orange hover:underline hover:decoration-2";
     view! {
         <a on:click=on_click class={move || format!("{} {}",base_link_class, if pathname().contains(&href) {"text-granola-orange"} else {"text-white"})} href=nav_entry.href>
             {match nav_entry.icon {
@@ -135,7 +135,7 @@ where
                 Icon::Staking => view! { <StakingIcon /> },
                 Icon::Broadcast => view! { <BroadcastIcon /> },
             }}
-            <div class="ml-1">{nav_entry.text}</div>
+            <div class="ml-0.5">{nav_entry.text}</div>
         </a>
     }
 }
