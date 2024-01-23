@@ -12,7 +12,11 @@ use crate::snarks::components::AccountDialogSnarkJobSection;
 use crate::transactions::components::AccountDialogTransactionSection;
 
 #[component]
-pub fn AccountDialog(public_key: String, path_base: String, account: Option<AccountSummary>) -> impl IntoView {
+pub fn AccountDialog(
+    public_key: String,
+    path_base: String,
+    account: Option<AccountSummary>,
+) -> impl IntoView {
     view! {
         <dialog id="accountdialog" class="z-20 w-full max-w-3xl h-screen fixed top-0 mr-0 ml-auto flex flex-col items-stretch p-4 bg-background">
             <button id="closedialog" class="absolute top-0 right-0 p-12 z-30">
@@ -34,7 +38,6 @@ pub fn AccountDialog(public_key: String, path_base: String, account: Option<Acco
                     </SpotlightSection>
                 }
             }}
-            
             <div class="overflow-y-auto flex flex-col pb-20">
                 <AccountDialogTransactionSection limit=3 account_id=public_key.clone() />
                 <AccountDialogSnarkJobSection public_key=Some(public_key.clone())/>
