@@ -56,17 +56,17 @@ pub fn Header() -> impl IntoView {
             icon: Icon::Staking,
             sub_entries: None,
         },
-        NavEntry {
-            href: "#".to_string(),
-            text: "More".to_string(),
-            icon: Icon::More,
-            sub_entries: Some(vec![NavEntry {
-                href: "/broadcast".to_string(),
-                text: "Broadcast".to_string(),
-                icon: Icon::Broadcast,
-                sub_entries: None,
-            }]),
-        },
+        // NavEntry {
+        //     href: "#".to_string(),
+        //     text: "More".to_string(),
+        //     icon: Icon::More,
+        //     sub_entries: Some(vec![NavEntry {
+        //         href: "/broadcast".to_string(),
+        //         text: "Broadcast".to_string(),
+        //         icon: Icon::Broadcast,
+        //         sub_entries: None,
+        //     }]),
+        // },
     ];
 
     let toggle = move |_| set_open.update(|value| *value = !*value);
