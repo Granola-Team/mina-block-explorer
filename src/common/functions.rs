@@ -80,6 +80,15 @@ pub fn convert_to_pill(data: String, pill_variant: PillVariant) -> HtmlElement<h
         .into()
 }
 
+pub fn data_placeholder() -> HtmlElement<html::AnyElement> {
+    html::span()
+        .attr(
+            "class",
+            "block animate-pulse h-7 w-full min-w-40 rounded-full bg-slate-200",
+        )
+        .into()
+}
+
 pub fn string_to_f64(str: &str) -> Option<f64> {
     let float_val: Result<f64, _> = str.parse();
     match float_val {

@@ -28,6 +28,7 @@ pub fn SnarksPage() -> impl IntoView {
                 Some(Ok(data)) => view! {
                     <Table data=data.snarks/>
                 },
+                None => view! { <Table data=LoadingPlaceholder{} />},
                 _ => view! { <span /> }.into_view()
             }}
             </TableSection>

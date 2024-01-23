@@ -1,3 +1,4 @@
+use crate::common::functions::*;
 use leptos::{web_sys::*, *};
 use leptos_router::*;
 
@@ -113,18 +114,10 @@ pub fn URLCheckbox(label: String, url_param_key: String) -> impl IntoView {
     }
 }
 
-pub enum SummaryItemKind {
-    Str(String),
-    Int64(u64),
-    Int16(u16),
-    Int32(u32),
-    Float64(f64),
-}
-
 #[component]
 pub fn SummaryItem(
     label: String,
-    value: SummaryItemKind,
+    value: Option<String>,
     id: String,
     #[prop(optional)] imgsrc: String,
 ) -> impl IntoView {
@@ -134,13 +127,10 @@ pub fn SummaryItem(
                 <img src=imgsrc width=25 alt="logo"/>
             </div>
             <div class="col-start-2 col-end-3 font-bold text-xl flex justify-start items-end" id={id.clone()}>{
-                match value {
-                    SummaryItemKind::Str(s) => s,
-                    SummaryItemKind::Int64(i) => i.to_string(),
-                    SummaryItemKind::Int32(i) => i.to_string(),
-                    SummaryItemKind::Int16(i) => i.to_string(),
-                    SummaryItemKind::Float64(i) => format!("{:.2}", i).parse::<f64>().unwrap().to_string()
-                }
+                {match value {
+                    Some(str_val) => view! {<span>{str_val}</span>}.into_view(),
+                    None => data_placeholder().into_view()
+                }}
             }</div>
             <label class="row-start-2 col-start-2 col-end-3 text-sm text-slate-500 font-semibold flex justify-start items-start" for={id.clone()}>{label}</label>
         </div>

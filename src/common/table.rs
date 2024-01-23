@@ -165,3 +165,18 @@ pub fn TableLink(href: String, text: String, children: Children) -> impl IntoVie
         </div>
     }.into_view()
 }
+
+pub struct LoadingPlaceholder;
+
+impl TableData for LoadingPlaceholder {
+    fn get_columns(&self) -> Vec<String> {
+        vec![String::new().clone(); 5]
+    }
+
+    fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
+        vec![vec![String::new().clone(); 5]; 10]
+            .iter()
+            .map(|o| o.iter().map(|_| data_placeholder()).collect::<Vec<_>>())
+            .collect()
+    }
+}

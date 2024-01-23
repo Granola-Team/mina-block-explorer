@@ -64,31 +64,61 @@ pub async fn load_all_data(
     }
 }
 
-pub fn get_spotlight_data(account: AccountSummary) -> Vec<SpotlightEntry> {
+pub fn get_spotlight_loading_data() -> Vec<SpotlightEntry> {
     vec![
         SpotlightEntry {
             label: String::from("Balance"),
-            value: account.balance.total,
-            pill_variant: Some(PillVariant::Green),
+            value: None,
+            pill_variant: None,
         },
         SpotlightEntry {
             label: String::from("Nonce"),
-            value: account.nonce.to_string(),
-            pill_variant: Some(PillVariant::Blue),
+            value: None,
+            pill_variant: None,
         },
         SpotlightEntry {
             label: String::from("Receipt Chain Hash"),
-            value: account.receipt_chain_hash,
+            value: None,
             pill_variant: None,
         },
         SpotlightEntry {
             label: String::from("Delegate"),
-            value: account.delegate,
+            value: None,
             pill_variant: None,
         },
         SpotlightEntry {
             label: String::from("Voting For"),
-            value: account.voting_for,
+            value: None,
+            pill_variant: None,
+        },
+    ]
+}
+
+pub fn get_spotlight_data(account: AccountSummary) -> Vec<SpotlightEntry> {
+    vec![
+        SpotlightEntry {
+            label: String::from("Balance"),
+            value: Some(account.balance.total),
+            pill_variant: Some(PillVariant::Green),
+        },
+        SpotlightEntry {
+            label: String::from("Nonce"),
+            value: Some(account.nonce.to_string()),
+            pill_variant: Some(PillVariant::Blue),
+        },
+        SpotlightEntry {
+            label: String::from("Receipt Chain Hash"),
+            value: Some(account.receipt_chain_hash),
+            pill_variant: None,
+        },
+        SpotlightEntry {
+            label: String::from("Delegate"),
+            value: Some(account.delegate),
+            pill_variant: None,
+        },
+        SpotlightEntry {
+            label: String::from("Voting For"),
+            value: Some(account.voting_for),
             pill_variant: None,
         },
     ]

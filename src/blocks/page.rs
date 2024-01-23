@@ -46,26 +46,26 @@ pub fn BlockSpotlight() -> impl IntoView {
                             let state_hash = get_state_hash(&block);
                             let date_time = get_date_time(&block);
                             let spotlight_items = vec![
-                                SpotlightEntry { label: "State Hash".to_string(), value: state_hash, pill_variant: None},
-                                SpotlightEntry { label: "Previous State Hash".to_string(), value: get_previous_state_hash(&block), pill_variant: None},
-                                SpotlightEntry { label: "Staged Ledger Hash".to_string(), value: get_staged_ledger_hash(&block), pill_variant: None},
-                                SpotlightEntry { label: "Snarked Ledger Hash".to_string(), value: get_snarked_ledger_hash(&block), pill_variant: None},
-                                SpotlightEntry { label: "Coinbase".to_string(), value: get_coinbase(&block), pill_variant: None},
-                                SpotlightEntry { label: "Coinbase Receiver".to_string(), value: get_coinbase_receiver(&block), pill_variant: None},
-                                SpotlightEntry { label: "Winning Account".to_string(), value: get_winning_account(&block), pill_variant: None},
-                                SpotlightEntry { label: "SNARK Fees".to_string(), value: get_snark_fees(&block), pill_variant: None},
-                                SpotlightEntry { label: "Global Slot".to_string(), value: get_global_slot(&block), pill_variant: Some(PillVariant::Blue)},
-                                SpotlightEntry { label: "Slot".to_string(), value: get_slot(&block), pill_variant: Some(PillVariant::Green)},
-                                SpotlightEntry { label: "Epoch".to_string(), value: get_epoch(&block), pill_variant: None},
-                                SpotlightEntry { label: "Transaction Fees".to_string(), value: get_transaction_fees(&block), pill_variant: None},
-                                SpotlightEntry { label: "Blockchain Length".to_string(), value: get_block_height(&block), pill_variant: None},
-                                SpotlightEntry { label: "Total Currency".to_string(), value: get_total_currency(&block), pill_variant: None},
+                                SpotlightEntry { label: "State Hash".to_string(), value: Some(state_hash), pill_variant: None},
+                                SpotlightEntry { label: "Previous State Hash".to_string(), value: Some(get_previous_state_hash(&block)), pill_variant: None},
+                                SpotlightEntry { label: "Staged Ledger Hash".to_string(), value: Some(get_staged_ledger_hash(&block)), pill_variant: None},
+                                SpotlightEntry { label: "Snarked Ledger Hash".to_string(), value: Some(get_snarked_ledger_hash(&block)), pill_variant: None},
+                                SpotlightEntry { label: "Coinbase".to_string(), value: Some(get_coinbase(&block)), pill_variant: None},
+                                SpotlightEntry { label: "Coinbase Receiver".to_string(), value: Some(get_coinbase_receiver(&block)), pill_variant: None},
+                                SpotlightEntry { label: "Winning Account".to_string(), value: Some(get_winning_account(&block)), pill_variant: None},
+                                SpotlightEntry { label: "SNARK Fees".to_string(), value: Some(get_snark_fees(&block)), pill_variant: None},
+                                SpotlightEntry { label: "Global Slot".to_string(), value: Some(get_global_slot(&block)), pill_variant: Some(PillVariant::Blue)},
+                                SpotlightEntry { label: "Slot".to_string(), value: Some(get_slot(&block)), pill_variant: Some(PillVariant::Green)},
+                                SpotlightEntry { label: "Epoch".to_string(), value: Some(get_epoch(&block)), pill_variant: None},
+                                SpotlightEntry { label: "Transaction Fees".to_string(), value: Some(get_transaction_fees(&block)), pill_variant: None},
+                                SpotlightEntry { label: "Blockchain Length".to_string(), value: Some(get_block_height(&block)), pill_variant: None},
+                                SpotlightEntry { label: "Total Currency".to_string(), value: Some(get_total_currency(&block)), pill_variant: None},
                             ];
                             view!{
                                 <SpotlightSection header="Block Spotlight".to_string()
                                     spotlight_items=spotlight_items
-                                    id=get_state_hash(&block)
-                                    meta=format!("{} ({})", date_time, print_time_since(&date_time)) >
+                                    id=Some(get_state_hash(&block))
+                                    meta=Some(format!("{} ({})", date_time, print_time_since(&date_time))) >
                                     <BlockIcon width=40/>
                                 </SpotlightSection>
                                 <TableSection section_heading="User Commands".to_string() controls=|| ().into_view()>
@@ -95,24 +95,51 @@ pub fn BlockSpotlight() -> impl IntoView {
                                         }
                                     }
                                 </TableSection>
-                                <SubSectionContainer>
-                                    <AppSubSection position=SubSectionPosition::Left heading="SNARK Jobs".to_string()>
-                                        <BlockSpotlightSnarkJobTable block_state_hash=block_state_hash()/>
-                                    </AppSubSection>
-                                    <AppSubSection position=SubSectionPosition::Right heading="Fee Transfers".to_string()>
-                                        <BlockSpotlightFeeTransfersTable block_state_hash=block_state_hash()/>
-                                    </AppSubSection>
-                                </SubSectionContainer>
-
                             }.into_view()
                         },
                         _ => view! { <NullView /> },
                     }
                 }
+                None => {
+                    let spotlight_items = vec![
+                        SpotlightEntry { label: "State Hash".to_string(), value: None, pill_variant: None},
+                        SpotlightEntry { label: "Previous State Hash".to_string(), value: None, pill_variant: None},
+                        SpotlightEntry { label: "Staged Ledger Hash".to_string(), value: None, pill_variant: None},
+                        SpotlightEntry { label: "Snarked Ledger Hash".to_string(), value: None, pill_variant: None},
+                        SpotlightEntry { label: "Coinbase".to_string(), value: None, pill_variant: None},
+                        SpotlightEntry { label: "Coinbase Receiver".to_string(), value: None, pill_variant: None},
+                        SpotlightEntry { label: "Winning Account".to_string(), value: None, pill_variant: None},
+                        SpotlightEntry { label: "SNARK Fees".to_string(), value: None, pill_variant: None},
+                        SpotlightEntry { label: "Global Slot".to_string(), value: None, pill_variant: None},
+                        SpotlightEntry { label: "Slot".to_string(), value: None, pill_variant: None},
+                        SpotlightEntry { label: "Epoch".to_string(), value: None, pill_variant: None},
+                        SpotlightEntry { label: "Transaction Fees".to_string(), value: None, pill_variant: None},
+                        SpotlightEntry { label: "Blockchain Length".to_string(), value: None, pill_variant: None},
+                        SpotlightEntry { label: "Total Currency".to_string(), value: None, pill_variant: None},
+                    ];
+                    view!{
+                        <SpotlightSection header="Block Spotlight".to_string()
+                            spotlight_items=spotlight_items
+                            id=None
+                            meta=None >
+                            <BlockIcon width=40/>
+                        </SpotlightSection>
+                        <TableSection section_heading="User Commands".to_string() controls=|| ().into_view()>
+                            <Table data=LoadingPlaceholder{} />
+                        </TableSection>
+                    }.into_view()
 
-                Some(Err(errors)) => view! { <ErrorView err=errors/> },
+                }
                 _ => view! { <NullView /> }
             }}
+            <SubSectionContainer>
+                <AppSubSection position=SubSectionPosition::Left heading="SNARK Jobs".to_string()>
+                    <BlockSpotlightSnarkJobTable block_state_hash=block_state_hash()/>
+                </AppSubSection>
+                <AppSubSection position=SubSectionPosition::Right heading="Fee Transfers".to_string()>
+                    <BlockSpotlightFeeTransfersTable block_state_hash=block_state_hash()/>
+                </AppSubSection>
+            </SubSectionContainer>
         </PageContainer>
     }
 }

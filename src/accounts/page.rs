@@ -81,50 +81,40 @@ pub fn AccountSpotlightPage() -> impl IntoView {
         },
     );
 
+    let public_key = move || memo_params_map.with(|p| p.get("id").cloned());
+
     view! {
         <PageContainer>
             {move || match resource.get() {
                 Some(Ok(res)) =>{
-                    let pk =res.account.public_key.clone();
-                    let pk_1 =res.account.public_key.clone();
-                    let pk_2 =res.account.public_key.clone();
-                    let pk_3 =res.account.public_key.clone();
                     view! {
                         <SpotlightSection header="Account Spotlight".to_string()
                             spotlight_items=get_spotlight_data(res.account.clone())
-                            meta=format!("Username: {}",res.account.username)
-                            id=pk>
+                            meta=Some(format!("Username: {}",res.account.username))
+                            id=Some(public_key().unwrap_or_default())>
                             <WalletIcon width=40/>
                         </SpotlightSection>
-                        <TransactionsSection public_key=Some(pk_1) with_link=true/>
-                        <SubSectionContainer>
-                            <AppSubSection heading="SNARK Jobs".to_string() position=SubSectionPosition::Left>
-                                <AccountOverviewSnarkJobTable public_key=Some(pk_2)/>
-                            </AppSubSection>
-                            <AppSubSection heading="Block Production".to_string() position=SubSectionPosition::Right>
-                                <AccountOverviewBlocksTable public_key=Some(pk_3) />
-                            </AppSubSection>
-                        </SubSectionContainer>
                     }.into_view()
+                },
+                None => view! {
+                    <SpotlightSection header="Account Spotlight".to_string()
+                        spotlight_items=get_spotlight_loading_data()
+                        meta=None
+                        id=None>
+                        <WalletIcon width=40/>
+                    </SpotlightSection>
                 },
                 _ => view! { <NullView /> }
             }}
+            <TransactionsSection public_key=Some(public_key().unwrap_or_default()) with_link=true/>
+            <SubSectionContainer>
+                <AppSubSection heading="SNARK Jobs".to_string() position=SubSectionPosition::Left>
+                    <AccountOverviewSnarkJobTable public_key=Some(public_key().unwrap_or_default())/>
+                </AppSubSection>
+                <AppSubSection heading="Block Production".to_string() position=SubSectionPosition::Right>
+                    <AccountOverviewBlocksTable public_key=Some(public_key().unwrap_or_default()) />
+                </AppSubSection>
+            </SubSectionContainer>
         </PageContainer>
-    }
-}
-
-#[component]
-fn AccountSummarySection(summary: AccountResponse) -> impl IntoView {
-    view! {
-        <section class="grid grid-cols-2 gap-1">
-            <SummaryItem id="publicKey".to_string() label="Public Key".to_string() value={SummaryItemKind::Str(summary.account.public_key)} />
-            <SummaryItem id="username".to_string() label="Username".to_string() value={SummaryItemKind::Str(summary.account.username)} />
-            <SummaryItem id="balance".to_string() label="Balance".to_string() value={SummaryItemKind::Float64(summary.account.balance.total())} />
-            <SummaryItem id="nonce".to_string() label="Nonce".to_string() value={SummaryItemKind::Int32(summary.account.nonce)} />
-            <SummaryItem id="receiptChainHash".to_string() label="Receipt Chain Hash".to_string() value={SummaryItemKind::Str(summary.account.receipt_chain_hash)} />
-            <SummaryItem id="delegate".to_string() label="Delegate".to_string() value={SummaryItemKind::Str(summary.account.delegate)} />
-            <SummaryItem id="votingFor".to_string() label="Voting For".to_string() value={SummaryItemKind::Str(summary.account.voting_for)} />
-            <SummaryItem id="pendingTransactions".to_string() label="Pending Transactions".to_string() value={SummaryItemKind::Int32(summary.account.count_pending_transactions)} />
-        </section>
     }
 }

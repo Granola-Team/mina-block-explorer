@@ -70,6 +70,11 @@ pub fn StakesPage() -> impl IntoView {
                         </TableSection>
                     }
                 },
+                None => view! {
+                    <TableSection section_heading=String::new() controls=move || view! { <NullView /> }>
+                        <Table data=LoadingPlaceholder{}/>
+                    </TableSection>
+                },
                 _ => view! { <NullView /> }
             }}
         </PageContainer>

@@ -119,6 +119,14 @@ pub fn BlocksSection() -> impl IntoView {
                     <Outlet />
                 }.into_view()
             },
+            None => {
+                view! {
+                    <TableSection section_heading="Blocks".to_owned() controls=move || view! { <NullView /> }>
+                        <Table data=LoadingPlaceholder{}/>
+                    </TableSection>
+                    <Outlet />
+                }.into_view()
+            },
             _ => view! { <span/> }.into_view()
         }}
     }
@@ -146,6 +154,12 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
                     url_param_key="include_non_canonical".to_string() />
                 }>
                     <Table data=SummaryPageBlocksQueryBlocks(data.blocks)/>
+                </TableSection>
+                <Outlet />
+            }.into_view(),
+            None => view! {
+                <TableSection section_heading="Blocks".to_string() controls=move || view! {<NullView />}>
+                    <Table data=LoadingPlaceholder{} />
                 </TableSection>
                 <Outlet />
             }.into_view(),

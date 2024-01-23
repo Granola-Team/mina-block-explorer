@@ -12,27 +12,40 @@ use crate::snarks::components::AccountDialogSnarkJobSection;
 use crate::transactions::components::AccountDialogTransactionSection;
 
 #[component]
-pub fn AccountDialog(path_base: String, account: AccountSummary) -> impl IntoView {
-    let id = account.public_key.clone();
-    let summary_items = get_spotlight_data(account.clone());
-    let public_key = account.public_key.clone();
-
+pub fn AccountDialog(
+    public_key: String,
+    path_base: String,
+    account: Option<AccountSummary>,
+) -> impl IntoView {
     view! {
         <dialog id="accountdialog" class="z-20 w-full max-w-3xl h-screen fixed top-0 mr-0 ml-auto flex flex-col items-stretch p-4 bg-background">
             <button id="closedialog" class="absolute top-0 right-0 p-12 z-30">
                 <a href=path_base>X</a>
             </button>
-            <SpotlightSection header="Account Spotlight".to_string() spotlight_items=summary_items id=account.public_key meta=format!("Username: {}",account.username)>
-                <WalletIcon width=40/>
-            </SpotlightSection>
+            {match account {
+                Some(acct) => {
+                    let summary_items = get_spotlight_data(acct.clone());
+                    let public_key = acct.public_key.clone();
+                    view! {
+                        <SpotlightSection header="Account Spotlight".to_string() spotlight_items=summary_items id=Some(public_key.clone()) meta=Some(format!("Username: {}",acct.username))>
+                            <WalletIcon width=40/>
+                        </SpotlightSection>
+                    }
+                },
+                None => view! {
+                    <SpotlightSection header="Account Spotlight".to_string() spotlight_items=get_spotlight_loading_data() id=None meta=None>
+                        <WalletIcon width=40/>
+                    </SpotlightSection>
+                }
+            }}
             <div class="overflow-y-auto flex flex-col pb-20">
                 <AccountDialogTransactionSection limit=3 account_id=public_key.clone() />
                 <AccountDialogSnarkJobSection public_key=Some(public_key.clone())/>
-                <AccountDialogBlocksSection public_key=Some(public_key)/>
+                <AccountDialogBlocksSection public_key=Some(public_key.clone())/>
             </div>
             <div class="absolute bottom-0 left-0 w-full h-20 flex justify-stretch items-center bg-white">
                 <button id="viewmore" class="disabled:bg-slate-400 disabled:text-slate-200 disabled:cursor-not-allowed bg-granola-orange text-white uppercase mx-8 h-11 w-full rounded-lg">
-                    <a href={format!("/accounts/{}", id)}>"View all details"</a>
+                    <a href={format!("/accounts/{}", public_key)}>"View all details"</a>
                 </button>
             </div>
         </dialog>
