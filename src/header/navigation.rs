@@ -10,8 +10,8 @@ enum Icon {
     Transactions,
     SNARKs,
     Staking,
-    // More,
-    // Broadcast,
+    More,
+    Broadcast,
 }
 
 #[derive(Clone)]
@@ -56,17 +56,22 @@ pub fn Header() -> impl IntoView {
             icon: Icon::Staking,
             sub_entries: None,
         },
-        // NavEntry {
-        //     href: "#".to_string(),
-        //     text: "More".to_string(),
-        //     icon: Icon::More,
-        //     sub_entries: Some(vec![NavEntry {
-        //         href: "/broadcast".to_string(),
-        //         text: "Broadcast".to_string(),
-        //         icon: Icon::Broadcast,
-        //         sub_entries: None,
-        //     }]),
-        // },
+        NavEntry {
+            href: "#".to_string(),
+            text: "More".to_string(),
+            icon: Icon::More,
+            sub_entries: Some(vec![NavEntry {
+                href: "/broadcast/transaction".to_string(),
+                text: "Broadcast Transaction".to_string(),
+                icon: Icon::Broadcast,
+                sub_entries: None,
+            },NavEntry {
+                href: "/broadcast/delegation".to_string(),
+                text: "Broadcast Delegation".to_string(),
+                icon: Icon::Broadcast,
+                sub_entries: None,
+            }]),
+        },
     ];
 
     let toggle = move |_| set_open.update(|value| *value = !*value);
@@ -130,10 +135,10 @@ where
                 Icon::Home => view! { <HomeIcon /> },
                 Icon::Blocks => view! { <BlockIcon /> },
                 Icon::Transactions => view! { <TransactionIcon /> },
-                // Icon::More => view! { <MoreIcon /> },
+                Icon::More => view! { <MoreIcon /> },
                 Icon::SNARKs => view! { <SnarkIcon /> },
                 Icon::Staking => view! { <StakingIcon /> },
-                // Icon::Broadcast => view! { <BroadcastIcon /> },
+                Icon::Broadcast => view! { <BroadcastIcon /> },
             }}
             <div class="ml-0.5">{nav_entry.text}</div>
         </a>

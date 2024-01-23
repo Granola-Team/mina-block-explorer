@@ -11,6 +11,7 @@ use crate::snarks::page::SnarksPage;
 use crate::stakes::page::StakesPage;
 use crate::summary::page::SummaryPage;
 use crate::transactions::page::{TransactionSpotlightPage, TransactionsPage};
+use crate::broadcast::page::{BroadcastTransactionPage,BroadcastDelegationPage};
 
 #[component]
 pub fn Root() -> impl IntoView {
@@ -35,6 +36,8 @@ pub fn Root() -> impl IntoView {
               <Route path="/transactions/:id" view=TransactionSpotlightPage/>
               <Route path="/snarks" view=SnarksPage />
               <Route path="/stakes" view=StakesPage />
+              <Route path="/broadcast/transaction" view=BroadcastTransactionPage />
+              <Route path="/broadcast/transaction" view=BroadcastDelegationPage />
             </Routes>
           </main>
           <Footer />

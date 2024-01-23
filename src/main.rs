@@ -11,6 +11,7 @@ mod snarks;
 mod stakes;
 mod summary;
 mod transactions;
+mod broadcast;
 
 use root::Root;
 
