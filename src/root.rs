@@ -4,7 +4,9 @@ use leptos_router::*;
 use crate::accounts::account_dialog::AccountDialogView;
 use crate::accounts::page::{AccountSpotlightPage, AccountsPage};
 use crate::blocks::page::{BlockSpotlight, LatestBlocksPage};
-use crate::broadcast::page::{BroadcastDelegationPage, BroadcastTransactionPage, BroadcastFromLedgerPage};
+use crate::broadcast::page::{
+    BroadcastDelegationPage, BroadcastFromLedgerPage, BroadcastTransactionPage,
+};
 use crate::common::components::DelegationTabbedPage;
 use crate::common::components::NullView;
 use crate::footer::Footer;
