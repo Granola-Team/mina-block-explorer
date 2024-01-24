@@ -159,3 +159,7 @@ pub fn PageContainer(children: Children) -> impl IntoView {
         </div>
     }
 }
+
+
+// #[component]
+// pub fn TabbedPage(tabs: Vec<TabLink>)

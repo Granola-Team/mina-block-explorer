@@ -1,24 +1,14 @@
 use crate::common::components::*;
+use crate::common::models::*;
 use crate::icons::*;
 use leptos::{web_sys::MouseEvent, *};
 use leptos_router::use_location;
 
 #[derive(Clone)]
-enum Icon {
-    Home,
-    Blocks,
-    Transactions,
-    SNARKs,
-    Staking,
-    More,
-    Broadcast,
-}
-
-#[derive(Clone)]
 struct NavEntry {
     href: String,
     text: String,
-    icon: Icon,
+    icon: NavIcon,
     sub_entries: Option<Vec<NavEntry>>,
 }
 
@@ -29,50 +19,44 @@ pub fn Header() -> impl IntoView {
         NavEntry {
             href: "/summary".to_string(),
             text: "Summary".to_string(),
-            icon: Icon::Home,
+            icon: NavIcon::Home,
             sub_entries: None,
         },
         NavEntry {
             href: "/blocks".to_string(),
             text: "Blocks".to_string(),
-            icon: Icon::Blocks,
+            icon: NavIcon::Blocks,
             sub_entries: None,
         },
         NavEntry {
             href: "/transactions".to_string(),
             text: "Transactions".to_string(),
-            icon: Icon::Transactions,
+            icon: NavIcon::Transactions,
             sub_entries: None,
         },
         NavEntry {
             href: "/snarks".to_string(),
             text: "SNARKs".to_string(),
-            icon: Icon::SNARKs,
+            icon: NavIcon::SNARKs,
             sub_entries: None,
         },
         NavEntry {
             href: "/stakes".to_string(),
             text: "Staking".to_string(),
-            icon: Icon::Staking,
+            icon: NavIcon::Staking,
             sub_entries: None,
         },
         NavEntry {
             href: "#".to_string(),
             text: "More".to_string(),
-            icon: Icon::More,
+            icon: NavIcon::More,
             sub_entries: Some(vec![
                 NavEntry {
-                    href: "/broadcast/transaction".to_string(),
-                    text: "Broadcast Transaction".to_string(),
-                    icon: Icon::Broadcast,
+                    href: "/broadcast".to_string(),
+                    text: "Broadcast".to_string(),
+                    icon: NavIcon::Broadcast,
                     sub_entries: None,
-                },
-                NavEntry {
-                    href: "/broadcast/delegation".to_string(),
-                    text: "Broadcast Delegation".to_string(),
-                    icon: Icon::Broadcast,
-                    sub_entries: None,
-                },
+                }
             ]),
         },
     ];
@@ -135,13 +119,13 @@ where
     view! {
         <a on:click=on_click class={move || format!("{} {}",base_link_class, if pathname().contains(&href) {"text-granola-orange"} else {"text-white"})} href=nav_entry.href>
             {match nav_entry.icon {
-                Icon::Home => view! { <HomeIcon /> },
-                Icon::Blocks => view! { <BlockIcon /> },
-                Icon::Transactions => view! { <TransactionIcon /> },
-                Icon::More => view! { <MoreIcon /> },
-                Icon::SNARKs => view! { <SnarkIcon /> },
-                Icon::Staking => view! { <StakingIcon /> },
-                Icon::Broadcast => view! { <BroadcastIcon /> },
+                NavIcon::Home => view! { <HomeIcon /> },
+                NavIcon::Blocks => view! { <BlockIcon /> },
+                NavIcon::Transactions => view! { <TransactionIcon /> },
+                NavIcon::More => view! { <MoreIcon /> },
+                NavIcon::SNARKs => view! { <SnarkIcon /> },
+                NavIcon::Staking => view! { <StakingIcon /> },
+                NavIcon::Broadcast => view! { <BroadcastIcon /> },
             }}
             <div class="ml-0.5">{nav_entry.text}</div>
         </a>
