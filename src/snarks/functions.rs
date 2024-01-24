@@ -15,10 +15,10 @@ pub async fn load_data(
         query: snarks_query::SnarkQueryInput {
             prover: public_key,
             canonical: Some(true),
-            block: Some(snarks_query::BlockQueryInput {
+            block: if block_state_hash.is_none() { None } else { Some(snarks_query::BlockQueryInput {
                 state_hash: block_state_hash,
                 ..Default::default()
-            }),
+            })},
             ..Default::default()
         },
     };
