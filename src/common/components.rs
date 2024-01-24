@@ -1,4 +1,6 @@
-use crate::common::functions::*;
+use super::functions::*;
+use super::models::*;
+use crate::icons::*;
 use leptos::{web_sys::*, *};
 use leptos_router::*;
 
@@ -169,7 +171,40 @@ pub fn PreSectionContainer(children: Children) -> impl IntoView {
     }
 }
 
-// #[component]
-// pub fn TabbedPage(tabs: Vec<TabLink>) {
 
+#[component]
+pub fn NavLink<F>(nav_entry: NavEntry, on_click: F) -> impl IntoView
+where
+    F: Fn(MouseEvent) + 'static,
+{
+    let location = use_location();
+    let pathname = move || location.pathname.get();
+    let href = nav_entry.href.clone();
+    let base_link_class = "md:mx-1.5 my-6 mx-4 flex font-bold text-sm uppercase hover:text-granola-orange hover:underline hover:decoration-2 whitespace-nowrap";
+    view! {
+        <a on:click=on_click class={move || format!("{} {}",base_link_class, if pathname().contains(&href) {"text-granola-orange"} else {"text-white"})} href=nav_entry.href>
+            {match nav_entry.icon {
+                NavIcon::Home => view! { <HomeIcon /> },
+                NavIcon::Blocks => view! { <BlockIcon /> },
+                NavIcon::Transactions => view! { <TransactionIcon /> },
+                NavIcon::More => view! { <MoreIcon /> },
+                NavIcon::SNARKs => view! { <SnarkIcon /> },
+                NavIcon::Staking => view! { <StakingIcon /> },
+                NavIcon::Broadcast => view! { <BroadcastIcon /> },
+            }}
+            <div class="ml-0.5">{nav_entry.text}</div>
+        </a>
+    }
+}
+
+// #[component]
+// pub fn TabbedPage(tabs: Vec<TabLink>) -> impl IntoView {
+//     view! {
+//         <ul class="flex w-full overflow-x-auto">
+//             {tabs.into_iter().map(|t| view!{
+//                 <li class="">
+//                 </li>
+//             })}
+//         </ul>
+//     }
 // }
