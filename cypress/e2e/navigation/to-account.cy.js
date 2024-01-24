@@ -12,7 +12,7 @@ describe('account page', () => {
         { origin: '/transactions', column: 'To', tableHeader: 'Transactions'},
         { origin: '/blocks/3NKnLbpRcFaY9WSzLFa4wYxejhnWBQNEPA2cnesvS75wcuNCr8nA', column: 'From', tableHeader: 'User Commands'},
         { origin: '/blocks/3NKnLbpRcFaY9WSzLFa4wYxejhnWBQNEPA2cnesvS75wcuNCr8nA', column: 'To', tableHeader: 'User Commands'},
-        { origin: '/blocks/3NKnLbpRcFaY9WSzLFa4wYxejhnWBQNEPA2cnesvS75wcuNCr8nA', column: 'Prover', tableHeader: 'SNARK Jobs'},
+        { origin: '/blocks/3NKjn8eQiAdwHMeenVuHKmqTVarJzPU7bfPnvSu74XuXTdzhXpj4', column: 'Prover', tableHeader: 'SNARK Jobs'},
         { origin: '/blocks/3NKnLbpRcFaY9WSzLFa4wYxejhnWBQNEPA2cnesvS75wcuNCr8nA', column: 'Recipient', tableHeader: 'Fee Transfers'},
     ];
 
