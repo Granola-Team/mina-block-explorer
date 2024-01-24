@@ -224,13 +224,13 @@ pub fn TabLink(nav_entry: NavEntry) -> impl IntoView {
 fn TabbedPage(tabs: Vec<NavEntry>) -> impl IntoView {
     view! {
         <PreSectionContainer>
-            <ul class="flex w-full overflow-x-auto">
+            <menu id="tabs" class="flex w-full overflow-x-auto">
                 {tabs.into_iter().map(|t| view!{
                     <li>
                         <TabLink nav_entry=t />
                     </li>
                 }).collect::<Vec<_>>()}
-            </ul>
+            </menu>
         </PreSectionContainer>
         <Outlet />
     }
