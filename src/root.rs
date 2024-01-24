@@ -37,7 +37,7 @@ pub fn Root() -> impl IntoView {
               <Route path="/snarks" view=SnarksPage />
               <Route path="/stakes" view=StakesPage />
               <Route path="/broadcast/transaction" view=BroadcastTransactionPage />
-              <Route path="/broadcast/transaction" view=BroadcastDelegationPage />
+              <Route path="/broadcast/delegation" view=BroadcastDelegationPage />
             </Routes>
           </main>
           <Footer />
