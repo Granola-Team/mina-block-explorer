@@ -197,13 +197,37 @@ where
 }
 
 #[component]
+pub fn TabLink(nav_entry: NavEntry) -> impl IntoView {
+    let location = use_location();
+    let pathname = move || location.pathname.get();
+    let href = nav_entry.href.clone();
+    let base_link_class = "mx-1 p-2 flex font-bold text-sm uppercase border-b border-b-2 whitespace-nowrap box-border";
+    let active_state = "text-granola-orange border-granola-orange";
+    let inactive_state = "text-white border-transparent hover:border-white";
+    view! {
+        <a class={move || format!("{} {}",base_link_class, if pathname().ends_with(&href) { active_state } else { inactive_state })} href=nav_entry.href>
+            {match nav_entry.icon {
+                NavIcon::Home => view! { <HomeIcon /> },
+                NavIcon::Blocks => view! { <BlockIcon /> },
+                NavIcon::Transactions => view! { <TransactionIcon /> },
+                NavIcon::More => view! { <MoreIcon /> },
+                NavIcon::SNARKs => view! { <SnarkIcon /> },
+                NavIcon::Staking => view! { <StakingIcon /> },
+                NavIcon::Broadcast => view! { <BroadcastIcon /> },
+            }}
+            <div class="ml-0.5">{nav_entry.text}</div>
+        </a>
+    }
+}
+
+#[component]
 fn TabbedPage(tabs: Vec<NavEntry>) -> impl IntoView {
     view! {
         <PreSectionContainer>
             <ul class="flex w-full overflow-x-auto">
                 {tabs.into_iter().map(|t| view!{
                     <li>
-                        <NavLink nav_entry=t on_click=move |_| () />
+                        <TabLink nav_entry=t />
                     </li>
                 }).collect::<Vec<_>>()}
             </ul>
