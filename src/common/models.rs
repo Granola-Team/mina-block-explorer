@@ -138,12 +138,6 @@ mod pagination_tests {
     }
 }
 
-pub struct TabLink<'a> {
-    pub href: &'a str,
-    pub text: &'a str,
-    pub icon: NavIcon,
-}
-
 #[derive(Clone)]
 pub struct NavEntry {
     pub href: String,

@@ -1,8 +1,8 @@
+use crate::common::components::*;
 use crate::icons::*;
 use leptos::*;
 use leptos_router::*;
 use leptos_use::signal_debounced;
-use crate::common::components::*;
 
 #[component]
 pub fn SearchBar(

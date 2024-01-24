@@ -5,6 +5,7 @@ use crate::accounts::account_dialog::AccountDialogView;
 use crate::accounts::page::{AccountSpotlightPage, AccountsPage};
 use crate::blocks::page::{BlockSpotlight, LatestBlocksPage};
 use crate::broadcast::page::{BroadcastDelegationPage, BroadcastTransactionPage};
+use crate::common::components::DelegationTabbedPage;
 use crate::common::components::NullView;
 use crate::footer::Footer;
 use crate::header::navigation::Header;
@@ -36,8 +37,11 @@ pub fn Root() -> impl IntoView {
               <Route path="/transactions/:id" view=TransactionSpotlightPage/>
               <Route path="/snarks" view=SnarksPage />
               <Route path="/stakes" view=StakesPage />
-              <Route path="/broadcast/transaction" view=BroadcastTransactionPage />
-              <Route path="/broadcast/delegation" view=BroadcastDelegationPage />
+              <Route path="/broadcast" view=DelegationTabbedPage>
+                <Route path="/transaction" view=BroadcastTransactionPage />
+                <Route path="/delegation" view=BroadcastDelegationPage />
+                <Route path="/*any" view=BroadcastTransactionPage />
+              </Route>
             </Routes>
           </main>
           <Footer />

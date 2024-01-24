@@ -171,7 +171,6 @@ pub fn PreSectionContainer(children: Children) -> impl IntoView {
     }
 }
 
-
 #[component]
 pub fn NavLink<F>(nav_entry: NavEntry, on_click: F) -> impl IntoView
 where
@@ -197,14 +196,37 @@ where
     }
 }
 
-// #[component]
-// pub fn TabbedPage(tabs: Vec<TabLink>) -> impl IntoView {
-//     view! {
-//         <ul class="flex w-full overflow-x-auto">
-//             {tabs.into_iter().map(|t| view!{
-//                 <li class="">
-//                 </li>
-//             })}
-//         </ul>
-//     }
-// }
+#[component]
+fn TabbedPage(tabs: Vec<NavEntry>) -> impl IntoView {
+    view! {
+        <PreSectionContainer>
+            <ul class="flex w-full overflow-x-auto">
+                {tabs.into_iter().map(|t| view!{
+                    <li>
+                        <NavLink nav_entry=t on_click=move |_| () />
+                    </li>
+                }).collect::<Vec<_>>()}
+            </ul>
+        </PreSectionContainer>
+        <Outlet />
+    }
+}
+
+#[component]
+pub fn DelegationTabbedPage() -> impl IntoView {
+    let tabs = vec![
+        NavEntry {
+            href: "/broadcast/transaction".to_string(),
+            text: "Transaction".to_string(),
+            icon: NavIcon::Transactions,
+            sub_entries: None,
+        },
+        NavEntry {
+            href: "/broadcast/delegation".to_string(),
+            text: "Delegation".to_string(),
+            icon: NavIcon::Transactions,
+            sub_entries: None,
+        },
+    ];
+    view! { <TabbedPage tabs /> }
+}

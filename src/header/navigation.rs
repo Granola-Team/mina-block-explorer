@@ -1,16 +1,6 @@
 use crate::common::components::*;
 use crate::common::models::*;
-use crate::icons::*;
-use leptos::{web_sys::MouseEvent, *};
-use leptos_router::use_location;
-
-#[derive(Clone)]
-struct NavEntry {
-    href: String,
-    text: String,
-    icon: NavIcon,
-    sub_entries: Option<Vec<NavEntry>>,
-}
+use leptos::*;
 
 #[component]
 pub fn Header() -> impl IntoView {
@@ -50,14 +40,12 @@ pub fn Header() -> impl IntoView {
             href: "#".to_string(),
             text: "More".to_string(),
             icon: NavIcon::More,
-            sub_entries: Some(vec![
-                NavEntry {
-                    href: "/broadcast".to_string(),
-                    text: "Broadcast".to_string(),
-                    icon: NavIcon::Broadcast,
-                    sub_entries: None,
-                }
-            ]),
+            sub_entries: Some(vec![NavEntry {
+                href: "/broadcast".to_string(),
+                text: "Broadcast".to_string(),
+                icon: NavIcon::Broadcast,
+                sub_entries: None,
+            }]),
         },
     ];
 
@@ -104,30 +92,5 @@ pub fn Header() -> impl IntoView {
                 <span class="relative rounded-lg block bg-white h-0.5 w-4 after:absolute after:rounded-lg after:block after:bg-white after:h-0.5 after:w-4 after:bottom-1 before:absolute before:roudned-sm before:block before:bg-white before:h-0.5 before:w-4 before:top-1"></span>
             </label>
         </header>
-    }
-}
-
-#[component]
-fn NavLink<F>(nav_entry: NavEntry, on_click: F) -> impl IntoView
-where
-    F: Fn(MouseEvent) + 'static,
-{
-    let location = use_location();
-    let pathname = move || location.pathname.get();
-    let href = nav_entry.href.clone();
-    let base_link_class = "md:mx-1.5 my-6 mx-4 flex font-bold text-sm uppercase hover:text-granola-orange hover:underline hover:decoration-2 whitespace-nowrap";
-    view! {
-        <a on:click=on_click class={move || format!("{} {}",base_link_class, if pathname().contains(&href) {"text-granola-orange"} else {"text-white"})} href=nav_entry.href>
-            {match nav_entry.icon {
-                NavIcon::Home => view! { <HomeIcon /> },
-                NavIcon::Blocks => view! { <BlockIcon /> },
-                NavIcon::Transactions => view! { <TransactionIcon /> },
-                NavIcon::More => view! { <MoreIcon /> },
-                NavIcon::SNARKs => view! { <SnarkIcon /> },
-                NavIcon::Staking => view! { <StakingIcon /> },
-                NavIcon::Broadcast => view! { <BroadcastIcon /> },
-            }}
-            <div class="ml-0.5">{nav_entry.text}</div>
-        </a>
     }
 }
