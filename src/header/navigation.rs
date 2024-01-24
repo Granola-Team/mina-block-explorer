@@ -60,17 +60,20 @@ pub fn Header() -> impl IntoView {
             href: "#".to_string(),
             text: "More".to_string(),
             icon: Icon::More,
-            sub_entries: Some(vec![NavEntry {
-                href: "/broadcast/transaction".to_string(),
-                text: "Broadcast Transaction".to_string(),
-                icon: Icon::Broadcast,
-                sub_entries: None,
-            },NavEntry {
-                href: "/broadcast/delegation".to_string(),
-                text: "Broadcast Delegation".to_string(),
-                icon: Icon::Broadcast,
-                sub_entries: None,
-            }]),
+            sub_entries: Some(vec![
+                NavEntry {
+                    href: "/broadcast/transaction".to_string(),
+                    text: "Broadcast Transaction".to_string(),
+                    icon: Icon::Broadcast,
+                    sub_entries: None,
+                },
+                NavEntry {
+                    href: "/broadcast/delegation".to_string(),
+                    text: "Broadcast Delegation".to_string(),
+                    icon: Icon::Broadcast,
+                    sub_entries: None,
+                },
+            ]),
         },
     ];
 

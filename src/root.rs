@@ -4,6 +4,7 @@ use leptos_router::*;
 use crate::accounts::account_dialog::AccountDialogView;
 use crate::accounts::page::{AccountSpotlightPage, AccountsPage};
 use crate::blocks::page::{BlockSpotlight, LatestBlocksPage};
+use crate::broadcast::page::{BroadcastDelegationPage, BroadcastTransactionPage};
 use crate::common::components::NullView;
 use crate::footer::Footer;
 use crate::header::navigation::Header;
@@ -11,7 +12,6 @@ use crate::snarks::page::SnarksPage;
 use crate::stakes::page::StakesPage;
 use crate::summary::page::SummaryPage;
 use crate::transactions::page::{TransactionSpotlightPage, TransactionsPage};
-use crate::broadcast::page::{BroadcastTransactionPage,BroadcastDelegationPage};
 
 #[component]
 pub fn Root() -> impl IntoView {

@@ -13,14 +13,14 @@ pub fn BroadcastForm(endpoint: String) -> impl IntoView {
 
     let submit_action = create_action(|input: &ActionInputs| {
         let input = input.clone();
-        async move { 
+        async move {
             reqwest::Client::new()
                 .post(&input.endpoint)
                 .body(input.value)
                 .send()
                 .await
-         }
-     });
+        }
+    });
 
     view! {
         <form class="p-8" on:submit=move |ev: SubmitEvent| {
@@ -38,10 +38,9 @@ pub fn BroadcastForm(endpoint: String) -> impl IntoView {
                 </textarea>
             </pre>
             <input
-                disabled=move || submit_action.pending().get() 
-                type="submit" 
+                disabled=move || submit_action.pending().get()
+                type="submit"
                 class="disabled:bg-slate-400 disabled:text-slate-200 disabled:cursor-not-allowed bg-granola-orange text-white uppercase h-11 rounded-lg px-6 cursor-pointer disabled:cursor-not-allowed" value="Send"/>
         </form>
     }
 }
-
