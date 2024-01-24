@@ -2,6 +2,7 @@ use crate::icons::*;
 use leptos::*;
 use leptos_router::*;
 use leptos_use::signal_debounced;
+use crate::common::components::*;
 
 #[component]
 pub fn SearchBar(
@@ -68,7 +69,7 @@ pub fn TitledSearchBar(
     search_placeholder: String,
 ) -> impl IntoView {
     view! {
-        <div class="flex flex-col md:flex-row md:px-[10vw] mb-4">
+        <PreSectionContainer>
             <div class="pl-8 md:pl-0 flex flex-col md:pr-4">
                 <span class="text-white font-bold text-2xl p-1 whitespace-nowrap">{title}</span>
                 <span class="text-white font-medium text-base p-1 whitespace-nowrap">{subtext}</span>
@@ -76,6 +77,6 @@ pub fn TitledSearchBar(
             <div class="mx-2 my-2 md:mx-0 md:w-full relative align-stretch flex items-center">
                 <SearchInput placeholder=search_placeholder/>
             </div>
-        </div>
+        </PreSectionContainer>
     }
 }

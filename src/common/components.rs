@@ -160,6 +160,16 @@ pub fn PageContainer(children: Children) -> impl IntoView {
     }
 }
 
+#[component]
+pub fn PreSectionContainer(children: Children) -> impl IntoView {
+    view! {
+        <div class="flex flex-col md:flex-row md:px-[10vw] mb-4">
+            {children()}
+        </div>
+    }
+}
 
 // #[component]
-// pub fn TabbedPage(tabs: Vec<TabLink>)
+// pub fn TabbedPage(tabs: Vec<TabLink>) {
+
+// }
