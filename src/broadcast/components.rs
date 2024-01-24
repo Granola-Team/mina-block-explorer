@@ -32,7 +32,7 @@ pub fn BroadcastForm(endpoint: String) -> impl IntoView {
          }>
             <pre>
                 <textarea
-                    class="p-2 border-box w-full border border-[#DADCE0] rounded-md"
+                    class="p-4 border-box w-full border border-[#DADCE0] rounded-md"
                     node_ref=textarea_element
                     rows="10">
                 </textarea>
@@ -42,5 +42,16 @@ pub fn BroadcastForm(endpoint: String) -> impl IntoView {
                 type="submit"
                 class="disabled:bg-slate-400 disabled:text-slate-200 disabled:cursor-not-allowed bg-granola-orange text-white uppercase h-11 rounded-lg px-6 cursor-pointer disabled:cursor-not-allowed" value="Send"/>
         </form>
+    }
+}
+
+#[component]
+pub fn Sample(children: Children) -> impl IntoView {
+    view! {
+        <div class="w-full overflow-x-auto">
+            <pre class="m-8 p-4 border-box stretch w-fit border border-[#DADCE0] rounded-md">
+                {children()}
+            </pre>
+        </div>
     }
 }
