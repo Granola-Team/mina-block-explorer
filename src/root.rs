@@ -7,6 +7,7 @@ use crate::blocks::page::{BlockSpotlight, LatestBlocksPage};
 use crate::common::components::NullView;
 use crate::footer::Footer;
 use crate::header::navigation::Header;
+use crate::next_stakes::page::NextStakesPage;
 use crate::snarks::page::SnarksPage;
 use crate::stakes::page::StakesPage;
 use crate::summary::page::SummaryPage;
@@ -35,6 +36,7 @@ pub fn Root() -> impl IntoView {
               <Route path="/transactions/:id" view=TransactionSpotlightPage/>
               <Route path="/snarks" view=SnarksPage />
               <Route path="/stakes" view=StakesPage />
+              <Route path="/next-stakes" view=NextStakesPage />
             </Routes>
           </main>
           <Footer />
