@@ -4,10 +4,18 @@ use crate::common::search::*;
 use crate::common::table::*;
 use crate::stakes::components::StakesNavButton;
 use leptos::*;
+use leptos_router::*;
 
 #[component]
 pub fn NextStakesPage() -> impl IntoView {
-    let resource = create_resource(|| (), |_| async move { load_data(10).await });
+    let query_params_map = use_query_map();
+    let resource = create_resource(
+        move || query_params_map.get(),
+        |params_map| async move {
+            let public_key = params_map.get("query");
+            load_data(10, public_key.cloned()).await
+        },
+    );
 
     view! {
         <SearchBar placeholder="Exact search for public key".to_string()/>

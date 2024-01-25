@@ -18,12 +18,14 @@ describe('search bar',() => {
         let tableHeading = 'SNARKs';
         let tableColumn = 'Prover';
         cy.visit('/snarks');
+        cy.wait(1000);
         cy.get("input#searchbar").type(prover, {delay:0})
         cy.tableColumnValuesEqual(tableHeading, tableColumn, prover)
     })
 
     pages.forEach(({origin, input, tableHeading}) => it(`works on ${origin} page`, () => {
         cy.visit(origin);
+        cy.wait(1000);
         cy.get("input#searchbar").type(input, {delay:0});
         cy.tableHasNRows(tableHeading, 1)
     }));

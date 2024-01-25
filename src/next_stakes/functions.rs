@@ -38,12 +38,16 @@ pub fn get_ledger_hash(nextstakes: &NextStakesQueryNextstakes) -> String {
         .map_or("".to_string(), |o| o.to_string())
 }
 
-pub async fn load_data(limit: i64) -> Result<next_stakes_query::ResponseData, MyError> {
+pub async fn load_data(
+    limit: i64,
+    public_key: Option<String>,
+) -> Result<next_stakes_query::ResponseData, MyError> {
     let url = "https://graphql.minaexplorer.com";
     let variables = next_stakes_query::Variables {
         sort_by: next_stakes_query::NextstakeSortByInput::BALANCE_DESC,
         limit: Some(limit),
         query: next_stakes_query::NextstakeQueryInput {
+            public_key,
             ..Default::default()
         },
     };
