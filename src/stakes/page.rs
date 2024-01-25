@@ -38,7 +38,7 @@ pub fn StakesPage() -> impl IntoView {
         <PageContainer>
             {move || match resource.get() {
                 Some(Ok(data)) => {
-                    let (previous_epoch, next_epoch, section_heading) = match (current_epoch(), query_string_epoch()) {
+                    let (previous_epoch, next_epoch, curr_epoch, section_heading) = match (current_epoch(), query_string_epoch()) {
                         (Some(curr_epoch), Some(qs_epoch)) => {
                             let i_curr_epoch = curr_epoch as i64;
                             match qs_epoch.parse::<i64>() {
@@ -46,25 +46,33 @@ pub fn StakesPage() -> impl IntoView {
                                     let i_next_epoch = min(i_curr_epoch, i_qs_epoch+1);
                                     let i_prev_epoch = max(0, i_qs_epoch-1);
                                     let header = if i_next_epoch == i_qs_epoch { "Current Staking Ledger".to_string() } else { format!("Epoch {} Staking Ledger",i_qs_epoch)};
-                                    (i_prev_epoch,i_next_epoch,header)
+                                    (i_prev_epoch,i_next_epoch,i_curr_epoch,header)
                                 },
-                                _ => (0,0, "".to_string())
+                                _ => (0,0,0, "".to_string())
                             }
 
                         },
                         (Some(curr_epoch), None) => {
-                            ((curr_epoch-1) as i64, (curr_epoch+1) as i64, "Current Staking Ledger".to_string())
+                            ((curr_epoch-1) as i64, (curr_epoch) as i64, (curr_epoch) as i64, "Current Staking Ledger".to_string())
                         },
-                        _ => (0,0, "".to_string())
+                        _ => (0,0,0, "".to_string())
                     };
                     view! {
                         <TableSection section_heading=section_heading controls=move || view! {
                             <EpochButton text="Previous".to_string()
                                 style_variant=EpochStyleVariant::Secondary
                                 epoch_target=previous_epoch/>
-                            <EpochButton text="Next".to_string()
-                                style_variant=EpochStyleVariant::Primary
-                                epoch_target=next_epoch/>
+                            { if next_epoch == curr_epoch {
+                                view! { 
+                                    <NextStakesButton />
+                                }
+                            } else { 
+                                view! {
+                                    <EpochButton text="Next".to_string()
+                                        style_variant=EpochStyleVariant::Primary
+                                        epoch_target=next_epoch/>
+                                }
+                            }}
                         }>
                             <Table data=data.stakes/>
                         </TableSection>
@@ -84,6 +92,15 @@ pub fn StakesPage() -> impl IntoView {
 enum EpochStyleVariant {
     Primary,
     Secondary,
+}
+
+#[component]
+fn NextStakesButton() -> impl IntoView {
+    view! {
+        <a href="/next-stakes" class="cursor-pointer text-sm rounded-md p-2 h-9 font-semibold mx-2 flex justify-center items-center border border-granola-orange border-[1px] text-white bg-granola-orange">
+            "Next Stakes"
+        </a>
+    }
 }
 
 #[component]
