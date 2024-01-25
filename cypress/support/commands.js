@@ -89,7 +89,7 @@ Cypress.Commands.add('tableColumnValuesEqual', (heading, column, value) => {
       cy.contains('section',heading)
         .find('table tr td', {timeout: 60000}) 
         .eq(columnIndex)
-        .find('a') 
+        .find('a', { timeout: 60000 }) 
         .should('have.text', value)         
     });
 })

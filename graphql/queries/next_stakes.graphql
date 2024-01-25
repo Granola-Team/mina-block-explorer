@@ -1,0 +1,17 @@
+query NextStakesQuery ($limit: Int = 10, $sort_by: NextstakeSortByInput!, $query: NextstakeQueryInput!) {
+  nextstakes(limit: $limit, sortBy: $sort_by, query: $query ) {
+    balance
+    delegate
+    ledgerHash
+    nonce
+    pk
+    public_key
+    receipt_chain_hash
+    token
+    voting_for
+    nextDelegationTotals {
+      countDelegates
+      totalDelegated
+    }
+  }
+}
