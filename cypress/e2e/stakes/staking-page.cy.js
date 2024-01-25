@@ -10,7 +10,19 @@ describe('staking ledger', () => {
         cy.get('section').contains("Current Staking Ledger");
         cy.get('a').contains('Next Stakes').click();
         cy.wait(500);
-        cy.url().should('include','/next-stakes')
+        cy.get('section').contains("Next Epoch Staking Ledger");
+    });
+
+    it('provides navigation between current and next epoch staking ledger',() => {
+        cy.visit("/next-stakes");
+        cy.get('section').contains("Next Epoch Staking Ledger");
+        cy.get('a').contains('Current Stakes').click();
+        cy.wait(500);
+        cy.get('section').contains("Current Staking Ledger");
+        cy.get('a').contains('Next Stakes').click();
+        cy.wait(500);
+        cy.get('section').contains("Next Epoch Staking Ledger");
+        
     });
 
     it('contains buttons for epoch navigation',() => {

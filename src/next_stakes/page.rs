@@ -15,7 +15,7 @@ pub fn NextStakesPage() -> impl IntoView {
             {move || match resource.get() {
                 Some(Ok(data)) => view! {
                         <TableSection section_heading="Next Epoch Staking Ledger".to_string() controls=move || view! {
-                            <StakesNavButton href="/stakes".to_string() text="Current Staking Ledger".to_string() />
+                            <StakesNavButton href="/stakes".to_string() text="Current Stakes".to_string() />
                         }>
                             <Table data=data.nextstakes/>
                         </TableSection>
