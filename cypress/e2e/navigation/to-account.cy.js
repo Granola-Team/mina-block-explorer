@@ -8,6 +8,8 @@ describe('account page', () => {
         { origin: '/snarks', column: 'Prover', tableHeader: 'SNARKs' },
         { origin: '/stakes', column: 'Key', tableHeader: 'Current Staking Ledger' },
         { origin: '/stakes', column: 'Delegate', tableHeader: 'Current Staking Ledger' },
+        { origin: '/next-stakes', column: 'Key', tableHeader: 'Next Staking Ledger' },
+        { origin: '/next-stakes', column: 'Delegate', tableHeader: 'Next Staking Ledger' },
         { origin: '/transactions', column: 'From', tableHeader: 'Transactions'},
         { origin: '/transactions', column: 'To', tableHeader: 'Transactions'},
         { origin: '/blocks/3NKnLbpRcFaY9WSzLFa4wYxejhnWBQNEPA2cnesvS75wcuNCr8nA', column: 'From', tableHeader: 'User Commands'},

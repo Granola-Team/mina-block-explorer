@@ -9,7 +9,8 @@ describe('search bar',() => {
         { origin: "/summary", input: block_hash, tableHeading: 'Blocks' },
         { origin: "/blocks", input: block_hash, tableHeading: 'Blocks' },
         { origin: "/transactions", input: payment_id, tableHeading:'Transactions'},
-        { origin: "/stakes", input: public_key, tableHeading:'Current Staking Ledger'}
+        { origin: "/stakes", input: public_key, tableHeading:'Current Staking Ledger'},
+        { origin: "/next-stakes", input: public_key, tableHeading:'Next Staking Ledger'},
     ];
 
     it('works on /snarks page', () => {
