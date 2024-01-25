@@ -2,6 +2,7 @@ use super::functions::*;
 use crate::common::components::*;
 use crate::common::search::*;
 use crate::common::table::*;
+use crate::stakes::components::StakesNavButton;
 use leptos::*;
 
 #[component]
@@ -13,7 +14,9 @@ pub fn NextStakesPage() -> impl IntoView {
         <PageContainer>
             {move || match resource.get() {
                 Some(Ok(data)) => view! {
-                        <TableSection section_heading="Next Epoch Staking Ledger".to_string() controls=move || ()>
+                        <TableSection section_heading="Next Epoch Staking Ledger".to_string() controls=move || view! {
+                            <StakesNavButton href="/stakes".to_string() text="Current Staking Ledger".to_string() />
+                        }>
                             <Table data=data.nextstakes/>
                         </TableSection>
                     }

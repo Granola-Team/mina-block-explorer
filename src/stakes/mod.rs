@@ -1,7 +1,7 @@
 // pub mod page;
 // mod functions;
 // mod table_trait;
-mod components;
+pub mod components;
 mod functions;
 mod graphql;
 mod models;

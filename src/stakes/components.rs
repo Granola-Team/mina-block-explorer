@@ -3,10 +3,10 @@ use leptos::*;
 use leptos_router::*;
 
 #[component]
-pub fn NextStakesButton() -> impl IntoView {
+pub fn StakesNavButton(href: String, text: String) -> impl IntoView {
     view! {
-        <a href="/next-stakes" class="cursor-pointer text-sm rounded-md p-2 h-9 font-semibold mx-2 flex justify-center items-center border border-granola-orange border-[1px] text-white bg-granola-orange">
-            "Next Stakes"
+        <a href=href class="cursor-pointer text-sm rounded-md p-2 h-9 font-semibold mx-2 flex justify-center items-center border border-granola-orange border-[1px] text-white bg-granola-orange">
+            {text}
         </a>
     }
 }
@@ -39,7 +39,7 @@ pub fn EpochButton(
     let navigate = use_navigate();
     let location = use_location();
 
-    let handle_click = move |_event| {
+    let handle_click = move |_| {
         let pathname = location.pathname.get();
         let mut pm = query_params_map.get();
         pm.insert("epoch".to_string(), epoch_target.to_string());

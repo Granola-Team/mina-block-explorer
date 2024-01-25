@@ -66,7 +66,7 @@ pub fn StakesPage() -> impl IntoView {
                                 epoch_target=previous_epoch/>
                             { if next_epoch == curr_epoch {
                                 view! {
-                                    <NextStakesButton />
+                                    <StakesNavButton href="/next-stakes".to_string() text="Next Stakes".to_string() />
                                 }
                             } else {
                                 view! {
