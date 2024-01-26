@@ -2,16 +2,11 @@ use crate::common::components::*;
 use crate::common::models::*;
 use leptos::*;
 
+
 #[component]
 pub fn Header() -> impl IntoView {
     let (open, set_open) = create_signal(false);
     let nav_items = vec![
-        NavEntry {
-            href: "/summary".to_string(),
-            text: "Summary".to_string(),
-            icon: NavIcon::Home,
-            sub_entries: None,
-        },
         NavEntry {
             href: "/blocks".to_string(),
             text: "Blocks".to_string(),
@@ -22,6 +17,12 @@ pub fn Header() -> impl IntoView {
             href: "/transactions".to_string(),
             text: "Transactions".to_string(),
             icon: NavIcon::Transactions,
+            sub_entries: None,
+        },
+        NavEntry {
+            href: "/accounts".to_string(),
+            text: "Accounts".to_string(),
+            icon: NavIcon::Accounts,
             sub_entries: None,
         },
         NavEntry {

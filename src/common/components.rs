@@ -179,17 +179,35 @@ where
     let location = use_location();
     let pathname = move || location.pathname.get();
     let href = nav_entry.href.clone();
-    let base_link_class = "md:mx-1.5 my-6 mx-4 flex font-bold text-sm uppercase hover:text-granola-orange hover:underline hover:decoration-2 whitespace-nowrap";
+    let base_link_class="md:mx-1.5 my-6 mx-4 flex font-bold text-sm uppercase";
+    let hover_class = "hover:text-granola-orange hover:underline hover:decoration-2";
+    let n_entry = nav_entry.clone();
+    let get_link_class = move || {
+        let tmp_class = if pathname().contains(&href) {
+            format!("{} {} {}",base_link_class,hover_class,"text-granola-orange")
+        } else {
+            format!("{} {} {}",base_link_class,hover_class,"text-white")
+        };
+        if n_entry.icon == NavIcon::Accounts {
+            format!("{} {}", tmp_class, "opacity-50 cursor-not-allowed pointer-events-none")
+        } else {
+            tmp_class
+        }
+    };
+    let (link_class, set_link_class) = create_signal(get_link_class());
+    create_effect(move |_| {
+        set_link_class.set(get_link_class());
+    });
     view! {
-        <a on:click=on_click class={move || format!("{} {}",base_link_class, if pathname().contains(&href) {"text-granola-orange"} else {"text-white"})} href=nav_entry.href>
+        <a on:click=on_click class={move || link_class.get()} href=nav_entry.href>
             {match nav_entry.icon {
-                NavIcon::Home => view! { <HomeIcon /> },
                 NavIcon::Blocks => view! { <BlockIcon /> },
                 NavIcon::Transactions => view! { <TransactionIcon /> },
                 NavIcon::More => view! { <MoreIcon /> },
                 NavIcon::SNARKs => view! { <SnarkIcon /> },
                 NavIcon::Staking => view! { <StakingIcon /> },
                 NavIcon::Broadcast => view! { <BroadcastIcon /> },
+                _ => view! {<NullView />},
             }}
             <div class="ml-0.5">{nav_entry.text}</div>
         </a>
@@ -207,13 +225,13 @@ pub fn TabLink(nav_entry: NavEntry) -> impl IntoView {
     view! {
         <a class={move || format!("{} {}",base_link_class, if pathname().ends_with(&href) { active_state } else { inactive_state })} href=nav_entry.href>
             {match nav_entry.icon {
-                NavIcon::Home => view! { <HomeIcon /> },
                 NavIcon::Blocks => view! { <BlockIcon /> },
                 NavIcon::Transactions => view! { <TransactionIcon /> },
                 NavIcon::More => view! { <MoreIcon /> },
                 NavIcon::SNARKs => view! { <SnarkIcon /> },
                 NavIcon::Staking => view! { <StakingIcon /> },
                 NavIcon::Broadcast => view! { <BroadcastIcon /> },
+                _ => view! {<NullView />},
             }}
             <div class="ml-0.5">{nav_entry.text}</div>
         </a>
