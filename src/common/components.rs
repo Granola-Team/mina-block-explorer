@@ -179,17 +179,23 @@ where
     let location = use_location();
     let pathname = move || location.pathname.get();
     let href = nav_entry.href.clone();
-    let base_link_class="md:mx-1.5 my-6 mx-4 flex font-bold text-sm uppercase";
+    let base_link_class = "md:mx-1.5 my-6 mx-4 flex font-bold text-sm uppercase";
     let hover_class = "hover:text-granola-orange hover:underline hover:decoration-2";
     let n_entry = nav_entry.clone();
     let get_link_class = move || {
         let tmp_class = if pathname().contains(&href) {
-            format!("{} {} {}",base_link_class,hover_class,"text-granola-orange")
+            format!(
+                "{} {} {}",
+                base_link_class, hover_class, "text-granola-orange"
+            )
         } else {
-            format!("{} {} {}",base_link_class,hover_class,"text-white")
+            format!("{} {} {}", base_link_class, hover_class, "text-white")
         };
         if n_entry.icon == NavIcon::Accounts {
-            format!("{} {}", tmp_class, "opacity-50 cursor-not-allowed pointer-events-none")
+            format!(
+                "{} {}",
+                tmp_class, "opacity-50 cursor-not-allowed pointer-events-none"
+            )
         } else {
             tmp_class
         }

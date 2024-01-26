@@ -2,7 +2,6 @@ use crate::common::components::*;
 use crate::common::models::*;
 use leptos::*;
 
-
 #[component]
 pub fn Header() -> impl IntoView {
     let (open, set_open) = create_signal(false);
