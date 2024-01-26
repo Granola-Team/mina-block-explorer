@@ -213,7 +213,7 @@ where
                 NavIcon::SNARKs => view! { <SnarkIcon /> },
                 NavIcon::Staking => view! { <StakingIcon /> },
                 NavIcon::Broadcast => view! { <BroadcastIcon /> },
-                _ => view! {<NullView />},
+                NavIcon::Accounts => view! { <AccountIcon /> },
             }}
             <div class="ml-0.5">{nav_entry.text}</div>
         </a>
@@ -237,7 +237,7 @@ pub fn TabLink(nav_entry: NavEntry) -> impl IntoView {
                 NavIcon::SNARKs => view! { <SnarkIcon /> },
                 NavIcon::Staking => view! { <StakingIcon /> },
                 NavIcon::Broadcast => view! { <BroadcastIcon /> },
-                _ => view! {<NullView />},
+                NavIcon::Accounts => view! { <AccountIcon /> },
             }}
             <div class="ml-0.5">{nav_entry.text}</div>
         </a>
