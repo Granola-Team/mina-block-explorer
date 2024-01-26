@@ -49,7 +49,7 @@ disallow-unused-cargo-deps:
   cargo machete Cargo.toml
 
 audit:
-  echo cargo audit
+  cargo audit
 
 serve: build 
   trunk serve --open --port=$((5170 + $RANDOM % 10))
