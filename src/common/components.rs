@@ -1,4 +1,6 @@
-use crate::common::functions::*;
+use super::functions::*;
+use super::models::*;
+use crate::icons::*;
 use leptos::{web_sys::*, *};
 use leptos_router::*;
 
@@ -158,4 +160,103 @@ pub fn PageContainer(children: Children) -> impl IntoView {
             {children()}
         </div>
     }
+}
+
+#[component]
+pub fn PreSectionContainer(children: Children) -> impl IntoView {
+    view! {
+        <div class="flex flex-col md:flex-row md:px-[10vw] mb-4">
+            {children()}
+        </div>
+    }
+}
+
+#[component]
+pub fn NavLink<F>(nav_entry: NavEntry, on_click: F) -> impl IntoView
+where
+    F: Fn(MouseEvent) + 'static,
+{
+    let location = use_location();
+    let pathname = move || location.pathname.get();
+    let href = nav_entry.href.clone();
+    let base_link_class = "md:mx-1.5 my-6 mx-4 flex font-bold text-sm uppercase hover:text-granola-orange hover:underline hover:decoration-2 whitespace-nowrap";
+    view! {
+        <a on:click=on_click class={move || format!("{} {}",base_link_class, if pathname().contains(&href) {"text-granola-orange"} else {"text-white"})} href=nav_entry.href>
+            {match nav_entry.icon {
+                NavIcon::Home => view! { <HomeIcon /> },
+                NavIcon::Blocks => view! { <BlockIcon /> },
+                NavIcon::Transactions => view! { <TransactionIcon /> },
+                NavIcon::More => view! { <MoreIcon /> },
+                NavIcon::SNARKs => view! { <SnarkIcon /> },
+                NavIcon::Staking => view! { <StakingIcon /> },
+                NavIcon::Broadcast => view! { <BroadcastIcon /> },
+            }}
+            <div class="ml-0.5">{nav_entry.text}</div>
+        </a>
+    }
+}
+
+#[component]
+pub fn TabLink(nav_entry: NavEntry) -> impl IntoView {
+    let location = use_location();
+    let pathname = move || location.pathname.get();
+    let href = nav_entry.href.clone();
+    let base_link_class = "mx-1 p-2 flex font-bold text-sm uppercase border-b border-b-2 whitespace-nowrap box-border";
+    let active_state = "text-granola-orange border-granola-orange";
+    let inactive_state = "text-white border-transparent hover:border-white";
+    view! {
+        <a class={move || format!("{} {}",base_link_class, if pathname().ends_with(&href) { active_state } else { inactive_state })} href=nav_entry.href>
+            {match nav_entry.icon {
+                NavIcon::Home => view! { <HomeIcon /> },
+                NavIcon::Blocks => view! { <BlockIcon /> },
+                NavIcon::Transactions => view! { <TransactionIcon /> },
+                NavIcon::More => view! { <MoreIcon /> },
+                NavIcon::SNARKs => view! { <SnarkIcon /> },
+                NavIcon::Staking => view! { <StakingIcon /> },
+                NavIcon::Broadcast => view! { <BroadcastIcon /> },
+            }}
+            <div class="ml-0.5">{nav_entry.text}</div>
+        </a>
+    }
+}
+
+#[component]
+fn TabbedPage(tabs: Vec<NavEntry>) -> impl IntoView {
+    view! {
+        <PreSectionContainer>
+            <menu id="tabs" class="flex w-full overflow-x-auto">
+                {tabs.into_iter().map(|t| view!{
+                    <li>
+                        <TabLink nav_entry=t />
+                    </li>
+                }).collect::<Vec<_>>()}
+            </menu>
+        </PreSectionContainer>
+        <Outlet />
+    }
+}
+
+#[component]
+pub fn DelegationTabbedPage() -> impl IntoView {
+    let tabs = vec![
+        NavEntry {
+            href: "/broadcast/transaction".to_string(),
+            text: "Transaction".to_string(),
+            icon: NavIcon::Transactions,
+            sub_entries: None,
+        },
+        NavEntry {
+            href: "/broadcast/delegation".to_string(),
+            text: "Delegation".to_string(),
+            icon: NavIcon::Transactions,
+            sub_entries: None,
+        },
+        NavEntry {
+            href: "/broadcast/ledger".to_string(),
+            text: "Ledger".to_string(),
+            icon: NavIcon::Transactions,
+            sub_entries: None,
+        },
+    ];
+    view! { <TabbedPage tabs /> }
 }

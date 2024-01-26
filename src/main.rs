@@ -1,6 +1,7 @@
 use leptos::*;
 mod accounts;
 mod blocks;
+mod broadcast;
 mod common;
 mod fee_transfers;
 mod footer;

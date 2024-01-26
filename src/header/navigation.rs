@@ -1,26 +1,6 @@
 use crate::common::components::*;
-use crate::icons::*;
-use leptos::{web_sys::MouseEvent, *};
-use leptos_router::use_location;
-
-#[derive(Clone)]
-enum Icon {
-    Home,
-    Blocks,
-    Transactions,
-    SNARKs,
-    Staking,
-    // More,
-    // Broadcast,
-}
-
-#[derive(Clone)]
-struct NavEntry {
-    href: String,
-    text: String,
-    icon: Icon,
-    sub_entries: Option<Vec<NavEntry>>,
-}
+use crate::common::models::*;
+use leptos::*;
 
 #[component]
 pub fn Header() -> impl IntoView {
@@ -29,44 +9,44 @@ pub fn Header() -> impl IntoView {
         NavEntry {
             href: "/summary".to_string(),
             text: "Summary".to_string(),
-            icon: Icon::Home,
+            icon: NavIcon::Home,
             sub_entries: None,
         },
         NavEntry {
             href: "/blocks".to_string(),
             text: "Blocks".to_string(),
-            icon: Icon::Blocks,
+            icon: NavIcon::Blocks,
             sub_entries: None,
         },
         NavEntry {
             href: "/transactions".to_string(),
             text: "Transactions".to_string(),
-            icon: Icon::Transactions,
+            icon: NavIcon::Transactions,
             sub_entries: None,
         },
         NavEntry {
             href: "/snarks".to_string(),
             text: "SNARKs".to_string(),
-            icon: Icon::SNARKs,
+            icon: NavIcon::SNARKs,
             sub_entries: None,
         },
         NavEntry {
             href: "/stakes".to_string(),
             text: "Staking".to_string(),
-            icon: Icon::Staking,
+            icon: NavIcon::Staking,
             sub_entries: None,
         },
-        // NavEntry {
-        //     href: "#".to_string(),
-        //     text: "More".to_string(),
-        //     icon: Icon::More,
-        //     sub_entries: Some(vec![NavEntry {
-        //         href: "/broadcast".to_string(),
-        //         text: "Broadcast".to_string(),
-        //         icon: Icon::Broadcast,
-        //         sub_entries: None,
-        //     }]),
-        // },
+        NavEntry {
+            href: "#".to_string(),
+            text: "More".to_string(),
+            icon: NavIcon::More,
+            sub_entries: Some(vec![NavEntry {
+                href: "/broadcast".to_string(),
+                text: "Broadcast".to_string(),
+                icon: NavIcon::Broadcast,
+                sub_entries: None,
+            }]),
+        },
     ];
 
     let toggle = move |_| set_open.update(|value| *value = !*value);
@@ -91,7 +71,7 @@ pub fn Header() -> impl IntoView {
                                     <NavLink nav_entry=nav_entry on_click=toggle />
                                     { match sub_entries {
                                         Some(s_entries) => view! {
-                                            <ul class="md:hidden md:absolute md:top-0 md:left-0 md:bg-main-background md:shadow-md md:translate-y-3/4 group-hover:block">
+                                            <ul class="md:px-2 md:hidden md:absolute md:top-0 md:left-0 md:bg-main-background md:shadow-md md:translate-y-16 md:-translate-x-2/4 group-hover:block">
                                                 {s_entries.into_iter()
                                                     .map(|sub_entry| view! {
                                                         <li class="ml-4">
@@ -112,30 +92,5 @@ pub fn Header() -> impl IntoView {
                 <span class="relative rounded-lg block bg-white h-0.5 w-4 after:absolute after:rounded-lg after:block after:bg-white after:h-0.5 after:w-4 after:bottom-1 before:absolute before:roudned-sm before:block before:bg-white before:h-0.5 before:w-4 before:top-1"></span>
             </label>
         </header>
-    }
-}
-
-#[component]
-fn NavLink<F>(nav_entry: NavEntry, on_click: F) -> impl IntoView
-where
-    F: Fn(MouseEvent) + 'static,
-{
-    let location = use_location();
-    let pathname = move || location.pathname.get();
-    let href = nav_entry.href.clone();
-    let base_link_class = "md:mx-1.5 my-6 mx-4 flex font-bold text-sm uppercase hover:text-granola-orange hover:underline hover:decoration-2";
-    view! {
-        <a on:click=on_click class={move || format!("{} {}",base_link_class, if pathname().contains(&href) {"text-granola-orange"} else {"text-white"})} href=nav_entry.href>
-            {match nav_entry.icon {
-                Icon::Home => view! { <HomeIcon /> },
-                Icon::Blocks => view! { <BlockIcon /> },
-                Icon::Transactions => view! { <TransactionIcon /> },
-                // Icon::More => view! { <MoreIcon /> },
-                Icon::SNARKs => view! { <SnarkIcon /> },
-                Icon::Staking => view! { <StakingIcon /> },
-                // Icon::Broadcast => view! { <BroadcastIcon /> },
-            }}
-            <div class="ml-0.5">{nav_entry.text}</div>
-        </a>
     }
 }

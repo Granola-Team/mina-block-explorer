@@ -137,3 +137,22 @@ mod pagination_tests {
         assert_eq!(pd.total_pages(), 7);
     }
 }
+
+#[derive(Clone)]
+pub struct NavEntry {
+    pub href: String,
+    pub text: String,
+    pub icon: NavIcon,
+    pub sub_entries: Option<Vec<NavEntry>>,
+}
+
+#[derive(Clone)]
+pub enum NavIcon {
+    Home,
+    Blocks,
+    Transactions,
+    SNARKs,
+    Staking,
+    More,
+    Broadcast,
+}
