@@ -7,6 +7,7 @@ mod fee_transfers;
 mod footer;
 mod header;
 mod icons;
+mod next_stakes;
 mod root;
 mod snarks;
 mod stakes;
