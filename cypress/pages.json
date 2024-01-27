@@ -1,6 +1,6 @@
 [
-    "/summary",
     "/blocks",
     "/transactions",
-    "/snarks"
+    "/snarks",
+    "/stakes"
 ]

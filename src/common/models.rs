@@ -146,11 +146,11 @@ pub struct NavEntry {
     pub sub_entries: Option<Vec<NavEntry>>,
 }
 
-#[derive(Clone)]
+#[derive(Clone, PartialEq)]
 pub enum NavIcon {
-    Home,
     Blocks,
     Transactions,
+    Accounts,
     SNARKs,
     Staking,
     More,
