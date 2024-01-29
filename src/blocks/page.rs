@@ -29,7 +29,7 @@ pub fn BlockSpotlight() -> impl IntoView {
         move || memo_params_map.get(),
         |value| async move {
             let state_hash = value.get("id");
-            load_data(10, None, state_hash.cloned(), None).await
+            load_data(50, None, state_hash.cloned(), None).await
         },
     );
     let block_state_hash = move || memo_params_map.with(|p| p.get("id").cloned());
