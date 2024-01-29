@@ -1,4 +1,4 @@
-describe('staking ledger', () => {
+suite(["@CI"],'staking ledger', () => {
 
     it('defaults to current epoch',() => {
         cy.visit("/stakes");

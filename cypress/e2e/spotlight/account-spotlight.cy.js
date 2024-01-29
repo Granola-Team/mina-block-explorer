@@ -1,4 +1,4 @@
-describe('Account spotlight', () => {
+suite(["@CI"],'Account spotlight', () => {
 
     let expected_fields = [
         'Balance', 'Receipt Chain Hash', 'Voting For', 'Delegate'

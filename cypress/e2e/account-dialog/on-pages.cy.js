@@ -1,4 +1,4 @@
-describe('account dialog', () => {
+suite(["@CI"],'account dialog', () => {
    
     let pages_with_account_dialog = [
       '/summary',

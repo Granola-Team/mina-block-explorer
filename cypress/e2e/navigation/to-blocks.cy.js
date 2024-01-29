@@ -1,4 +1,4 @@
-describe('block page', () => {
+suite(["@CI"],'block page', () => {
     [{
         origin: '/accounts/B62qq3TQ8AP7MFYPVtMx5tZGF3kWLJukfwG1A1RGvaBW1jfTPTkDBW6',
         dest:"blocks",

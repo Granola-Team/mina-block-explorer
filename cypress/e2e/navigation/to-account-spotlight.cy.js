@@ -1,4 +1,4 @@
-describe('account spotlight', () => {
+suite(["@CI"],'account spotlight', () => {
     let dialogs = [{
         origin: '/summary/accounts/B62qq3TQ8AP7MFYPVtMx5tZGF3kWLJukfwG1A1RGvaBW1jfTPTkDBW6',
         selector: '#viewmore a'
