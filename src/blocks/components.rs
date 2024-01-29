@@ -197,7 +197,7 @@ pub fn AccountOverviewBlocksTable(public_key: Option<String>) -> impl IntoView {
             .unwrap_or_else(|| "/blocks".to_string()),
     );
 
-    let records_per_page = 10;
+    let records_per_page = 5;
     let (current_page, set_current_page) = create_signal(1);
 
     view! {
