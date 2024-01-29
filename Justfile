@@ -1,3 +1,12 @@
+# Justfile
+
+# Choose a random port on which to run 'trunk', otherwise concurrent runs
+# interfere with each other if they use the same port.
+#
+trunk_port := `echo $((5170 + $RANDOM % 10))`
+
+cypress_base_url := 'http://localhost:' + trunk_port
+
 default:
   @just --list --justfile {{justfile()}}
 
@@ -20,20 +29,24 @@ build-release:
   just tailwind
   cargo build --release
 
-clean:
+clean: kill-server
   rm -rf dist
   trunk clean
   cargo clean
+  rm -f assets/css/styles.css
+  rm -fr cypress/screenshots/
+  rm -fr cypress/snapshots/navigation/desktop-menu-look-and-feel.cy.js/__diff_output__/
+  rm -fr cypress/snapshots/navigation/mobile-menu-look-and-feel.cy.js/__diff_output__/
+  rm -fr node_modules/
+  rm -f package-lock.json
 
-test: test-unit
+test: lint test-unit test-e2e
 
 kill-server:
-  kill $(cat .pid 2>/dev/null) 2>/dev/null || true
+  if [ -e .pid ]; then kill "$(cat .pid)" && rm .pid ; fi
 
-test-e2e: && kill-server
-  trunk serve --port=5274 & pid=$!; echo "$pid" > .pid
-  sleep 5
-  npx cypress run -r list -q
+test-e2e: serve && kill-server
+  CYPRESS_BASE_URL="{{cypress_base_url}}" npx cypress run -r list -q
   
 test-unit: build
   cargo nextest run
@@ -43,8 +56,6 @@ lint: && audit disallow-unused-cargo-deps
   cargo clippy -- -D warnings
   cargo clippy --all-targets --all-features -- -D warnings
 
-test-ci: lint test-unit test-e2e
-
 disallow-unused-cargo-deps:
   cargo machete Cargo.toml
 
@@ -52,7 +63,8 @@ audit:
   cargo audit
 
 serve: build 
-  trunk serve --open --port=$((5170 + $RANDOM % 10))
+  trunk serve --port="{{trunk_port}}" & pid=$!; echo "$pid" > .pid
+  sleep 10  # Wait for server to start
 
 release: build-release
   trunk build --release --filehash true

@@ -24,7 +24,6 @@ pub fn Root() -> impl IntoView {
           <Header />
           <main>
             <Routes>
-              <Route path="/" view=SummaryPage />
               <Route path="/summary" view=SummaryPage>
                 <Route path="accounts/:id" view=AccountDialogView/>
                 <Route path="" view=NullView/>
@@ -47,6 +46,7 @@ pub fn Root() -> impl IntoView {
                 <Route path="/ledger" view=BroadcastFromLedgerPage />
                 <Route path="/*any" view=BroadcastTransactionPage />
               </Route>
+              <Route path="/*any" view=SummaryPage/>
             </Routes>
           </main>
           <Footer />
