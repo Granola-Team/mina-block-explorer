@@ -1,7 +1,7 @@
 
 const pages = require('../../pages.json');
 
-suite([],'mobile', () => {
+suite(["@VisualRegression"],'mobile', () => {
     
     it(`has menu`, () => {
         cy.viewport('iphone-xr');
