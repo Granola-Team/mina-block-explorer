@@ -394,7 +394,6 @@ mod get_subset_tests {
             vec![Some(MyStruct { value: 3 }), Some(MyStruct { value: 4 })]
         );
     }
-
 }
 
 pub fn build_pagination(
