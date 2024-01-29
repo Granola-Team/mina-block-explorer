@@ -1,4 +1,4 @@
-describe('blocks table', () => {
+suite(["@CI"],'blocks table', () => {
 
     let pages = ['/blocks', '/summary', '/'];
 

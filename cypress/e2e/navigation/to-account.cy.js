@@ -1,4 +1,4 @@
-describe('account page', () => {
+suite(["@CI"],'account page', () => {
     let pages = [
         { origin: '/accounts/B62qq3TQ8AP7MFYPVtMx5tZGF3kWLJukfwG1A1RGvaBW1jfTPTkDBW6', column: 'From', tableHeader: 'Transactions' },
         { origin: '/accounts/B62qq3TQ8AP7MFYPVtMx5tZGF3kWLJukfwG1A1RGvaBW1jfTPTkDBW6', column: 'To', tableHeader: 'Transactions' },

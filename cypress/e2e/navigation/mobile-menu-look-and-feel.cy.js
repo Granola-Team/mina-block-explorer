@@ -1,7 +1,7 @@
 
 const pages = require('../../pages.json');
 
-describe('mobile', () => {
+suite(["@CI"],'mobile', () => {
     
     it(`has menu`, () => {
         cy.viewport('iphone-xr');

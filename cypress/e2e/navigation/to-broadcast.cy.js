@@ -1,4 +1,4 @@
-describe('broadcast page',() => {
+suite(["@CI"],'broadcast page',() => {
 
     let tabs = [
         { text: 'Transaction', heading: 'Broadcast Signed Transaction' },

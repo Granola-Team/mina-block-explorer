@@ -1,4 +1,4 @@
-describe('snarks page', () => {
+suite(["@CI"],'snarks page', () => {
     [{
         origin: '/accounts/B62qq3TQ8AP7MFYPVtMx5tZGF3kWLJukfwG1A1RGvaBW1jfTPTkDBW6',
         dest:"snarks",

@@ -1,4 +1,4 @@
-describe('dialog',()=>{
+suite(["@CI"],'dialog',()=>{
 
     beforeEach(() => {
         cy.visit('/summary/accounts/B62qq3TQ8AP7MFYPVtMx5tZGF3kWLJukfwG1A1RGvaBW1jfTPTkDBW6');
