@@ -7,7 +7,6 @@ use super::models::*;
 use crate::accounts::components::*;
 use crate::common::components::*;
 use crate::common::functions::*;
-use crate::common::models::*;
 use crate::common::table::*;
 use crate::icons::*;
 
@@ -113,7 +112,7 @@ pub fn BlocksSection() -> impl IntoView {
         {move || match resource.get() {
             Some(Ok(data)) => {
                 let pag = build_pagination(data.blocks.len(), records_per_page, current_page.get(), set_current_page);
-                let blocks_subset = get_blocks_subset(&data.blocks, records_per_page, current_page.get()-1);
+                let blocks_subset = get_subset(&data.blocks, records_per_page, current_page.get()-1);
                 view! {
                     <TableSection section_heading="Blocks".to_owned() controls=move || view! {
                         <URLCheckbox
@@ -158,7 +157,7 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
         {move || match resource.get() {
             Some(Ok(data)) => {
                 let pag = build_pagination(data.blocks.len(), records_per_page, current_page.get(), set_current_page);
-                let blocks_subset = get_blocks_subset(&data.blocks, records_per_page, current_page.get()-1);
+                let blocks_subset = get_subset(&data.blocks, records_per_page, current_page.get()-1);
                 view! {
                     <TableSection section_heading="Blocks".to_owned() controls=move || view! {
                         <URLCheckbox
@@ -209,7 +208,7 @@ pub fn AccountOverviewBlocksTable(public_key: Option<String>) -> impl IntoView {
                         0 => view! { <EmptyTable message="This public key has no block production".to_string() /> },
                         _ => {
                             let pag = build_pagination(data.blocks.len(), records_per_page, current_page.get(), set_current_page);
-                            let blocks_subset = get_blocks_subset(&data.blocks, records_per_page, current_page.get()-1);
+                            let blocks_subset = get_subset(&data.blocks, records_per_page, current_page.get()-1);
                             view! {
                                 <Table data=blocks_subset pagination=pag/>
                                 <TableLink href=href.get() text="See all block production".to_string()>
@@ -224,28 +223,4 @@ pub fn AccountOverviewBlocksTable(public_key: Option<String>) -> impl IntoView {
         }}
 
     }
-}
-
-
-fn build_pagination(total_records: usize, records_per_page: usize, current_page: usize, set_current_page: WriteSignal<usize>) -> Pagination {
-    Pagination {
-        current_page,
-        records_per_page,
-        total_records,
-        next_page: Callback::from(move |_| {
-            let set_current_page_inner = set_current_page.clone();
-            set_current_page_inner.update(|cp| *cp += 1);
-        }),
-        prev_page: Callback::from(move |_| {
-            let set_current_page_inner = set_current_page.clone();
-            set_current_page_inner.update(|cp| *cp -= 1);
-        }),
-    }
-}
-
-fn get_blocks_subset(blocks: &Vec<Option<BlocksQueryBlocks>>, records_per_page: usize, current_range: usize) -> Vec<Option<BlocksQueryBlocks>>{
-    let total_records = blocks.len();
-    let ranges = get_ranges(total_records, records_per_page);
-    let range = ranges[current_range];
-    blocks[range[0]..range[1]].to_vec()
 }

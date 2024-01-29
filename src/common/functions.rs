@@ -336,3 +336,87 @@ pub fn pill_variant_to_style_str(pill_variant: PillVariant) -> String {
         PillVariant::Grey => "bg-slate-400".to_string(),
     }
 }
+
+pub fn get_subset<T>(items: &Vec<Option<T>>, records_per_page: usize, current_range: usize) -> Vec<Option<T>>
+where
+    T: Clone,
+{
+    let total_records = items.len();
+    let ranges = get_ranges(total_records, records_per_page);
+    let range = ranges[current_range];
+    items[range[0]..range[1]].to_vec()
+}
+
+#[cfg(test)]
+mod get_subset_tests {
+    use super::get_subset;
+
+    #[derive(Debug, Clone, PartialEq)]
+    struct MyStruct {
+        value: i32,
+    }
+
+    #[test]
+    fn test_get_subset_with_full_range() {
+        let data: Vec<Option<MyStruct>> = vec![
+            Some(MyStruct { value: 1 }),
+            Some(MyStruct { value: 2 }),
+            Some(MyStruct { value: 3 }),
+            Some(MyStruct { value: 4 }),
+            Some(MyStruct { value: 5 }),
+        ];
+
+        let records_per_page = data.len();
+        let current_range = 0;
+        let result = get_subset(&data, records_per_page, current_range);
+        assert_eq!(result, data);
+    }
+
+    #[test]
+    fn test_get_subset_with_partial_range() {
+        let data: Vec<Option<MyStruct>> = vec![
+            Some(MyStruct { value: 1 }),
+            Some(MyStruct { value: 2 }),
+            Some(MyStruct { value: 3 }),
+            Some(MyStruct { value: 4 }),
+            Some(MyStruct { value: 5 }),
+        ];
+
+        let records_per_page = 2;
+        let current_range = 1;
+        let result = get_subset(&data, records_per_page, current_range);
+        assert_eq!(result, vec![Some(MyStruct { value: 3 }), Some(MyStruct { value: 4 })]);
+    }
+
+    #[test]
+    fn test_get_subset_with_invalid_range() {
+        let data: Vec<Option<MyStruct>> = vec![
+            Some(MyStruct { value: 1 }),
+            Some(MyStruct { value: 2 }),
+            Some(MyStruct { value: 3 }),
+            Some(MyStruct { value: 4 }),
+            Some(MyStruct { value: 5 }),
+        ];
+
+        let records_per_page = 2;
+        let current_range = 3;
+        let result = get_subset(&data, records_per_page, current_range);
+        assert_eq!(result, Vec::<Option<MyStruct>>::new());
+    }
+}
+
+pub fn build_pagination(total_records: usize, records_per_page: usize, current_page: usize, set_current_page: WriteSignal<usize>) -> Pagination {
+    Pagination {
+        current_page,
+        records_per_page,
+        total_records,
+        next_page: Callback::from(move |_| {
+            let set_current_page_inner = set_current_page.clone();
+            set_current_page_inner.update(|cp| *cp += 1);
+        }),
+        prev_page: Callback::from(move |_| {
+            let set_current_page_inner = set_current_page.clone();
+            set_current_page_inner.update(|cp| *cp -= 1);
+        }),
+    }
+}
