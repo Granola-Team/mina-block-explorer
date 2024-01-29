@@ -33,7 +33,7 @@ addMatchImageSnapshotCommand({
 
 function suite(tags, suiteName, callback) {
   if (tags.length == 0) {
-    tags = ["N/A"]
+    tags=["n/a"];
   }
   const shouldSkip = Cypress.env('tags') && !tags.some(tag => Cypress.env('tags').includes(tag));
   let tagsStr = tags.join(', ');
