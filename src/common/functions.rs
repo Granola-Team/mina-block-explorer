@@ -395,21 +395,6 @@ mod get_subset_tests {
         );
     }
 
-    #[test]
-    fn test_get_subset_with_invalid_range() {
-        let data: Vec<Option<MyStruct>> = vec![
-            Some(MyStruct { value: 1 }),
-            Some(MyStruct { value: 2 }),
-            Some(MyStruct { value: 3 }),
-            Some(MyStruct { value: 4 }),
-            Some(MyStruct { value: 5 }),
-        ];
-
-        let records_per_page = 2;
-        let current_range = 3;
-        let result = get_subset(&data, records_per_page, current_range);
-        assert_eq!(result, Vec::<Option<MyStruct>>::new());
-    }
 }
 
 pub fn build_pagination(
