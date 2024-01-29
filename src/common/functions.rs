@@ -423,11 +423,11 @@ pub fn build_pagination(
         records_per_page,
         total_records,
         next_page: Callback::from(move |_| {
-            let set_current_page_inner = set_current_page.clone();
+            let set_current_page_inner = set_current_page;
             set_current_page_inner.update(|cp| *cp += 1);
         }),
         prev_page: Callback::from(move |_| {
-            let set_current_page_inner = set_current_page.clone();
+            let set_current_page_inner = set_current_page;
             set_current_page_inner.update(|cp| *cp -= 1);
         }),
     }
