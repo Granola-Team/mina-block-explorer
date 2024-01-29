@@ -8,8 +8,6 @@ steps:
   key: prereqs
 
 - label: "Lint, Audit, Build, and Test"
-  env: 
-    CYPRESS_failOnSnapshotDiff: "false"
   command: |
     nix-shell shell.nix --run "just --justfile Justfile test"
   key: build
