@@ -11,6 +11,6 @@ steps:
   env: 
     CYPRESS_failOnSnapshotDiff: "false"
   command: |
-    nix-shell shell.nix --run "just --justfile Justfile test-ci"
+    nix-shell shell.nix --run "just --justfile Justfile test"
   key: build
   depends_on: prereqs
