@@ -20,19 +20,25 @@ build-release:
   just tailwind
   cargo build --release
 
-clean:
+clean: kill-server
   rm -rf dist
   trunk clean
   cargo clean
+  rm -f assets/css/styles.css
+  rm -fr cypress/screenshots/
+  rm -fr cypress/snapshots/navigation/desktop-menu-look-and-feel.cy.js/__diff_output__/
+  rm -fr cypress/snapshots/navigation/mobile-menu-look-and-feel.cy.js/__diff_output__/
+  rm -fr node_modules/
+  rm -f package-lock.json
 
-test: test-unit
+test: test-unit test-e2e
 
 kill-server:
-  kill $(cat .pid 2>/dev/null) 2>/dev/null || true
+  if [ -e .pid ]; then kill "$(cat .pid)" && rm .pid ; fi
 
 test-e2e: && kill-server
   trunk serve --port=5274 & pid=$!; echo "$pid" > .pid
-  sleep 5
+  sleep 10  # Wait for trunk server to start
   npx cypress run -r list -q
   
 test-unit: build
