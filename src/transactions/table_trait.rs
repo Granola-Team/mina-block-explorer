@@ -7,7 +7,7 @@ use crate::common::table::*;
 
 impl TableData for Vec<Option<TransactionsQueryTransactions>> {
     fn get_columns(&self) -> Vec<String> {
-        ["Date", "From", "To", "Hash", "Fee", "Amount"]
+        ["Date", "From", "To", "Nonce", "Hash", "Fee", "Amount"]
             .iter()
             .map(ToString::to_string)
             .collect::<Vec<_>>()
@@ -18,14 +18,25 @@ impl TableData for Vec<Option<TransactionsQueryTransactions>> {
             .map(|opt_trans| match opt_trans {
                 Some(transaction) => vec![
                     convert_to_span(get_block_datetime(transaction)),
-                    convert_to_link(
-                        get_from(transaction),
-                        format!("/accounts/{}", get_from(transaction)),
-                    ),
+                    if get_memo(transaction).len() > 0 {
+                        convert_array_to_span(vec![
+                            convert_to_link(
+                                get_from(transaction),
+                                format!("/accounts/{}", get_from(transaction)),
+                            ),
+                            convert_to_span(get_memo(transaction)).attr("class","font-xs text-slate-400")
+                        ]).attr("class","block")
+                    } else {
+                        convert_to_link(
+                            get_from(transaction),
+                            format!("/accounts/{}", get_from(transaction)),
+                        )
+                    },
                     convert_to_link(
                         get_receiver_public_key(transaction),
                         format!("/accounts/{}", get_receiver_public_key(transaction)),
                     ),
+                    convert_to_pill(get_nonce(transaction), PillVariant::Grey),
                     convert_to_link(
                         get_hash(transaction),
                         format!("/transactions/{}", get_hash(transaction)),
