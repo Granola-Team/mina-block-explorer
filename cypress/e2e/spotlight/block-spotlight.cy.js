@@ -1,4 +1,4 @@
-describe('Block spotlight', () => {
+suite(["@CI"],'Block spotlight', () => {
 
     let expected_fields = ["State Hash",
         "Previous State Hash",

@@ -1,6 +1,6 @@
 const devices = require('../../devices.json');
 
-describe('transaction spotlight', () => {
+suite(["@CI"],'transaction spotlight', () => {
 
     let expected_fields = [
         'Date', 'Payment ID', 'Canonical', 'Amount', 'From', 'Nonce', 'Kind', 

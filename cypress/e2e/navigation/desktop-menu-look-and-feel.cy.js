@@ -1,7 +1,7 @@
 
 const pages = require('../../pages.json');
 
-describe('desktop', () => {
+suite(["@VisualRegression"],'desktop', () => {
     
     it(`has menu in header`, () => {
         cy.visit("/summary");
