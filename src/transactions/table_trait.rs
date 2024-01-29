@@ -18,7 +18,7 @@ impl TableData for Vec<Option<TransactionsQueryTransactions>> {
             .map(|opt_trans| match opt_trans {
                 Some(transaction) => vec![
                     convert_to_span(get_block_datetime(transaction)),
-                    if get_memo(transaction).len() > 0 {
+                    if !get_memo(transaction).is_empty() {
                         convert_array_to_span(vec![
                             convert_to_link(
                                 get_from(transaction),
