@@ -29,4 +29,20 @@ addMatchImageSnapshotCommand()
 // by all instances of `matchImageSnapshot`
 addMatchImageSnapshotCommand({
   failureThreshold: 0.2,
-})
+});
+
+function suite(tags, suiteName, callback) {
+  if (tags.length == 0) {
+    tags = ["N/A"]
+  }
+  const shouldSkip = Cypress.env('tags') && !tags.some(tag => Cypress.env('tags').includes(tag));
+  let tagsStr = tags.join(', ');
+
+  if (!shouldSkip) {
+    describe(`[Tags: ${tagsStr}] ${suiteName}`, callback);
+  } else {
+    it.skip(`Skipped suite: [Tags: ${tagsStr}] ${suiteName}`, () => {});
+  }
+}
+
+global.suite = suite;
