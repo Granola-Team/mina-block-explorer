@@ -6,8 +6,7 @@ use crate::common::models::*;
 use leptos::*;
 use snarks_query::SnarksQuerySnarks;
 
-
-impl TableData for Vec<Option<SnarksQuerySnarks>>{
+impl TableData for Vec<Option<SnarksQuerySnarks>> {
     fn get_columns(&self) -> Vec<String> {
         ["Height", "Date", "Prover", "Work Ids", "State Hash", "Fee"]
             .iter()
@@ -43,7 +42,7 @@ impl TableData for Vec<Option<SnarksQuerySnarks>>{
     }
 }
 
-impl TableData for &[Option<SnarksQuerySnarks>]{
+impl TableData for &[Option<SnarksQuerySnarks>] {
     fn get_columns(&self) -> Vec<String> {
         ["Height", "Date", "Prover", "Work Ids", "State Hash", "Fee"]
             .iter()

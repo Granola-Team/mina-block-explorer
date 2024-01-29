@@ -105,7 +105,6 @@ pub fn AccountOverviewSnarkJobTable(public_key: Option<String>) -> impl IntoView
             .unwrap_or_else(|| "/snarks".to_string()),
     );
 
-
     let records_per_page = 5;
     let (current_page, set_current_page) = create_signal(1);
 

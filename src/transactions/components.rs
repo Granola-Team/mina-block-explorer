@@ -106,9 +106,7 @@ pub fn TransactionsSection(
 
     let resource = create_resource(
         move || (pk.get(), pid.get()),
-        move |(pk_value, pid_value)| async move {
-            load_data(50, pk_value, None, pid_value).await
-        },
+        move |(pk_value, pid_value)| async move { load_data(50, pk_value, None, pid_value).await },
     );
 
     let records_per_page = 10;

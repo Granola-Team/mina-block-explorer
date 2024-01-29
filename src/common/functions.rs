@@ -337,7 +337,11 @@ pub fn pill_variant_to_style_str(pill_variant: PillVariant) -> String {
     }
 }
 
-pub fn get_subset<T>(items: &Vec<Option<T>>, records_per_page: usize, current_range: usize) -> Vec<Option<T>>
+pub fn get_subset<T>(
+    items: &Vec<Option<T>>,
+    records_per_page: usize,
+    current_range: usize,
+) -> Vec<Option<T>>
 where
     T: Clone,
 {
@@ -385,7 +389,10 @@ mod get_subset_tests {
         let records_per_page = 2;
         let current_range = 1;
         let result = get_subset(&data, records_per_page, current_range);
-        assert_eq!(result, vec![Some(MyStruct { value: 3 }), Some(MyStruct { value: 4 })]);
+        assert_eq!(
+            result,
+            vec![Some(MyStruct { value: 3 }), Some(MyStruct { value: 4 })]
+        );
     }
 
     #[test]
@@ -405,7 +412,12 @@ mod get_subset_tests {
     }
 }
 
-pub fn build_pagination(total_records: usize, records_per_page: usize, current_page: usize, set_current_page: WriteSignal<usize>) -> Pagination {
+pub fn build_pagination(
+    total_records: usize,
+    records_per_page: usize,
+    current_page: usize,
+    set_current_page: WriteSignal<usize>,
+) -> Pagination {
     Pagination {
         current_page,
         records_per_page,
