@@ -106,41 +106,46 @@ pub fn TransactionsSection(
 
     let resource = create_resource(
         move || (pk.get(), pid.get()),
-        move |(pk_value, pid_value)| async move {
-            let limit = 10;
-            load_data(limit, pk_value, None, pid_value).await
-        },
+        move |(pk_value, pid_value)| async move { load_data(50, pk_value, None, pid_value).await },
     );
+
+    let records_per_page = 10;
+    let (current_page, set_current_page) = create_signal(1);
 
     view! {
         {move || match resource.get() {
             Some(Ok(data)) => view! {
                 <TableSection section_heading="Transactions".to_owned() controls=|| ().into_view()>
-                    {match data.transactions.len() {
+                    {move || match data.transactions.len() {
                         0 => view! { <EmptyTable message="This public key has no transactions".to_string() /> },
-                        _ => view! {
-                            <Table data=data.transactions/>
-                            {match with_link {
-                                false => view! { <NullView /> },
-                                true => {
-                                    let pk_inner = pk.get();
-                                    let link = pk_inner.map_or_else(
-                                        || "/transactions".to_string(),
-                                        |mpk| {
-                                            if mpk.is_empty() {
-                                                "/transactions".to_string()
-                                            } else {
-                                                format!("/transactions?account={}", mpk)
-                                            }
-                                        },
-                                    );
-                                    view! {
-                                        <TableLink href=link text="See all transactions".to_string() >
-                                            <TransactionIcon />
-                                        </TableLink>
-                                    }
-                                }.into_view()
-                            }}
+                        _ => {
+                            let pag = build_pagination(data.transactions.len(), records_per_page, current_page.get(), set_current_page);
+                            let subset = get_subset(&data.transactions, records_per_page, current_page.get()-1);
+                            view! {
+                                <Table data=subset pagination=pag/>
+                                // <NullView />
+                                {match with_link {
+                                    false => view! { <NullView /> },
+                                    true => {
+                                        let pk_inner = pk.get();
+                                        let link = pk_inner.map_or_else(
+                                            || "/transactions".to_string(),
+                                            |mpk| {
+                                                if mpk.is_empty() {
+                                                    "/transactions".to_string()
+                                                } else {
+                                                    format!("/transactions?account={}", mpk)
+                                                }
+                                            },
+                                        );
+                                        view! {
+                                            <TableLink href=link text="See all transactions".to_string() >
+                                                <TransactionIcon />
+                                            </TableLink>
+                                        }
+                                    }.into_view()
+                                }}
+                            }
                         }.into_view()
                     }}
                 </TableSection>

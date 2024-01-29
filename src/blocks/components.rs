@@ -96,7 +96,7 @@ pub fn BlocksSection() -> impl IntoView {
             let include_non_canonical_qs = value.get("include_non_canonical");
             let canonical_query = canonical_qs_to_canonical_query_param(include_non_canonical_qs);
             load_data(
-                10,
+                50,
                 public_key.cloned(),
                 block_hash.cloned(),
                 canonical_query,
@@ -105,16 +105,21 @@ pub fn BlocksSection() -> impl IntoView {
         },
     );
 
+    let records_per_page = 10;
+    let (current_page, set_current_page) = create_signal(1);
+
     view! {
         {move || match resource.get() {
             Some(Ok(data)) => {
+                let pag = build_pagination(data.blocks.len(), records_per_page, current_page.get(), set_current_page);
+                let blocks_subset = get_subset(&data.blocks, records_per_page, current_page.get()-1);
                 view! {
                     <TableSection section_heading="Blocks".to_owned() controls=move || view! {
                         <URLCheckbox
                         label="Include Non-Canonical".to_string()
                         url_param_key="include_non_canonical".to_string() />
                     }>
-                        <Table data=data.blocks/>
+                        <Table data=blocks_subset pagination=pag/>
                     </TableSection>
                     <Outlet />
                 }.into_view()
@@ -141,22 +146,29 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
             let state_hash = value.get("query");
             let include_non_canonical_qs = value.get("include_non_canonical");
             let canonical_query = canonical_qs_to_canonical_query_param(include_non_canonical_qs);
-            load_data(10, None, state_hash.cloned(), canonical_query).await
+            load_data(50, None, state_hash.cloned(), canonical_query).await
         },
     );
 
+    let records_per_page = 10;
+    let (current_page, set_current_page) = create_signal(1);
+
     view! {
         {move || match resource.get() {
-            Some(Ok(data)) => view! {
-                <TableSection section_heading="Blocks".to_owned() controls=move || view! {
-                    <URLCheckbox
-                    label="Include Non-Canonical".to_string()
-                    url_param_key="include_non_canonical".to_string() />
-                }>
-                    <Table data=SummaryPageBlocksQueryBlocks(data.blocks)/>
-                </TableSection>
-                <Outlet />
-            }.into_view(),
+            Some(Ok(data)) => {
+                let pag = build_pagination(data.blocks.len(), records_per_page, current_page.get(), set_current_page);
+                let blocks_subset = get_subset(&data.blocks, records_per_page, current_page.get()-1);
+                view! {
+                    <TableSection section_heading="Blocks".to_owned() controls=move || view! {
+                        <URLCheckbox
+                        label="Include Non-Canonical".to_string()
+                        url_param_key="include_non_canonical".to_string() />
+                    }>
+                        <Table data=SummaryPageBlocksQueryBlocks(blocks_subset) pagination=pag/>
+                    </TableSection>
+                    <Outlet />
+                }.into_view()
+            },
             None => view! {
                 <TableSection section_heading="Blocks".to_string() controls=move || view! {<NullView />}>
                     <Table data=LoadingPlaceholder{} />
@@ -175,7 +187,7 @@ pub fn AccountOverviewBlocksTable(public_key: Option<String>) -> impl IntoView {
         || (),
         move |_| {
             let public_key_inner = public_key.clone();
-            async move { load_data(5, public_key_inner, None, Some(true)).await }
+            async move { load_data(50, public_key_inner, None, Some(true)).await }
         },
     );
 
@@ -185,17 +197,24 @@ pub fn AccountOverviewBlocksTable(public_key: Option<String>) -> impl IntoView {
             .unwrap_or_else(|| "/blocks".to_string()),
     );
 
+    let records_per_page = 5;
+    let (current_page, set_current_page) = create_signal(1);
+
     view! {
         {move || match resource.get() {
             Some(Ok(data)) => view! {
                 {
                     match data.blocks.len() {
                         0 => view! { <EmptyTable message="This public key has no block production".to_string() /> },
-                        _ => view! {
-                            <Table data=data.blocks />
-                            <TableLink href=href.get() text="See all block production".to_string()>
-                                <BlockIcon />
-                            </TableLink>
+                        _ => {
+                            let pag = build_pagination(data.blocks.len(), records_per_page, current_page.get(), set_current_page);
+                            let blocks_subset = get_subset(&data.blocks, records_per_page, current_page.get()-1);
+                            view! {
+                                <Table data=blocks_subset pagination=pag/>
+                                <TableLink href=href.get() text="See all block production".to_string()>
+                                    <BlockIcon />
+                                </TableLink>
+                            }
                         }.into_view()
                     }
                 }

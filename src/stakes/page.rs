@@ -2,6 +2,7 @@ use super::components::*;
 use super::functions::*;
 use super::models::*;
 use crate::common::components::*;
+use crate::common::functions::*;
 use crate::common::search::*;
 use crate::common::table::*;
 use crate::summary::functions::load_data as load_summary_data;
@@ -31,9 +32,12 @@ pub fn StakesPage() -> impl IntoView {
                 (Some(epoch), None) => Some(epoch as i64),
                 _ => q_str_epoch.and_then(|s| s.parse::<i64>().ok()),
             };
-            load_data(10, resolved_epoch, public_key).await
+            load_data(50, resolved_epoch, public_key).await
         },
     );
+
+    let records_per_page = 10;
+    let (current_page, set_current_page) = create_signal(1);
 
     view! {
         <SearchBar placeholder="Exact search for public key".to_string()/>
@@ -59,6 +63,8 @@ pub fn StakesPage() -> impl IntoView {
                         },
                         _ => (0,0,0, "".to_string())
                     };
+                    let pag = build_pagination(data.stakes.len(), records_per_page, current_page.get(), set_current_page);
+                    let subset = get_subset(&data.stakes, records_per_page, current_page.get()-1);
                     view! {
                         <TableSection section_heading=section_heading controls=move || view! {
                             <EpochButton text="Previous".to_string()
@@ -76,7 +82,7 @@ pub fn StakesPage() -> impl IntoView {
                                 }
                             }}
                         }>
-                            <Table data=data.stakes/>
+                            <Table data=subset pagination=pag/>
                         </TableSection>
                     }
                 },

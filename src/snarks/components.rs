@@ -6,7 +6,6 @@ use super::graphql::snarks_query::SnarksQuerySnarks;
 use crate::accounts::components::*;
 use crate::common::components::*;
 use crate::common::functions::*;
-use crate::common::models::*;
 use crate::common::table::*;
 use crate::icons::*;
 
@@ -96,7 +95,7 @@ pub fn AccountOverviewSnarkJobTable(public_key: Option<String>) -> impl IntoView
         || (),
         move |_| {
             let public_key_inner = public_key.clone();
-            async move { load_data(5, public_key_inner, None).await }
+            async move { load_data(50, public_key_inner, None).await }
         },
     );
 
@@ -106,18 +105,25 @@ pub fn AccountOverviewSnarkJobTable(public_key: Option<String>) -> impl IntoView
             .unwrap_or_else(|| "/snarks".to_string()),
     );
 
+    let records_per_page = 5;
+    let (current_page, set_current_page) = create_signal(1);
+
     view! {
         {move || match resource.get() {
             Some(Ok(data)) => view! {
                 {
                     match data.snarks.len() {
                         0 => view! { <EmptyTable message="This public key has not completed any SNARK work".to_string() /> },
-                        _ => view! {
-                            <Table data=data.snarks />
-                            <TableLink href=href.get() text="See all snark jobs".to_string()>
-                                <SnarkIcon />
-                            </TableLink>
-                        }.into_view()
+                        _ => {
+                            let pag = build_pagination(data.snarks.len(), records_per_page, current_page.get(), set_current_page);
+                            let subset = get_subset(&data.snarks, records_per_page, current_page.get()-1);
+                            view! {
+                                <Table data=subset pagination=pag />
+                                <TableLink href=href.get() text="See all snark jobs".to_string()>
+                                    <SnarkIcon />
+                                </TableLink>
+                            }.into_view()
+                        }
                     }
                 }
             },
@@ -145,26 +151,10 @@ pub fn BlockSpotlightSnarkJobTable(block_state_hash: Option<String>) -> impl Int
                     match data.snarks.len() {
                         0 => view! { <EmptyTable message="No SNARK work related to this block".to_string() /> },
                         _ => {
-                            let snarks = data.snarks;
-                            let total_records = snarks.len();
-                            let ranges = get_ranges(total_records, records_per_page);
-                            let range = ranges[current_page.get()-1];
-                            let snarks_subset = &snarks[range[0]..range[1]];
-                            let pag = Pagination {
-                                current_page: current_page.get(),
-                                records_per_page,
-                                total_records,
-                                next_page: Callback::from(move |_| {
-                                    let set_current_page_inner = set_current_page;
-                                    set_current_page_inner.update(|cp| *cp += 1);
-                                }),
-                                prev_page: Callback::from(move |_| {
-                                    let set_current_page_inner = set_current_page;
-                                    set_current_page_inner.update(|cp| *cp -= 1);
-                                }),
-                            };
+                            let pag = build_pagination(data.snarks.len(), records_per_page, current_page.get(), set_current_page);
+                            let subset = get_subset(&data.snarks, records_per_page, current_page.get()-1);
                             view! {
-                                <Table data=snarks_subset pagination=pag/>
+                                <Table data=subset pagination=pag/>
                             }
                         }
                     }
