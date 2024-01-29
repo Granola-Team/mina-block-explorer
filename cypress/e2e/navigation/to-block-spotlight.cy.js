@@ -1,4 +1,4 @@
-describe('block spotlight', () => {
+suite(["@CI"],'block spotlight', () => {
     [{
         origin: '/summary',
         selector: 'a[href^="/blocks/"]:not(a[href^="/blocks/account"])'

@@ -1,4 +1,4 @@
-describe('transaction page', () => {
+suite(["@CI"],'transaction page', () => {
     [{
         origin: '/accounts/B62qq3TQ8AP7MFYPVtMx5tZGF3kWLJukfwG1A1RGvaBW1jfTPTkDBW6',
         dest:"transactions",
@@ -11,7 +11,7 @@ describe('transaction page', () => {
 
 });
 
-describe('transaction spotlight', () => {
+suite(["@CI"],'transaction spotlight', () => {
     let pages = [
         { origin: '/transactions', column: 'Hash', tableHeader: 'Transactions'},
         { origin: '/blocks/3NKnLbpRcFaY9WSzLFa4wYxejhnWBQNEPA2cnesvS75wcuNCr8nA', column: 'Hash', tableHeader: 'User Commands'},
