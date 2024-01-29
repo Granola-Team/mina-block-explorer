@@ -24,8 +24,10 @@ impl TableData for Vec<Option<TransactionsQueryTransactions>> {
                                 get_from(transaction),
                                 format!("/accounts/{}", get_from(transaction)),
                             ),
-                            convert_to_span(get_memo(transaction)).attr("class","font-xs text-slate-400")
-                        ]).attr("class","block")
+                            convert_to_span(get_memo(transaction))
+                                .attr("class", "font-xs text-slate-400"),
+                        ])
+                        .attr("class", "block")
                     } else {
                         convert_to_link(
                             get_from(transaction),
