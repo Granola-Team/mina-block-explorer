@@ -55,7 +55,7 @@ impl TableData for Vec<Option<BlocksQueryBlocks>> {
                     if get_canonical(block) {
                         canonical_wrapper(d)
                     } else {
-                        opacity_50_wrapper(d)
+                        non_canonical_wrapper(d)
                     }
                 })
                 .collect::<Vec<_>>(),
@@ -136,7 +136,7 @@ impl TableData for SummaryPageBlocksQueryBlocks {
                     if get_canonical(block) {
                         canonical_wrapper(d)
                     } else {
-                        opacity_50_wrapper(d)
+                        non_canonical_wrapper(d)
                     }
                 })
                 .collect::<Vec<_>>()
