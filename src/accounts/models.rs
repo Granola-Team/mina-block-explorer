@@ -53,9 +53,3 @@ pub struct AllAccountSummary {
     pub public_key: String,
     pub username: String,
 }
-
-pub enum AccountCardVariant {
-    Purple,
-    Blue,
-    Green,
-}
