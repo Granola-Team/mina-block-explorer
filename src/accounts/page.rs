@@ -32,19 +32,33 @@ pub fn AccountsPage() -> impl IntoView {
     let (current_page, set_current_page) = create_signal(1);
 
     view! {
-        <SearchBar />
+        <SearchBar/>
         <PageContainer>
             <TableSection section_heading="Accounts".to_string() controls=|| ().into_view()>
                 {move || match resource.get() {
                     Some(Ok(data)) => {
-                        let pag = build_pagination(data.data.len(), records_per_page, current_page.get(), set_current_page);
-                        let subset = get_subset(&data.data.into_iter().map(Some).collect(), records_per_page, current_page.get()-1);
+                        let pag = build_pagination(
+                            data.data.len(),
+                            records_per_page,
+                            current_page.get(),
+                            set_current_page,
+                        );
+                        let subset = get_subset(
+                            &data.data.into_iter().map(Some).collect(),
+                            records_per_page,
+                            current_page.get() - 1,
+                        );
+                        view! { <Table data=subset pagination=pag/> }
+                    }
+                    None => view! { <Table data=LoadingPlaceholder {}/> },
+                    Some(Err(_)) => {
                         view! {
-                            <Table data=subset pagination=pag />
+                            <EmptyTable message="Unable to list accounts at this time. Refresh to try again."
+                                .to_string()/>
                         }
-                    },
-                    _ => view! { <NullView />}
+                    }
                 }}
+
             </TableSection>
         </PageContainer>
     }
@@ -73,33 +87,45 @@ pub fn AccountSpotlightPage() -> impl IntoView {
     view! {
         <PageContainer>
             {move || match resource.get() {
-                Some(Ok(res)) =>{
+                Some(Ok(res)) => {
                     view! {
-                        <SpotlightSection header="Account Spotlight".to_string()
+                        <SpotlightSection
+                            header="Account Spotlight".to_string()
                             spotlight_items=get_spotlight_data(res.account.clone())
-                            meta=Some(format!("Username: {}",res.account.username))
-                            id=Some(public_key().unwrap_or_default())>
+                            meta=Some(format!("Username: {}", res.account.username))
+                            id=Some(public_key().unwrap_or_default())
+                        >
                             <WalletIcon width=40/>
                         </SpotlightSection>
-                    }.into_view()
-                },
-                None => view! {
-                    <SpotlightSection header="Account Spotlight".to_string()
-                        spotlight_items=get_spotlight_loading_data()
-                        meta=None
-                        id=None>
-                        <WalletIcon width=40/>
-                    </SpotlightSection>
-                },
-                _ => view! { <NullView /> }
+                    }
+                        .into_view()
+                }
+                None => {
+                    view! {
+                        <SpotlightSection
+                            header="Account Spotlight".to_string()
+                            spotlight_items=get_spotlight_loading_data()
+                            meta=None
+                            id=None
+                        >
+                            <WalletIcon width=40/>
+                        </SpotlightSection>
+                    }
+                }
+                _ => view! { <NullView/> },
             }}
             <TransactionsSection public_key=Some(public_key().unwrap_or_default()) with_link=true/>
             <SubSectionContainer>
                 <AppSubSection heading="SNARK Jobs".to_string() position=SubSectionPosition::Left>
-                    <AccountOverviewSnarkJobTable public_key=Some(public_key().unwrap_or_default())/>
+                    <AccountOverviewSnarkJobTable public_key=Some(
+                        public_key().unwrap_or_default(),
+                    )/>
                 </AppSubSection>
-                <AppSubSection heading="Block Production".to_string() position=SubSectionPosition::Right>
-                    <AccountOverviewBlocksTable public_key=Some(public_key().unwrap_or_default()) />
+                <AppSubSection
+                    heading="Block Production".to_string()
+                    position=SubSectionPosition::Right
+                >
+                    <AccountOverviewBlocksTable public_key=Some(public_key().unwrap_or_default())/>
                 </AppSubSection>
             </SubSectionContainer>
         </PageContainer>
