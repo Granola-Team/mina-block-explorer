@@ -46,20 +46,20 @@ pub fn BlockSpotlight() -> impl IntoView {
                             let state_hash = get_state_hash(&block);
                             let date_time = get_date_time(&block);
                             let spotlight_items = vec![
-                                SpotlightEntry { label: "State Hash".to_string(), value: Some(state_hash), pill_variant: None},
-                                SpotlightEntry { label: "Previous State Hash".to_string(), value: Some(get_previous_state_hash(&block)), pill_variant: None},
-                                SpotlightEntry { label: "Staged Ledger Hash".to_string(), value: Some(get_staged_ledger_hash(&block)), pill_variant: None},
-                                SpotlightEntry { label: "Snarked Ledger Hash".to_string(), value: Some(get_snarked_ledger_hash(&block)), pill_variant: None},
-                                SpotlightEntry { label: "Coinbase".to_string(), value: Some(get_coinbase(&block)), pill_variant: None},
-                                SpotlightEntry { label: "Coinbase Receiver".to_string(), value: Some(get_coinbase_receiver(&block)), pill_variant: None},
-                                SpotlightEntry { label: "Winning Account".to_string(), value: Some(get_winning_account(&block)), pill_variant: None},
-                                SpotlightEntry { label: "SNARK Fees".to_string(), value: Some(get_snark_fees(&block)), pill_variant: None},
-                                SpotlightEntry { label: "Global Slot".to_string(), value: Some(get_global_slot(&block)), pill_variant: Some(PillVariant::Blue)},
-                                SpotlightEntry { label: "Slot".to_string(), value: Some(get_slot(&block)), pill_variant: Some(PillVariant::Green)},
-                                SpotlightEntry { label: "Epoch".to_string(), value: Some(get_epoch(&block)), pill_variant: None},
-                                SpotlightEntry { label: "Transaction Fees".to_string(), value: Some(get_transaction_fees(&block)), pill_variant: None},
-                                SpotlightEntry { label: "Blockchain Length".to_string(), value: Some(get_block_height(&block)), pill_variant: None},
-                                SpotlightEntry { label: "Total Currency".to_string(), value: Some(get_total_currency(&block)), pill_variant: None},
+                                SpotlightEntry { label: "State Hash".to_string(), value: Some(state_hash), pill_variant: None, copiable: true},
+                                SpotlightEntry { label: "Previous State Hash".to_string(), value: Some(get_previous_state_hash(&block)), pill_variant: None, copiable: true},
+                                SpotlightEntry { label: "Staged Ledger Hash".to_string(), value: Some(get_staged_ledger_hash(&block)), pill_variant: None, copiable: true},
+                                SpotlightEntry { label: "Snarked Ledger Hash".to_string(), value: Some(get_snarked_ledger_hash(&block)), pill_variant: None, copiable: true},
+                                SpotlightEntry { label: "Coinbase".to_string(), value: Some(get_coinbase(&block)), pill_variant: None, copiable: true},
+                                SpotlightEntry { label: "Coinbase Receiver".to_string(), value: Some(get_coinbase_receiver(&block)), pill_variant: None, copiable: true},
+                                SpotlightEntry { label: "Winning Account".to_string(), value: Some(get_winning_account(&block)), pill_variant: None, copiable: true},
+                                SpotlightEntry { label: "SNARK Fees".to_string(), value: Some(get_snark_fees(&block)), pill_variant: Some(PillVariant::Orange), copiable: false},
+                                SpotlightEntry { label: "Global Slot".to_string(), value: Some(get_global_slot(&block)), pill_variant: Some(PillVariant::Grey), copiable: false},
+                                SpotlightEntry { label: "Slot".to_string(), value: Some(get_slot(&block)), pill_variant: Some(PillVariant::Grey), copiable: false},
+                                SpotlightEntry { label: "Epoch".to_string(), value: Some(get_epoch(&block)), pill_variant: Some(PillVariant::Grey), copiable: false},
+                                SpotlightEntry { label: "Transaction Fees".to_string(), value: Some(get_transaction_fees(&block)), pill_variant: Some(PillVariant::Orange), copiable: false},
+                                SpotlightEntry { label: "Blockchain Length".to_string(), value: Some(get_block_height(&block)), pill_variant: Some(PillVariant::Grey), copiable: false},
+                                SpotlightEntry { label: "Total Currency".to_string(), value: Some(get_total_currency(&block)), pill_variant: Some(PillVariant::Green), copiable: false},
                             ];
                             view!{
                                 <SpotlightSection header="Block Spotlight".to_string()
@@ -87,20 +87,20 @@ pub fn BlockSpotlight() -> impl IntoView {
                 }
                 None => {
                     let spotlight_items = vec![
-                        SpotlightEntry { label: "State Hash".to_string(), value: None, pill_variant: None},
-                        SpotlightEntry { label: "Previous State Hash".to_string(), value: None, pill_variant: None},
-                        SpotlightEntry { label: "Staged Ledger Hash".to_string(), value: None, pill_variant: None},
-                        SpotlightEntry { label: "Snarked Ledger Hash".to_string(), value: None, pill_variant: None},
-                        SpotlightEntry { label: "Coinbase".to_string(), value: None, pill_variant: None},
-                        SpotlightEntry { label: "Coinbase Receiver".to_string(), value: None, pill_variant: None},
-                        SpotlightEntry { label: "Winning Account".to_string(), value: None, pill_variant: None},
-                        SpotlightEntry { label: "SNARK Fees".to_string(), value: None, pill_variant: None},
-                        SpotlightEntry { label: "Global Slot".to_string(), value: None, pill_variant: None},
-                        SpotlightEntry { label: "Slot".to_string(), value: None, pill_variant: None},
-                        SpotlightEntry { label: "Epoch".to_string(), value: None, pill_variant: None},
-                        SpotlightEntry { label: "Transaction Fees".to_string(), value: None, pill_variant: None},
-                        SpotlightEntry { label: "Blockchain Length".to_string(), value: None, pill_variant: None},
-                        SpotlightEntry { label: "Total Currency".to_string(), value: None, pill_variant: None},
+                        SpotlightEntry { label: "State Hash".to_string(), value: None, pill_variant: None, copiable: true},
+                        SpotlightEntry { label: "Previous State Hash".to_string(), value: None, pill_variant: None, copiable: true},
+                        SpotlightEntry { label: "Staged Ledger Hash".to_string(), value: None, pill_variant: None, copiable: true},
+                        SpotlightEntry { label: "Snarked Ledger Hash".to_string(), value: None, pill_variant: None, copiable: true},
+                        SpotlightEntry { label: "Coinbase".to_string(), value: None, pill_variant: None, copiable: true},
+                        SpotlightEntry { label: "Coinbase Receiver".to_string(), value: None, pill_variant: None, copiable: true},
+                        SpotlightEntry { label: "Winning Account".to_string(), value: None, pill_variant: None, copiable: true},
+                        SpotlightEntry { label: "SNARK Fees".to_string(), value: None, pill_variant: Some(PillVariant::Orange), copiable: false},
+                        SpotlightEntry { label: "Global Slot".to_string(), value: None, pill_variant: Some(PillVariant::Grey), copiable: false},
+                        SpotlightEntry { label: "Slot".to_string(), value: None, pill_variant: Some(PillVariant::Grey), copiable: false},
+                        SpotlightEntry { label: "Epoch".to_string(), value: None, pill_variant: Some(PillVariant::Grey), copiable: false},
+                        SpotlightEntry { label: "Transaction Fees".to_string(), value: None, pill_variant: Some(PillVariant::Orange), copiable: false},
+                        SpotlightEntry { label: "Blockchain Length".to_string(), value: None, pill_variant: Some(PillVariant::Grey), copiable: false},
+                        SpotlightEntry { label: "Total Currency".to_string(), value: None, pill_variant: Some(PillVariant::Green), copiable: false},
                     ];
                     view!{
                         <SpotlightSection header="Block Spotlight".to_string()

@@ -2,11 +2,13 @@ use leptos::*;
 
 use crate::common::functions::*;
 use crate::common::models::*;
+use crate::common::components::*;
 
 pub struct SpotlightEntry {
     pub label: String,
     pub value: Option<String>,
     pub pill_variant: Option<PillVariant>,
+    pub copiable: bool
 }
 
 #[component]
@@ -41,7 +43,7 @@ fn Spotlight(
             </div>
             <div id="spotlight-id" class="@3xl:col-start-3 text-granola-orange text-base text-bold text-ellipsis w-10/12 overflow-hidden text-center @3xl:text-left">
                 {match id {
-                    Some(i) => view! { <span>{i}</span> }.into_view(),
+                    Some(i) => view! { <CopyToClipboard>{i}</CopyToClipboard> }.into_view(),
                     None => data_placeholder().into_view()
                 }}
             </div>
@@ -86,7 +88,16 @@ fn SpotlightRow(entry: SpotlightEntry) -> impl IntoView {
         <th class=format!("{} {}",th_td_class_base,"w-36 min-w-36 text-sm font-normal text-slate-400 whitespace-nowrap")>{entry.label}:</th>
         <td class=format!("{} {}",th_td_class_base,"block w-fit text-ellipsis overflow-hidden whitespace-nowrap")>
             {match entry.value {
-                Some(val) => view! { <span class=value_class_str>{val}</span>}.into_view(),
+                Some(val) => match entry.copiable {
+                    true => view! {
+                        <CopyToClipboard> 
+                            <span class=value_class_str>{val}</span>
+                        </CopyToClipboard>
+                    }.into_view(),
+                    false => view! { 
+                        <span class=value_class_str>{val}</span>
+                    }.into_view()
+                },
                 None => data_placeholder().into_view()
             }}
 

@@ -294,7 +294,7 @@ pub fn CopyToClipboard(children: Children) -> impl IntoView {
     let (copied, set_copied) = create_signal(false);
 
     view! {
-        <div class="relative group w-fit" node_ref=element >
+        <div class="relative group w-fit max-w-full" node_ref=element >
             <span on:click=move |_| {
                 let value = element.get()
                     .expect("<div> element")
@@ -304,7 +304,7 @@ pub fn CopyToClipboard(children: Children) -> impl IntoView {
                 let _ = clipboard.write_text(&value);
                 set_copied.set(true);
                 logging::log!("copied value '{}'",value);
-            } class="hidden group-hover:block rounded-sm absolute top-0 right-0 bottom-0 p-0.5 text-slate-700 bg-slate-100 z-10 cursor-pointer">
+            } class="hidden group-hover:block rounded-sm absolute top-0 right-0 bottom-0 p-0.5 text-slate-700 bg-slate-300 z-10 cursor-pointer">
                 {move || match copied.get() {
                     true => view! {<CopiedIcon width=20/>},
                     false => view! {<ClipboardIcon width=20/>}
