@@ -38,7 +38,7 @@ pub fn AccountsPage() -> impl IntoView {
                 {move || match resource.get() {
                     Some(Ok(data)) => {
                         let pag = build_pagination(data.data.len(), records_per_page, current_page.get(), set_current_page);
-                        let subset = get_subset(&data.data.into_iter().map(|d| Some(d)).collect(), records_per_page, current_page.get()-1);
+                        let subset = get_subset(&data.data.into_iter().map(Some).collect(), records_per_page, current_page.get()-1);
                         view! {
                             <Table data=subset pagination=pag />
                         }
