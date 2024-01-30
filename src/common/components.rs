@@ -294,7 +294,7 @@ pub fn CopyToClipboard(children: Children) -> impl IntoView {
     let (text_color, set_text_color) = create_signal("text-slate-700");
     create_effect(move |_| {
         if copied.get() {
-            set_text_color.set("text-green-500")
+            set_text_color.set("text-pill-green")
         } else {
             set_text_color.set("text-slate-700")
         }
@@ -314,7 +314,7 @@ pub fn CopyToClipboard(children: Children) -> impl IntoView {
             } on:mouseleave=move |_| {
                 logging::log!("mouse exited copytoclipboard");
                 set_copied.set(false);
-            } class={move || format!("hidden group-hover:block rounded-sm absolute top-0 right-0 bottom-0 p-0.5 bg-slate-200 z-10 cursor-pointer {}", text_color.get())}>
+            } class={move || format!("hidden group-hover:block rounded-sm absolute top-0 right-0 bottom-0 p-0.5 bg-white z-10 cursor-pointer {}", text_color.get())}>
                 {move || match copied.get() {
                     true => view! {<CopiedIcon width=20/>},
                     false => view! {<ClipboardIcon width=20/>}
