@@ -29,8 +29,10 @@ pub fn AppSubSection(
         SubSectionPosition::Right => "md:col-start-2 md:col-end-3",
     };
     view! {
-        <section class=format!("{} md:rounded-lg bg-table-section",position_class)>
-            <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-start items-center">{heading}</h1>
+        <section class=format!("{} md:rounded-lg bg-table-section", position_class)>
+            <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-start items-center">
+                {heading}
+            </h1>
             {children()}
         </section>
     }
@@ -48,7 +50,9 @@ pub fn AppSection(children: Children) -> impl IntoView {
 #[component]
 pub fn AppHeading(heading: String) -> impl IntoView {
     view! {
-        <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-start items-center">{heading}</h1>
+        <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-start items-center">
+            {heading}
+        </h1>
     }
 }
 
@@ -64,7 +68,8 @@ where
                 prop:checked=value
                 name="checkbox"
                 type="checkbox"
-                class="accent-granola-orange" />
+                class="accent-granola-orange"
+            />
             {label}
         </label>
     }
@@ -107,12 +112,17 @@ pub fn URLCheckbox(label: String, url_param_key: String) -> impl IntoView {
     });
 
     view! {
-        <Checkbox label=label value=checkbox_value.get() handle_change=move |ev| {
-            set_checkbox_value.update(|c| {
-                logging::log!("new value is {}", event_target_checked(&ev));
-                *c = event_target_checked(&ev)
-            })
-        }/>
+        <Checkbox
+            label=label
+            value=checkbox_value.get()
+            handle_change=move |ev| {
+                set_checkbox_value
+                    .update(|c| {
+                        logging::log!("new value is {}", event_target_checked(& ev));
+                        *c = event_target_checked(&ev);
+                    })
+            }
+        />
     }
 }
 
@@ -128,24 +138,31 @@ pub fn SummaryItem(
             <div class="cols-span-1 row-start-1 row-end-3 bg-light-granola-orange rounded-md flex justify-center items-center">
                 <img src=imgsrc width=25 alt="logo"/>
             </div>
-            <div class="col-start-2 col-end-3 font-bold text-xl flex justify-start items-end" id={id.clone()}>{
-                {match value {
-                    Some(str_val) => view! {<span>{str_val}</span>}.into_view(),
-                    None => data_placeholder().into_view()
+            <div
+                class="col-start-2 col-end-3 font-bold text-xl flex justify-start items-end"
+                id=id.clone()
+            >
+                {{
+                    match value {
+                        Some(str_val) => view! { <span>{str_val}</span> }.into_view(),
+                        None => data_placeholder().into_view(),
+                    }
                 }}
-            }</div>
-            <label class="row-start-2 col-start-2 col-end-3 text-sm text-slate-500 font-semibold flex justify-start items-start" for={id.clone()}>{label}</label>
+
+            </div>
+            <label
+                class="row-start-2 col-start-2 col-end-3 text-sm text-slate-500 font-semibold flex justify-start items-start"
+                for=id.clone()
+            >
+                {label}
+            </label>
         </div>
     }
 }
 
 #[component]
 pub fn ErrorView<E: std::fmt::Debug>(err: E) -> impl IntoView {
-    view! {
-        <div class="error">
-            { format!("Error: {:#?}", err) }
-        </div>
-    }
+    view! { <div class="error">{format!("Error: {:#?}", err)}</div> }
 }
 
 #[component]
@@ -164,11 +181,7 @@ pub fn PageContainer(children: Children) -> impl IntoView {
 
 #[component]
 pub fn PreSectionContainer(children: Children) -> impl IntoView {
-    view! {
-        <div class="flex flex-col md:flex-row md:px-[10vw] mb-4">
-            {children()}
-        </div>
-    }
+    view! { <div class="flex flex-col md:flex-row md:px-[10vw] mb-4">{children()}</div> }
 }
 
 #[component]
@@ -205,16 +218,17 @@ where
         set_link_class.set(get_link_class());
     });
     view! {
-        <a on:click=on_click class={move || link_class.get()} href=nav_entry.href>
+        <a on:click=on_click class=move || link_class.get() href=nav_entry.href>
             {match nav_entry.icon {
-                NavIcon::Blocks => view! { <BlockIcon /> },
-                NavIcon::Transactions => view! { <TransactionIcon /> },
-                NavIcon::More => view! { <MoreIcon /> },
-                NavIcon::SNARKs => view! { <SnarkIcon /> },
-                NavIcon::Staking => view! { <StakingIcon /> },
-                NavIcon::Broadcast => view! { <BroadcastIcon /> },
-                NavIcon::Accounts => view! { <AccountIcon /> },
+                NavIcon::Blocks => view! { <BlockIcon/> },
+                NavIcon::Transactions => view! { <TransactionIcon/> },
+                NavIcon::More => view! { <MoreIcon/> },
+                NavIcon::SNARKs => view! { <SnarkIcon/> },
+                NavIcon::Staking => view! { <StakingIcon/> },
+                NavIcon::Broadcast => view! { <BroadcastIcon/> },
+                NavIcon::Accounts => view! { <AccountIcon/> },
             }}
+
             <div class="ml-0.5">{nav_entry.text}</div>
         </a>
     }
@@ -229,16 +243,26 @@ pub fn TabLink(nav_entry: NavEntry) -> impl IntoView {
     let active_state = "text-granola-orange border-granola-orange";
     let inactive_state = "text-white border-transparent hover:border-white";
     view! {
-        <a class={move || format!("{} {}",base_link_class, if pathname().ends_with(&href) { active_state } else { inactive_state })} href=nav_entry.href>
+        <a
+            class=move || {
+                format!(
+                    "{} {}",
+                    base_link_class,
+                    if pathname().ends_with(&href) { active_state } else { inactive_state },
+                )
+            }
+            href=nav_entry.href
+        >
             {match nav_entry.icon {
-                NavIcon::Blocks => view! { <BlockIcon /> },
-                NavIcon::Transactions => view! { <TransactionIcon /> },
-                NavIcon::More => view! { <MoreIcon /> },
-                NavIcon::SNARKs => view! { <SnarkIcon /> },
-                NavIcon::Staking => view! { <StakingIcon /> },
-                NavIcon::Broadcast => view! { <BroadcastIcon /> },
-                NavIcon::Accounts => view! { <AccountIcon /> },
+                NavIcon::Blocks => view! { <BlockIcon/> },
+                NavIcon::Transactions => view! { <TransactionIcon/> },
+                NavIcon::More => view! { <MoreIcon/> },
+                NavIcon::SNARKs => view! { <SnarkIcon/> },
+                NavIcon::Staking => view! { <StakingIcon/> },
+                NavIcon::Broadcast => view! { <BroadcastIcon/> },
+                NavIcon::Accounts => view! { <AccountIcon/> },
             }}
+
             <div class="ml-0.5">{nav_entry.text}</div>
         </a>
     }
@@ -249,14 +273,19 @@ fn TabbedPage(tabs: Vec<NavEntry>) -> impl IntoView {
     view! {
         <PreSectionContainer>
             <menu id="tabs" class="flex w-full overflow-x-auto">
-                {tabs.into_iter().map(|t| view!{
-                    <li>
-                        <TabLink nav_entry=t />
-                    </li>
-                }).collect::<Vec<_>>()}
+                {tabs
+                    .into_iter()
+                    .map(|t| {
+                        view! {
+                            <li>
+                                <TabLink nav_entry=t/>
+                            </li>
+                        }
+                    })
+                    .collect::<Vec<_>>()}
             </menu>
         </PreSectionContainer>
-        <Outlet />
+        <Outlet/>
     }
 }
 
@@ -282,5 +311,5 @@ pub fn DelegationTabbedPage() -> impl IntoView {
             sub_entries: None,
         },
     ];
-    view! { <TabbedPage tabs /> }
+    view! { <TabbedPage tabs/> }
 }

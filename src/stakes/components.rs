@@ -5,7 +5,10 @@ use leptos_router::*;
 #[component]
 pub fn StakesNavButton(href: String, text: String) -> impl IntoView {
     view! {
-        <a href=href class="cursor-pointer text-sm rounded-md p-2 h-9 font-semibold mx-2 flex justify-center items-center border border-granola-orange border-[1px] text-white bg-granola-orange">
+        <a
+            href=href
+            class="cursor-pointer text-sm rounded-md p-2 h-9 font-semibold mx-2 flex justify-center items-center border border-granola-orange border-[1px] text-white bg-granola-orange"
+        >
             {text}
         </a>
     }

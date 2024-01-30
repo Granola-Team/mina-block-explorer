@@ -20,31 +20,45 @@ pub fn AccountDialogTransactionSection(limit: i32, account_id: String) -> impl I
 
     view! {
         {move || match resource.get() {
-            Some(Ok(res)) => view! {
-                <AccountDialogSectionContainer title=String::from("Transactions") showing_message={format!("Showing latest {} transactions", res.transactions.len())}>
-                    {res.transactions.into_iter()
-                        .map(|opt_transaction| {
-                            match opt_transaction {
-                                Some(transaction) => view! {
-                                    <TransactionEntry status=get_status(&get_block_datetime(&transaction))
-                                        date=get_block_datetime(&transaction)
-                                        moments_ago=print_time_since(&get_block_datetime(&transaction))
-                                        from=get_from(&transaction)
-                                        to=get_to(&transaction)
-                                        fee=get_fee(&transaction)
-                                        amount=get_amount(&transaction)
-                                        hash=get_hash(&transaction) />
-                                },
-                                None => view! { <span /> }.into_view()
-                            }
-                        })
-                        .collect::<Vec<_>>()}
-                </AccountDialogSectionContainer>
-            },
-            _ => view! { <span /> }.into_view()
-
+            Some(Ok(res)) => {
+                view! {
+                    <AccountDialogSectionContainer
+                        title=String::from("Transactions")
+                        showing_message=format!(
+                            "Showing latest {} transactions",
+                            res.transactions.len(),
+                        )
+                    >
+                        {res
+                            .transactions
+                            .into_iter()
+                            .map(|opt_transaction| {
+                                match opt_transaction {
+                                    Some(transaction) => {
+                                        view! {
+                                            <TransactionEntry
+                                                status=get_status(&get_block_datetime(&transaction))
+                                                date=get_block_datetime(&transaction)
+                                                moments_ago=print_time_since(
+                                                    &get_block_datetime(&transaction),
+                                                )
+                                                from=get_from(&transaction)
+                                                to=get_to(&transaction)
+                                                fee=get_fee(&transaction)
+                                                amount=get_amount(&transaction)
+                                                hash=get_hash(&transaction)
+                                            />
+                                        }
+                                    }
+                                    None => view! { <span></span> }.into_view(),
+                                }
+                            })
+                            .collect::<Vec<_>>()}
+                    </AccountDialogSectionContainer>
+                }
+            }
+            _ => view! { <span></span> }.into_view(),
         }}
-
     }
 }
 
@@ -77,21 +91,30 @@ fn TransactionEntry(
         .collect();
 
     view! {
-        <AccountDialogSectionEntryHeader date=date status=status moments_ago=moments_ago />
-        {grouped.into_iter()
-            .map(|e| view! {
-                <div class="w-full flex justify-between">
-                    {e.into_iter()
-                        .map(|(label, value)| view! {
-                            <AccountDialogSectionSubEntry label=label.to_string() value=value />
-                        })
-                        .collect::<Vec<_>>()}
-                </div>
-            }.into_view())
-        .collect::<Vec<_>>()}
+        <AccountDialogSectionEntryHeader date=date status=status moments_ago=moments_ago/>
+        {grouped
+            .into_iter()
+            .map(|e| {
+                view! {
+                    <div class="w-full flex justify-between">
+                        {e
+                            .into_iter()
+                            .map(|(label, value)| {
+                                view! {
+                                    <AccountDialogSectionSubEntry
+                                        label=label.to_string()
+                                        value=value
+                                    />
+                                }
+                            })
+                            .collect::<Vec<_>>()}
+                    </div>
+                }
+                    .into_view()
+            })
+            .collect::<Vec<_>>()}
 
-        <AccountDialogEntryDivider />
-
+        <AccountDialogEntryDivider/>
     }
 }
 
@@ -114,48 +137,92 @@ pub fn TransactionsSection(
 
     view! {
         {move || match resource.get() {
-            Some(Ok(data)) => view! {
-                <TableSection section_heading="Transactions".to_owned() controls=|| ().into_view()>
-                    {move || match data.transactions.len() {
-                        0 => view! { <EmptyTable message="This public key has no transactions".to_string() /> },
-                        _ => {
-                            let pag = build_pagination(data.transactions.len(), records_per_page, current_page.get(), set_current_page);
-                            let subset = get_subset(&data.transactions, records_per_page, current_page.get()-1);
-                            view! {
-                                <Table data=subset pagination=pag/>
-                                // <NullView />
-                                {match with_link {
-                                    false => view! { <NullView /> },
-                                    true => {
-                                        let pk_inner = pk.get();
-                                        let link = pk_inner.map_or_else(
-                                            || "/transactions".to_string(),
-                                            |mpk| {
-                                                if mpk.is_empty() {
-                                                    "/transactions".to_string()
-                                                } else {
-                                                    format!("/transactions?account={}", mpk)
-                                                }
-                                            },
-                                        );
-                                        view! {
-                                            <TableLink href=link text="See all transactions".to_string() >
-                                                <TransactionIcon />
-                                            </TableLink>
-                                        }
-                                    }.into_view()
-                                }}
+            Some(Ok(data)) => {
+                view! {
+                    <TableSection
+                        section_heading="Transactions".to_owned()
+                        controls=|| ().into_view()
+                    >
+                        {move || match data.transactions.len() {
+                            0 => {
+                                view! {
+                                    <EmptyTable message="This public key has no transactions"
+                                        .to_string()/>
+                                }
                             }
-                        }.into_view()
-                    }}
-                </TableSection>
-             },
-            None => view! {
-                <TableSection section_heading="Transactions".to_owned() controls=|| ().into_view()>
-                    <Table data=LoadingPlaceholder{}/>
-                </TableSection>
-            },
-            _ => view! { <span /> }.into_view()
+                            _ => {
+                                {
+                                    let pag = build_pagination(
+                                        data.transactions.len(),
+                                        records_per_page,
+                                        current_page.get(),
+                                        set_current_page,
+                                    );
+                                    let subset = get_subset(
+                                        &data.transactions,
+                                        records_per_page,
+                                        current_page.get() - 1,
+                                    );
+                                    view! {
+                                        <Table data=subset pagination=pag/>
+                                        // <NullView />
+                                        {match with_link {
+                                            false => view! { <NullView/> },
+                                            true => {
+                                                {
+                                                    let pk_inner = pk.get();
+                                                    let link = pk_inner
+                                                        .map_or_else(
+                                                            || "/transactions".to_string(),
+                                                            |mpk| {
+                                                                if mpk.is_empty() {
+                                                                    "/transactions".to_string()
+                                                                } else {
+                                                                    format!("/transactions?account={}", mpk)
+                                                                }
+                                                            },
+                                                        );
+                                                    view! {
+                                                        <TableLink
+                                                            href=link
+                                                            text="See all transactions".to_string()
+                                                        >
+                                                            <TransactionIcon/>
+                                                        </TableLink>
+                                                    }
+                                                }
+                                                    .into_view()
+                                            }
+                                        }}
+                                    }
+                                }
+                                    .into_view()
+                            }
+                        }}
+
+                    </TableSection>
+                }
+            }
+            None => {
+                view! {
+                    // <NullView />
+
+                    <TableSection
+                        section_heading="Transactions".to_owned()
+                        controls=|| ().into_view()
+                    >
+                        <Table data=LoadingPlaceholder {}/>
+                    </TableSection>
+                }
+            }
+            _ => {
+                view! {
+                    // <NullView />
+
+                    <span></span>
+                }
+                    .into_view()
+            }
         }}
     }
 }

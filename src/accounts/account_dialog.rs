@@ -30,13 +30,25 @@ pub fn AccountDialogView() -> impl IntoView {
 
     view! {
         {move || match account_resource.get() {
-            Some(Ok(res)) => view!{
-                <AccountDialog public_key=public_key().unwrap_or_default() path_base=base.to_owned() account=Some(res.account) />
-            },
-            None => view! {
-                <AccountDialog public_key=public_key().unwrap_or_default() path_base=base.to_owned() account=None />
-            },
-            _ => view! { <span/>  }.into_view()
+            Some(Ok(res)) => {
+                view! {
+                    <AccountDialog
+                        public_key=public_key().unwrap_or_default()
+                        path_base=base.to_owned()
+                        account=Some(res.account)
+                    />
+                }
+            }
+            None => {
+                view! {
+                    <AccountDialog
+                        public_key=public_key().unwrap_or_default()
+                        path_base=base.to_owned()
+                        account=None
+                    />
+                }
+            }
+            _ => view! { <span></span> }.into_view(),
         }}
     }
 }

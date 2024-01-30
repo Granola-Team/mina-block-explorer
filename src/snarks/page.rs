@@ -28,17 +28,25 @@ pub fn SnarksPage() -> impl IntoView {
         <SearchBar placeholder="Exact search for prover".to_string()/>
         <PageContainer>
             <TableSection section_heading="SNARKs".to_owned() controls=|| ().into_view()>
-            {move || match resource.get() {
-                Some(Ok(data)) => {
-                    let pag = build_pagination(data.snarks.len(), records_per_page, current_page.get(), set_current_page);
-                    let subset = get_subset(&data.snarks, records_per_page, current_page.get()-1);
-                    view! {
-                        <Table data=subset pagination=pag/>
+                {move || match resource.get() {
+                    Some(Ok(data)) => {
+                        let pag = build_pagination(
+                            data.snarks.len(),
+                            records_per_page,
+                            current_page.get(),
+                            set_current_page,
+                        );
+                        let subset = get_subset(
+                            &data.snarks,
+                            records_per_page,
+                            current_page.get() - 1,
+                        );
+                        view! { <Table data=subset pagination=pag/> }
                     }
-                },
-                None => view! { <Table data=LoadingPlaceholder{} />},
-                _ => view! { <span /> }.into_view()
-            }}
+                    None => view! { <Table data=LoadingPlaceholder {}/> },
+                    _ => view! { <span></span> }.into_view(),
+                }}
+
             </TableSection>
         </PageContainer>
     }

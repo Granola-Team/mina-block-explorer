@@ -22,9 +22,10 @@ pub fn TransactionsPage() -> impl IntoView {
                 view! {
                     <TransactionsSection
                         public_key=qp_map.get("public_key").cloned()
-                        payment_id=qp_map.get("query").cloned() />
-                }}
-            }
+                        payment_id=qp_map.get("query").cloned()
+                    />
+                }
+            }}
 
         </PageContainer>
     }
@@ -43,60 +44,179 @@ pub fn TransactionSpotlightPage() -> impl IntoView {
 
     view! {
         <PageContainer>
-            { move || match resource.get() {
+            {move || match resource.get() {
                 Some(Ok(data)) => {
                     match data.transactions.first() {
                         Some(Some(transaction)) => {
                             let state_hash = get_hash(transaction);
                             let date_time = get_block_datetime(transaction);
-                            let spotlight_items=vec![
-                                SpotlightEntry { label: "Date".to_string(), value: Some(get_block_datetime(transaction)), pill_variant: None },
-                                SpotlightEntry { label: "Transaction Hash".to_string(), value: Some(get_hash(transaction)), pill_variant: None },
-                                SpotlightEntry { label: "Payment ID".to_string(), value: Some(get_payment_id(transaction)), pill_variant: None },
-                                SpotlightEntry { label: "Block Height".to_string(), value: Some(get_block_height(transaction)), pill_variant: None },
-                                SpotlightEntry { label: "Canonical".to_string(), value: Some(get_canonical(transaction)), pill_variant: None },
-                                SpotlightEntry { label: "Block State Hash".to_string(), value: Some(get_block_state_hash(transaction)), pill_variant: None },
-                                SpotlightEntry { label: "Amount".to_string(), value: Some(get_amount(transaction)), pill_variant: Some(PillVariant::Green) },
-                                SpotlightEntry { label: "Fee".to_string(), value: Some(get_fee(transaction)), pill_variant: Some(PillVariant::Orange) },
-                                SpotlightEntry { label: "From".to_string(), value: Some(get_from(transaction)), pill_variant: None },
-                                SpotlightEntry { label: "To".to_string(), value: Some(get_to(transaction)), pill_variant: None },
-                                SpotlightEntry { label: "Nonce".to_string(), value: Some(get_nonce(transaction)), pill_variant: None },
-                                SpotlightEntry { label: "Memo".to_string(), value: Some(get_memo(transaction)), pill_variant: None },
-                                SpotlightEntry { label: "Kind".to_string(), value: Some(get_kind(transaction)), pill_variant: Some(PillVariant::Blue) },
+                            let spotlight_items = vec![
+                                SpotlightEntry {
+                                    label: "Date".to_string(),
+                                    value: Some(get_block_datetime(transaction)),
+                                    pill_variant: None,
+                                },
+                                SpotlightEntry {
+                                    label: "Transaction Hash".to_string(),
+                                    value: Some(get_hash(transaction)),
+                                    pill_variant: None,
+                                },
+                                SpotlightEntry {
+                                    label: "Payment ID".to_string(),
+                                    value: Some(get_payment_id(transaction)),
+                                    pill_variant: None,
+                                },
+                                SpotlightEntry {
+                                    label: "Block Height".to_string(),
+                                    value: Some(get_block_height(transaction)),
+                                    pill_variant: None,
+                                },
+                                SpotlightEntry {
+                                    label: "Canonical".to_string(),
+                                    value: Some(get_canonical(transaction)),
+                                    pill_variant: None,
+                                },
+                                SpotlightEntry {
+                                    label: "Block State Hash".to_string(),
+                                    value: Some(get_block_state_hash(transaction)),
+                                    pill_variant: None,
+                                },
+                                SpotlightEntry {
+                                    label: "Amount".to_string(),
+                                    value: Some(get_amount(transaction)),
+                                    pill_variant: Some(PillVariant::Green),
+                                },
+                                SpotlightEntry {
+                                    label: "Fee".to_string(),
+                                    value: Some(get_fee(transaction)),
+                                    pill_variant: Some(PillVariant::Orange),
+                                },
+                                SpotlightEntry {
+                                    label: "From".to_string(),
+                                    value: Some(get_from(transaction)),
+                                    pill_variant: None,
+                                },
+                                SpotlightEntry {
+                                    label: "To".to_string(),
+                                    value: Some(get_to(transaction)),
+                                    pill_variant: None,
+                                },
+                                SpotlightEntry {
+                                    label: "Nonce".to_string(),
+                                    value: Some(get_nonce(transaction)),
+                                    pill_variant: None,
+                                },
+                                SpotlightEntry {
+                                    label: "Memo".to_string(),
+                                    value: Some(get_memo(transaction)),
+                                    pill_variant: None,
+                                },
+                                SpotlightEntry {
+                                    label: "Kind".to_string(),
+                                    value: Some(get_kind(transaction)),
+                                    pill_variant: Some(PillVariant::Blue),
+                                },
                             ];
-                            view!{
-                                <SpotlightSection header="Transaction Spotlight".to_string() spotlight_items=spotlight_items id=Some(state_hash) meta=Some(format!("{} ({})", date_time, print_time_since(&date_time)))>
+                            view! {
+                                <SpotlightSection
+                                    header="Transaction Spotlight".to_string()
+                                    spotlight_items=spotlight_items
+                                    id=Some(state_hash)
+                                    meta=Some(
+                                        format!("{} ({})", date_time, print_time_since(&date_time)),
+                                    )
+                                >
                                     <TransactionIcon width=40/>
                                 </SpotlightSection>
-                            }.into_view()
-                        },
-                        _ => view! { <NullView />}
+                            }
+                                .into_view()
+                        }
+                        _ => view! { <NullView/> },
                     }
-                },
+                }
                 None => {
-                    let spotlight_items=vec![
-                        SpotlightEntry { label: "Date".to_string(), value: None, pill_variant: None },
-                        SpotlightEntry { label: "Transaction Hash".to_string(), value: None, pill_variant: None },
-                        SpotlightEntry { label: "Payment ID".to_string(), value: None, pill_variant: None },
-                        SpotlightEntry { label: "Block Height".to_string(), value: None, pill_variant: None },
-                        SpotlightEntry { label: "Canonical".to_string(), value: None, pill_variant: None },
-                        SpotlightEntry { label: "Block State Hash".to_string(), value: None, pill_variant: None },
-                        SpotlightEntry { label: "Amount".to_string(), value: None, pill_variant: None },
-                        SpotlightEntry { label: "Fee".to_string(), value: None, pill_variant: None },
-                        SpotlightEntry { label: "From".to_string(), value: None, pill_variant: None },
-                        SpotlightEntry { label: "To".to_string(), value: None, pill_variant: None },
-                        SpotlightEntry { label: "Nonce".to_string(), value: None, pill_variant: None },
-                        SpotlightEntry { label: "Memo".to_string(), value: None, pill_variant: None },
-                        SpotlightEntry { label: "Kind".to_string(), value: None, pill_variant: None },
+                    let spotlight_items = vec![
+                        SpotlightEntry {
+                            label: "Date".to_string(),
+                            value: None,
+                            pill_variant: None,
+                        },
+                        SpotlightEntry {
+                            label: "Transaction Hash".to_string(),
+                            value: None,
+                            pill_variant: None,
+                        },
+                        SpotlightEntry {
+                            label: "Payment ID".to_string(),
+                            value: None,
+                            pill_variant: None,
+                        },
+                        SpotlightEntry {
+                            label: "Block Height".to_string(),
+                            value: None,
+                            pill_variant: None,
+                        },
+                        SpotlightEntry {
+                            label: "Canonical".to_string(),
+                            value: None,
+                            pill_variant: None,
+                        },
+                        SpotlightEntry {
+                            label: "Block State Hash".to_string(),
+                            value: None,
+                            pill_variant: None,
+                        },
+                        SpotlightEntry {
+                            label: "Amount".to_string(),
+                            value: None,
+                            pill_variant: None,
+                        },
+                        SpotlightEntry {
+                            label: "Fee".to_string(),
+                            value: None,
+                            pill_variant: None,
+                        },
+                        SpotlightEntry {
+                            label: "From".to_string(),
+                            value: None,
+                            pill_variant: None,
+                        },
+                        SpotlightEntry {
+                            label: "To".to_string(),
+                            value: None,
+                            pill_variant: None,
+                        },
+                        SpotlightEntry {
+                            label: "Nonce".to_string(),
+                            value: None,
+                            pill_variant: None,
+                        },
+                        SpotlightEntry {
+                            label: "Memo".to_string(),
+                            value: None,
+                            pill_variant: None,
+                        },
+                        SpotlightEntry {
+                            label: "Kind".to_string(),
+                            value: None,
+                            pill_variant: None,
+                        },
                     ];
-                    view!{
-                        <SpotlightSection header="Transaction Spotlight".to_string() spotlight_items=spotlight_items id=None meta=None>
+                    view! {
+                        <SpotlightSection
+                            header="Transaction Spotlight".to_string()
+                            spotlight_items=spotlight_items
+                            id=None
+                            meta=None
+                        >
                             <TransactionIcon width=40/>
                         </SpotlightSection>
-                    }.into_view()
-                },
-                _ => view! { <NullView /> },
+                    }
+                        .into_view()
+                }
+                _ => view! { <NullView/> },
             }}
+
         </PageContainer>
     }
 }
