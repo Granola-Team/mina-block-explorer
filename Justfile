@@ -59,6 +59,10 @@ lint: && audit disallow-unused-cargo-deps
 disallow-unused-cargo-deps:
   cargo machete Cargo.toml
 
+format:
+  cargo fmt
+  leptosfmt ./src
+
 audit:
   cargo audit
 
