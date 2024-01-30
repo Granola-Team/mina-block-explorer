@@ -22,9 +22,6 @@ features = [
   "Navigator"
 ]
 
-[build]
-rustflags = ["web_sys_unstable_apis" ]
-
 [profile.release]
 opt-level = 'z'
 lto = true
