@@ -29,33 +29,35 @@ pub fn AccountsPage() -> impl IntoView {
         },
     );
 
+    let list_accounts = move || resource.get()
+        .and_then(|d| d.ok())
+        .map(|d| d.data.into_iter()
+            .enumerate()
+            .map(|(i, account)| view! {
+                <AccountCard username=account.username
+                balance=account.balance
+                nonce=account.nonce
+                is_unlocked=true
+                public_key=account.public_key
+                delegate=account.delegate
+                variant={match i%3 {
+                    0 => AccountCardVariant::Purple,
+                    1 => AccountCardVariant::Green,
+                    _ => AccountCardVariant::Blue
+                }}/>
+            })
+            .collect::<Vec<_>>()
+        );
+
     view! {
         <SearchBar />
         <PageContainer>
             <section class="md:col-start-2 md:col-end-3 md:rounded-lg bg-table-section mb-4">
                 <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-start items-center">"Accounts"</h1>
                 <div class="sm:p-8 grid grid-cols-1 gap-2 md:grid-cols-2 xl:grid-cols-3">
-                    {move || match resource.get() {
-                        Some(Ok(data)) =>  {
-                            data.data.into_iter()
-                                .enumerate()
-                                .map(|(i, account)| view! {
-                                    <AccountCard username=account.username
-                                        balance=account.balance
-                                        nonce=account.nonce
-                                        is_unlocked=true
-                                        public_key=account.public_key
-                                        delegate=account.delegate
-                                        variant={match i%3 {
-                                            0 => AccountCardVariant::Purple,
-                                            1 => AccountCardVariant::Green,
-                                            _ => AccountCardVariant::Blue
-                                        }}/>
-                                })
-                                .collect::<Vec<_>>()
-                        }.into_view(),
-                        _ => view! {<NullView />}
-                    }}
+                    <ErrorBoundary fallback=|_| view! { <NullView />}>
+                        {list_accounts}    
+                    </ErrorBoundary>
                 </div>
             </section>
         </PageContainer>
