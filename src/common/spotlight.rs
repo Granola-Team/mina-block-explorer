@@ -1,14 +1,14 @@
 use leptos::*;
 
+use crate::common::components::*;
 use crate::common::functions::*;
 use crate::common::models::*;
-use crate::common::components::*;
 
 pub struct SpotlightEntry {
     pub label: String,
     pub value: Option<String>,
     pub pill_variant: Option<PillVariant>,
-    pub copiable: bool
+    pub copiable: bool,
 }
 
 #[component]
@@ -90,11 +90,11 @@ fn SpotlightRow(entry: SpotlightEntry) -> impl IntoView {
             {match entry.value {
                 Some(val) => match entry.copiable {
                     true => view! {
-                        <CopyToClipboard> 
+                        <CopyToClipboard>
                             <span class=value_class_str>{val}</span>
                         </CopyToClipboard>
                     }.into_view(),
-                    false => view! { 
+                    false => view! {
                         <span class=value_class_str>{val}</span>
                     }.into_view()
                 },
