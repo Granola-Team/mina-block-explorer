@@ -65,50 +65,7 @@ impl TableData for Vec<Option<BlocksQueryBlocks>> {
     }
 }
 
-impl TableData for &[Option<BlocksQueryBlocks>] {
-    fn get_columns(&self) -> Vec<String> {
-        shared_get_columns()
-    }
-
-    fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
-        self.iter()
-            .map(|opt_blocks| match opt_blocks {
-                Some(block) => vec![
-                    convert_to_span(get_block_height(block)),
-                    convert_to_span(get_date_time(block)),
-                    convert_to_link(
-                        get_creator_account(block),
-                        format!("/blocks/accounts/{}", get_creator_account(block)),
-                    ),
-                    convert_to_span(get_coinbase(block)),
-                    convert_to_pill(get_transaction_count(block), PillVariant::Green),
-                    convert_to_pill(get_snark_job_count(block), PillVariant::Blue),
-                    convert_to_pill(get_slot(block), PillVariant::Orange),
-                    convert_to_link(
-                        get_state_hash(block),
-                        format!("/blocks/{}", get_state_hash(block)),
-                    ),
-                    convert_to_link(
-                        get_coinbase_receiver(block),
-                        format!("/blocks/accounts/{}", get_coinbase_receiver(block)),
-                    ),
-                ]
-                .into_iter()
-                .map(|d| {
-                    if get_canonical(block) {
-                        canonical_wrapper(d)
-                    } else {
-                        non_canonical_wrapper(d)
-                    }
-                })
-                .collect::<Vec<_>>(),
-                None => vec![],
-            })
-            .collect()
-    }
-}
-
-impl TableData for &[Option<BlocksQueryBlocksTransactionsUserCommands>] {
+impl TableData for Vec<Option<BlocksQueryBlocksTransactionsUserCommands>> {
     fn get_columns(&self) -> Vec<String> {
         vec![
             String::from("From"),

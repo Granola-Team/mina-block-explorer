@@ -72,24 +72,9 @@ pub fn BlockSpotlight() -> impl IntoView {
                                     {
                                         move || match get_user_commands(&block) {
                                             Some(user_commands) => {
-                                                let total_records = user_commands.len();
-                                                let ranges = get_ranges(total_records, records_per_page);
-                                                let range = ranges[current_page.get()-1];
-                                                let user_commands_subset = &user_commands[range[0]..range[1]];
-                                                let pag = Pagination {
-                                                    current_page: current_page.get(),
-                                                    records_per_page,
-                                                    total_records,
-                                                    next_page: Callback::from(move |_| {
-                                                        let set_current_page_inner = set_current_page;
-                                                        set_current_page_inner.update(|cp| *cp += 1);
-                                                    }),
-                                                    prev_page: Callback::from(move |_| {
-                                                        let set_current_page_inner = set_current_page;
-                                                        set_current_page_inner.update(|cp| *cp -= 1);
-                                                    }),
-                                                };
-                                                view! { <Table data=user_commands_subset pagination=pag/> }
+                                                let pag = build_pagination(user_commands.len(), records_per_page, current_page.get(), set_current_page);
+                                                let subset = get_subset(&user_commands, records_per_page, current_page.get()-1);
+                                                view! { <Table data=subset pagination=pag/> }
                                             },
                                             None => view! { <NullView /> }
                                         }
