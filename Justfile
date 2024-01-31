@@ -55,6 +55,7 @@ test-unit: build
 
 lint: && audit disallow-unused-cargo-deps
   cargo fmt --check
+  leptosfmt --check ./src
   cargo clippy -- -D warnings
   cargo clippy --all-targets --all-features -- -D warnings
 
