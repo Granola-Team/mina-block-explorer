@@ -70,26 +70,31 @@ pub fn get_spotlight_loading_data() -> Vec<SpotlightEntry> {
             label: String::from("Balance"),
             value: None,
             pill_variant: None,
+            copiable: false,
         },
         SpotlightEntry {
             label: String::from("Nonce"),
             value: None,
             pill_variant: None,
+            copiable: false,
         },
         SpotlightEntry {
             label: String::from("Receipt Chain Hash"),
             value: None,
             pill_variant: None,
+            copiable: true,
         },
         SpotlightEntry {
             label: String::from("Delegate"),
             value: None,
             pill_variant: None,
+            copiable: true,
         },
         SpotlightEntry {
             label: String::from("Voting For"),
             value: None,
             pill_variant: None,
+            copiable: true,
         },
     ]
 }
@@ -100,26 +105,31 @@ pub fn get_spotlight_data(account: AccountSummary) -> Vec<SpotlightEntry> {
             label: String::from("Balance"),
             value: Some(account.balance.total),
             pill_variant: Some(PillVariant::Green),
+            copiable: false,
         },
         SpotlightEntry {
             label: String::from("Nonce"),
             value: Some(account.nonce.to_string()),
             pill_variant: Some(PillVariant::Blue),
+            copiable: false,
         },
         SpotlightEntry {
             label: String::from("Receipt Chain Hash"),
             value: Some(account.receipt_chain_hash),
             pill_variant: None,
+            copiable: true,
         },
         SpotlightEntry {
             label: String::from("Delegate"),
             value: Some(account.delegate),
             pill_variant: None,
+            copiable: true,
         },
         SpotlightEntry {
             label: String::from("Voting For"),
             value: Some(account.voting_for),
             pill_variant: None,
+            copiable: true,
         },
     ]
 }

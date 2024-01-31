@@ -10,7 +10,7 @@ use crate::common::models::*;
 use crate::common::table::TableData;
 use crate::fee_transfers::graphql::fee_transfers_query::FeeTransfersQueryFeetransfers;
 
-impl TableData for &[Option<FeeTransfersQueryFeetransfers>] {
+impl TableData for Vec<Option<FeeTransfersQueryFeetransfers>> {
     fn get_columns(&self) -> Vec<String> {
         ["Recipient", "Fee", "Type", "Date"]
             .iter()
