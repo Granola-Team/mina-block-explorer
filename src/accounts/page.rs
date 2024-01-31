@@ -91,7 +91,7 @@ pub fn AccountSpotlightPage() -> impl IntoView {
                     view! {
                         <SpotlightSection
                             header="Account Spotlight".to_string()
-                            spotlight_items=get_spotlight_data(res.account.clone())
+                            spotlight_items=get_spotlight_data(&res.account)
                             meta=Some(format!("Username: {}", res.account.username))
                             id=Some(public_key().unwrap_or_default())
                         >

@@ -88,11 +88,11 @@ pub fn get_spotlight_loading_data() -> Vec<SpotlightEntry> {
     ]
 }
 
-pub fn get_spotlight_data(account: AccountSummary) -> Vec<SpotlightEntry> {
+pub fn get_spotlight_data(account: &AccountSummary) -> Vec<SpotlightEntry> {
     vec![
         SpotlightEntry {
             label: String::from("Balance"),
-            value: Some(account.balance.total),
+            value: Some(account.balance.total.clone()),
             pill_variant: Some(PillVariant::Green),
             copiable: false,
         },
@@ -104,19 +104,19 @@ pub fn get_spotlight_data(account: AccountSummary) -> Vec<SpotlightEntry> {
         },
         SpotlightEntry {
             label: String::from("Receipt Chain Hash"),
-            value: Some(account.receipt_chain_hash),
+            value: Some(account.receipt_chain_hash.to_string()),
             pill_variant: None,
             copiable: true,
         },
         SpotlightEntry {
             label: String::from("Delegate"),
-            value: Some(account.delegate),
+            value: Some(account.delegate.to_string()),
             pill_variant: None,
             copiable: true,
         },
         SpotlightEntry {
             label: String::from("Voting For"),
-            value: Some(account.voting_for),
+            value: Some(account.voting_for.to_string()),
             pill_variant: None,
             copiable: true,
         },
