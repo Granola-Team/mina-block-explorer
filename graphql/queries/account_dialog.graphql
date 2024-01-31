@@ -11,7 +11,7 @@ query AccountActivityQuery($blocks_query: BlockQueryInput!, $blocks_limit: Int =
     fee
     dateTime
   }
-  blocks(sortBy: $block_sort_by, limit: $blocks_limit, query: $blocks_query) {
+  blocks(sortBy: $blocks_sort_by, limit: $blocks_limit, query: $blocks_query) {
     stateHash
     transactions {
       coinbase
