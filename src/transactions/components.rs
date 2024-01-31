@@ -167,7 +167,7 @@ pub fn TransactionsSection(
                                     );
                                     view! {
                                         <Table data=subset pagination=pag/>
-                                        // <NullView />
+
                                         {match with_link {
                                             false => view! { <NullView/> },
                                             true => {
@@ -207,12 +207,6 @@ pub fn TransactionsSection(
             }
             None => {
                 view! {
-                    // <NullView />
-
-                    // <NullView />
-
-                    // <NullView />
-
                     <TableSection
                         section_heading="Transactions".to_owned()
                         controls=|| ().into_view()
@@ -221,24 +215,7 @@ pub fn TransactionsSection(
                     </TableSection>
                 }
             }
-            _ => {
-                view! {
-                    // <NullView />
-
-                    // <NullView />
-
-                    // <NullView />
-
-                    // <NullView />
-
-                    // <NullView />
-
-                    // <NullView />
-
-                    <span></span>
-                }
-                    .into_view()
-            }
+            _ => view! { <span></span> }.into_view(),
         }}
     }
 }
