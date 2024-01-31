@@ -3,6 +3,8 @@ use crate::common::models::MyError;
 use graphql_client::reqwest::post_graphql;
 
 use super::graphql::transactions_query::TransactionsQueryTransactions;
+use crate::account_dialog::graphql::account_activity_query::AccountActivityQueryTransactions;
+
 use super::graphql::*;
 use std::error::Error;
 
@@ -13,6 +15,13 @@ pub fn get_block_datetime(transaction: &TransactionsQueryTransactions) -> String
         .and_then(|b| b.date_time)
         .map_or_else(String::new, |o1| o1.to_string())
 }
+
+pub fn get_block_datetime_for_account_activity(transaction: &AccountActivityQueryTransactions) -> String {
+    transaction
+        .date_time
+        .map_or_else(String::new, |o1| o1.to_string())
+}
+
 
 pub fn get_block_height(transaction: &TransactionsQueryTransactions) -> String {
     transaction
@@ -68,6 +77,13 @@ pub fn get_from(transaction: &TransactionsQueryTransactions) -> String {
         .map_or_else(String::new, |o| o.to_string())
 }
 
+pub fn get_from_for_account_activity(transaction: &AccountActivityQueryTransactions) -> String {
+    transaction
+        .from
+        .as_ref()
+        .map_or_else(String::new, |o| o.to_string())
+}
+
 pub fn get_receiver_public_key(transaction: &TransactionsQueryTransactions) -> String {
     transaction.receiver.as_ref().map_or_else(String::new, |o| {
         o.public_key
@@ -83,7 +99,21 @@ pub fn get_fee(transaction: &TransactionsQueryTransactions) -> String {
         .map_or("".to_string(), to_mina_string)
 }
 
+pub fn get_fee_for_account_activity(transaction: &AccountActivityQueryTransactions) -> String {
+    transaction
+        .fee
+        .and_then(nanomina_to_mina)
+        .map_or("".to_string(), to_mina_string)
+}
+
 pub fn get_hash(transaction: &TransactionsQueryTransactions) -> String {
+    transaction
+        .hash
+        .as_ref()
+        .map_or_else(String::new, |o| o.to_string())
+}
+
+pub fn get_hash_for_account_activity(transaction: &AccountActivityQueryTransactions) -> String {
     transaction
         .hash
         .as_ref()
@@ -97,7 +127,21 @@ pub fn get_amount(transaction: &TransactionsQueryTransactions) -> String {
         .map_or("".to_string(), to_mina_string)
 }
 
+pub fn get_amount_for_account_activity(transaction: &AccountActivityQueryTransactions) -> String {
+    transaction
+        .amount
+        .and_then(nanomina_to_mina)
+        .map_or("".to_string(), to_mina_string)
+}
+
 pub fn get_to(transaction: &TransactionsQueryTransactions) -> String {
+    transaction
+        .to
+        .as_ref()
+        .map_or_else(String::new, |o| o.to_string())
+}
+
+pub fn get_to_for_account_activity(transaction: &AccountActivityQueryTransactions) -> String {
     transaction
         .to
         .as_ref()

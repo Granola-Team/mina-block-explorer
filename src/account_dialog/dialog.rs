@@ -10,6 +10,8 @@ use super::functions::load_data;
 use crate::accounts::functions::{load_data as load_summary_data, *};
  
 use crate::icons::*;
+use crate::transactions::components::AccountDialogTransactionSection;
+
 
 
 
@@ -90,12 +92,15 @@ pub fn AccountDialogView() -> impl IntoView {
                                     </SpotlightSection>
                                 }
                             })
-                    }} ;
+                    }}
                 </Suspense>
-                <div class="overflow-y-auto flex flex-col pb-20">// <AccountDialogTransactionSection limit=3 account_id=public_key.clone()/>
-                // <AccountDialogSnarkJobSection public_key=Some(public_key.clone())/>
-                // <AccountDialogBlocksSection public_key=Some(public_key.clone())/>
-                </div>
+                <Suspense fallback=move || view! { <NullView /> }>
+                    <div class="overflow-y-auto flex flex-col pb-20">
+                        {move || account_activity_resource.get().and_then(|res| res.ok()).map(|res| view! {
+                            <AccountDialogTransactionSection transactions=res.transactions />
+                        })}
+                    </div>
+                </Suspense>
                 <div class="absolute bottom-0 left-0 w-full h-20 flex justify-stretch items-center bg-white">
                     <button
                         id="viewmore"
