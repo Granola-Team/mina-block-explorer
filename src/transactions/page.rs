@@ -139,6 +139,7 @@ pub fn TransactionSpotlightPage() -> impl IntoView {
                                         format!("{} ({})", date_time, print_time_since(&date_time)),
                                     )
                                 >
+
                                     <TransactionIcon width=40/>
                                 </SpotlightSection>
                             }

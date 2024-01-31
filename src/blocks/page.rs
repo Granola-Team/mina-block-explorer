@@ -140,6 +140,7 @@ pub fn BlockSpotlight() -> impl IntoView {
                                         format!("{} ({})", date_time, print_time_since(&date_time)),
                                     )
                                 >
+
                                     <BlockIcon width=40/>
                                 </SpotlightSection>
                                 <TableSection

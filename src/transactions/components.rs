@@ -211,6 +211,8 @@ pub fn TransactionsSection(
 
                     // <NullView />
 
+                    // <NullView />
+
                     <TableSection
                         section_heading="Transactions".to_owned()
                         controls=|| ().into_view()
@@ -221,6 +223,12 @@ pub fn TransactionsSection(
             }
             _ => {
                 view! {
+                    // <NullView />
+
+                    // <NullView />
+
+                    // <NullView />
+
                     // <NullView />
 
                     // <NullView />
