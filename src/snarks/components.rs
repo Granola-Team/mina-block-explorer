@@ -3,7 +3,7 @@ use leptos::*;
 use super::functions::load_data;
 use super::functions::*;
 use super::graphql::snarks_query::SnarksQuerySnarks;
-use crate::accounts::components::*;
+use crate::account_dialog::components::*;
 use crate::common::components::*;
 use crate::common::functions::*;
 use crate::common::table::*;

@@ -1,7 +1,17 @@
 use crate::common::models::MyError;
 use super::graphql::{account_activity_query, AccountActivityQuery};
 use graphql_client::reqwest::post_graphql;
+use leptos::*;
+use leptos_router::*;
 
+pub fn get_base_page_path(location: Location) -> String {
+    let path = location.pathname.with(|path| path.clone());
+    let path_parts: Vec<&str> = path.split("/accounts").collect();
+    match path_parts.first() {
+        Some(base) => base.to_string(),
+        None => "/".to_string(),
+    }
+}
 
 
 pub async fn load_data(

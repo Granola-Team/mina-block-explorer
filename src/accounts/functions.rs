@@ -1,20 +1,9 @@
-use leptos::*;
-use leptos_router::*;
 use url::Url;
 
 use crate::common::models::*;
 use crate::common::spotlight::*;
 
 use super::models::*;
-
-pub fn get_base_page_path(location: Location) -> String {
-    let path = location.pathname.with(|path| path.clone());
-    let path_parts: Vec<&str> = path.split("/accounts").collect();
-    match path_parts.first() {
-        Some(base) => base.to_string(),
-        None => "/".to_string(),
-    }
-}
 
 pub async fn load_data(id: &str) -> Result<AccountResponse, MyError> {
     let response = reqwest::get(format!("https://api.minaexplorer.com/accounts/{}", id)).await;

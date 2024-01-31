@@ -4,7 +4,7 @@ use leptos_router::*;
 use super::functions::*;
 use super::graphql::blocks_query::BlocksQueryBlocks;
 use super::models::*;
-use crate::accounts::components::*;
+use crate::account_dialog::components::*;
 use crate::common::components::*;
 use crate::common::functions::*;
 use crate::common::table::*;

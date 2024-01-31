@@ -1,7 +1,7 @@
 use leptos::*;
 use leptos_router::*;
 
-use crate::accounts::account_dialog::AccountDialogView;
+use crate::account_dialog::dialog::AccountDialogView;
 use crate::accounts::page::{AccountSpotlightPage, AccountsPage};
 use crate::blocks::page::{BlockSpotlight, LatestBlocksPage};
 use crate::broadcast::page::{

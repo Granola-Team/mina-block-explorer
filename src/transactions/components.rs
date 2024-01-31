@@ -1,7 +1,7 @@
 use leptos::*;
 
 use super::functions::*;
-use crate::accounts::components::*;
+use crate::account_dialog::components::*;
 use crate::common::components::*;
 use crate::common::functions::*;
 use crate::common::models::*;
