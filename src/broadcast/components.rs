@@ -35,6 +35,7 @@ pub fn BroadcastForm(endpoint: String) -> impl IntoView {
                     })
             }
         >
+
             <pre>
                 <textarea
                     class="p-4 border-box w-full border border-[#DADCE0] rounded-md"

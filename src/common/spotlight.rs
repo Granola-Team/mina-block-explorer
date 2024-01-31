@@ -1,5 +1,6 @@
 use leptos::*;
 
+use crate::common::components::*;
 use crate::common::functions::*;
 use crate::common::models::*;
 
@@ -7,6 +8,7 @@ pub struct SpotlightEntry {
     pub label: String,
     pub value: Option<String>,
     pub pill_variant: Option<PillVariant>,
+    pub copiable: bool,
 }
 
 #[component]
@@ -55,7 +57,7 @@ fn Spotlight(
                 class="@3xl:col-start-3 text-granola-orange text-base text-bold text-ellipsis w-10/12 overflow-hidden text-center @3xl:text-left"
             >
                 {match id {
-                    Some(i) => view! { <span>{i}</span> }.into_view(),
+                    Some(i) => view! { <CopyToClipboard>{i}</CopyToClipboard> }.into_view(),
                     None => data_placeholder().into_view(),
                 }}
 
@@ -116,7 +118,19 @@ fn SpotlightRow(entry: SpotlightEntry) -> impl IntoView {
             "block w-fit text-ellipsis overflow-hidden whitespace-nowrap",
         )>
             {match entry.value {
-                Some(val) => view! { <span class=value_class_str>{val}</span> }.into_view(),
+                Some(val) => {
+                    match entry.copiable {
+                        true => {
+                            view! {
+                                <CopyToClipboard>
+                                    <span class=value_class_str>{val}</span>
+                                </CopyToClipboard>
+                            }
+                                .into_view()
+                        }
+                        false => view! { <span class=value_class_str>{val}</span> }.into_view(),
+                    }
+                }
                 None => data_placeholder().into_view(),
             }}
 

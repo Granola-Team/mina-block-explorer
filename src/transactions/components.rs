@@ -29,6 +29,7 @@ pub fn AccountDialogTransactionSection(limit: i32, account_id: String) -> impl I
                             res.transactions.len(),
                         )
                     >
+
                         {res
                             .transactions
                             .into_iter()
@@ -42,6 +43,7 @@ pub fn AccountDialogTransactionSection(limit: i32, account_id: String) -> impl I
                                                 moments_ago=print_time_since(
                                                     &get_block_datetime(&transaction),
                                                 )
+
                                                 from=get_from(&transaction)
                                                 to=get_to(&transaction)
                                                 fee=get_fee(&transaction)
@@ -207,6 +209,8 @@ pub fn TransactionsSection(
                 view! {
                     // <NullView />
 
+                    // <NullView />
+
                     <TableSection
                         section_heading="Transactions".to_owned()
                         controls=|| ().into_view()
@@ -217,6 +221,10 @@ pub fn TransactionsSection(
             }
             _ => {
                 view! {
+                    // <NullView />
+
+                    // <NullView />
+
                     // <NullView />
 
                     <span></span>

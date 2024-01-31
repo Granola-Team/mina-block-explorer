@@ -5,6 +5,8 @@
 #
 trunk_port := `echo $((5170 + $RANDOM % 10))`
 
+export RUSTFLAGS := "--cfg=web_sys_unstable_apis"
+
 cypress_base_url := 'http://localhost:' + trunk_port
 
 default:

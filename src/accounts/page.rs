@@ -2,14 +2,13 @@ use leptos::*;
 use leptos_router::*;
 
 use super::functions::*;
-use super::models::*;
-
-use super::components::*;
 use crate::blocks::components::AccountOverviewBlocksTable;
 use crate::common::components::*;
+use crate::common::functions::*;
 use crate::common::models::MyError;
 use crate::common::search::*;
 use crate::common::spotlight::*;
+use crate::common::table::*;
 use crate::icons::WalletIcon;
 use crate::snarks::components::AccountOverviewSnarkJobTable;
 use crate::transactions::components::*;
@@ -29,46 +28,38 @@ pub fn AccountsPage() -> impl IntoView {
         },
     );
 
+    let records_per_page = 10;
+    let (current_page, set_current_page) = create_signal(1);
+
     view! {
         <SearchBar/>
         <PageContainer>
-            <section class="md:col-start-2 md:col-end-3 md:rounded-lg bg-table-section mb-4">
-                <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-start items-center">
-                    "Accounts"
-                </h1>
-                <div class="sm:p-8 grid grid-cols-1 gap-2 md:grid-cols-2 xl:grid-cols-3">
-                    {move || match resource.get() {
-                        Some(Ok(data)) => {
-                            {
-                                data.data
-                                    .into_iter()
-                                    .enumerate()
-                                    .map(|(i, account)| {
-                                        view! {
-                                            <AccountCard
-                                                username=account.username
-                                                balance=account.balance
-                                                nonce=account.nonce
-                                                is_unlocked=true
-                                                public_key=account.public_key
-                                                delegate=account.delegate
-                                                variant=match i % 3 {
-                                                    0 => AccountCardVariant::Purple,
-                                                    1 => AccountCardVariant::Green,
-                                                    _ => AccountCardVariant::Blue,
-                                                }
-                                            />
-                                        }
-                                    })
-                                    .collect::<Vec<_>>()
-                            }
-                                .into_view()
+            <TableSection section_heading="Accounts".to_string() controls=|| ().into_view()>
+                {move || match resource.get() {
+                    Some(Ok(data)) => {
+                        let pag = build_pagination(
+                            data.data.len(),
+                            records_per_page,
+                            current_page.get(),
+                            set_current_page,
+                        );
+                        let subset = get_subset(
+                            &data.data.into_iter().map(Some).collect(),
+                            records_per_page,
+                            current_page.get() - 1,
+                        );
+                        view! { <Table data=subset pagination=pag/> }
+                    }
+                    None => view! { <Table data=LoadingPlaceholder {}/> },
+                    Some(Err(_)) => {
+                        view! {
+                            <EmptyTable message="Unable to list accounts at this time. Refresh to try again."
+                                .to_string()/>
                         }
-                        _ => view! { <NullView/> },
-                    }}
+                    }
+                }}
 
-                </div>
-            </section>
+            </TableSection>
         </PageContainer>
     }
 }

@@ -150,6 +150,7 @@ pub fn BlocksSection() -> impl IntoView {
                             }
                         }
                     >
+
                         <Table data=blocks_subset pagination=pag/>
                     </TableSection>
                     <Outlet/>
@@ -215,6 +216,7 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
                             }
                         }
                     >
+
                         <Table data=SummaryPageBlocksQueryBlocks(blocks_subset) pagination=pag/>
                     </TableSection>
                     <Outlet/>

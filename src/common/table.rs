@@ -83,6 +83,7 @@ where
                                         pg.end_index(),
                                         pg.total_records,
                                     )}
+
                                 </span>
                                 <span class="col-start-2 text-xs font-bold flex items-center justify-center my-2">
                                     <PaginationButton
@@ -151,6 +152,7 @@ fn PaginationButton(
                 on_click.call(event)
             }
         >
+
             {children()}
         </div>
     }

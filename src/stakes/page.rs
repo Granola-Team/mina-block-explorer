@@ -110,6 +110,7 @@ pub fn StakesPage() -> impl IntoView {
                                 }
                             }
                         >
+
                             <Table data=subset pagination=pag/>
                         </TableSection>
                     }

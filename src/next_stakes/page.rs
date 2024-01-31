@@ -49,6 +49,7 @@ pub fn NextStakesPage() -> impl IntoView {
                                 }
                             }
                         >
+
                             <Table data=subset pagination=pag/>
                         </TableSection>
                     }

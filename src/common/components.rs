@@ -1,8 +1,10 @@
 use super::functions::*;
 use super::models::*;
 use crate::icons::*;
-use leptos::{web_sys::*, *};
+use leptos::web_sys::*;
+use leptos::*;
 use leptos_router::*;
+use web_sys::window;
 
 pub enum SubSectionPosition {
     Left,
@@ -142,6 +144,7 @@ pub fn SummaryItem(
                 class="col-start-2 col-end-3 font-bold text-xl flex justify-start items-end"
                 id=id.clone()
             >
+
                 {{
                     match value {
                         Some(str_val) => view! { <span>{str_val}</span> }.into_view(),
@@ -251,6 +254,7 @@ pub fn TabLink(nav_entry: NavEntry) -> impl IntoView {
                     if pathname().ends_with(&href) { active_state } else { inactive_state },
                 )
             }
+
             href=nav_entry.href
         >
             {match nav_entry.icon {
@@ -312,4 +316,53 @@ pub fn DelegationTabbedPage() -> impl IntoView {
         },
     ];
     view! { <TabbedPage tabs/> }
+}
+
+#[component]
+pub fn CopyToClipboard(children: Children) -> impl IntoView {
+    let element: NodeRef<leptos::html::Div> = create_node_ref();
+    let (copied, set_copied) = create_signal(false);
+    let (text_color, set_text_color) = create_signal("text-slate-700");
+    create_effect(move |_| {
+        if copied.get() {
+            set_text_color.set("text-pill-green")
+        } else {
+            set_text_color.set("text-slate-700")
+        }
+    });
+
+    view! {
+        <div class="relative group w-fit max-w-full text-ellipsis overflow-hidden" node_ref=element>
+            <span
+                on:click=move |_| {
+                    let value = element.get().expect("<div> element").inner_text();
+                    let window = window().expect("no global `window` exists");
+                    let clipboard = window
+                        .navigator()
+                        .clipboard()
+                        .expect("Could not get clipboard object");
+                    let _ = clipboard.write_text(&value);
+                    set_copied.set(true);
+                    logging::log!("copied value '{}'", value);
+                }
+                on:mouseleave=move |_| {
+                    logging::log!("mouse exited copytoclipboard");
+                    set_copied.set(false);
+                }
+                class=move || {
+                    format!(
+                        "hidden group-hover:block rounded-sm absolute top-0 right-0 bottom-0 p-0.5 bg-white z-10 cursor-pointer {}",
+                        text_color.get(),
+                    )
+                }
+            >
+                {move || match copied.get() {
+                    true => view! { <CopiedIcon width=20/> },
+                    false => view! { <ClipboardIcon width=20/> },
+                }}
+
+            </span>
+            {children()}
+        </div>
+    }
 }
