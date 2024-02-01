@@ -29,6 +29,7 @@
             cargo-audit
             cargo-machete
             cargo-nextest
+            leptosfmt
             just
             nodejs_18
             openssl

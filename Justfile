@@ -55,11 +55,16 @@ test-unit: build
 
 lint: && audit disallow-unused-cargo-deps
   cargo fmt --check
+  leptosfmt --check ./src
   cargo clippy -- -D warnings
   cargo clippy --all-targets --all-features -- -D warnings
 
 disallow-unused-cargo-deps:
   cargo machete Cargo.toml
+
+format:
+  cargo fmt
+  leptosfmt ./src
 
 audit:
   cargo audit

@@ -9,10 +9,10 @@ use crate::accounts::functions::{load_data as load_summary_data, *};
 use crate::common::components::*;
 use crate::common::spotlight::*;
 
-use crate::icons::*;
-use crate::transactions::components::AccountDialogTransactionSection;
-use crate::snarks::components::AccountDialogSnarkJobSection;
 use crate::blocks::components::AccountDialogBlocksSection;
+use crate::icons::*;
+use crate::snarks::components::AccountDialogSnarkJobSection;
+use crate::transactions::components::AccountDialogTransactionSection;
 
 #[component]
 pub fn AccountDialogView() -> impl IntoView {
@@ -92,6 +92,7 @@ pub fn AccountDialogView() -> impl IntoView {
                                 }
                             })
                     }}
+
                 </Suspense>
                 <Suspense>
                     <div class="overflow-y-auto flex flex-col pb-20">
@@ -117,6 +118,7 @@ pub fn AccountDialogView() -> impl IntoView {
                                         .collect()/>
                                 }
                             })}
+
                     // 
                     </div>
                 </Suspense>

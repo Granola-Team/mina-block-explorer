@@ -44,55 +44,90 @@ pub fn StakesPage() -> impl IntoView {
         <PageContainer>
             {move || match resource.get() {
                 Some(Ok(data)) => {
-                    let (previous_epoch, next_epoch, curr_epoch, section_heading) = match (current_epoch(), query_string_epoch()) {
+                    let (previous_epoch, next_epoch, curr_epoch, section_heading) = match (
+                        current_epoch(),
+                        query_string_epoch(),
+                    ) {
                         (Some(curr_epoch), Some(qs_epoch)) => {
                             let i_curr_epoch = curr_epoch as i64;
                             match qs_epoch.parse::<i64>() {
                                 Ok(i_qs_epoch) => {
-                                    let i_next_epoch = min(i_curr_epoch, i_qs_epoch+1);
-                                    let i_prev_epoch = max(0, i_qs_epoch-1);
-                                    let header = if i_next_epoch == i_qs_epoch { "Current Staking Ledger".to_string() } else { format!("Epoch {} Staking Ledger",i_qs_epoch)};
-                                    (i_prev_epoch,i_next_epoch,i_curr_epoch,header)
-                                },
-                                _ => (0,0,0, "".to_string())
+                                    let i_next_epoch = min(i_curr_epoch, i_qs_epoch + 1);
+                                    let i_prev_epoch = max(0, i_qs_epoch - 1);
+                                    let header = if i_next_epoch == i_qs_epoch {
+                                        "Current Staking Ledger".to_string()
+                                    } else {
+                                        format!("Epoch {} Staking Ledger", i_qs_epoch)
+                                    };
+                                    (i_prev_epoch, i_next_epoch, i_curr_epoch, header)
+                                }
+                                _ => (0, 0, 0, "".to_string()),
                             }
-
-                        },
+                        }
                         (Some(curr_epoch), None) => {
-                            ((curr_epoch-1) as i64, (curr_epoch) as i64, (curr_epoch) as i64, "Current Staking Ledger".to_string())
-                        },
-                        _ => (0,0,0, "".to_string())
+                            (
+                                (curr_epoch - 1) as i64,
+                                (curr_epoch) as i64,
+                                (curr_epoch) as i64,
+                                "Current Staking Ledger".to_string(),
+                            )
+                        }
+                        _ => (0, 0, 0, "".to_string()),
                     };
-                    let pag = build_pagination(data.stakes.len(), records_per_page, current_page.get(), set_current_page);
-                    let subset = get_subset(&data.stakes, records_per_page, current_page.get()-1);
+                    let pag = build_pagination(
+                        data.stakes.len(),
+                        records_per_page,
+                        current_page.get(),
+                        set_current_page,
+                    );
+                    let subset = get_subset(&data.stakes, records_per_page, current_page.get() - 1);
                     view! {
-                        <TableSection section_heading=section_heading controls=move || view! {
-                            <EpochButton text="Previous".to_string()
-                                style_variant=EpochStyleVariant::Secondary
-                                epoch_target=previous_epoch/>
-                            { if next_epoch == curr_epoch {
+                        <TableSection
+                            section_heading=section_heading
+                            controls=move || {
                                 view! {
-                                    <StakesNavButton href="/next-stakes".to_string() text="Next Stakes".to_string() />
+                                    <EpochButton
+                                        text="Previous".to_string()
+                                        style_variant=EpochStyleVariant::Secondary
+                                        epoch_target=previous_epoch
+                                    />
+                                    {if next_epoch == curr_epoch {
+                                        view! {
+                                            <StakesNavButton
+                                                href="/next-stakes".to_string()
+                                                text="Next Stakes".to_string()
+                                            />
+                                        }
+                                    } else {
+                                        view! {
+                                            <EpochButton
+                                                text="Next".to_string()
+                                                style_variant=EpochStyleVariant::Primary
+                                                epoch_target=next_epoch
+                                            />
+                                        }
+                                    }}
                                 }
-                            } else {
-                                view! {
-                                    <EpochButton text="Next".to_string()
-                                        style_variant=EpochStyleVariant::Primary
-                                        epoch_target=next_epoch/>
-                                }
-                            }}
-                        }>
+                            }
+                        >
+
                             <Table data=subset pagination=pag/>
                         </TableSection>
                     }
-                },
-                None => view! {
-                    <TableSection section_heading=String::new() controls=move || view! { <NullView /> }>
-                        <Table data=LoadingPlaceholder{}/>
-                    </TableSection>
-                },
-                _ => view! { <NullView /> }
+                }
+                None => {
+                    view! {
+                        <TableSection
+                            section_heading=String::new()
+                            controls=move || view! { <NullView/> }
+                        >
+                            <Table data=LoadingPlaceholder {}/>
+                        </TableSection>
+                    }
+                }
+                _ => view! { <NullView/> },
             }}
+
         </PageContainer>
     }
 }

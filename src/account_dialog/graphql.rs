@@ -1,22 +1,22 @@
 use chrono::Utc;
 use graphql_client::GraphQLQuery;
 
+use self::account_activity_query::AccountActivityQueryBlocks;
+use self::account_activity_query::AccountActivityQueryBlocksTransactions;
+use self::account_activity_query::AccountActivityQuerySnarks;
+use self::account_activity_query::AccountActivityQuerySnarksBlock;
 use self::account_activity_query::AccountActivityQueryTransactions;
 use self::account_activity_query::AccountActivityQueryTransactionsBlock;
-use self::account_activity_query::AccountActivityQuerySnarks;
-use self::account_activity_query::AccountActivityQueryBlocks;
 use self::account_activity_query::BlockQueryInput;
 use self::account_activity_query::SnarkQueryInput;
 use self::account_activity_query::TransactionQueryInput;
-use self::account_activity_query::AccountActivityQueryBlocksTransactions;
-use self::account_activity_query::AccountActivityQuerySnarksBlock;
+use crate::blocks::graphql::blocks_query::BlocksQueryBlocks;
+use crate::blocks::graphql::blocks_query::BlocksQueryBlocksTransactions;
+use crate::snarks::graphql::snarks_query::SnarksQuerySnarks;
+use crate::snarks::graphql::snarks_query::SnarksQuerySnarksBlock;
 use crate::transactions::graphql::transactions_query::{
     TransactionsQueryTransactions, TransactionsQueryTransactionsBlock,
 };
-use crate::snarks::graphql::snarks_query::SnarksQuerySnarks;
-use crate::snarks::graphql::snarks_query::SnarksQuerySnarksBlock;
-use crate::blocks::graphql::blocks_query::BlocksQueryBlocks;
-use crate::blocks::graphql::blocks_query::BlocksQueryBlocksTransactions;
 
 type DateTime = chrono::DateTime<Utc>;
 type Long = i32;

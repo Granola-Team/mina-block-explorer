@@ -26,23 +26,44 @@ pub fn NextStakesPage() -> impl IntoView {
         <PageContainer>
             {move || match resource.get() {
                 Some(Ok(data)) => {
-                    let pag = build_pagination(data.nextstakes.len(), records_per_page, current_page.get(), set_current_page);
-                    let subset = get_subset(&data.nextstakes, records_per_page, current_page.get()-1);
+                    let pag = build_pagination(
+                        data.nextstakes.len(),
+                        records_per_page,
+                        current_page.get(),
+                        set_current_page,
+                    );
+                    let subset = get_subset(
+                        &data.nextstakes,
+                        records_per_page,
+                        current_page.get() - 1,
+                    );
                     view! {
-                        <TableSection section_heading="Next Staking Ledger".to_string() controls=move || view! {
-                            <StakesNavButton href="/stakes".to_string() text="Current Stakes".to_string() />
-                        }>
+                        <TableSection
+                            section_heading="Next Staking Ledger".to_string()
+                            controls=move || {
+                                view! {
+                                    <StakesNavButton
+                                        href="/stakes".to_string()
+                                        text="Current Stakes".to_string()
+                                    />
+                                }
+                            }
+                        >
+
                             <Table data=subset pagination=pag/>
                         </TableSection>
                     }
-                },
-                None => view! {
-                    <TableSection section_heading=String::new() controls=move || ()>
-                        <Table data=LoadingPlaceholder{}/>
-                    </TableSection>
-                },
-                _ => view! { <NullView /> }
+                }
+                None => {
+                    view! {
+                        <TableSection section_heading=String::new() controls=move || ()>
+                            <Table data=LoadingPlaceholder {}/>
+                        </TableSection>
+                    }
+                }
+                _ => view! { <NullView/> },
             }}
+
         </PageContainer>
     }
 }

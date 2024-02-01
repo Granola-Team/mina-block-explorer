@@ -53,12 +53,16 @@ fn SearchInput(placeholder: String) -> impl IntoView {
     });
 
     view! {
-        <input id="searchbar"
+        <input
+            id="searchbar"
             type="text"
             placeholder=initial_query.unwrap_or(placeholder)
             on:input=move |event| set_input.update(|e| *e = event_target_value(&event))
-            class="h-14 flex justify-start items-center text-base text-white pl-14 placeholder:text-slate-400 placeholder:font-medium placeholder:text-base focus:outline-none box-border w-full rounded-2xl bg-[#383B42]" />
-            <span class="text-white absolute top-0 left-0 translate-x-3/4 translate-y-3/4"><SearchIcon width=22 /></span>
+            class="h-14 flex justify-start items-center text-base text-white pl-14 placeholder:text-slate-400 placeholder:font-medium placeholder:text-base focus:outline-none box-border w-full rounded-2xl bg-[#383B42]"
+        />
+        <span class="text-white absolute top-0 left-0 translate-x-3/4 translate-y-3/4">
+            <SearchIcon width=22/>
+        </span>
     }
 }
 
@@ -72,7 +76,9 @@ pub fn TitledSearchBar(
         <PreSectionContainer>
             <div class="pl-8 md:pl-0 flex flex-col md:pr-4">
                 <span class="text-white font-bold text-2xl p-1 whitespace-nowrap">{title}</span>
-                <span class="text-white font-medium text-base p-1 whitespace-nowrap">{subtext}</span>
+                <span class="text-white font-medium text-base p-1 whitespace-nowrap">
+                    {subtext}
+                </span>
             </div>
             <div class="mx-2 my-2 md:mx-0 md:w-full relative align-stretch flex items-center">
                 <SearchInput placeholder=search_placeholder/>

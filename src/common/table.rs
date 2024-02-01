@@ -24,31 +24,47 @@ where
     view! {
         <div class="@container w-full overflow-auto">
             <table class="md:rounded-b-lg table-fixed w-full @xs:w-[300%] @md:w-[200%] @2xl:w-[150%] @7xl:w-full">
-            <tr class="h-12 bg-table-header-fill">
-                {columns.into_iter()
-                    .map(|s| view! { <th class={format!("{} text-table-header-text-color font-semibold uppercase text-xs text-left", cell_padding_class)}>{s}</th>})
-                    .collect::<Vec<_>>()}
-            </tr>
-            {rows.into_iter()
-                .map(|row| view! {
-                    <tr class="h-12 bg-table-row-fill">
-                        {
-                            row.iter().map(|cell| {
+                <tr class="h-12 bg-table-header-fill">
+                    {columns
+                        .into_iter()
+                        .map(|s| {
+                            view! {
+                                <th class=format!(
+                                    "{} text-table-header-text-color font-semibold uppercase text-xs text-left",
+                                    cell_padding_class,
+                                )>{s}</th>
+                            }
+                        })
+                        .collect::<Vec<_>>()}
+                </tr>
+                {rows
+                    .into_iter()
+                    .map(|row| {
+                        view! {
+                            <tr class="h-12 bg-table-row-fill">
 
-                                let cell_ellipsis_class = "w-full text-ellipsis overflow-hidden";
-                                let cell_class = format!("{} {} first:pl-8 pl-2 text-table-row-text-color font-medium text-sm text-left whitespace-nowrap", cell_padding_class, cell_ellipsis_class);
-                                view! {
-                                    <td class=cell_class>{cell.clone().into_view()}</td>
-                                }
+                                {row
+                                    .iter()
+                                    .map(|cell| {
+                                        let cell_ellipsis_class = "w-full text-ellipsis overflow-hidden";
+                                        let cell_class = format!(
+                                            "{} {} first:pl-8 pl-2 text-table-row-text-color font-medium text-sm text-left whitespace-nowrap",
+                                            cell_padding_class,
+                                            cell_ellipsis_class,
+                                        );
+                                        view! {
+                                            <td class=cell_class>{cell.clone().into_view()}</td>
+                                        }
+                                    })
+                                    .collect::<Vec<_>>()}
 
-                            }).collect::<Vec<_>>()
-
+                            </tr>
                         }
-                    </tr>
-                })
-                .collect::<Vec<_>>()}
+                    })
+                    .collect::<Vec<_>>()}
             </table>
         </div>
+
         {
             let page_data_clone = pagination.clone();
             move || {
@@ -61,37 +77,50 @@ where
                         view! {
                             <div class="flex flex-col md:grid md:grid-cols-3 min-h-12 bg-table-header-fill">
                                 <span class="col-start-1 text-xs flex justify-center md:justify-start items-center font-bold pl-8 my-2">
-                                    {format!("Showing {} to {} of {} records", pg.start_index(), pg.end_index(), pg.total_records)}
+                                    {format!(
+                                        "Showing {} to {} of {} records",
+                                        pg.start_index(),
+                                        pg.end_index(),
+                                        pg.total_records,
+                                    )}
+
                                 </span>
                                 <span class="col-start-2 text-xs font-bold flex items-center justify-center my-2">
-                                    <PaginationButton on_click=pg.prev_page disabled=x_preceding_pages.is_empty()>
+                                    <PaginationButton
+                                        on_click=pg.prev_page
+                                        disabled=x_preceding_pages.is_empty()
+                                    >
                                         <ChevronLeft width=16/>
                                     </PaginationButton>
-                                    {x_preceding_pages.iter()
-                                        .map(|p| view! {
-                                            <div class=page_number_class>{*p}</div>
-                                        })
-                                        .collect::<Vec<_>>()
-                                    }
-                                    <span class=format!("text-white rounded-md bg-granola-orange {}",page_number_class)>{pg.current_page}</span>
-                                    {x_following_pages.iter()
-                                        .map(|p| view! {
-                                            <div class=page_number_class>{*p}</div>
-                                        })
-                                        .collect::<Vec<_>>()
-                                    }
-                                    <PaginationButton on_click=pg.next_page disabled=x_following_pages.is_empty()>
+                                    {x_preceding_pages
+                                        .iter()
+                                        .map(|p| view! { <div class=page_number_class>{*p}</div> })
+                                        .collect::<Vec<_>>()}
+
+                                    <span class=format!(
+                                        "text-white rounded-md bg-granola-orange {}",
+                                        page_number_class,
+                                    )>{pg.current_page}</span>
+                                    {x_following_pages
+                                        .iter()
+                                        .map(|p| view! { <div class=page_number_class>{*p}</div> })
+                                        .collect::<Vec<_>>()}
+
+                                    <PaginationButton
+                                        on_click=pg.next_page
+                                        disabled=x_following_pages.is_empty()
+                                    >
                                         <ChevronRight width=16/>
                                     </PaginationButton>
                                 </span>
                             </div>
-                        }.into_view()
-                    },
-                    None => view! { <NullView/> }
+                        }
+                            .into_view()
+                    }
+                    None => view! { <NullView/> },
                 }
             }
         }
-
     }
 }
 
@@ -113,12 +142,17 @@ fn PaginationButton(
         ),
     };
     view! {
-        <div class=button_class type="button" on:click=move |event: MouseEvent| {
-            if disabled {
-                return;
+        <div
+            class=button_class
+            type="button"
+            on:click=move |event: MouseEvent| {
+                if disabled {
+                    return;
+                }
+                on_click.call(event)
             }
-            on_click.call(event)
-        }>
+        >
+
             {children()}
         </div>
     }
@@ -128,7 +162,7 @@ fn PaginationButton(
 pub fn EmptyTable(message: String) -> impl IntoView {
     view! {
         <div class="flex text-base text-slate-400 items-center justify-center p-8">
-            <NoIcon />
+            <NoIcon/>
             <span class="text-sm">{message}</span>
         </div>
     }
@@ -143,10 +177,8 @@ where
     view! {
         <AppSection>
             <span class="w-full flex justify-between">
-                <AppHeading heading=section_heading />
-                <div class="self-stretch flex items-center pr-4">
-                    { controls() }
-                </div>
+                <AppHeading heading=section_heading/>
+                <div class="self-stretch flex items-center pr-4">{controls()}</div>
             </span>
             {children()}
         </AppSection>
@@ -157,10 +189,13 @@ where
 pub fn TableLink(href: String, text: String, children: Children) -> impl IntoView {
     view! {
         <div class="w-full bg-inherit flex justify-center items-center py-3">
-            <a href={href} class="font-bold uppercase text-sm flex justify-center align-center hover:underline hover:text-granola-orange">
+            <a
+                href=href
+                class="font-bold uppercase text-sm flex justify-center align-center hover:underline hover:text-granola-orange"
+            >
                 {children()}
                 <span class="mx-1">{text}</span>
-                <ChevronRight />
+                <ChevronRight/>
             </a>
         </div>
     }.into_view()
