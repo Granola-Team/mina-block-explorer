@@ -119,7 +119,6 @@ pub fn AccountDialogView() -> impl IntoView {
                                 }
                             })}
 
-                    // 
                     </div>
                 </Suspense>
                 <div class="absolute bottom-0 left-0 w-full h-20 flex justify-stretch items-center bg-white">
