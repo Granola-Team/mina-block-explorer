@@ -15,6 +15,36 @@ type Long = i32;
 pub struct BlocksQuery;
 
 #[allow(clippy::derivable_impls)]
+impl Default for blocks_query::BlocksQueryBlocks {
+    fn default() -> Self {
+        blocks_query::BlocksQueryBlocks {
+            block_height: None,
+            date_time: None,
+            state_hash: None,
+            canonical: None,
+            transactions: None,
+            creator_account: None,
+            snark_jobs: None,
+            protocol_state: None,
+            winner_account: None,
+            snark_fees: None,
+            tx_fees: None,
+        }
+    }
+}
+
+#[allow(clippy::derivable_impls)]
+impl Default for blocks_query::BlocksQueryBlocksTransactions {
+    fn default() -> Self {
+        blocks_query::BlocksQueryBlocksTransactions {
+            coinbase: None,
+            coinbase_receiver_account: None,
+            user_commands: None
+        }
+    }
+}
+
+#[allow(clippy::derivable_impls)]
 impl Default for BlockQueryInput {
     fn default() -> Self {
         BlockQueryInput {

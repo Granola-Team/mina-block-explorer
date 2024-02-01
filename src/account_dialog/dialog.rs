@@ -12,6 +12,7 @@ use crate::common::spotlight::*;
 use crate::icons::*;
 use crate::transactions::components::AccountDialogTransactionSection;
 use crate::snarks::components::AccountDialogSnarkJobSection;
+use crate::blocks::components::AccountDialogBlocksSection;
 
 #[component]
 pub fn AccountDialogView() -> impl IntoView {
@@ -109,11 +110,14 @@ pub fn AccountDialogView() -> impl IntoView {
                                         .into_iter()
                                         .map(|r| r.map(|t| t.into()))
                                         .collect()/>
+                                    <AccountDialogBlocksSection blocks=res
+                                        .blocks
+                                        .into_iter()
+                                        .map(|r| r.map(|t| t.into()))
+                                        .collect()/>
                                 }
                             })}
-
-                    // <AccountDialogSnarkJobSection public_key=Some(public_key.clone())/>
-                    // <AccountDialogBlocksSection public_key=Some(public_key.clone())/>
+                    // 
                     </div>
                 </Suspense>
                 <div class="absolute bottom-0 left-0 w-full h-20 flex justify-stretch items-center bg-white">

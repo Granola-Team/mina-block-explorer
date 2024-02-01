@@ -4,13 +4,17 @@ use graphql_client::GraphQLQuery;
 use self::account_activity_query::AccountActivityQueryTransactions;
 use self::account_activity_query::AccountActivityQueryTransactionsBlock;
 use self::account_activity_query::AccountActivityQuerySnarks;
+use self::account_activity_query::AccountActivityQueryBlocks;
 use self::account_activity_query::BlockQueryInput;
 use self::account_activity_query::SnarkQueryInput;
 use self::account_activity_query::TransactionQueryInput;
+use self::account_activity_query::AccountActivityQueryBlocksTransactions;
 use crate::transactions::graphql::transactions_query::{
     TransactionsQueryTransactions, TransactionsQueryTransactionsBlock,
 };
 use crate::snarks::graphql::snarks_query::SnarksQuerySnarks;
+use crate::blocks::graphql::blocks_query::BlocksQueryBlocks;
+use crate::blocks::graphql::blocks_query::BlocksQueryBlocksTransactions;
 
 type DateTime = chrono::DateTime<Utc>;
 type Long = i32;
@@ -51,6 +55,25 @@ impl From<AccountActivityQuerySnarks> for SnarksQuerySnarks {
         SnarksQuerySnarks {
             fee: item.fee,
             date_time: item.date_time,
+            ..Default::default()
+        }
+    }
+}
+
+impl From<AccountActivityQueryBlocks> for BlocksQueryBlocks {
+    fn from(item: AccountActivityQueryBlocks) -> Self {
+        BlocksQueryBlocks {
+            state_hash: item.state_hash,
+            transactions: item.transactions.map(|r| r.into()),
+            ..Default::default()
+        }
+    }
+}
+
+impl From<AccountActivityQueryBlocksTransactions> for BlocksQueryBlocksTransactions {
+    fn from(item: AccountActivityQueryBlocksTransactions) -> Self {
+        BlocksQueryBlocksTransactions {
+            coinbase: item.coinbase,
             ..Default::default()
         }
     }

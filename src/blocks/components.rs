@@ -11,48 +11,41 @@ use crate::common::table::*;
 use crate::icons::*;
 
 #[component]
-pub fn AccountDialogBlocksSection(public_key: Option<String>) -> impl IntoView {
-    let resource = create_resource(
-        move || public_key.clone(),
-        move |pk| async move { load_data(3, pk, None, None).await },
-    );
+pub fn AccountDialogBlocksSection(blocks: Vec<Option<BlocksQueryBlocks>>) -> impl IntoView {
+    
+    let blocks_inner = blocks.clone();
+    let has_blocks = move || blocks.clone().len() > 0;
 
     view! {
-        {move || match resource.get() {
-            Some(Ok(data)) => view! {
-                <AccountDialogSectionContainer title=String::from("Block Production") showing_message={format!("Showing latest {} blocks", data.blocks.len())} >
-                    {
-                        match data.blocks.len() {
-                            0 => view! { <EmptyTable message="This public key has no block production".to_string() /> },
-                            _ => view! {
-                                {data.blocks.into_iter()
-                                    .map(|opt_block| {
-                                        match opt_block {
-                                            Some(block) => {
-                                                let moments_ago = print_time_since(&get_date_time(&block));
-                                                let date_time = get_date_time(&block);
-                                                let status = get_status(&date_time);
-                                                view! {
-                                                    <AccountDialogSectionEntryHeader
-                                                        status=status
-                                                        date=date_time
-                                                        moments_ago=moments_ago/>
-                                                    <AccountDialogBlockEntry block=block/>
-                                                    <AccountDialogEntryDivider />
-                                                }.into_view()
-                                            },
-                                            None => view! { <span /> }.into_view(),
-                                        }
-                                    }).collect::<Vec<_>>()}
-                            }.into_view()
+        <AccountDialogSectionContainer title=String::from("Block Production") showing_message={format!("Showing latest {} blocks", blocks_inner.len())} >
+            <Show when=has_blocks fallback=move || view! { <EmptyTable message="This public key has no block production".to_string() /> }>    
+                {blocks_inner.iter()
+                    .map(|opt_block| {
+                        let check_block = opt_block.clone();
+                        let block = opt_block.clone().unwrap();
+                        view! {
+                            <Show when=move || check_block.is_some() fallback=move || view! {<NullView />}>
+                                {
+                                    let moments_ago = print_time_since(&get_date_time(&block));
+                                    let date_time = get_date_time(&block);
+                                    let status = get_status(&date_time);
+                                    view! {
+                                        <AccountDialogSectionEntryHeader
+                                            status=status
+                                            date=date_time
+                                            moments_ago=moments_ago/>
+                                        <AccountDialogBlockEntry block=block.clone()/>
+                                        <AccountDialogEntryDivider />
+                                    }.into_view()
+                                }
+                            </Show>
                         }
-                    }
-                </AccountDialogSectionContainer>
-            },
-            _ => view! { <span /> }.into_view(),
-        }}
-
+                    }).collect::<Vec<_>>()}
+            </Show>
+        </AccountDialogSectionContainer>
     }
+
+    
 }
 
 struct SubEntry {
