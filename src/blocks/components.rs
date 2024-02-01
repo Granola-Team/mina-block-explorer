@@ -184,39 +184,8 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
     let (current_page, set_current_page) = create_signal(1);
 
     view! {
-        {move || match resource.get() {
-            Some(Ok(data)) => {
-                let pag = build_pagination(
-                    data.blocks.len(),
-                    records_per_page,
-                    current_page.get(),
-                    set_current_page,
-                );
-                let blocks_subset = get_subset(
-                    &data.blocks,
-                    records_per_page,
-                    current_page.get() - 1,
-                );
-                view! {
-                    <TableSection
-                        section_heading="Blocks".to_owned()
-                        controls=move || {
-                            view! {
-                                <URLCheckbox
-                                    label="Include Non-Canonical".to_string()
-                                    url_param_key="include_non_canonical".to_string()
-                                />
-                            }
-                        }
-                    >
-
-                        <Table data=SummaryPageBlocksQueryBlocks(blocks_subset) pagination=pag/>
-                    </TableSection>
-                    <Outlet/>
-                }
-                    .into_view()
-            }
-            None => {
+        <ErrorBoundary fallback=move |_| view! { <NullView/> }>
+            <Suspense fallback=move || {
                 view! {
                     <TableSection
                         section_heading="Blocks".to_string()
@@ -224,12 +193,47 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
                     >
                         <Table data=LoadingPlaceholder {}/>
                     </TableSection>
-                    <Outlet/>
                 }
-                    .into_view()
-            }
-            _ => view! { <span></span> }.into_view(),
-        }}
+            }>
+                {resource
+                    .get()
+                    .and_then(|res| res.ok())
+                    .map(|data| {
+                        let pag = build_pagination(
+                            data.blocks.len(),
+                            records_per_page,
+                            current_page.get(),
+                            set_current_page,
+                        );
+                        let blocks_subset = get_subset(
+                            &data.blocks,
+                            records_per_page,
+                            current_page.get() - 1,
+                        );
+                        view! {
+                            <TableSection
+                                section_heading="Blocks".to_owned()
+                                controls=move || {
+                                    view! {
+                                        <URLCheckbox
+                                            label="Include Non-Canonical".to_string()
+                                            url_param_key="include_non_canonical".to_string()
+                                        />
+                                    }
+                                }
+                            >
+
+                                <Table
+                                    data=SummaryPageBlocksQueryBlocks(blocks_subset)
+                                    pagination=pag
+                                />
+                            </TableSection>
+                        }
+                    })}
+
+            </Suspense>
+        </ErrorBoundary>
+        <Outlet/>
     }
 }
 
