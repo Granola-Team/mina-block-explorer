@@ -28,6 +28,7 @@ pub fn AccountDialogTransactionSection(
                     }
                 }
             >
+
                 {inner_transactions
                     .iter()
                     .map(|opt_transaction| {
@@ -44,6 +45,7 @@ pub fn AccountDialogTransactionSection(
                                     moments_ago=print_time_since(
                                         &get_block_datetime(&unwrap_opt_trans),
                                     )
+
                                     from=get_from(&unwrap_opt_trans)
                                     to=get_to(&unwrap_opt_trans)
                                     fee=get_fee(&unwrap_opt_trans)
@@ -205,6 +207,10 @@ pub fn TransactionsSection(
                 view! {
                     // <NullView />
 
+                    // <NullView />
+
+                    // <NullView />
+
                     <TableSection
                         section_heading="Transactions".to_owned()
                         controls=|| ().into_view()
@@ -215,6 +221,16 @@ pub fn TransactionsSection(
             }
             _ => {
                 view! {
+                    // <NullView />
+
+                    // <NullView />
+
+                    // <NullView />
+
+                    // <NullView />
+
+                    // <NullView />
+
                     // <NullView />
 
                     <span></span>

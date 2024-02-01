@@ -66,7 +66,7 @@ impl From<AccountActivityQuerySnarks> for SnarksQuerySnarks {
 impl From<AccountActivityQuerySnarksBlock> for SnarksQuerySnarksBlock {
     fn from(item: AccountActivityQuerySnarksBlock) -> Self {
         SnarksQuerySnarksBlock {
-            state_hash: item.state_hash
+            state_hash: item.state_hash,
         }
     }
 }
