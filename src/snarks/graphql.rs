@@ -29,6 +29,15 @@ impl Default for snarks_query::SnarksQuerySnarks {
 }
 
 #[allow(clippy::derivable_impls)]
+impl Default for snarks_query::SnarksQuerySnarksBlock {
+    fn default() -> Self {
+        snarks_query::SnarksQuerySnarksBlock {
+            state_hash: None, 
+        }
+    }
+}
+
+#[allow(clippy::derivable_impls)]
 impl Default for snarks_query::BlockQueryInput {
     fn default() -> Self {
         snarks_query::BlockQueryInput {

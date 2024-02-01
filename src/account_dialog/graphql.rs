@@ -9,10 +9,12 @@ use self::account_activity_query::BlockQueryInput;
 use self::account_activity_query::SnarkQueryInput;
 use self::account_activity_query::TransactionQueryInput;
 use self::account_activity_query::AccountActivityQueryBlocksTransactions;
+use self::account_activity_query::AccountActivityQuerySnarksBlock;
 use crate::transactions::graphql::transactions_query::{
     TransactionsQueryTransactions, TransactionsQueryTransactionsBlock,
 };
 use crate::snarks::graphql::snarks_query::SnarksQuerySnarks;
+use crate::snarks::graphql::snarks_query::SnarksQuerySnarksBlock;
 use crate::blocks::graphql::blocks_query::BlocksQueryBlocks;
 use crate::blocks::graphql::blocks_query::BlocksQueryBlocksTransactions;
 
@@ -53,8 +55,18 @@ impl From<AccountActivityQueryTransactionsBlock> for TransactionsQueryTransactio
 impl From<AccountActivityQuerySnarks> for SnarksQuerySnarks {
     fn from(item: AccountActivityQuerySnarks) -> Self {
         SnarksQuerySnarks {
+            block: item.block.map(|b| b.into()),
             fee: item.fee,
             date_time: item.date_time,
+            ..Default::default()
+        }
+    }
+}
+
+impl From<AccountActivityQuerySnarksBlock> for SnarksQuerySnarksBlock {
+    fn from(item: AccountActivityQuerySnarksBlock) -> Self {
+        SnarksQuerySnarksBlock {
+            state_hash: item.state_hash,
             ..Default::default()
         }
     }
@@ -63,6 +75,7 @@ impl From<AccountActivityQuerySnarks> for SnarksQuerySnarks {
 impl From<AccountActivityQueryBlocks> for BlocksQueryBlocks {
     fn from(item: AccountActivityQueryBlocks) -> Self {
         BlocksQueryBlocks {
+            date_time: item.date_time,
             state_hash: item.state_hash,
             transactions: item.transactions.map(|r| r.into()),
             ..Default::default()

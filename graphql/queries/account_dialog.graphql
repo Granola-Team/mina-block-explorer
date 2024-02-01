@@ -10,11 +10,15 @@ query AccountActivityQuery($blocks_query: BlockQueryInput!, $blocks_limit: Int =
     }
   }
   snarks(sortBy: $snarks_sort_by, limit: $snarks_limit, query: $snarks_query) {
+    block {
+      stateHash
+    }
     fee
     dateTime
   }
   blocks(sortBy: $blocks_sort_by, limit: $blocks_limit, query: $blocks_query) {
     stateHash
+    dateTime
     transactions {
       coinbase
     }
