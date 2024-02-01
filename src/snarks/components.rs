@@ -12,7 +12,7 @@ use crate::icons::*;
 #[component]
 pub fn AccountDialogSnarkJobSection(snarks: Vec<Option<SnarksQuerySnarks>>) -> impl IntoView {
     let snarks_inner = snarks.clone();
-    let has_snarks = move || snarks.clone().len() > 0;
+    let has_snarks = move || !snarks.clone().is_empty();
 
     view! {
         <AccountDialogSectionContainer

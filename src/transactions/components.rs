@@ -14,7 +14,7 @@ pub fn AccountDialogTransactionSection(
     transactions: Vec<Option<TransactionsQueryTransactions>>,
 ) -> impl IntoView {
     let inner_transactions = transactions.clone();
-    let has_transactions = move || transactions.clone().len() > 0;
+    let has_transactions = move || !transactions.clone().is_empty();
     view! {
         <AccountDialogSectionContainer
             title=String::from("Transactions")

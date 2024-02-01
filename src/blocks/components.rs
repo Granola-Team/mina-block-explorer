@@ -13,7 +13,7 @@ use crate::icons::*;
 #[component]
 pub fn AccountDialogBlocksSection(blocks: Vec<Option<BlocksQueryBlocks>>) -> impl IntoView {
     let blocks_inner = blocks.clone();
-    let has_blocks = move || blocks.clone().len() > 0;
+    let has_blocks = move || !blocks.clone().is_empty();
 
     view! {
         <AccountDialogSectionContainer
