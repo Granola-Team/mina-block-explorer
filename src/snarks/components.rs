@@ -21,39 +21,58 @@ pub fn AccountDialogSnarkJobSection(public_key: Option<String>) -> impl IntoView
 
     view! {
         {move || match resource.get() {
-            Some(Ok(data)) => view! {
-                <AccountDialogSectionContainer title=String::from("SNARK Jobs") showing_message={format!("Showing latest {} SNARK jobs", data.snarks.len())} >
-                    {
-                        match data.snarks.len() {
-                            0 => view! { <EmptyTable message="This public key has not completed any SNARK work".to_string() /> },
-                            _ => view! {
-                                {data.snarks.into_iter()
-                                    .map(|opt_snark| {
-                                        match opt_snark {
-                                            Some(snark) => {
-                                                let moments_ago = print_time_since(&get_snark_date_time(&snark));
-                                                let date_time = get_snark_date_time(&snark);
-                                                let status = get_status(&date_time);
-                                                view! {
-                                                    <AccountDialogSectionEntryHeader
-                                                        status=status
-                                                        date=date_time
-                                                        moments_ago=moments_ago/>
-                                                    <AccountDialogSnarkJobEntry snark=snark/>
-                                                    <AccountDialogEntryDivider />
-                                                }.into_view()
-                                            },
-                                            None => view! { <span /> }.into_view(),
-                                        }
-                                    }).collect::<Vec<_>>()}
-                            }.into_view()
-                        }
-                    }
-                </AccountDialogSectionContainer>
-            },
-            _ => view! { <span /> }.into_view(),
-        }}
+            Some(Ok(data)) => {
+                view! {
+                    <AccountDialogSectionContainer
+                        title=String::from("SNARK Jobs")
+                        showing_message=format!("Showing latest {} SNARK jobs", data.snarks.len())
+                    >
 
+                        {match data.snarks.len() {
+                            0 => {
+                                view! {
+                                    <EmptyTable message="This public key has not completed any SNARK work"
+                                        .to_string()/>
+                                }
+                            }
+                            _ => {
+                                view! {
+                                    {data
+                                        .snarks
+                                        .into_iter()
+                                        .map(|opt_snark| {
+                                            match opt_snark {
+                                                Some(snark) => {
+                                                    let moments_ago = print_time_since(
+                                                        &get_snark_date_time(&snark),
+                                                    );
+                                                    let date_time = get_snark_date_time(&snark);
+                                                    let status = get_status(&date_time);
+                                                    view! {
+                                                        <AccountDialogSectionEntryHeader
+                                                            status=status
+                                                            date=date_time
+                                                            moments_ago=moments_ago
+                                                        />
+                                                        <AccountDialogSnarkJobEntry snark=snark/>
+                                                        <AccountDialogEntryDivider/>
+                                                    }
+                                                        .into_view()
+                                                }
+                                                None => view! { <span></span> }.into_view(),
+                                            }
+                                        })
+                                        .collect::<Vec<_>>()}
+                                }
+                                    .into_view()
+                            }
+                        }}
+
+                    </AccountDialogSectionContainer>
+                }
+            }
+            _ => view! { <span></span> }.into_view(),
+        }}
     }
 }
 
@@ -78,11 +97,10 @@ fn AccountDialogSnarkJobEntry(snark: SnarksQuerySnarks) -> impl IntoView {
     ];
     view! {
         <div class="w-full flex justify-between">
-            {sub_entries.into_iter()
-                .map(|se| view! {
-                    <AccountDialogSectionSubEntry label=se.label value=se.value />
-                })
-            .collect::<Vec<_>>()}
+            {sub_entries
+                .into_iter()
+                .map(|se| view! { <AccountDialogSectionSubEntry label=se.label value=se.value/> })
+                .collect::<Vec<_>>()}
         </div>
     }
     .into_view()
@@ -110,26 +128,40 @@ pub fn AccountOverviewSnarkJobTable(public_key: Option<String>) -> impl IntoView
 
     view! {
         {move || match resource.get() {
-            Some(Ok(data)) => view! {
-                {
-                    match data.snarks.len() {
-                        0 => view! { <EmptyTable message="This public key has not completed any SNARK work".to_string() /> },
-                        _ => {
-                            let pag = build_pagination(data.snarks.len(), records_per_page, current_page.get(), set_current_page);
-                            let subset = get_subset(&data.snarks, records_per_page, current_page.get()-1);
+            Some(Ok(data)) => {
+                view! {
+                    {match data.snarks.len() {
+                        0 => {
                             view! {
-                                <Table data=subset pagination=pag />
-                                <TableLink href=href.get() text="See all snark jobs".to_string()>
-                                    <SnarkIcon />
-                                </TableLink>
-                            }.into_view()
+                                <EmptyTable message="This public key has not completed any SNARK work"
+                                    .to_string()/>
+                            }
                         }
-                    }
+                        _ => {
+                            let pag = build_pagination(
+                                data.snarks.len(),
+                                records_per_page,
+                                current_page.get(),
+                                set_current_page,
+                            );
+                            let subset = get_subset(
+                                &data.snarks,
+                                records_per_page,
+                                current_page.get() - 1,
+                            );
+                            view! {
+                                <Table data=subset pagination=pag/>
+                                <TableLink href=href.get() text="See all snark jobs".to_string()>
+                                    <SnarkIcon/>
+                                </TableLink>
+                            }
+                                .into_view()
+                        }
+                    }}
                 }
-            },
-            _ => view! { <span /> }.into_view(),
+            }
+            _ => view! { <span></span> }.into_view(),
         }}
-
     }
 }
 
@@ -146,21 +178,33 @@ pub fn BlockSpotlightSnarkJobTable(block_state_hash: Option<String>) -> impl Int
 
     view! {
         {move || match resource.get() {
-            Some(Ok(data)) => view! {
-                {
-                    match data.snarks.len() {
-                        0 => view! { <EmptyTable message="No SNARK work related to this block".to_string() /> },
-                        _ => {
-                            let pag = build_pagination(data.snarks.len(), records_per_page, current_page.get(), set_current_page);
-                            let subset = get_subset(&data.snarks, records_per_page, current_page.get()-1);
+            Some(Ok(data)) => {
+                view! {
+                    {match data.snarks.len() {
+                        0 => {
                             view! {
-                                <Table data=subset pagination=pag/>
+                                <EmptyTable message="No SNARK work related to this block"
+                                    .to_string()/>
                             }
                         }
-                    }
+                        _ => {
+                            let pag = build_pagination(
+                                data.snarks.len(),
+                                records_per_page,
+                                current_page.get(),
+                                set_current_page,
+                            );
+                            let subset = get_subset(
+                                &data.snarks,
+                                records_per_page,
+                                current_page.get() - 1,
+                            );
+                            view! { <Table data=subset pagination=pag/> }
+                        }
+                    }}
                 }
-            },
-            _ => view! { <NullView /> }
+            }
+            _ => view! { <NullView/> },
         }}
     }
 }

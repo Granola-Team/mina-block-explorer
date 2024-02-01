@@ -23,24 +23,32 @@ pub fn BroadcastForm(endpoint: String) -> impl IntoView {
     });
 
     view! {
-        <form class="p-8" on:submit=move |ev: SubmitEvent| {
-            ev.prevent_default();
-            let value = textarea_element.get()
-                .expect("<textarea> to exist")
-                .value();
-            submit_action.dispatch(ActionInputs { value, endpoint: endpoint.clone() })
-         }>
+        <form
+            class="p-8"
+            on:submit=move |ev: SubmitEvent| {
+                ev.prevent_default();
+                let value = textarea_element.get().expect("<textarea> to exist").value();
+                submit_action
+                    .dispatch(ActionInputs {
+                        value,
+                        endpoint: endpoint.clone(),
+                    })
+            }
+        >
+
             <pre>
                 <textarea
                     class="p-4 border-box w-full border border-[#DADCE0] rounded-md"
                     node_ref=textarea_element
-                    rows="10">
-                </textarea>
+                    rows="10"
+                ></textarea>
             </pre>
             <input
                 disabled=move || submit_action.pending().get()
                 type="submit"
-                class="disabled:bg-slate-400 disabled:text-slate-200 disabled:cursor-not-allowed bg-granola-orange text-white uppercase h-11 rounded-lg px-6 cursor-pointer disabled:cursor-not-allowed" value="Send"/>
+                class="disabled:bg-slate-400 disabled:text-slate-200 disabled:cursor-not-allowed bg-granola-orange text-white uppercase h-11 rounded-lg px-6 cursor-pointer disabled:cursor-not-allowed"
+                value="Send"
+            />
         </form>
     }
 }

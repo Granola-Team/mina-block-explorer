@@ -19,39 +19,56 @@ pub fn AccountDialogBlocksSection(public_key: Option<String>) -> impl IntoView {
 
     view! {
         {move || match resource.get() {
-            Some(Ok(data)) => view! {
-                <AccountDialogSectionContainer title=String::from("Block Production") showing_message={format!("Showing latest {} blocks", data.blocks.len())} >
-                    {
-                        match data.blocks.len() {
-                            0 => view! { <EmptyTable message="This public key has no block production".to_string() /> },
-                            _ => view! {
-                                {data.blocks.into_iter()
-                                    .map(|opt_block| {
-                                        match opt_block {
-                                            Some(block) => {
-                                                let moments_ago = print_time_since(&get_date_time(&block));
-                                                let date_time = get_date_time(&block);
-                                                let status = get_status(&date_time);
-                                                view! {
-                                                    <AccountDialogSectionEntryHeader
-                                                        status=status
-                                                        date=date_time
-                                                        moments_ago=moments_ago/>
-                                                    <AccountDialogBlockEntry block=block/>
-                                                    <AccountDialogEntryDivider />
-                                                }.into_view()
-                                            },
-                                            None => view! { <span /> }.into_view(),
-                                        }
-                                    }).collect::<Vec<_>>()}
-                            }.into_view()
-                        }
-                    }
-                </AccountDialogSectionContainer>
-            },
-            _ => view! { <span /> }.into_view(),
-        }}
+            Some(Ok(data)) => {
+                view! {
+                    <AccountDialogSectionContainer
+                        title=String::from("Block Production")
+                        showing_message=format!("Showing latest {} blocks", data.blocks.len())
+                    >
 
+                        {match data.blocks.len() {
+                            0 => {
+                                view! {
+                                    <EmptyTable message="This public key has no block production"
+                                        .to_string()/>
+                                }
+                            }
+                            _ => {
+                                view! {
+                                    {data
+                                        .blocks
+                                        .into_iter()
+                                        .map(|opt_block| {
+                                            match opt_block {
+                                                Some(block) => {
+                                                    let moments_ago = print_time_since(&get_date_time(&block));
+                                                    let date_time = get_date_time(&block);
+                                                    let status = get_status(&date_time);
+                                                    view! {
+                                                        <AccountDialogSectionEntryHeader
+                                                            status=status
+                                                            date=date_time
+                                                            moments_ago=moments_ago
+                                                        />
+                                                        <AccountDialogBlockEntry block=block/>
+                                                        <AccountDialogEntryDivider/>
+                                                    }
+                                                        .into_view()
+                                                }
+                                                None => view! { <span></span> }.into_view(),
+                                            }
+                                        })
+                                        .collect::<Vec<_>>()}
+                                }
+                                    .into_view()
+                            }
+                        }}
+
+                    </AccountDialogSectionContainer>
+                }
+            }
+            _ => view! { <span></span> }.into_view(),
+        }}
     }
 }
 
@@ -74,11 +91,10 @@ fn AccountDialogBlockEntry(block: BlocksQueryBlocks) -> impl IntoView {
     ];
     view! {
         <div class="w-full flex justify-between">
-            {sub_entries.into_iter()
-                .map(|se| view! {
-                    <AccountDialogSectionSubEntry label=se.label value=se.value />
-                })
-            .collect::<Vec<_>>()}
+            {sub_entries
+                .into_iter()
+                .map(|se| view! { <AccountDialogSectionSubEntry label=se.label value=se.value/> })
+                .collect::<Vec<_>>()}
         </div>
     }
     .into_view()
@@ -111,28 +127,49 @@ pub fn BlocksSection() -> impl IntoView {
     view! {
         {move || match resource.get() {
             Some(Ok(data)) => {
-                let pag = build_pagination(data.blocks.len(), records_per_page, current_page.get(), set_current_page);
-                let blocks_subset = get_subset(&data.blocks, records_per_page, current_page.get()-1);
+                let pag = build_pagination(
+                    data.blocks.len(),
+                    records_per_page,
+                    current_page.get(),
+                    set_current_page,
+                );
+                let blocks_subset = get_subset(
+                    &data.blocks,
+                    records_per_page,
+                    current_page.get() - 1,
+                );
                 view! {
-                    <TableSection section_heading="Blocks".to_owned() controls=move || view! {
-                        <URLCheckbox
-                        label="Include Non-Canonical".to_string()
-                        url_param_key="include_non_canonical".to_string() />
-                    }>
+                    <TableSection
+                        section_heading="Blocks".to_owned()
+                        controls=move || {
+                            view! {
+                                <URLCheckbox
+                                    label="Include Non-Canonical".to_string()
+                                    url_param_key="include_non_canonical".to_string()
+                                />
+                            }
+                        }
+                    >
+
                         <Table data=blocks_subset pagination=pag/>
                     </TableSection>
-                    <Outlet />
-                }.into_view()
-            },
+                    <Outlet/>
+                }
+                    .into_view()
+            }
             None => {
                 view! {
-                    <TableSection section_heading="Blocks".to_owned() controls=move || view! { <NullView /> }>
-                        <Table data=LoadingPlaceholder{}/>
+                    <TableSection
+                        section_heading="Blocks".to_owned()
+                        controls=move || view! { <NullView/> }
+                    >
+                        <Table data=LoadingPlaceholder {}/>
                     </TableSection>
-                    <Outlet />
-                }.into_view()
-            },
-            _ => view! { <span/> }.into_view()
+                    <Outlet/>
+                }
+                    .into_view()
+            }
+            _ => view! { <span></span> }.into_view(),
         }}
     }
 }
@@ -156,26 +193,49 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
     view! {
         {move || match resource.get() {
             Some(Ok(data)) => {
-                let pag = build_pagination(data.blocks.len(), records_per_page, current_page.get(), set_current_page);
-                let blocks_subset = get_subset(&data.blocks, records_per_page, current_page.get()-1);
+                let pag = build_pagination(
+                    data.blocks.len(),
+                    records_per_page,
+                    current_page.get(),
+                    set_current_page,
+                );
+                let blocks_subset = get_subset(
+                    &data.blocks,
+                    records_per_page,
+                    current_page.get() - 1,
+                );
                 view! {
-                    <TableSection section_heading="Blocks".to_owned() controls=move || view! {
-                        <URLCheckbox
-                        label="Include Non-Canonical".to_string()
-                        url_param_key="include_non_canonical".to_string() />
-                    }>
+                    <TableSection
+                        section_heading="Blocks".to_owned()
+                        controls=move || {
+                            view! {
+                                <URLCheckbox
+                                    label="Include Non-Canonical".to_string()
+                                    url_param_key="include_non_canonical".to_string()
+                                />
+                            }
+                        }
+                    >
+
                         <Table data=SummaryPageBlocksQueryBlocks(blocks_subset) pagination=pag/>
                     </TableSection>
-                    <Outlet />
-                }.into_view()
-            },
-            None => view! {
-                <TableSection section_heading="Blocks".to_string() controls=move || view! {<NullView />}>
-                    <Table data=LoadingPlaceholder{} />
-                </TableSection>
-                <Outlet />
-            }.into_view(),
-            _ => view! { <span/> }.into_view()
+                    <Outlet/>
+                }
+                    .into_view()
+            }
+            None => {
+                view! {
+                    <TableSection
+                        section_heading="Blocks".to_string()
+                        controls=move || view! { <NullView/> }
+                    >
+                        <Table data=LoadingPlaceholder {}/>
+                    </TableSection>
+                    <Outlet/>
+                }
+                    .into_view()
+            }
+            _ => view! { <span></span> }.into_view(),
         }}
     }
 }
@@ -202,25 +262,44 @@ pub fn AccountOverviewBlocksTable(public_key: Option<String>) -> impl IntoView {
 
     view! {
         {move || match resource.get() {
-            Some(Ok(data)) => view! {
-                {
-                    match data.blocks.len() {
-                        0 => view! { <EmptyTable message="This public key has no block production".to_string() /> },
-                        _ => {
-                            let pag = build_pagination(data.blocks.len(), records_per_page, current_page.get(), set_current_page);
-                            let blocks_subset = get_subset(&data.blocks, records_per_page, current_page.get()-1);
+            Some(Ok(data)) => {
+                view! {
+                    {match data.blocks.len() {
+                        0 => {
                             view! {
-                                <Table data=blocks_subset pagination=pag/>
-                                <TableLink href=href.get() text="See all block production".to_string()>
-                                    <BlockIcon />
-                                </TableLink>
+                                <EmptyTable message="This public key has no block production"
+                                    .to_string()/>
                             }
-                        }.into_view()
-                    }
+                        }
+                        _ => {
+                            {
+                                let pag = build_pagination(
+                                    data.blocks.len(),
+                                    records_per_page,
+                                    current_page.get(),
+                                    set_current_page,
+                                );
+                                let blocks_subset = get_subset(
+                                    &data.blocks,
+                                    records_per_page,
+                                    current_page.get() - 1,
+                                );
+                                view! {
+                                    <Table data=blocks_subset pagination=pag/>
+                                    <TableLink
+                                        href=href.get()
+                                        text="See all block production".to_string()
+                                    >
+                                        <BlockIcon/>
+                                    </TableLink>
+                                }
+                            }
+                                .into_view()
+                        }
+                    }}
                 }
-            },
-            _ => view! { <span /> }.into_view(),
+            }
+            _ => view! { <span></span> }.into_view(),
         }}
-
     }
 }
