@@ -15,6 +15,20 @@ type Long = i32;
 pub struct SnarksQuery;
 
 #[allow(clippy::derivable_impls)]
+impl Default for snarks_query::SnarksQuerySnarks {
+    fn default() -> Self {
+        snarks_query::SnarksQuerySnarks {
+            block_height: None,
+            date_time: None,
+            prover: None,
+            work_ids: None,
+            block: None,
+            fee: None,
+        }
+    }
+}
+
+#[allow(clippy::derivable_impls)]
 impl Default for snarks_query::BlockQueryInput {
     fn default() -> Self {
         snarks_query::BlockQueryInput {

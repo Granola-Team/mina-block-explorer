@@ -13,30 +13,33 @@ use crate::transactions::graphql::transactions_query::TransactionsQueryTransacti
 pub fn AccountDialogTransactionSection(
     transactions: Vec<Option<TransactionsQueryTransactions>>,
 ) -> impl IntoView {
+    let inner_transactions = transactions.clone();
+    let has_transactions = move || transactions.clone().len() > 0;
     view! {
-        <AccountDialogSectionContainer title=String::from("Transactions") showing_message={format!("Showing latest {} transactions", transactions.len())}>
-
-            {transactions.into_iter()
-                .map(|opt_transaction| {
-                    let check_opt_trans = opt_transaction.clone();
-                    let unwrap_opt_trans = opt_transaction.unwrap();
-                    view! {
-                        <Show when={move || check_opt_trans.is_some() }
-                            fallback=move || view! { <NullView /> }
-                        >
-                            <TransactionEntry status=get_status(&get_block_datetime(&unwrap_opt_trans))
-                                date=get_block_datetime(&unwrap_opt_trans)
-                                moments_ago=print_time_since(&get_block_datetime(&unwrap_opt_trans))
-                                from=get_from(&unwrap_opt_trans)
-                                to=get_to(&unwrap_opt_trans)
-                                fee=get_fee(&unwrap_opt_trans)
-                                amount=get_amount(&unwrap_opt_trans)
-                                hash=get_hash(&unwrap_opt_trans) />
-                        </Show>
-                    }
-                })
-                .collect::<Vec<_>>()
-            }
+        <AccountDialogSectionContainer title=String::from("Transactions") showing_message={format!("Showing latest {} transactions", inner_transactions.len())}>
+            <Show when=has_transactions fallback=move || view! { <EmptyTable message="This public key has no transactions".to_string() />}>
+                {inner_transactions.iter()
+                    .map(|opt_transaction| {
+                        let check_opt_trans = opt_transaction.clone();
+                        let unwrap_opt_trans = opt_transaction.clone().unwrap();
+                        view! {
+                            <Show when={move || check_opt_trans.is_some() }
+                                fallback=move || view! { <NullView /> }
+                            >
+                                <TransactionEntry status=get_status(&get_block_datetime(&unwrap_opt_trans))
+                                    date=get_block_datetime(&unwrap_opt_trans)
+                                    moments_ago=print_time_since(&get_block_datetime(&unwrap_opt_trans))
+                                    from=get_from(&unwrap_opt_trans)
+                                    to=get_to(&unwrap_opt_trans)
+                                    fee=get_fee(&unwrap_opt_trans)
+                                    amount=get_amount(&unwrap_opt_trans)
+                                    hash=get_hash(&unwrap_opt_trans) />
+                            </Show>
+                        }
+                    })
+                    .collect::<Vec<_>>()
+                }
+            </Show>
         </AccountDialogSectionContainer>
     }
 }

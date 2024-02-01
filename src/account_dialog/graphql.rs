@@ -3,12 +3,14 @@ use graphql_client::GraphQLQuery;
 
 use self::account_activity_query::AccountActivityQueryTransactions;
 use self::account_activity_query::AccountActivityQueryTransactionsBlock;
+use self::account_activity_query::AccountActivityQuerySnarks;
 use self::account_activity_query::BlockQueryInput;
 use self::account_activity_query::SnarkQueryInput;
 use self::account_activity_query::TransactionQueryInput;
 use crate::transactions::graphql::transactions_query::{
     TransactionsQueryTransactions, TransactionsQueryTransactionsBlock,
 };
+use crate::snarks::graphql::snarks_query::SnarksQuerySnarks;
 
 type DateTime = chrono::DateTime<Utc>;
 type Long = i32;
@@ -38,6 +40,16 @@ impl From<AccountActivityQueryTransactions> for TransactionsQueryTransactions {
 impl From<AccountActivityQueryTransactionsBlock> for TransactionsQueryTransactionsBlock {
     fn from(item: AccountActivityQueryTransactionsBlock) -> Self {
         TransactionsQueryTransactionsBlock {
+            date_time: item.date_time,
+            ..Default::default()
+        }
+    }
+}
+
+impl From<AccountActivityQuerySnarks> for SnarksQuerySnarks {
+    fn from(item: AccountActivityQuerySnarks) -> Self {
+        SnarksQuerySnarks {
+            fee: item.fee,
             date_time: item.date_time,
             ..Default::default()
         }

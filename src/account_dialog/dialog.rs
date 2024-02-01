@@ -11,6 +11,7 @@ use crate::common::spotlight::*;
 
 use crate::icons::*;
 use crate::transactions::components::AccountDialogTransactionSection;
+use crate::snarks::components::AccountDialogSnarkJobSection;
 
 #[component]
 pub fn AccountDialogView() -> impl IntoView {
@@ -89,7 +90,7 @@ pub fn AccountDialogView() -> impl IntoView {
                                     </SpotlightSection>
                                 }
                             })
-                    }} ;
+                    }}
                 </Suspense>
                 <Suspense>
                     <div class="overflow-y-auto flex flex-col pb-20">
@@ -100,6 +101,11 @@ pub fn AccountDialogView() -> impl IntoView {
                                 view! {
                                     <AccountDialogTransactionSection transactions=res
                                         .transactions
+                                        .into_iter()
+                                        .map(|r| r.map(|t| t.into()))
+                                        .collect()/>
+                                    <AccountDialogSnarkJobSection snarks=res
+                                        .snarks
                                         .into_iter()
                                         .map(|r| r.map(|t| t.into()))
                                         .collect()/>
