@@ -1,9 +1,14 @@
 use chrono::Utc;
 use graphql_client::GraphQLQuery;
 
+use self::account_activity_query::AccountActivityQueryTransactions;
+use self::account_activity_query::AccountActivityQueryTransactionsBlock;
 use self::account_activity_query::BlockQueryInput;
 use self::account_activity_query::SnarkQueryInput;
 use self::account_activity_query::TransactionQueryInput;
+use crate::transactions::graphql::transactions_query::{
+    TransactionsQueryTransactions, TransactionsQueryTransactionsBlock,
+};
 
 type DateTime = chrono::DateTime<Utc>;
 type Long = i32;
@@ -16,6 +21,28 @@ type Long = i32;
 )]
 pub struct AccountActivityQuery;
 
+impl From<AccountActivityQueryTransactions> for TransactionsQueryTransactions {
+    fn from(item: AccountActivityQueryTransactions) -> Self {
+        TransactionsQueryTransactions {
+            fee: item.fee,
+            from: item.from,
+            hash: item.hash,
+            to: item.to,
+            amount: item.amount,
+            block: item.block.map(|b| b.into()),
+            ..Default::default()
+        }
+    }
+}
+
+impl From<AccountActivityQueryTransactionsBlock> for TransactionsQueryTransactionsBlock {
+    fn from(item: AccountActivityQueryTransactionsBlock) -> Self {
+        TransactionsQueryTransactionsBlock {
+            date_time: item.date_time,
+            ..Default::default()
+        }
+    }
+}
 
 #[allow(clippy::derivable_impls)]
 impl Default for BlockQueryInput {

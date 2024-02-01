@@ -4,21 +4,20 @@ use leptos_router::*;
 use super::functions::get_base_page_path;
 use crate::common::models::MyError;
 
-use crate::common::components::*;
-use crate::common::spotlight::*;
 use super::functions::load_data;
 use crate::accounts::functions::{load_data as load_summary_data, *};
- 
+use crate::common::components::*;
+use crate::common::spotlight::*;
+
 use crate::icons::*;
-
-
+use crate::transactions::components::AccountDialogTransactionSection;
 
 #[component]
 pub fn AccountDialogView() -> impl IntoView {
     let location = use_location();
     let (base, _set_base) = create_signal(get_base_page_path(location));
     let memo_params_map = use_params_map();
-    
+
     let account_resource = create_resource(
         move || memo_params_map.get(),
         |value| async move {
@@ -46,7 +45,7 @@ pub fn AccountDialogView() -> impl IntoView {
                     "Could not parse id parameter from url",
                 )))
             }
-        }
+        },
     );
 
     view! {
@@ -92,10 +91,25 @@ pub fn AccountDialogView() -> impl IntoView {
                             })
                     }} ;
                 </Suspense>
-                <div class="overflow-y-auto flex flex-col pb-20">// <AccountDialogTransactionSection limit=3 account_id=public_key.clone()/>
-                // <AccountDialogSnarkJobSection public_key=Some(public_key.clone())/>
-                // <AccountDialogBlocksSection public_key=Some(public_key.clone())/>
-                </div>
+                <Suspense>
+                    <div class="overflow-y-auto flex flex-col pb-20">
+                        {account_activity_resource
+                            .get()
+                            .and_then(|res| res.ok())
+                            .map(|res| {
+                                view! {
+                                    <AccountDialogTransactionSection transactions=res
+                                        .transactions
+                                        .into_iter()
+                                        .map(|r| r.map(|t| t.into()))
+                                        .collect()/>
+                                }
+                            })}
+
+                    // <AccountDialogSnarkJobSection public_key=Some(public_key.clone())/>
+                    // <AccountDialogBlocksSection public_key=Some(public_key.clone())/>
+                    </div>
+                </Suspense>
                 <div class="absolute bottom-0 left-0 w-full h-20 flex justify-stretch items-center bg-white">
                     <button
                         id="viewmore"

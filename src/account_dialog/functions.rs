@@ -1,5 +1,5 @@
-use crate::common::models::MyError;
 use super::graphql::{account_activity_query, AccountActivityQuery};
+use crate::common::models::MyError;
 use graphql_client::reqwest::post_graphql;
 use leptos::*;
 use leptos_router::*;
@@ -12,7 +12,6 @@ pub fn get_base_page_path(location: Location) -> String {
         None => "/".to_string(),
     }
 }
-
 
 pub async fn load_data(
     public_key: Option<String>,
@@ -39,7 +38,7 @@ pub async fn load_data(
             from: public_key,
             canonical: Some(true),
             ..Default::default()
-        }
+        },
     };
 
     let client = reqwest::Client::new();

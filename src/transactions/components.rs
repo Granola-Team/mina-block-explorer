@@ -7,44 +7,37 @@ use crate::common::functions::*;
 use crate::common::models::*;
 use crate::common::table::*;
 use crate::icons::*;
+use crate::transactions::graphql::transactions_query::TransactionsQueryTransactions;
 
 #[component]
-pub fn AccountDialogTransactionSection(limit: i32, account_id: String) -> impl IntoView {
-    let resource = create_resource(
-        || (),
-        move |_| {
-            let account_id_clone = account_id.clone();
-            async move { load_data(limit, Some(account_id_clone), None, None).await }
-        },
-    );
-
+pub fn AccountDialogTransactionSection(
+    transactions: Vec<Option<TransactionsQueryTransactions>>,
+) -> impl IntoView {
     view! {
-        {move || match resource.get() {
-            Some(Ok(res)) => view! {
-                <AccountDialogSectionContainer title=String::from("Transactions") showing_message={format!("Showing latest {} transactions", res.transactions.len())}>
-                    {res.transactions.into_iter()
-                        .map(|opt_transaction| {
-                            match opt_transaction {
-                                Some(transaction) => view! {
-                                    <TransactionEntry status=get_status(&get_block_datetime(&transaction))
-                                        date=get_block_datetime(&transaction)
-                                        moments_ago=print_time_since(&get_block_datetime(&transaction))
-                                        from=get_from(&transaction)
-                                        to=get_to(&transaction)
-                                        fee=get_fee(&transaction)
-                                        amount=get_amount(&transaction)
-                                        hash=get_hash(&transaction) />
-                                },
-                                None => view! { <span /> }.into_view()
-                            }
-                        })
-                        .collect::<Vec<_>>()}
-                </AccountDialogSectionContainer>
-            },
-            _ => view! { <span /> }.into_view()
+        <AccountDialogSectionContainer title=String::from("Transactions") showing_message={format!("Showing latest {} transactions", transactions.len())}>
 
-        }}
-
+            {transactions.into_iter()
+                .map(|opt_transaction| {
+                    let check_opt_trans = opt_transaction.clone();
+                    let unwrap_opt_trans = opt_transaction.unwrap();
+                    view! {
+                        <Show when={move || check_opt_trans.is_some() }
+                            fallback=move || view! { <NullView /> }
+                        >
+                            <TransactionEntry status=get_status(&get_block_datetime(&unwrap_opt_trans))
+                                date=get_block_datetime(&unwrap_opt_trans)
+                                moments_ago=print_time_since(&get_block_datetime(&unwrap_opt_trans))
+                                from=get_from(&unwrap_opt_trans)
+                                to=get_to(&unwrap_opt_trans)
+                                fee=get_fee(&unwrap_opt_trans)
+                                amount=get_amount(&unwrap_opt_trans)
+                                hash=get_hash(&unwrap_opt_trans) />
+                        </Show>
+                    }
+                })
+                .collect::<Vec<_>>()
+            }
+        </AccountDialogSectionContainer>
     }
 }
 

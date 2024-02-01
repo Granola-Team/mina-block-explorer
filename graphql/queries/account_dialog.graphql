@@ -5,7 +5,9 @@ query AccountActivityQuery($blocks_query: BlockQueryInput!, $blocks_limit: Int =
     hash
     to
     amount
-    dateTime
+    block {
+      dateTime
+    }
   }
   snarks(sortBy: $snarks_sort_by, limit: $snarks_limit, query: $snarks_query) {
     fee
