@@ -34,7 +34,7 @@ No additional dependencies are needed beyond this setup.
 
 These two steps will get your environment ready and your server running quickly.
 
-## License (See LICENSE file for full license)
+## License (See [LICENSE](LICENSE) file for full license)
 
 Copyright 2023 Mina Foundation, Inc.
 
