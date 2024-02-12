@@ -4,71 +4,64 @@ use leptos_router::*;
 use super::functions::*;
 use super::graphql::blocks_query::BlocksQueryBlocks;
 use super::models::*;
-use crate::accounts::components::*;
+use crate::account_dialog::components::*;
 use crate::common::components::*;
 use crate::common::functions::*;
 use crate::common::table::*;
 use crate::icons::*;
 
 #[component]
-pub fn AccountDialogBlocksSection(public_key: Option<String>) -> impl IntoView {
-    let resource = create_resource(
-        move || public_key.clone(),
-        move |pk| async move { load_data(3, pk, None, None).await },
-    );
+pub fn AccountDialogBlocksSection(blocks: Vec<Option<BlocksQueryBlocks>>) -> impl IntoView {
+    let blocks_inner = blocks.clone();
+    let has_blocks = move || !blocks.clone().is_empty();
 
     view! {
-        {move || match resource.get() {
-            Some(Ok(data)) => {
-                view! {
-                    <AccountDialogSectionContainer
-                        title=String::from("Block Production")
-                        showing_message=format!("Showing latest {} blocks", data.blocks.len())
-                    >
-
-                        {match data.blocks.len() {
-                            0 => {
-                                view! {
-                                    <EmptyTable message="This public key has no block production"
-                                        .to_string()/>
-                                }
-                            }
-                            _ => {
-                                view! {
-                                    {data
-                                        .blocks
-                                        .into_iter()
-                                        .map(|opt_block| {
-                                            match opt_block {
-                                                Some(block) => {
-                                                    let moments_ago = print_time_since(&get_date_time(&block));
-                                                    let date_time = get_date_time(&block);
-                                                    let status = get_status(&date_time);
-                                                    view! {
-                                                        <AccountDialogSectionEntryHeader
-                                                            status=status
-                                                            date=date_time
-                                                            moments_ago=moments_ago
-                                                        />
-                                                        <AccountDialogBlockEntry block=block/>
-                                                        <AccountDialogEntryDivider/>
-                                                    }
-                                                        .into_view()
-                                                }
-                                                None => view! { <span></span> }.into_view(),
-                                            }
-                                        })
-                                        .collect::<Vec<_>>()}
-                                }
-                                    .into_view()
-                            }
-                        }}
-
-                    </AccountDialogSectionContainer>
+        <AccountDialogSectionContainer
+            title=String::from("Block Production")
+            showing_message=format!("Showing latest {} blocks", blocks_inner.len())
+        >
+            <Show
+                when=has_blocks
+                fallback=move || {
+                    view! {
+                        <EmptyTable message="This public key has no block production".to_string()/>
+                    }
                 }
-            }
-            _ => view! { <span></span> }.into_view(),
-        }}
+            >
+
+                {blocks_inner
+                    .iter()
+                    .map(|opt_block| {
+                        let check_block = opt_block.clone();
+                        let block = opt_block.clone().unwrap();
+                        view! {
+                            <Show
+                                when=move || check_block.is_some()
+                                fallback=move || view! { <NullView/> }
+                            >
+
+                                {
+                                    let moments_ago = print_time_since(&get_date_time(&block));
+                                    let date_time = get_date_time(&block);
+                                    let status = get_status(&date_time);
+                                    view! {
+                                        <AccountDialogSectionEntryHeader
+                                            status=status
+                                            date=date_time
+                                            moments_ago=moments_ago
+                                        />
+                                        <AccountDialogBlockEntry block=block.clone()/>
+                                        <AccountDialogEntryDivider/>
+                                    }
+                                        .into_view()
+                                }
+
+                            </Show>
+                        }
+                    })
+                    .collect::<Vec<_>>()}
+            </Show>
+        </AccountDialogSectionContainer>
     }
 }
 
@@ -191,39 +184,8 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
     let (current_page, set_current_page) = create_signal(1);
 
     view! {
-        {move || match resource.get() {
-            Some(Ok(data)) => {
-                let pag = build_pagination(
-                    data.blocks.len(),
-                    records_per_page,
-                    current_page.get(),
-                    set_current_page,
-                );
-                let blocks_subset = get_subset(
-                    &data.blocks,
-                    records_per_page,
-                    current_page.get() - 1,
-                );
-                view! {
-                    <TableSection
-                        section_heading="Blocks".to_owned()
-                        controls=move || {
-                            view! {
-                                <URLCheckbox
-                                    label="Include Non-Canonical".to_string()
-                                    url_param_key="include_non_canonical".to_string()
-                                />
-                            }
-                        }
-                    >
-
-                        <Table data=SummaryPageBlocksQueryBlocks(blocks_subset) pagination=pag/>
-                    </TableSection>
-                    <Outlet/>
-                }
-                    .into_view()
-            }
-            None => {
+        <ErrorBoundary fallback=move |_| view! { <NullView/> }>
+            <Suspense fallback=move || {
                 view! {
                     <TableSection
                         section_heading="Blocks".to_string()
@@ -231,12 +193,47 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
                     >
                         <Table data=LoadingPlaceholder {}/>
                     </TableSection>
-                    <Outlet/>
                 }
-                    .into_view()
-            }
-            _ => view! { <span></span> }.into_view(),
-        }}
+            }>
+                {resource
+                    .get()
+                    .and_then(|res| res.ok())
+                    .map(|data| {
+                        let pag = build_pagination(
+                            data.blocks.len(),
+                            records_per_page,
+                            current_page.get(),
+                            set_current_page,
+                        );
+                        let blocks_subset = get_subset(
+                            &data.blocks,
+                            records_per_page,
+                            current_page.get() - 1,
+                        );
+                        view! {
+                            <TableSection
+                                section_heading="Blocks".to_owned()
+                                controls=move || {
+                                    view! {
+                                        <URLCheckbox
+                                            label="Include Non-Canonical".to_string()
+                                            url_param_key="include_non_canonical".to_string()
+                                        />
+                                    }
+                                }
+                            >
+
+                                <Table
+                                    data=SummaryPageBlocksQueryBlocks(blocks_subset)
+                                    pagination=pag
+                                />
+                            </TableSection>
+                        }
+                    })}
+
+            </Suspense>
+        </ErrorBoundary>
+        <Outlet/>
     }
 }
 

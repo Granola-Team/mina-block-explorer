@@ -3,76 +3,69 @@ use leptos::*;
 use super::functions::load_data;
 use super::functions::*;
 use super::graphql::snarks_query::SnarksQuerySnarks;
-use crate::accounts::components::*;
+use crate::account_dialog::components::*;
 use crate::common::components::*;
 use crate::common::functions::*;
 use crate::common::table::*;
 use crate::icons::*;
 
 #[component]
-pub fn AccountDialogSnarkJobSection(public_key: Option<String>) -> impl IntoView {
-    let resource = create_resource(
-        || (),
-        move |_| {
-            let public_key_inner = public_key.clone();
-            async move { load_data(3, public_key_inner, None).await }
-        },
-    );
+pub fn AccountDialogSnarkJobSection(snarks: Vec<Option<SnarksQuerySnarks>>) -> impl IntoView {
+    let snarks_inner = snarks.clone();
+    let has_snarks = move || !snarks.clone().is_empty();
 
     view! {
-        {move || match resource.get() {
-            Some(Ok(data)) => {
-                view! {
-                    <AccountDialogSectionContainer
-                        title=String::from("SNARK Jobs")
-                        showing_message=format!("Showing latest {} SNARK jobs", data.snarks.len())
-                    >
+        <AccountDialogSectionContainer
+            title=String::from("SNARK Jobs")
+            showing_message=format!("Showing latest {} SNARK jobs", snarks_inner.len())
+        >
 
-                        {match data.snarks.len() {
-                            0 => {
-                                view! {
-                                    <EmptyTable message="This public key has not completed any SNARK work"
-                                        .to_string()/>
-                                }
-                            }
-                            _ => {
-                                view! {
-                                    {data
-                                        .snarks
-                                        .into_iter()
-                                        .map(|opt_snark| {
-                                            match opt_snark {
-                                                Some(snark) => {
-                                                    let moments_ago = print_time_since(
-                                                        &get_snark_date_time(&snark),
-                                                    );
-                                                    let date_time = get_snark_date_time(&snark);
-                                                    let status = get_status(&date_time);
-                                                    view! {
-                                                        <AccountDialogSectionEntryHeader
-                                                            status=status
-                                                            date=date_time
-                                                            moments_ago=moments_ago
-                                                        />
-                                                        <AccountDialogSnarkJobEntry snark=snark/>
-                                                        <AccountDialogEntryDivider/>
-                                                    }
-                                                        .into_view()
-                                                }
-                                                None => view! { <span></span> }.into_view(),
-                                            }
-                                        })
-                                        .collect::<Vec<_>>()}
-                                }
-                                    .into_view()
-                            }
-                        }}
-
-                    </AccountDialogSectionContainer>
+            <Show
+                when=has_snarks
+                fallback=move || {
+                    view! {
+                        <EmptyTable message="This public key has not completed any SNARK work"
+                            .to_string()/>
+                    }
                 }
-            }
-            _ => view! { <span></span> }.into_view(),
-        }}
+            >
+
+                {snarks_inner
+                    .iter()
+                    .map(|opt_snark| {
+                        let check_opt_snark = opt_snark.clone();
+                        let snark = opt_snark.clone().unwrap();
+                        view! {
+                            <Show
+                                when=move || check_opt_snark.is_some()
+                                fallback=move || view! { <NullView/> }
+                            >
+
+                                {
+                                    let moments_ago = print_time_since(
+                                        &get_snark_date_time(&snark),
+                                    );
+                                    let date_time = get_snark_date_time(&snark);
+                                    let status = get_status(&date_time);
+                                    view! {
+                                        <AccountDialogSectionEntryHeader
+                                            status=status
+                                            date=date_time
+                                            moments_ago=moments_ago
+                                        />
+                                        <AccountDialogSnarkJobEntry snark=snark.clone()/>
+                                        <AccountDialogEntryDivider/>
+                                    }
+                                }
+
+                            </Show>
+                        }
+                            .into_view()
+                    })
+                    .collect::<Vec<_>>()}
+
+            </Show>
+        </AccountDialogSectionContainer>
     }
 }
 
