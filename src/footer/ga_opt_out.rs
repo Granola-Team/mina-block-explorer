@@ -24,8 +24,8 @@ pub fn GAOptOut() -> impl IntoView {
             class="ml-1 sm:ml-4 flex items-center text-white text-xs uppercase hover:text-granola-orange hover:underline"
             on:click=move |_| set_flag.update(|f| *f = !*f)
             title=move || match flag.get() {
-                true => "You have opted out of google analytics tracking",
-                false => "Google analytics tracking is active",
+                true => "You have opted out of Google Analytics tracking",
+                false => "Google Analytics tracking is active",
             }
         >
 
