@@ -34,7 +34,7 @@ pub fn GAOptOut() -> impl IntoView {
                     <CheckCircleIcon width=12/>
                 }
             }}
-            <div class="ml-1 whitespace-nowrap overflow-hidden text-ellipsis">"Web Analytics"</div>
+            <div class="ml-1 whitespace-nowrap overflow-hidden text-ellipsis">"Data & Tracking"</div>
         </button>
     }
 }
