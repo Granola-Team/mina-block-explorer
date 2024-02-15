@@ -10,7 +10,7 @@ pub fn GAOptOut() -> impl IntoView {
     create_effect(move |_| {
         match (flag.get(), first_load.get()) {
             (_, true) => {
-                let _ = set_first_load.set(false);
+                set_first_load.set(false);
             }
             (_, false) => {
                 // so that analytics can be conditionally loaded back into index.html
