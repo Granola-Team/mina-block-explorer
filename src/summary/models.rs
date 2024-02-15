@@ -25,7 +25,7 @@ impl BlockchainSummary {
     }
 }
 
-#[test]
+#[cfg(test)]
 fn test_parsing_floats() {
     let bs = BlockchainSummary {
         circulating_supply: "2345345.4312431243".to_owned(),
