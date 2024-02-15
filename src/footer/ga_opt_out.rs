@@ -28,6 +28,7 @@ pub fn GAOptOut() -> impl IntoView {
                 false => "Google analytics tracking is active",
             }
         >
+
             {move || match flag.get() {
                 true => view! { <NoSymbol width=12/> },
                 false => view! { <CheckCircleIcon width=12/> },
