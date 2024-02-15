@@ -45,7 +45,7 @@ clean: kill-server
 test: lint test-unit test-e2e
 
 kill-server:
-  if [ -e .pid ]; then kill "$(cat .pid)" && rm .pid ; fi
+  if [ -e .pid ]; then { kill "$(cat .pid)" && rm .pid; } || true; fi
 
 test-e2e: serve && kill-server
   CYPRESS_BASE_URL="{{cypress_base_url}}" npx cypress run -r list -q
