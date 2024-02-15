@@ -12,29 +12,21 @@
     <meta name="theme-color" content="#21252D"/>
   </head>
   <script>
-    if (localStorage.getItem('ga-opt-out') === 'false') {
-        // Load the Google Tag Manager script
-        (function(w, d, s, l, i) {
-            w[l] = w[l] || [];
-            w[l].push({
-                'gtm.start': new Date().getTime(),
-                event: 'gtm.js'
-            });
-            var f = d.getElementsByTagName(s)[0],
-                j = d.createElement(s),
-                dl = l != 'dataLayer' ? '&l=' + l : '';
-            j.async = true;
-            j.src = 'https://www.googletagmanager.com/gtag/js?id=' + i;
-            f.parentNode.insertBefore(j, f);
-        })(window, document, 'script', 'dataLayer', 'G-5LPF0LNCRM');
-
-        // Initialize Google Tag Manager
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-5LPF0LNCRM');
+    if (localStorage.getItem('userConsentForTracking') === 'true') {
+      // Dynamically create and insert the script tag for Google Tag Manager
+      var gtagScript = document.createElement('script');
+      gtagScript.async = true; // Ensure the script is loaded asynchronously
+      gtagScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-5LPF0LNCRM';
+      document.head.appendChild(gtagScript);
+  
+      // Initialize dataLayer and define gtag function
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-5LPF0LNCRM');
     }
   </script>
+  
   <body class="h-screen flex flex-col bg-main-background pt-20">
   </body>
 </html>
