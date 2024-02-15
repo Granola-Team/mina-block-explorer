@@ -12,7 +12,7 @@
     <meta name="theme-color" content="#21252D"/>
   </head>
   <script>
-    if (localStorage.getItem('userConsentForTracking') === 'true') {
+    if (localStorage.getItem('ga-opt-out') === 'false') {
       // Dynamically create and insert the script tag for Google Tag Manager
       var gtagScript = document.createElement('script');
       gtagScript.async = true; // Ensure the script is loaded asynchronously
