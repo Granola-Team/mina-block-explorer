@@ -84,7 +84,7 @@ mod pagination_tests {
         assert_eq!(pd.end_index(), 15)
     }
 
-    #[cfg(test)]
+    #[test]
     fn test_indexes_second_page() {
         let (_, set_page) = create_signal(1);
         let pd = Pagination {
@@ -104,7 +104,7 @@ mod pagination_tests {
         assert_eq!(pd.end_index(), 30)
     }
 
-    #[cfg(test)]
+    #[test]
     fn test_total_pages() {
         let (_, set_page) = create_signal(1);
         let pd = Pagination {
