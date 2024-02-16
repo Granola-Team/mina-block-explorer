@@ -66,8 +66,8 @@ format:
 audit:
   cargo audit
 
-dev: build 
-  trunk serve --port="{{trunk_port}}" --open
+dev: build
+  node scripts/wait-on-port.js trunk serve --port="{{trunk_port}}" --open -- "{{trunk_port}}" -- just tailwind-watch
 
 release: build-release
   trunk build --release --filehash true

@@ -30,7 +30,7 @@ No additional dependencies are needed beyond this setup.
 1. Setup Environment: Run `nix develop` in your terminal to prepare your
    development environment.
 
-2. Start the Server: Execute `just serve` to start the server. Execute `just tailwind-watch` in another terminal.
+2. Start the Server: Execute `just dev` to start the server. 
 
 These two steps will get your environment ready and your server running quickly.
 
