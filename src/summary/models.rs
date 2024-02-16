@@ -25,15 +25,21 @@ impl BlockchainSummary {
     }
 }
 
-#[test]
-fn test_parsing_floats() {
-    let bs = BlockchainSummary {
-        circulating_supply: "2345345.4312431243".to_owned(),
-        blockchain_length: 314394,
-        epoch: 67,
-        slot: 4194,
-        total_currency: "1105297372.840039233".to_owned(),
-    };
-    assert_eq!(bs.circ_supply(), 2345345.4312431243);
-    assert_eq!(bs.tot_currency(), 1_105_297_372.840_039_3)
+#[cfg(test)]
+mod float_tests {
+
+    use super::*;
+
+    #[test]
+    fn test_parsing_floats() {
+        let bs = BlockchainSummary {
+            circulating_supply: "2345345.4312431243".to_owned(),
+            blockchain_length: 314394,
+            epoch: 67,
+            slot: 4194,
+            total_currency: "1105297372.840039233".to_owned(),
+        };
+        assert_eq!(bs.circ_supply(), 2345345.4312431243);
+        assert_eq!(bs.tot_currency(), 1_105_297_372.840_039_3)
+    }
 }
