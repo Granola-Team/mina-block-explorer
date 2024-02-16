@@ -31,7 +31,7 @@ build-release:
   just tailwind
   cargo build --release
 
-clean: kill-server
+clean:
   rm -rf dist
   trunk clean
   cargo clean
@@ -44,11 +44,8 @@ clean: kill-server
 
 test: lint test-unit test-e2e
 
-kill-server:
-  if [ -e .pid ]; then kill "$(cat .pid)" && rm .pid ; fi
-
-test-e2e: serve && kill-server
-  CYPRESS_BASE_URL="{{cypress_base_url}}" npx cypress run -r list -q
+test-e2e: 
+  CYPRESS_BASE_URL="{{cypress_base_url}}" node ./scripts/wait-on-port.js trunk serve --port="{{trunk_port}}" -- "{{trunk_port}}" -- npx cypress run -r list -q
   
 test-unit: build
   cargo nextest run
@@ -69,9 +66,8 @@ format:
 audit:
   cargo audit
 
-serve: build 
-  trunk serve --port="{{trunk_port}}" & pid=$!; echo "$pid" > .pid
-  sleep 10  # Wait for server to start
+dev: build 
+  trunk serve --port="{{trunk_port}}" --open
 
 release: build-release
   trunk build --release --filehash true
