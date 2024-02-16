@@ -16,13 +16,13 @@ pub fn SummaryPage() -> impl IntoView {
             subtext="Powered by Mina".to_string()
             search_placeholder="Exact search for block hash".to_string()
         />
-        // <PageContainer>
-        //     {move || match blockchain_summary_resource.get() {
-        //         Some(Ok(summary)) => view! { <SummaryGrid summary=Some(summary)/> },
-        //         _ => view! { <SummaryGrid summary=None/> },
-        //     }}
-        //     <SummaryPageBlocksSection/>
-        // </PageContainer>
+        <PageContainer>
+            {move || match blockchain_summary_resource.get() {
+                Some(Ok(summary)) => view! { <SummaryGrid summary=Some(summary)/> },
+                _ => view! { <SummaryGrid summary=None/> },
+            }}
+            <SummaryPageBlocksSection/>
+        </PageContainer>
     }
 }
 
