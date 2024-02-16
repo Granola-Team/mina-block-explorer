@@ -17,41 +17,27 @@ pub fn SearchBar(
 
 #[component]
 fn SearchInput(placeholder: String) -> impl IntoView {
-    let query_params_map = use_query_map();
-    let navigate = use_navigate();
-    let location = use_location();
-
-    let params_map = query_params_map.get();
-    let initial_query = params_map.get("query").cloned();
+    let (query, set_query) = create_query_signal::<String>("query");
 
     let (input, set_input) = create_signal("".to_string());
     let debounced: Signal<String> = signal_debounced(input, 500.0);
 
-    create_effect(move |_| {
+    create_effect(move |prev_value| {
         let input_value = debounced.get();
-
-        if input_value.is_empty() {
-            return;
-        }
-
-        let pathname = location.pathname.get();
-        let mut pm = query_params_map.get();
-        pm.insert("query".to_string(), input_value);
-
-        logging::log!("{}", pm.to_query_string());
-        logging::log!("{}", pathname);
-
-        navigate(
-            &format!("{}{}", pathname, pm.to_query_string()),
-            Default::default(),
-        );
+        let prev_value_str = prev_value.unwrap_or("".to_string());
+        if input_value != prev_value_str {
+            logging::log!("{}", input_value);
+            set_query.set(Some(input_value.to_string()));
+            return input_value;
+        } 
+        prev_value_str
     });
 
     view! {
         <input
             id="searchbar"
             type="text"
-            placeholder=initial_query.unwrap_or(placeholder)
+            placeholder=query.get().unwrap_or(placeholder)
             on:input=move |event| set_input.update(|e| *e = event_target_value(&event))
             class="h-14 flex justify-start items-center text-base text-white pl-14 placeholder:text-slate-400 placeholder:font-medium placeholder:text-base focus:outline-none box-border w-full rounded-2xl bg-[#383B42]"
         />
