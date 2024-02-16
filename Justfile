@@ -71,7 +71,7 @@ audit:
 
 serve: build 
   trunk serve --port="{{trunk_port}}" & pid=$!; echo "$pid" > .pid
-  sleep 10  # Wait for server to start
+  ./scripts/wait-for-port.sh "{{trunk_port}}"
 
 release: build-release
   trunk build --release --filehash true
