@@ -13,7 +13,7 @@ function checkPortOpen(port, callback) {
 }
 
 // Function to wait for the service to be ready
-function waitForPort(port, onSuccess, maxAttempts = 20, interval = 1000, attempts = 0) {
+function waitForPort(port, onSuccess, maxAttempts = 20, interval = 3000, attempts = 0) {
   checkPortOpen(port, (isReady) => {
     if (isReady) {
       console.log('Service is ready, proceeding with the main task...');
