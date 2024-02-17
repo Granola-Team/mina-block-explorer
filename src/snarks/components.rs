@@ -145,7 +145,7 @@ pub fn AccountOverviewSnarkJobTable(public_key: Option<String>) -> impl IntoView
                             view! {
                                 <Table data=subset pagination=pag/>
                                 <TableLink href=href.get() text="See all snark jobs".to_string()>
-                                    <SnarkIcon/>
+                                    <CheckCircleIcon/>
                                 </TableLink>
                             }
                                 .into_view()
