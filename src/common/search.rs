@@ -34,7 +34,7 @@ fn SearchInput(placeholder: String) -> impl IntoView {
         (Some(query_str), Some(None)) => {
             logging::log!("Setting input from query {}", query_str);
             set_input.set(Some(query_str.clone()));
-            return Some(query_str);
+            Some(query_str)
         }
         _ => None,
     });
@@ -43,7 +43,7 @@ fn SearchInput(placeholder: String) -> impl IntoView {
         (Some(input_value), Some(Some(prev_value_str))) => {
             if input_value != prev_value_str {
                 logging::log!("Setting query from input {}", input_value);
-                match input_value.len() > 0 {
+                match !input_value.is_empty() {
                     true => set_query.set(Some(input_value.to_string())),
                     false => set_query.set(None),
                 }
@@ -53,11 +53,11 @@ fn SearchInput(placeholder: String) -> impl IntoView {
         }
         (Some(input_value), Some(None)) => {
             logging::log!("Setting query from input {}", input_value);
-            match input_value.len() > 0 {
+            match !input_value.is_empty() {
                 true => set_query.set(Some(input_value.to_string())),
                 false => set_query.set(None),
             }
-            return Some(input_value);
+            Some(input_value)
         }
         _ => None,
     });
@@ -68,7 +68,7 @@ fn SearchInput(placeholder: String) -> impl IntoView {
             type="text"
             on:input=move |event| {
                 let text = event_target_value(&event);
-                match text.len() > 0 {
+                match !text.is_empty() {
                     true => set_query.set(Some(text)),
                     false => set_query.set(None),
                 }
