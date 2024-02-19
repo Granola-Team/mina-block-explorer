@@ -46,6 +46,9 @@ test: lint test-unit test-e2e
 
 test-e2e: 
   CYPRESS_BASE_URL="{{cypress_base_url}}" node ./scripts/wait-on-port.js trunk serve --port="{{trunk_port}}" -- "{{trunk_port}}" -- npx cypress run -r list -q
+
+test-e2e-local:
+  CYPRESS_BASE_URL="{{cypress_base_url}}" node ./scripts/wait-on-port.js trunk serve --port="{{trunk_port}}" -- "{{trunk_port}}" -- npx cypress open
   
 test-unit: build
   cargo nextest run
