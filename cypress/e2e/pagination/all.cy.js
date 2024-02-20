@@ -1,6 +1,6 @@
 suite(["@CI"],'pagination',() => {
 
-    ['/blocks'].forEach(page => it(`defaults to first page, on ${page}`,() => {
+    ['/','/summary','/blocks','/transactions','/snarks','/stakes','/next-stakes'].forEach(page => it(`defaults to first page, on ${page}`,() => {
         cy.visit(page);
         cy.get('.pagination-controls', {timeout: 30000}).find('button').last().as('next');
         cy.get('.pagination-controls', {timeout: 30000}).find('button').first().as('prev');
@@ -24,6 +24,13 @@ suite(["@CI"],'pagination',() => {
         cy.get('@prev').should('not.be.disabled');
         cy.get('@next').should('be.disabled');
         cy.get('@currentPage').should('contain',5);    
+
+        // prev page
+        cy.get('@prev').click();
+        cy.wait(1000);
+        cy.get('@prev').should('not.be.disabled');
+        cy.get('@next').should('not.be.disabled');
+        cy.get('@currentPage').should('contain',4);    
 
     }));
 
