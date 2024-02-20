@@ -1,5 +1,5 @@
 use graphql_client::Error;
-use leptos::{web_sys::MouseEvent, *};
+use leptos::*;
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
@@ -29,13 +29,11 @@ pub enum Status {
     Unknown,
 }
 
-#[derive(Clone)]
 pub struct Pagination {
     pub current_page: usize,
     pub records_per_page: usize,
     pub total_records: usize,
-    pub next_page: Callback<MouseEvent>,
-    pub prev_page: Callback<MouseEvent>,
+    pub set_current_page: WriteSignal<usize>,
 }
 
 impl Pagination {
@@ -71,14 +69,7 @@ mod pagination_tests {
             current_page: 1,
             records_per_page: 15,
             total_records: 90,
-            next_page: Callback::from(move |_| {
-                let set_current_page_inner = set_page;
-                set_current_page_inner.update(|cp| *cp += 1);
-            }),
-            prev_page: Callback::from(move |_| {
-                let set_current_page_inner = set_page;
-                set_current_page_inner.update(|cp| *cp -= 1);
-            }),
+            set_current_page: set_page,
         };
         assert_eq!(pd.start_index(), 1);
         assert_eq!(pd.end_index(), 15)
@@ -91,14 +82,7 @@ mod pagination_tests {
             current_page: 2,
             records_per_page: 15,
             total_records: 90,
-            next_page: Callback::from(move |_| {
-                let set_current_page_inner = set_page;
-                set_current_page_inner.update(|cp| *cp += 1);
-            }),
-            prev_page: Callback::from(move |_| {
-                let set_current_page_inner = set_page;
-                set_current_page_inner.update(|cp| *cp -= 1);
-            }),
+            set_current_page: set_page,
         };
         assert_eq!(pd.start_index(), 16);
         assert_eq!(pd.end_index(), 30)
@@ -111,28 +95,14 @@ mod pagination_tests {
             current_page: 2,
             records_per_page: 15,
             total_records: 90,
-            next_page: Callback::from(move |_| {
-                let set_current_page_inner = set_page;
-                set_current_page_inner.update(|cp| *cp += 1);
-            }),
-            prev_page: Callback::from(move |_| {
-                let set_current_page_inner = set_page;
-                set_current_page_inner.update(|cp| *cp -= 1);
-            }),
+            set_current_page: set_page,
         };
         assert_eq!(pd.total_pages(), 6);
         let pd = Pagination {
             current_page: 2,
             records_per_page: 15,
             total_records: 91,
-            next_page: Callback::from(move |_| {
-                let set_current_page_inner = set_page;
-                set_current_page_inner.update(|cp| *cp += 1);
-            }),
-            prev_page: Callback::from(move |_| {
-                let set_current_page_inner = set_page;
-                set_current_page_inner.update(|cp| *cp -= 1);
-            }),
+            set_current_page: set_page,
         };
         assert_eq!(pd.total_pages(), 7);
     }
