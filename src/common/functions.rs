@@ -346,13 +346,12 @@ where
     T: Clone,
 {
     let total_records = items.len();
-    match total_records > 0 {
-        true => {
-            let ranges = get_ranges(total_records, records_per_page);
-            let range = ranges[current_range];
-            items[range[0]..range[1]].to_vec()
-        }
-        false => [].to_vec(),
+    if total_records > 0 {
+        let ranges = get_ranges(total_records, records_per_page);
+        let range = ranges[current_range];
+        items[range[0]..range[1]].to_vec()
+    } else {
+        vec![]
     }
 }
 
