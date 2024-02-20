@@ -1,6 +1,6 @@
 suite(["@CI"],'pagination',() => {
 
-    ['/','/summary','/blocks','/transactions','/snarks','/stakes','/next-stakes'].forEach(page => it(`defaults to first page, on ${page}`,() => {
+    ['/','/summary','/blocks','/transactions','/snarks','/stakes','/next-stakes'].forEach(page => it(`works on ${page}`,() => {
         cy.visit(page);
         cy.get('.pagination-controls', {timeout: 30000}).find('button').last().as('next');
         cy.get('.pagination-controls', {timeout: 30000}).find('button').first().as('prev');
