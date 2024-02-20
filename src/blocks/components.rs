@@ -195,7 +195,7 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
                     </TableSection>
                 }
             }>
-                {resource
+                {move || resource
                     .get()
                     .and_then(|res| res.ok())
                     .map(|data| {
