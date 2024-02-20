@@ -367,13 +367,13 @@ mod get_subset_tests {
 
     #[test]
     fn test_get_subset_with_zero_length() {
-        let data: Vec<Option<MyStruct>> = vec![]; 
+        let data: Vec<Option<MyStruct>> = vec![];
 
-        let records_per_page = 1; 
-        let current_range = 0; 
+        let records_per_page = 1;
+        let current_range = 0;
         let result = get_subset(&data, records_per_page, current_range);
 
-        assert_eq!(result, vec![] as Vec<Option<MyStruct>>); 
+        assert_eq!(result, vec![] as Vec<Option<MyStruct>>);
     }
 
     #[test]
