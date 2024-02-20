@@ -195,41 +195,43 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
                     </TableSection>
                 }
             }>
-                {move || resource
-                    .get()
-                    .and_then(|res| res.ok())
-                    .map(|data| {
-                        let pag = build_pagination(
-                            data.blocks.len(),
-                            records_per_page,
-                            current_page.get(),
-                            set_current_page,
-                        );
-                        let blocks_subset = get_subset(
-                            &data.blocks,
-                            records_per_page,
-                            current_page.get() - 1,
-                        );
-                        view! {
-                            <TableSection
-                                section_heading="Blocks".to_owned()
-                                controls=move || {
-                                    view! {
-                                        <URLCheckbox
-                                            label="Include Non-Canonical".to_string()
-                                            url_param_key="include_non_canonical".to_string()
-                                        />
+                {move || {
+                    resource
+                        .get()
+                        .and_then(|res| res.ok())
+                        .map(|data| {
+                            let pag = build_pagination(
+                                data.blocks.len(),
+                                records_per_page,
+                                current_page.get(),
+                                set_current_page,
+                            );
+                            let blocks_subset = get_subset(
+                                &data.blocks,
+                                records_per_page,
+                                current_page.get() - 1,
+                            );
+                            view! {
+                                <TableSection
+                                    section_heading="Blocks".to_owned()
+                                    controls=move || {
+                                        view! {
+                                            <URLCheckbox
+                                                label="Include Non-Canonical".to_string()
+                                                url_param_key="include_non_canonical".to_string()
+                                            />
+                                        }
                                     }
-                                }
-                            >
+                                >
 
-                                <Table
-                                    data=SummaryPageBlocksQueryBlocks(blocks_subset)
-                                    pagination=pag
-                                />
-                            </TableSection>
-                        }
-                    })}
+                                    <Table
+                                        data=SummaryPageBlocksQueryBlocks(blocks_subset)
+                                        pagination=pag
+                                    />
+                                </TableSection>
+                            }
+                        })
+                }}
 
             </Suspense>
         </ErrorBoundary>

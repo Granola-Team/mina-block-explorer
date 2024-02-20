@@ -99,12 +99,14 @@ where
                                             on:click=move |_| {
                                                 pg.set_current_page.update(|cp| *cp = p_inner)
                                             }
+
                                             class=format!(
                                                 "{} {}",
                                                 page_number_class,
                                                 inactive_page_number_class,
                                             )
                                         >
+
                                             {p_inner}
                                         </div>
                                     }
@@ -124,12 +126,14 @@ where
                                             on:click=move |_| {
                                                 pg.set_current_page.update(|cp| *cp = p_inner)
                                             }
+
                                             class=format!(
                                                 "{} {}",
                                                 page_number_class,
                                                 inactive_page_number_class,
                                             )
                                         >
+
                                             {p_inner}
                                         </div>
                                     }
