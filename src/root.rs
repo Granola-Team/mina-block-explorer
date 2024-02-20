@@ -15,6 +15,7 @@ use crate::snarks::page::SnarksPage;
 use crate::stakes::page::StakesPage;
 use crate::summary::page::SummaryPage;
 use crate::transactions::page::{TransactionSpotlightPage, TransactionsPage};
+use crate::common::components::NullView;
 
 #[component]
 pub fn Root() -> impl IntoView {
@@ -25,11 +26,13 @@ pub fn Root() -> impl IntoView {
                 <Routes>
                     <Route path="/summary" view=SummaryPage>
                         <Route path="accounts/:id" view=AccountDialogView/>
+                        <Route path="/*any" view=NullView/>
                     </Route>
                     <Route path="/accounts" view=AccountsPage/>
                     <Route path="/accounts/:id" view=AccountSpotlightPage/>
                     <Route path="/blocks" view=LatestBlocksPage>
                         <Route path="accounts/:id" view=AccountDialogView/>
+                        <Route path="/*any" view=NullView/>
                     </Route>
                     <Route path="/blocks/:id" view=BlockSpotlight/>
                     <Route path="/transactions" view=TransactionsPage/>
