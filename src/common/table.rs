@@ -73,7 +73,7 @@ where
                 let x_preceding_pages = &x_pages_around[0];
                 let x_following_pages = &x_pages_around[1];
                 view! {
-                    <div class="flex flex-col md:grid md:grid-cols-3 min-h-12 bg-table-header-fill">
+                    <div class="pagination-controls flex flex-col md:grid md:grid-cols-3 min-h-12 bg-table-header-fill">
                         <span class="col-start-1 text-xs flex justify-center md:justify-start items-center font-bold pl-8 my-2">
                             {format!(
                                 "Showing {} to {} of {} records",
@@ -95,7 +95,7 @@ where
                                 .map(|p| {
                                     let p_inner = *p;
                                     view! {
-                                        <div
+                                        <button
                                             on:click=move |_| {
                                                 pg.set_current_page.update(|cp| *cp = p_inner)
                                             }
@@ -108,13 +108,13 @@ where
                                         >
 
                                             {p_inner}
-                                        </div>
+                                        </button>
                                     }
                                 })
                                 .collect::<Vec<_>>()}
 
                             <span class=format!(
-                                "text-white rounded-md bg-granola-orange {}",
+                                "current-page text-white rounded-md bg-granola-orange {}",
                                 page_number_class,
                             )>{pg.current_page}</span>
                             {x_following_pages
@@ -122,7 +122,7 @@ where
                                 .map(|p| {
                                     let p_inner = *p;
                                     view! {
-                                        <div
+                                        <button
                                             on:click=move |_| {
                                                 pg.set_current_page.update(|cp| *cp = p_inner)
                                             }
@@ -135,7 +135,7 @@ where
                                         >
 
                                             {p_inner}
-                                        </div>
+                                        </button>
                                     }
                                 })
                                 .collect::<Vec<_>>()}
@@ -174,8 +174,9 @@ fn PaginationButton(
         ),
     };
     view! {
-        <div
+        <button
             class=button_class
+            disabled=disabled
             type="button"
             on:click=move |event: MouseEvent| {
                 if disabled {
@@ -186,7 +187,7 @@ fn PaginationButton(
         >
 
             {children()}
-        </div>
+        </button>
     }
 }
 
