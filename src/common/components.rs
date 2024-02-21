@@ -273,7 +273,7 @@ pub fn TabLink(nav_entry: NavEntry) -> impl IntoView {
 }
 
 #[component]
-fn TabbedPage(tabs: Vec<NavEntry>) -> impl IntoView {
+pub fn TabbedPage(tabs: Vec<NavEntry>) -> impl IntoView {
     view! {
         <PreSectionContainer>
             <menu id="tabs" class="flex w-full overflow-x-auto">
@@ -291,31 +291,6 @@ fn TabbedPage(tabs: Vec<NavEntry>) -> impl IntoView {
         </PreSectionContainer>
         <Outlet/>
     }
-}
-
-#[component]
-pub fn DelegationTabbedPage() -> impl IntoView {
-    let tabs = vec![
-        NavEntry {
-            href: "/broadcast/transaction".to_string(),
-            text: "Transaction".to_string(),
-            icon: NavIcon::Transactions,
-            sub_entries: None,
-        },
-        NavEntry {
-            href: "/broadcast/delegation".to_string(),
-            text: "Delegation".to_string(),
-            icon: NavIcon::Transactions,
-            sub_entries: None,
-        },
-        NavEntry {
-            href: "/broadcast/ledger".to_string(),
-            text: "Ledger".to_string(),
-            icon: NavIcon::Transactions,
-            sub_entries: None,
-        },
-    ];
-    view! { <TabbedPage tabs/> }
 }
 
 #[component]
