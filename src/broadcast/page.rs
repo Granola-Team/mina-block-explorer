@@ -116,7 +116,6 @@ pub fn BroadcastFromLedgerPage() -> impl IntoView {
     }
 }
 
-
 #[component]
 pub fn DelegationTabbedPage() -> impl IntoView {
     let tabs = vec![
