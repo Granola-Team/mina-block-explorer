@@ -19,10 +19,29 @@ pub fn Header() -> impl IntoView {
             sub_entries: None,
         },
         NavEntry {
-            href: "/accounts".to_string(),
-            text: "Accounts".to_string(),
-            icon: NavIcon::Accounts,
-            sub_entries: None,
+            href: "/addresses".to_string(),
+            text: "Addresses".to_string(),
+            icon: NavIcon::Addresses,
+            sub_entries: Some(vec![
+                NavEntry {
+                    href: "/addresses/accounts".to_string(),
+                    text: "Accounts".to_string(),
+                    icon: NavIcon::Accounts,
+                    sub_entries: None,
+                },
+                NavEntry {
+                    href: "/addresses/tokens".to_string(),
+                    text: "Tokens".to_string(),
+                    icon: NavIcon::Tokens,
+                    sub_entries: None,
+                },
+                NavEntry {
+                    href: "/addresses/zkApps".to_string(),
+                    text: "zkApps".to_string(),
+                    icon: NavIcon::ZKApps,
+                    sub_entries: None,
+                },
+            ]),
         },
         NavEntry {
             href: "/snarks".to_string(),
