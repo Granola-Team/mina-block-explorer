@@ -5,7 +5,7 @@ use super::functions::get_base_page_path;
 use crate::common::models::MyError;
 
 use super::functions::load_data;
-use crate::accounts::functions::{load_data as load_summary_data, *};
+use crate::addresses::functions::{load_data as load_summary_data, *};
 use crate::common::components::*;
 use crate::common::spotlight::*;
 

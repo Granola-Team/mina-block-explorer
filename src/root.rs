@@ -2,7 +2,7 @@ use leptos::*;
 use leptos_router::*;
 
 use crate::account_dialog::dialog::AccountDialogView;
-use crate::accounts::page::{AccountSpotlightPage, AccountsPage};
+use crate::addresses::page::{AccountSpotlightPage, AccountsPage};
 use crate::blocks::page::{BlockSpotlight, LatestBlocksPage};
 use crate::broadcast::page::{
     BroadcastDelegationPage, BroadcastFromLedgerPage, BroadcastTransactionPage, DelegationTabbedPage
