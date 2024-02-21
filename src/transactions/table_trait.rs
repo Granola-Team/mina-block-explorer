@@ -36,7 +36,10 @@ impl TableData for Vec<Option<TransactionsQueryTransactions>> {
                     },
                     convert_to_link(
                         get_receiver_public_key(transaction),
-                        format!("/addresses/accounts/{}", get_receiver_public_key(transaction)),
+                        format!(
+                            "/addresses/accounts/{}",
+                            get_receiver_public_key(transaction)
+                        ),
                     ),
                     convert_to_pill(get_nonce(transaction), PillVariant::Grey),
                     convert_to_link(

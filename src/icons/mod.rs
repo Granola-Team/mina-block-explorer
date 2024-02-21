@@ -535,7 +535,6 @@ pub fn ZKAppSymbol(#[prop(default = 20)] width: i8) -> impl IntoView {
 
 #[component]
 pub fn AddressIcon(#[prop(default = 20)] width: i8) -> impl IntoView {
-
     view! {
         <svg
             xmlns="http://www.w3.org/2000/svg"

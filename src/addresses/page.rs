@@ -158,8 +158,8 @@ pub fn AddressesTabbedPage() -> impl IntoView {
             disabled: false,
         },
     ];
-    view! { 
+    view! {
         <SearchBar/>
-        <TabbedPage tabs/> 
+        <TabbedPage tabs/>
     }
 }
