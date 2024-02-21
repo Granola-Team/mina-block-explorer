@@ -27,9 +27,9 @@ pub fn Root() -> impl IntoView {
                         <Route path="accounts/:id" view=AccountDialogView/>
                     </Route>
                     <Route path="/addresses" view=AddressesTabbedPage>
-                        <Route path="/*any" view=AccountsPage/>
+                        <Route path="/accounts/:id" view=AccountSpotlightPage/>
+                        <Route path="/*any" view=AccountsPage />
                     </Route>
-                    <Route path="/accounts/:id" view=AccountSpotlightPage/>
                     <Route path="/blocks" view=LatestBlocksPage>
                         <Route path="accounts/:id" view=AccountDialogView/>
                     </Route>
