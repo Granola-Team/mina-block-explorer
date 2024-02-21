@@ -38,7 +38,7 @@ Cypress.Commands.add('accountDialogToAccount', () => {
   cy.get('dialog button#viewmore a').click();
   cy.get('dialog').should('not.exist');
 
-  cy.url().should('contain', '/accounts')
+  cy.url().should('contain', '/addresses/accounts')
 });
 
 Cypress.Commands.add('openMobileMenu', () => {

@@ -126,7 +126,7 @@ pub fn AccountDialogView() -> impl IntoView {
                         id="viewmore"
                         class="disabled:bg-slate-400 disabled:text-slate-200 disabled:cursor-not-allowed bg-granola-orange text-white uppercase mx-8 h-11 w-full rounded-lg"
                     >
-                        <a href=format!("/accounts/{}", public_key())>"View all details"</a>
+                        <a href=format!("/addresses/accounts/{}", public_key())>"View all details"</a>
                     </button>
                 </div>
             </dialog>

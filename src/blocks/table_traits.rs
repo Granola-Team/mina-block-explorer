@@ -82,11 +82,11 @@ impl TableData for Vec<Option<BlocksQueryBlocksTransactionsUserCommands>> {
                 Some(user_command) => vec![
                     convert_to_link(
                         get_user_command_from(user_command),
-                        format!("/accounts/{}", get_user_command_from(user_command)),
+                        format!("/addresses/accounts/{}", get_user_command_from(user_command)),
                     ),
                     convert_to_link(
                         get_user_command_to(user_command),
-                        format!("/accounts/{}", get_user_command_to(user_command)),
+                        format!("/addresses/accounts/{}", get_user_command_to(user_command)),
                     ),
                     convert_to_link(
                         get_user_command_hash(user_command),

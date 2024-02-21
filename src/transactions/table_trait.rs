@@ -22,7 +22,7 @@ impl TableData for Vec<Option<TransactionsQueryTransactions>> {
                         convert_array_to_span(vec![
                             convert_to_link(
                                 get_from(transaction),
-                                format!("/accounts/{}", get_from(transaction)),
+                                format!("/addresses/accounts/{}", get_from(transaction)),
                             ),
                             convert_to_span(get_memo(transaction))
                                 .attr("class", "font-xs text-slate-400"),
@@ -31,12 +31,12 @@ impl TableData for Vec<Option<TransactionsQueryTransactions>> {
                     } else {
                         convert_to_link(
                             get_from(transaction),
-                            format!("/accounts/{}", get_from(transaction)),
+                            format!("/addresses/accounts/{}", get_from(transaction)),
                         )
                     },
                     convert_to_link(
                         get_receiver_public_key(transaction),
-                        format!("/accounts/{}", get_receiver_public_key(transaction)),
+                        format!("/addresses/accounts/{}", get_receiver_public_key(transaction)),
                     ),
                     convert_to_pill(get_nonce(transaction), PillVariant::Grey),
                     convert_to_link(
