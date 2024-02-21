@@ -155,4 +155,7 @@ pub enum NavIcon {
     Staking,
     More,
     Broadcast,
+    ZKApps,
+    Tokens,
+    Addresses,
 }

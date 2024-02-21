@@ -230,6 +230,9 @@ where
                 NavIcon::Staking => view! { <StakingIcon/> },
                 NavIcon::Broadcast => view! { <BroadcastIcon/> },
                 NavIcon::Accounts => view! { <AccountIcon/> },
+                NavIcon::ZKApps => view! { <ZKAppSymbol/> },
+                NavIcon::Tokens => view! { <TokenSymbol/> },
+                NavIcon::Addresses => view! { <AddressIcon/> },
             }}
 
             <div class="ml-0.5">{nav_entry.text}</div>
@@ -265,6 +268,9 @@ pub fn TabLink(nav_entry: NavEntry) -> impl IntoView {
                 NavIcon::Staking => view! { <StakingIcon/> },
                 NavIcon::Broadcast => view! { <BroadcastIcon/> },
                 NavIcon::Accounts => view! { <AccountIcon/> },
+                NavIcon::ZKApps => view! { <ZKAppSymbol/> },
+                NavIcon::Tokens => view! { <TokenSymbol/> },
+                NavIcon::Addresses => view! { <AddressIcon/> },
             }}
 
             <div class="ml-0.5">{nav_entry.text}</div>
