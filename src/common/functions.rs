@@ -346,9 +346,13 @@ where
     T: Clone,
 {
     let total_records = items.len();
-    let ranges = get_ranges(total_records, records_per_page);
-    let range = ranges[current_range];
-    items[range[0]..range[1]].to_vec()
+    if total_records > 0 {
+        let ranges = get_ranges(total_records, records_per_page);
+        let range = ranges[current_range];
+        items[range[0]..range[1]].to_vec()
+    } else {
+        vec![]
+    }
 }
 
 #[cfg(test)]
@@ -358,6 +362,17 @@ mod get_subset_tests {
     #[derive(Debug, Clone, PartialEq)]
     struct MyStruct {
         value: i32,
+    }
+
+    #[test]
+    fn test_get_subset_with_zero_length() {
+        let data: Vec<Option<MyStruct>> = vec![];
+
+        let records_per_page = 1;
+        let current_range = 0;
+        let result = get_subset(&data, records_per_page, current_range);
+
+        assert_eq!(result, vec![] as Vec<Option<MyStruct>>);
     }
 
     #[test]
