@@ -124,18 +124,21 @@ pub fn DelegationTabbedPage() -> impl IntoView {
             text: "Transaction".to_string(),
             icon: NavIcon::Transactions,
             sub_entries: None,
+            disabled: false,
         },
         NavEntry {
             href: "/broadcast/delegation".to_string(),
             text: "Delegation".to_string(),
             icon: NavIcon::Transactions,
             sub_entries: None,
+            disabled: false,
         },
         NavEntry {
             href: "/broadcast/ledger".to_string(),
             text: "Ledger".to_string(),
             icon: NavIcon::Transactions,
             sub_entries: None,
+            disabled: false,
         },
     ];
     view! { <TabbedPage tabs/> }

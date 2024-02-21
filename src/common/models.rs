@@ -144,6 +144,7 @@ pub struct NavEntry {
     pub text: String,
     pub icon: NavIcon,
     pub sub_entries: Option<Vec<NavEntry>>,
+    pub disabled: bool,
 }
 
 #[derive(Clone, PartialEq)]
