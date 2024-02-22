@@ -26,8 +26,24 @@ suite(["@CI"],'search bar',() => {
     pages.forEach(({origin, input, tableHeading}) => it(`works on ${origin} page`, () => {
         cy.visit(origin);
         cy.wait(1000);
-        cy.get("input#searchbar").type(input, {delay:0});
-        cy.tableHasNRows(tableHeading, 1)
+        cy.get("input#searchbar").as('searchinput');
+        cy.get("@searchinput").type(input, {delay:0});
+
+        // check input
+        cy.get("@searchinput").should('have.value', input);
+        // check url
+        cy.url().should('include', `query=${input}`);
+        // check table
+        cy.tableHasNRows(tableHeading, 1);
+
+        cy.go('back');
+
+        // check input
+        cy.get("@searchinput").should('have.value', '');
+        // check url
+        cy.url().should('not.contain', `query`);
+        // check table
+        cy.tableHasNRows(tableHeading, 10);
     }));
 
 })
