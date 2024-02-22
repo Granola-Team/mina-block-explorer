@@ -294,3 +294,43 @@ pub fn BlockSpotlight() -> impl IntoView {
         </PageContainer>
     }
 }
+
+
+#[component]
+pub fn BlockTabbedPage() -> impl IntoView {
+    let memo_params_map = use_params_map();
+    let id = move || memo_params_map.with(|p| p.get("id").cloned().unwrap_or_default());
+    let tabs = move || vec![
+        NavEntry {
+            href: format!("/blocks/{}/spotlight",id()),
+            text: "Block Spotlight".to_string(),
+            icon: NavIcon::Blocks,
+            sub_entries: None,
+            disabled: false,
+        },
+        NavEntry {
+            href: format!("/blocks/{}/user-commands",id()),
+            text: "User Commands".to_string(),
+            icon: NavIcon::Transactions,
+            sub_entries: None,
+            disabled: false,
+        },
+        NavEntry {
+            href: format!("/blocks/{}/snark-jobs",id()),
+            text: "SNARK Jobs".to_string(),
+            icon: NavIcon::SNARKs,
+            sub_entries: None,
+            disabled: false,
+        },
+        NavEntry {
+            href: format!("/blocks/{}/fee-transfers",id()),
+            text: "Fee Transfers".to_string(),
+            icon: NavIcon::FeeTransfers,
+            sub_entries: None,
+            disabled: false,
+        },
+    ];
+    view! {
+        <TabbedPage tabs=tabs()/>
+    }
+}
