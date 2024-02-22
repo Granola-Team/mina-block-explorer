@@ -148,14 +148,14 @@ pub fn AddressesTabbedPage() -> impl IntoView {
             text: "Tokens".to_string(),
             icon: NavIcon::Tokens,
             sub_entries: None,
-            disabled: false,
+            disabled: true,
         },
         NavEntry {
             href: "/addresses/zkApps".to_string(),
             text: "zkApps".to_string(),
             icon: NavIcon::ZKApps,
             sub_entries: None,
-            disabled: false,
+            disabled: true,
         },
     ];
     view! {
