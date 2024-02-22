@@ -24,46 +24,54 @@ pub fn NextStakesPage() -> impl IntoView {
     view! {
         <SearchBar placeholder="Exact search for public key".to_string()/>
         <PageContainer>
-            {move || match resource.get() {
-                Some(Ok(data)) => {
-                    let pag = build_pagination(
-                        data.nextstakes.len(),
-                        records_per_page,
-                        current_page.get(),
-                        set_current_page,
-                    );
-                    let subset = get_subset(
-                        &data.nextstakes,
-                        records_per_page,
-                        current_page.get() - 1,
-                    );
+            <ErrorBoundary fallback=move |_| view! { <NullView/> }>
+                <Suspense fallback=move || {
                     view! {
                         <TableSection
                             section_heading="Next Staking Ledger".to_string()
-                            controls=move || {
-                                view! {
-                                    <StakesNavButton
-                                        href="/stakes".to_string()
-                                        text="Current Stakes".to_string()
-                                    />
-                                }
-                            }
+                            controls=move || view! { <NullView/> }
                         >
-
-                            <Table data=subset pagination=pag/>
-                        </TableSection>
-                    }
-                }
-                None => {
-                    view! {
-                        <TableSection section_heading=String::new() controls=move || ()>
                             <Table data=LoadingPlaceholder {}/>
                         </TableSection>
                     }
-                }
-                _ => view! { <NullView/> },
-            }}
+                }>
+                    {move || {
+                        resource
+                            .get()
+                            .and_then(|res| res.ok())
+                            .map(|data| {
+                                let pag = build_pagination(
+                                    data.nextstakes.len(),
+                                    records_per_page,
+                                    current_page.get(),
+                                    set_current_page,
+                                );
+                                let subset = get_subset(
+                                    &data.nextstakes,
+                                    records_per_page,
+                                    current_page.get() - 1,
+                                );
+                                view! {
+                                    <TableSection
+                                        section_heading="Next Staking Ledger".to_string()
+                                        controls=move || {
+                                            view! {
+                                                <StakesNavButton
+                                                    href="/stakes".to_string()
+                                                    text="Current Stakes".to_string()
+                                                />
+                                            }
+                                        }
+                                    >
 
+                                        <Table data=subset pagination=pag/>
+                                    </TableSection>
+                                }
+                            })
+                    }}
+
+                </Suspense>
+            </ErrorBoundary>
         </PageContainer>
     }
 }
