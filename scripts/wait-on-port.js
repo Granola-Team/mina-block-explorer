@@ -40,15 +40,15 @@ const mainTaskCmd = args.slice(mainTaskFlagIndex + 1);
 console.log(`Starting background task: ${bgTaskArgs.join(' ')}`);
 const bgTask = spawn(bgTaskArgs[0], bgTaskArgs.slice(1), { stdio: 'inherit' });
 
-// Ensure the background task is killed on exit
-function cleanup() {
+// Ensure the background task is killed on exit and exit with the main task status
+function cleanup(exitCode = 0) {
   console.log('Killing the background task...');
   bgTask.kill();
-  process.exit();
+  process.exit(exitCode); // Exit with the provided exit code
 }
 
-process.on('SIGINT', cleanup);
-process.on('SIGTERM', cleanup);
+process.on('SIGINT', () => cleanup());
+process.on('SIGTERM', () => cleanup());
 
 // Wait for the specified port to open before starting the main task
 waitForPort(port, () => {
@@ -57,6 +57,6 @@ waitForPort(port, () => {
 
   mainTaskProcess.on('close', (code) => {
     console.log(`Main task exited with code ${code}`);
-    cleanup(); // Ensure background task is killed
+    cleanup(code); // Ensure background task is killed and exit with the main task's exit code
   });
 });
