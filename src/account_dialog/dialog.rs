@@ -5,7 +5,7 @@ use super::functions::get_base_page_path;
 use crate::common::models::MyError;
 
 use super::functions::load_data;
-use crate::accounts::functions::{load_data as load_summary_data, *};
+use crate::addresses::functions::{load_data as load_summary_data, *};
 use crate::common::components::*;
 use crate::common::spotlight::*;
 
@@ -126,7 +126,10 @@ pub fn AccountDialogView() -> impl IntoView {
                         id="viewmore"
                         class="disabled:bg-slate-400 disabled:text-slate-200 disabled:cursor-not-allowed bg-granola-orange text-white uppercase mx-8 h-11 w-full rounded-lg"
                     >
-                        <a href=format!("/accounts/{}", public_key())>"View all details"</a>
+                        <a href=format!(
+                            "/addresses/accounts/{}",
+                            public_key(),
+                        )>"View all details"</a>
                     </button>
                 </div>
             </dialog>

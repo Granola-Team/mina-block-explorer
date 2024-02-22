@@ -2,12 +2,12 @@ use leptos::*;
 use leptos_router::*;
 
 use crate::account_dialog::dialog::AccountDialogView;
-use crate::accounts::page::{AccountSpotlightPage, AccountsPage};
+use crate::addresses::page::{AccountSpotlightPage, AccountsPage, AddressesTabbedPage};
 use crate::blocks::page::{BlockSpotlight, LatestBlocksPage};
 use crate::broadcast::page::{
     BroadcastDelegationPage, BroadcastFromLedgerPage, BroadcastTransactionPage,
+    DelegationTabbedPage,
 };
-use crate::common::components::DelegationTabbedPage;
 use crate::common::components::NullView;
 use crate::footer::Footer;
 use crate::header::navigation::Header;
@@ -28,8 +28,10 @@ pub fn Root() -> impl IntoView {
                         <Route path="accounts/:id" view=AccountDialogView/>
                         <Route path="/*any" view=NullView/>
                     </Route>
-                    <Route path="/accounts" view=AccountsPage/>
-                    <Route path="/accounts/:id" view=AccountSpotlightPage/>
+                    <Route path="/addresses" view=AddressesTabbedPage>
+                        <Route path="/accounts/:id" view=AccountSpotlightPage/>
+                        <Route path="/*any" view=AccountsPage/>
+                    </Route>
                     <Route path="/blocks" view=LatestBlocksPage>
                         <Route path="accounts/:id" view=AccountDialogView/>
                         <Route path="/*any" view=NullView/>

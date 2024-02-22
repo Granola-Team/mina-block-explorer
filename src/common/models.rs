@@ -114,6 +114,7 @@ pub struct NavEntry {
     pub text: String,
     pub icon: NavIcon,
     pub sub_entries: Option<Vec<NavEntry>>,
+    pub disabled: bool,
 }
 
 #[derive(Clone, PartialEq)]
@@ -125,4 +126,7 @@ pub enum NavIcon {
     Staking,
     More,
     Broadcast,
+    ZKApps,
+    Tokens,
+    Addresses,
 }

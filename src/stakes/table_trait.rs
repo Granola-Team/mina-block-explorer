@@ -20,7 +20,7 @@ impl TableData for Vec<Option<StakesQueryStakes>> {
                 Some(stake) => vec![
                     convert_to_link(
                         get_public_key(stake),
-                        format!("/accounts/{}", get_public_key(stake)),
+                        format!("/addresses/accounts/{}", get_public_key(stake)),
                     ),
                     convert_to_pill(get_balance(stake), PillVariant::Green),
                     convert_to_link(
@@ -29,7 +29,7 @@ impl TableData for Vec<Option<StakesQueryStakes>> {
                         } else {
                             get_delegate(stake)
                         },
-                        format!("/accounts/{}", get_delegate(stake)),
+                        format!("/addresses/accounts/{}", get_delegate(stake)),
                     ),
                     convert_to_pill(get_delegators_count(stake), PillVariant::Blue),
                     convert_to_span(get_ledger_hash(stake)),

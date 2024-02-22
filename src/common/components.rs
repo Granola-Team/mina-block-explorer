@@ -202,7 +202,7 @@ where
         } else {
             format!("{} {} {}", base_link_class, hover_class, "text-white")
         };
-        if n_entry.icon == NavIcon::Accounts {
+        if n_entry.disabled {
             format!(
                 "{} {}",
                 tmp_class, "opacity-50 cursor-not-allowed pointer-events-none"
@@ -225,6 +225,9 @@ where
                 NavIcon::Staking => view! { <StakingIcon/> },
                 NavIcon::Broadcast => view! { <BroadcastIcon/> },
                 NavIcon::Accounts => view! { <AccountIcon/> },
+                NavIcon::ZKApps => view! { <ZKAppSymbol/> },
+                NavIcon::Tokens => view! { <TokenSymbol/> },
+                NavIcon::Addresses => view! { <AddressIcon/> },
             }}
 
             <div class="ml-0.5">{nav_entry.text}</div>
@@ -238,15 +241,18 @@ pub fn TabLink(nav_entry: NavEntry) -> impl IntoView {
     let pathname = move || location.pathname.get();
     let href = nav_entry.href.clone();
     let base_link_class = "mx-1 p-2 flex font-bold text-sm uppercase border-b border-b-2 whitespace-nowrap box-border";
+    let disabled_link_class =
+        "text-white border-transparent opacity-50 cursor-not-allowed pointer-events-none";
     let active_state = "text-granola-orange border-granola-orange";
     let inactive_state = "text-white border-transparent hover:border-white";
     view! {
         <a
             class=move || {
                 format!(
-                    "{} {}",
+                    "{} {} {}",
                     base_link_class,
                     if pathname().ends_with(&href) { active_state } else { inactive_state },
+                    if nav_entry.disabled { disabled_link_class } else { "" },
                 )
             }
 
@@ -260,6 +266,9 @@ pub fn TabLink(nav_entry: NavEntry) -> impl IntoView {
                 NavIcon::Staking => view! { <StakingIcon/> },
                 NavIcon::Broadcast => view! { <BroadcastIcon/> },
                 NavIcon::Accounts => view! { <AccountIcon/> },
+                NavIcon::ZKApps => view! { <ZKAppSymbol/> },
+                NavIcon::Tokens => view! { <TokenSymbol/> },
+                NavIcon::Addresses => view! { <AddressIcon/> },
             }}
 
             <div class="ml-0.5">{nav_entry.text}</div>
@@ -268,7 +277,7 @@ pub fn TabLink(nav_entry: NavEntry) -> impl IntoView {
 }
 
 #[component]
-fn TabbedPage(tabs: Vec<NavEntry>) -> impl IntoView {
+pub fn TabbedPage(tabs: Vec<NavEntry>) -> impl IntoView {
     view! {
         <PreSectionContainer>
             <menu id="tabs" class="flex w-full overflow-x-auto">
@@ -286,31 +295,6 @@ fn TabbedPage(tabs: Vec<NavEntry>) -> impl IntoView {
         </PreSectionContainer>
         <Outlet/>
     }
-}
-
-#[component]
-pub fn DelegationTabbedPage() -> impl IntoView {
-    let tabs = vec![
-        NavEntry {
-            href: "/broadcast/transaction".to_string(),
-            text: "Transaction".to_string(),
-            icon: NavIcon::Transactions,
-            sub_entries: None,
-        },
-        NavEntry {
-            href: "/broadcast/delegation".to_string(),
-            text: "Delegation".to_string(),
-            icon: NavIcon::Transactions,
-            sub_entries: None,
-        },
-        NavEntry {
-            href: "/broadcast/ledger".to_string(),
-            text: "Ledger".to_string(),
-            icon: NavIcon::Transactions,
-            sub_entries: None,
-        },
-    ];
-    view! { <TabbedPage tabs/> }
 }
 
 #[component]

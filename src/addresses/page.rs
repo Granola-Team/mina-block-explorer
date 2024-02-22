@@ -6,10 +6,12 @@ use crate::blocks::components::AccountOverviewBlocksTable;
 use crate::common::components::*;
 use crate::common::functions::*;
 use crate::common::models::MyError;
+use crate::common::models::NavEntry;
+use crate::common::models::NavIcon;
 use crate::common::search::*;
 use crate::common::spotlight::*;
 use crate::common::table::*;
-use crate::icons::WalletIcon;
+use crate::icons::*;
 use crate::snarks::components::AccountOverviewSnarkJobTable;
 use crate::transactions::components::*;
 
@@ -32,7 +34,6 @@ pub fn AccountsPage() -> impl IntoView {
     let (current_page, set_current_page) = create_signal(1);
 
     view! {
-        <SearchBar/>
         <PageContainer>
             <TableSection section_heading="Accounts".to_string() controls=|| ().into_view()>
                 {move || match resource.get() {
@@ -129,5 +130,36 @@ pub fn AccountSpotlightPage() -> impl IntoView {
                 </AppSubSection>
             </SubSectionContainer>
         </PageContainer>
+    }
+}
+
+#[component]
+pub fn AddressesTabbedPage() -> impl IntoView {
+    let tabs = vec![
+        NavEntry {
+            href: "/addresses/accounts".to_string(),
+            text: "Accounts".to_string(),
+            icon: NavIcon::Addresses,
+            sub_entries: None,
+            disabled: true,
+        },
+        NavEntry {
+            href: "/addresses/tokens".to_string(),
+            text: "Tokens".to_string(),
+            icon: NavIcon::Tokens,
+            sub_entries: None,
+            disabled: true,
+        },
+        NavEntry {
+            href: "/addresses/zkApps".to_string(),
+            text: "zkApps".to_string(),
+            icon: NavIcon::ZKApps,
+            sub_entries: None,
+            disabled: true,
+        },
+    ];
+    view! {
+        <SearchBar/>
+        <TabbedPage tabs/>
     }
 }

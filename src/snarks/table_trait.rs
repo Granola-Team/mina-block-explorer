@@ -22,7 +22,7 @@ impl TableData for Vec<Option<SnarksQuerySnarks>> {
                     convert_to_span(get_date_time(snark)),
                     convert_to_link(
                         get_prover(snark),
-                        format!("/accounts/{}", get_prover(snark)),
+                        format!("/addresses/accounts/{}", get_prover(snark)),
                     ),
                     convert_array_to_span(
                         get_work_ids(snark)
