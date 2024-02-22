@@ -20,6 +20,8 @@ where
     let rows = data.get_rows();
     let cell_padding_class = "first:pl-8 pl-2";
     let page_number_class = "text-md m-1 h-6 w-6 flex justify-center items-center font-semibold";
+    let inactive_page_number_class =
+        "cursor-pointer hover:bg-slate-300 bg-transparent rounded-full";
 
     view! {
         <div class="@container w-full overflow-auto">
@@ -65,72 +67,102 @@ where
             </table>
         </div>
 
-        {
-            let page_data_clone = pagination.clone();
-            move || {
-                let page_data_inner = page_data_clone.clone();
-                match page_data_inner {
-                    Some(pg) => {
-                        let x_pages_around = x_surrounding_pages(pg.current_page, pg.total_pages());
-                        let x_preceding_pages = &x_pages_around[0];
-                        let x_following_pages = &x_pages_around[1];
-                        view! {
-                            <div class="flex flex-col md:grid md:grid-cols-3 min-h-12 bg-table-header-fill">
-                                <span class="col-start-1 text-xs flex justify-center md:justify-start items-center font-bold pl-8 my-2">
-                                    {format!(
-                                        "Showing {} to {} of {} records",
-                                        pg.start_index(),
-                                        pg.end_index(),
-                                        pg.total_records,
-                                    )}
+        {match pagination {
+            Some(pg) => {
+                let x_pages_around = x_surrounding_pages(pg.current_page, pg.total_pages());
+                let x_preceding_pages = &x_pages_around[0];
+                let x_following_pages = &x_pages_around[1];
+                view! {
+                    <div class="pagination-controls flex flex-col md:grid md:grid-cols-3 min-h-12 bg-table-header-fill">
+                        <span class="col-start-1 text-xs flex justify-center md:justify-start items-center font-bold pl-8 my-2">
+                            {format!(
+                                "Showing {} to {} of {} records",
+                                pg.start_index(),
+                                pg.end_index(),
+                                pg.total_records,
+                            )}
 
-                                </span>
-                                <span class="col-start-2 text-xs font-bold flex items-center justify-center my-2">
-                                    <PaginationButton
-                                        on_click=pg.prev_page
-                                        disabled=x_preceding_pages.is_empty()
-                                    >
-                                        <ChevronLeft width=16/>
-                                    </PaginationButton>
-                                    {x_preceding_pages
-                                        .iter()
-                                        .map(|p| view! { <div class=page_number_class>{*p}</div> })
-                                        .collect::<Vec<_>>()}
+                        </span>
+                        <span class="col-start-2 text-xs font-bold flex items-center justify-center my-2">
+                            <PaginationButton
+                                on_click=move |_| pg.set_current_page.update(|cp| *cp -= 1)
+                                disabled=x_preceding_pages.is_empty()
+                            >
+                                <ChevronLeft width=16/>
+                            </PaginationButton>
+                            {x_preceding_pages
+                                .iter()
+                                .map(|p| {
+                                    let p_inner = *p;
+                                    view! {
+                                        <button
+                                            on:click=move |_| {
+                                                pg.set_current_page.update(|cp| *cp = p_inner)
+                                            }
 
-                                    <span class=format!(
-                                        "text-white rounded-md bg-granola-orange {}",
-                                        page_number_class,
-                                    )>{pg.current_page}</span>
-                                    {x_following_pages
-                                        .iter()
-                                        .map(|p| view! { <div class=page_number_class>{*p}</div> })
-                                        .collect::<Vec<_>>()}
+                                            class=format!(
+                                                "{} {}",
+                                                page_number_class,
+                                                inactive_page_number_class,
+                                            )
+                                        >
 
-                                    <PaginationButton
-                                        on_click=pg.next_page
-                                        disabled=x_following_pages.is_empty()
-                                    >
-                                        <ChevronRight width=16/>
-                                    </PaginationButton>
-                                </span>
-                            </div>
-                        }
-                            .into_view()
-                    }
-                    None => view! { <NullView/> },
+                                            {p_inner}
+                                        </button>
+                                    }
+                                })
+                                .collect::<Vec<_>>()}
+
+                            <span class=format!(
+                                "current-page text-white rounded-md bg-granola-orange {}",
+                                page_number_class,
+                            )>{pg.current_page}</span>
+                            {x_following_pages
+                                .iter()
+                                .map(|p| {
+                                    let p_inner = *p;
+                                    view! {
+                                        <button
+                                            on:click=move |_| {
+                                                pg.set_current_page.update(|cp| *cp = p_inner)
+                                            }
+
+                                            class=format!(
+                                                "{} {}",
+                                                page_number_class,
+                                                inactive_page_number_class,
+                                            )
+                                        >
+
+                                            {p_inner}
+                                        </button>
+                                    }
+                                })
+                                .collect::<Vec<_>>()}
+
+                            <PaginationButton
+                                on_click=move |_| pg.set_current_page.update(|cp| *cp += 1)
+                                disabled=x_following_pages.is_empty()
+                            >
+                                <ChevronRight width=16/>
+                            </PaginationButton>
+                        </span>
+                    </div>
                 }
+                    .into_view()
             }
-        }
+            None => view! { <NullView/> },
+        }}
     }
 }
 
 #[component]
 fn PaginationButton(
     children: Children,
-    on_click: Callback<MouseEvent>,
+    #[prop(into)] on_click: Callback<MouseEvent>,
     disabled: bool,
 ) -> impl IntoView {
-    let button_class_base = "font-semibold";
+    let button_class_base = "font-semibold h-6 w-6 flex justify-center items-center";
     let button_class = match disabled {
         true => format!(
             "{} {}",
@@ -138,12 +170,13 @@ fn PaginationButton(
         ),
         false => format!(
             "{} {}",
-            button_class_base, "hover:cursor-pointer hover:text-granola-orange hover:underline"
+            button_class_base, "hover:cursor-pointer hover:text-granola-orange hover:underline rounded-full bg-transparent hover:bg-slate-300"
         ),
     };
     view! {
-        <div
+        <button
             class=button_class
+            disabled=disabled
             type="button"
             on:click=move |event: MouseEvent| {
                 if disabled {
@@ -154,7 +187,7 @@ fn PaginationButton(
         >
 
             {children()}
-        </div>
+        </button>
     }
 }
 

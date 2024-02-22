@@ -8,6 +8,7 @@ use crate::broadcast::page::{
     BroadcastDelegationPage, BroadcastFromLedgerPage, BroadcastTransactionPage,
     DelegationTabbedPage,
 };
+use crate::common::components::NullView;
 use crate::footer::Footer;
 use crate::header::navigation::Header;
 use crate::next_stakes::page::NextStakesPage;
@@ -25,6 +26,7 @@ pub fn Root() -> impl IntoView {
                 <Routes>
                     <Route path="/summary" view=SummaryPage>
                         <Route path="accounts/:id" view=AccountDialogView/>
+                        <Route path="/*any" view=NullView/>
                     </Route>
                     <Route path="/addresses" view=AddressesTabbedPage>
                         <Route path="/accounts/:id" view=AccountSpotlightPage/>
@@ -32,6 +34,7 @@ pub fn Root() -> impl IntoView {
                     </Route>
                     <Route path="/blocks" view=LatestBlocksPage>
                         <Route path="accounts/:id" view=AccountDialogView/>
+                        <Route path="/*any" view=NullView/>
                     </Route>
                     <Route path="/blocks/:id" view=BlockSpotlight/>
                     <Route path="/transactions" view=TransactionsPage/>
