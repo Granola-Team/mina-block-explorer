@@ -6,9 +6,8 @@ use crate::common::models::*;
 use crate::common::search::*;
 use crate::common::spotlight::*;
 use crate::common::table::*;
-use crate::fee_transfers::components::BlockSpotlightFeeTransfersTable;
 use crate::icons::*;
-use crate::snarks::components::BlockSpotlightSnarkJobTable;
+
 use leptos::*;
 use leptos_router::*;
 
@@ -32,10 +31,6 @@ pub fn BlockSpotlight() -> impl IntoView {
             load_data(50, None, state_hash.cloned(), None).await
         },
     );
-    let block_state_hash = move || memo_params_map.with(|p| p.get("id").cloned());
-    let records_per_page = 10;
-    let (current_page, set_current_page) = create_signal(1);
-
     view! {
         <PageContainer>
             {move || match resource.get() {
@@ -143,30 +138,6 @@ pub fn BlockSpotlight() -> impl IntoView {
 
                                     <BlockIcon width=40/>
                                 </SpotlightSection>
-                                <TableSection
-                                    section_heading="User Commands".to_string()
-                                    controls=|| ().into_view()
-                                >
-
-                                    {move || match get_user_commands(&block) {
-                                        Some(user_commands) => {
-                                            let pag = build_pagination(
-                                                user_commands.len(),
-                                                records_per_page,
-                                                current_page.get(),
-                                                set_current_page,
-                                            );
-                                            let subset = get_subset(
-                                                &user_commands,
-                                                records_per_page,
-                                                current_page.get() - 1,
-                                            );
-                                            view! { <Table data=subset pagination=pag/> }
-                                        }
-                                        None => view! { <NullView/> },
-                                    }}
-
-                                </TableSection>
                             }
                                 .into_view()
                         }
@@ -280,57 +251,46 @@ pub fn BlockSpotlight() -> impl IntoView {
                 }
                 _ => view! { <NullView/> },
             }}
-            <SubSectionContainer>
-                <AppSubSection position=SubSectionPosition::Left heading="SNARK Jobs".to_string()>
-                    <BlockSpotlightSnarkJobTable block_state_hash=block_state_hash()/>
-                </AppSubSection>
-                <AppSubSection
-                    position=SubSectionPosition::Right
-                    heading="Fee Transfers".to_string()
-                >
-                    <BlockSpotlightFeeTransfersTable block_state_hash=block_state_hash()/>
-                </AppSubSection>
-            </SubSectionContainer>
+
         </PageContainer>
     }
 }
-
 
 #[component]
 pub fn BlockTabbedPage() -> impl IntoView {
     let memo_params_map = use_params_map();
     let id = move || memo_params_map.with(|p| p.get("id").cloned().unwrap_or_default());
-    let tabs = move || vec![
-        NavEntry {
-            href: format!("/blocks/{}/spotlight",id()),
-            text: "Block Spotlight".to_string(),
-            icon: NavIcon::Blocks,
-            sub_entries: None,
-            disabled: false,
-        },
-        NavEntry {
-            href: format!("/blocks/{}/user-commands",id()),
-            text: "User Commands".to_string(),
-            icon: NavIcon::Transactions,
-            sub_entries: None,
-            disabled: false,
-        },
-        NavEntry {
-            href: format!("/blocks/{}/snark-jobs",id()),
-            text: "SNARK Jobs".to_string(),
-            icon: NavIcon::SNARKs,
-            sub_entries: None,
-            disabled: false,
-        },
-        NavEntry {
-            href: format!("/blocks/{}/fee-transfers",id()),
-            text: "Fee Transfers".to_string(),
-            icon: NavIcon::FeeTransfers,
-            sub_entries: None,
-            disabled: false,
-        },
-    ];
-    view! {
-        <TabbedPage tabs=tabs()/>
-    }
+    let tabs = move || {
+        vec![
+            NavEntry {
+                href: format!("/blocks/{}/spotlight", id()),
+                text: "Block Spotlight".to_string(),
+                icon: NavIcon::Blocks,
+                sub_entries: None,
+                disabled: false,
+            },
+            NavEntry {
+                href: format!("/blocks/{}/user-commands", id()),
+                text: "User Commands".to_string(),
+                icon: NavIcon::Transactions,
+                sub_entries: None,
+                disabled: false,
+            },
+            NavEntry {
+                href: format!("/blocks/{}/snark-jobs", id()),
+                text: "SNARK Jobs".to_string(),
+                icon: NavIcon::SNARKs,
+                sub_entries: None,
+                disabled: false,
+            },
+            NavEntry {
+                href: format!("/blocks/{}/fee-transfers", id()),
+                text: "Fee Transfers".to_string(),
+                icon: NavIcon::FeeTransfers,
+                sub_entries: None,
+                disabled: false,
+            },
+        ]
+    };
+    view! { <TabbedPage tabs=tabs()/> }
 }
