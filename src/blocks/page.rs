@@ -8,6 +8,7 @@ use crate::common::search::*;
 use crate::common::spotlight::*;
 use crate::common::table::Table;
 use crate::common::table::TableSection;
+use crate::fee_transfers::components::BlockSpotlightFeeTransfersTable;
 use crate::icons::*;
 use crate::snarks::components::BlockSpotlightSnarkJobTable;
 
@@ -150,6 +151,11 @@ pub fn BlockSnarkJobsTab() -> impl IntoView {
 }
 
 #[component]
+pub fn BlockFeeTransfersTab() -> impl IntoView {
+    view! { <BlockTabContainer content=BlockContent::FeeTransfers/> }
+}
+
+#[component]
 pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
     let memo_params_map = use_params_map();
     let resource = create_resource(
@@ -184,7 +190,9 @@ pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
                                     BlockContent::SNARKJobs => {
                                         view! { <BlockSnarkJobs block=block/> }
                                     }
-                                    BlockContent::FeeTransfers => todo!(),
+                                    BlockContent::FeeTransfers => {
+                                        view! { <BlockFeeTransfers block=block/> }
+                                    }
                                     BlockContent::ZKApps => todo!(),
                                 }
                             }
@@ -230,6 +238,15 @@ pub fn BlockSnarkJobs(block: BlocksQueryBlocks) -> impl IntoView {
     view! {
         <TableSection section_heading="SNARK Jobs".to_string() controls=|| ().into_view()>
             <BlockSpotlightSnarkJobTable block_state_hash=Option::from(get_state_hash(&block))/>
+        </TableSection>
+    }
+}
+
+#[component]
+pub fn BlockFeeTransfers(block: BlocksQueryBlocks) -> impl IntoView {
+    view! {
+        <TableSection section_heading="Fee Transfers".to_string() controls=|| ().into_view()>
+            <BlockSpotlightFeeTransfersTable block_state_hash=Option::from(get_state_hash(&block))/>
         </TableSection>
     }
 }
