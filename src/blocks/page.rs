@@ -6,6 +6,8 @@ use crate::common::functions::*;
 use crate::common::models::*;
 use crate::common::search::*;
 use crate::common::spotlight::*;
+use crate::common::table::Table;
+use crate::common::table::TableSection;
 use crate::icons::*;
 
 use leptos::ErrorBoundary;
@@ -136,6 +138,11 @@ pub fn BlockSpotlightTab() -> impl IntoView {
 }
 
 #[component]
+pub fn BlockUserCommandsTab() -> impl IntoView {
+    view! { <BlockTabContainer content=BlockContent::UserCommands/> }
+}
+
+#[component]
 pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
     let memo_params_map = use_params_map();
     let resource = create_resource(
@@ -162,11 +169,11 @@ pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
                             {
                                 match content_clone {
                                     BlockContent::Spotlight => {
-                                        view! {
-                                            <BlockSpotlight block=block/>
-                                        }
+                                        view! { <BlockSpotlight block=block/> }
                                     }
-                                    BlockContent::UserCommands => todo!(),
+                                    BlockContent::UserCommands => {
+                                        view! { <BlockUserCommands block=block/> }
+                                    }
                                     BlockContent::FeeTransfers => todo!(),
                                     BlockContent::ZKApps => todo!(),
                                 }
@@ -176,6 +183,35 @@ pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
                 </Suspense>
             </ErrorBoundary>
         </PageContainer>
+    }
+}
+
+#[component]
+pub fn BlockUserCommands(block: BlocksQueryBlocks) -> impl IntoView {
+    let records_per_page = 10;
+    let (current_page, set_current_page) = create_signal(1);
+    view! {
+        <TableSection section_heading="User Commands".to_string() controls=|| ().into_view()>
+
+            {move || match get_user_commands(&block) {
+                Some(user_commands) => {
+                    let pag = build_pagination(
+                        user_commands.len(),
+                        records_per_page,
+                        current_page.get(),
+                        set_current_page,
+                    );
+                    let subset = get_subset(
+                        &user_commands,
+                        records_per_page,
+                        current_page.get() - 1,
+                    );
+                    view! { <Table data=subset pagination=pag/> }
+                }
+                None => view! { <NullView/> },
+            }}
+
+        </TableSection>
     }
 }
 
