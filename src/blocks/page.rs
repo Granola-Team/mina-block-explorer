@@ -9,6 +9,7 @@ use crate::common::spotlight::*;
 use crate::common::table::Table;
 use crate::common::table::TableSection;
 use crate::icons::*;
+use crate::snarks::components::BlockSpotlightSnarkJobTable;
 
 use leptos::ErrorBoundary;
 use leptos::*;
@@ -129,6 +130,7 @@ enum BlockContent {
     Spotlight,
     UserCommands,
     FeeTransfers,
+    SNARKJobs,
     ZKApps,
 }
 
@@ -140,6 +142,11 @@ pub fn BlockSpotlightTab() -> impl IntoView {
 #[component]
 pub fn BlockUserCommandsTab() -> impl IntoView {
     view! { <BlockTabContainer content=BlockContent::UserCommands/> }
+}
+
+#[component]
+pub fn BlockSnarkJobsTab() -> impl IntoView {
+    view! { <BlockTabContainer content=BlockContent::SNARKJobs/> }
 }
 
 #[component]
@@ -173,6 +180,9 @@ pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
                                     }
                                     BlockContent::UserCommands => {
                                         view! { <BlockUserCommands block=block/> }
+                                    }
+                                    BlockContent::SNARKJobs => {
+                                        view! { <BlockSnarkJobs block=block/> }
                                     }
                                     BlockContent::FeeTransfers => todo!(),
                                     BlockContent::ZKApps => todo!(),
@@ -211,6 +221,15 @@ pub fn BlockUserCommands(block: BlocksQueryBlocks) -> impl IntoView {
                 None => view! { <NullView/> },
             }}
 
+        </TableSection>
+    }
+}
+
+#[component]
+pub fn BlockSnarkJobs(block: BlocksQueryBlocks) -> impl IntoView {
+    view! {
+        <TableSection section_heading="SNARK Jobs".to_string() controls=|| ().into_view()>
+            <BlockSpotlightSnarkJobTable block_state_hash=Option::from(get_state_hash(&block))/>
         </TableSection>
     }
 }
