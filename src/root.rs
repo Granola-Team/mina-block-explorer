@@ -44,7 +44,7 @@ pub fn Root() -> impl IntoView {
                         <Route path="/user-commands" view=BlockUserCommandsTab/>
                         <Route path="/snark-jobs" view=BlockSnarkJobsTab/>
                         <Route path="/fee-transfers" view=BlockFeeTransfersTab/>
-                        <Route path="/*any" view=BlockSpotlightTab/>
+                        <Route path="/*any" view=NullView/>
                     </Route>
                     <Route path="/transactions" view=TransactionsPage/>
                     <Route path="/transactions/:id" view=TransactionSpotlightPage/>
