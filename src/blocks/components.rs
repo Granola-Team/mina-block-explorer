@@ -16,14 +16,8 @@ use crate::snarks::components::BlockSpotlightSnarkJobTable;
 
 #[component]
 pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
-    let memo_params_map = use_params_map();
-    let resource = create_resource(
-        move || memo_params_map.get(),
-        |value| async move {
-            let state_hash = value.get("id");
-            load_data(50, None, state_hash.cloned(), None).await
-        },
-    );
+    let option_block = use_context::<ReadSignal<Option<BlocksQueryBlocks>>>()
+        .expect("there to be an optional block signal provided");
 
     let content_for_fallback = content.clone();
 
@@ -67,29 +61,24 @@ pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
                     }
                 }>
 
-                    {resource
-                        .get()
-                        .and_then(|res| res.ok())
-                        .and_then(|res| res.blocks.first().cloned().unwrap_or_default())
-                        .map(|block| {
-                            let content_clone = content.clone();
-                            {
-                                match content_clone {
-                                    BlockContent::Spotlight => {
-                                        view! { <BlockSpotlight block=block/> }
-                                    }
-                                    BlockContent::UserCommands => {
-                                        view! { <BlockUserCommands block=block/> }
-                                    }
-                                    BlockContent::SNARKJobs => {
-                                        view! { <BlockSnarkJobs block=block/> }
-                                    }
-                                    BlockContent::FeeTransfers => {
-                                        view! { <BlockFeeTransfers block=block/> }
-                                    }
-                                }
+                    {
+                        let content_clone = content.clone();
+                        let block = option_block.get().unwrap();
+                        match content_clone {
+                            BlockContent::Spotlight => {
+                                view! { <BlockSpotlight block=block/> }
                             }
-                        })}
+                            BlockContent::UserCommands => {
+                                view! { <BlockUserCommands block=block/> }
+                            }
+                            BlockContent::SNARKJobs => {
+                                view! { <BlockSnarkJobs block=block/> }
+                            }
+                            BlockContent::FeeTransfers => {
+                                view! { <BlockFeeTransfers block=block/> }
+                            }
+                        }
+                    }
 
                 </Suspense>
             </ErrorBoundary>

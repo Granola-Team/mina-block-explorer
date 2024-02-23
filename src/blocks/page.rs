@@ -9,6 +9,8 @@ use crate::common::search::*;
 use leptos::*;
 use leptos_router::*;
 
+use crate::blocks::functions::load_data;
+
 #[component]
 pub fn LatestBlocksPage() -> impl IntoView {
     view! {
@@ -42,6 +44,27 @@ pub fn BlockFeeTransfersTab() -> impl IntoView {
 pub fn BlockTabbedPage() -> impl IntoView {
     let memo_params_map = use_params_map();
     let id = move || memo_params_map.with(|p| p.get("id").cloned().unwrap_or_default());
+    let resource = create_resource(
+        move || memo_params_map.get(),
+        |value| async move {
+            let state_hash = value.get("id");
+            load_data(50, None, state_hash.cloned(), None).await
+        },
+    );
+
+    let (option_block, set_option_block) = create_signal(None);
+
+    create_effect(move |_| {
+        let option_block = resource
+            .get()
+            .and_then(|res| res.ok())
+            .and_then(|res| res.blocks.first().cloned().unwrap_or_default());
+
+        set_option_block.set(option_block);
+    });
+
+    provide_context(option_block);
+
     let tabs = move || {
         vec![
             NavEntry {
