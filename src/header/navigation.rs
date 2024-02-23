@@ -10,58 +10,55 @@ pub fn Header() -> impl IntoView {
             href: "/blocks".to_string(),
             text: "Blocks".to_string(),
             icon: NavIcon::Blocks,
-            sub_entries: None,
-            disabled: false,
+            ..Default::default()
         },
         NavEntry {
             href: "/transactions".to_string(),
             text: "Transactions".to_string(),
             icon: NavIcon::Transactions,
-            sub_entries: None,
-            disabled: false,
+            ..Default::default()
         },
         NavEntry {
             href: "/addresses".to_string(),
             text: "Addresses".to_string(),
             icon: NavIcon::Addresses,
-            disabled: false,
+            disabled: true,
             sub_entries: Some(vec![
                 NavEntry {
                     href: "/addresses/accounts".to_string(),
                     text: "Accounts".to_string(),
                     icon: NavIcon::Accounts,
-                    sub_entries: None,
                     disabled: true,
+                    ..Default::default()
                 },
                 NavEntry {
                     href: "/addresses/tokens".to_string(),
                     text: "Tokens".to_string(),
                     icon: NavIcon::Tokens,
-                    sub_entries: None,
                     disabled: true,
+                    ..Default::default()
                 },
                 NavEntry {
                     href: "/addresses/zkApps".to_string(),
                     text: "zkApps".to_string(),
                     icon: NavIcon::ZKApps,
-                    sub_entries: None,
                     disabled: true,
+                    ..Default::default()
                 },
             ]),
+            ..Default::default()
         },
         NavEntry {
             href: "/snarks".to_string(),
             text: "SNARKs".to_string(),
             icon: NavIcon::SNARKs,
-            sub_entries: None,
-            disabled: false,
+            ..Default::default()
         },
         NavEntry {
             href: "/stakes".to_string(),
             text: "Staking".to_string(),
             icon: NavIcon::Staking,
-            sub_entries: None,
-            disabled: false,
+            ..Default::default()
         },
         NavEntry {
             href: "#".to_string(),
@@ -72,9 +69,9 @@ pub fn Header() -> impl IntoView {
                 href: "/broadcast".to_string(),
                 text: "Broadcast".to_string(),
                 icon: NavIcon::Broadcast,
-                sub_entries: None,
-                disabled: false,
+                ..Default::default()
             }]),
+            ..Default::default()
         },
     ];
 
