@@ -1,13 +1,14 @@
 use super::components::*;
 use super::functions::*;
+use crate::blocks::graphql::blocks_query::BlocksQueryBlocks;
 use crate::common::components::*;
 use crate::common::functions::*;
 use crate::common::models::*;
 use crate::common::search::*;
 use crate::common::spotlight::*;
-use crate::common::table::*;
 use crate::icons::*;
 
+use leptos::ErrorBoundary;
 use leptos::*;
 use leptos_router::*;
 
@@ -121,8 +122,21 @@ fn BlockSpotlightPlaceholder() -> impl IntoView {
     }
 }
 
+#[derive(Clone)]
+enum BlockContent {
+    Spotlight,
+    UserCommands,
+    FeeTransfers,
+    ZKApps,
+}
+
 #[component]
-pub fn BlockSpotlight() -> impl IntoView {
+pub fn BlockSpotlightTab() -> impl IntoView {
+    view! { <BlockTabContainer content=BlockContent::Spotlight/> }
+}
+
+#[component]
+pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
     let memo_params_map = use_params_map();
     let resource = create_resource(
         move || memo_params_map.get(),
@@ -131,125 +145,140 @@ pub fn BlockSpotlight() -> impl IntoView {
             load_data(50, None, state_hash.cloned(), None).await
         },
     );
+
     view! {
         <PageContainer>
             <ErrorBoundary fallback=move |_| view! { <NullView/> }>
                 <Suspense fallback=move || {
                     view! { <BlockSpotlightPlaceholder/> }
                 }>
-                    {move || {
-                        resource
-                            .get()
-                            .and_then(|res| res.ok())
-                            .and_then(|res| res.blocks.first().cloned().unwrap_or_default())
-                            .map(|block| {
-                                let state_hash = get_state_hash(&block);
-                                let date_time = get_date_time(&block);
-                                let spotlight_items = vec![
-                                    SpotlightEntry {
-                                        label: "State Hash".to_string(),
-                                        value: Some(state_hash),
-                                        pill_variant: None,
-                                        copiable: true,
-                                    },
-                                    SpotlightEntry {
-                                        label: "Previous State Hash".to_string(),
-                                        value: Some(get_previous_state_hash(&block)),
-                                        pill_variant: None,
-                                        copiable: true,
-                                    },
-                                    SpotlightEntry {
-                                        label: "Staged Ledger Hash".to_string(),
-                                        value: Some(get_staged_ledger_hash(&block)),
-                                        pill_variant: None,
-                                        copiable: true,
-                                    },
-                                    SpotlightEntry {
-                                        label: "Snarked Ledger Hash".to_string(),
-                                        value: Some(get_snarked_ledger_hash(&block)),
-                                        pill_variant: None,
-                                        copiable: true,
-                                    },
-                                    SpotlightEntry {
-                                        label: "Coinbase".to_string(),
-                                        value: Some(get_coinbase(&block)),
-                                        pill_variant: Some(PillVariant::Green),
-                                        copiable: false,
-                                    },
-                                    SpotlightEntry {
-                                        label: "Coinbase Receiver".to_string(),
-                                        value: Some(get_coinbase_receiver(&block)),
-                                        pill_variant: None,
-                                        copiable: true,
-                                    },
-                                    SpotlightEntry {
-                                        label: "Winning Account".to_string(),
-                                        value: Some(get_winning_account(&block)),
-                                        pill_variant: None,
-                                        copiable: true,
-                                    },
-                                    SpotlightEntry {
-                                        label: "SNARK Fees".to_string(),
-                                        value: Some(get_snark_fees(&block)),
-                                        pill_variant: Some(PillVariant::Orange),
-                                        copiable: false,
-                                    },
-                                    SpotlightEntry {
-                                        label: "Global Slot".to_string(),
-                                        value: Some(get_global_slot(&block)),
-                                        pill_variant: Some(PillVariant::Grey),
-                                        copiable: false,
-                                    },
-                                    SpotlightEntry {
-                                        label: "Slot".to_string(),
-                                        value: Some(get_slot(&block)),
-                                        pill_variant: Some(PillVariant::Grey),
-                                        copiable: false,
-                                    },
-                                    SpotlightEntry {
-                                        label: "Epoch".to_string(),
-                                        value: Some(get_epoch(&block)),
-                                        pill_variant: Some(PillVariant::Grey),
-                                        copiable: false,
-                                    },
-                                    SpotlightEntry {
-                                        label: "Transaction Fees".to_string(),
-                                        value: Some(get_transaction_fees(&block)),
-                                        pill_variant: Some(PillVariant::Orange),
-                                        copiable: false,
-                                    },
-                                    SpotlightEntry {
-                                        label: "Blockchain Length".to_string(),
-                                        value: Some(get_block_height(&block)),
-                                        pill_variant: Some(PillVariant::Grey),
-                                        copiable: false,
-                                    },
-                                    SpotlightEntry {
-                                        label: "Total Currency".to_string(),
-                                        value: Some(get_total_currency(&block)),
-                                        pill_variant: Some(PillVariant::Green),
-                                        copiable: false,
-                                    },
-                                ];
-                                view! {
-                                    <SpotlightSection
-                                        header="Block Spotlight".to_string()
-                                        spotlight_items=spotlight_items
-                                        id=Some(get_state_hash(&block))
-                                        meta=Some(
-                                            format!("{} ({})", date_time, print_time_since(&date_time)),
-                                        )
-                                    >
 
-                                        <BlockIcon width=40/>
-                                    </SpotlightSection>
+                    {resource
+                        .get()
+                        .and_then(|res| res.ok())
+                        .and_then(|res| res.blocks.first().cloned().unwrap_or_default())
+                        .map(|block| {
+                            let content_clone = content.clone();
+                            {
+                                match content_clone {
+                                    BlockContent::Spotlight => {
+                                        view! {
+                                            <BlockSpotlight block=block/>
+                                        }
+                                    }
+                                    BlockContent::UserCommands => todo!(),
+                                    BlockContent::FeeTransfers => todo!(),
+                                    BlockContent::ZKApps => todo!(),
                                 }
-                            })
-                    }}
+                            }
+                        })}
 
                 </Suspense>
             </ErrorBoundary>
         </PageContainer>
+    }
+}
+
+#[component]
+pub fn BlockSpotlight(block: BlocksQueryBlocks) -> impl IntoView {
+    let state_hash = get_state_hash(&block);
+    let date_time = get_date_time(&block);
+    let spotlight_items = vec![
+        SpotlightEntry {
+            label: "State Hash".to_string(),
+            value: Some(state_hash),
+            pill_variant: None,
+            copiable: true,
+        },
+        SpotlightEntry {
+            label: "Previous State Hash".to_string(),
+            value: Some(get_previous_state_hash(&block)),
+            pill_variant: None,
+            copiable: true,
+        },
+        SpotlightEntry {
+            label: "Staged Ledger Hash".to_string(),
+            value: Some(get_staged_ledger_hash(&block)),
+            pill_variant: None,
+            copiable: true,
+        },
+        SpotlightEntry {
+            label: "Snarked Ledger Hash".to_string(),
+            value: Some(get_snarked_ledger_hash(&block)),
+            pill_variant: None,
+            copiable: true,
+        },
+        SpotlightEntry {
+            label: "Coinbase".to_string(),
+            value: Some(get_coinbase(&block)),
+            pill_variant: Some(PillVariant::Green),
+            copiable: false,
+        },
+        SpotlightEntry {
+            label: "Coinbase Receiver".to_string(),
+            value: Some(get_coinbase_receiver(&block)),
+            pill_variant: None,
+            copiable: true,
+        },
+        SpotlightEntry {
+            label: "Winning Account".to_string(),
+            value: Some(get_winning_account(&block)),
+            pill_variant: None,
+            copiable: true,
+        },
+        SpotlightEntry {
+            label: "SNARK Fees".to_string(),
+            value: Some(get_snark_fees(&block)),
+            pill_variant: Some(PillVariant::Orange),
+            copiable: false,
+        },
+        SpotlightEntry {
+            label: "Global Slot".to_string(),
+            value: Some(get_global_slot(&block)),
+            pill_variant: Some(PillVariant::Grey),
+            copiable: false,
+        },
+        SpotlightEntry {
+            label: "Slot".to_string(),
+            value: Some(get_slot(&block)),
+            pill_variant: Some(PillVariant::Grey),
+            copiable: false,
+        },
+        SpotlightEntry {
+            label: "Epoch".to_string(),
+            value: Some(get_epoch(&block)),
+            pill_variant: Some(PillVariant::Grey),
+            copiable: false,
+        },
+        SpotlightEntry {
+            label: "Transaction Fees".to_string(),
+            value: Some(get_transaction_fees(&block)),
+            pill_variant: Some(PillVariant::Orange),
+            copiable: false,
+        },
+        SpotlightEntry {
+            label: "Blockchain Length".to_string(),
+            value: Some(get_block_height(&block)),
+            pill_variant: Some(PillVariant::Grey),
+            copiable: false,
+        },
+        SpotlightEntry {
+            label: "Total Currency".to_string(),
+            value: Some(get_total_currency(&block)),
+            pill_variant: Some(PillVariant::Green),
+            copiable: false,
+        },
+    ];
+    view! {
+        <SpotlightSection
+            header="Block Spotlight".to_string()
+            spotlight_items=spotlight_items
+            id=Some(get_state_hash(&block))
+            meta=Some(format!("{} ({})", date_time, print_time_since(&date_time)))
+        >
+
+            <BlockIcon width=40/>
+        </SpotlightSection>
     }
 }
 
