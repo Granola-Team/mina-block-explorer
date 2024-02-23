@@ -8,5 +8,5 @@ pub enum BlockContent {
     UserCommands,
     FeeTransfers,
     SNARKJobs,
-    ZKApps,
+    //ZKApps,
 }

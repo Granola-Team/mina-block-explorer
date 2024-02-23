@@ -25,11 +25,46 @@ pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
         },
     );
 
+    let content_for_fallback = content.clone();
+
     view! {
         <PageContainer>
             <ErrorBoundary fallback=move |_| view! { <NullView/> }>
                 <Suspense fallback=move || {
-                    view! { <BlockSpotlightPlaceholder/> }
+                    let content_clone = content_for_fallback.clone();
+                    match content_clone {
+                        BlockContent::Spotlight => view! { <BlockSpotlightPlaceholder/> },
+                        BlockContent::UserCommands => {
+                            view! {
+                                <TableSection
+                                    section_heading="User Commands".to_string()
+                                    controls=|| ().into_view()
+                                >
+                                    <Table data=LoadingPlaceholder {}/>
+                                </TableSection>
+                            }
+                        }
+                        BlockContent::SNARKJobs => {
+                            view! {
+                                <TableSection
+                                    section_heading="SNARK Jobs".to_string()
+                                    controls=|| ().into_view()
+                                >
+                                    <Table data=LoadingPlaceholder {}/>
+                                </TableSection>
+                            }
+                        }
+                        BlockContent::FeeTransfers => {
+                            view! {
+                                <TableSection
+                                    section_heading="Fee Transfers".to_string()
+                                    controls=|| ().into_view()
+                                >
+                                    <Table data=LoadingPlaceholder {}/>
+                                </TableSection>
+                            }
+                        }
+                    }
                 }>
 
                     {resource
@@ -52,7 +87,6 @@ pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
                                     BlockContent::FeeTransfers => {
                                         view! { <BlockFeeTransfers block=block/> }
                                     }
-                                    BlockContent::ZKApps => todo!(),
                                 }
                             }
                         })}
