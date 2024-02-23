@@ -97,5 +97,5 @@ pub fn BlockTabbedPage() -> impl IntoView {
             },
         ]
     };
-    view! { <TabbedPage tabs=tabs()/> }
+    move || view! { <TabbedPage tabs=tabs()/> }
 }

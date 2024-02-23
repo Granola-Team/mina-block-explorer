@@ -63,19 +63,21 @@ pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
 
                     {
                         let content_clone = content.clone();
-                        let block = option_block.get().unwrap();
-                        match content_clone {
-                            BlockContent::Spotlight => {
-                                view! { <BlockSpotlight block=block/> }
-                            }
-                            BlockContent::UserCommands => {
-                                view! { <BlockUserCommands block=block/> }
-                            }
-                            BlockContent::SNARKJobs => {
-                                view! { <BlockSnarkJobs block=block/> }
-                            }
-                            BlockContent::FeeTransfers => {
-                                view! { <BlockFeeTransfers block=block/> }
+                        move || {
+                            match (option_block.get(), content_clone.clone()) {
+                                (Some(block), BlockContent::Spotlight) => {
+                                    view! { <BlockSpotlight block=block/> }
+                                }
+                                (Some(block), BlockContent::UserCommands) => {
+                                    view! { <BlockUserCommands block=block/> }
+                                }
+                                (Some(block), BlockContent::SNARKJobs) => {
+                                    view! { <BlockSnarkJobs block=block/> }
+                                }
+                                (Some(block), BlockContent::FeeTransfers) => {
+                                    view! { <BlockFeeTransfers block=block/> }
+                                }
+                                _ => view! { <NullView/> },
                             }
                         }
                     }
