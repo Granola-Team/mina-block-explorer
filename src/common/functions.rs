@@ -79,7 +79,7 @@ pub fn convert_to_status_bubble(status: Option<String>) -> HtmlElement<html::Any
             format!(
                 "block h-3 w-3 rounded-full mr-1 {} {}",
                 color,
-                if title.len() > 0 {
+                if !title.is_empty() {
                     String::from("cursor-help")
                 } else {
                     String::new()
@@ -103,9 +103,7 @@ pub fn to_title_case(s: &str) -> String {
 }
 
 pub fn split_and_title_case(s: &str, delimiter: char) -> Vec<String> {
-    s.split(delimiter)
-        .map(|substr| to_title_case(substr))
-        .collect()
+    s.split(delimiter).map(to_title_case).collect()
 }
 
 #[cfg(test)]
