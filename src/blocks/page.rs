@@ -88,6 +88,7 @@ pub fn BlockTabbedPage() -> impl IntoView {
                 href: format!("/blocks/{}/snark-jobs", id()),
                 text: "SNARK Jobs".to_string(),
                 icon: NavIcon::SNARKs,
+                number_bubble: option_block.get().as_ref().and_then(get_snark_job_count),
                 sub_entries: None,
                 disabled: false,
                 ..Default::default()
