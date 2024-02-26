@@ -68,17 +68,34 @@ pub fn convert_array_to_span(
 pub fn convert_to_status_bubble(status: Option<String>) -> HtmlElement<html::AnyElement> {
     let (color, title) = match status {
         Some(s) => (String::from("bg-status-failed"), s.to_string()),
-        None => (String::from("bg-status-success"), String::new()) 
+        None => (String::from("bg-status-success"), String::new()),
     };
     html::span()
-        .attr("class", format!("block h-3 w-3 rounded-full mr-1 {} {}", color, if title.len() > 0 { String::from("cursor-help") } else { String::new() }))
+        .attr(
+            "class",
+            format!(
+                "block h-3 w-3 rounded-full mr-1 {} {}",
+                color,
+                if title.len() > 0 {
+                    String::from("cursor-help")
+                } else {
+                    String::new()
+                }
+            ),
+        )
         .attr("title", split_and_title_case(&title, '_').join(" "))
         .into()
 }
 
 pub fn to_title_case(s: &str) -> String {
     s.char_indices()
-        .map(|(i, c)| if i == 0 || s[i - 1..i].contains(' ') { c.to_uppercase().to_string() } else { c.to_lowercase().to_string() })
+        .map(|(i, c)| {
+            if i == 0 || s[i - 1..i].contains(' ') {
+                c.to_uppercase().to_string()
+            } else {
+                c.to_lowercase().to_string()
+            }
+        })
         .collect()
 }
 
@@ -90,20 +107,29 @@ pub fn split_and_title_case(s: &str, delimiter: char) -> Vec<String> {
 
 #[cfg(test)]
 mod tests {
-    use super::{split_and_title_case,to_title_case};
+    use super::{split_and_title_case, to_title_case};
 
     #[test]
     fn test_to_title_case() {
         assert_eq!(to_title_case("hello"), "Hello");
         assert_eq!(to_title_case("hello world"), "Hello World");
         assert_eq!(to_title_case("hello_world"), "Hello_world");
-        assert_eq!(to_title_case("hello world_from rust"), "Hello World_from Rust");
+        assert_eq!(
+            to_title_case("hello world_from rust"),
+            "Hello World_from Rust"
+        );
     }
 
     #[test]
     fn test_split_and_title_case() {
-        assert_eq!(split_and_title_case("hello_world_from_rust", '_'), vec!["Hello", "World", "From", "Rust"]);
-        assert_eq!(split_and_title_case("one_two_three", '_'), vec!["One", "Two", "Three"]);
+        assert_eq!(
+            split_and_title_case("hello_world_from_rust", '_'),
+            vec!["Hello", "World", "From", "Rust"]
+        );
+        assert_eq!(
+            split_and_title_case("one_two_three", '_'),
+            vec!["One", "Two", "Three"]
+        );
         assert_eq!(split_and_title_case("a-b-c", '-'), vec!["A", "B", "C"]);
     }
 

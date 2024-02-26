@@ -7,9 +7,7 @@ use super::graphql::*;
 use std::error::Error;
 
 pub fn get_failure_reason(transaction: &TransactionsQueryTransactions) -> Option<String> {
-    transaction
-        .failure_reason
-        .clone()
+    transaction.failure_reason.clone()
 }
 
 pub fn get_block_datetime(transaction: &TransactionsQueryTransactions) -> String {

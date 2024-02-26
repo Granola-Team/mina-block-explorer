@@ -7,10 +7,12 @@ use crate::common::table::*;
 
 impl TableData for Vec<Option<TransactionsQueryTransactions>> {
     fn get_columns(&self) -> Vec<String> {
-        ["Height","Date", "From", "To", "Nonce", "Hash", "Fee", "Amount"]
-            .iter()
-            .map(ToString::to_string)
-            .collect::<Vec<_>>()
+        [
+            "Height", "Date", "From", "To", "Nonce", "Hash", "Fee", "Amount",
+        ]
+        .iter()
+        .map(ToString::to_string)
+        .collect::<Vec<_>>()
     }
 
     fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
@@ -19,8 +21,8 @@ impl TableData for Vec<Option<TransactionsQueryTransactions>> {
                 Some(transaction) => vec![
                     convert_array_to_span(vec![
                         convert_to_status_bubble(get_failure_reason(transaction)),
-                        convert_to_span(get_block_height(transaction))
-                    ]),    
+                        convert_to_span(get_block_height(transaction)),
+                    ]),
                     convert_to_span(get_block_datetime(transaction)),
                     if !get_memo(transaction).is_empty() {
                         convert_array_to_span(vec![
