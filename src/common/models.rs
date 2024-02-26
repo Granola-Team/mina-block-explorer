@@ -115,7 +115,7 @@ pub struct NavEntry {
     pub icon: NavIcon,
     pub sub_entries: Option<Vec<NavEntry>>,
     pub disabled: bool,
-    pub number_bubble: Option<i16>
+    pub number_bubble: Option<usize>
 }
 
 
