@@ -43,7 +43,7 @@ impl TableData for Vec<Option<BlocksQueryBlocks>> {
                     convert_to_pill(get_slot(block), PillVariant::Orange),
                     convert_to_link(
                         get_state_hash(block),
-                        format!("/blocks/{}", get_state_hash(block)),
+                        format!("/blocks/{}/spotlight", get_state_hash(block)),
                     ),
                     convert_to_link(
                         get_coinbase_receiver(block),
@@ -127,7 +127,7 @@ impl TableData for SummaryPageBlocksQueryBlocks {
                     convert_to_pill(get_slot(block), PillVariant::Grey),
                     convert_to_link(
                         get_state_hash(block),
-                        format!("/blocks/{}", get_state_hash(block)),
+                        format!("/blocks/{}/spotlight", get_state_hash(block)),
                     ),
                     convert_to_link(
                         get_coinbase_receiver(block),

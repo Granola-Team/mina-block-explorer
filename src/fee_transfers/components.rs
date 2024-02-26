@@ -13,7 +13,7 @@ pub fn BlockSpotlightFeeTransfersTable(block_state_hash: Option<String>) -> impl
         move |block_state_hash_opt| async move { load_data(50, block_state_hash_opt).await },
     );
 
-    let records_per_page = 5;
+    let records_per_page = 10;
     let (current_page, set_current_page) = create_signal(1);
 
     view! {

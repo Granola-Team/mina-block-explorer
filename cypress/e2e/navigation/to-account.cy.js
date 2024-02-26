@@ -12,10 +12,10 @@ suite(["@CI"],'account page', () => {
         { origin: '/next-stakes', column: 'Delegate', tableHeader: 'Next Staking Ledger' },
         { origin: '/transactions', column: 'From', tableHeader: 'Transactions'},
         { origin: '/transactions', column: 'To', tableHeader: 'Transactions'},
-        { origin: '/blocks/3NKnLbpRcFaY9WSzLFa4wYxejhnWBQNEPA2cnesvS75wcuNCr8nA', column: 'From', tableHeader: 'User Commands'},
-        { origin: '/blocks/3NKnLbpRcFaY9WSzLFa4wYxejhnWBQNEPA2cnesvS75wcuNCr8nA', column: 'To', tableHeader: 'User Commands'},
-        { origin: '/blocks/3NKjn8eQiAdwHMeenVuHKmqTVarJzPU7bfPnvSu74XuXTdzhXpj4', column: 'Prover', tableHeader: 'SNARK Jobs'},
-        { origin: '/blocks/3NLXaJBYriRYe8LQUNwgSFsUvuikjkL8SDo1MHKRYsfRA4FjCsEv', column: 'Recipient', tableHeader: 'Fee Transfers'},
+        { origin: '/blocks/3NKnLbpRcFaY9WSzLFa4wYxejhnWBQNEPA2cnesvS75wcuNCr8nA/user-commands', column: 'From', tableHeader: 'User Commands'},
+        { origin: '/blocks/3NKnLbpRcFaY9WSzLFa4wYxejhnWBQNEPA2cnesvS75wcuNCr8nA/user-commands', column: 'To', tableHeader: 'User Commands'},
+        { origin: '/blocks/3NKjn8eQiAdwHMeenVuHKmqTVarJzPU7bfPnvSu74XuXTdzhXpj4/snark-jobs', column: 'Prover', tableHeader: 'SNARK Jobs'},
+        { origin: '/blocks/3NLXaJBYriRYe8LQUNwgSFsUvuikjkL8SDo1MHKRYsfRA4FjCsEv/fee-transfers', column: 'Recipient', tableHeader: 'Fee Transfers'},
     ];
 
     pages.forEach(({ origin, column, tableHeader }) => it(`is navigated to from ${origin} by clicking link in '${column}'`,() => {
