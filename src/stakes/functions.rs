@@ -12,10 +12,7 @@ pub fn get_public_key(stake: &StakesQueryStakes) -> String {
 }
 
 pub fn get_balance(stake: &StakesQueryStakes) -> String {
-    stake
-        .balance
-        .and_then(nanomina_to_mina)
-        .map_or("".to_string(), to_mina_string)
+    stake.balance.map(nanomina_to_mina).unwrap_or_default()
 }
 
 pub fn get_delegate(stake: &StakesQueryStakes) -> String {
