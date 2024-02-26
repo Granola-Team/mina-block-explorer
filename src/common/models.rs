@@ -129,4 +129,5 @@ pub enum NavIcon {
     ZKApps,
     Tokens,
     Addresses,
+    FeeTransfers,
 }
