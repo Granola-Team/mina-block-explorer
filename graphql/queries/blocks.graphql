@@ -18,7 +18,7 @@ query BlocksQuery($query: BlockQueryInput!, $limit: Int = 10, $sort_by: BlockSor
         amount
       }
       feeTransfer {
-        fee
+        type
       }
     }
     creatorAccount {
