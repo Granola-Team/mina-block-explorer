@@ -77,11 +77,11 @@ pub fn get_coinbase(block: &BlocksQueryBlocks) -> String {
         .map_or("".to_string(), to_mina_string)
 }
 
-pub fn get_transaction_count(block: &BlocksQueryBlocks) -> String {
-    block.transactions.as_ref().map_or_else(String::new, |o| {
+pub fn get_transaction_count(block: &BlocksQueryBlocks) -> Option<usize> {
+    block.transactions.as_ref().and_then(|o| {
         o.user_commands
             .as_ref()
-            .map_or_else(String::new, |o1| o1.len().to_string())
+            .map(|o1| o1.len())
     })
 }
 
