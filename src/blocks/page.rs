@@ -97,6 +97,7 @@ pub fn BlockTabbedPage() -> impl IntoView {
                 href: format!("/blocks/{}/fee-transfers", id()),
                 text: "Fee Transfers".to_string(),
                 icon: NavIcon::FeeTransfers,
+                number_bubble: option_block.get().as_ref().and_then(get_fee_transfer_count),
                 sub_entries: None,
                 disabled: false,
                 ..Default::default()
