@@ -9,7 +9,7 @@ use crate::common::search::*;
 use leptos::*;
 use leptos_router::*;
 
-use crate::blocks::functions::load_data;
+use super::functions::*;
 
 #[component]
 pub fn LatestBlocksPage() -> impl IntoView {
@@ -73,13 +73,16 @@ pub fn BlockTabbedPage() -> impl IntoView {
                 icon: NavIcon::Blocks,
                 sub_entries: None,
                 disabled: false,
+                ..Default::default()
             },
             NavEntry {
                 href: format!("/blocks/{}/user-commands", id()),
                 text: "User Commands".to_string(),
                 icon: NavIcon::Transactions,
+                number_bubble: option_block.get().as_ref().and_then(get_transaction_count),
                 sub_entries: None,
                 disabled: false,
+                ..Default::default()
             },
             NavEntry {
                 href: format!("/blocks/{}/snark-jobs", id()),
@@ -87,6 +90,7 @@ pub fn BlockTabbedPage() -> impl IntoView {
                 icon: NavIcon::SNARKs,
                 sub_entries: None,
                 disabled: false,
+                ..Default::default()
             },
             NavEntry {
                 href: format!("/blocks/{}/fee-transfers", id()),
@@ -94,6 +98,7 @@ pub fn BlockTabbedPage() -> impl IntoView {
                 icon: NavIcon::FeeTransfers,
                 sub_entries: None,
                 disabled: false,
+                ..Default::default()
             },
         ]
     };
