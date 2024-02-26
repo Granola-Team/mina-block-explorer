@@ -62,7 +62,10 @@ pub fn canonical_wrapper(el: HtmlElement<html::AnyElement>) -> HtmlElement<html:
 pub fn convert_array_to_span(
     els: Vec<HtmlElement<html::AnyElement>>,
 ) -> HtmlElement<html::AnyElement> {
-    html::span().attr("class", "flex").child(els).into()
+    html::span()
+        .attr("class", "flex items-center")
+        .child(els)
+        .into()
 }
 
 pub fn convert_to_status_bubble(status: Option<String>) -> HtmlElement<html::AnyElement> {
