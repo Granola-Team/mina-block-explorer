@@ -17,6 +17,9 @@ query BlocksQuery($query: BlockQueryInput!, $limit: Int = 10, $sort_by: BlockSor
         fee 
         amount
       }
+      feeTransfer {
+        fee
+      }
     }
     creatorAccount {
       publicKey
