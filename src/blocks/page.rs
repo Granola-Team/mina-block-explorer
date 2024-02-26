@@ -82,7 +82,6 @@ pub fn BlockTabbedPage() -> impl IntoView {
                 number_bubble: option_block.get().as_ref().and_then(get_transaction_count),
                 sub_entries: None,
                 disabled: false,
-                ..Default::default()
             },
             NavEntry {
                 href: format!("/blocks/{}/snark-jobs", id()),
@@ -91,7 +90,6 @@ pub fn BlockTabbedPage() -> impl IntoView {
                 number_bubble: option_block.get().as_ref().and_then(get_snark_job_count),
                 sub_entries: None,
                 disabled: false,
-                ..Default::default()
             },
             NavEntry {
                 href: format!("/blocks/{}/fee-transfers", id()),
@@ -100,7 +98,6 @@ pub fn BlockTabbedPage() -> impl IntoView {
                 number_bubble: option_block.get().as_ref().and_then(get_fee_transfer_count),
                 sub_entries: None,
                 disabled: false,
-                ..Default::default()
             },
         ]
     };
