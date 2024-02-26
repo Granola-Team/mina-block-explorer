@@ -85,11 +85,11 @@ pub fn get_transaction_count(block: &BlocksQueryBlocks) -> Option<usize> {
     })
 }
 
-pub fn get_snark_job_count(block: &BlocksQueryBlocks) -> String {
+pub fn get_snark_job_count(block: &BlocksQueryBlocks) -> Option<usize> {
     block
         .snark_jobs
         .as_ref()
-        .map_or_else(String::new, |o| o.len().to_string())
+        .map(|o| o.len())
 }
 
 pub fn get_slot(block: &BlocksQueryBlocks) -> String {
