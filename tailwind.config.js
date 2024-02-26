@@ -26,7 +26,9 @@ module.exports = {
                 'card-blue': '#ECFBFF',
                 'card-green': '#EEFCEF',
                 'card-text-purple': '#8572E6',
-                'card-text-blue': '#25B4D6'
+                'card-text-blue': '#25B4D6',
+                'status-success': '#56D05F',
+                'status-failed': '#F58E2E'
           }
         }
 
