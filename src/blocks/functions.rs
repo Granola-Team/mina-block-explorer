@@ -78,26 +78,21 @@ pub fn get_coinbase(block: &BlocksQueryBlocks) -> String {
 }
 
 pub fn get_transaction_count(block: &BlocksQueryBlocks) -> Option<usize> {
-    block.transactions.as_ref().and_then(|o| {
-        o.user_commands
-            .as_ref()
-            .map(|o1| o1.len())
-    })
+    block
+        .transactions
+        .as_ref()
+        .and_then(|o| o.user_commands.as_ref().map(|o1| o1.len()))
 }
 
 pub fn get_snark_job_count(block: &BlocksQueryBlocks) -> Option<usize> {
-    block
-        .snark_jobs
-        .as_ref()
-        .map(|o| o.len())
+    block.snark_jobs.as_ref().map(|o| o.len())
 }
 
-pub fn get_fee_transfer_count(block: &BlocksQueryBlocks) -> Option<usize> { 
-    block.transactions.as_ref().and_then(|o| {
-        o.fee_transfer
-            .as_ref()
-            .map(|o1| o1.len())
-    })
+pub fn get_fee_transfer_count(block: &BlocksQueryBlocks) -> Option<usize> {
+    block
+        .transactions
+        .as_ref()
+        .and_then(|o| o.fee_transfer.as_ref().map(|o1| o1.len()))
 }
 
 pub fn get_slot(block: &BlocksQueryBlocks) -> String {

@@ -115,9 +115,8 @@ pub struct NavEntry {
     pub icon: NavIcon,
     pub sub_entries: Option<Vec<NavEntry>>,
     pub disabled: bool,
-    pub number_bubble: Option<usize>
+    pub number_bubble: Option<usize>,
 }
-
 
 impl Default for NavEntry {
     fn default() -> Self {
