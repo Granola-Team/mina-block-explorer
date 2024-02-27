@@ -3,5 +3,14 @@
     "rust-analyzer.linkedProjects": [
         "./Cargo.toml",
     ],
-    "rust-analyzer.diagnostics.disabled": ["unresolved-proc-macro"]
+    "rust-analyzer.diagnostics.disabled": ["unresolved-proc-macro"],
+    "terminal.integrated.env.osx": {
+        "RUSTFLAGS": "--cfg=web_sys_unstable_apis"
+    },
+    "terminal.integrated.env.linux": {
+        "RUSTFLAGS": "--cfg=web_sys_unstable_apis"
+    },
+    "terminal.integrated.env.windows": {
+        "RUSTFLAGS": "--cfg=web_sys_unstable_apis"
+    }
 }
