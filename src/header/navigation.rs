@@ -25,14 +25,14 @@ pub fn Header() -> impl IntoView {
                 },
                 NavEntry {
                     href: "/transactions/token-trxs".to_string(),
-                    text: "Token Transactions".to_string(),
+                    text: "Token Trnxs".to_string(),
                     icon: NavIcon::Tokens,
                     disabled: true,
                     ..Default::default()
                 },
                 NavEntry {
                     href: "/transactions/zk-trxs".to_string(),
-                    text: "zkApp Transactions".to_string(),
+                    text: "zkApp Trnxs".to_string(),
                     icon: NavIcon::ZKApps,
                     disabled: true,
                     ..Default::default()
