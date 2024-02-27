@@ -11,6 +11,35 @@ use crate::common::spotlight::*;
 use crate::icons::*;
 
 #[component]
+pub fn TransactionTabbedPage() -> impl IntoView {
+    let tabs = vec![
+        NavEntry {
+            href: "/transactions".to_string(),
+            text: "Transactions".to_string(),
+            icon: NavIcon::Transactions,
+            sub_entries: None,
+            disabled: false,
+        },
+        NavEntry {
+            href: "/transactions/token-trxs".to_string(),
+            text: "Token Transactions".to_string(),
+            icon: NavIcon::Tokens,
+            sub_entries: None,
+            disabled: true,
+        },
+        NavEntry {
+            href: "/transactions/zk-trxs".to_string(),
+            text: "zkApp Transactions".to_string(),
+            icon: NavIcon::ZKApps,
+            sub_entries: None,
+            disabled: true,
+        },
+    ];
+
+    view! { <TabbedPage tabs=tabs/> }
+}
+
+#[component]
 pub fn TransactionsPage() -> impl IntoView {
     let query_params_map: Memo<ParamsMap> = use_query_map();
 
