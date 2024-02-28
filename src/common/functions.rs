@@ -171,6 +171,14 @@ pub fn data_placeholder() -> HtmlElement<html::AnyElement> {
         .into()
 }
 
+pub fn decorate_with_currency_tag(data: String, currency_tag: String) -> HtmlElement<html::AnyElement> {
+    view! {
+        <span class="whitespace-nowrap">
+            {data} <span class="ml-1 uppercase font-light text-inherit/50">{currency_tag}</span>
+        </span> 
+    }.into()
+}
+
 pub fn string_to_f64(str: &str) -> Option<f64> {
     let float_val: Result<f64, _> = str.parse();
     match float_val {
