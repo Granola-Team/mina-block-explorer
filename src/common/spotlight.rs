@@ -4,20 +4,11 @@ use crate::common::components::*;
 use crate::common::functions::*;
 use web_sys::js_sys::Array;
 
+#[derive(Default)]
 pub struct SpotlightEntry {
     pub label: String,
     pub any_el: Option<HtmlElement<html::AnyElement>>,
     pub copiable: bool,
-}
-
-impl Default for SpotlightEntry {
-    fn default() -> Self {
-        SpotlightEntry {
-            label: String::new(),
-            any_el: None,
-            copiable: false,
-        }
-    }
 }
 
 #[component]
