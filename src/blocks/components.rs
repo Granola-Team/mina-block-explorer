@@ -162,7 +162,7 @@ pub fn BlockSpotlight(block: BlocksQueryBlocks) -> impl IntoView {
         },
         SpotlightEntry {
             label: "Coinbase".to_string(),
-            any_el: Some(convert_to_pill(get_coinbase(&block),PillVariant::Green)),
+            any_el: Some(wrap_in_pill(decorate_with_currency_tag(get_coinbase(&block),"mina".to_string()),PillVariant::Green)),
             ..Default::default()
         },
         SpotlightEntry {
@@ -177,7 +177,7 @@ pub fn BlockSpotlight(block: BlocksQueryBlocks) -> impl IntoView {
         },
         SpotlightEntry {
             label: "SNARK Fees".to_string(),
-            any_el: Some(convert_to_pill(get_snark_fees(&block),PillVariant::Orange)),
+            any_el: Some(wrap_in_pill(decorate_with_currency_tag(get_snark_fees(&block),"mina".to_string()),PillVariant::Orange)),
             ..Default::default()
         },
         SpotlightEntry {
@@ -197,7 +197,7 @@ pub fn BlockSpotlight(block: BlocksQueryBlocks) -> impl IntoView {
         },
         SpotlightEntry {
             label: "Transaction Fees".to_string(),
-            any_el: Some(convert_to_pill(get_transaction_fees(&block),PillVariant::Orange)),
+            any_el: Some(wrap_in_pill(decorate_with_currency_tag(get_transaction_fees(&block),"mina".to_string()),PillVariant::Orange)),
             ..Default::default()
         },
         SpotlightEntry {
@@ -207,7 +207,7 @@ pub fn BlockSpotlight(block: BlocksQueryBlocks) -> impl IntoView {
         },
         SpotlightEntry {
             label: "Total Currency".to_string(),
-            any_el: Some(convert_to_pill(get_total_currency(&block),PillVariant::Green)),
+            any_el: Some(wrap_in_pill(decorate_with_currency_tag(get_total_currency(&block),"mina".to_string()),PillVariant::Green)),
             ..Default::default()
         },
     ];

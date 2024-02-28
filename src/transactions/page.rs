@@ -83,12 +83,12 @@ pub fn TransactionSpotlightPage() -> impl IntoView {
                                 },
                                 SpotlightEntry {
                                     label: "Amount".to_string(),
-                                    any_el: Some(convert_to_pill(get_amount(transaction),PillVariant::Green)),
+                                    any_el: Some(wrap_in_pill(decorate_with_currency_tag(get_amount(transaction),"mina".to_string()),PillVariant::Green)),
                                     ..Default::default()
                                 },
                                 SpotlightEntry {
                                     label: "Fee".to_string(),
-                                    any_el: Some(convert_to_pill(get_fee(transaction),PillVariant::Orange)),
+                                    any_el: Some(wrap_in_pill(decorate_with_currency_tag(get_fee(transaction),"mina".to_string()),PillVariant::Orange)),
                                     ..Default::default()
                                 },
                                 SpotlightEntry {
