@@ -163,8 +163,7 @@ pub fn wrap_in_pill(
         pill_class_str_base.to_owned(),
         pill_variant_to_style_str(pill_variant)
     );
-    view! { <span class=pill_class_str>{any}</span> }
-    .into()
+    view! { <span class=pill_class_str>{any}</span> }.into()
 }
 
 pub fn data_placeholder() -> HtmlElement<html::AnyElement> {
