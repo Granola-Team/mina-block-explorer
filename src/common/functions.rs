@@ -151,7 +151,10 @@ pub fn convert_to_pill(data: String, pill_variant: PillVariant) -> HtmlElement<h
     wrap_in_pill(html::span().child(data).into(), pill_variant)
 }
 
-pub fn wrap_in_pill(any: HtmlElement<html::AnyElement>, pill_variant: PillVariant) -> HtmlElement<html::AnyElement> {
+pub fn wrap_in_pill(
+    any: HtmlElement<html::AnyElement>,
+    pill_variant: PillVariant,
+) -> HtmlElement<html::AnyElement> {
     let value_class_str_base = "text-white p-0.5 text-sm flex justify-center items-center w-fit";
     let pill_class_str_base = format!("{} {}", value_class_str_base, "px-2 rounded-full");
 
@@ -160,11 +163,8 @@ pub fn wrap_in_pill(any: HtmlElement<html::AnyElement>, pill_variant: PillVarian
         pill_class_str_base.to_owned(),
         pill_variant_to_style_str(pill_variant)
     );
-    view! {
-        <span class=pill_class_str>
-            {any}
-        </span>
-    }.into()
+    view! { <span class=pill_class_str>{any}</span> }
+    .into()
 }
 
 pub fn data_placeholder() -> HtmlElement<html::AnyElement> {
@@ -176,12 +176,16 @@ pub fn data_placeholder() -> HtmlElement<html::AnyElement> {
         .into()
 }
 
-pub fn decorate_with_currency_tag(data: String, currency_tag: String) -> HtmlElement<html::AnyElement> {
+pub fn decorate_with_currency_tag(
+    data: String,
+    currency_tag: String,
+) -> HtmlElement<html::AnyElement> {
     view! {
         <span class="whitespace-nowrap">
             {data} <span class="ml-1 uppercase font-light text-inherit/50">{currency_tag}</span>
-        </span> 
-    }.into()
+        </span>
+    }
+    .into()
 }
 
 pub fn string_to_f64(str: &str) -> Option<f64> {

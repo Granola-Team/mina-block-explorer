@@ -34,7 +34,10 @@ impl TableData for Vec<Option<SnarksQuerySnarks>> {
                         get_block_state_hash(snark),
                         format!("/blocks/{}", get_block_state_hash(snark)),
                     ),
-                    wrap_in_pill(decorate_with_currency_tag(get_fee(snark),"mina".to_string()), PillVariant::Orange),
+                    wrap_in_pill(
+                        decorate_with_currency_tag(get_fee(snark), "mina".to_string()),
+                        PillVariant::Orange,
+                    ),
                 ],
                 None => vec![],
             })

@@ -1,7 +1,7 @@
 use url::Url;
 
-use crate::common::models::*;
 use crate::common::functions::*;
+use crate::common::models::*;
 use crate::common::spotlight::*;
 
 use super::models::*;
@@ -83,12 +83,18 @@ pub fn get_spotlight_data(account: &AccountSummary) -> Vec<SpotlightEntry> {
     vec![
         SpotlightEntry {
             label: String::from("Balance"),
-            any_el: Some(wrap_in_pill(decorate_with_currency_tag(account.balance.total.clone(),"mina".to_string()),PillVariant::Green)),
+            any_el: Some(wrap_in_pill(
+                decorate_with_currency_tag(account.balance.total.clone(), "mina".to_string()),
+                PillVariant::Green,
+            )),
             ..Default::default()
         },
         SpotlightEntry {
             label: String::from("Nonce"),
-            any_el: Some(convert_to_pill(account.nonce.to_string(),PillVariant::Blue)),
+            any_el: Some(convert_to_pill(
+                account.nonce.to_string(),
+                PillVariant::Blue,
+            )),
             ..Default::default()
         },
         SpotlightEntry {

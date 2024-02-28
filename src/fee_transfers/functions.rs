@@ -15,7 +15,10 @@ pub fn get_receipient(fee_transfer: &FeeTransfersQueryFeetransfers) -> String {
 }
 
 pub fn get_fee(fee_transfer: &FeeTransfersQueryFeetransfers) -> String {
-    fee_transfer.fee.map(|i| nanomina_to_mina(i as f64)).unwrap_or_default()
+    fee_transfer
+        .fee
+        .map(|i| nanomina_to_mina(i as f64))
+        .unwrap_or_default()
 }
 
 pub fn get_type(fee_transfer: &FeeTransfersQueryFeetransfers) -> String {

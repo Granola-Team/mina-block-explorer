@@ -12,10 +12,10 @@ pub struct SpotlightEntry {
 
 impl Default for SpotlightEntry {
     fn default() -> Self {
-        SpotlightEntry { 
-            label: String::new(), 
-            any_el: None, 
-            copiable: false 
+        SpotlightEntry {
+            label: String::new(),
+            any_el: None,
+            copiable: false,
         }
     }
 }
@@ -99,7 +99,6 @@ fn Spotlight(
 
 #[component]
 fn SpotlightRow(entry: SpotlightEntry) -> impl IntoView {
-    
     let th_td_class_base = "flex justify-start items-center m-1 p-1 text-left";
 
     view! {
@@ -116,20 +115,13 @@ fn SpotlightRow(entry: SpotlightEntry) -> impl IntoView {
             {match entry.any_el {
                 Some(any_el) => {
                     let class_list_array = Array::new();
-
                     class_list_array.push(&"text-sm".into());
                     class_list_array.push(&"text-ellipsis".into());
                     class_list_array.push(&"overflow-hidden".into());
                     any_el.class_list().add(&class_list_array).unwrap();
                     match entry.copiable {
-                        true => {
-                            view! {
-                                <CopyToClipboard>
-                                    {any_el}
-                                </CopyToClipboard>
-                            }.into_view()
-                        }
-                        false => any_el.into_view()
+                        true => view! { <CopyToClipboard>{any_el}</CopyToClipboard> }.into_view(),
+                        false => any_el.into_view(),
                     }
                 }
                 None => data_placeholder().into_view(),

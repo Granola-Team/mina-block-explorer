@@ -73,22 +73,45 @@ pub fn TransactionSpotlightPage() -> impl IntoView {
                                 },
                                 SpotlightEntry {
                                     label: "Canonical".to_string(),
-                                    any_el: Some(convert_to_pill(get_canonical(transaction),PillVariant::Grey)),
+                                    any_el: Some(
+                                        convert_to_pill(
+                                            get_canonical(transaction),
+                                            PillVariant::Grey,
+                                        ),
+                                    ),
                                     ..Default::default()
                                 },
                                 SpotlightEntry {
                                     label: "Block State Hash".to_string(),
-                                    any_el: Some(convert_to_span(get_block_state_hash(transaction))),
+                                    any_el: Some(
+                                        convert_to_span(get_block_state_hash(transaction)),
+                                    ),
                                     copiable: true,
                                 },
                                 SpotlightEntry {
                                     label: "Amount".to_string(),
-                                    any_el: Some(wrap_in_pill(decorate_with_currency_tag(get_amount(transaction),"mina".to_string()),PillVariant::Green)),
+                                    any_el: Some(
+                                        wrap_in_pill(
+                                            decorate_with_currency_tag(
+                                                get_amount(transaction),
+                                                "mina".to_string(),
+                                            ),
+                                            PillVariant::Green,
+                                        ),
+                                    ),
                                     ..Default::default()
                                 },
                                 SpotlightEntry {
                                     label: "Fee".to_string(),
-                                    any_el: Some(wrap_in_pill(decorate_with_currency_tag(get_fee(transaction),"mina".to_string()),PillVariant::Orange)),
+                                    any_el: Some(
+                                        wrap_in_pill(
+                                            decorate_with_currency_tag(
+                                                get_fee(transaction),
+                                                "mina".to_string(),
+                                            ),
+                                            PillVariant::Orange,
+                                        ),
+                                    ),
                                     ..Default::default()
                                 },
                                 SpotlightEntry {
@@ -103,17 +126,23 @@ pub fn TransactionSpotlightPage() -> impl IntoView {
                                 },
                                 SpotlightEntry {
                                     label: "Nonce".to_string(),
-                                    any_el: Some(convert_to_pill(get_nonce(transaction),PillVariant::Grey)),
+                                    any_el: Some(
+                                        convert_to_pill(get_nonce(transaction), PillVariant::Grey),
+                                    ),
                                     ..Default::default()
                                 },
                                 SpotlightEntry {
                                     label: "Memo".to_string(),
-                                    any_el: Some(convert_to_pill(get_memo(transaction),PillVariant::Grey)),
+                                    any_el: Some(
+                                        convert_to_pill(get_memo(transaction), PillVariant::Grey),
+                                    ),
                                     ..Default::default()
                                 },
                                 SpotlightEntry {
                                     label: "Kind".to_string(),
-                                    any_el: Some(convert_to_pill(get_kind(transaction),PillVariant::Grey)),
+                                    any_el: Some(
+                                        convert_to_pill(get_kind(transaction), PillVariant::Grey),
+                                    ),
                                     ..Default::default()
                                 },
                             ];

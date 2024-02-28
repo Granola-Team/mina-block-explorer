@@ -52,8 +52,14 @@ impl TableData for Vec<Option<TransactionsQueryTransactions>> {
                         get_hash(transaction),
                         format!("/transactions/{}", get_hash(transaction)),
                     ),
-                    wrap_in_pill(decorate_with_currency_tag(get_fee(transaction),"mina".to_string()), PillVariant::Orange),
-                    wrap_in_pill(decorate_with_currency_tag(get_amount(transaction),"mina".to_string()), PillVariant::Green),
+                    wrap_in_pill(
+                        decorate_with_currency_tag(get_fee(transaction), "mina".to_string()),
+                        PillVariant::Orange,
+                    ),
+                    wrap_in_pill(
+                        decorate_with_currency_tag(get_amount(transaction), "mina".to_string()),
+                        PillVariant::Green,
+                    ),
                 ],
                 None => vec![],
             })
