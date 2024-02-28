@@ -1,5 +1,6 @@
 use graphql_client::reqwest::post_graphql;
 
+use crate::common::functions::nanomina_to_mina;
 use crate::common::models::MyError;
 use crate::fee_transfers::graphql::fee_transfers_query;
 use crate::fee_transfers::graphql::fee_transfers_query::FeeTransfersQueryFeetransfers;
@@ -14,7 +15,7 @@ pub fn get_receipient(fee_transfer: &FeeTransfersQueryFeetransfers) -> String {
 }
 
 pub fn get_fee(fee_transfer: &FeeTransfersQueryFeetransfers) -> String {
-    fee_transfer.fee.map_or("".to_string(), |o| o.to_string())
+    fee_transfer.fee.map(|i| nanomina_to_mina(i as f64)).unwrap_or_default()
 }
 
 pub fn get_type(fee_transfer: &FeeTransfersQueryFeetransfers) -> String {
