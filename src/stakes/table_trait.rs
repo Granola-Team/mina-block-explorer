@@ -22,7 +22,7 @@ impl TableData for Vec<Option<StakesQueryStakes>> {
                         get_public_key(stake),
                         format!("/addresses/accounts/{}", get_public_key(stake)),
                     ),
-                    convert_to_pill(get_balance(stake), PillVariant::Green),
+                    wrap_in_pill(decorate_with_currency_tag(get_balance(stake),"mina".to_string()), PillVariant::Green),
                     convert_to_link(
                         if get_public_key(stake) == get_delegate(stake) {
                             "Self".to_string()

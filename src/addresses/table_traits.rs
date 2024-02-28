@@ -24,8 +24,8 @@ impl TableData for Vec<Option<AllAccountSummary>> {
                         format!("/addresses/accounts/{}", all_account_sum.pk),
                     ),
                     convert_to_span(all_account_sum.username.to_string()),
-                    convert_to_pill(all_account_sum.balance.to_string(), PillVariant::Green),
-                    convert_to_pill(all_account_sum.nonce.to_string(), PillVariant::Grey),
+                    wrap_in_pill(decorate_with_currency_tag(all_account_sum.balance.to_string(),"mina".to_string()), PillVariant::Green),
+                    wrap_in_pill(decorate_with_currency_tag(all_account_sum.nonce.to_string(),"mina".to_string()), PillVariant::Grey),
                     convert_to_link(
                         all_account_sum.delegate.to_string(),
                         format!("/addresses/accounts/{}", all_account_sum.delegate),
