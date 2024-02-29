@@ -20,15 +20,15 @@ pub fn TransactionTabbedPage() -> impl IntoView {
             ..Default::default()
         },
         NavEntry {
-            href: "/transactions/token-trxs".to_string(),
-            text: "Token Trnxs".to_string(),
+            href: "/transactions/token".to_string(),
+            text: "Token Transactions".to_string(),
             icon: NavIcon::Tokens,
             disabled: true,
             ..Default::default()
         },
         NavEntry {
-            href: "/transactions/zk-trxs".to_string(),
-            text: "zkApp Trnxs".to_string(),
+            href: "/transactions/zkapp".to_string(),
+            text: "zkApp Transactions".to_string(),
             icon: NavIcon::ZKApps,
             disabled: true,
             ..Default::default()
