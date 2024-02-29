@@ -80,4 +80,5 @@ pre_build:
 
 publish: release
   aws cloudfront create-invalidation --distribution-id "$DIST_ID" --paths "/*"
+  aws s3 rm "s3://$BUCKET_NAME" --recursive
   aws s3 cp dist "s3://$BUCKET_NAME" --recursive
