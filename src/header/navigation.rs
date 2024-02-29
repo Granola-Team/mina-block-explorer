@@ -16,6 +16,28 @@ pub fn Header() -> impl IntoView {
             href: "/transactions".to_string(),
             text: "Transactions".to_string(),
             icon: NavIcon::Transactions,
+            sub_entries: Some(vec![
+                NavEntry {
+                    href: "/transactions".to_string(),
+                    text: "Transactions".to_string(),
+                    icon: NavIcon::Transactions,
+                    ..Default::default()
+                },
+                NavEntry {
+                    href: "/transactions/token".to_string(),
+                    text: "Token Transactions".to_string(),
+                    icon: NavIcon::Tokens,
+                    disabled: true,
+                    ..Default::default()
+                },
+                NavEntry {
+                    href: "/transactions/zkapp".to_string(),
+                    text: "zkApp Transactions".to_string(),
+                    icon: NavIcon::ZKApps,
+                    disabled: true,
+                    ..Default::default()
+                },
+            ]),
             ..Default::default()
         },
         NavEntry {
@@ -102,7 +124,7 @@ pub fn Header() -> impl IntoView {
                                     {match sub_entries {
                                         Some(s_entries) => {
                                             view! {
-                                                <ul class="md:px-2 md:hidden md:absolute md:top-0 md:left-0 md:bg-main-background md:shadow-md md:translate-y-16 md:-translate-x-2/4 group-hover:block">
+                                                <ul class="md:px-2 md:hidden md:absolute md:top-0 md:left-0 md:bg-main-background md:shadow-md md:translate-y-16 group-hover:block">
                                                     {s_entries
                                                         .into_iter()
                                                         .map(|sub_entry| {

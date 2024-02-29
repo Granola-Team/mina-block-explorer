@@ -9,7 +9,7 @@ suite(["@CI"],'mobile menu', () => {
     });
 
     pages.forEach(url => it(`provides navigation to ${url}`, () => { 
-        cy.get(`nav a[href^="${url}"]`).click();
+        cy.get(`nav a[href^="${url}"]`).first().click();
         cy.url().should('contain', url);
     }))
     

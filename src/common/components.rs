@@ -231,7 +231,7 @@ where
                 NavIcon::FeeTransfers => view! { <FeeTransferIcon/> },
             }}
 
-            <div class="ml-0.5">{nav_entry.text}</div>
+            <div class="ml-0.5 whitespace-nowrap">{nav_entry.text}</div>
         </a>
     }
 }
