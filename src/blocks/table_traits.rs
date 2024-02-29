@@ -37,7 +37,7 @@ impl TableData for Vec<Option<BlocksQueryBlocks>> {
                         get_creator_account(block),
                         format!("/blocks/accounts/{}", get_creator_account(block)),
                     ),
-                    convert_to_span(get_coinbase(block)),
+                    decorate_with_currency_tag(get_coinbase(block), "mina".to_string()),
                     convert_to_pill(
                         get_transaction_count(block).map_or_else(String::new, |o| o.to_string()),
                         PillVariant::Green,
@@ -101,8 +101,20 @@ impl TableData for Vec<Option<BlocksQueryBlocksTransactionsUserCommands>> {
                         get_user_command_hash(user_command),
                         format!("/transactions/{}", get_user_command_hash(user_command)),
                     ),
-                    convert_to_pill(get_user_command_fee(user_command), PillVariant::Orange),
-                    convert_to_pill(get_user_command_amount(user_command), PillVariant::Green),
+                    wrap_in_pill(
+                        decorate_with_currency_tag(
+                            get_user_command_fee(user_command),
+                            "mina".to_string(),
+                        ),
+                        PillVariant::Orange,
+                    ),
+                    wrap_in_pill(
+                        decorate_with_currency_tag(
+                            get_user_command_amount(user_command),
+                            "mina".to_string(),
+                        ),
+                        PillVariant::Green,
+                    ),
                 ],
                 None => vec![],
             })
@@ -127,7 +139,7 @@ impl TableData for SummaryPageBlocksQueryBlocks {
                         get_creator_account(block),
                         format!("/summary/accounts/{}", get_creator_account(block)),
                     ),
-                    convert_to_span(get_coinbase(block)),
+                    decorate_with_currency_tag(get_coinbase(block), "mina".to_string()),
                     convert_to_pill(
                         get_transaction_count(block).map_or_else(String::new, |o| o.to_string()),
                         PillVariant::Green,

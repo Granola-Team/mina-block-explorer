@@ -81,10 +81,7 @@ pub fn get_receiver_public_key(transaction: &TransactionsQueryTransactions) -> S
 }
 
 pub fn get_fee(transaction: &TransactionsQueryTransactions) -> String {
-    transaction
-        .fee
-        .and_then(nanomina_to_mina)
-        .map_or("".to_string(), to_mina_string)
+    transaction.fee.map(nanomina_to_mina).unwrap_or_default()
 }
 
 pub fn get_hash(transaction: &TransactionsQueryTransactions) -> String {
@@ -95,10 +92,7 @@ pub fn get_hash(transaction: &TransactionsQueryTransactions) -> String {
 }
 
 pub fn get_amount(transaction: &TransactionsQueryTransactions) -> String {
-    transaction
-        .amount
-        .and_then(nanomina_to_mina)
-        .map_or("".to_string(), to_mina_string)
+    transaction.amount.map(nanomina_to_mina).unwrap_or_default()
 }
 
 pub fn get_to(transaction: &TransactionsQueryTransactions) -> String {

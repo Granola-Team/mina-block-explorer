@@ -26,7 +26,10 @@ impl TableData for Vec<Option<FeeTransfersQueryFeetransfers>> {
                         get_receipient(fee_transfer),
                         format!("/addresses/accounts/{}", get_receipient(fee_transfer)),
                     ),
-                    convert_to_pill(get_fee(fee_transfer), PillVariant::Orange),
+                    wrap_in_pill(
+                        decorate_with_currency_tag(get_fee(fee_transfer), "mina".to_string()),
+                        PillVariant::Orange,
+                    ),
                     convert_to_pill(get_type(fee_transfer), PillVariant::Grey),
                     convert_to_span(get_date_time(fee_transfer)),
                 ],

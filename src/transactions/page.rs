@@ -53,81 +53,97 @@ pub fn TransactionSpotlightPage() -> impl IntoView {
                             let spotlight_items = vec![
                                 SpotlightEntry {
                                     label: "Date".to_string(),
-                                    value: Some(get_block_datetime(transaction)),
-                                    pill_variant: None,
-                                    copiable: false,
+                                    any_el: Some(convert_to_span(get_block_datetime(transaction))),
+                                    ..Default::default()
                                 },
                                 SpotlightEntry {
                                     label: "Transaction Hash".to_string(),
-                                    value: Some(get_hash(transaction)),
-                                    pill_variant: None,
+                                    any_el: Some(convert_to_span(get_hash(transaction))),
                                     copiable: true,
                                 },
                                 SpotlightEntry {
                                     label: "Payment ID".to_string(),
-                                    value: Some(get_payment_id(transaction)),
-                                    pill_variant: None,
+                                    any_el: Some(convert_to_span(get_payment_id(transaction))),
                                     copiable: true,
                                 },
                                 SpotlightEntry {
                                     label: "Block Height".to_string(),
-                                    value: Some(get_block_height(transaction)),
-                                    pill_variant: None,
-                                    copiable: false,
+                                    any_el: Some(convert_to_span(get_block_height(transaction))),
+                                    ..Default::default()
                                 },
                                 SpotlightEntry {
                                     label: "Canonical".to_string(),
-                                    value: Some(get_canonical(transaction)),
-                                    pill_variant: Some(PillVariant::Grey),
-                                    copiable: false,
+                                    any_el: Some(
+                                        convert_to_pill(
+                                            get_canonical(transaction),
+                                            PillVariant::Grey,
+                                        ),
+                                    ),
+                                    ..Default::default()
                                 },
                                 SpotlightEntry {
                                     label: "Block State Hash".to_string(),
-                                    value: Some(get_block_state_hash(transaction)),
-                                    pill_variant: None,
+                                    any_el: Some(
+                                        convert_to_span(get_block_state_hash(transaction)),
+                                    ),
                                     copiable: true,
                                 },
                                 SpotlightEntry {
                                     label: "Amount".to_string(),
-                                    value: Some(get_amount(transaction)),
-                                    pill_variant: Some(PillVariant::Green),
-                                    copiable: false,
+                                    any_el: Some(
+                                        wrap_in_pill(
+                                            decorate_with_currency_tag(
+                                                get_amount(transaction),
+                                                "mina".to_string(),
+                                            ),
+                                            PillVariant::Green,
+                                        ),
+                                    ),
+                                    ..Default::default()
                                 },
                                 SpotlightEntry {
                                     label: "Fee".to_string(),
-                                    value: Some(get_fee(transaction)),
-                                    pill_variant: Some(PillVariant::Orange),
-                                    copiable: false,
+                                    any_el: Some(
+                                        wrap_in_pill(
+                                            decorate_with_currency_tag(
+                                                get_fee(transaction),
+                                                "mina".to_string(),
+                                            ),
+                                            PillVariant::Orange,
+                                        ),
+                                    ),
+                                    ..Default::default()
                                 },
                                 SpotlightEntry {
                                     label: "From".to_string(),
-                                    value: Some(get_from(transaction)),
-                                    pill_variant: None,
+                                    any_el: Some(convert_to_span(get_from(transaction))),
                                     copiable: true,
                                 },
                                 SpotlightEntry {
                                     label: "To".to_string(),
-                                    value: Some(get_to(transaction)),
-                                    pill_variant: None,
+                                    any_el: Some(convert_to_span(get_to(transaction))),
                                     copiable: true,
                                 },
                                 SpotlightEntry {
                                     label: "Nonce".to_string(),
-                                    value: Some(get_nonce(transaction)),
-                                    pill_variant: Some(PillVariant::Grey),
-                                    copiable: false,
+                                    any_el: Some(
+                                        convert_to_pill(get_nonce(transaction), PillVariant::Grey),
+                                    ),
+                                    ..Default::default()
                                 },
                                 SpotlightEntry {
                                     label: "Memo".to_string(),
-                                    value: Some(get_memo(transaction)),
-                                    pill_variant: Some(PillVariant::Grey),
-                                    copiable: false,
+                                    any_el: Some(
+                                        convert_to_pill(get_memo(transaction), PillVariant::Grey),
+                                    ),
+                                    ..Default::default()
                                 },
                                 SpotlightEntry {
                                     label: "Kind".to_string(),
-                                    value: Some(get_kind(transaction)),
-                                    pill_variant: Some(PillVariant::Grey),
-                                    copiable: false,
+                                    any_el: Some(
+                                        convert_to_pill(get_kind(transaction), PillVariant::Grey),
+                                    ),
+                                    ..Default::default()
                                 },
                             ];
                             view! {
@@ -152,81 +168,55 @@ pub fn TransactionSpotlightPage() -> impl IntoView {
                     let spotlight_items = vec![
                         SpotlightEntry {
                             label: "Date".to_string(),
-                            value: None,
-                            pill_variant: None,
-                            copiable: false,
+                            ..Default::default()
                         },
                         SpotlightEntry {
                             label: "Transaction Hash".to_string(),
-                            value: None,
-                            pill_variant: None,
-                            copiable: true,
+                            ..Default::default()
                         },
                         SpotlightEntry {
                             label: "Payment ID".to_string(),
-                            value: None,
-                            pill_variant: None,
-                            copiable: true,
+                            ..Default::default()
                         },
                         SpotlightEntry {
                             label: "Block Height".to_string(),
-                            value: None,
-                            pill_variant: None,
-                            copiable: false,
+                            ..Default::default()
                         },
                         SpotlightEntry {
                             label: "Canonical".to_string(),
-                            value: None,
-                            pill_variant: None,
-                            copiable: false,
+                            ..Default::default()
                         },
                         SpotlightEntry {
                             label: "Block State Hash".to_string(),
-                            value: None,
-                            pill_variant: None,
-                            copiable: true,
+                            ..Default::default()
                         },
                         SpotlightEntry {
                             label: "Amount".to_string(),
-                            value: None,
-                            pill_variant: Some(PillVariant::Green),
-                            copiable: false,
+                            ..Default::default()
                         },
                         SpotlightEntry {
                             label: "Fee".to_string(),
-                            value: None,
-                            pill_variant: Some(PillVariant::Orange),
-                            copiable: false,
+                            ..Default::default()
                         },
                         SpotlightEntry {
                             label: "From".to_string(),
-                            value: None,
-                            pill_variant: None,
-                            copiable: true,
+                            ..Default::default()
                         },
                         SpotlightEntry {
                             label: "To".to_string(),
-                            value: None,
-                            pill_variant: None,
-                            copiable: true,
+                            ..Default::default()
                         },
                         SpotlightEntry {
                             label: "Nonce".to_string(),
-                            value: None,
-                            pill_variant: Some(PillVariant::Grey),
-                            copiable: false,
+                            ..Default::default()
                         },
                         SpotlightEntry {
                             label: "Memo".to_string(),
-                            value: None,
-                            pill_variant: Some(PillVariant::Grey),
-                            copiable: false,
+                            ..Default::default()
                         },
                         SpotlightEntry {
                             label: "Kind".to_string(),
-                            value: None,
-                            pill_variant: None,
-                            copiable: false,
+                            ..Default::default()
                         },
                     ];
                     view! {

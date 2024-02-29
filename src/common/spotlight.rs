@@ -2,12 +2,12 @@ use leptos::*;
 
 use crate::common::components::*;
 use crate::common::functions::*;
-use crate::common::models::*;
+use web_sys::js_sys::Array;
 
+#[derive(Default)]
 pub struct SpotlightEntry {
     pub label: String,
-    pub value: Option<String>,
-    pub pill_variant: Option<PillVariant>,
+    pub any_el: Option<HtmlElement<html::AnyElement>>,
     pub copiable: bool,
 }
 
@@ -90,20 +90,6 @@ fn Spotlight(
 
 #[component]
 fn SpotlightRow(entry: SpotlightEntry) -> impl IntoView {
-    let value_class_str_base = "text-sm text-ellipsis overflow-hidden";
-    let pill_class_str_base = format!(
-        "{} {}",
-        value_class_str_base, "px-2 py-0.5 rounded-full text-white"
-    );
-
-    let value_class_str = match entry.pill_variant {
-        Some(pill_variant) => format!(
-            "{} {}",
-            pill_class_str_base,
-            pill_variant_to_style_str(pill_variant)
-        ),
-        None => value_class_str_base.to_string(),
-    };
     let th_td_class_base = "flex justify-start items-center m-1 p-1 text-left";
 
     view! {
@@ -117,18 +103,16 @@ fn SpotlightRow(entry: SpotlightEntry) -> impl IntoView {
             th_td_class_base,
             "block w-fit text-ellipsis overflow-hidden whitespace-nowrap",
         )>
-            {match entry.value {
-                Some(val) => {
+            {match entry.any_el {
+                Some(any_el) => {
+                    let class_list_array = Array::new();
+                    class_list_array.push(&"text-sm".into());
+                    class_list_array.push(&"text-ellipsis".into());
+                    class_list_array.push(&"overflow-hidden".into());
+                    any_el.class_list().add(&class_list_array).unwrap();
                     match entry.copiable {
-                        true => {
-                            view! {
-                                <CopyToClipboard>
-                                    <span class=value_class_str>{val}</span>
-                                </CopyToClipboard>
-                            }
-                                .into_view()
-                        }
-                        false => view! { <span class=value_class_str>{val}</span> }.into_view(),
+                        true => view! { <CopyToClipboard>{any_el}</CopyToClipboard> }.into_view(),
+                        false => any_el.into_view(),
                     }
                 }
                 None => data_placeholder().into_view(),

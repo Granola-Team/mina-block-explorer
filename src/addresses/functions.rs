@@ -1,5 +1,6 @@
 use url::Url;
 
+use crate::common::functions::*;
 use crate::common::models::*;
 use crate::common::spotlight::*;
 
@@ -57,33 +58,23 @@ pub fn get_spotlight_loading_data() -> Vec<SpotlightEntry> {
     vec![
         SpotlightEntry {
             label: String::from("Balance"),
-            value: None,
-            pill_variant: None,
-            copiable: false,
+            ..Default::default()
         },
         SpotlightEntry {
             label: String::from("Nonce"),
-            value: None,
-            pill_variant: None,
-            copiable: false,
+            ..Default::default()
         },
         SpotlightEntry {
             label: String::from("Receipt Chain Hash"),
-            value: None,
-            pill_variant: None,
-            copiable: true,
+            ..Default::default()
         },
         SpotlightEntry {
             label: String::from("Delegate"),
-            value: None,
-            pill_variant: None,
-            copiable: true,
+            ..Default::default()
         },
         SpotlightEntry {
             label: String::from("Voting For"),
-            value: None,
-            pill_variant: None,
-            copiable: true,
+            ..Default::default()
         },
     ]
 }
@@ -92,32 +83,33 @@ pub fn get_spotlight_data(account: &AccountSummary) -> Vec<SpotlightEntry> {
     vec![
         SpotlightEntry {
             label: String::from("Balance"),
-            value: Some(account.balance.total.clone()),
-            pill_variant: Some(PillVariant::Green),
-            copiable: false,
+            any_el: Some(wrap_in_pill(
+                decorate_with_currency_tag(account.balance.total.clone(), "mina".to_string()),
+                PillVariant::Green,
+            )),
+            ..Default::default()
         },
         SpotlightEntry {
             label: String::from("Nonce"),
-            value: Some(account.nonce.to_string()),
-            pill_variant: Some(PillVariant::Blue),
-            copiable: false,
+            any_el: Some(convert_to_pill(
+                account.nonce.to_string(),
+                PillVariant::Blue,
+            )),
+            ..Default::default()
         },
         SpotlightEntry {
             label: String::from("Receipt Chain Hash"),
-            value: Some(account.receipt_chain_hash.to_string()),
-            pill_variant: None,
+            any_el: Some(convert_to_span(account.receipt_chain_hash.to_string())),
             copiable: true,
         },
         SpotlightEntry {
             label: String::from("Delegate"),
-            value: Some(account.delegate.to_string()),
-            pill_variant: None,
+            any_el: Some(convert_to_span(account.delegate.to_string())),
             copiable: true,
         },
         SpotlightEntry {
             label: String::from("Voting For"),
-            value: Some(account.voting_for.to_string()),
-            pill_variant: None,
+            any_el: Some(convert_to_span(account.voting_for.to_string())),
             copiable: true,
         },
     ]
