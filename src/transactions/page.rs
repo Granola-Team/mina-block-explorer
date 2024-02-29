@@ -60,11 +60,13 @@ pub fn TransactionSpotlightPage() -> impl IntoView {
                                     label: "Transaction Hash".to_string(),
                                     any_el: Some(convert_to_span(get_hash(transaction))),
                                     copiable: true,
+                                    ..Default::default()
                                 },
                                 SpotlightEntry {
                                     label: "Payment ID".to_string(),
                                     any_el: Some(convert_to_span(get_payment_id(transaction))),
                                     copiable: true,
+                                    ..Default::default()
                                 },
                                 SpotlightEntry {
                                     label: "Block Height".to_string(),
@@ -87,6 +89,7 @@ pub fn TransactionSpotlightPage() -> impl IntoView {
                                         convert_to_span(get_block_state_hash(transaction)),
                                     ),
                                     copiable: true,
+                                    ..Default::default()
                                 },
                                 SpotlightEntry {
                                     label: "Amount".to_string(),
@@ -118,11 +121,13 @@ pub fn TransactionSpotlightPage() -> impl IntoView {
                                     label: "From".to_string(),
                                     any_el: Some(convert_to_span(get_from(transaction))),
                                     copiable: true,
+                                    ..Default::default()
                                 },
                                 SpotlightEntry {
                                     label: "To".to_string(),
                                     any_el: Some(convert_to_span(get_to(transaction))),
                                     copiable: true,
+                                    ..Default::default()
                                 },
                                 SpotlightEntry {
                                     label: "Nonce".to_string(),

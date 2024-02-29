@@ -14,6 +14,7 @@ mod snarks;
 mod stakes;
 mod summary;
 mod transactions;
+mod zk_apps;
 
 use root::Root;
 

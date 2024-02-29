@@ -101,16 +101,19 @@ pub fn get_spotlight_data(account: &AccountSummary) -> Vec<SpotlightEntry> {
             label: String::from("Receipt Chain Hash"),
             any_el: Some(convert_to_span(account.receipt_chain_hash.to_string())),
             copiable: true,
+            ..Default::default()
         },
         SpotlightEntry {
             label: String::from("Delegate"),
             any_el: Some(convert_to_span(account.delegate.to_string())),
             copiable: true,
+            ..Default::default()
         },
         SpotlightEntry {
             label: String::from("Voting For"),
             any_el: Some(convert_to_span(account.voting_for.to_string())),
             copiable: true,
+            ..Default::default()
         },
     ]
 }

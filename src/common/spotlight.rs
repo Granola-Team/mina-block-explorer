@@ -9,7 +9,10 @@ pub struct SpotlightEntry {
     pub label: String,
     pub any_el: Option<HtmlElement<html::AnyElement>>,
     pub copiable: bool,
+    pub is_full_width: bool
 }
+
+
 
 #[component]
 pub fn SpotlightSection(
@@ -73,12 +76,20 @@ fn Spotlight(
 
             </div>
         </div>
+        <SpotlightTable spotlight_items/>
+    }
+}
+
+#[component]
+pub fn SpotlightTable(spotlight_items: Vec<SpotlightEntry>) -> impl IntoView {
+    view! {
         <table class="@3xl:mx-[10rem] bg-white rounded-xl mt-8 p-4 table-fixed flex flex-wrap">
             {spotlight_items
                 .into_iter()
                 .map(|entry| {
+                    let fw_class = if entry.is_full_width { "" } else { "@7xl:w-1/2"};
                     view! {
-                        <tr class="h-9 w-full @7xl:w-1/2 overflow-hidden flex">
+                        <tr class=format!("h-fit w-full {} overflow-hidden flex", fw_class)>
                             <SpotlightRow entry=entry/>
                         </tr>
                     }

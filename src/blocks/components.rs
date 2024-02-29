@@ -144,21 +144,25 @@ pub fn BlockSpotlight(block: BlocksQueryBlocks) -> impl IntoView {
             label: "State Hash".to_string(),
             any_el: Some(convert_to_span(state_hash)),
             copiable: true,
+            ..Default::default()
         },
         SpotlightEntry {
             label: "Previous State Hash".to_string(),
             any_el: Some(convert_to_span(get_previous_state_hash(&block))),
             copiable: true,
+            ..Default::default()
         },
         SpotlightEntry {
             label: "Staged Ledger Hash".to_string(),
             any_el: Some(convert_to_span(get_staged_ledger_hash(&block))),
             copiable: true,
+            ..Default::default()
         },
         SpotlightEntry {
             label: "Snarked Ledger Hash".to_string(),
             any_el: Some(convert_to_span(get_snarked_ledger_hash(&block))),
             copiable: true,
+            ..Default::default()
         },
         SpotlightEntry {
             label: "Coinbase".to_string(),
@@ -172,11 +176,13 @@ pub fn BlockSpotlight(block: BlocksQueryBlocks) -> impl IntoView {
             label: "Coinbase Receiver".to_string(),
             any_el: Some(convert_to_span(get_coinbase_receiver(&block))),
             copiable: true,
+            ..Default::default()
         },
         SpotlightEntry {
             label: "Winning Account".to_string(),
             any_el: Some(convert_to_span(get_winning_account(&block))),
             copiable: true,
+            ..Default::default()
         },
         SpotlightEntry {
             label: "SNARK Fees".to_string(),

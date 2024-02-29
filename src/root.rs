@@ -19,6 +19,7 @@ use crate::snarks::page::SnarksPage;
 use crate::stakes::page::StakesPage;
 use crate::summary::page::SummaryPage;
 use crate::transactions::page::{TransactionSpotlightPage, TransactionsPage};
+use crate::zk_apps::page::ZkAppTransactionSpotlightPage;
 
 #[component]
 pub fn Root() -> impl IntoView {
@@ -47,6 +48,7 @@ pub fn Root() -> impl IntoView {
                         <Route path="/*any" view=NullView/>
                     </Route>
                     <Route path="/transactions" view=TransactionsPage/>
+                    <Route path="/transactions/zk-app-trnx" view=ZkAppTransactionSpotlightPage/>
                     <Route path="/transactions/:id" view=TransactionSpotlightPage/>
                     <Route path="/snarks" view=SnarksPage/>
                     <Route path="/stakes" view=StakesPage/>

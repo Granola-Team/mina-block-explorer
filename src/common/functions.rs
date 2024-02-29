@@ -49,6 +49,20 @@ pub fn convert_to_span(data: String) -> HtmlElement<html::AnyElement> {
     html::span().child(data).into()
 }
 
+pub fn json_to_code(data: String) -> HtmlElement<html::AnyElement> {
+    let parsed_json: serde_json::Result<serde_json::Value> = serde_json::from_str(&data);
+    view! {
+        <code class="whitespace-pre p-2 border border-slate-200 rounded">
+            {match parsed_json {
+                Ok(value) => serde_json::to_string_pretty(&value).unwrap(),
+                _ => {
+                    "".to_string()
+                }
+            }}
+        </code>
+    }.into()
+}
+
 pub fn non_canonical_wrapper(el: HtmlElement<html::AnyElement>) -> HtmlElement<html::AnyElement> {
     html::span()
         .attr("class", "non-canonical opacity-50")

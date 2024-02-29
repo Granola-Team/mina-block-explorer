@@ -43,7 +43,7 @@ pub fn AppSubSection(
 #[component]
 pub fn AppSection(children: Children) -> impl IntoView {
     view! {
-        <section class="md:col-start-2 md:col-end-3 md:rounded-lg bg-table-section mb-4">
+        <section class="@container md:col-start-2 md:col-end-3 md:rounded-lg bg-table-section mb-4">
             {children()}
         </section>
     }
