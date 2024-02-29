@@ -40,6 +40,7 @@ impl Default for blocks_query::BlocksQueryBlocksTransactions {
             coinbase: None,
             coinbase_receiver_account: None,
             user_commands: None,
+            fee_transfer: None,
         }
     }
 }

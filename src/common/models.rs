@@ -115,6 +115,20 @@ pub struct NavEntry {
     pub icon: NavIcon,
     pub sub_entries: Option<Vec<NavEntry>>,
     pub disabled: bool,
+    pub number_bubble: Option<usize>,
+}
+
+impl Default for NavEntry {
+    fn default() -> Self {
+        NavEntry {
+            sub_entries: None,
+            disabled: false,
+            number_bubble: None,
+            href: String::new(),
+            text: String::new(),
+            icon: NavIcon::Accounts,
+        }
+    }
 }
 
 #[derive(Clone, PartialEq)]

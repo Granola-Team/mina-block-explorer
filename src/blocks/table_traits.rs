@@ -38,8 +38,14 @@ impl TableData for Vec<Option<BlocksQueryBlocks>> {
                         format!("/blocks/accounts/{}", get_creator_account(block)),
                     ),
                     decorate_with_currency_tag(get_coinbase(block), "mina".to_string()),
-                    convert_to_pill(get_transaction_count(block), PillVariant::Green),
-                    convert_to_pill(get_snark_job_count(block), PillVariant::Blue),
+                    convert_to_pill(
+                        get_transaction_count(block).map_or_else(String::new, |o| o.to_string()),
+                        PillVariant::Green,
+                    ),
+                    convert_to_pill(
+                        get_snark_job_count(block).map_or_else(String::new, |o| o.to_string()),
+                        PillVariant::Blue,
+                    ),
                     convert_to_pill(get_slot(block), PillVariant::Orange),
                     convert_to_link(
                         get_state_hash(block),
@@ -134,8 +140,14 @@ impl TableData for SummaryPageBlocksQueryBlocks {
                         format!("/summary/accounts/{}", get_creator_account(block)),
                     ),
                     decorate_with_currency_tag(get_coinbase(block), "mina".to_string()),
-                    convert_to_pill(get_transaction_count(block), PillVariant::Green),
-                    convert_to_pill(get_snark_job_count(block), PillVariant::Blue),
+                    convert_to_pill(
+                        get_transaction_count(block).map_or_else(String::new, |o| o.to_string()),
+                        PillVariant::Green,
+                    ),
+                    convert_to_pill(
+                        get_snark_job_count(block).map_or_else(String::new, |o| o.to_string()),
+                        PillVariant::Blue,
+                    ),
                     convert_to_pill(get_slot(block), PillVariant::Grey),
                     convert_to_link(
                         get_state_hash(block),
