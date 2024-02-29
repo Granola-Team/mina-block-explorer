@@ -140,22 +140,22 @@ pub fn AddressesTabbedPage() -> impl IntoView {
             href: "/addresses/accounts".to_string(),
             text: "Accounts".to_string(),
             icon: NavIcon::Addresses,
-            sub_entries: None,
             disabled: true,
+            ..Default::default()
         },
         NavEntry {
             href: "/addresses/tokens".to_string(),
             text: "Tokens".to_string(),
             icon: NavIcon::Tokens,
-            sub_entries: None,
             disabled: true,
+            ..Default::default()
         },
         NavEntry {
             href: "/addresses/zkApps".to_string(),
             text: "zkApps".to_string(),
             icon: NavIcon::ZKApps,
-            sub_entries: None,
             disabled: true,
+            ..Default::default()
         },
     ];
     view! {
