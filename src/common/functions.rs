@@ -1,5 +1,6 @@
 use chrono::{DateTime, Duration, Utc};
 use leptos::*;
+use rust_decimal::Decimal;
 
 use super::models::*;
 
@@ -107,7 +108,7 @@ pub fn split_and_title_case(s: &str, delimiter: char) -> Vec<String> {
 }
 
 #[cfg(test)]
-mod tests {
+mod titlecase_tests {
     use super::{split_and_title_case, to_title_case};
 
     #[test]
@@ -147,6 +148,13 @@ mod tests {
 }
 
 pub fn convert_to_pill(data: String, pill_variant: PillVariant) -> HtmlElement<html::AnyElement> {
+    wrap_in_pill(html::span().child(data).into(), pill_variant)
+}
+
+pub fn wrap_in_pill(
+    any: HtmlElement<html::AnyElement>,
+    pill_variant: PillVariant,
+) -> HtmlElement<html::AnyElement> {
     let value_class_str_base = "text-white p-0.5 text-sm flex justify-center items-center w-fit";
     let pill_class_str_base = format!("{} {}", value_class_str_base, "px-2 rounded-full");
 
@@ -155,10 +163,7 @@ pub fn convert_to_pill(data: String, pill_variant: PillVariant) -> HtmlElement<h
         pill_class_str_base.to_owned(),
         pill_variant_to_style_str(pill_variant)
     );
-    html::span()
-        .attr("class", pill_class_str)
-        .child(data)
-        .into()
+    view! { <span class=pill_class_str>{any}</span> }.into()
 }
 
 pub fn data_placeholder() -> HtmlElement<html::AnyElement> {
@@ -170,6 +175,18 @@ pub fn data_placeholder() -> HtmlElement<html::AnyElement> {
         .into()
 }
 
+pub fn decorate_with_currency_tag(
+    data: String,
+    currency_tag: String,
+) -> HtmlElement<html::AnyElement> {
+    view! {
+        <span class="whitespace-nowrap">
+            {data} <span class="ml-1 uppercase font-light text-inherit/50">{currency_tag}</span>
+        </span>
+    }
+    .into()
+}
+
 pub fn string_to_f64(str: &str) -> Option<f64> {
     let float_val: Result<f64, _> = str.parse();
     match float_val {
@@ -178,50 +195,79 @@ pub fn string_to_f64(str: &str) -> Option<f64> {
     }
 }
 
-pub fn nanomina_to_mina<T, U>(nanomina: T) -> U
-where
-    T: Into<f64>,
-    U: From<f64>,
-{
-    let factor = 1e9;
-    let mina_value = nanomina.into() / factor;
-    U::from(mina_value)
-}
+const MINA_SCALE: u32 = 9;
 
-pub fn to_mina_string(v: f64) -> String {
-    format!("{:.9}", v)
+pub fn nanomina_to_mina(num: f64) -> String {
+    let rounded = unsafe { num.to_int_unchecked::<u64>() };
+    let mut dec = Decimal::from(rounded);
+    dec.set_scale(MINA_SCALE).unwrap();
+    let mut dec_str = dec.to_string();
+    if dec_str.contains('.') {
+        while dec_str.ends_with('0') {
+            dec_str.pop();
+        }
+        if dec_str.ends_with('.') {
+            dec_str.pop();
+        }
+    }
+    dec_str
 }
 
 #[cfg(test)]
-mod nanomina_to_mina_tests {
-
-    use super::nanomina_to_mina;
-    use super::to_mina_string;
+mod nanomina_tests {
+    use super::*;
 
     #[test]
-    fn test_nanomina_conversion() {
-        assert_eq!(nanomina_to_mina::<f64, f64>(1e9), 1.0);
+    fn test_zero_value() {
+        assert_eq!(nanomina_to_mina(0.0), "0");
+    }
+
+    #[test]
+    fn test_exact_value() {
+        assert_eq!(nanomina_to_mina(123456789.0), "0.123456789");
+    }
+
+    #[test]
+    fn test_rounding() {
+        // This test assumes that the function should round down, based on the implementation
+        assert_eq!(nanomina_to_mina(123456789.123), "0.123456789");
+    }
+
+    #[test]
+    fn test_large_number() {
         assert_eq!(
-            nanomina_to_mina::<f64, f64>(245_145_236_987.0),
-            245.145_236_987
-        );
-        assert_eq!(
-            nanomina_to_mina::<f64, f64>(245_145_000_000.0),
-            245.145_000_000
-        );
-        assert_eq!(
-            nanomina_to_mina::<f64, f64>(611_918_500_148.000_1),
-            611.918_500_148_000_1
+            nanomina_to_mina(1_000_000_111_111_111.0),
+            "1000000.111111111"
         );
     }
 
     #[test]
-    fn test_to_string() {
-        assert_eq!(to_mina_string(611.918_5), "611.918500000".to_string());
+    fn test_larger_number() {
+        // document lack of precision in the conversion from f64 to u64
         assert_eq!(
-            to_mina_string(0.000_500_000_000_0),
-            "0.000500000".to_string()
+            nanomina_to_mina(10_000_000_111_111_111.0),
+            "10000000.111111112"
         );
+    }
+
+    #[test]
+    fn test_even_larger_number() {
+        // document lack of precision in the conversion from f64 to u64
+        assert_eq!(
+            nanomina_to_mina(100_000_000_111_111_111.0),
+            "100000000.111111104"
+        );
+    }
+
+    #[test]
+    fn test_small_fractional_value() {
+        assert_eq!(nanomina_to_mina(1.0), "0.000000001");
+    }
+
+    #[test]
+    fn test_boundary_value() {
+        // Testing value just below a rounding boundary
+        assert_eq!(nanomina_to_mina(123456788.999999999), "0.123456789");
     }
 }
 
