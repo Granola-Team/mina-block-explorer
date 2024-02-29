@@ -17,22 +17,21 @@ pub fn TransactionTabbedPage() -> impl IntoView {
             href: "/transactions".to_string(),
             text: "Transactions".to_string(),
             icon: NavIcon::Transactions,
-            sub_entries: None,
-            disabled: false,
+            ..Default::default()
         },
         NavEntry {
             href: "/transactions/token-trxs".to_string(),
             text: "Token Trnxs".to_string(),
             icon: NavIcon::Tokens,
-            sub_entries: None,
             disabled: true,
+            ..Default::default()
         },
         NavEntry {
             href: "/transactions/zk-trxs".to_string(),
             text: "zkApp Trnxs".to_string(),
             icon: NavIcon::ZKApps,
-            sub_entries: None,
             disabled: true,
+            ..Default::default()
         },
     ];
 
