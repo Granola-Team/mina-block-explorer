@@ -78,7 +78,7 @@ where
                             {format!(
                                 "Showing {} to {} of {} records",
                                 pg.start_index(),
-                                pg.end_index(),
+                                std::cmp::min(pg.end_index(), pg.total_records),
                                 pg.total_records,
                             )}
 
