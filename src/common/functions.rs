@@ -108,7 +108,7 @@ pub fn split_and_title_case(s: &str, delimiter: char) -> Vec<String> {
 }
 
 #[cfg(test)]
-mod tests {
+mod titlecase_tests {
     use super::{split_and_title_case, to_title_case};
 
     #[test]
@@ -214,7 +214,7 @@ pub fn nanomina_to_mina(num: f64) -> String {
 }
 
 #[cfg(test)]
-mod tests {
+mod nanomina_tests {
     use super::*;
 
     #[test]
