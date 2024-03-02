@@ -30,16 +30,15 @@ No additional dependencies are needed beyond this setup.
 1. Setup Environment: Run `nix develop` in your terminal to prepare your
    development environment.
 
-2. Start the Server: Execute `just dev` to start the server. 
+2. Start the Server: Execute `just dev` to start the server.
 
 These two steps will get your environment ready and your server running quickly.
 
-## License (See [LICENSE](LICENSE) file for full license)
+## License
 
-Copyright 2023 Mina Foundation, Inc.
+Copyright 2022-2024 Granola Systems Inc.
 
-Free use of this software is granted under the terms of the Mozilla
-Public License 2.0.
+This software is [licensed](LICENSE) under the Apache License, Version 2.0.
 
 ## Contributing
 
