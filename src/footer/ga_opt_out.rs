@@ -1,6 +1,6 @@
 use crate::icons::*;
 use leptos::*;
-use leptos_use::storage::{use_local_storage};
+use leptos_use::storage::use_local_storage;
 use leptos_use::utils::FromToStringCodec;
 
 #[component]
