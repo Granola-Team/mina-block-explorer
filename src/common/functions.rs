@@ -465,7 +465,7 @@ pub fn pill_variant_to_style_str(pill_variant: PillVariant) -> String {
 }
 
 pub fn get_subset<T>(
-    #[allow(clippy::ptr_arg)] items: &Vec<Option<T>>,
+    items: &[Option<T>],
     records_per_page: usize,
     current_range: usize,
 ) -> Vec<Option<T>>
