@@ -22,7 +22,7 @@ impl TableData for Vec<Option<SnarksQuerySnarks>> {
                     convert_array_to_span(vec![
                         convert_to_span(print_time_since(&get_date_time(snark))),
                         convert_to_span(get_date_time(snark))
-                            .attr("class", "block text-xs font-extralight text-slate-400"),
+                            .attr("class", "block text-xs font-light text-slate-400"),
                     ])
                     .attr("class", "block"),
                     convert_to_link(

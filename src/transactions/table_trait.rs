@@ -26,7 +26,7 @@ impl TableData for Vec<Option<TransactionsQueryTransactions>> {
                     convert_array_to_span(vec![
                         convert_to_span(print_time_since(&get_block_datetime(transaction))),
                         convert_to_span(get_block_datetime(transaction))
-                            .attr("class", "block text-xs font-extralight text-slate-400"),
+                            .attr("class", "block text-xs font-light text-slate-400"),
                     ])
                     .attr("class", "block"),
                     if !get_memo(transaction).is_empty() {
