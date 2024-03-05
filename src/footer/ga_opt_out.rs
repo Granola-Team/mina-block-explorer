@@ -1,10 +1,11 @@
 use crate::icons::*;
 use leptos::*;
-use leptos_use::storage::{use_local_storage, StringCodec};
+use leptos_use::storage::use_local_storage;
+use leptos_use::utils::FromToStringCodec;
 
 #[component]
 pub fn GAOptOut() -> impl IntoView {
-    let (flag, set_flag, _remove_flag) = use_local_storage::<bool, StringCodec>("ga-opt-out");
+    let (flag, set_flag, _remove_flag) = use_local_storage::<bool, FromToStringCodec>("ga-opt-out");
     let (first_load, set_first_load) = create_signal(true);
 
     create_effect(move |_| {
