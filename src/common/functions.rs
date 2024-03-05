@@ -356,7 +356,6 @@ mod split_str_tests {
     }
 }
 
-
 pub fn x_surrounding_pages(x: usize, l: usize) -> Vec<Vec<usize>> {
     let mut preceding = Vec::new();
     let mut following = Vec::new();
