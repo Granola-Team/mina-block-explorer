@@ -11,13 +11,13 @@ use crate::common::table::*;
 fn shared_get_columns() -> Vec<String> {
     vec![
         String::from("Height"),
+        String::from("State Hash"),
+        String::from("Slot"),
         String::from("Date"),
         String::from("Block Producer"),
         String::from("Coinbase"),
         String::from("Transactions"),
         String::from("SNARKs"),
-        String::from("Slot"),
-        String::from("State Hash"),
         String::from("Coinbase Receiver"),
     ]
 }
@@ -39,6 +39,11 @@ impl TableData for Vec<Option<BlocksQueryBlocks>> {
                         }),
                         convert_to_span(get_block_height(block)),
                     ]),
+                    convert_to_link(
+                        get_state_hash(block),
+                        format!("/blocks/{}/spotlight", get_state_hash(block)),
+                    ),
+                    convert_to_pill(get_slot(block), PillVariant::Orange),
                     convert_to_span(get_date_time(block)),
                     convert_to_link(
                         get_creator_account(block),
@@ -52,11 +57,6 @@ impl TableData for Vec<Option<BlocksQueryBlocks>> {
                     convert_to_pill(
                         get_snark_job_count(block).map_or_else(String::new, |o| o.to_string()),
                         PillVariant::Blue,
-                    ),
-                    convert_to_pill(get_slot(block), PillVariant::Orange),
-                    convert_to_link(
-                        get_state_hash(block),
-                        format!("/blocks/{}/spotlight", get_state_hash(block)),
                     ),
                     convert_to_link(
                         get_coinbase_receiver(block),
@@ -139,6 +139,11 @@ impl TableData for SummaryPageBlocksQueryBlocks {
                         }),
                         convert_to_span(get_block_height(block)),
                     ]),
+                    convert_to_link(
+                        get_state_hash(block),
+                        format!("/blocks/{}/spotlight", get_state_hash(block)),
+                    ),
+                    convert_to_pill(get_slot(block), PillVariant::Grey),
                     convert_to_span(get_date_time(block)),
                     convert_to_link(
                         get_creator_account(block),
@@ -152,11 +157,6 @@ impl TableData for SummaryPageBlocksQueryBlocks {
                     convert_to_pill(
                         get_snark_job_count(block).map_or_else(String::new, |o| o.to_string()),
                         PillVariant::Blue,
-                    ),
-                    convert_to_pill(get_slot(block), PillVariant::Grey),
-                    convert_to_link(
-                        get_state_hash(block),
-                        format!("/blocks/{}/spotlight", get_state_hash(block)),
                     ),
                     convert_to_link(
                         get_coinbase_receiver(block),

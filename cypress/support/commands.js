@@ -47,6 +47,17 @@ Cypress.Commands.add('openMobileMenu', () => {
   cy.get('nav').should('be.visible');
 });
 
+Cypress.Commands.add('tableHasOrderedColumns', (tableHeading, columns) => {
+  cy.contains('section', tableHeading)
+      .find('table th')
+      .as('columns');
+
+  cy.get('@columns').should('have.length',columns.length);
+  columns.forEach((col,i) => {
+      cy.get('@columns').eq(i).contains(col);    
+  });
+});
+
 Cypress.Commands.add('clickLinkInTable', (nthRow, columnHeading, tableHeading) => {
   cy.contains('section',tableHeading)
     .contains('table th', columnHeading, { timeout: 60000 }) 
