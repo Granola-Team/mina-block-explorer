@@ -12,7 +12,7 @@ use crate::fee_transfers::graphql::fee_transfers_query::FeeTransfersQueryFeetran
 
 impl TableData for Vec<Option<FeeTransfersQueryFeetransfers>> {
     fn get_columns(&self) -> Vec<String> {
-        ["Recipient", "Fee", "Type", "Date"]
+        ["Recipient", "Fee", "Type", "Age"]
             .iter()
             .map(ToString::to_string)
             .collect::<Vec<_>>()

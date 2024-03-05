@@ -8,7 +8,7 @@ use snarks_query::SnarksQuerySnarks;
 
 impl TableData for Vec<Option<SnarksQuerySnarks>> {
     fn get_columns(&self) -> Vec<String> {
-        ["Height", "Date", "Prover", "Work Ids", "State Hash", "Fee"]
+        ["Height", "Age", "Prover", "Work Ids", "State Hash", "Fee"]
             .iter()
             .map(ToString::to_string)
             .collect::<Vec<_>>()
