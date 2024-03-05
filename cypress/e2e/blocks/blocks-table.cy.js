@@ -1,6 +1,7 @@
 suite(["@CI"],'blocks table', () => {
 
     let pages = ['/blocks', '/summary', '/'];
+    let columns = ['Height', 'State Hash', 'Slot', 'Date', 'Block Producer', 'Coinbase', 'Transactions', 'SNARKs', 'Coinbase Receiver'];
 
     pages.forEach(page => it(`on ${page} includes non-canonical blocks when toggled is checked`, () => {
         cy.visit(page);
@@ -16,5 +17,10 @@ suite(["@CI"],'blocks table', () => {
         cy.url().should('include', 'include_non_canonical=false');
         cy.get('@tableRows').should('have.class', 'canonical')
         cy.get('@tableRows').should('not.have.class', 'non-canonical')
+    }));
+
+    pages.forEach(page => it(`on ${page} includes correct columns`, () => {
+        cy.visit(page);
+        cy.tableHasOrderedColumns('Blocks', columns);
     }));
 })
