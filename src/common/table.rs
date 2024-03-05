@@ -25,7 +25,7 @@ where
 
     view! {
         <div class="@container w-full overflow-auto">
-            <table class="md:rounded-b-lg table-fixed w-full @xs:w-[300%] @md:w-[200%] @2xl:w-[150%] @7xl:w-full">
+            <table class="font-mono md:rounded-b-lg w-full @xs:w-[300%] @md:w-[200%] @2xl:w-[150%] @7xl:w-full">
                 <tr class="h-12 bg-table-header-fill">
                     {columns
                         .into_iter()
@@ -48,9 +48,9 @@ where
                                 {row
                                     .iter()
                                     .map(|cell| {
-                                        let cell_ellipsis_class = "w-full text-ellipsis overflow-hidden";
+                                        let cell_ellipsis_class = "text-ellipsis overflow-hidden";
                                         let cell_class = format!(
-                                            "{} {} first:pl-8 pl-2 text-table-row-text-color font-medium text-sm text-left whitespace-nowrap",
+                                            "{} {} first:pl-8 pl-2 text-table-row-text-color font-medium text-sm text-left whitespace-nowrap max-w-40",
                                             cell_padding_class,
                                             cell_ellipsis_class,
                                         );
