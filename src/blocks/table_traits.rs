@@ -31,7 +31,14 @@ impl TableData for Vec<Option<BlocksQueryBlocks>> {
         self.iter()
             .map(|opt_blocks| match opt_blocks {
                 Some(block) => vec![
-                    convert_to_span(get_block_height(block)),
+                    convert_array_to_span(vec![
+                        convert_to_status_bubble(if get_canonical(block) {
+                            None
+                        } else {
+                            Some("Non-Canonical".to_string())
+                        }),
+                        convert_to_span(get_block_height(block)),
+                    ]),
                     convert_to_span(get_date_time(block)),
                     convert_to_link(
                         get_creator_account(block),
@@ -55,16 +62,7 @@ impl TableData for Vec<Option<BlocksQueryBlocks>> {
                         get_coinbase_receiver(block),
                         format!("/blocks/accounts/{}", get_coinbase_receiver(block)),
                     ),
-                ]
-                .into_iter()
-                .map(|d| {
-                    if get_canonical(block) {
-                        canonical_wrapper(d)
-                    } else {
-                        non_canonical_wrapper(d)
-                    }
-                })
-                .collect::<Vec<_>>(),
+                ],
                 None => vec![],
             })
             .collect()
@@ -133,7 +131,14 @@ impl TableData for SummaryPageBlocksQueryBlocks {
             .filter_map(|block_opt| block_opt.as_ref())
             .map(|block| {
                 vec![
-                    convert_to_span(get_block_height(block)),
+                    convert_array_to_span(vec![
+                        convert_to_status_bubble(if get_canonical(block) {
+                            None
+                        } else {
+                            Some("Non-Canonical".to_string())
+                        }),
+                        convert_to_span(get_block_height(block)),
+                    ]),
                     convert_to_span(get_date_time(block)),
                     convert_to_link(
                         get_creator_account(block),
@@ -158,15 +163,6 @@ impl TableData for SummaryPageBlocksQueryBlocks {
                         format!("/summary/accounts/{}", get_coinbase_receiver(block)),
                     ),
                 ]
-                .into_iter()
-                .map(|d| {
-                    if get_canonical(block) {
-                        canonical_wrapper(d)
-                    } else {
-                        non_canonical_wrapper(d)
-                    }
-                })
-                .collect::<Vec<_>>()
             })
             .collect()
     }
