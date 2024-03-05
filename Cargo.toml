@@ -7,12 +7,12 @@ edition = "2021"
 rust_decimal = { version = "1.33.1", features = ["serde"] }
 reqwest = { version = "0.11", features = ["json"] }
 serde = { version = "1.0", features = ["derive"] }
-leptos = { version = "0.5.7", features = ["csr"] }
-leptos_router = { version = "0.5.7", features = ["csr"] }
+leptos = { version = "0.6.9", features = ["csr"] }
+leptos_router = { version = "0.6.9", features = ["csr"] }
 chrono = { version = "0.4", features = ["serde"] }
 graphql_client = { version = "0.13.0", features = ["reqwest"] }
 url = "2.5.0"
-leptos-use = "0.9.0"
+leptos-use = "0.10.0"
 bs58 = { version = "0.5.0", features = ["check"] }
 console_error_panic_hook = "0.1.7"
 
