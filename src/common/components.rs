@@ -86,7 +86,7 @@ pub fn URLCheckbox(label: String, url_param_key: String) -> impl IntoView {
     let url_param_key_clone = url_param_key.clone(); // Clone url_param_key for use in the closure
 
     let initial_checkbox_value =
-        move || query_params_map.with(|params| params.get(&url_param_key_clone).cloned());
+        move || query_params_map.with_untracked(|params| params.get(&url_param_key_clone).cloned());
     let (checkbox_value, set_checkbox_value) =
         create_signal(initial_checkbox_value().map_or(false, |i| i == "true"));
 
@@ -108,18 +108,22 @@ pub fn URLCheckbox(label: String, url_param_key: String) -> impl IntoView {
         );
     });
 
-    view! {
-        <Checkbox
-            label=label
-            value=checkbox_value.get()
-            handle_change=move |ev| {
-                set_checkbox_value
-                    .update(|c| {
-                        logging::log!("new value is {}", event_target_checked(& ev));
-                        *c = event_target_checked(&ev);
-                    })
+    {
+        move || {
+            view! {
+                <Checkbox
+                    label=label.to_string()
+                    value=checkbox_value.get()
+                    handle_change=move |ev| {
+                        set_checkbox_value
+                            .update(|c| {
+                                logging::log!("new value is {}", event_target_checked(& ev));
+                                *c = event_target_checked(&ev);
+                            })
+                    }
+                />
             }
-        />
+        }
     }
 }
 
@@ -188,13 +192,13 @@ where
     F: Fn(MouseEvent) + 'static,
 {
     let location = use_location();
-    let pathname = move || location.pathname.get();
     let href = nav_entry.href.clone();
     let base_link_class = "md:mx-1.5 my-6 mx-4 flex font-bold text-sm uppercase";
     let hover_class = "hover:text-granola-orange hover:underline hover:decoration-2";
     let n_entry = nav_entry.clone();
-    let get_link_class = move || {
-        let tmp_class = if pathname().contains(&href) {
+    let get_link_class = create_memo(move |_| {
+        let pathname = location.pathname.get();
+        let tmp_class = if pathname.contains(&href) {
             format!(
                 "{} {} {}",
                 base_link_class, hover_class, "text-granola-orange"
@@ -210,10 +214,10 @@ where
         } else {
             tmp_class
         }
-    };
-    let (link_class, set_link_class) = create_signal(get_link_class());
+    });
+    let (link_class, set_link_class) = create_signal(get_link_class.get_untracked());
     create_effect(move |_| {
-        set_link_class.set(get_link_class());
+        set_link_class.set(get_link_class.get());
     });
     view! {
         <a on:click=on_click class=move || link_class.get() href=nav_entry.href>
