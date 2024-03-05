@@ -277,15 +277,26 @@ pub fn convert_to_link(data: String, href: String) -> HtmlElement<html::AnyEleme
 
 pub fn convert_to_ellipsis(text: String) -> HtmlElement<html::AnyElement> {
     let parts_base = "overflow-hidden flex-initial";
-    let midpoint = text.len()/2;
+    let midpoint = text.len() / 2;
     let first = text.chars().take(midpoint).collect::<String>();
-    let last = text.chars().rev().take(midpoint).collect::<String>().chars().rev().collect::<String>();
+    let last = text
+        .chars()
+        .rev()
+        .take(midpoint)
+        .collect::<String>()
+        .chars()
+        .rev()
+        .collect::<String>();
     view! {
         <div class="flex items-baseline justify-center">
-            <div class=format!("{} break-all", parts_base)>
-                {first}
-            </div>
-            <div style="direction: rtl;" class=format!(r#"{} whitespace-nowrap text-ellipsis after:content-['\200E']"#, parts_base)>
+            <div class=format!("{} break-all", parts_base)>{first}</div>
+            <div
+                style="direction: rtl;"
+                class=format!(
+                    r#"{} whitespace-nowrap text-ellipsis after:content-['\200E']"#,
+                    parts_base,
+                )
+            >
                 {last}
             </div>
         </div>
