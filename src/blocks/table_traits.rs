@@ -13,7 +13,7 @@ fn shared_get_columns() -> Vec<String> {
         String::from("Height"),
         String::from("State Hash"),
         String::from("Slot"),
-        String::from("Date"),
+        String::from("Age"),
         String::from("Block Producer"),
         String::from("Coinbase"),
         String::from("Transactions"),
@@ -44,7 +44,12 @@ impl TableData for Vec<Option<BlocksQueryBlocks>> {
                         format!("/blocks/{}/spotlight", get_state_hash(block)),
                     ),
                     convert_to_pill(get_slot(block), PillVariant::Orange),
-                    convert_to_span(get_date_time(block)),
+                    convert_array_to_span(vec![
+                        convert_to_span(print_time_since(&get_date_time(block))),
+                        convert_to_span(get_date_time(block))
+                            .attr("class", "block text-xs font-extralight text-slate-400"),
+                    ])
+                    .attr("class", "block"),
                     convert_to_link(
                         get_creator_account(block),
                         format!("/blocks/accounts/{}", get_creator_account(block)),
@@ -144,7 +149,12 @@ impl TableData for SummaryPageBlocksQueryBlocks {
                         format!("/blocks/{}/spotlight", get_state_hash(block)),
                     ),
                     convert_to_pill(get_slot(block), PillVariant::Grey),
-                    convert_to_span(get_date_time(block)),
+                    convert_array_to_span(vec![
+                        convert_to_span(print_time_since(&get_date_time(block))),
+                        convert_to_span(get_date_time(block))
+                            .attr("class", "block text-xs font-extralight text-slate-400"),
+                    ])
+                    .attr("class", "block"),
                     convert_to_link(
                         get_creator_account(block),
                         format!("/summary/accounts/{}", get_creator_account(block)),
