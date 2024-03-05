@@ -282,7 +282,7 @@ pub fn convert_to_ellipsis(text: String) -> HtmlElement<html::AnyElement> {
     let last = text
         .chars()
         .rev()
-        .take(midpoint+1)
+        .take(midpoint + 1)
         .collect::<String>()
         .chars()
         .rev()
