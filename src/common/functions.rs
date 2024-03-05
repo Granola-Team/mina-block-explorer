@@ -296,7 +296,7 @@ pub fn convert_to_ellipsis(text: String) -> HtmlElement<html::AnyElement> {
     .into()
 }
 
-pub fn split_str(s: &str) -> (&str, &str) {
+pub fn split_str(s: &str) -> (String, String) {
     let mid = s.len() / 2;
     let mut boundary = mid;
 
@@ -308,7 +308,7 @@ pub fn split_str(s: &str) -> (&str, &str) {
     }
 
     let (first_half, second_half) = s.split_at(boundary);
-    (first_half, second_half)
+    (first_half.to_string(), second_half.to_string())
 }
 
 #[cfg(test)]
