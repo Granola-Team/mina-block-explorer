@@ -23,4 +23,9 @@ suite(["@CI"],'blocks table', () => {
         cy.visit(page);
         cy.tableHasOrderedColumns('Blocks', columns);
     }));
+
+    pages.forEach(page => it(`on ${page} includes correct columns`, () => {
+        cy.visit(page);
+        cy.tableHasOrderedColumns('Blocks', columns);
+    }));
 })
