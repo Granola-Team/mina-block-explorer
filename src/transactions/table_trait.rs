@@ -36,7 +36,7 @@ impl TableData for Vec<Option<TransactionsQueryTransactions>> {
                                 format!("/addresses/accounts/{}", get_from(transaction)),
                             ),
                             convert_to_span(get_memo(transaction))
-                                .attr("class", "text-xs font-extralight text-slate-400"),
+                                .attr("class", "block text-xs font-light text-slate-400"),
                         ])
                         .attr("class", "block")
                     } else {
