@@ -49,17 +49,6 @@ pub fn convert_to_span(data: String) -> HtmlElement<html::AnyElement> {
     html::span().child(data).into()
 }
 
-pub fn non_canonical_wrapper(el: HtmlElement<html::AnyElement>) -> HtmlElement<html::AnyElement> {
-    html::span()
-        .attr("class", "non-canonical opacity-50")
-        .child(el)
-        .into()
-}
-
-pub fn canonical_wrapper(el: HtmlElement<html::AnyElement>) -> HtmlElement<html::AnyElement> {
-    html::span().attr("class", "canonical").child(el).into()
-}
-
 pub fn convert_array_to_span(
     els: Vec<HtmlElement<html::AnyElement>>,
 ) -> HtmlElement<html::AnyElement> {
