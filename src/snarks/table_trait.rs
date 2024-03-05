@@ -19,7 +19,12 @@ impl TableData for Vec<Option<SnarksQuerySnarks>> {
             .map(|opt_snark| match opt_snark {
                 Some(snark) => vec![
                     convert_to_span(get_block_height(snark)),
-                    convert_to_span(get_date_time(snark)),
+                    convert_array_to_span(vec![
+                        convert_to_span(print_time_since(&get_date_time(snark))),
+                        convert_to_span(get_date_time(snark))
+                            .attr("class", "block text-xs font-extralight text-slate-400"),
+                    ])
+                    .attr("class", "block"),
                     convert_to_link(
                         get_prover(snark),
                         format!("/addresses/accounts/{}", get_prover(snark)),
