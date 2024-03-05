@@ -482,56 +482,51 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
     let (current_page, set_current_page) = create_signal(1);
 
     view! {
-        <ErrorBoundary fallback=move |_| view! { <NullView/> }>
-            <Suspense fallback=move || {
-                view! {
-                    <TableSection
-                        section_heading="Blocks".to_string()
-                        controls=move || view! { <NullView/> }
-                    >
-                        <Table data=LoadingPlaceholder {}/>
-                    </TableSection>
+        <ErrorBoundary fallback=move |_| {
+            view! { <NullView/> }
+        }>
+            {move || match resource.get().and_then(|res| res.ok()) {
+                None => {
+                    view! {
+                        <TableSection
+                            section_heading="Blocks".to_string()
+                            controls=move || view! { <NullView/> }
+                        >
+                            <Table data=LoadingPlaceholder {}/>
+                        </TableSection>
+                    }
                 }
-            }>
-                {move || {
-                    resource
-                        .get()
-                        .and_then(|res| res.ok())
-                        .map(|data| {
-                            let pag = build_pagination(
-                                data.blocks.len(),
-                                records_per_page,
-                                current_page.get(),
-                                set_current_page,
-                            );
-                            let blocks_subset = get_subset(
-                                &data.blocks,
-                                records_per_page,
-                                current_page.get() - 1,
-                            );
-                            view! {
-                                <TableSection
-                                    section_heading="Blocks".to_owned()
-                                    controls=move || {
-                                        view! {
-                                            <URLCheckbox
-                                                label="Include Non-Canonical".to_string()
-                                                url_param_key="include_non_canonical".to_string()
-                                            />
-                                        }
-                                    }
-                                >
-
-                                    <Table
-                                        data=SummaryPageBlocksQueryBlocks(blocks_subset)
-                                        pagination=pag
+                Some(data) => {
+                    let pag = build_pagination(
+                        data.blocks.len(),
+                        records_per_page,
+                        current_page.get(),
+                        set_current_page,
+                    );
+                    let blocks_subset = get_subset(
+                        &data.blocks,
+                        records_per_page,
+                        current_page.get() - 1,
+                    );
+                    view! {
+                        <TableSection
+                            section_heading="Blocks".to_owned()
+                            controls=move || {
+                                view! {
+                                    <URLCheckbox
+                                        label="Include Non-Canonical".to_string()
+                                        url_param_key="include_non_canonical".to_string()
                                     />
-                                </TableSection>
+                                }
                             }
-                        })
-                }}
+                        >
 
-            </Suspense>
+                            <Table data=SummaryPageBlocksQueryBlocks(blocks_subset) pagination=pag/>
+                        </TableSection>
+                    }
+                }
+            }}
+
         </ErrorBoundary>
         <Outlet/>
     }
