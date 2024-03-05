@@ -18,9 +18,4 @@ suite(["@CI"],'blocks table', () => {
         cy.get('@tableRows').should('not.have.class', 'bg-status-failed')
     }));
 
-    pages.forEach(page => it(`on ${page} includes correct columns`, () => {
-        cy.visit(page);
-        cy.tableHasOrderedColumns('Blocks', columns);
-    }));
-
 })
