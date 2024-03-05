@@ -31,7 +31,12 @@ impl TableData for Vec<Option<FeeTransfersQueryFeetransfers>> {
                         PillVariant::Orange,
                     ),
                     convert_to_pill(get_type(fee_transfer), PillVariant::Grey),
-                    convert_to_span(get_date_time(fee_transfer)),
+                    convert_array_to_span(vec![
+                        convert_to_span(print_time_since(&get_date_time(fee_transfer))),
+                        convert_to_span(get_date_time(fee_transfer))
+                            .attr("class", "block text-xs font-extralight text-slate-400"),
+                    ])
+                    .attr("class", "block"),
                 ],
                 None => vec![],
             })
