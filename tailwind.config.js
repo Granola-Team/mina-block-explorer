@@ -7,6 +7,7 @@ module.exports = {
     theme: {
         fontFamily: {
             sans: ['system-ui', 'sans-serif'],
+            mono: ['Menlo', 'monospace']
         },
         extend: {
             colors: {
