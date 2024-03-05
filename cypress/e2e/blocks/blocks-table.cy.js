@@ -2,7 +2,7 @@ suite(["@CI"],'blocks table', () => {
 
     let pages = ['/blocks', '/summary', '/'];
 
-    pages.forEach(page => it(`can include non-canonical blocks when checked (page ${page})`, () => {
+    pages.forEach(page => it(`on ${page} includes non-canonical blocks when toggled is checked`, () => {
         cy.visit(page);
         cy.get('label').contains('Include Non-Canonical').as('toggle');
         cy.get('@toggle').click();
