@@ -297,10 +297,12 @@ pub fn convert_to_ellipsis(text: String) -> HtmlElement<html::AnyElement> {
                     parts_base,
                 )
             >
+
                 {last}
             </div>
         </div>
-    }.into()
+    }
+    .into()
 }
 
 pub fn x_surrounding_pages(x: usize, l: usize) -> Vec<Vec<usize>> {
