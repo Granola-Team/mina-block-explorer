@@ -1,7 +1,7 @@
 suite(["@CI"],'transactions table', () => {
 
     let pages = ['/transactions'];
-    let columns = ['Height', 'Age', 'From', 'To', 'Nonce', 'Hash', 'Fee', 'Amount'];
+    let columns = ['Height', 'Age', 'Type', 'From', 'To', 'Nonce', 'Hash', 'Fee', 'Amount'];
 
     pages.forEach(page => it(`on ${page} includes correct columns`, () => {
         cy.visit(page);
