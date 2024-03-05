@@ -23,7 +23,12 @@ impl TableData for Vec<Option<TransactionsQueryTransactions>> {
                         convert_to_status_bubble(get_failure_reason(transaction)),
                         convert_to_span(get_block_height(transaction)),
                     ]),
-                    convert_to_span(get_block_datetime(transaction)),
+                    convert_array_to_span(vec![
+                        convert_to_span(print_time_since(&get_block_datetime(transaction))),
+                        convert_to_span(get_block_datetime(transaction))
+                            .attr("class", "block text-xs font-extralight text-slate-400"),
+                    ])
+                    .attr("class", "block"),
                     if !get_memo(transaction).is_empty() {
                         convert_array_to_span(vec![
                             convert_to_link(
@@ -31,7 +36,7 @@ impl TableData for Vec<Option<TransactionsQueryTransactions>> {
                                 format!("/addresses/accounts/{}", get_from(transaction)),
                             ),
                             convert_to_span(get_memo(transaction))
-                                .attr("class", "font-xs text-slate-400"),
+                                .attr("class", "text-xs font-extralight text-slate-400"),
                         ])
                         .attr("class", "block")
                     } else {
