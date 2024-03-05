@@ -8,7 +8,7 @@ use crate::common::table::*;
 impl TableData for Vec<Option<TransactionsQueryTransactions>> {
     fn get_columns(&self) -> Vec<String> {
         [
-            "Height", "Age", "From", "To", "Nonce", "Hash", "Fee", "Amount",
+            "Height", "Age", "Type", "From", "To", "Nonce", "Hash", "Fee", "Amount",
         ]
         .iter()
         .map(ToString::to_string)
@@ -29,6 +29,7 @@ impl TableData for Vec<Option<TransactionsQueryTransactions>> {
                             .attr("class", "block text-xs font-light text-slate-400"),
                     ])
                     .attr("class", "block"),
+                    convert_to_pill(get_kind(transaction), PillVariant::Grey),
                     if !get_memo(transaction).is_empty() {
                         convert_array_to_span(vec![
                             convert_to_link(
