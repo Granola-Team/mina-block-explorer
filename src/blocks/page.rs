@@ -1,15 +1,7 @@
-use super::components::*;
-use super::models::*;
-
-use crate::common::components::*;
-
-use crate::common::models::*;
-use crate::common::search::*;
-
+use super::{components::*, functions::*, models::*};
+use crate::common::{components::*, models::*, search::*};
 use leptos::*;
 use leptos_router::*;
-
-use super::functions::*;
 
 #[component]
 pub fn LatestBlocksPage() -> impl IntoView {

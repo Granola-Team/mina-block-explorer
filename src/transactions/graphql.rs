@@ -1,7 +1,6 @@
+use self::transactions_query::TransactionQueryInput;
 use chrono::Utc;
 use graphql_client::GraphQLQuery;
-
-use self::transactions_query::TransactionQueryInput;
 
 type DateTime = chrono::DateTime<Utc>;
 type Long = i32;

@@ -1,9 +1,6 @@
-use leptos::*;
-
 use super::{functions::*, graphql::transactions_query::TransactionsQueryTransactions};
-use crate::common::functions::*;
-use crate::common::models::PillVariant;
-use crate::common::table::*;
+use crate::common::{functions::*, models::PillVariant, table::*};
+use leptos::*;
 
 impl TableData for Vec<Option<TransactionsQueryTransactions>> {
     fn get_columns(&self) -> Vec<String> {

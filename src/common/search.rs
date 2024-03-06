@@ -1,5 +1,4 @@
-use crate::common::components::*;
-use crate::icons::*;
+use crate::{common::components::*, icons::*};
 use leptos::*;
 use leptos_router::*;
 use leptos_use::signal_debounced;

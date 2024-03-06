@@ -1,8 +1,5 @@
-use crate::common::functions::*;
-use crate::common::models::*;
-use crate::common::table::*;
-
 use super::{functions::*, graphql::stakes_query};
+use crate::common::{functions::*, models::*, table::*};
 use leptos::*;
 use stakes_query::StakesQueryStakes;
 

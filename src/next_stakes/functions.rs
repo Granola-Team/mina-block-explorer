@@ -1,8 +1,8 @@
+use crate::{
+    common::models::*,
+    next_stakes::graphql::{next_stakes_query, *},
+};
 use graphql_client::reqwest::post_graphql;
-
-use crate::common::models::*;
-use crate::next_stakes::graphql::{next_stakes_query, *};
-
 use next_stakes_query::NextStakesQueryNextstakes;
 
 pub fn get_public_key(nextstakes: &NextStakesQueryNextstakes) -> String {

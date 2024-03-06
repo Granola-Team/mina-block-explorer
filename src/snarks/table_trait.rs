@@ -1,8 +1,5 @@
-use crate::common::functions::*;
-use crate::common::table::*;
-
 use super::{functions::*, graphql::snarks_query};
-use crate::common::models::*;
+use crate::common::{functions::*, models::*, table::*};
 use leptos::*;
 use snarks_query::SnarksQuerySnarks;
 

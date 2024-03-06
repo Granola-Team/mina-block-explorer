@@ -1,19 +1,20 @@
+use super::functions::*;
+use crate::{
+    blocks::components::AccountOverviewBlocksTable,
+    common::{
+        components::*,
+        functions::*,
+        models::{MyError, NavEntry, NavIcon},
+        search::*,
+        spotlight::*,
+        table::*,
+    },
+    icons::*,
+    snarks::components::AccountOverviewSnarkJobTable,
+    transactions::components::*,
+};
 use leptos::*;
 use leptos_router::*;
-
-use super::functions::*;
-use crate::blocks::components::AccountOverviewBlocksTable;
-use crate::common::components::*;
-use crate::common::functions::*;
-use crate::common::models::MyError;
-use crate::common::models::NavEntry;
-use crate::common::models::NavIcon;
-use crate::common::search::*;
-use crate::common::spotlight::*;
-use crate::common::table::*;
-use crate::icons::*;
-use crate::snarks::components::AccountOverviewSnarkJobTable;
-use crate::transactions::components::*;
 
 #[component]
 pub fn AccountsPage() -> impl IntoView {

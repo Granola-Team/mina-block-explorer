@@ -1,7 +1,6 @@
 use crate::icons::*;
 use leptos::*;
-use leptos_use::storage::use_local_storage;
-use leptos_use::utils::FromToStringCodec;
+use leptos_use::{storage::use_local_storage, utils::FromToStringCodec};
 
 #[component]
 pub fn GAOptOut() -> impl IntoView {

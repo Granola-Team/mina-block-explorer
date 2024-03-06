@@ -1,8 +1,7 @@
+use super::models::*;
 use chrono::{DateTime, Duration, Utc};
 use leptos::*;
 use rust_decimal::Decimal;
-
-use super::models::*;
 
 // Function to calculate and print the time elapsed since the given timestamp
 pub fn print_time_since(timestamp: &str) -> String {
@@ -218,7 +217,8 @@ mod nanomina_tests {
 
     #[test]
     fn test_rounding() {
-        // This test assumes that the function should round down, based on the implementation
+        // This test assumes that the function should round down, based on the
+        // implementation
         assert_eq!(nanomina_to_mina(123456789.123), "0.123456789");
     }
 

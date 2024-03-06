@@ -1,7 +1,6 @@
+use self::blocks_query::BlockQueryInput;
 use chrono::Utc;
 use graphql_client::GraphQLQuery;
-
-use self::blocks_query::BlockQueryInput;
 
 type DateTime = chrono::DateTime<Utc>;
 type Long = i32;

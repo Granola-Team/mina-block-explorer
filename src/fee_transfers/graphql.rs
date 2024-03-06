@@ -1,7 +1,6 @@
+use self::fee_transfers_query::FeetransferQueryInput;
 use chrono::Utc;
 use graphql_client::GraphQLQuery;
-
-use self::fee_transfers_query::FeetransferQueryInput;
 type DateTime = chrono::DateTime<Utc>;
 type Long = i32;
 

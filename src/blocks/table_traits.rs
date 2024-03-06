@@ -1,12 +1,10 @@
+use super::{
+    functions::*,
+    graphql::blocks_query::{BlocksQueryBlocks, BlocksQueryBlocksTransactionsUserCommands},
+    models::*,
+};
+use crate::common::{functions::*, models::*, table::*};
 use leptos::*;
-
-use super::functions::*;
-use super::graphql::blocks_query::BlocksQueryBlocks;
-use super::graphql::blocks_query::BlocksQueryBlocksTransactionsUserCommands;
-use super::models::*;
-use crate::common::functions::*;
-use crate::common::models::*;
-use crate::common::table::*;
 
 fn shared_get_columns() -> Vec<String> {
     vec![

@@ -1,14 +1,10 @@
+use super::{components::*, functions::*};
+use crate::{
+    common::{components::*, functions::*, models::*, search::*, spotlight::*},
+    icons::*,
+};
 use leptos::*;
 use leptos_router::*;
-
-use super::components::*;
-use super::functions::*;
-use crate::common::components::*;
-use crate::common::functions::*;
-use crate::common::models::*;
-use crate::common::search::*;
-use crate::common::spotlight::*;
-use crate::icons::*;
 
 #[component]
 pub fn TransactionTabbedPage() -> impl IntoView {

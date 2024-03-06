@@ -1,18 +1,13 @@
+use super::{functions::*, graphql::blocks_query::BlocksQueryBlocks, models::*};
+use crate::{
+    account_dialog::components::*,
+    common::{components::*, functions::*, models::*, spotlight::*, table::*},
+    fee_transfers::components::BlockSpotlightFeeTransfersTable,
+    icons::*,
+    snarks::components::BlockSpotlightSnarkJobTable,
+};
 use leptos::*;
 use leptos_router::*;
-
-use super::functions::*;
-use super::graphql::blocks_query::BlocksQueryBlocks;
-use super::models::*;
-use crate::account_dialog::components::*;
-use crate::common::components::*;
-use crate::common::functions::*;
-use crate::common::models::*;
-use crate::common::spotlight::*;
-use crate::common::table::*;
-use crate::fee_transfers::components::BlockSpotlightFeeTransfersTable;
-use crate::icons::*;
-use crate::snarks::components::BlockSpotlightSnarkJobTable;
 
 #[component]
 pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {

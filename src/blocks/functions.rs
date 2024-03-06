@@ -1,5 +1,3 @@
-use graphql_client::reqwest::post_graphql;
-
 use super::graphql::{
     blocks_query::{BlocksQueryBlocks, BlocksQueryBlocksTransactionsUserCommands},
     *,
@@ -8,6 +6,7 @@ use crate::common::{
     functions::{nanomina_to_mina, string_to_f64},
     models::MyError,
 };
+use graphql_client::reqwest::post_graphql;
 
 pub fn get_user_commands(
     block: &BlocksQueryBlocks,

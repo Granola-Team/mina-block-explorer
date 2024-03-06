@@ -1,7 +1,6 @@
+use super::models::AllAccountSummary;
 use crate::common::{functions::*, models::*, table::TableData};
 use leptos::*;
-
-use super::models::AllAccountSummary;
 
 impl TableData for Vec<Option<AllAccountSummary>> {
     fn get_columns(&self) -> Vec<String> {

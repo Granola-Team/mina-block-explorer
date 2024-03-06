@@ -1,7 +1,6 @@
 // use chrono::Utc;
-use graphql_client::GraphQLQuery;
-
 use self::next_stakes_query::NextstakeQueryInput;
+use graphql_client::GraphQLQuery;
 
 // type DateTime = chrono::DateTime<Utc>;
 // type Long = i32;
