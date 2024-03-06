@@ -30,6 +30,7 @@ pub fn SpotlightSection(
                         Some(frag) => frag(),
                         None => Fragment::new(vec![]),
                     }}
+
                 </span>
             </h1>
             <Spotlight spotlight_items=spotlight_items id=id meta=meta>
