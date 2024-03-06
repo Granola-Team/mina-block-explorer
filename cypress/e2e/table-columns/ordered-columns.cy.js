@@ -1,7 +1,7 @@
 suite(["@CI"],'transactions table', () => {
 
     let pages = ['/transactions'];
-    let columns = ['Height', 'Age', 'Type', 'From', 'To', 'Nonce', 'Hash', 'Fee', 'Amount'];
+    let columns = ['Height', 'State Hash', 'Age', 'Type', 'From', 'To', 'Nonce', 'Fee', 'Amount'];
 
     pages.forEach(page => it(`on ${page} includes correct columns`, () => {
         cy.visit(page);
@@ -23,7 +23,7 @@ suite(["@CI"],'blocks table', () => {
 suite(["@CI"],'snarks table', () => {
 
     let pages = ['/snarks'];
-    let columns = ['Height', 'Age', 'Prover', 'Work Ids', 'State Hash', 'Fee'];
+    let columns = ['Height', 'State Hash', 'Age', 'Prover', 'Work Ids', 'Fee'];
 
     pages.forEach(page => it(`on ${page} includes correct columns`, () => {
         cy.visit(page);
