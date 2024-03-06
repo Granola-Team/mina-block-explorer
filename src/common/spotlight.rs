@@ -73,7 +73,7 @@ fn Spotlight(
 
             </div>
         </div>
-        <table class="@3xl:mx-[10rem] bg-white rounded-xl mt-8 p-4 table-fixed flex flex-wrap">
+        <table class="font-mono @3xl:mx-[10rem] bg-white rounded-xl mt-8 p-4 table-fixed flex flex-wrap">
             {spotlight_items
                 .into_iter()
                 .map(|entry| {
@@ -96,7 +96,7 @@ fn SpotlightRow(entry: SpotlightEntry) -> impl IntoView {
         <th class=format!(
             "{} {}",
             th_td_class_base,
-            "w-36 min-w-36 text-sm font-normal text-slate-400 whitespace-nowrap",
+            "w-40 min-w-40 text-sm font-normal text-slate-400 whitespace-nowrap",
         )>{entry.label} :</th>
         <td class=format!(
             "{} {}",
