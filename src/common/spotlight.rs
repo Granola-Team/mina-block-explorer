@@ -96,7 +96,8 @@ fn Spotlight(
 
 #[component]
 fn SpotlightRow(entry: SpotlightEntry) -> impl IntoView {
-    let th_td_class_base = "flex justify-start items-center m-1 p-1 text-left text-xs md:text-sm whitespace-nowrap";
+    let th_td_class_base =
+        "flex justify-start items-center m-1 p-1 text-left text-xs md:text-sm whitespace-nowrap";
 
     view! {
         <th class=format!(
