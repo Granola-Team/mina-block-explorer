@@ -1,6 +1,5 @@
 use crate::common::{components::*, functions::*};
 use leptos::*;
-use web_sys::js_sys::Array;
 
 #[derive(Default)]
 pub struct SpotlightEntry {
