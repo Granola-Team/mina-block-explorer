@@ -89,7 +89,7 @@ pub fn get_spotlight_data(account: &AccountSummary) -> Vec<SpotlightEntry> {
             label: String::from("Nonce"),
             any_el: Some(convert_to_pill(
                 account.nonce.to_string(),
-                PillVariant::Blue,
+                PillVariant::Grey,
             )),
             ..Default::default()
         },
