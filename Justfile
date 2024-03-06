@@ -19,7 +19,7 @@ tailwind:
 
 tailwind-watch:
   npx tailwindcss -i assets/css/input.css -o assets/css/styles.css --watch
-  
+
 build:
   npm install
   just tailwind
@@ -44,17 +44,17 @@ clean:
 
 test: lint test-unit test-e2e
 
-test-e2e: 
+test-e2e:
   CYPRESS_BASE_URL="{{cypress_base_url}}" node ./scripts/wait-on-port.js trunk serve --port="{{trunk_port}}" -- "{{trunk_port}}" -- npx cypress run -r list -q
 
 test-e2e-local:
   CYPRESS_BASE_URL="{{cypress_base_url}}" node ./scripts/wait-on-port.js trunk serve --port="{{trunk_port}}" -- "{{trunk_port}}" -- npx cypress open
-  
+
 test-unit: build
   cargo nextest run
 
 lint: && audit disallow-unused-cargo-deps
-  cargo fmt --check
+  cargo fmt --all --check
   leptosfmt --check ./src
   cargo clippy -- -D warnings
   cargo clippy --all-targets --all-features -- -D warnings
@@ -63,7 +63,7 @@ disallow-unused-cargo-deps:
   cargo machete Cargo.toml
 
 format:
-  cargo fmt
+  cargo fmt --all
   leptosfmt ./src
 
 audit:
