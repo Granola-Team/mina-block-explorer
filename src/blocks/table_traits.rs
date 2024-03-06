@@ -52,7 +52,10 @@ impl TableData for Vec<Option<BlocksQueryBlocks>> {
                         get_creator_account(block),
                         format!("/blocks/accounts/{}", get_creator_account(block)),
                     ),
-                    wrap_in_pill(decorate_with_currency_tag(get_coinbase(block), "mina".to_string()),PillVariant::Green),
+                    wrap_in_pill(
+                        decorate_with_currency_tag(get_coinbase(block), "mina".to_string()),
+                        PillVariant::Green,
+                    ),
                     convert_to_pill(
                         get_transaction_count(block).map_or_else(String::new, |o| o.to_string()),
                         PillVariant::Blue,
