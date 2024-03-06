@@ -1,9 +1,5 @@
-use crate::common::functions::*;
-use crate::common::models::*;
-use crate::common::table::*;
-
-use super::functions::*;
-use super::graphql::next_stakes_query;
+use super::{functions::*, graphql::next_stakes_query};
+use crate::common::{functions::*, models::*, table::*};
 use leptos::*;
 use next_stakes_query::NextStakesQueryNextstakes;
 

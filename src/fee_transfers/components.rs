@@ -1,9 +1,6 @@
-use leptos::*;
-
 use super::functions::*;
-use crate::common::components::*;
-use crate::common::functions::*;
-use crate::common::table::*;
+use crate::common::{components::*, functions::*, table::*};
+use leptos::*;
 
 #[component]
 pub fn BlockSpotlightFeeTransfersTable(block_state_hash: Option<String>) -> impl IntoView {

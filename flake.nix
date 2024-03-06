@@ -19,11 +19,19 @@
           inherit system overlays;
         };
         toolchain = pkgs.rust-bin.fromRustupToolchainFile ./rust-toolchain.toml;
+
+        # used to ensure rustfmt is nightly version to support unstable features
+        nightlyToolchain = pkgs.rust-bin.selectLatestNightlyWith (toolchain:
+          toolchain.minimal.override {
+            extensions = ["rustfmt"];
+          }
+        );
       in
       with pkgs;
       {
         devShells.default = mkShell {
           buildInputs = [
+            nightlyToolchain.passthru.availableComponents.rustfmt
             awscli
             cacert
             cargo-audit

@@ -1,10 +1,6 @@
-use leptos::web_sys::MouseEvent;
-use leptos::{html::*, *};
-
-use super::components::*;
-use super::functions::*;
-use super::models::*;
+use super::{components::*, functions::*, models::*};
 use crate::icons::*;
+use leptos::{html::*, web_sys::MouseEvent, *};
 
 pub trait TableData {
     fn get_columns(&self) -> Vec<String>;

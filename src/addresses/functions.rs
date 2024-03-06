@@ -1,10 +1,6 @@
-use url::Url;
-
-use crate::common::functions::*;
-use crate::common::models::*;
-use crate::common::spotlight::*;
-
 use super::models::*;
+use crate::common::{functions::*, models::*, spotlight::*};
+use url::Url;
 
 pub async fn load_data(id: &str) -> Result<AccountResponse, MyError> {
     let response = reqwest::get(format!("https://api.minaexplorer.com/accounts/{}", id)).await;

@@ -1,8 +1,6 @@
 use super::components::*;
-use crate::common::components::*;
+use crate::common::{components::*, models::*};
 use leptos::*;
-
-use crate::common::models::*;
 
 #[component]
 pub fn BroadcastTransactionPage() -> impl IntoView {

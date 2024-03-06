@@ -1,13 +1,11 @@
-use leptos::*;
-
 use super::functions::*;
-use crate::account_dialog::components::*;
-use crate::common::components::*;
-use crate::common::functions::*;
-use crate::common::models::*;
-use crate::common::table::*;
-use crate::icons::*;
-use crate::transactions::graphql::transactions_query::TransactionsQueryTransactions;
+use crate::{
+    account_dialog::components::*,
+    common::{components::*, functions::*, models::*, table::*},
+    icons::*,
+    transactions::graphql::transactions_query::TransactionsQueryTransactions,
+};
+use leptos::*;
 
 #[component]
 pub fn AccountDialogTransactionSection(
@@ -84,9 +82,10 @@ fn TransactionEntry(
     let grouped: Vec<[(&str, String); 2]> = entries
         .chunks(2)
         .map(|chunk| match chunk {
-            [a, b] => [a.clone(), b.clone()],        // For chunks of size 2
-            [a] => [a.clone(), ("", String::new())], // For the last chunk of size 1, with a default/filler value
-            _ => unreachable!(),                     // This case will never happen with chunks(2)
+            [a, b] => [a.clone(), b.clone()], // For chunks of size 2
+            /* For the last chunk of size 1, with a default/filler value */
+            [a] => [a.clone(), ("", String::new())],
+            _ => unreachable!(), // This case will never happen with chunks(2)
         })
         .collect();
 

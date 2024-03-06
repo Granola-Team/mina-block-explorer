@@ -1,11 +1,8 @@
-use super::components::*;
-use super::functions::*;
-use super::models::*;
-use crate::common::components::*;
-use crate::common::functions::*;
-use crate::common::search::*;
-use crate::common::table::*;
-use crate::summary::functions::load_data as load_summary_data;
+use super::{components::*, functions::*, models::*};
+use crate::{
+    common::{components::*, functions::*, search::*, table::*},
+    summary::functions::load_data as load_summary_data,
+};
 use leptos::*;
 use leptos_router::*;
 use std::cmp::{max, min};

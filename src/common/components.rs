@@ -1,8 +1,6 @@
-use super::functions::*;
-use super::models::*;
+use super::{functions::*, models::*};
 use crate::icons::*;
-use leptos::web_sys::*;
-use leptos::*;
+use leptos::{web_sys::*, *};
 use leptos_router::*;
 use web_sys::window;
 

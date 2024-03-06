@@ -1,8 +1,6 @@
-use graphql_client::reqwest::post_graphql;
-
 use super::graphql::{stakes_query, stakes_query::StakesQueryStakes, StakesQuery};
-use crate::common::functions::*;
-use crate::common::models::*;
+use crate::common::{functions::*, models::*};
+use graphql_client::reqwest::post_graphql;
 
 pub fn get_public_key(stake: &StakesQueryStakes) -> String {
     stake

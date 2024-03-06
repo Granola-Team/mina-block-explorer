@@ -1,9 +1,8 @@
 use super::functions::*;
-use crate::common::components::*;
-use crate::common::functions::*;
-use crate::common::search::*;
-use crate::common::table::*;
-use crate::stakes::components::StakesNavButton;
+use crate::{
+    common::{components::*, functions::*, search::*, table::*},
+    stakes::components::StakesNavButton,
+};
 use leptos::*;
 use leptos_router::*;
 

@@ -1,5 +1,4 @@
-use leptos::*;
-use leptos::{html::Textarea, web_sys::SubmitEvent};
+use leptos::{html::Textarea, web_sys::SubmitEvent, *};
 
 #[derive(Clone)]
 struct ActionInputs {

@@ -1,14 +1,12 @@
+use super::functions::*;
+use crate::{
+    common::{functions::*, models::*, table::TableData},
+    fee_transfers::graphql::fee_transfers_query::FeeTransfersQueryFeetransfers,
+};
 use leptos::{
     html::{self},
     HtmlElement,
 };
-
-use super::functions::*;
-use crate::common::functions::*;
-
-use crate::common::models::*;
-use crate::common::table::TableData;
-use crate::fee_transfers::graphql::fee_transfers_query::FeeTransfersQueryFeetransfers;
 
 impl TableData for Vec<Option<FeeTransfersQueryFeetransfers>> {
     fn get_columns(&self) -> Vec<String> {

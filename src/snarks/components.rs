@@ -1,13 +1,13 @@
+use super::{
+    functions::{load_data, *},
+    graphql::snarks_query::SnarksQuerySnarks,
+};
+use crate::{
+    account_dialog::components::*,
+    common::{components::*, functions::*, table::*},
+    icons::*,
+};
 use leptos::*;
-
-use super::functions::load_data;
-use super::functions::*;
-use super::graphql::snarks_query::SnarksQuerySnarks;
-use crate::account_dialog::components::*;
-use crate::common::components::*;
-use crate::common::functions::*;
-use crate::common::table::*;
-use crate::icons::*;
 
 #[component]
 pub fn AccountDialogSnarkJobSection(snarks: Vec<Option<SnarksQuerySnarks>>) -> impl IntoView {

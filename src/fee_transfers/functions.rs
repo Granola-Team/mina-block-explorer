@@ -1,11 +1,11 @@
-use graphql_client::reqwest::post_graphql;
-
-use crate::common::functions::nanomina_to_mina;
-use crate::common::models::MyError;
-use crate::fee_transfers::graphql::fee_transfers_query;
-use crate::fee_transfers::graphql::fee_transfers_query::FeeTransfersQueryFeetransfers;
-
 use super::graphql::FeeTransfersQuery;
+use crate::{
+    common::{functions::nanomina_to_mina, models::MyError},
+    fee_transfers::graphql::{
+        fee_transfers_query, fee_transfers_query::FeeTransfersQueryFeetransfers,
+    },
+};
+use graphql_client::reqwest::post_graphql;
 
 pub fn get_receipient(fee_transfer: &FeeTransfersQueryFeetransfers) -> String {
     fee_transfer

@@ -1,26 +1,25 @@
+use crate::{
+    account_dialog::dialog::AccountDialogView,
+    addresses::page::{AccountSpotlightPage, AccountsPage, AddressesTabbedPage},
+    blocks::page::{
+        BlockFeeTransfersTab, BlockSnarkJobsTab, BlockSpotlightTab, BlockTabbedPage,
+        BlockUserCommandsTab, LatestBlocksPage,
+    },
+    broadcast::page::{
+        BroadcastDelegationPage, BroadcastFromLedgerPage, BroadcastTransactionPage,
+        DelegationTabbedPage,
+    },
+    common::components::NullView,
+    footer::Footer,
+    header::navigation::Header,
+    next_stakes::page::NextStakesPage,
+    snarks::page::SnarksPage,
+    stakes::page::StakesPage,
+    summary::page::SummaryPage,
+    transactions::page::{TransactionSpotlightPage, TransactionTabbedPage, TransactionsPage},
+};
 use leptos::*;
 use leptos_router::*;
-
-use crate::account_dialog::dialog::AccountDialogView;
-use crate::addresses::page::{AccountSpotlightPage, AccountsPage, AddressesTabbedPage};
-use crate::blocks::page::{
-    BlockFeeTransfersTab, BlockSnarkJobsTab, BlockSpotlightTab, BlockTabbedPage,
-    BlockUserCommandsTab, LatestBlocksPage,
-};
-use crate::broadcast::page::{
-    BroadcastDelegationPage, BroadcastFromLedgerPage, BroadcastTransactionPage,
-    DelegationTabbedPage,
-};
-use crate::common::components::NullView;
-use crate::footer::Footer;
-use crate::header::navigation::Header;
-use crate::next_stakes::page::NextStakesPage;
-use crate::snarks::page::SnarksPage;
-use crate::stakes::page::StakesPage;
-use crate::summary::page::SummaryPage;
-use crate::transactions::page::{
-    TransactionSpotlightPage, TransactionTabbedPage, TransactionsPage,
-};
 
 #[component]
 pub fn Root() -> impl IntoView {

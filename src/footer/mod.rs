@@ -1,6 +1,5 @@
-use leptos::*;
-
 use crate::icons::*;
+use leptos::*;
 mod ga_opt_out;
 use ga_opt_out::GAOptOut;
 

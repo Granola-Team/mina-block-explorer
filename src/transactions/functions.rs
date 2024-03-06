@@ -1,9 +1,6 @@
-use crate::common::functions::*;
-use crate::common::models::MyError;
+use super::graphql::{transactions_query::TransactionsQueryTransactions, *};
+use crate::common::{functions::*, models::MyError};
 use graphql_client::reqwest::post_graphql;
-
-use super::graphql::transactions_query::TransactionsQueryTransactions;
-use super::graphql::*;
 use std::error::Error;
 
 pub fn get_failure_reason(transaction: &TransactionsQueryTransactions) -> Option<String> {
