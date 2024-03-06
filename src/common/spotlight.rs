@@ -12,6 +12,7 @@ pub struct SpotlightEntry {
 #[component]
 pub fn SpotlightSection(
     header: String,
+    #[prop(default = None)] top_right: Option<Children>,
     spotlight_items: Vec<SpotlightEntry>,
     id: Option<String>,
     meta: Option<String>,
@@ -22,8 +23,15 @@ pub fn SpotlightSection(
             id="spotlight-section"
             class="@container md:col-start-2 md:col-end-3 md:rounded-lg bg-table-section p-0 p-4 mb-2"
         >
-            <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-start items-center">
-                {header}
+            <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-between items-center">
+                <span>{header}</span>
+                <span>
+                    {match top_right {
+                        Some(frag) => frag(),
+                        None => Fragment::new(vec![]),
+                    }}
+
+                </span>
             </h1>
             <Spotlight spotlight_items=spotlight_items id=id meta=meta>
                 {children()}

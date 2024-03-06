@@ -55,9 +55,6 @@ pub fn AccountDialogView() -> impl IntoView {
                 id="accountdialog"
                 class="z-20 w-full max-w-3xl h-screen fixed top-0 mr-0 ml-auto flex flex-col items-stretch bg-background"
             >
-                <button id="closedialog" class="absolute top-0 right-0 p-12 z-30">
-                    <a href=base.get()>X</a>
-                </button>
                 <Suspense fallback=move || {
                     view! {
                         <SpotlightSection
@@ -79,6 +76,21 @@ pub fn AccountDialogView() -> impl IntoView {
                                 view! {
                                     <SpotlightSection
                                         header="Account Spotlight".to_string()
+                                        top_right=Some(
+                                            Box::new(move || Fragment::new(
+                                                vec![
+                                                    view! {
+                                                        <button id="closedialog" class="mr-4 cursor-pointer">
+                                                            <a href=base.get()>
+                                                                <CloseIcon/>
+                                                            </a>
+                                                        </button>
+                                                    }
+                                                        .into_view(),
+                                                ],
+                                            )),
+                                        )
+
                                         spotlight_items=summary_items
                                         id=Some(public_key())
                                         meta=Some(format!("Username: {}", res.account.username))
