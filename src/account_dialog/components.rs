@@ -13,7 +13,9 @@ pub fn AccountDialogSectionContainer(
         <section class="flex flex-col bg-white rounded-xl flex flex-col items-stretch mt-8 p-4 h-fit">
             <div class="flex justify-between items-baseline w-full mb-4">
                 <h2 class="text-xl">{title}</h2>
-                <span class="text-table-row-text-color text-xs flex items-center">{showing_message}</span>
+                <span class="text-table-row-text-color text-xs flex items-center">
+                    {showing_message}
+                </span>
             </div>
             {children()}
         </section>
