@@ -1,6 +1,4 @@
-use crate::common::components::*;
-use crate::common::functions::*;
-use crate::common::models::*;
+use crate::common::{components::*, functions::*, models::*};
 use leptos::*;
 
 #[component]
