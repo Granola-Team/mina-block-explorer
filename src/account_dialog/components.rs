@@ -11,9 +11,9 @@ pub fn AccountDialogSectionContainer(
 ) -> impl IntoView {
     view! {
         <section class="flex flex-col bg-white rounded-xl flex flex-col items-stretch mt-8 p-4 h-fit">
-            <div class="flex justify-between w-full mb-4">
+            <div class="flex justify-between items-baseline w-full mb-4">
                 <h2 class="text-xl">{title}</h2>
-                <span class="text-table-row-text-color text-xs">{showing_message}</span>
+                <span class="text-table-row-text-color text-xs flex items-center">{showing_message}</span>
             </div>
             {children()}
         </section>
@@ -32,7 +32,7 @@ pub fn AccountDialogSubsectionRow(label: String, value: String) -> impl IntoView
             0 => view! { <NullView/> }.into_view(),
             _ => {
                 view! {
-                    <tr class="my-1 flex whitespace-nowrap">
+                    <tr class="my-2 flex whitespace-nowrap">
                         <th class="text-xs text-slate-400 w-1/4 flex justify-start font-normal">
                             {label} :
                         </th>
