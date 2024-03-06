@@ -5,7 +5,15 @@ use leptos::*;
 impl TableData for Vec<Option<TransactionsQueryTransactions>> {
     fn get_columns(&self) -> Vec<String> {
         [
-            "Height", "Age", "Type", "From", "To", "Nonce", "Hash", "Fee", "Amount",
+            "Height",
+            "State Hash",
+            "Age",
+            "Type",
+            "From",
+            "To",
+            "Nonce",
+            "Fee",
+            "Amount",
         ]
         .iter()
         .map(ToString::to_string)
@@ -20,6 +28,10 @@ impl TableData for Vec<Option<TransactionsQueryTransactions>> {
                         convert_to_status_bubble(get_failure_reason(transaction)),
                         convert_to_span(get_block_height(transaction)),
                     ]),
+                    convert_to_link(
+                        get_hash(transaction),
+                        format!("/transactions/{}", get_hash(transaction)),
+                    ),
                     convert_array_to_span(vec![
                         convert_to_span(print_time_since(&get_block_datetime(transaction))),
                         convert_to_span(get_block_datetime(transaction))
@@ -51,10 +63,6 @@ impl TableData for Vec<Option<TransactionsQueryTransactions>> {
                         ),
                     ),
                     convert_to_pill(get_nonce(transaction), PillVariant::Grey),
-                    convert_to_link(
-                        get_hash(transaction),
-                        format!("/transactions/{}", get_hash(transaction)),
-                    ),
                     wrap_in_pill(
                         decorate_with_currency_tag(get_fee(transaction), "mina".to_string()),
                         PillVariant::Orange,

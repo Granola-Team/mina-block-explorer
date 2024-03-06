@@ -21,7 +21,7 @@ pub fn SpotlightSection(
     view! {
         <section
             id="spotlight-section"
-            class="@container md:col-start-2 md:col-end-3 md:rounded-lg bg-table-section p-0 md:p-4 mb-2"
+            class="@container md:col-start-2 md:col-end-3 md:rounded-lg bg-table-section p-0 p-4 mb-2"
         >
             <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-between items-center">
                 <span>{header}</span>
@@ -79,7 +79,7 @@ fn Spotlight(
 
             </div>
         </div>
-        <table class="font-mono @3xl:mx-[10rem] bg-white rounded-xl mt-8 p-4 table-fixed flex flex-wrap">
+        <table class="font-mono @3xl:mx-[10rem] bg-white rounded-xl mt-8 md:p-4 table-fixed flex flex-wrap">
             {spotlight_items
                 .into_iter()
                 .map(|entry| {
