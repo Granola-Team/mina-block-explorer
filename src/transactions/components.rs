@@ -91,28 +91,27 @@ fn TransactionEntry(
 
     view! {
         <AccountDialogSectionEntryHeader date=date status=status moments_ago=moments_ago/>
-        {grouped
-            .into_iter()
-            .map(|e| {
-                view! {
-                    <div class="w-full flex justify-between">
+        <AccountDialogSubsectionTable>
+            {grouped
+                .into_iter()
+                .map(|e| {
+                    view! {
                         {e
                             .into_iter()
                             .map(|(label, value)| {
                                 view! {
-                                    <AccountDialogSectionSubEntry
+                                    <AccountDialogSubsectionRow
                                         label=label.to_string()
                                         value=value
                                     />
                                 }
                             })
                             .collect::<Vec<_>>()}
-                    </div>
-                }
-                    .into_view()
-            })
-            .collect::<Vec<_>>()}
-
+                    }
+                        .into_view()
+                })
+                .collect::<Vec<_>>()}
+        </AccountDialogSubsectionTable>
         <AccountDialogEntryDivider/>
     }
 }

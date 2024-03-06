@@ -376,12 +376,12 @@ fn AccountDialogBlockEntry(block: BlocksQueryBlocks) -> impl IntoView {
         },
     ];
     view! {
-        <div class="w-full flex justify-between">
+        <AccountDialogSubsectionTable>
             {sub_entries
                 .into_iter()
-                .map(|se| view! { <AccountDialogSectionSubEntry label=se.label value=se.value/> })
+                .map(|se| view! { <AccountDialogSubsectionRow label=se.label value=se.value/> })
                 .collect::<Vec<_>>()}
-        </div>
+        </AccountDialogSubsectionTable>
     }
     .into_view()
 }
