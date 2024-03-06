@@ -270,9 +270,90 @@ pub fn convert_to_link(data: String, href: String) -> HtmlElement<html::AnyEleme
                     "class",
                     "hover:text-granola-orange hover:underline hover:decoration-2",
                 )
-                .child(data),
+                .child(convert_to_ellipsis(data)),
         )
         .into()
+}
+
+pub fn convert_to_ellipsis(text: String) -> HtmlElement<html::AnyElement> {
+    let parts_base = "overflow-hidden flex-initial";
+    let (first, last) = split_str(&text);
+    view! {
+        <div class="flex items-baseline justify-center">
+            <div class=format!("{} break-all", parts_base)>{first}</div>
+            <div
+                style="direction: rtl;"
+                class=format!(
+                    r#"{} whitespace-nowrap text-ellipsis after:content-['\200E']"#,
+                    parts_base,
+                )
+            >
+
+                {last}
+            </div>
+        </div>
+    }
+    .into()
+}
+
+pub fn split_str(s: &str) -> (String, String) {
+    let mid = s.len() / 2;
+    let mut boundary = mid;
+
+    for (idx, _) in s.char_indices() {
+        if idx >= mid {
+            boundary = idx;
+            break;
+        }
+    }
+
+    let (first_half, second_half) = s.split_at(boundary);
+    (first_half.to_string(), second_half.to_string())
+}
+
+#[cfg(test)]
+mod split_str_tests {
+    use super::split_str;
+
+    #[test]
+    fn even_length_ascii() {
+        let input = "HelloWorld";
+        let (first_half, second_half) = split_str(input);
+        assert_eq!(first_half, "Hello");
+        assert_eq!(second_half, "World");
+    }
+
+    #[test]
+    fn odd_length_ascii() {
+        let input = "Hello";
+        let (first_half, second_half) = split_str(input);
+        assert_eq!(first_half, "He");
+        assert_eq!(second_half, "llo");
+    }
+
+    #[test]
+    fn single_char() {
+        let input = "H";
+        let (first_half, second_half) = split_str(input);
+        assert_eq!(first_half, "");
+        assert_eq!(second_half, "H");
+    }
+
+    #[test]
+    fn two_chars() {
+        let input = "Hi";
+        let (first_half, second_half) = split_str(input);
+        assert_eq!(first_half, "H");
+        assert_eq!(second_half, "i");
+    }
+
+    #[test]
+    fn empty_string() {
+        let input = "";
+        let (first_half, second_half) = split_str(input);
+        assert_eq!(first_half, "");
+        assert_eq!(second_half, "");
+    }
 }
 
 pub fn x_surrounding_pages(x: usize, l: usize) -> Vec<Vec<usize>> {
