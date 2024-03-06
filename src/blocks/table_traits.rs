@@ -160,7 +160,10 @@ impl TableData for SummaryPageBlocksQueryBlocks {
                         get_creator_account(block),
                         format!("/summary/accounts/{}", get_creator_account(block)),
                     ),
-                    decorate_with_currency_tag(get_coinbase(block), "mina".to_string()),
+                    wrap_in_pill(
+                        decorate_with_currency_tag(get_coinbase(block), "mina".to_string()),
+                        PillVariant::Green,
+                    ),
                     convert_to_pill(
                         get_transaction_count(block).map_or_else(String::new, |o| o.to_string()),
                         PillVariant::Blue,
