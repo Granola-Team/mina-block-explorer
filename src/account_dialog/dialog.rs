@@ -53,7 +53,7 @@ pub fn AccountDialogView() -> impl IntoView {
         >
             <dialog
                 id="accountdialog"
-                class="z-20 w-full max-w-3xl h-screen fixed top-0 mr-0 ml-auto flex flex-col items-stretch p-4 bg-background"
+                class="z-20 w-full max-w-3xl h-screen fixed top-0 mr-0 ml-auto flex flex-col items-stretch bg-background"
             >
                 <button id="closedialog" class="absolute top-0 right-0 p-12 z-30">
                     <a href=base.get()>X</a>
