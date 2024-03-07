@@ -41,7 +41,7 @@ impl TableData for Vec<Option<BlocksQueryBlocks>> {
                         get_state_hash(block),
                         format!("/blocks/{}/spotlight", get_state_hash(block)),
                     ),
-                    convert_to_pill(get_slot(block), PillVariant::Orange),
+                    convert_to_pill(get_slot(block), PillVariant::Grey),
                     convert_array_to_span(vec![
                         convert_to_span(print_time_since(&get_date_time(block))),
                         convert_to_span(get_date_time(block))
@@ -52,10 +52,13 @@ impl TableData for Vec<Option<BlocksQueryBlocks>> {
                         get_creator_account(block),
                         format!("/blocks/accounts/{}", get_creator_account(block)),
                     ),
-                    decorate_with_currency_tag(get_coinbase(block), "mina".to_string()),
+                    wrap_in_pill(
+                        decorate_with_currency_tag(get_coinbase(block), "mina".to_string()),
+                        PillVariant::Green,
+                    ),
                     convert_to_pill(
                         get_transaction_count(block).map_or_else(String::new, |o| o.to_string()),
-                        PillVariant::Green,
+                        PillVariant::Blue,
                     ),
                     convert_to_pill(
                         get_snark_job_count(block).map_or_else(String::new, |o| o.to_string()),
@@ -114,7 +117,7 @@ impl TableData for Vec<Option<BlocksQueryBlocksTransactionsUserCommands>> {
                             get_user_command_amount(user_command),
                             "mina".to_string(),
                         ),
-                        PillVariant::Green,
+                        PillVariant::Blue,
                     ),
                 ],
                 None => vec![],
@@ -157,10 +160,13 @@ impl TableData for SummaryPageBlocksQueryBlocks {
                         get_creator_account(block),
                         format!("/summary/accounts/{}", get_creator_account(block)),
                     ),
-                    decorate_with_currency_tag(get_coinbase(block), "mina".to_string()),
+                    wrap_in_pill(
+                        decorate_with_currency_tag(get_coinbase(block), "mina".to_string()),
+                        PillVariant::Green,
+                    ),
                     convert_to_pill(
                         get_transaction_count(block).map_or_else(String::new, |o| o.to_string()),
-                        PillVariant::Green,
+                        PillVariant::Blue,
                     ),
                     convert_to_pill(
                         get_snark_job_count(block).map_or_else(String::new, |o| o.to_string()),
