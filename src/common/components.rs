@@ -231,6 +231,7 @@ where
                 NavIcon::Tokens => view! { <TokenSymbol/> },
                 NavIcon::Addresses => view! { <AddressIcon/> },
                 NavIcon::FeeTransfers => view! { <FeeTransferIcon/> },
+                NavIcon::Analytics => view! { <AnalyticsIcon/> },
             }}
 
             <div class="ml-0.5 whitespace-nowrap">{nav_entry.text}</div>
@@ -273,6 +274,7 @@ pub fn TabLink(nav_entry: NavEntry) -> impl IntoView {
                 NavIcon::Tokens => view! { <TokenSymbol/> },
                 NavIcon::Addresses => view! { <AddressIcon/> },
                 NavIcon::FeeTransfers => view! { <FeeTransferIcon/> },
+                NavIcon::Analytics => view! { <AnalyticsIcon/> },
             }}
 
             <div class="ml-0.5">{nav_entry.text}</div>

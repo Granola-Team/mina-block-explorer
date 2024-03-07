@@ -28,8 +28,13 @@ pub fn BlockSnarkJobsTab() -> impl IntoView {
 }
 
 #[component]
-pub fn BlockFeeTransfersTab() -> impl IntoView {
+pub fn BlockInternalCommandsTab() -> impl IntoView {
     view! { <BlockTabContainer content=BlockContent::FeeTransfers/> }
+}
+
+#[component]
+pub fn BlockAnalyticsTab() -> impl IntoView {
+    view! { <BlockTabContainer content=BlockContent::Analytics/> }
 }
 
 #[component]
@@ -84,10 +89,18 @@ pub fn BlockTabbedPage() -> impl IntoView {
                 disabled: false,
             },
             NavEntry {
-                href: format!("/blocks/{}/fee-transfers", id()),
-                text: "Fee Transfers".to_string(),
+                href: format!("/blocks/{}/internal-commands", id()),
+                text: "Internal Commands".to_string(),
                 icon: NavIcon::FeeTransfers,
                 number_bubble: option_block.get().as_ref().and_then(get_fee_transfer_count),
+                sub_entries: None,
+                disabled: false,
+            },
+            NavEntry {
+                href: format!("/blocks/{}/analytics", id()),
+                text: "Analytics".to_string(),
+                icon: NavIcon::Analytics,
+                number_bubble: None,
                 sub_entries: None,
                 disabled: false,
             },
