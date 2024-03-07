@@ -1,6 +1,5 @@
 use crate::common::{components::*, functions::*};
 use leptos::*;
-use web_sys::js_sys::Array;
 
 #[derive(Default)]
 pub struct SpotlightEntry {
@@ -96,26 +95,22 @@ fn Spotlight(
 
 #[component]
 fn SpotlightRow(entry: SpotlightEntry) -> impl IntoView {
-    let th_td_class_base = "flex justify-start items-center m-1 p-1 text-left";
+    let th_td_class_base =
+        "flex justify-start items-center m-1 p-1 text-left text-xs md:text-sm whitespace-nowrap";
 
     view! {
         <th class=format!(
             "{} {}",
             th_td_class_base,
-            "w-40 min-w-40 text-sm font-normal text-slate-400 whitespace-nowrap",
+            "w-36 md:w-40 min-w-36 md:min-w-40 font-normal text-slate-400",
         )>{entry.label} :</th>
         <td class=format!(
             "{} {}",
             th_td_class_base,
-            "block w-fit text-ellipsis overflow-hidden whitespace-nowrap",
+            "block w-fit text-ellipsis overflow-hidden",
         )>
             {match entry.any_el {
                 Some(any_el) => {
-                    let class_list_array = Array::new();
-                    class_list_array.push(&"text-sm".into());
-                    class_list_array.push(&"text-ellipsis".into());
-                    class_list_array.push(&"overflow-hidden".into());
-                    any_el.class_list().add(&class_list_array).unwrap();
                     match entry.copiable {
                         true => view! { <CopyToClipboard>{any_el}</CopyToClipboard> }.into_view(),
                         false => any_el.into_view(),
