@@ -102,7 +102,10 @@ pub fn URLCheckbox(label: String, url_param_key: String) -> impl IntoView {
 
         navigate(
             &format!("{}{}", pathname, pm.to_query_string()),
-            Default::default(),
+            NavigateOptions {
+                scroll: false,
+                ..Default::default()
+            },
         );
     });
 
