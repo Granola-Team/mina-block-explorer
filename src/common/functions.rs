@@ -279,7 +279,7 @@ pub fn convert_to_ellipsis(text: String) -> HtmlElement<html::AnyElement> {
     let parts_base = "overflow-hidden flex-initial";
     let (first, last) = split_str(&text);
     view! {
-        <div class="flex items-baseline justify-center">
+        <div class="w-full flex items-baseline justify-start">
             <div class=format!("{} break-all", parts_base)>{first}</div>
             <div
                 style="direction: rtl;"

@@ -1,4 +1,4 @@
-use crate::common::models::*;
+use crate::common::{components::*, functions::*, models::*};
 use leptos::*;
 
 #[component]
@@ -9,9 +9,11 @@ pub fn AccountDialogSectionContainer(
 ) -> impl IntoView {
     view! {
         <section class="flex flex-col bg-white rounded-xl flex flex-col items-stretch mt-8 p-4 h-fit">
-            <div class="flex justify-between w-full mb-4">
+            <div class="flex justify-between items-baseline w-full mb-4">
                 <h2 class="text-xl">{title}</h2>
-                <span class="text-table-row-text-color text-xs">{showing_message}</span>
+                <span class="text-table-row-text-color text-xs flex items-center">
+                    {showing_message}
+                </span>
             </div>
             {children()}
         </section>
@@ -19,15 +21,29 @@ pub fn AccountDialogSectionContainer(
 }
 
 #[component]
-pub fn AccountDialogSectionSubEntry(label: String, value: String) -> impl IntoView {
-    match label.len() {
-        0 => view! { <div></div> },
-        _ => view! {
-            <div class="w-1/2 flex my-1">
-                <span class="text-xs text-slate-400 w-1/4">{label} :</span>
-                <span class="text-xs overflow-hidden text-ellipsis w-3/4">{value}</span>
-            </div>
-        },
+pub fn AccountDialogSubsectionTable(children: Children) -> impl IntoView {
+    view! { <table class="font-mono w-full">{children()}</table> }
+}
+
+#[component]
+pub fn AccountDialogSubsectionRow(label: String, value: String) -> impl IntoView {
+    view! {
+        {match label.len() {
+            0 => view! { <NullView/> }.into_view(),
+            _ => {
+                view! {
+                    <tr class="my-2 flex whitespace-nowrap">
+                        <th class="text-xs text-slate-400 w-1/4 flex justify-start font-normal">
+                            {label} :
+                        </th>
+                        <td class="text-xs overflow-hidden text-ellipsis w-[60%] flex justify-start">
+                            {convert_to_ellipsis(value)}
+                        </td>
+                    </tr>
+                }
+                    .into_view()
+            }
+        }}
     }
 }
 
@@ -57,7 +73,7 @@ pub fn AccountDialogSectionEntryHeader(
         },
     };
     view! {
-        <div class="flex justify-between w-full">
+        <div class="font-mono flex justify-between w-full">
             <div class="flex items-center">
                 <img src=img_attr.src alt=img_attr.alt class="mr-2"/>
                 {move || match status {
