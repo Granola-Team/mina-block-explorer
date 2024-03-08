@@ -103,6 +103,15 @@ Cypress.Commands.add('tableColumnValuesEqual', (heading, column, value) => {
         .find('a', { timeout: 60000 }) 
         .should('have.text', value)         
     });
+});
+
+Cypress.Commands.add('prepareSnapshotTest',() => {
+  /** 
+   * Make the header static so that it doesn't get in the way.
+   * We are unable to scroll to top and take snapshots without 
+   * the header getting in the way.
+   */
+  cy.get('header').invoke('css', 'position', 'static');
 })
 
 
