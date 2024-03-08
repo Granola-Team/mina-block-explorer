@@ -51,6 +51,10 @@ pub fn get_block_height(snark: &SnarksQuerySnarks) -> String {
         .map_or_else(String::new, |height| height.to_string())
 }
 
+pub fn get_canonical(snark: &SnarksQuerySnarks) -> bool {
+    snark.canonical.unwrap_or_default()
+}
+
 pub fn get_date_time(snark: &SnarksQuerySnarks) -> String {
     snark
         .date_time
