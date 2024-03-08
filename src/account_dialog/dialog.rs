@@ -73,6 +73,7 @@ pub fn AccountDialogView() -> impl IntoView {
                                     ],
                                 )),
                             )
+
                             spotlight_items=get_spotlight_loading_data()
                             id=None
                             meta=None
