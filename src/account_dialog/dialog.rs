@@ -59,6 +59,20 @@ pub fn AccountDialogView() -> impl IntoView {
                     view! {
                         <SpotlightSection
                             header="Account Spotlight".to_string()
+                            top_right=Some(
+                                Box::new(move || Fragment::new(
+                                    vec![
+                                        view! {
+                                            <button id="closedialog" class="mr-4 cursor-pointer">
+                                                <a href=base.get()>
+                                                    <CloseIcon/>
+                                                </a>
+                                            </button>
+                                        }
+                                            .into_view(),
+                                    ],
+                                )),
+                            )
                             spotlight_items=get_spotlight_loading_data()
                             id=None
                             meta=None
