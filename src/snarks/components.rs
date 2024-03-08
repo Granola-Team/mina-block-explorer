@@ -100,13 +100,16 @@ fn AccountDialogSnarkJobEntry(snark: SnarksQuerySnarks) -> impl IntoView {
 }
 
 #[component]
-pub fn AccountOverviewSnarkJobTable(public_key: Option<String>) -> impl IntoView {
+pub fn AccountOverviewSnarkJobTable(
+    public_key: Option<String>,
+    canonical: Option<bool>,
+) -> impl IntoView {
     let pk = public_key.clone();
     let resource = create_resource(
         || (),
         move |_| {
             let public_key_inner = public_key.clone();
-            async move { load_data(50, public_key_inner, None).await }
+            async move { load_data(50, public_key_inner, None, canonical).await }
         },
     );
 
@@ -159,11 +162,16 @@ pub fn AccountOverviewSnarkJobTable(public_key: Option<String>) -> impl IntoView
 }
 
 #[component]
-pub fn BlockSpotlightSnarkJobTable(block_state_hash: Option<String>) -> impl IntoView {
+pub fn BlockSpotlightSnarkJobTable(
+    block_state_hash: Option<String>,
+    canonical: Option<bool>,
+) -> impl IntoView {
     let (bsh_signal, _set_bsh) = create_signal(block_state_hash);
     let resource = create_resource(
         move || bsh_signal.get(),
-        move |block_state_hash_opt| async move { load_data(50, None, block_state_hash_opt).await },
+        move |block_state_hash_opt| async move {
+            load_data(50, None, block_state_hash_opt, canonical).await
+        },
     );
 
     let records_per_page = 10;

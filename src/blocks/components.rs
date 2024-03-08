@@ -13,6 +13,7 @@ use leptos_router::*;
 pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
     let option_block = use_context::<ReadSignal<Option<BlocksQueryBlocks>>>()
         .expect("there to be an optional block signal provided");
+    let (canonical, _) = create_query_signal::<bool>("canonical");
 
     let content_for_fallback = content.clone();
 
@@ -67,7 +68,9 @@ pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
                                     view! { <BlockUserCommands block=block/> }
                                 }
                                 (Some(block), BlockContent::SNARKJobs) => {
-                                    view! { <BlockSnarkJobs block=block/> }
+                                    view! {
+                                        <BlockSnarkJobs block=block canonical=canonical.get()/>
+                                    }
                                 }
                                 (Some(block), BlockContent::FeeTransfers) => {
                                     view! { <BlockFeeTransfers block=block/> }
@@ -113,10 +116,13 @@ pub fn BlockUserCommands(block: BlocksQueryBlocks) -> impl IntoView {
 }
 
 #[component]
-pub fn BlockSnarkJobs(block: BlocksQueryBlocks) -> impl IntoView {
+pub fn BlockSnarkJobs(block: BlocksQueryBlocks, canonical: Option<bool>) -> impl IntoView {
     view! {
         <TableSection section_heading="SNARK Jobs".to_string() controls=|| ().into_view()>
-            <BlockSpotlightSnarkJobTable block_state_hash=Option::from(get_state_hash(&block))/>
+            <BlockSpotlightSnarkJobTable
+                block_state_hash=Option::from(get_state_hash(&block))
+                canonical
+            />
         </TableSection>
     }
 }

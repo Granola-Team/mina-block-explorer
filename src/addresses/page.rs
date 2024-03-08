@@ -69,6 +69,7 @@ pub fn AccountsPage() -> impl IntoView {
 #[component]
 pub fn AccountSpotlightPage() -> impl IntoView {
     let memo_params_map = use_params_map();
+    let (canonical, _) = create_query_signal::<bool>("canonical");
 
     let resource = create_resource(
         move || memo_params_map.get(),
@@ -119,9 +120,10 @@ pub fn AccountSpotlightPage() -> impl IntoView {
             <TransactionsSection public_key=Some(public_key().unwrap_or_default()) with_link=true/>
             <SubSectionContainer>
                 <AppSubSection heading="SNARK Jobs".to_string() position=SubSectionPosition::Left>
-                    <AccountOverviewSnarkJobTable public_key=Some(
-                        public_key().unwrap_or_default(),
-                    )/>
+                    <AccountOverviewSnarkJobTable
+                        public_key=Some(public_key().unwrap_or_default())
+                        canonical=canonical.get()
+                    />
                 </AppSubSection>
                 <AppSubSection
                     heading="Block Production".to_string()
