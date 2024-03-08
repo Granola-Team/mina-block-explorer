@@ -18,7 +18,7 @@ impl TableData for Vec<Option<SnarksQuerySnarks>> {
                     convert_to_span(get_block_height(snark)),
                     convert_to_link(
                         get_block_state_hash(snark),
-                        format!("/blocks/{}", get_block_state_hash(snark)),
+                        format!("/blocks/{}/spotlight", get_block_state_hash(snark)),
                     ),
                     convert_array_to_span(vec![
                         convert_to_span(print_time_since(&get_date_time(snark))),
