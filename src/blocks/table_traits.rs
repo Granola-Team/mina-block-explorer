@@ -197,29 +197,29 @@ impl TableData for Vec<Option<BlocksQueryBlocksSnarkJobs>> {
         self.iter()
             .map(|opt_snark| match opt_snark {
                 Some(snark) => vec![
-                    convert_to_span(get_snark_block_height(&snark)),
+                    convert_to_span(get_snark_block_height(snark)),
                     convert_to_link(
-                        get_snark_block_state_hash(&snark),
-                        format!("/blocks/{}", get_snark_block_state_hash(&snark)),
+                        get_snark_block_state_hash(snark),
+                        format!("/blocks/{}", get_snark_block_state_hash(snark)),
                     ),
                     convert_array_to_span(vec![
-                        convert_to_span(print_time_since(&get_snark_date_time(&snark))),
-                        convert_to_span(get_snark_date_time(&snark))
+                        convert_to_span(print_time_since(&get_snark_date_time(snark))),
+                        convert_to_span(get_snark_date_time(snark))
                             .attr("class", "block text-xs font-light text-slate-400"),
                     ])
                     .attr("class", "block"),
                     convert_to_link(
-                        get_snark_prover(&snark),
-                        format!("/addresses/accounts/{}", get_snark_prover(&snark)),
+                        get_snark_prover(snark),
+                        format!("/addresses/accounts/{}", get_snark_prover(snark)),
                     ),
                     convert_array_to_span(
-                        get_snark_work_ids(&snark)
+                        get_snark_work_ids(snark)
                             .iter()
                             .map(|w| convert_to_pill(w.to_string(), PillVariant::Grey))
                             .collect::<Vec<_>>(),
                     ),
                     wrap_in_pill(
-                        decorate_with_currency_tag(get_snark_fee(&snark), "mina".to_string()),
+                        decorate_with_currency_tag(get_snark_fee(snark), "mina".to_string()),
                         PillVariant::Orange,
                     ),
                 ],
