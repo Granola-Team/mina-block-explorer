@@ -4,7 +4,6 @@ use crate::{
     common::{components::*, functions::*, models::*, spotlight::*, table::*},
     fee_transfers::components::BlockSpotlightFeeTransfersTable,
     icons::*,
-    snarks::components::BlockSpotlightSnarkJobTable,
 };
 use leptos::*;
 use leptos_router::*;
@@ -116,7 +115,7 @@ pub fn BlockUserCommands(block: BlocksQueryBlocks) -> impl IntoView {
 pub fn BlockSnarkJobs(block: BlocksQueryBlocks) -> impl IntoView {
     view! {
         <TableSection section_heading="SNARK Jobs".to_string() controls=|| ().into_view()>
-            <BlockSpotlightSnarkJobTable block_state_hash=Option::from(get_state_hash(&block))/>
+            <BlockSpotlightSnarkJobTable block=block/>
         </TableSection>
     }
 }
@@ -591,23 +590,16 @@ pub fn AccountOverviewBlocksTable(public_key: Option<String>) -> impl IntoView {
     }
 }
 
-
 #[component]
-pub fn BlockSpotlightSnarkJobTable(block: Option<String>) -> impl IntoView {
-    let (bsh_signal, _set_bsh) = create_signal(block_state_hash);
-    let resource = create_resource(
-        move || bsh_signal.get(),
-        move |block_state_hash_opt| async move { load_data(50, None, block_state_hash_opt).await },
-    );
-
+pub fn BlockSpotlightSnarkJobTable(block: BlocksQueryBlocks) -> impl IntoView {
     let records_per_page = 10;
     let (current_page, set_current_page) = create_signal(1);
 
     view! {
-        {move || match resource.get() {
-            Some(Ok(data)) => {
+        {move || match block.snark_jobs.clone() {
+            Some(snark_jobs) => {
                 view! {
-                    {match data.snarks.len() {
+                    {match snark_jobs.len() {
                         0 => {
                             view! {
                                 <EmptyTable message="No SNARK work related to this block"
@@ -616,13 +608,13 @@ pub fn BlockSpotlightSnarkJobTable(block: Option<String>) -> impl IntoView {
                         }
                         _ => {
                             let pag = build_pagination(
-                                data.snarks.len(),
+                                snark_jobs.len(),
                                 records_per_page,
                                 current_page.get(),
                                 set_current_page,
                             );
                             let subset = get_subset(
-                                &data.snarks,
+                                &snark_jobs,
                                 records_per_page,
                                 current_page.get() - 1,
                             );
