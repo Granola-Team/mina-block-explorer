@@ -25,7 +25,7 @@ impl TableData for Vec<Option<TransactionsQueryTransactions>> {
             .map(|opt_trans| match opt_trans {
                 Some(transaction) => vec![
                     convert_array_to_span(vec![
-                        convert_to_status_bubble(get_failure_reason(transaction)),
+                        convert_to_status_bubble(get_canonical(transaction), get_failure_reason(transaction)),
                         convert_to_span(get_block_height(transaction)),
                     ]),
                     convert_to_link(
@@ -77,3 +77,4 @@ impl TableData for Vec<Option<TransactionsQueryTransactions>> {
             .collect::<Vec<_>>()
     }
 }
+

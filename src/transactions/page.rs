@@ -99,7 +99,7 @@ pub fn TransactionSpotlightPage() -> impl IntoView {
                                     label: "Canonical".to_string(),
                                     any_el: Some(
                                         convert_to_pill(
-                                            get_canonical(transaction),
+                                            get_canonical(transaction).unwrap_or_default().to_string(),
                                             PillVariant::Grey,
                                         ),
                                     ),
