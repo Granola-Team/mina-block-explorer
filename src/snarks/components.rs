@@ -8,6 +8,7 @@ use crate::{
     icons::*,
 };
 use leptos::*;
+use leptos_router::create_query_signal;
 
 #[component]
 pub fn AccountDialogSnarkJobSection(snarks: Vec<Option<SnarksQuerySnarks>>) -> impl IntoView {
@@ -102,11 +103,12 @@ fn AccountDialogSnarkJobEntry(snark: SnarksQuerySnarks) -> impl IntoView {
 #[component]
 pub fn AccountOverviewSnarkJobTable(public_key: Option<String>) -> impl IntoView {
     let pk = public_key.clone();
+    let (canonical_qs, _) = create_query_signal::<bool>("canonical");
     let resource = create_resource(
-        || (),
-        move |_| {
+        move || canonical_qs.get(),
+        move |canonical| {
             let public_key_inner = public_key.clone();
-            async move { load_data(50, public_key_inner, None).await }
+            async move { load_data(50, public_key_inner, None, canonical).await }
         },
     );
 

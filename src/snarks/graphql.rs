@@ -9,7 +9,8 @@ type Long = i32;
 #[graphql(
     schema_path = "graphql/schemas/mina-explorer.graphql",
     query_path = "graphql/queries/snarks.graphql",
-    response_derives = "Serialize,PartialEq,Debug,Clone"
+    response_derives = "Serialize,PartialEq,Debug,Clone",
+    skip_serializing_none
 )]
 pub struct SnarksQuery;
 
@@ -23,7 +24,7 @@ impl Default for snarks_query::SnarksQuerySnarks {
             work_ids: None,
             block: None,
             fee: None,
-            canonical: None
+            canonical: None,
         }
     }
 }

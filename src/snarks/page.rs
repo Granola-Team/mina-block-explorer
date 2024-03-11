@@ -1,20 +1,21 @@
 use super::functions::*;
-use crate::common::{components::*, functions::*, search::*, table::*};
+use crate::common::{components::*, functions::*, search::*, table::*, models::*};
 use leptos::*;
-use leptos_router::use_query_map;
+use leptos_router::{use_query_map, create_query_signal};
 
 #[component]
 pub fn SnarksPage() -> impl IntoView {
     let query_params_map = use_query_map();
+    let (canonical_qp, _) = create_query_signal::<bool>("canonical");
 
     let resource = create_resource(
-        move || query_params_map.get(),
-        |value| async move {
+        move || (query_params_map.get(), canonical_qp.get()),
+        |(value,canonical)| async move {
             let mut public_key = value.get("account");
             if public_key.is_none() {
                 public_key = value.get("query");
             }
-            load_data(50, public_key.cloned(), None).await
+            load_data(50, public_key.cloned(), None,canonical).await
         },
     );
 
