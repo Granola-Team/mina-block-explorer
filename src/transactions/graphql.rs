@@ -9,7 +9,8 @@ type Long = i32;
 #[graphql(
     schema_path = "graphql/schemas/mina-explorer.graphql",
     query_path = "graphql/queries/transactions.graphql",
-    response_derives = "Serialize,PartialEq,Debug,Clone,Default"
+    response_derives = "Serialize,PartialEq,Debug,Clone,Default",
+    skip_serializing_none
 )]
 pub struct TransactionsQuery;
 
