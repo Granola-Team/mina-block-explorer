@@ -25,7 +25,12 @@ query BlocksQuery($query: BlockQueryInput!, $limit: Int = 10, $sort_by: BlockSor
       publicKey
     }
     snarkJobs {
+      prover
+      workIds
+      blockStateHash
       blockHeight
+      fee
+      dateTime
     }
     protocolState {
       previousStateHash

@@ -282,7 +282,7 @@ pub fn TabLink(nav_entry: NavEntry) -> impl IntoView {
             {match nav_entry.number_bubble {
                 Some(number) => {
                     view! {
-                        <div class="ml-1 px-1 flex text-granola-orange text-xs bg-granola-orange/25 justify-center items-center rounded-full">
+                        <div class="number-bubble ml-1 px-1 flex text-granola-orange text-xs bg-granola-orange/25 justify-center items-center rounded-full">
                             {number}
                         </div>
                     }

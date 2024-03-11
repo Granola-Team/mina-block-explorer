@@ -4,7 +4,6 @@ use crate::{
     common::{components::*, functions::*, models::*, spotlight::*, table::*},
     fee_transfers::components::BlockSpotlightFeeTransfersTable,
     icons::*,
-    snarks::components::BlockSpotlightSnarkJobTable,
 };
 use leptos::*;
 use leptos_router::*;
@@ -116,7 +115,7 @@ pub fn BlockUserCommands(block: BlocksQueryBlocks) -> impl IntoView {
 pub fn BlockSnarkJobs(block: BlocksQueryBlocks) -> impl IntoView {
     view! {
         <TableSection section_heading="SNARK Jobs".to_string() controls=|| ().into_view()>
-            <BlockSpotlightSnarkJobTable block_state_hash=Option::from(get_state_hash(&block))/>
+            <BlockSpotlightSnarkJobTable block=block/>
         </TableSection>
     }
 }
@@ -587,6 +586,44 @@ pub fn AccountOverviewBlocksTable(public_key: Option<String>) -> impl IntoView {
                 }
             }
             _ => view! { <span></span> }.into_view(),
+        }}
+    }
+}
+
+#[component]
+pub fn BlockSpotlightSnarkJobTable(block: BlocksQueryBlocks) -> impl IntoView {
+    let records_per_page = 10;
+    let (current_page, set_current_page) = create_signal(1);
+
+    view! {
+        {move || match block.snark_jobs.clone() {
+            Some(snark_jobs) => {
+                view! {
+                    {match snark_jobs.len() {
+                        0 => {
+                            view! {
+                                <EmptyTable message="No SNARK work related to this block"
+                                    .to_string()/>
+                            }
+                        }
+                        _ => {
+                            let pag = build_pagination(
+                                snark_jobs.len(),
+                                records_per_page,
+                                current_page.get(),
+                                set_current_page,
+                            );
+                            let subset = get_subset(
+                                &snark_jobs,
+                                records_per_page,
+                                current_page.get() - 1,
+                            );
+                            view! { <Table data=subset pagination=pag/> }
+                        }
+                    }}
+                }
+            }
+            _ => view! { <NullView/> },
         }}
     }
 }
