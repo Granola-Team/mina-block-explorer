@@ -85,7 +85,7 @@ pub fn BooleanUrlParamSelectMenu(
     let comparison_labels = labels.clone();
     view! {
         <select
-            class="text-xs font-mono"
+            class="text-xs"
             id=id
             on:change=move |ev| {
                 match event_target_value(&ev) {
