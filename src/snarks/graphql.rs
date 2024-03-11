@@ -23,6 +23,7 @@ impl Default for snarks_query::SnarksQuerySnarks {
             work_ids: None,
             block: None,
             fee: None,
+            canonical: None
         }
     }
 }
