@@ -131,6 +131,13 @@ impl Default for NavEntry {
     }
 }
 
+#[derive(Clone)]
+pub struct BooleanUrlParamSelectOptions {
+    pub true_case: String,
+    pub false_case: String,
+    pub none_case: String,
+}
+
 #[derive(Clone, PartialEq)]
 pub enum NavIcon {
     Blocks,

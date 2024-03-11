@@ -129,6 +129,33 @@ pub fn URLCheckbox(label: String, url_param_key: String) -> impl IntoView {
 }
 
 #[component]
+pub fn BooleanUrlParamSelectMenu(
+    #[prop(into)] id: String,
+    #[prop(into)] query_str_key: String,
+    labels: BooleanUrlParamSelectOptions,
+) -> impl IntoView {
+    let (query_val, set_query_val) = create_query_signal::<bool>(query_str_key);
+    let comparison_labels = labels.clone();
+    view! {
+        <select class="text-xs font-mono"
+            id=id
+            on:change=move |ev| {
+                match event_target_value(&ev) {
+                    val if val == comparison_labels.true_case => set_query_val.set(Some(true)),
+                    val if val == comparison_labels.false_case => set_query_val.set(Some(false)),
+                    val if val == comparison_labels.none_case => set_query_val.set(None),
+                    val => logging::log!("unknown value {}", val),
+                }
+            }
+        >
+            <option class="text-xs font-mono" selected=move || query_val.get().unwrap_or_default()>{labels.true_case}</option>
+            <option class="text-xs font-mono" selected=move || !query_val.get().unwrap_or_default()>{labels.false_case}</option>
+            <option class="text-xs font-mono" selected=move || query_val.get().is_none()>{labels.none_case}</option>
+        </select>
+    }
+}
+
+#[component]
 pub fn SummaryItem(
     label: String,
     value: Option<String>,
