@@ -151,7 +151,7 @@ pub fn TransactionsSection(
                                     labels=BooleanUrlParamSelectOptions {
                                         true_case: String::from("Canonical"),
                                         false_case: String::from("Non-Canonical"),
-                                        none_case: String::from("All Transactions"),
+                                        none_case: String::from("All"),
                                     }
                                 />
                             }
