@@ -388,21 +388,14 @@ fn AccountDialogBlockEntry(block: BlocksQueryBlocks) -> impl IntoView {
 #[component]
 pub fn BlocksSection() -> impl IntoView {
     let query_params_map = use_query_map();
+    let (canonical_qp, _) = create_query_signal::<bool>("canonical");
 
     let resource = create_resource(
-        move || query_params_map.get(),
-        |value| async move {
+        move || (query_params_map.get(), canonical_qp.get()),
+        |(value, canonical)| async move {
             let public_key = value.get("account");
             let block_hash = value.get("query");
-            let include_non_canonical_qs = value.get("include_non_canonical");
-            let canonical_query = canonical_qs_to_canonical_query_param(include_non_canonical_qs);
-            load_data(
-                50,
-                public_key.cloned(),
-                block_hash.cloned(),
-                canonical_query,
-            )
-            .await
+            load_data(50, public_key.cloned(), block_hash.cloned(), canonical).await
         },
     );
 
@@ -428,9 +421,14 @@ pub fn BlocksSection() -> impl IntoView {
                         section_heading="Blocks".to_owned()
                         controls=move || {
                             view! {
-                                <URLCheckbox
-                                    label="Include Non-Canonical".to_string()
-                                    url_param_key="include_non_canonical".to_string()
+                                <BooleanUrlParamSelectMenu
+                                    id="canonical-selection"
+                                    query_str_key="canonical"
+                                    labels=BooleanUrlParamSelectOptions {
+                                        true_case: String::from("Canonical"),
+                                        false_case: String::from("Non-Canonical"),
+                                        none_case: String::from("All"),
+                                    }
                                 />
                             }
                         }
@@ -462,13 +460,12 @@ pub fn BlocksSection() -> impl IntoView {
 #[component]
 pub fn SummaryPageBlocksSection() -> impl IntoView {
     let query_params_map = use_query_map();
+    let (canonical_qp, _) = create_query_signal::<bool>("canonical");
     let resource = create_resource(
-        move || query_params_map.get(),
-        |value| async move {
+        move || (query_params_map.get(), canonical_qp.get()),
+        |(value, canonical)| async move {
             let state_hash = value.get("query");
-            let include_non_canonical_qs = value.get("include_non_canonical");
-            let canonical_query = canonical_qs_to_canonical_query_param(include_non_canonical_qs);
-            load_data(50, None, state_hash.cloned(), canonical_query).await
+            load_data(50, None, state_hash.cloned(), canonical).await
         },
     );
 
@@ -507,9 +504,14 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
                             section_heading="Blocks".to_owned()
                             controls=move || {
                                 view! {
-                                    <URLCheckbox
-                                        label="Include Non-Canonical".to_string()
-                                        url_param_key="include_non_canonical".to_string()
+                                    <BooleanUrlParamSelectMenu
+                                        id="canonical-selection"
+                                        query_str_key="canonical"
+                                        labels=BooleanUrlParamSelectOptions {
+                                            true_case: String::from("Canonical"),
+                                            false_case: String::from("Non-Canonical"),
+                                            none_case: String::from("All"),
+                                        }
                                     />
                                 }
                             }
