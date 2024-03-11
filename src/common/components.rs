@@ -84,7 +84,8 @@ pub fn BooleanUrlParamSelectMenu(
     let (query_val, set_query_val) = create_query_signal::<bool>(query_str_key);
     let comparison_labels = labels.clone();
     view! {
-        <select class="text-xs font-mono"
+        <select
+            class="text-xs font-mono"
             id=id
             on:change=move |ev| {
                 match event_target_value(&ev) {
@@ -95,9 +96,16 @@ pub fn BooleanUrlParamSelectMenu(
                 }
             }
         >
-            <option class="text-xs font-mono" selected=move || query_val.get().unwrap_or_default()>{labels.true_case}</option>
-            <option class="text-xs font-mono" selected=move || !query_val.get().unwrap_or_default()>{labels.false_case}</option>
-            <option class="text-xs font-mono" selected=move || query_val.get().is_none()>{labels.none_case}</option>
+
+            <option class="text-xs font-mono" selected=move || query_val.get().unwrap_or_default()>
+                {labels.true_case}
+            </option>
+            <option class="text-xs font-mono" selected=move || !query_val.get().unwrap_or_default()>
+                {labels.false_case}
+            </option>
+            <option class="text-xs font-mono" selected=move || query_val.get().is_none()>
+                {labels.none_case}
+            </option>
         </select>
     }
 }

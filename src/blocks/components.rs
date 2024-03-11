@@ -396,13 +396,7 @@ pub fn BlocksSection() -> impl IntoView {
         |(value, canonical)| async move {
             let public_key = value.get("account");
             let block_hash = value.get("query");
-            load_data(
-                50,
-                public_key.cloned(),
-                block_hash.cloned(),
-                canonical,
-            )
-            .await
+            load_data(50, public_key.cloned(), block_hash.cloned(), canonical).await
         },
     );
 
