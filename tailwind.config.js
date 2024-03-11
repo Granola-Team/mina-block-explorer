@@ -29,7 +29,8 @@ module.exports = {
                 'card-text-purple': '#8572E6',
                 'card-text-blue': '#25B4D6',
                 'status-success': '#56D05F',
-                'status-failed': '#F58E2E'
+                'status-failed': '#FB7631',
+                'status-unknown': '#F8AC4B',
           }
         }
 
