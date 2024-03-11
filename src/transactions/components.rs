@@ -143,8 +143,21 @@ pub fn TransactionsSection(
                 view! {
                     <TableSection
                         section_heading="Transactions".to_owned()
-                        controls=|| ().into_view()
+                        controls=move || {
+                            view! {
+                                <BooleanUrlParamSelectMenu
+                                    id="canonical-selection"
+                                    query_str_key="canonical"
+                                    labels=BooleanUrlParamSelectOptions {
+                                        true_case: String::from("Canonical"),
+                                        false_case: String::from("Non-Canonical"),
+                                        none_case: String::from("All Transactions"),
+                                    }
+                                />
+                            }
+                        }
                     >
+
                         {move || match data.transactions.len() {
                             0 => {
                                 view! {
