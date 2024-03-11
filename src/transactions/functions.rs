@@ -22,8 +22,7 @@ pub fn get_block_height(transaction: &TransactionsQueryTransactions) -> String {
 }
 
 pub fn get_canonical(transaction: &TransactionsQueryTransactions) -> Option<bool> {
-    transaction
-        .canonical
+    transaction.canonical
 }
 
 pub fn get_kind(transaction: &TransactionsQueryTransactions) -> String {
