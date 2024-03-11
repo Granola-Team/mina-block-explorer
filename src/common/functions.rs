@@ -57,12 +57,18 @@ pub fn convert_array_to_span(
         .into()
 }
 
-pub fn convert_to_status_bubble(canonical_status: Option<bool>, status_msg: Option<String>) -> HtmlElement<html::AnyElement> {
+pub fn convert_to_status_bubble(
+    canonical_status: Option<bool>,
+    status_msg: Option<String>,
+) -> HtmlElement<html::AnyElement> {
     let (color, title) = match (canonical_status, status_msg) {
-        (Some(false),Some(s)) => (String::from("bg-status-failed"), s.to_string()),
-        (Some(false),None) => (String::from("bg-status-failed"), "Unknown".to_string()),
-        (Some(true),_) => (String::from("bg-status-success"), String::new()),
-        (None,_) => (String::from("bg-status-unknown"), "Canonical Status Unknown".to_string())
+        (Some(false), Some(s)) => (String::from("bg-status-failed"), s.to_string()),
+        (Some(false), None) => (String::from("bg-status-failed"), "Unknown".to_string()),
+        (Some(true), _) => (String::from("bg-status-success"), String::new()),
+        (None, _) => (
+            String::from("bg-status-unknown"),
+            "Canonical Status Unknown".to_string(),
+        ),
     };
     html::span()
         .attr(
