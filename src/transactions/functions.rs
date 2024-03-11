@@ -121,6 +121,7 @@ pub async fn load_data(
     public_key: Option<String>,
     state_hash: Option<String>,
     payment_id: Option<String>,
+    canonical: Option<bool>,
 ) -> Result<transactions_query::ResponseData, MyError> {
     let url = "https://graphql.minaexplorer.com";
     let variables = transactions_query::Variables {
@@ -130,7 +131,7 @@ pub async fn load_data(
             from: public_key,
             hash: state_hash,
             id: payment_id,
-            canonical: Some(true),
+            canonical,
             ..Default::default()
         },
     };

@@ -58,11 +58,12 @@ pub fn TransactionsPage() -> impl IntoView {
 #[component]
 pub fn TransactionSpotlightPage() -> impl IntoView {
     let memo_params_map = use_params_map();
+    let (canonical_qp, _) = create_query_signal::<bool>("canonical");
     let resource = create_resource(
-        move || memo_params_map.get(),
-        |value| async move {
+        move || (memo_params_map.get(), canonical_qp.get()),
+        |(value, canonical)| async move {
             let state_hash = value.get("id");
-            load_data(10, None, state_hash.cloned(), None).await
+            load_data(10, None, state_hash.cloned(), None, canonical).await
         },
     );
 
