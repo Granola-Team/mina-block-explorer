@@ -76,59 +76,6 @@ where
 }
 
 #[component]
-pub fn URLCheckbox(label: String, url_param_key: String) -> impl IntoView {
-    let query_params_map = use_query_map();
-    let navigate = use_navigate();
-    let location = use_location();
-
-    let url_param_key_clone = url_param_key.clone(); // Clone url_param_key for use in the closure
-
-    let initial_checkbox_value =
-        move || query_params_map.with_untracked(|params| params.get(&url_param_key_clone).cloned());
-    let (checkbox_value, set_checkbox_value) =
-        create_signal(initial_checkbox_value().map_or(false, |i| i == "true"));
-
-    create_effect(move |_| {
-        let current_checkbox_value = checkbox_value.get();
-        let pathname = location.pathname.get();
-        let mut pm = query_params_map.get();
-        pm.insert(
-            url_param_key.to_string(),
-            current_checkbox_value.to_string(),
-        );
-
-        logging::log!("{}", pm.to_query_string());
-        logging::log!("{}", pathname);
-
-        navigate(
-            &format!("{}{}", pathname, pm.to_query_string()),
-            NavigateOptions {
-                scroll: false,
-                ..Default::default()
-            },
-        );
-    });
-
-    {
-        move || {
-            view! {
-                <Checkbox
-                    label=label.to_string()
-                    value=checkbox_value.get()
-                    handle_change=move |ev| {
-                        set_checkbox_value
-                            .update(|c| {
-                                logging::log!("new value is {}", event_target_checked(& ev));
-                                *c = event_target_checked(&ev);
-                            })
-                    }
-                />
-            }
-        }
-    }
-}
-
-#[component]
 pub fn BooleanUrlParamSelectMenu(
     #[prop(into)] id: String,
     #[prop(into)] query_str_key: String,
