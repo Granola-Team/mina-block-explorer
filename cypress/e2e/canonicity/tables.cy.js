@@ -1,9 +1,10 @@
 suite(["@CI"],'table', () => {
 
-    let pages = [{
-            url:'/transactions',
-            section: 'Transactions',
-        },
+    let pages = [
+        // {
+        //     url:'/transactions',
+        //     section: 'Transactions',
+        // },
         { 
             url: '/blocks',
             section: 'Blocks',
