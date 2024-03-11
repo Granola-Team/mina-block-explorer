@@ -1,7 +1,7 @@
 use super::functions::*;
-use crate::common::{components::*, functions::*, search::*, table::*, models::*};
+use crate::common::{components::*, functions::*, models::*, search::*, table::*};
 use leptos::*;
-use leptos_router::{use_query_map, create_query_signal};
+use leptos_router::{create_query_signal, use_query_map};
 
 #[component]
 pub fn SnarksPage() -> impl IntoView {
@@ -10,12 +10,12 @@ pub fn SnarksPage() -> impl IntoView {
 
     let resource = create_resource(
         move || (query_params_map.get(), canonical_qp.get()),
-        |(value,canonical)| async move {
+        |(value, canonical)| async move {
             let mut public_key = value.get("account");
             if public_key.is_none() {
                 public_key = value.get("query");
             }
-            load_data(50, public_key.cloned(), None,canonical).await
+            load_data(50, public_key.cloned(), None, canonical).await
         },
     );
 
@@ -41,6 +41,7 @@ pub fn SnarksPage() -> impl IntoView {
                     }
                 }
             >
+
                 {move || match resource.get() {
                     Some(Ok(data)) => {
                         let pag = build_pagination(
