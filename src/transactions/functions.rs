@@ -21,10 +21,9 @@ pub fn get_block_height(transaction: &TransactionsQueryTransactions) -> String {
         .map_or_else(String::new, |o| o.to_string())
 }
 
-pub fn get_canonical(transaction: &TransactionsQueryTransactions) -> String {
+pub fn get_canonical(transaction: &TransactionsQueryTransactions) -> Option<bool> {
     transaction
         .canonical
-        .map_or_else(String::new, |o| o.to_string())
 }
 
 pub fn get_kind(transaction: &TransactionsQueryTransactions) -> String {
