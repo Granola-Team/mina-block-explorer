@@ -59,7 +59,7 @@ fn Spotlight(
             </div>
             <div
                 id="spotlight-id"
-                class="@3xl:col-start-3 text-granola-orange text-base text-bold text-ellipsis w-10/12 overflow-hidden text-center @3xl:text-left"
+                class="@3xl:col-start-3 text-granola-orange text-base text-bold text-ellipsis w-10/12 overflow-hidden flex justify-center @3xl:justify-start"
             >
                 {match id {
                     Some(i) => view! { <CopyToClipboard>{i}</CopyToClipboard> }.into_view(),

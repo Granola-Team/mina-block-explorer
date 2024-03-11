@@ -1,5 +1,7 @@
 use super::graphql::{
-    blocks_query::{BlocksQueryBlocks, BlocksQueryBlocksTransactionsUserCommands},
+    blocks_query::{
+        BlocksQueryBlocks, BlocksQueryBlocksSnarkJobs, BlocksQueryBlocksTransactionsUserCommands,
+    },
     *,
 };
 use crate::common::{
@@ -7,6 +9,37 @@ use crate::common::{
     models::MyError,
 };
 use graphql_client::reqwest::post_graphql;
+
+pub fn get_snark_block_height(snark: &BlocksQueryBlocksSnarkJobs) -> String {
+    snark
+        .block_height
+        .map_or_else(String::new, |o| o.to_string())
+}
+pub fn get_snark_block_state_hash(snark: &BlocksQueryBlocksSnarkJobs) -> String {
+    snark
+        .block_state_hash
+        .as_ref()
+        .map_or_else(String::new, |o| o.to_string())
+}
+pub fn get_snark_date_time(snark: &BlocksQueryBlocksSnarkJobs) -> String {
+    snark.date_time.map_or_else(String::new, |o| o.to_string())
+}
+pub fn get_snark_prover(snark: &BlocksQueryBlocksSnarkJobs) -> String {
+    snark
+        .prover
+        .as_ref()
+        .map_or_else(String::new, |o| o.to_string())
+}
+pub fn get_snark_work_ids(snark: &BlocksQueryBlocksSnarkJobs) -> Vec<String> {
+    snark.work_ids.as_ref().map_or_else(Vec::new, |ids| {
+        ids.iter()
+            .map(|id| id.map_or_else(String::new, |id| id.to_string()))
+            .collect::<Vec<_>>()
+    })
+}
+pub fn get_snark_fee(snark: &BlocksQueryBlocksSnarkJobs) -> String {
+    snark.fee.map_or_else(String::new, |o| o.to_string())
+}
 
 pub fn get_user_commands(
     block: &BlocksQueryBlocks,
