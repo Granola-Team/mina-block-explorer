@@ -25,7 +25,22 @@ pub fn SnarksPage() -> impl IntoView {
     view! {
         <SearchBar placeholder="Exact search for prover".to_string()/>
         <PageContainer>
-            <TableSection section_heading="SNARKs".to_owned() controls=|| ().into_view()>
+            <TableSection
+                section_heading="SNARKs".to_owned()
+                controls=move || {
+                    view! {
+                        <BooleanUrlParamSelectMenu
+                            id="canonical-selection"
+                            query_str_key="canonical"
+                            labels=BooleanUrlParamSelectOptions {
+                                true_case: String::from("Canonical"),
+                                false_case: String::from("Non-Canonical"),
+                                none_case: String::from("All"),
+                            }
+                        />
+                    }
+                }
+            >
                 {move || match resource.get() {
                     Some(Ok(data)) => {
                         let pag = build_pagination(
