@@ -64,6 +64,10 @@ pub fn get_prover(snark: &SnarksQuerySnarks) -> String {
         .map_or_else(String::new, ToString::to_string)
 }
 
+pub fn get_canonical(snark: &SnarksQuerySnarks) -> Option<bool> {
+    snark.canonical
+}
+
 pub fn get_work_ids(snark: &SnarksQuerySnarks) -> Vec<String> {
     snark.work_ids.as_ref().map_or_else(Vec::new, |ids| {
         ids.iter()
