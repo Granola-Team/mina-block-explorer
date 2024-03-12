@@ -2,7 +2,7 @@ use crate::{
     account_dialog::dialog::AccountDialogView,
     addresses::page::{AccountSpotlightPage, AccountsPage, AddressesTabbedPage},
     blocks::page::{
-        BlockFeeTransfersTab, BlockSnarkJobsTab, BlockSpotlightTab, BlockTabbedPage,
+        BlockAnalyticsTab, BlockFeeTransfersTab, BlockSnarkJobsTab, BlockSpotlightTab, BlockTabbedPage,
         BlockUserCommandsTab, LatestBlocksPage,
     },
     broadcast::page::{
@@ -45,6 +45,7 @@ pub fn Root() -> impl IntoView {
                         <Route path="/user-commands" view=BlockUserCommandsTab/>
                         <Route path="/snark-jobs" view=BlockSnarkJobsTab/>
                         <Route path="/fee-transfers" view=BlockFeeTransfersTab/>
+                        <Route path="/analytics" view=BlockAnalyticsTab/>
                         <Route path="/*any" view=BlockSpotlightTab/>
                     </Route>
                     <Route path="/transactions" view=TransactionTabbedPage>

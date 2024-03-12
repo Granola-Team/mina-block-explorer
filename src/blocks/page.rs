@@ -33,6 +33,11 @@ pub fn BlockFeeTransfersTab() -> impl IntoView {
 }
 
 #[component]
+pub fn BlockAnalyticsTab() -> impl IntoView {
+    view! { <NullView /> }
+}
+
+#[component]
 pub fn BlockTabbedPage() -> impl IntoView {
     let memo_params_map = use_params_map();
     let id = move || memo_params_map.with(|p| p.get("id").cloned().unwrap_or_default());
