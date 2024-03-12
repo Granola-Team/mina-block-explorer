@@ -17,8 +17,13 @@ suite(["@CI"],'tab count and pagination count', () => {
 
         cy.get('@tab').click();        
         cy.get('@tab-count').invoke('text').then((count) => {
-            cy.scrollTo('bottom');
-            cy.get('.pagination-controls').children().first().contains(count);
+            if (Number(count) > 0) {
+                cy.scrollTo('bottom');
+                cy.get('.pagination-controls').children().first().contains(count);
+            } else {
+                cy.get('table').should('not.exist');
+            }
+            
         });
     }));
     
