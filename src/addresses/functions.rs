@@ -81,7 +81,7 @@ pub fn get_spotlight_data(account: &AccountSummary) -> Vec<SpotlightEntry> {
             label: String::from("Balance"),
             any_el: Some(wrap_in_pill(
                 decorate_with_currency_tag(account.balance.total.clone(), "mina".to_string()),
-                PillVariant::Green,
+                ColorVariant::Green,
             )),
             ..Default::default()
         },
@@ -89,7 +89,7 @@ pub fn get_spotlight_data(account: &AccountSummary) -> Vec<SpotlightEntry> {
             label: String::from("Nonce"),
             any_el: Some(convert_to_pill(
                 account.nonce.to_string(),
-                PillVariant::Grey,
+                ColorVariant::Grey,
             )),
             ..Default::default()
         },

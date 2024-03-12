@@ -28,14 +28,14 @@ impl TableData for Vec<Option<AllAccountSummary>> {
                             all_account_sum.balance.to_string(),
                             "mina".to_string(),
                         ),
-                        PillVariant::Green,
+                        ColorVariant::Green,
                     ),
                     wrap_in_pill(
                         decorate_with_currency_tag(
                             all_account_sum.nonce.to_string(),
                             "mina".to_string(),
                         ),
-                        PillVariant::Grey,
+                        ColorVariant::Grey,
                     ),
                     convert_to_link(
                         all_account_sum.delegate.to_string(),

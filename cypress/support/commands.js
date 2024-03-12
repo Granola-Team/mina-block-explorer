@@ -81,6 +81,23 @@ Cypress.Commands.add('tableHasNRows', (tableHeading, n) => {
     })
 });
 
+Cypress.Commands.add('spotlightData', (label) => {
+  cy.get('table:first tr th').contains(label).siblings('td');
+});
+
+Cypress.Commands.add('valueInTable', (nthRow, columnHeading, tableHeading, alias) => {
+  cy.contains('section',tableHeading)
+    .contains('table th', columnHeading, { timeout: 60000 }) 
+    .invoke('index')
+    .then(columnIndex => {
+      cy.contains('section',tableHeading)
+        .find('table tr', {timeout: 60000}) 
+        .eq(nthRow) 
+        .find('td')
+        .eq(columnIndex)
+        .as(alias)
+    });
+});
 
 Cypress.Commands.add('tableHasLessThanNRows', (tableHeading, n) => {
   cy.contains('section',tableHeading)

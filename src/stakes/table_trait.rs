@@ -21,7 +21,7 @@ impl TableData for Vec<Option<StakesQueryStakes>> {
                     ),
                     wrap_in_pill(
                         decorate_with_currency_tag(get_balance(stake), "mina".to_string()),
-                        PillVariant::Green,
+                        ColorVariant::Green,
                     ),
                     convert_to_link(
                         if get_public_key(stake) == get_delegate(stake) {
@@ -31,7 +31,7 @@ impl TableData for Vec<Option<StakesQueryStakes>> {
                         },
                         format!("/addresses/accounts/{}", get_delegate(stake)),
                     ),
-                    convert_to_pill(get_delegators_count(stake), PillVariant::Blue),
+                    convert_to_pill(get_delegators_count(stake), ColorVariant::Blue),
                     convert_to_span(get_ledger_hash(stake)),
                 ],
                 None => vec![],

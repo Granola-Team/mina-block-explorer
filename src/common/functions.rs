@@ -143,13 +143,13 @@ mod titlecase_tests {
     }
 }
 
-pub fn convert_to_pill(data: String, pill_variant: PillVariant) -> HtmlElement<html::AnyElement> {
+pub fn convert_to_pill(data: String, pill_variant: ColorVariant) -> HtmlElement<html::AnyElement> {
     wrap_in_pill(html::span().child(data).into(), pill_variant)
 }
 
 pub fn wrap_in_pill(
     any: HtmlElement<html::AnyElement>,
-    pill_variant: PillVariant,
+    pill_variant: ColorVariant,
 ) -> HtmlElement<html::AnyElement> {
     let value_class_str_base = "text-white p-0.5 flex justify-center items-center w-fit";
     let pill_class_str_base = format!("{} {}", value_class_str_base, "px-2 rounded-full");
@@ -533,12 +533,12 @@ mod format_duration_tests {
     }
 }
 
-pub fn pill_variant_to_style_str(pill_variant: PillVariant) -> String {
+pub fn pill_variant_to_style_str(pill_variant: ColorVariant) -> String {
     match pill_variant {
-        PillVariant::Green => "bg-pill-green".to_string(),
-        PillVariant::Blue => "bg-pill-blue".to_string(),
-        PillVariant::Orange => "bg-granola-orange".to_string(),
-        PillVariant::Grey => "bg-slate-400".to_string(),
+        ColorVariant::Green => "bg-green".to_string(),
+        ColorVariant::Blue => "bg-blue".to_string(),
+        ColorVariant::Orange => "bg-granola-orange".to_string(),
+        ColorVariant::Grey => "bg-slate-400".to_string(),
     }
 }
 

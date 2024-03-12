@@ -1,5 +1,5 @@
 use super::{functions::*, graphql::transactions_query::TransactionsQueryTransactions};
-use crate::common::{functions::*, models::PillVariant, table::*};
+use crate::common::{functions::*, models::ColorVariant, table::*};
 use leptos::*;
 
 impl TableData for Vec<Option<TransactionsQueryTransactions>> {
@@ -41,7 +41,7 @@ impl TableData for Vec<Option<TransactionsQueryTransactions>> {
                             .attr("class", "block text-xs font-light text-slate-400"),
                     ])
                     .attr("class", "block"),
-                    convert_to_pill(get_kind(transaction), PillVariant::Grey),
+                    convert_to_pill(get_kind(transaction), ColorVariant::Grey),
                     if !get_memo(transaction).is_empty() {
                         convert_array_to_span(vec![
                             convert_to_link(
@@ -65,14 +65,14 @@ impl TableData for Vec<Option<TransactionsQueryTransactions>> {
                             get_receiver_public_key(transaction)
                         ),
                     ),
-                    convert_to_pill(get_nonce(transaction), PillVariant::Grey),
+                    convert_to_pill(get_nonce(transaction), ColorVariant::Grey),
                     wrap_in_pill(
                         decorate_with_currency_tag(get_fee(transaction), "mina".to_string()),
-                        PillVariant::Orange,
+                        ColorVariant::Orange,
                     ),
                     wrap_in_pill(
                         decorate_with_currency_tag(get_amount(transaction), "mina".to_string()),
-                        PillVariant::Green,
+                        ColorVariant::Green,
                     ),
                 ],
                 None => vec![],

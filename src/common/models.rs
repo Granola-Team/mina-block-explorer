@@ -51,7 +51,7 @@ impl Pagination {
     }
 }
 
-pub enum PillVariant {
+pub enum ColorVariant {
     Green,
     Blue,
     Orange,
