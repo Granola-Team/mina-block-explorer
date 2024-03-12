@@ -9,7 +9,8 @@ use graphql_client::GraphQLQuery;
 #[graphql(
     schema_path = "graphql/schemas/mina-explorer.graphql",
     query_path = "graphql/queries/next_stakes.graphql",
-    response_derives = "Serialize,PartialEq,Debug,Clone"
+    response_derives = "Serialize,PartialEq,Debug,Clone",
+    skip_serializing_none
 )]
 pub struct NextStakesQuery;
 

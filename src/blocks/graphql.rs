@@ -9,7 +9,8 @@ type Long = i32;
 #[graphql(
     schema_path = "graphql/schemas/mina-explorer.graphql",
     query_path = "graphql/queries/blocks.graphql",
-    response_derives = "Serialize,PartialEq,Debug,Clone"
+    response_derives = "Serialize,PartialEq,Debug,Clone",
+    skip_serializing_none
 )]
 pub struct BlocksQuery;
 
