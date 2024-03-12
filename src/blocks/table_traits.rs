@@ -33,11 +33,7 @@ impl TableData for Vec<Option<BlocksQueryBlocks>> {
             .map(|opt_blocks| match opt_blocks {
                 Some(block) => vec![
                     convert_array_to_span(vec![
-                        convert_to_status_bubble(if get_canonical(block) {
-                            None
-                        } else {
-                            Some("Non-Canonical".to_string())
-                        }),
+                        convert_to_status_bubble(get_canonical(block), None),
                         convert_to_span(get_block_height(block)),
                     ]),
                     convert_to_link(
@@ -141,11 +137,7 @@ impl TableData for SummaryPageBlocksQueryBlocks {
             .map(|block| {
                 vec![
                     convert_array_to_span(vec![
-                        convert_to_status_bubble(if get_canonical(block) {
-                            None
-                        } else {
-                            Some("Non-Canonical".to_string())
-                        }),
+                        convert_to_status_bubble(get_canonical(block), None),
                         convert_to_span(get_block_height(block)),
                     ]),
                     convert_to_link(

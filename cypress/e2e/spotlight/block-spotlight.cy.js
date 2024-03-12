@@ -17,6 +17,9 @@ suite(["@CI"],'Block spotlight', () => {
     let block_id = "3NLn8e9HoJgvmbJubfX7wbhNzgcz9BSeS2LDNk4X7XngzhPgBfjf";
 
     it('displays complete information', () => {
+        cy.visit(`/blocks/${block_id}`);
+        cy.testSpotlight("Block Spotlight", block_id, expected_fields);
+
         cy.visit(`/blocks/${block_id}/spotlight`);
         cy.testSpotlight("Block Spotlight", block_id, expected_fields);
 
