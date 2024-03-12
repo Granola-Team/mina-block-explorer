@@ -39,14 +39,14 @@ pub fn TransactionsPage() -> impl IntoView {
     let query_params_map: Memo<ParamsMap> = use_query_map();
 
     view! {
-        <SearchBar placeholder="Exact search by payment ID".to_string()/>
+        <SearchBar placeholder="Exact search by state hash".to_string()/>
         <PageContainer>
             {move || {
                 let qp_map = query_params_map.get();
                 view! {
                     <TransactionsSection
                         public_key=qp_map.get("public_key").cloned()
-                        payment_id=qp_map.get("query").cloned()
+                        state_hash=qp_map.get("query").cloned()
                     />
                 }
             }}
@@ -63,7 +63,7 @@ pub fn TransactionSpotlightPage() -> impl IntoView {
         move || (memo_params_map.get(), canonical_qp.get()),
         |(value, canonical)| async move {
             let state_hash = value.get("id");
-            load_data(10, None, state_hash.cloned(), None, canonical).await
+            load_data(10, None, state_hash.cloned(), canonical).await
         },
     );
 

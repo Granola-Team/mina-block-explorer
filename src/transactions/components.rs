@@ -120,17 +120,18 @@ fn TransactionEntry(
 #[component]
 pub fn TransactionsSection(
     public_key: Option<String>,
-    #[prop(default = None)] payment_id: Option<String>,
+    #[prop(default = None)] state_hash: Option<String>,
     #[prop(default = false)] with_link: bool,
 ) -> impl IntoView {
+
     let (pk, _set_public_key) = create_signal(public_key);
-    let (pid, _set_pid) = create_signal(payment_id);
+    let (state_hash_sig, _) = create_signal(state_hash);
     let (canonical_qp, _) = create_query_signal::<bool>("canonical");
 
     let resource = create_resource(
-        move || (pk.get(), pid.get(), canonical_qp.get()),
-        move |(pk_value, pid_value, canonical)| async move {
-            load_data(50, pk_value, None, pid_value, canonical).await
+        move || (pk.get(), state_hash_sig.get(), canonical_qp.get()),
+        move |(pk_value, state_hash, canonical)| async move {
+            load_data(50, pk_value, state_hash, canonical).await
         },
     );
 
