@@ -6,6 +6,7 @@ use crate::{
     transactions::graphql::transactions_query::TransactionsQueryTransactions,
 };
 use leptos::*;
+use leptos_router::*;
 
 #[component]
 pub fn AccountDialogTransactionSection(
@@ -124,10 +125,13 @@ pub fn TransactionsSection(
 ) -> impl IntoView {
     let (pk, _set_public_key) = create_signal(public_key);
     let (pid, _set_pid) = create_signal(payment_id);
+    let (canonical_qp, _) = create_query_signal::<bool>("canonical");
 
     let resource = create_resource(
-        move || (pk.get(), pid.get()),
-        move |(pk_value, pid_value)| async move { load_data(50, pk_value, None, pid_value).await },
+        move || (pk.get(), pid.get(), canonical_qp.get()),
+        move |(pk_value, pid_value, canonical)| async move {
+            load_data(50, pk_value, None, pid_value, canonical).await
+        },
     );
 
     let records_per_page = 10;
@@ -139,8 +143,21 @@ pub fn TransactionsSection(
                 view! {
                     <TableSection
                         section_heading="Transactions".to_owned()
-                        controls=|| ().into_view()
+                        controls=move || {
+                            view! {
+                                <BooleanUrlParamSelectMenu
+                                    id="canonical-selection"
+                                    query_str_key="canonical"
+                                    labels=BooleanUrlParamSelectOptions {
+                                        true_case: String::from("Canonical"),
+                                        false_case: String::from("Non-Canonical"),
+                                        none_case: String::from("All"),
+                                    }
+                                />
+                            }
+                        }
                     >
+
                         {move || match data.transactions.len() {
                             0 => {
                                 view! {
