@@ -158,7 +158,7 @@ pub fn BlockSpotlight(block: BlocksQueryBlocks) -> impl IntoView {
             label: "Coinbase".to_string(),
             any_el: Some(wrap_in_pill(
                 decorate_with_currency_tag(get_coinbase(&block), "mina".to_string()),
-                PillVariant::Green,
+                ColorVariant::Green,
             )),
             ..Default::default()
         },
@@ -176,43 +176,46 @@ pub fn BlockSpotlight(block: BlocksQueryBlocks) -> impl IntoView {
             label: "SNARK Fees".to_string(),
             any_el: Some(wrap_in_pill(
                 decorate_with_currency_tag(get_snark_fees(&block), "mina".to_string()),
-                PillVariant::Orange,
+                ColorVariant::Orange,
             )),
             ..Default::default()
         },
         SpotlightEntry {
             label: "Global Slot".to_string(),
-            any_el: Some(convert_to_pill(get_global_slot(&block), PillVariant::Grey)),
+            any_el: Some(convert_to_pill(get_global_slot(&block), ColorVariant::Grey)),
             ..Default::default()
         },
         SpotlightEntry {
             label: "Slot".to_string(),
-            any_el: Some(convert_to_pill(get_slot(&block), PillVariant::Grey)),
+            any_el: Some(convert_to_pill(get_slot(&block), ColorVariant::Grey)),
             ..Default::default()
         },
         SpotlightEntry {
             label: "Epoch".to_string(),
-            any_el: Some(convert_to_pill(get_epoch(&block), PillVariant::Grey)),
+            any_el: Some(convert_to_pill(get_epoch(&block), ColorVariant::Grey)),
             ..Default::default()
         },
         SpotlightEntry {
             label: "Transaction Fees".to_string(),
             any_el: Some(wrap_in_pill(
                 decorate_with_currency_tag(get_transaction_fees(&block), "mina".to_string()),
-                PillVariant::Orange,
+                ColorVariant::Orange,
             )),
             ..Default::default()
         },
         SpotlightEntry {
             label: "Blockchain Length".to_string(),
-            any_el: Some(convert_to_pill(get_block_height(&block), PillVariant::Grey)),
+            any_el: Some(convert_to_pill(
+                get_block_height(&block),
+                ColorVariant::Grey,
+            )),
             ..Default::default()
         },
         SpotlightEntry {
             label: "Total Currency".to_string(),
             any_el: Some(wrap_in_pill(
                 decorate_with_currency_tag(get_total_currency(&block), "mina".to_string()),
-                PillVariant::Green,
+                ColorVariant::Green,
             )),
             ..Default::default()
         },
