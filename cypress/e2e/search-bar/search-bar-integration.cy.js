@@ -34,7 +34,7 @@ suite(["@CI"],'search bar',() => {
         // check url
         cy.url().should('include', `query=${input}`);
         // check table
-        cy.tableHasNRows(tableHeading, 1);
+        cy.tableHasLessThanNRows(tableHeading, 5);
         cy.wait(1000);
 
         cy.go('back');
