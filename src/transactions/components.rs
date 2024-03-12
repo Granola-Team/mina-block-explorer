@@ -123,7 +123,6 @@ pub fn TransactionsSection(
     #[prop(default = None)] state_hash: Option<String>,
     #[prop(default = false)] with_link: bool,
 ) -> impl IntoView {
-
     let (pk, _set_public_key) = create_signal(public_key);
     let (state_hash_sig, _) = create_signal(state_hash);
     let (canonical_qp, _) = create_query_signal::<bool>("canonical");
