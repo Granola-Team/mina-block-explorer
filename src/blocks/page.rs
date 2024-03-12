@@ -96,6 +96,14 @@ pub fn BlockTabbedPage() -> impl IntoView {
                 sub_entries: None,
                 disabled: false,
             },
+            NavEntry {
+                href: format!("/blocks/{}/analytics", id()),
+                text: "Analytics".to_string(),
+                icon: NavIcon::Analytics,
+                number_bubble: None,
+                sub_entries: None,
+                disabled: false,
+            },
         ]
     };
     move || view! { <TabbedPage tabs=tabs()/> }

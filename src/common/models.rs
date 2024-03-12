@@ -151,4 +151,5 @@ pub enum NavIcon {
     Tokens,
     Addresses,
     FeeTransfers,
+    Analytics,
 }
