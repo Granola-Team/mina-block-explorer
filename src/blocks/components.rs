@@ -2,7 +2,7 @@ use super::{functions::*, graphql::blocks_query::BlocksQueryBlocks, models::*};
 use crate::{
     account_dialog::components::*,
     common::{components::*, functions::*, models::*, spotlight::*, table::*},
-    fee_transfers::components::BlockSpotlightFeeTransfersTable,
+    fee_transfers::components::{BlockInternalCommandsTable},
     icons::*,
 };
 use leptos::*;
@@ -45,7 +45,7 @@ pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
                         BlockContent::FeeTransfers => {
                             view! {
                                 <TableSection
-                                    section_heading="Fee Transfers".to_string()
+                                    section_heading="Internal Commands".to_string()
                                     controls=|| ().into_view()
                                 >
                                     <Table data=LoadingPlaceholder {}/>
@@ -69,7 +69,7 @@ pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
                                     view! { <BlockSnarkJobs block=block/> }
                                 }
                                 (Some(block), BlockContent::FeeTransfers) => {
-                                    view! { <BlockFeeTransfers block=block/> }
+                                    view! { <BlockInternalCommands block=block/> }
                                 }
                                 _ => view! { <NullView/> },
                             }
@@ -121,10 +121,10 @@ pub fn BlockSnarkJobs(block: BlocksQueryBlocks) -> impl IntoView {
 }
 
 #[component]
-pub fn BlockFeeTransfers(block: BlocksQueryBlocks) -> impl IntoView {
+pub fn BlockInternalCommands(block: BlocksQueryBlocks) -> impl IntoView {
     view! {
-        <TableSection section_heading="Fee Transfers".to_string() controls=|| ().into_view()>
-            <BlockSpotlightFeeTransfersTable block_state_hash=Option::from(get_state_hash(&block))/>
+        <TableSection section_heading="Internal Commands".to_string() controls=|| ().into_view()>
+            <BlockInternalCommandsTable block_state_hash=Option::from(get_state_hash(&block))/>
         </TableSection>
     }
 }
