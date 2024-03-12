@@ -1,6 +1,6 @@
 suite(["@CI"],'search bar',() => {
 
-    let payment_id="4Rs6xMHVyo1HmXm4m5azosTMSvbEJDkDAs6tYoCc6wTPz8YHJPNFMoCi117YcTdHd46hMaCQs6BuGZtxHntoqJPdpLZae6o7BXFGaRmBXHdZDEn6UpLmZR5sNzGujR2VwMAi3nvymfcLQkKM1Qxdy62NgPe2p3pKvnJsdUmkAX1ERuejKaRz9JyBrUgc7i1WoEx2Etp1tKg4pnRQe3CpKHuYCvEbV4xUh7Gkm8TqgZYCfkU9crZxA5BmucJ8A1RU1gBqv2pNPhaWQ2ExSFuBqGmYrSZ6nqcU6LhfHZirjZd6eC673Wn9CL5txSpnsqd61HUgoiLjpLUQ3Sdg3F8C6s2D1xuRhhqXG8E2xxsBjYS3B5oHLndrEb7WaqJY5YULNGHq6UVk";
+    let state_hash="CkpYfTKJyVjWmM5Lb5SdzRL6GuEbJf6q7yYAyW6NkvkYFZQaY5PGz";
     let block_hash="3NLqPGGVtxXdsQg2orrp3SFFE3ToeMuqWRerSRWbmAKuSk2tphWy";
     let public_key="B62qrQKS9ghd91shs73TCmBJRW9GzvTJK443DPx2YbqcyoLc56g1ny9";
 
@@ -8,7 +8,7 @@ suite(["@CI"],'search bar',() => {
         { origin: "/", input: block_hash, tableHeading: 'Blocks' },
         { origin: "/summary", input: block_hash, tableHeading: 'Blocks' },
         { origin: "/blocks", input: block_hash, tableHeading: 'Blocks' },
-        { origin: "/transactions", input: payment_id, tableHeading:'Transactions'},
+        { origin: "/transactions", input: state_hash, tableHeading:'Transactions'},
         { origin: "/stakes", input: public_key, tableHeading:'Current Staking Ledger'},
         { origin: "/next-stakes", input: public_key, tableHeading:'Next Staking Ledger'},
     ];
