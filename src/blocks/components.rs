@@ -245,19 +245,11 @@ pub fn BlockSpotlightFeeTransferAnalytics(block: BlocksQueryBlocks) -> impl Into
         if let Some(fee_transfer) = block_sig.get().transactions.unwrap().fee_transfer {
             fee_transfer.into_iter().for_each(|row| {
                 if let Some(r) = row.clone() {
-                    match (r.fee, r.recipient) {
-                        (Some(fee), Some(mut recipient)) => {
-                            recipient.truncate(12);
-                            let recipient = recipient.to_string();
-                            if !pie_hashmap.contains_key(&recipient) {
-                                pie_hashmap.insert(recipient, str::parse::<i32>(&fee).unwrap_or(0));
-                            } else {
-                                if let Some(val) = pie_hashmap.get_mut(&recipient) {
-                                    *val += str::parse::<i32>(&fee).unwrap_or(0);
-                                }
-                            }
-                        }
-                        (_, _) => (),
+                    if let (Some(fee), Some(mut recipient)) = (r.fee, r.recipient) {
+                        recipient.truncate(12);
+                        let recipient = recipient.to_string();
+                        *pie_hashmap.entry(recipient).or_insert(0) +=
+                            str::parse::<i32>(&fee).unwrap_or(0);
                     }
                 }
                 logging::log!("{}", "iterating...");
@@ -328,27 +320,16 @@ pub fn BlockSpotlightUserCommandAnalytics(block: BlocksQueryBlocks) -> impl Into
 
         if let Some(transactions) = &block.transactions {
             if let Some(user_commands) = &transactions.user_commands {
-                user_commands.into_iter().for_each(|row| {
+                user_commands.iter().for_each(|row| {
                     if let Some(r) = row.clone() {
-                        match (r.amount, r.to) {
-                            (Some(amount), Some(mut recipient)) => {
-                                recipient.truncate(12);
-                                let recipient = recipient.to_string();
-                                if !pie_hashmap.contains_key(&recipient) {
-                                    pie_hashmap.insert(recipient, amount as i64);
-                                } else {
-                                    if let Some(val) = pie_hashmap.get_mut(&recipient) {
-                                        *val += amount as i64;
-                                    }
-                                }
-                            }
-                            (_, _) => (),
+                        if let (Some(amount), Some(mut recipient)) = (r.amount, r.to) {
+                            recipient.truncate(12);
+                            let recipient = recipient.to_string();
+                            *pie_hashmap.entry(recipient).or_insert(0) += amount as i64;
                         }
                     }
-                    // logging::log!("{}", "iterating...");
                 });
 
-                // logging::log!("{:?}", pie_hashmap);
                 set_data.set(pie_hashmap);
             }
         }
@@ -400,7 +381,6 @@ pub fn BlockSpotlightUserCommandAnalytics(block: BlocksQueryBlocks) -> impl Into
 
     create_effect(move |_| {
         if data.get().is_empty() {
-            return;
         } else {
             action.dispatch(data.get());
         }
