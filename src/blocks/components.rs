@@ -2,7 +2,7 @@ use super::{functions::*, graphql::blocks_query::BlocksQueryBlocks, models::*};
 use crate::{
     account_dialog::components::*,
     common::{components::*, functions::*, models::*, spotlight::*, table::*},
-    fee_transfers::components::{BlockInternalCommandsTable, BlockSpotlightFeeTransferAnalytics},
+    fee_transfers::components::BlockInternalCommandsTable,
     icons::*,
 };
 use charming::{
@@ -225,9 +225,7 @@ pub fn BlockAnalytics(block: BlocksQueryBlocks) -> impl IntoView {
                     />
                 </AnalyticsSmContainer>
                 <AnalyticsLgContainer>
-                    <BlockSpotlightFeeTransferAnalytics block_state_hash=Option::from(
-                        get_state_hash(&block_sig.get()),
-                    )/>
+                    <BlockSpotlightFeeTransferAnalytics block=block_sig.get()/>
                 </AnalyticsLgContainer>
                 <AnalyticsLgContainer>
                     <BlockSpotlightUserCommandAnalytics block=block_sig.get()/>
@@ -235,6 +233,91 @@ pub fn BlockAnalytics(block: BlocksQueryBlocks) -> impl IntoView {
             </AnalyticsLayout>
         </TableSection>
     }
+}
+
+#[component]
+pub fn BlockSpotlightFeeTransferAnalytics(block: BlocksQueryBlocks) -> impl IntoView {
+    let (block_sig, _) = create_signal(block);
+    let (data, set_data) = create_signal(HashMap::new());
+
+    create_effect(move |_| {
+        let mut pie_hashmap = HashMap::new();
+        if let Some(fee_transfer) = block_sig.get().transactions.unwrap().fee_transfer {
+            fee_transfer.into_iter().for_each(|row| {
+                if let Some(r) = row.clone() {
+                    match (r.fee, r.recipient) {
+                        (Some(fee), Some(mut recipient)) => {
+                            recipient.truncate(12);
+                            let recipient = recipient.to_string();
+                            if !pie_hashmap.contains_key(&recipient) {
+                                pie_hashmap.insert(recipient, str::parse::<i32>(&fee).unwrap_or(0));
+                            } else {
+                                if let Some(val) = pie_hashmap.get_mut(&recipient) {
+                                    *val += str::parse::<i32>(&fee).unwrap_or(0);
+                                }
+                            }
+                        }
+                        (_, _) => (),
+                    }
+                }
+                logging::log!("{}", "iterating...");
+            });
+
+            set_data.set(pie_hashmap);
+        }
+    });
+
+    let action = create_action(move |input: &HashMap<String, i32>| {
+        let input = input.clone();
+        async move {
+            let mut data = input
+                .iter()
+                .map(|(key, val)| (*val, key))
+                .collect::<Vec<_>>();
+
+            // Sort the vector in descending order
+            data.sort_by(|a, b| b.cmp(a));
+
+            // Split the vector into two parts
+            let size = data.len();
+            let (top_five, rest) = data.split_at_mut(5.min(size));
+
+            // Aggregate the remaining entries
+            let binding = String::from("Other");
+            let aggregated = rest.iter().fold((0, &binding), |mut acc, tup| {
+                acc.0 += tup.0;
+                acc
+            });
+
+            // Append the aggregated tuple to the top six
+            let mut result = top_five.to_vec();
+            if !rest.is_empty() {
+                result.push(aggregated);
+            }
+
+            let series = Pie::new()
+                .name("Fee Transfer Recipient")
+                .radius(vec!["50", "100"])
+                .center(vec!["50%", "50%"])
+                .data(result);
+            let chart = Chart::new()
+                .title(Title::new().text("Top Internal Transfers"))
+                .legend(Legend::new().top("bottom"))
+                .series(series);
+            let renderer = WasmRenderer::new(375, 375);
+
+            renderer.render("chart", &chart).unwrap();
+        }
+    });
+
+    create_effect(move |_| {
+        if data.get().is_empty() {
+            return;
+        }
+        action.dispatch(data.get());
+    });
+
+    view! { <div id="chart" class="p-4 md:p-8"></div> }
 }
 
 #[component]
