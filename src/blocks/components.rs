@@ -52,6 +52,16 @@ pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
                                 </TableSection>
                             }
                         }
+                        BlockContent::Analytics => {
+                            view! {
+                                <TableSection
+                                    section_heading="Analytics".to_string()
+                                    controls=|| ().into_view()
+                                >
+                                    <span></span>
+                                </TableSection>
+                            }
+                        }
                     }
                 }>
 
@@ -70,6 +80,9 @@ pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
                                 }
                                 (Some(block), BlockContent::FeeTransfers) => {
                                     view! { <BlockInternalCommands block=block/> }
+                                }
+                                (Some(block), BlockContent::Analytics) => {
+                                    view! { <BlockAnalytics block=block/> }
                                 }
                                 _ => view! { <NullView/> },
                             }
@@ -125,6 +138,15 @@ pub fn BlockInternalCommands(block: BlocksQueryBlocks) -> impl IntoView {
     view! {
         <TableSection section_heading="Internal Commands".to_string() controls=|| ().into_view()>
             <BlockInternalCommandsTable block_state_hash=Option::from(get_state_hash(&block))/>
+        </TableSection>
+    }
+}
+
+#[component]
+pub fn BlockAnalytics(block: BlocksQueryBlocks) -> impl IntoView {
+    view! {
+        <TableSection section_heading="Analytics".to_string() controls=|| ().into_view()>
+            <NullView />
         </TableSection>
     }
 }

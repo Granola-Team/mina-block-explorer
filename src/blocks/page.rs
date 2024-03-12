@@ -34,7 +34,7 @@ pub fn BlockInternalCommandsTab() -> impl IntoView {
 
 #[component]
 pub fn BlockAnalyticsTab() -> impl IntoView {
-    view! { <NullView /> }
+    view! { <BlockTabContainer content=BlockContent::Analytics/> }
 }
 
 #[component]
