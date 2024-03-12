@@ -199,6 +199,16 @@ pub fn get_transaction_fees(block: &BlocksQueryBlocks) -> String {
         .unwrap_or_default()
 }
 
+pub fn get_winner_total(block: &BlocksQueryBlocks) -> String {
+    block
+        .winner_account
+        .as_ref()
+        .and_then(|w| w.balance.as_ref())
+        .and_then(|b| b.total.as_deref())
+        .and_then(string_to_f64)
+        .map_or(String::new(), nanomina_to_mina)
+}
+
 pub fn get_snark_fees(block: &BlocksQueryBlocks) -> String {
     block
         .snark_fees

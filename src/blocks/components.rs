@@ -166,16 +166,7 @@ pub fn BlockAnalytics(block: BlocksQueryBlocks) -> impl IntoView {
             0.0
         }
     };
-    let winner_total = move || {
-        block_sig
-            .get()
-            .winner_account
-            .as_ref()
-            .and_then(|w| w.balance.as_ref())
-            .and_then(|b| b.total.as_deref())
-            .and_then(string_to_f64)
-            .map_or(String::new(), nanomina_to_mina)
-    };
+    let winner_total = move || get_winner_total(&block_sig.get());
 
     view! {
         <TableSection section_heading="Analytics".to_string() controls=|| ().into_view()>
@@ -190,6 +181,7 @@ pub fn BlockAnalytics(block: BlocksQueryBlocks) -> impl IntoView {
                             ),
                             ColorVariant::Green,
                         )
+
                         variant=ColorVariant::Green
                     />
                 </AnalyticsSmContainer>
@@ -203,6 +195,7 @@ pub fn BlockAnalytics(block: BlocksQueryBlocks) -> impl IntoView {
                             ),
                             ColorVariant::Orange,
                         )
+
                         variant=ColorVariant::Orange
                     />
                 </AnalyticsSmContainer>
@@ -216,6 +209,7 @@ pub fn BlockAnalytics(block: BlocksQueryBlocks) -> impl IntoView {
                             ),
                             ColorVariant::Blue,
                         )
+
                         variant=ColorVariant::Blue
                     />
                 </AnalyticsSmContainer>
@@ -226,6 +220,7 @@ pub fn BlockAnalytics(block: BlocksQueryBlocks) -> impl IntoView {
                             decorate_with_currency_tag(winner_total(), "mina".to_string()),
                             ColorVariant::Grey,
                         )
+
                         variant=ColorVariant::Grey
                     />
                 </AnalyticsSmContainer>
