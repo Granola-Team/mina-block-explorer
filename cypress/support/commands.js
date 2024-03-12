@@ -81,6 +81,15 @@ Cypress.Commands.add('tableHasNRows', (tableHeading, n) => {
     })
 });
 
+
+Cypress.Commands.add('tableHasLessThanNRows', (tableHeading, n) => {
+  cy.contains('section',tableHeading)
+    .find('table tr:not(:has(th))', {timeout: 60000})
+    .should(($tr) => {
+      expect($tr).to.have.length.of.at.most(n);
+    })
+});
+
 Cypress.Commands.add('testSpotlight',(heading, id, expected_fields) => {
   cy.get("section#spotlight-section h1").contains(heading);
   cy.get("#spotlight-id").contains(id);
