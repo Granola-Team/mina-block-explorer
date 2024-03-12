@@ -2,11 +2,18 @@ use super::{functions::*, graphql::blocks_query::BlocksQueryBlocks, models::*};
 use crate::{
     account_dialog::components::*,
     common::{components::*, functions::*, models::*, spotlight::*, table::*},
-    fee_transfers::components::{BlockInternalCommandsTable},
+    fee_transfers::components::{BlockInternalCommandsTable, BlockSpotlightFeeTransferAnalytics},
     icons::*,
 };
+use charming::{
+    component::{Legend, Title},
+    series::*,
+    Chart, WasmRenderer,
+};
+use gloo_timers::future::TimeoutFuture;
 use leptos::*;
 use leptos_router::*;
+use std::collections::HashMap;
 
 #[component]
 pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
@@ -144,11 +151,184 @@ pub fn BlockInternalCommands(block: BlocksQueryBlocks) -> impl IntoView {
 
 #[component]
 pub fn BlockAnalytics(block: BlocksQueryBlocks) -> impl IntoView {
+    let (block_sig, _) = create_signal(block);
+    let user_command_amount_total = move || {
+        if let Some(user_commands) = get_user_commands(&block_sig.get()) {
+            user_commands
+                .iter()
+                .filter_map(|transaction_option| {
+                    transaction_option
+                        .as_ref()
+                        .map(|transaction| transaction.amount.unwrap_or(0.0))
+                })
+                .sum()
+        } else {
+            0.0
+        }
+    };
+    let winner_total = move || {
+        block_sig
+            .get()
+            .winner_account
+            .as_ref()
+            .and_then(|w| w.balance.as_ref())
+            .and_then(|b| b.total.as_deref())
+            .and_then(string_to_f64)
+            .map_or(String::new(), nanomina_to_mina)
+    };
+
     view! {
         <TableSection section_heading="Analytics".to_string() controls=|| ().into_view()>
-            <NullView />
+            <AnalyticsLayout>
+                <AnalyticsSmContainer>
+                    <AnalyticsSimpleInfo
+                        label=convert_to_span("Total User Amounts Transferred".into())
+                        value=wrap_in_pill(
+                            decorate_with_currency_tag(
+                                nanomina_to_mina(user_command_amount_total()),
+                                "mina".to_string(),
+                            ),
+                            ColorVariant::Green,
+                        )
+                        variant=ColorVariant::Green
+                    />
+                </AnalyticsSmContainer>
+                <AnalyticsSmContainer>
+                    <AnalyticsSimpleInfo
+                        label=convert_to_span("Total Internal Fees Transferred".into())
+                        value=wrap_in_pill(
+                            decorate_with_currency_tag(
+                                get_transaction_fees(&block_sig.get()),
+                                "mina".to_string(),
+                            ),
+                            ColorVariant::Orange,
+                        )
+                        variant=ColorVariant::Orange
+                    />
+                </AnalyticsSmContainer>
+                <AnalyticsSmContainer>
+                    <AnalyticsSimpleInfo
+                        label=convert_to_span("Total SNARK Fees".into())
+                        value=wrap_in_pill(
+                            decorate_with_currency_tag(
+                                get_snark_fees(&block_sig.get()),
+                                "mina".to_string(),
+                            ),
+                            ColorVariant::Blue,
+                        )
+                        variant=ColorVariant::Blue
+                    />
+                </AnalyticsSmContainer>
+                <AnalyticsSmContainer>
+                    <AnalyticsSimpleInfo
+                        label=convert_to_span("Winner Total".into())
+                        value=wrap_in_pill(
+                            decorate_with_currency_tag(winner_total(), "mina".to_string()),
+                            ColorVariant::Grey,
+                        )
+                        variant=ColorVariant::Grey
+                    />
+                </AnalyticsSmContainer>
+                <AnalyticsLgContainer>
+                    <BlockSpotlightFeeTransferAnalytics block_state_hash=Option::from(
+                        get_state_hash(&block_sig.get()),
+                    )/>
+                </AnalyticsLgContainer>
+                <AnalyticsLgContainer>
+                    <BlockSpotlightUserCommandAnalytics block=block_sig.get()/>
+                </AnalyticsLgContainer>
+            </AnalyticsLayout>
         </TableSection>
     }
+}
+
+#[component]
+pub fn BlockSpotlightUserCommandAnalytics(block: BlocksQueryBlocks) -> impl IntoView {
+    let (data, set_data) = create_signal(HashMap::new());
+    create_effect(move |_| {
+        let mut pie_hashmap = HashMap::new();
+
+        if let Some(transactions) = &block.transactions {
+            if let Some(user_commands) = &transactions.user_commands {
+                user_commands.into_iter().for_each(|row| {
+                    if let Some(r) = row.clone() {
+                        match (r.amount, r.to) {
+                            (Some(amount), Some(mut recipient)) => {
+                                recipient.truncate(12);
+                                let recipient = recipient.to_string();
+                                if !pie_hashmap.contains_key(&recipient) {
+                                    pie_hashmap.insert(recipient, amount as i64);
+                                } else {
+                                    if let Some(val) = pie_hashmap.get_mut(&recipient) {
+                                        *val += amount as i64;
+                                    }
+                                }
+                            }
+                            (_, _) => (),
+                        }
+                    }
+                    // logging::log!("{}", "iterating...");
+                });
+
+                // logging::log!("{:?}", pie_hashmap);
+                set_data.set(pie_hashmap);
+            }
+        }
+    });
+
+    let action = create_action(move |input: &HashMap<String, i64>| {
+        let input = input.clone();
+        async move {
+            logging::log!("input: {:?}", input);
+            let mut data = input
+                .iter()
+                .map(|(key, val)| (*val, key))
+                .collect::<Vec<_>>();
+
+            // Sort the vector in descending order
+            data.sort_by(|a, b| b.cmp(a));
+
+            // Split the vector into two parts
+            let size = data.len();
+            let (top_five, rest) = data.split_at_mut(5.min(size));
+
+            // Aggregate the remaining entries
+            let binding = String::from("Other");
+            let aggregated = rest.iter().fold((0, &binding), |mut acc, tup| {
+                acc.0 += tup.0;
+                acc
+            });
+
+            // Append the aggregated tuple to the top six
+            let mut result = top_five.to_vec();
+            if !rest.is_empty() {
+                result.push(aggregated);
+            }
+
+            let series = Pie::new()
+                .radius(vec!["50", "100"])
+                .center(vec!["50%", "50%"])
+                .data(result);
+            let chart = Chart::new()
+                .title(Title::new().text("Top Payments"))
+                .legend(Legend::new().top("bottom"))
+                .series(series);
+            let renderer = WasmRenderer::new(375, 375);
+
+            TimeoutFuture::new(1_000).await;
+            renderer.render("chart2", &chart).unwrap();
+        }
+    });
+
+    create_effect(move |_| {
+        if data.get().is_empty() {
+            return;
+        } else {
+            action.dispatch(data.get());
+        }
+    });
+
+    view! { <div id="chart2" class="p-4 md:p-8"></div> }
 }
 
 #[component]
