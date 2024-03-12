@@ -3,7 +3,7 @@ input BlockTransactionUserCommandFromAccountInsertInput {
 }
 
 type BlockTransactionFeeTransfer {
-  fee: Long
+  fee: String
   recipient: String
   type: String
 }
@@ -1798,7 +1798,7 @@ type BlockWinnerAccountBalance {
   liquid: Int
   locked: Long
   stateHash: String
-  total: Long
+  total: String
   unknown: Long
 }
 

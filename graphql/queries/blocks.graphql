@@ -19,6 +19,8 @@ query BlocksQuery($query: BlockQueryInput!, $limit: Int = 10, $sort_by: BlockSor
       }
       feeTransfer {
         type
+        fee
+        recipient
       }
     }
     creatorAccount {
@@ -47,6 +49,9 @@ query BlocksQuery($query: BlockQueryInput!, $limit: Int = 10, $sort_by: BlockSor
     }
     winnerAccount {
       publicKey
+      balance {
+        total
+      }
     }
     snarkFees
     txFees
