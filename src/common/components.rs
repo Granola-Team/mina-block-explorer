@@ -363,12 +363,20 @@ fn AnalyticsContainer(children: Children, #[prop(into)] span: String) -> impl In
 
 #[component]
 pub fn AnalyticsSmContainer(children: Children) -> impl IntoView {
-    view! { <AnalyticsContainer span="analytics-sm col-span-1 md:col-span-2">{children()}</AnalyticsContainer> }
+    view! {
+        <AnalyticsContainer span="analytics-sm col-span-1 md:col-span-2">
+            {children()}
+        </AnalyticsContainer>
+    }
 }
 
 #[component]
 pub fn AnalyticsLgContainer(children: Children) -> impl IntoView {
-    view! { <AnalyticsContainer span="analytics-lg col-span-1 md:col-span-2">{children()}</AnalyticsContainer> }
+    view! {
+        <AnalyticsContainer span="analytics-lg col-span-1 md:col-span-2">
+            {children()}
+        </AnalyticsContainer>
+    }
 }
 
 #[component]
