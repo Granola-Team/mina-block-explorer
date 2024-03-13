@@ -2,11 +2,18 @@ use super::{functions::*, graphql::blocks_query::BlocksQueryBlocks, models::*};
 use crate::{
     account_dialog::components::*,
     common::{components::*, functions::*, models::*, spotlight::*, table::*},
-    fee_transfers::components::BlockSpotlightFeeTransfersTable,
+    fee_transfers::components::BlockInternalCommandsTable,
     icons::*,
 };
+use charming::{
+    component::{Legend, Title},
+    series::*,
+    Chart, WasmRenderer,
+};
+use gloo_timers::future::TimeoutFuture;
 use leptos::*;
 use leptos_router::*;
+use std::collections::HashMap;
 
 #[component]
 pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
@@ -45,10 +52,20 @@ pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
                         BlockContent::FeeTransfers => {
                             view! {
                                 <TableSection
-                                    section_heading="Fee Transfers".to_string()
+                                    section_heading="Internal Commands".to_string()
                                     controls=|| ().into_view()
                                 >
                                     <Table data=LoadingPlaceholder {}/>
+                                </TableSection>
+                            }
+                        }
+                        BlockContent::Analytics => {
+                            view! {
+                                <TableSection
+                                    section_heading="Analytics".to_string()
+                                    controls=|| ().into_view()
+                                >
+                                    <span></span>
                                 </TableSection>
                             }
                         }
@@ -69,7 +86,10 @@ pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
                                     view! { <BlockSnarkJobs block=block/> }
                                 }
                                 (Some(block), BlockContent::FeeTransfers) => {
-                                    view! { <BlockFeeTransfers block=block/> }
+                                    view! { <BlockInternalCommands block=block/> }
+                                }
+                                (Some(block), BlockContent::Analytics) => {
+                                    view! { <BlockAnalytics block=block/> }
                                 }
                                 _ => view! { <NullView/> },
                             }
@@ -121,12 +141,236 @@ pub fn BlockSnarkJobs(block: BlocksQueryBlocks) -> impl IntoView {
 }
 
 #[component]
-pub fn BlockFeeTransfers(block: BlocksQueryBlocks) -> impl IntoView {
+pub fn BlockInternalCommands(block: BlocksQueryBlocks) -> impl IntoView {
     view! {
-        <TableSection section_heading="Fee Transfers".to_string() controls=|| ().into_view()>
-            <BlockSpotlightFeeTransfersTable block_state_hash=Option::from(get_state_hash(&block))/>
+        <TableSection section_heading="Internal Commands".to_string() controls=|| ().into_view()>
+            <BlockInternalCommandsTable block_state_hash=Option::from(get_state_hash(&block))/>
         </TableSection>
     }
+}
+
+#[component]
+pub fn BlockAnalytics(block: BlocksQueryBlocks) -> impl IntoView {
+    let (block_sig, _) = create_signal(block);
+    let user_command_amount_total = move || {
+        if let Some(user_commands) = get_user_commands(&block_sig.get()) {
+            user_commands
+                .iter()
+                .filter_map(|transaction_option| {
+                    transaction_option
+                        .as_ref()
+                        .map(|transaction| transaction.amount.unwrap_or(0.0))
+                })
+                .sum()
+        } else {
+            0.0
+        }
+    };
+    let winner_total = move || get_winner_total(&block_sig.get());
+
+    view! {
+        <TableSection section_heading="Analytics".to_string() controls=|| ().into_view()>
+            <AnalyticsLayout>
+                <AnalyticsSmContainer>
+                    <AnalyticsSimpleInfo
+                        label=convert_to_span("Total User Amounts Transferred".into())
+                        value=wrap_in_pill(
+                            decorate_with_currency_tag(
+                                nanomina_to_mina(user_command_amount_total()),
+                                "mina".to_string(),
+                            ),
+                            ColorVariant::Green,
+                        )
+
+                        variant=ColorVariant::Green
+                    />
+                </AnalyticsSmContainer>
+                <AnalyticsSmContainer>
+                    <AnalyticsSimpleInfo
+                        label=convert_to_span("Total Internal Fees Transferred".into())
+                        value=wrap_in_pill(
+                            decorate_with_currency_tag(
+                                get_transaction_fees(&block_sig.get()),
+                                "mina".to_string(),
+                            ),
+                            ColorVariant::Orange,
+                        )
+
+                        variant=ColorVariant::Orange
+                    />
+                </AnalyticsSmContainer>
+                <AnalyticsSmContainer>
+                    <AnalyticsSimpleInfo
+                        label=convert_to_span("Total SNARK Fees".into())
+                        value=wrap_in_pill(
+                            decorate_with_currency_tag(
+                                get_snark_fees(&block_sig.get()),
+                                "mina".to_string(),
+                            ),
+                            ColorVariant::Blue,
+                        )
+
+                        variant=ColorVariant::Blue
+                    />
+                </AnalyticsSmContainer>
+                <AnalyticsSmContainer>
+                    <AnalyticsSimpleInfo
+                        label=convert_to_span("Winner Total".into())
+                        value=wrap_in_pill(
+                            decorate_with_currency_tag(winner_total(), "mina".to_string()),
+                            ColorVariant::Grey,
+                        )
+
+                        variant=ColorVariant::Grey
+                    />
+                </AnalyticsSmContainer>
+                <AnalyticsLgContainer>
+                    <BlockSpotlightFeeTransferAnalytics block=block_sig.get()/>
+                </AnalyticsLgContainer>
+                <AnalyticsLgContainer>
+                    <BlockSpotlightUserCommandAnalytics block=block_sig.get()/>
+                </AnalyticsLgContainer>
+            </AnalyticsLayout>
+        </TableSection>
+    }
+}
+
+#[component]
+pub fn BlockSpotlightFeeTransferAnalytics(block: BlocksQueryBlocks) -> impl IntoView {
+    let (block_sig, _) = create_signal(block);
+    let (data, set_data) = create_signal(HashMap::new());
+
+    create_effect(move |_| {
+        if let Some(transactions) = block_sig.get().transactions.as_ref() {
+            if let Some(fee_transfer) = transactions.fee_transfer.as_ref() {
+                let pie_hashmap = fee_transfer
+                    .iter()
+                    .filter_map(|row| {
+                        let r = row.as_ref()?;
+                        let (Some(fee), Some(recipient)) = (r.fee.as_ref(), r.recipient.as_ref())
+                        else {
+                            return None;
+                        };
+                        let parsed_fee = str::parse::<i32>(fee).unwrap_or(0);
+                        let sixth_to_last = recipient.len() - 6;
+                        let recip = [
+                            recipient[..6].to_string(),
+                            recipient[sixth_to_last..].to_string(),
+                        ];
+                        Some((recip.join("..."), parsed_fee))
+                    })
+                    .fold(HashMap::new(), |mut acc, (recipient, fee)| {
+                        *acc.entry(recipient).or_insert(0) += fee;
+                        acc
+                    });
+                set_data.set(pie_hashmap);
+            }
+        }
+    });
+
+    create_effect(move |_| {
+        if !data.get().is_empty() {
+            setup_and_render_chart(&data.get(), "chart", "Top Internal Transfers");
+        }
+    });
+
+    view! { <div id="chart" class="p-4 md:p-8"></div> }
+}
+
+#[component]
+pub fn BlockSpotlightUserCommandAnalytics(block: BlocksQueryBlocks) -> impl IntoView {
+    let (data, set_data) = create_signal(HashMap::new());
+    create_effect(move |_| {
+        if let Some(transactions) = block.transactions.as_ref() {
+            if let Some(user_commands) = transactions.user_commands.as_ref() {
+                let pie_hashmap = user_commands
+                    .iter()
+                    .filter_map(|row| {
+                        let r = row.as_ref()?;
+                        let (Some(amount), Some(recipient)) = (r.amount, r.to.as_ref()) else {
+                            return None;
+                        };
+                        let sixth_to_last = recipient.len() - 6;
+                        let recip = [
+                            recipient[..6].to_string(),
+                            recipient[sixth_to_last..].to_string(),
+                        ];
+                        Some((recip.join("..."), amount as i64))
+                    })
+                    .fold(HashMap::new(), |mut acc, (recipient, amount)| {
+                        *acc.entry(recipient).or_insert(0) += amount;
+                        acc
+                    });
+                set_data.set(pie_hashmap);
+            }
+        }
+    });
+
+    create_effect(move |_| {
+        if !data.get().is_empty() {
+            setup_and_render_chart(&data.get(), "chart2", "Top Payments");
+        }
+    });
+
+    view! { <div id="chart2" class="p-4 md:p-8"></div> }
+}
+
+fn setup_and_render_chart<T>(data: &HashMap<String, T>, chart_id: &str, chart_title: &str)
+where
+    T: Into<i64> + Copy + 'static,
+{
+    let d = data.clone();
+    let ch_id = chart_id.to_string();
+    let ch_tl = chart_title.to_string();
+
+    let action = create_action(move |_: &()| {
+        let d_cloned = d.clone();
+        let ch_id_cloned = ch_id.clone();
+        let ch_tl_cloned = ch_tl.clone();
+
+        async move { render_pie_chart(&d_cloned, &ch_id_cloned, &ch_tl_cloned).await }
+    });
+
+    action.dispatch(());
+}
+
+// Asynchronous function to render the chart
+async fn render_pie_chart<T>(data: &HashMap<String, T>, chart_id: &str, chart_title: &str)
+where
+    T: Into<i64> + Copy,
+{
+    let mut sorted_data = data
+        .iter()
+        .map(|(key, &val)| (Into::<i64>::into(val), key))
+        .collect::<Vec<_>>();
+    sorted_data.sort_by(|a, b| b.0.cmp(&a.0));
+
+    let size = sorted_data.len();
+    let (top_items, rest) = sorted_data.split_at_mut(5.min(size));
+
+    let binding = String::from("Other");
+    let aggregated = rest.iter().fold((0, &binding), |mut acc, tup| {
+        acc.0 += tup.0;
+        acc
+    });
+
+    let mut result = top_items.to_vec();
+    if !rest.is_empty() {
+        result.push(aggregated);
+    }
+
+    let series = Pie::new()
+        .radius(vec!["50", "100"])
+        .center(vec!["50%", "50%"])
+        .data(result);
+    let chart = Chart::new()
+        .title(Title::new().text(chart_title))
+        .legend(Legend::new().top("bottom"))
+        .series(series);
+    let renderer = WasmRenderer::new(375, 375);
+
+    TimeoutFuture::new(1_000).await;
+    renderer.render(chart_id, &chart).unwrap();
 }
 
 #[component]

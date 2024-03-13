@@ -3,7 +3,7 @@ use crate::common::{components::*, functions::*, table::*};
 use leptos::*;
 
 #[component]
-pub fn BlockSpotlightFeeTransfersTable(block_state_hash: Option<String>) -> impl IntoView {
+pub fn BlockInternalCommandsTable(block_state_hash: Option<String>) -> impl IntoView {
     let (bsh_signal, _set_bsh) = create_signal(block_state_hash);
     let resource = create_resource(
         move || bsh_signal.get(),
@@ -20,7 +20,7 @@ pub fn BlockSpotlightFeeTransfersTable(block_state_hash: Option<String>) -> impl
                     {match data.feetransfers.len() {
                         0 => {
                             view! {
-                                <EmptyTable message="No fee transfers related to this block"
+                                <EmptyTable message="No internal commands for this block"
                                     .to_string()/>
                             }
                         }

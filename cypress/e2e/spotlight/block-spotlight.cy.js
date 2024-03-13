@@ -30,7 +30,7 @@ suite(["@CI"],'Block spotlight', () => {
         cy.tableHasNRows("SNARK Jobs", 10);
         cy.tableColumnValuesEqual("SNARK Jobs", "Hash", block_id);
 
-        cy.get(`a[href="/blocks/${block_id}/fee-transfers"]`).click();
-        cy.tableHasNRows("Fee Transfers", 10);
+        cy.get(`a[href="/blocks/${block_id}/internal-commands"]`).click();
+        cy.tableHasNRows("Internal Commands", 10);
     });
 });

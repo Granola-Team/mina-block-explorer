@@ -32,13 +32,13 @@ suite(["@CI"],'snarks table', () => {
 });
 
 
-suite(["@CI"],'fee transfer table', () => {
+suite(["@CI"],'internal commands table', () => {
 
-    let pages = ['/blocks/3NKyujsdi2GtWA1XC9KJ6nvXeLAd3DNvYrm1PUGEagj9899s1LMz/fee-transfers'];
+    let pages = ['/blocks/3NKyujsdi2GtWA1XC9KJ6nvXeLAd3DNvYrm1PUGEagj9899s1LMz/internal-commands'];
     let columns = ['Recipient', 'Fee', 'Type', 'Age'];
 
     pages.forEach(page => it(`on ${page} includes correct columns`, () => {
         cy.visit(page);
-        cy.tableHasOrderedColumns('Fee Transfers', columns);
+        cy.tableHasOrderedColumns('Internal Commands', columns);
     }));
 });

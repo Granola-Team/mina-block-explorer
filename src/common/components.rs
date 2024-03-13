@@ -1,8 +1,8 @@
 use super::{functions::*, models::*};
 use crate::icons::*;
-use leptos::{web_sys::*, *};
+use leptos::*;
 use leptos_router::*;
-use web_sys::window;
+use web_sys::{window, Event, MouseEvent};
 
 pub enum SubSectionPosition {
     Left,
@@ -216,6 +216,7 @@ where
                 NavIcon::Tokens => view! { <TokenSymbol/> },
                 NavIcon::Addresses => view! { <AddressIcon/> },
                 NavIcon::FeeTransfers => view! { <FeeTransferIcon/> },
+                NavIcon::Analytics => view! { <AnalyticsIcon/> },
             }}
 
             <span class="ml-0.5">{nav_entry.text}</span>
@@ -258,6 +259,7 @@ pub fn TabLink(nav_entry: NavEntry) -> impl IntoView {
                 NavIcon::Tokens => view! { <TokenSymbol/> },
                 NavIcon::Addresses => view! { <AddressIcon/> },
                 NavIcon::FeeTransfers => view! { <FeeTransferIcon/> },
+                NavIcon::Analytics => view! { <AnalyticsIcon/> },
             }}
 
             <div class="ml-0.5">{nav_entry.text}</div>
@@ -346,6 +348,81 @@ pub fn CopyToClipboard(children: Children) -> impl IntoView {
 
             </span>
             {children()}
+        </div>
+    }
+}
+
+#[component]
+fn AnalyticsContainer(children: Children, #[prop(into)] span: String) -> impl IntoView {
+    let class_str = format!(
+        "bg-secondary-background rounded-lg flex justify-center items-center {}",
+        span
+    );
+    view! { <div class=class_str>{children()}</div> }
+}
+
+#[component]
+pub fn AnalyticsSmContainer(children: Children) -> impl IntoView {
+    view! {
+        <AnalyticsContainer span="analytics-sm col-span-1 md:col-span-2">
+            {children()}
+        </AnalyticsContainer>
+    }
+}
+
+#[component]
+pub fn AnalyticsLgContainer(children: Children) -> impl IntoView {
+    view! {
+        <AnalyticsContainer span="analytics-lg col-span-1 md:col-span-2">
+            {children()}
+        </AnalyticsContainer>
+    }
+}
+
+#[component]
+pub fn AnalyticsLayout(children: Children) -> impl IntoView {
+    view! {
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4 p-2 md:p-8">
+            {children()}
+        </div>
+    }
+}
+
+#[component]
+pub fn AnalyticsSimpleInfo(
+    value: HtmlElement<html::AnyElement>,
+    label: HtmlElement<html::AnyElement>,
+    variant: ColorVariant,
+) -> impl IntoView {
+    let mut container_class_str =
+        "w-full p-4 rounded-lg flex flex-col justify-around items-stretch ".to_string();
+    let base_class_str = "flex justify-center items-center";
+    let mut value_class_str = " text-sm lg:text-base ".to_string();
+    value_class_str.push_str(base_class_str);
+    let mut label_class_str = " text-xs mt-2 ".to_string();
+    label_class_str.push_str(base_class_str);
+    match variant {
+        ColorVariant::Blue => {
+            container_class_str.push_str(" bg-blue/25 ");
+            value_class_str.push_str(" text-blue ");
+        }
+        ColorVariant::Green => {
+            container_class_str.push_str(" bg-green/25 ");
+            value_class_str.push_str(" text-green ");
+        }
+        ColorVariant::Orange => {
+            container_class_str.push_str(" bg-granola-orange/25 ");
+            value_class_str.push_str(" text-granola-orange ");
+        }
+        ColorVariant::Grey => {
+            container_class_str.push_str(" bg-slate-400/25 ");
+            value_class_str.push_str(" text-slate-400 ");
+        }
+    }
+    view! {
+        <div class=container_class_str>
+            <div class=value_class_str>{value}</div>
+            <div class=label_class_str>{label}</div>
         </div>
     }
 }

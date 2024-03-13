@@ -3,7 +3,7 @@ suite(["@CI"],'tab count and pagination count', () => {
     let tabs = [
         "SNARK Jobs",
         "User Commands",
-        "Fee Transfers"
+        "Internal Commands"
     ];
 
     
