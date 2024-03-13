@@ -241,72 +241,37 @@ pub fn BlockSpotlightFeeTransferAnalytics(block: BlocksQueryBlocks) -> impl Into
     let (data, set_data) = create_signal(HashMap::new());
 
     create_effect(move |_| {
-        let mut pie_hashmap = HashMap::new();
-        if let Some(fee_transfer) = block_sig.get().transactions.unwrap().fee_transfer {
-            fee_transfer.into_iter().for_each(|row| {
-                if let Some(r) = row.clone() {
-                    if let (Some(fee), Some(mut recipient)) = (r.fee, r.recipient) {
-                        recipient.truncate(12);
-                        let recipient = recipient.to_string();
-                        *pie_hashmap.entry(recipient).or_insert(0) +=
-                            str::parse::<i32>(&fee).unwrap_or(0);
-                    }
-                }
-                logging::log!("{}", "iterating...");
-            });
-
-            set_data.set(pie_hashmap);
-        }
-    });
-
-    let action = create_action(move |input: &HashMap<String, i32>| {
-        let input = input.clone();
-        async move {
-            let mut data = input
-                .iter()
-                .map(|(key, val)| (*val, key))
-                .collect::<Vec<_>>();
-
-            // Sort the vector in descending order
-            data.sort_by(|a, b| b.cmp(a));
-
-            // Split the vector into two parts
-            let size = data.len();
-            let (top_five, rest) = data.split_at_mut(5.min(size));
-
-            // Aggregate the remaining entries
-            let binding = String::from("Other");
-            let aggregated = rest.iter().fold((0, &binding), |mut acc, tup| {
-                acc.0 += tup.0;
-                acc
-            });
-
-            // Append the aggregated tuple to the top six
-            let mut result = top_five.to_vec();
-            if !rest.is_empty() {
-                result.push(aggregated);
+        if let Some(transactions) = block_sig.get().transactions.as_ref() {
+            if let Some(fee_transfer) = transactions.fee_transfer.as_ref() {
+                let pie_hashmap = fee_transfer
+                    .iter()
+                    .filter_map(|row| {
+                        let r = row.as_ref()?;
+                        let (Some(fee), Some(recipient)) = (r.fee.as_ref(), r.recipient.as_ref())
+                        else {
+                            return None;
+                        };
+                        let parsed_fee = str::parse::<i32>(fee).unwrap_or(0);
+                        let sixth_to_last = recipient.len() - 6;
+                        let recip = [
+                            recipient[..6].to_string(),
+                            recipient[sixth_to_last..].to_string(),
+                        ];
+                        Some((recip.join("..."), parsed_fee))
+                    })
+                    .fold(HashMap::new(), |mut acc, (recipient, fee)| {
+                        *acc.entry(recipient).or_insert(0) += fee;
+                        acc
+                    });
+                set_data.set(pie_hashmap);
             }
-
-            let series = Pie::new()
-                .name("Fee Transfer Recipient")
-                .radius(vec!["50", "100"])
-                .center(vec!["50%", "50%"])
-                .data(result);
-            let chart = Chart::new()
-                .title(Title::new().text("Top Internal Transfers"))
-                .legend(Legend::new().top("bottom"))
-                .series(series);
-            let renderer = WasmRenderer::new(375, 375);
-
-            renderer.render("chart", &chart).unwrap();
         }
     });
 
     create_effect(move |_| {
-        if data.get().is_empty() {
-            return;
+        if !data.get().is_empty() {
+            setup_and_render_chart(&data.get(), "chart", "Top Internal Transfers");
         }
-        action.dispatch(data.get());
     });
 
     view! { <div id="chart" class="p-4 md:p-8"></div> }
@@ -316,77 +281,96 @@ pub fn BlockSpotlightFeeTransferAnalytics(block: BlocksQueryBlocks) -> impl Into
 pub fn BlockSpotlightUserCommandAnalytics(block: BlocksQueryBlocks) -> impl IntoView {
     let (data, set_data) = create_signal(HashMap::new());
     create_effect(move |_| {
-        let mut pie_hashmap = HashMap::new();
-
-        if let Some(transactions) = &block.transactions {
-            if let Some(user_commands) = &transactions.user_commands {
-                user_commands.iter().for_each(|row| {
-                    if let Some(r) = row.clone() {
-                        if let (Some(amount), Some(mut recipient)) = (r.amount, r.to) {
-                            recipient.truncate(12);
-                            let recipient = recipient.to_string();
-                            *pie_hashmap.entry(recipient).or_insert(0) += amount as i64;
-                        }
-                    }
-                });
-
+        if let Some(transactions) = block.transactions.as_ref() {
+            if let Some(user_commands) = transactions.user_commands.as_ref() {
+                let pie_hashmap = user_commands
+                    .iter()
+                    .filter_map(|row| {
+                        let r = row.as_ref()?;
+                        let (Some(amount), Some(recipient)) = (r.amount, r.to.as_ref()) else {
+                            return None;
+                        };
+                        let sixth_to_last = recipient.len() - 6;
+                        let recip = [
+                            recipient[..6].to_string(),
+                            recipient[sixth_to_last..].to_string(),
+                        ];
+                        Some((recip.join("..."), amount as i64))
+                    })
+                    .fold(HashMap::new(), |mut acc, (recipient, amount)| {
+                        *acc.entry(recipient).or_insert(0) += amount;
+                        acc
+                    });
                 set_data.set(pie_hashmap);
             }
         }
     });
 
-    let action = create_action(move |input: &HashMap<String, i64>| {
-        let input = input.clone();
-        async move {
-            logging::log!("input: {:?}", input);
-            let mut data = input
-                .iter()
-                .map(|(key, val)| (*val, key))
-                .collect::<Vec<_>>();
-
-            // Sort the vector in descending order
-            data.sort_by(|a, b| b.cmp(a));
-
-            // Split the vector into two parts
-            let size = data.len();
-            let (top_five, rest) = data.split_at_mut(5.min(size));
-
-            // Aggregate the remaining entries
-            let binding = String::from("Other");
-            let aggregated = rest.iter().fold((0, &binding), |mut acc, tup| {
-                acc.0 += tup.0;
-                acc
-            });
-
-            // Append the aggregated tuple to the top six
-            let mut result = top_five.to_vec();
-            if !rest.is_empty() {
-                result.push(aggregated);
-            }
-
-            let series = Pie::new()
-                .radius(vec!["50", "100"])
-                .center(vec!["50%", "50%"])
-                .data(result);
-            let chart = Chart::new()
-                .title(Title::new().text("Top Payments"))
-                .legend(Legend::new().top("bottom"))
-                .series(series);
-            let renderer = WasmRenderer::new(375, 375);
-
-            TimeoutFuture::new(1_000).await;
-            renderer.render("chart2", &chart).unwrap();
-        }
-    });
-
     create_effect(move |_| {
-        if data.get().is_empty() {
-        } else {
-            action.dispatch(data.get());
+        if !data.get().is_empty() {
+            setup_and_render_chart(&data.get(), "chart2", "Top Payments");
         }
     });
 
     view! { <div id="chart2" class="p-4 md:p-8"></div> }
+}
+
+fn setup_and_render_chart<T>(data: &HashMap<String, T>, chart_id: &str, chart_title: &str)
+where
+    T: Into<i64> + Copy + 'static,
+{
+    let d = data.clone();
+    let ch_id = chart_id.to_string();
+    let ch_tl = chart_title.to_string();
+
+    let action = create_action(move |_: &()| {
+        let d_cloned = d.clone();
+        let ch_id_cloned = ch_id.clone();
+        let ch_tl_cloned = ch_tl.clone();
+
+        async move { render_pie_chart(&d_cloned, &ch_id_cloned, &ch_tl_cloned).await }
+    });
+
+    action.dispatch(());
+}
+
+// Asynchronous function to render the chart
+async fn render_pie_chart<T>(data: &HashMap<String, T>, chart_id: &str, chart_title: &str)
+where
+    T: Into<i64> + Copy,
+{
+    let mut sorted_data = data
+        .iter()
+        .map(|(key, &val)| (Into::<i64>::into(val), key))
+        .collect::<Vec<_>>();
+    sorted_data.sort_by(|a, b| b.0.cmp(&a.0));
+
+    let size = sorted_data.len();
+    let (top_items, rest) = sorted_data.split_at_mut(5.min(size));
+
+    let binding = String::from("Other");
+    let aggregated = rest.iter().fold((0, &binding), |mut acc, tup| {
+        acc.0 += tup.0;
+        acc
+    });
+
+    let mut result = top_items.to_vec();
+    if !rest.is_empty() {
+        result.push(aggregated);
+    }
+
+    let series = Pie::new()
+        .radius(vec!["50", "100"])
+        .center(vec!["50%", "50%"])
+        .data(result);
+    let chart = Chart::new()
+        .title(Title::new().text(chart_title))
+        .legend(Legend::new().top("bottom"))
+        .series(series);
+    let renderer = WasmRenderer::new(375, 375);
+
+    TimeoutFuture::new(1_000).await;
+    renderer.render(chart_id, &chart).unwrap();
 }
 
 #[component]
