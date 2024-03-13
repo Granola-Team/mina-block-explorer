@@ -6,6 +6,7 @@ pub async fn load_data(
     limit: i32,
     public_key: Option<String>,
     block_state_hash: Option<String>,
+    canonical: Option<bool>,
 ) -> Result<snarks_query::ResponseData, MyError> {
     let url = "https://graphql.minaexplorer.com";
     let variables = snarks_query::Variables {
@@ -13,7 +14,7 @@ pub async fn load_data(
         limit: Some(limit.into()),
         query: snarks_query::SnarkQueryInput {
             prover: public_key,
-            canonical: Some(true),
+            canonical,
             block: if block_state_hash.is_none() {
                 None
             } else {
@@ -62,6 +63,10 @@ pub fn get_prover(snark: &SnarksQuerySnarks) -> String {
         .prover
         .as_ref()
         .map_or_else(String::new, ToString::to_string)
+}
+
+pub fn get_canonical(snark: &SnarksQuerySnarks) -> Option<bool> {
+    snark.canonical
 }
 
 pub fn get_work_ids(snark: &SnarksQuerySnarks) -> Vec<String> {

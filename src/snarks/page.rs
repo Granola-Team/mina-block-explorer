@@ -1,20 +1,21 @@
 use super::functions::*;
-use crate::common::{components::*, functions::*, search::*, table::*};
+use crate::common::{components::*, functions::*, models::*, search::*, table::*};
 use leptos::*;
-use leptos_router::use_query_map;
+use leptos_router::{create_query_signal, use_query_map};
 
 #[component]
 pub fn SnarksPage() -> impl IntoView {
     let query_params_map = use_query_map();
+    let (canonical_qp, _) = create_query_signal::<bool>("canonical");
 
     let resource = create_resource(
-        move || query_params_map.get(),
-        |value| async move {
+        move || (query_params_map.get(), canonical_qp.get()),
+        |(value, canonical)| async move {
             let mut public_key = value.get("account");
             if public_key.is_none() {
                 public_key = value.get("query");
             }
-            load_data(50, public_key.cloned(), None).await
+            load_data(50, public_key.cloned(), None, canonical).await
         },
     );
 
@@ -24,7 +25,23 @@ pub fn SnarksPage() -> impl IntoView {
     view! {
         <SearchBar placeholder="Exact search for prover".to_string()/>
         <PageContainer>
-            <TableSection section_heading="SNARKs".to_owned() controls=|| ().into_view()>
+            <TableSection
+                section_heading="SNARKs".to_owned()
+                controls=move || {
+                    view! {
+                        <BooleanUrlParamSelectMenu
+                            id="canonical-selection"
+                            query_str_key="canonical"
+                            labels=BooleanUrlParamSelectOptions {
+                                true_case: String::from("Canonical"),
+                                false_case: String::from("Non-Canonical"),
+                                none_case: String::from("All"),
+                            }
+                        />
+                    }
+                }
+            >
+
                 {move || match resource.get() {
                     Some(Ok(data)) => {
                         let pag = build_pagination(

@@ -3,6 +3,7 @@ query SnarksQuery($sort_by: SnarkSortByInput!, $limit: Int = 10, $query: SnarkQu
     blockHeight
     dateTime
     prover
+    canonical
     workIds
     block {
       stateHash
