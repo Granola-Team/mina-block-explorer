@@ -83,6 +83,7 @@ pub fn BooleanUrlParamSelectMenu(
 ) -> impl IntoView {
     let (query_val, set_query_val) = create_query_signal::<bool>(query_str_key);
     let comparison_labels = labels.clone();
+    let is_true_case = move || (query_val.get().is_none() || query_val.get().unwrap_or_default());
     view! {
         <select
             class="text-xs"
@@ -91,20 +92,16 @@ pub fn BooleanUrlParamSelectMenu(
                 match event_target_value(&ev) {
                     val if val == comparison_labels.true_case => set_query_val.set(Some(true)),
                     val if val == comparison_labels.false_case => set_query_val.set(Some(false)),
-                    val if val == comparison_labels.none_case => set_query_val.set(None),
                     val => logging::log!("unknown value {}", val),
                 }
             }
         >
 
-            <option class="text-xs font-mono" selected=move || query_val.get().unwrap_or_default()>
+            <option class="text-xs font-mono" selected=is_true_case()>
                 {labels.true_case}
             </option>
-            <option class="text-xs font-mono" selected=move || !query_val.get().unwrap_or_default()>
+            <option class="text-xs font-mono" selected=!is_true_case()>
                 {labels.false_case}
-            </option>
-            <option class="text-xs font-mono" selected=move || query_val.get().is_none()>
-                {labels.none_case}
             </option>
         </select>
     }

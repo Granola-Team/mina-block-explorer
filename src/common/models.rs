@@ -135,7 +135,6 @@ impl Default for NavEntry {
 pub struct BooleanUrlParamSelectOptions {
     pub true_case: String,
     pub false_case: String,
-    pub none_case: String,
 }
 
 #[derive(Clone, PartialEq)]
