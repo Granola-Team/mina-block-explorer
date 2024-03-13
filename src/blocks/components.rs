@@ -674,7 +674,6 @@ pub fn BlocksSection() -> impl IntoView {
                                     labels=BooleanUrlParamSelectOptions {
                                         true_case: String::from("Canonical"),
                                         false_case: String::from("Non-Canonical"),
-                                        none_case: String::from("All"),
                                     }
                                 />
                             }
@@ -757,7 +756,6 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
                                         labels=BooleanUrlParamSelectOptions {
                                             true_case: String::from("Canonical"),
                                             false_case: String::from("Non-Canonical"),
-                                            none_case: String::from("All"),
                                         }
                                     />
                                 }

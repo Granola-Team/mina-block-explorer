@@ -35,7 +35,6 @@ pub fn SnarksPage() -> impl IntoView {
                             labels=BooleanUrlParamSelectOptions {
                                 true_case: String::from("Canonical"),
                                 false_case: String::from("Non-Canonical"),
-                                none_case: String::from("All"),
                             }
                         />
                     }
