@@ -305,7 +305,7 @@ pub fn CopyToClipboard(children: Children) -> impl IntoView {
     let (text_color, set_text_color) = create_signal("text-slate-700");
     create_effect(move |_| {
         if copied.get() {
-            set_text_color.set("text-pill-green")
+            set_text_color.set("text-green")
         } else {
             set_text_color.set("text-slate-700")
         }

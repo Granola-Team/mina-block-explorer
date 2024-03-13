@@ -21,15 +21,16 @@ module.exports = {
                 'table-row-fill': '#FFFFFF',
                 'table-row-text-color': '#25213B',
                 'table-header-text-color': '#25213B',
-                'pill-green': '#56D05F',
-                'pill-blue': '#14DBF6',
+                'green': '#56D05F',
+                'blue': '#14DBF6',
                 'card-purple': '#F4F2FF',
                 'card-blue': '#ECFBFF',
                 'card-green': '#EEFCEF',
                 'card-text-purple': '#8572E6',
                 'card-text-blue': '#25B4D6',
                 'status-success': '#56D05F',
-                'status-failed': '#F58E2E'
+                'status-failed': '#FB7631',
+                'status-unknown': '#F8AC4B',
           }
         }
 

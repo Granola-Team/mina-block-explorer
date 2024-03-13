@@ -1,6 +1,4 @@
-suite(["@CI"],'tab counts', () => {
-
-    let page = '/blocks/3NKxoDDgKH9Je4pg86wNgkK3LqnSY1A4KANzWrAvmUn74cWRENmP/spotlight';
+suite(["@CI"],'tab count and pagination count', () => {
 
     let tabs = [
         "SNARK Jobs",
@@ -8,16 +6,26 @@ suite(["@CI"],'tab counts', () => {
         "Fee Transfers"
     ];
 
-    tabs.forEach(tab => it(`match to table pagination counts on ${tab} tab`,() => {
-        cy.visit(page);
+    
+    tabs.forEach(tab => it(`match on ${tab} tab (random block audit)`,() => {
+        cy.visit('/blocks');
+        cy.clickLinkInTable(1, 'State Hash', 'Blocks');
+
+        cy.url().should('include','/spotlight');
         cy.get('a').contains(tab).as('tab');
         cy.get('@tab').siblings('.number-bubble').first().as('tab-count');
 
         cy.get('@tab').click();        
         cy.get('@tab-count').invoke('text').then((count) => {
-            cy.scrollTo('bottom');
-            cy.get('.pagination-controls').children().first().contains(count);
+            if (Number(count) > 0) {
+                cy.scrollTo('bottom');
+                cy.get('.pagination-controls').children().first().contains(count);
+            } else {
+                cy.get('table').should('not.exist');
+            }
+            
         });
     }));
+    
 
 });

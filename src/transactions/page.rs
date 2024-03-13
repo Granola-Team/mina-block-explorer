@@ -39,14 +39,14 @@ pub fn TransactionsPage() -> impl IntoView {
     let query_params_map: Memo<ParamsMap> = use_query_map();
 
     view! {
-        <SearchBar placeholder="Exact search by payment ID".to_string()/>
+        <SearchBar placeholder="Exact search by state hash".to_string()/>
         <PageContainer>
             {move || {
                 let qp_map = query_params_map.get();
                 view! {
                     <TransactionsSection
                         public_key=qp_map.get("public_key").cloned()
-                        payment_id=qp_map.get("query").cloned()
+                        state_hash=qp_map.get("query").cloned()
                     />
                 }
             }}
@@ -58,11 +58,12 @@ pub fn TransactionsPage() -> impl IntoView {
 #[component]
 pub fn TransactionSpotlightPage() -> impl IntoView {
     let memo_params_map = use_params_map();
+    let (canonical_qp, _) = create_query_signal::<bool>("canonical");
     let resource = create_resource(
-        move || memo_params_map.get(),
-        |value| async move {
+        move || (memo_params_map.get(), canonical_qp.get()),
+        |(value, canonical)| async move {
             let state_hash = value.get("id");
-            load_data(10, None, state_hash.cloned(), None).await
+            load_data(10, None, state_hash.cloned(), canonical).await
         },
     );
 
@@ -100,7 +101,7 @@ pub fn TransactionSpotlightPage() -> impl IntoView {
                                     any_el: Some(
                                         convert_to_pill(
                                             get_canonical(transaction).unwrap_or_default().to_string(),
-                                            PillVariant::Grey,
+                                            ColorVariant::Grey,
                                         ),
                                     ),
                                     ..Default::default()
@@ -120,7 +121,7 @@ pub fn TransactionSpotlightPage() -> impl IntoView {
                                                 get_amount(transaction),
                                                 "mina".to_string(),
                                             ),
-                                            PillVariant::Green,
+                                            ColorVariant::Green,
                                         ),
                                     ),
                                     ..Default::default()
@@ -133,7 +134,7 @@ pub fn TransactionSpotlightPage() -> impl IntoView {
                                                 get_fee(transaction),
                                                 "mina".to_string(),
                                             ),
-                                            PillVariant::Orange,
+                                            ColorVariant::Orange,
                                         ),
                                     ),
                                     ..Default::default()
@@ -151,21 +152,21 @@ pub fn TransactionSpotlightPage() -> impl IntoView {
                                 SpotlightEntry {
                                     label: "Nonce".to_string(),
                                     any_el: Some(
-                                        convert_to_pill(get_nonce(transaction), PillVariant::Grey),
+                                        convert_to_pill(get_nonce(transaction), ColorVariant::Grey),
                                     ),
                                     ..Default::default()
                                 },
                                 SpotlightEntry {
                                     label: "Memo".to_string(),
                                     any_el: Some(
-                                        convert_to_pill(get_memo(transaction), PillVariant::Grey),
+                                        convert_to_pill(get_memo(transaction), ColorVariant::Grey),
                                     ),
                                     ..Default::default()
                                 },
                                 SpotlightEntry {
                                     label: "Kind".to_string(),
                                     any_el: Some(
-                                        convert_to_pill(get_kind(transaction), PillVariant::Grey),
+                                        convert_to_pill(get_kind(transaction), ColorVariant::Grey),
                                     ),
                                     ..Default::default()
                                 },
