@@ -127,7 +127,11 @@ pub async fn load_data(
         query: transactions_query::TransactionQueryInput {
             from: public_key,
             hash: state_hash,
-            canonical,
+            canonical: if canonical.is_none() {
+                Some(true)
+            } else {
+                canonical
+            },
             ..Default::default()
         },
     };

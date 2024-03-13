@@ -14,7 +14,11 @@ pub async fn load_data(
         limit: Some(limit.into()),
         query: snarks_query::SnarkQueryInput {
             prover: public_key,
-            canonical,
+            canonical: if canonical.is_none() {
+                Some(true)
+            } else {
+                canonical
+            },
             block: if block_state_hash.is_none() {
                 None
             } else {
