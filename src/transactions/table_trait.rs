@@ -145,7 +145,7 @@ impl TableData for Vec<Option<DirectionalTransactionsQueryTransactions>> {
                         if transaction.outbound {
                             ColorVariant::Orange
                         } else {
-                            ColorVariant::Green
+                            ColorVariant::Blue
                         },
                     ),
                     convert_array_to_span(vec![
