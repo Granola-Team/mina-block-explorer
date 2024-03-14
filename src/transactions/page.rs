@@ -1,4 +1,4 @@
-use super::{components::*, functions::*};
+use super::{components::*, functions::*, table_trait::*};
 use crate::{
     common::{components::*, functions::*, models::*, search::*, spotlight::*},
     icons::*,
@@ -72,34 +72,34 @@ pub fn TransactionSpotlightPage() -> impl IntoView {
                 Some(Ok(data)) => {
                     match data.transactions.first() {
                         Some(Some(transaction)) => {
-                            let state_hash = get_hash(transaction);
-                            let date_time = get_block_datetime(transaction);
+                            let state_hash = transaction.get_hash();
+                            let date_time = transaction.get_block_datetime();
                             let spotlight_items = vec![
                                 SpotlightEntry {
                                     label: "Date".to_string(),
-                                    any_el: Some(convert_to_span(get_block_datetime(transaction))),
+                                    any_el: Some(convert_to_span(transaction.get_block_datetime())),
                                     ..Default::default()
                                 },
                                 SpotlightEntry {
                                     label: "Transaction Hash".to_string(),
-                                    any_el: Some(convert_to_span(get_hash(transaction))),
+                                    any_el: Some(convert_to_span(transaction.get_hash())),
                                     copiable: true,
                                 },
                                 SpotlightEntry {
                                     label: "Payment ID".to_string(),
-                                    any_el: Some(convert_to_span(get_payment_id(transaction))),
+                                    any_el: Some(convert_to_span(transaction.get_payment_id())),
                                     copiable: true,
                                 },
                                 SpotlightEntry {
                                     label: "Block Height".to_string(),
-                                    any_el: Some(convert_to_span(get_block_height(transaction))),
+                                    any_el: Some(convert_to_span(transaction.get_block_height())),
                                     ..Default::default()
                                 },
                                 SpotlightEntry {
                                     label: "Canonical".to_string(),
                                     any_el: Some(
                                         convert_to_pill(
-                                            get_canonical(transaction).unwrap_or_default().to_string(),
+                                            transaction.get_canonical().unwrap_or_default().to_string(),
                                             ColorVariant::Grey,
                                         ),
                                     ),
@@ -108,7 +108,7 @@ pub fn TransactionSpotlightPage() -> impl IntoView {
                                 SpotlightEntry {
                                     label: "Block State Hash".to_string(),
                                     any_el: Some(
-                                        convert_to_span(get_block_state_hash(transaction)),
+                                        convert_to_span(transaction.get_block_state_hash()),
                                     ),
                                     copiable: true,
                                 },
@@ -117,7 +117,7 @@ pub fn TransactionSpotlightPage() -> impl IntoView {
                                     any_el: Some(
                                         wrap_in_pill(
                                             decorate_with_currency_tag(
-                                                get_amount(transaction),
+                                                transaction.get_amount(),
                                                 "mina".to_string(),
                                             ),
                                             ColorVariant::Green,
@@ -130,7 +130,7 @@ pub fn TransactionSpotlightPage() -> impl IntoView {
                                     any_el: Some(
                                         wrap_in_pill(
                                             decorate_with_currency_tag(
-                                                get_fee(transaction),
+                                                transaction.get_fee(),
                                                 "mina".to_string(),
                                             ),
                                             ColorVariant::Orange,
@@ -140,32 +140,32 @@ pub fn TransactionSpotlightPage() -> impl IntoView {
                                 },
                                 SpotlightEntry {
                                     label: "From".to_string(),
-                                    any_el: Some(convert_to_span(get_from(transaction))),
+                                    any_el: Some(convert_to_span(transaction.get_from())),
                                     copiable: true,
                                 },
                                 SpotlightEntry {
                                     label: "To".to_string(),
-                                    any_el: Some(convert_to_span(get_to(transaction))),
+                                    any_el: Some(convert_to_span(transaction.get_to())),
                                     copiable: true,
                                 },
                                 SpotlightEntry {
                                     label: "Nonce".to_string(),
                                     any_el: Some(
-                                        convert_to_pill(get_nonce(transaction), ColorVariant::Grey),
+                                        convert_to_pill(transaction.get_nonce(), ColorVariant::Grey),
                                     ),
                                     ..Default::default()
                                 },
                                 SpotlightEntry {
                                     label: "Memo".to_string(),
                                     any_el: Some(
-                                        convert_to_pill(get_memo(transaction), ColorVariant::Grey),
+                                        convert_to_pill(transaction.get_memo(), ColorVariant::Grey),
                                     ),
                                     ..Default::default()
                                 },
                                 SpotlightEntry {
                                     label: "Kind".to_string(),
                                     any_el: Some(
-                                        convert_to_pill(get_kind(transaction), ColorVariant::Grey),
+                                        convert_to_pill(transaction.get_kind(), ColorVariant::Grey),
                                     ),
                                     ..Default::default()
                                 },

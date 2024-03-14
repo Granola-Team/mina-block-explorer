@@ -1,4 +1,4 @@
-use super::functions::*;
+use super::{functions::*, models::{DirectionalTransactionsQueryTransactions}, table_trait::TransactionsTrait};
 use crate::{
     account_dialog::components::*,
     common::{components::*, functions::*, models::*, table::*},
@@ -39,17 +39,16 @@ pub fn AccountDialogTransactionSection(
                                 fallback=move || view! { <NullView/> }
                             >
                                 <TransactionEntry
-                                    status=get_status(&get_block_datetime(&unwrap_opt_trans))
-                                    date=get_block_datetime(&unwrap_opt_trans)
+                                    status=get_status(&unwrap_opt_trans.get_block_datetime())
+                                    date=unwrap_opt_trans.get_block_datetime()
                                     moments_ago=print_time_since(
-                                        &get_block_datetime(&unwrap_opt_trans),
+                                        &unwrap_opt_trans.get_block_datetime(),
                                     )
-
-                                    from=get_from(&unwrap_opt_trans)
-                                    to=get_to(&unwrap_opt_trans)
-                                    fee=get_fee(&unwrap_opt_trans)
-                                    amount=get_amount(&unwrap_opt_trans)
-                                    hash=get_hash(&unwrap_opt_trans)
+                                    from=unwrap_opt_trans.get_from()
+                                    to=unwrap_opt_trans.get_to()
+                                    fee=unwrap_opt_trans.get_fee()
+                                    amount=unwrap_opt_trans.get_amount()
+                                    hash=unwrap_opt_trans.get_hash()
                                 />
                             </Show>
                         }
@@ -190,10 +189,13 @@ pub fn AccountTransactionsSection(
                     .iter()
                     .filter(|d| d.is_some())
                     .chain(data_to.transactions.iter())
-                    .cloned()
+                    .map(|d| {
+                        let trx = d.clone().unwrap();
+                        Some(DirectionalTransactionsQueryTransactions::from_original(&trx, pk.get().unwrap()))
+                    })
                     .collect::<Vec<_>>();
                 data.sort_by(|a, b| {
-                    match (&<std::option::Option<TransactionsQueryTransactions> as Clone>::clone(&a).unwrap().block.unwrap().date_time, &<std::option::Option<TransactionsQueryTransactions> as Clone>::clone(&b).unwrap().block.unwrap().date_time) {
+                    match (&<std::option::Option<DirectionalTransactionsQueryTransactions> as Clone>::clone(&a).unwrap().base_transaction.block.unwrap().date_time, &<std::option::Option<DirectionalTransactionsQueryTransactions> as Clone>::clone(&b).unwrap().base_transaction.block.unwrap().date_time) {
                         (Some(date_time_a), Some(date_time_b)) => date_time_b.cmp(date_time_a),
                         (Some(_), None) => std::cmp::Ordering::Greater,
                         (None, Some(_)) => std::cmp::Ordering::Less,
@@ -216,10 +218,14 @@ pub fn AccountTransactionsSection(
 }
 
 #[component]
-fn TransactionSection(
+fn TransactionSection<T>(
     public_key: Option<String>,
     #[prop(default = false)] with_link: bool,
-    transactions: Option<Vec<Option<TransactionsQueryTransactions>>>) -> impl IntoView {
+    transactions: Option<Vec<Option<T>>>) -> impl IntoView 
+where
+    T: TransactionsTrait + Clone + 'static,
+    Vec<Option<T>>: TableData,
+{
     let (pk, _set_public_key) = create_signal(public_key);
     let records_per_page = 10;
     let (current_page, set_current_page) = create_signal(1);
