@@ -89,6 +89,7 @@ impl TableData for Vec<Option<DirectionalTransactionsQueryTransactions>> {
             "State Hash",
             "Age",
             "Type",
+            "Direction",
             "From",
             "To",
             "Nonce",
@@ -122,6 +123,7 @@ impl TableData for Vec<Option<DirectionalTransactionsQueryTransactions>> {
                     ])
                     .attr("class", "block"),
                     convert_to_pill(transaction.get_kind(), ColorVariant::Grey),
+                    convert_to_pill(if transaction.outbound { "OUT".to_string() } else { "IN".to_string() }, if transaction.outbound { ColorVariant::Orange } else { ColorVariant::Green }),
                     if !transaction.get_memo().is_empty() {
                         convert_array_to_span(vec![
                             convert_to_link(
