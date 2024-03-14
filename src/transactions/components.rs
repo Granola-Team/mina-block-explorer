@@ -186,35 +186,32 @@ pub fn AccountTransactionsSection(
     );
 
     create_effect(move |_| {
-        match (
+        if let (Some(Ok(data_from)), Some(Ok(data_to))) = (
             transactions_from_resource.get(),
             transactions_to_resource.get(),
         ) {
-            (Some(Ok(data_from)), Some(Ok(data_to))) => {
-                let mut data = data_from
-                    .transactions
-                    .iter()
-                    .filter(|d| d.is_some())
-                    .chain(data_to.transactions.iter())
-                    .map(|d| {
-                        let trx = d.clone().unwrap();
-                        Some(DirectionalTransactionsQueryTransactions::from_original(
-                            &trx,
-                            pk.get().unwrap(),
-                        ))
-                    })
-                    .collect::<Vec<_>>();
-                data.sort_by(|a, b| {
-                    match (&<std::option::Option<DirectionalTransactionsQueryTransactions> as Clone>::clone(&a).unwrap().base_transaction.block.unwrap().date_time, &<std::option::Option<DirectionalTransactionsQueryTransactions> as Clone>::clone(&b).unwrap().base_transaction.block.unwrap().date_time) {
-                        (Some(date_time_a), Some(date_time_b)) => date_time_b.cmp(date_time_a),
-                        (Some(_), None) => std::cmp::Ordering::Greater,
-                        (None, Some(_)) => std::cmp::Ordering::Less,
-                        (None, None) => std::cmp::Ordering::Equal,
-                    }
-                });
-                set_data.set(Some(data));
-            }
-            (_, _) => (),
+            let mut data = data_from
+                .transactions
+                .iter()
+                .filter(|d| d.is_some())
+                .chain(data_to.transactions.iter())
+                .map(|d| {
+                    let trx = d.clone().unwrap();
+                    Some(DirectionalTransactionsQueryTransactions::from_original(
+                        &trx,
+                        pk.get().unwrap(),
+                    ))
+                })
+                .collect::<Vec<_>>();
+            data.sort_by(|a, b| {
+                        match (&<std::option::Option<DirectionalTransactionsQueryTransactions> as Clone>::clone(a).unwrap().base_transaction.block.unwrap().date_time, &<std::option::Option<DirectionalTransactionsQueryTransactions> as Clone>::clone(b).unwrap().base_transaction.block.unwrap().date_time) {
+                            (Some(date_time_a), Some(date_time_b)) => date_time_b.cmp(date_time_a),
+                            (Some(_), None) => std::cmp::Ordering::Greater,
+                            (None, Some(_)) => std::cmp::Ordering::Less,
+                            (None, None) => std::cmp::Ordering::Equal,
+                        }
+                    });
+            set_data.set(Some(data));
         }
     });
 
@@ -261,7 +258,7 @@ where
                 let transactions_inner = transactions_inner.clone().unwrap();
                 view! {
                     <Show
-                        when=move || { transactions_for_empty.len() > 0 }
+                        when=move || { !transactions_for_empty.is_empty() }
                         fallback=move || view! { <EmptyTable message="No transactions found"/> }
                     >
 
