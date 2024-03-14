@@ -112,24 +112,11 @@ impl TableData for Vec<Option<DirectionalTransactionsQueryTransactions>> {
                         ),
                         convert_to_span(transaction.get_block_height()),
                     ]),
-                    convert_to_link(
-                        transaction.get_hash(),
-                        format!("/transactions/{}", transaction.get_hash()),
-                    ),
-                    convert_to_pill(transaction.get_nonce(), ColorVariant::Grey),
-                    convert_array_to_span(vec![
-                        convert_to_span(print_time_since(&transaction.get_block_datetime())),
-                        convert_to_span(transaction.get_block_datetime())
-                            .attr("class", "block text-xs font-light text-slate-400"),
-                    ])
-                    .attr("class", "block"),
-                    convert_to_pill(transaction.get_kind(), ColorVariant::Grey),
-                    convert_to_pill(if transaction.outbound { "OUT".to_string() } else { "IN".to_string() }, if transaction.outbound { ColorVariant::Orange } else { ColorVariant::Green }),
                     if !transaction.get_memo().is_empty() {
                         convert_array_to_span(vec![
                             convert_to_link(
-                                transaction.get_from(),
-                                format!("/addresses/accounts/{}", transaction.get_from()),
+                                transaction.get_hash(),
+                                format!("/transactions/{}", transaction.get_hash()),
                             ),
                             convert_to_span(transaction.get_memo())
                                 .attr("class", "block text-xs font-light text-slate-400"),
@@ -141,6 +128,19 @@ impl TableData for Vec<Option<DirectionalTransactionsQueryTransactions>> {
                             format!("/addresses/accounts/{}", transaction.get_from()),
                         )
                     },
+                    convert_to_pill(transaction.get_nonce(), ColorVariant::Grey),
+                    convert_array_to_span(vec![
+                        convert_to_span(print_time_since(&transaction.get_block_datetime())),
+                        convert_to_span(transaction.get_block_datetime())
+                            .attr("class", "block text-xs font-light text-slate-400"),
+                    ])
+                    .attr("class", "block"),
+                    convert_to_pill(transaction.get_kind(), ColorVariant::Grey),
+                    convert_to_pill(if transaction.outbound { "OUT".to_string() } else { "IN".to_string() }, if transaction.outbound { ColorVariant::Orange } else { ColorVariant::Green }),
+                    convert_to_link(
+                        transaction.get_from(),
+                        format!("/addresses/accounts/{}", transaction.get_from()),
+                    ),
                     convert_to_link(
                         transaction.get_receiver_public_key(),
                         format!(
