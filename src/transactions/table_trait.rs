@@ -87,12 +87,12 @@ impl TableData for Vec<Option<DirectionalTransactionsQueryTransactions>> {
         [
             "Height",
             "State Hash",
+            "Nonce",
             "Age",
             "Type",
             "Direction",
             "From",
             "To",
-            "Nonce",
             "Fee",
             "Amount",
         ]
@@ -116,6 +116,7 @@ impl TableData for Vec<Option<DirectionalTransactionsQueryTransactions>> {
                         transaction.get_hash(),
                         format!("/transactions/{}", transaction.get_hash()),
                     ),
+                    convert_to_pill(transaction.get_nonce(), ColorVariant::Grey),
                     convert_array_to_span(vec![
                         convert_to_span(print_time_since(&transaction.get_block_datetime())),
                         convert_to_span(transaction.get_block_datetime())
@@ -147,7 +148,6 @@ impl TableData for Vec<Option<DirectionalTransactionsQueryTransactions>> {
                             transaction.get_receiver_public_key()
                         ),
                     ),
-                    convert_to_pill(transaction.get_nonce(), ColorVariant::Grey),
                     wrap_in_pill(
                         decorate_with_currency_tag(transaction.get_fee(), "mina".to_string()),
                         ColorVariant::Orange,
