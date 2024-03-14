@@ -1,4 +1,6 @@
-use super::{functions::*, models::{DirectionalTransactionsQueryTransactions}, table_trait::TransactionsTrait};
+use super::{
+    functions::*, models::DirectionalTransactionsQueryTransactions, table_trait::TransactionsTrait,
+};
 use crate::{
     account_dialog::components::*,
     common::{components::*, functions::*, models::*, table::*},
@@ -44,6 +46,7 @@ pub fn AccountDialogTransactionSection(
                                     moments_ago=print_time_since(
                                         &unwrap_opt_trans.get_block_datetime(),
                                     )
+
                                     from=unwrap_opt_trans.get_from()
                                     to=unwrap_opt_trans.get_to()
                                     fee=unwrap_opt_trans.get_fee()
@@ -130,12 +133,18 @@ pub fn TransactionsSection(
             load_data(50, None, None, state_hash, canonical).await
         },
     );
-        
+
     view! {
         {move || match resource.get() {
-            Some(Ok(data)) => view! {
-                <TransactionSection transactions=Some(data.transactions) with_link public_key=None/>
-            },
+            Some(Ok(data)) => {
+                view! {
+                    <TransactionSection
+                        transactions=Some(data.transactions)
+                        with_link
+                        public_key=None
+                    />
+                }
+            }
             _ => {
                 view! {
                     <TableSection
@@ -147,9 +156,7 @@ pub fn TransactionsSection(
                 }
             }
         }}
-        
     }
-    
 }
 
 #[component]
@@ -178,7 +185,7 @@ pub fn AccountTransactionsSection(
         },
     );
 
-    create_effect(move |_| {  
+    create_effect(move |_| {
         match (
             transactions_from_resource.get(),
             transactions_to_resource.get(),
@@ -191,7 +198,10 @@ pub fn AccountTransactionsSection(
                     .chain(data_to.transactions.iter())
                     .map(|d| {
                         let trx = d.clone().unwrap();
-                        Some(DirectionalTransactionsQueryTransactions::from_original(&trx, pk.get().unwrap()))
+                        Some(DirectionalTransactionsQueryTransactions::from_original(
+                            &trx,
+                            pk.get().unwrap(),
+                        ))
                     })
                     .collect::<Vec<_>>();
                 data.sort_by(|a, b| {
@@ -203,25 +213,24 @@ pub fn AccountTransactionsSection(
                     }
                 });
                 set_data.set(Some(data));
-
             }
             (_, _) => (),
         }
-    
     });
 
-    
-    {move || view! {
-        <TransactionSection transactions=data.get() with_link public_key=pk.get()/>
-    }}
-    
+    {
+        move || {
+            view! { <TransactionSection transactions=data.get() with_link public_key=pk.get()/> }
+        }
+    }
 }
 
 #[component]
 fn TransactionSection<T>(
     public_key: Option<String>,
     #[prop(default = false)] with_link: bool,
-    transactions: Option<Vec<Option<T>>>) -> impl IntoView 
+    transactions: Option<Vec<Option<T>>>,
+) -> impl IntoView
 where
     T: TransactionsTrait + Clone + 'static,
     Vec<Option<T>>: TableData,
@@ -233,7 +242,8 @@ where
     let transactions_show_condition = transactions.clone();
     let transactions_inner = transactions.clone();
     view! {
-        <Show when=move || transactions_show_condition.is_some()
+        <Show
+            when=move || transactions_show_condition.is_some()
             fallback=move || {
                 view! {
                     <TableSection
@@ -243,71 +253,80 @@ where
                         <Table data=LoadingPlaceholder {}/>
                     </TableSection>
                 }
-            
-            }>
+            }
+        >
+
             {
                 let transactions_for_empty = transactions_inner.clone().unwrap();
                 let transactions_inner = transactions_inner.clone().unwrap();
                 view! {
-                    <Show when=move || { transactions_for_empty.len() > 0 }
-                        fallback=move || view! {
-                            <EmptyTable message="No transactions found"/>
-                        }
+                    <Show
+                        when=move || { transactions_for_empty.len() > 0 }
+                        fallback=move || view! { <EmptyTable message="No transactions found"/> }
                     >
-                    {
-                        let data = transactions_inner.clone();
-                        view! {
-                            <TableSection
-                                section_heading="Transactions".to_owned()
-                                controls=move || {
-                                    view! {
-                                        <BooleanUrlParamSelectMenu
-                                            id="canonical-selection"
-                                            query_str_key="canonical"
-                                            labels=BooleanUrlParamSelectOptions {
-                                                true_case: String::from("Canonical"),
-                                                false_case: String::from("Non-Canonical"),
-                                            }
-                                        />
-                                    }
-                                }
-                            > 
-                            {move || {
-                                let pag = build_pagination(
-                                    data.len(),
-                                    records_per_page,
-                                    current_page.get(),
-                                    set_current_page,
-                                );
-                                let subset = get_subset(
-                                    &data,
-                                    records_per_page,
-                                    current_page.get() - 1,
-                                );
-                                view! {
-                                    <Table data=subset pagination=pag/>
-                                    <Show when=move || pk.get().is_some() && with_link
-                                        fallback=move || view! { <NullView /> }>
-                                        {
-                                            let pk_i = pk.get().unwrap();
-                                            view! {
-                                                <TableLink
-                                                    href=format!("/transactions?account={}", pk_i)
-                                                    text="See all transactions".to_string()
-                                                >
-                                                    <TransactionIcon/>
-                                                </TableLink>
-                                            }
+
+                        {
+                            let data = transactions_inner.clone();
+                            view! {
+                                <TableSection
+                                    section_heading="Transactions".to_owned()
+                                    controls=move || {
+                                        view! {
+                                            <BooleanUrlParamSelectMenu
+                                                id="canonical-selection"
+                                                query_str_key="canonical"
+                                                labels=BooleanUrlParamSelectOptions {
+                                                    true_case: String::from("Canonical"),
+                                                    false_case: String::from("Non-Canonical"),
+                                                }
+                                            />
                                         }
-                                    </Show>
-                                }
-                            }}
-                            </TableSection>
+                                    }
+                                >
+
+                                    {move || {
+                                        let pag = build_pagination(
+                                            data.len(),
+                                            records_per_page,
+                                            current_page.get(),
+                                            set_current_page,
+                                        );
+                                        let subset = get_subset(
+                                            &data,
+                                            records_per_page,
+                                            current_page.get() - 1,
+                                        );
+                                        view! {
+                                            <Table data=subset pagination=pag/>
+                                            <Show
+                                                when=move || pk.get().is_some() && with_link
+                                                fallback=move || view! { <NullView/> }
+                                            >
+
+                                                {
+                                                    let pk_i = pk.get().unwrap();
+                                                    view! {
+                                                        <TableLink
+                                                            href=format!("/transactions?account={}", pk_i)
+                                                            text="See all transactions".to_string()
+                                                        >
+                                                            <TransactionIcon/>
+                                                        </TableLink>
+                                                    }
+                                                }
+
+                                            </Show>
+                                        }
+                                    }}
+
+                                </TableSection>
+                            }
                         }
-                    }
+
                     </Show>
                 }
             }
+
         </Show>
     }
 }

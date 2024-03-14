@@ -43,11 +43,7 @@ pub fn TransactionsPage() -> impl IntoView {
         <PageContainer>
             {move || {
                 let qp_map = query_params_map.get();
-                view! {
-                    <TransactionsSection
-                        state_hash=qp_map.get("query").cloned()
-                    />
-                }
+                view! { <TransactionsSection state_hash=qp_map.get("query").cloned()/> }
             }}
 
         </PageContainer>

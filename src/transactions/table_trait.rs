@@ -1,4 +1,7 @@
-use super::{functions::*, graphql::transactions_query::TransactionsQueryTransactions, models::DirectionalTransactionsQueryTransactions};
+use super::{
+    functions::*, graphql::transactions_query::TransactionsQueryTransactions,
+    models::DirectionalTransactionsQueryTransactions,
+};
 use crate::common::{functions::*, models::ColorVariant, table::*};
 use leptos::*;
 
@@ -81,7 +84,6 @@ impl TableData for Vec<Option<TransactionsQueryTransactions>> {
     }
 }
 
-
 impl TableData for Vec<Option<DirectionalTransactionsQueryTransactions>> {
     fn get_columns(&self) -> Vec<String> {
         [
@@ -134,7 +136,18 @@ impl TableData for Vec<Option<DirectionalTransactionsQueryTransactions>> {
                     ])
                     .attr("class", "block"),
                     convert_to_pill(transaction.get_kind(), ColorVariant::Grey),
-                    convert_to_pill(if transaction.outbound { "OUT".to_string() } else { "IN".to_string() }, if transaction.outbound { ColorVariant::Orange } else { ColorVariant::Green }),
+                    convert_to_pill(
+                        if transaction.outbound {
+                            "OUT".to_string()
+                        } else {
+                            "IN".to_string()
+                        },
+                        if transaction.outbound {
+                            ColorVariant::Orange
+                        } else {
+                            ColorVariant::Green
+                        },
+                    ),
                     convert_array_to_span(vec![
                         convert_to_link(
                             transaction.get_from(),
@@ -142,16 +155,28 @@ impl TableData for Vec<Option<DirectionalTransactionsQueryTransactions>> {
                         ),
                         convert_to_link(
                             transaction.get_to(),
-                            format!(
-                                "/addresses/accounts/{}",
-                                transaction.get_to()
+                            format!("/addresses/accounts/{}", transaction.get_to()),
+                        ),
+                    ])
+                    .attr("class", "block"),
+                    convert_array_to_span(vec![
+                        wrap_in_pill(
+                            decorate_with_currency_tag(
+                                transaction.get_amount(),
+                                "mina".to_string(),
                             ),
-                        )
-                    ]).attr("class", "block"),
-                    convert_array_to_span(vec![    
-                        wrap_in_pill(decorate_with_currency_tag(transaction.get_amount(), "mina".to_string()),ColorVariant::Green),
-                        wrap_in_pill(convert_array_to_span(vec![decorate_with_currency_tag(transaction.get_fee(), "mina".to_string())]).attr("class","text-xs text-slate-400"),ColorVariant::Transparent)
-                    ]).attr("class","flex flex-col items-start"),
+                            ColorVariant::Green,
+                        ),
+                        wrap_in_pill(
+                            convert_array_to_span(vec![decorate_with_currency_tag(
+                                transaction.get_fee(),
+                                "mina".to_string(),
+                            )])
+                            .attr("class", "text-xs text-slate-400"),
+                            ColorVariant::Transparent,
+                        ),
+                    ])
+                    .attr("class", "flex flex-col items-start"),
                 ],
                 None => vec![],
             })
@@ -160,40 +185,37 @@ impl TableData for Vec<Option<DirectionalTransactionsQueryTransactions>> {
 }
 
 pub trait TransactionsTrait {
-    fn get_failure_reason(&self) -> Option<String>; 
-    fn get_block_datetime(&self) -> String; 
-    fn get_block_height(&self) -> String;   
-    fn get_canonical(&self) -> Option<bool>;    
-    fn get_kind(&self) -> String;   
-    fn get_payment_id(&self) -> String; 
-    fn get_nonce(&self) -> String;  
-    fn get_memo(&self) -> String;   
-    fn get_block_state_hash(&self) -> String;   
-    fn get_from(&self) -> String;   
-    fn get_receiver_public_key(&self) -> String;    
-    fn get_fee(&self) -> String;    
-    fn get_hash(&self) -> String;   
-    fn get_amount(&self) -> String; 
-    fn get_to(&self) -> String; 
+    fn get_failure_reason(&self) -> Option<String>;
+    fn get_block_datetime(&self) -> String;
+    fn get_block_height(&self) -> String;
+    fn get_canonical(&self) -> Option<bool>;
+    fn get_kind(&self) -> String;
+    fn get_payment_id(&self) -> String;
+    fn get_nonce(&self) -> String;
+    fn get_memo(&self) -> String;
+    fn get_block_state_hash(&self) -> String;
+    fn get_from(&self) -> String;
+    fn get_receiver_public_key(&self) -> String;
+    fn get_fee(&self) -> String;
+    fn get_hash(&self) -> String;
+    fn get_amount(&self) -> String;
+    fn get_to(&self) -> String;
 }
 
 impl TransactionsTrait for TransactionsQueryTransactions {
-
     fn get_failure_reason(&self) -> Option<String> {
         self.failure_reason.clone()
     }
 
     fn get_block_datetime(&self) -> String {
-        self
-            .block
+        self.block
             .as_ref()
             .and_then(|b| b.date_time)
             .map_or_else(String::new, |o1| o1.to_string())
     }
 
     fn get_block_height(&self) -> String {
-        self
-            .block_height
+        self.block_height
             .map_or_else(String::new, |o| o.to_string())
     }
 
@@ -202,43 +224,34 @@ impl TransactionsTrait for TransactionsQueryTransactions {
     }
 
     fn get_kind(&self) -> String {
-        self
-            .kind
+        self.kind
             .as_ref()
             .map_or_else(String::new, |o| o.to_string())
     }
 
     fn get_payment_id(&self) -> String {
-        self
-            .id
-            .as_ref()
-            .map_or_else(String::new, |o| o.to_string())
+        self.id.as_ref().map_or_else(String::new, |o| o.to_string())
     }
 
     fn get_nonce(&self) -> String {
-        self
-            .nonce
-            .map_or_else(String::new, |o| o.to_string())
+        self.nonce.map_or_else(String::new, |o| o.to_string())
     }
 
     fn get_memo(&self) -> String {
-        self
-            .memo
+        self.memo
             .as_ref()
             .map_or_else(String::new, |o| decode_memo(o).unwrap_or("".to_string()))
     }
 
     fn get_block_state_hash(&self) -> String {
-        self
-            .block
+        self.block
             .as_ref()
             .and_then(|b| b.state_hash.as_ref())
             .map_or_else(String::new, |o1| o1.to_string())
     }
 
     fn get_from(&self) -> String {
-        self
-            .from
+        self.from
             .as_ref()
             .map_or_else(String::new, |o| o.to_string())
     }
@@ -256,8 +269,7 @@ impl TransactionsTrait for TransactionsQueryTransactions {
     }
 
     fn get_hash(&self) -> String {
-        self
-            .hash
+        self.hash
             .as_ref()
             .map_or_else(String::new, |o| o.to_string())
     }
@@ -267,58 +279,54 @@ impl TransactionsTrait for TransactionsQueryTransactions {
     }
 
     fn get_to(&self) -> String {
-        self
-            .to
-            .as_ref()
-            .map_or_else(String::new, |o| o.to_string())
+        self.to.as_ref().map_or_else(String::new, |o| o.to_string())
     }
 }
 
 impl TransactionsTrait for DirectionalTransactionsQueryTransactions {
-
     fn get_failure_reason(&self) -> Option<String> {
         self.base_transaction.get_failure_reason()
-    } 
+    }
     fn get_block_datetime(&self) -> String {
         self.base_transaction.get_block_datetime()
-    } 
+    }
     fn get_block_height(&self) -> String {
         self.base_transaction.get_block_height()
-    }   
+    }
     fn get_canonical(&self) -> Option<bool> {
         self.base_transaction.get_canonical()
-    }    
+    }
     fn get_kind(&self) -> String {
         self.base_transaction.get_kind()
-    }   
+    }
     fn get_payment_id(&self) -> String {
         self.base_transaction.get_payment_id()
-    } 
+    }
     fn get_nonce(&self) -> String {
         self.base_transaction.get_nonce()
-    }  
+    }
     fn get_memo(&self) -> String {
         self.base_transaction.get_memo()
-    }   
+    }
     fn get_block_state_hash(&self) -> String {
         self.base_transaction.get_block_state_hash()
-    }   
+    }
     fn get_from(&self) -> String {
         self.base_transaction.get_from()
-    }   
+    }
     fn get_receiver_public_key(&self) -> String {
         self.base_transaction.get_receiver_public_key()
-    }    
+    }
     fn get_fee(&self) -> String {
         self.base_transaction.get_fee()
-    }    
+    }
     fn get_hash(&self) -> String {
         self.base_transaction.get_hash()
-    }   
+    }
     fn get_amount(&self) -> String {
         self.base_transaction.get_amount()
-    } 
+    }
     fn get_to(&self) -> String {
         self.base_transaction.get_to()
-    } 
+    }
 }

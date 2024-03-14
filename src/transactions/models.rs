@@ -7,10 +7,17 @@ pub struct DirectionalTransactionsQueryTransactions {
 }
 
 impl DirectionalTransactionsQueryTransactions {
-    pub fn from_original(transactions: &TransactionsQueryTransactions, account_owner: String) -> DirectionalTransactionsQueryTransactions{
+    pub fn from_original(
+        transactions: &TransactionsQueryTransactions,
+        account_owner: String,
+    ) -> DirectionalTransactionsQueryTransactions {
         DirectionalTransactionsQueryTransactions {
             base_transaction: transactions.clone(),
-            outbound: transactions.from.clone().map(|a| a == account_owner).unwrap_or(false),
+            outbound: transactions
+                .from
+                .clone()
+                .map(|a| a == account_owner)
+                .unwrap_or(false),
         }
     }
 }
