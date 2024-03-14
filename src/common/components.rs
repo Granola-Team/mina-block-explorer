@@ -415,6 +415,10 @@ pub fn AnalyticsSimpleInfo(
             container_class_str.push_str(" bg-slate-400/25 ");
             value_class_str.push_str(" text-slate-400 ");
         }
+        ColorVariant::Transparent => {
+            container_class_str.push_str(" bg-transparent ");
+            value_class_str.push_str(" text-inherit ");
+        }
     }
     view! {
         <div class=container_class_str>
