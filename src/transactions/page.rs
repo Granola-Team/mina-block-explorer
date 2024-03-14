@@ -45,7 +45,6 @@ pub fn TransactionsPage() -> impl IntoView {
                 let qp_map = query_params_map.get();
                 view! {
                     <TransactionsSection
-                        public_key=qp_map.get("public_key").cloned()
                         state_hash=qp_map.get("query").cloned()
                     />
                 }
@@ -63,7 +62,7 @@ pub fn TransactionSpotlightPage() -> impl IntoView {
         move || (memo_params_map.get(), canonical_qp.get()),
         |(value, canonical)| async move {
             let state_hash = value.get("id");
-            load_data(10, None, state_hash.cloned(), canonical).await
+            load_data(1, None, None, state_hash.cloned(), canonical).await
         },
     );
 

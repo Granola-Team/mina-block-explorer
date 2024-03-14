@@ -117,6 +117,7 @@ pub fn decode_memo(encoded: &str) -> Result<String, Box<dyn Error>> {
 pub async fn load_data(
     limit: i32,
     from_account: Option<String>,
+    to_account: Option<String>,
     state_hash: Option<String>,
     canonical: Option<bool>,
 ) -> Result<transactions_query::ResponseData, MyError> {
@@ -126,6 +127,7 @@ pub async fn load_data(
         limit: Some(limit.into()),
         query: transactions_query::TransactionQueryInput {
             from: from_account,
+            to: to_account,
             hash: state_hash,
             canonical: if canonical.is_none() {
                 Some(true)

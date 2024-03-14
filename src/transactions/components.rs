@@ -119,6 +119,42 @@ fn TransactionEntry(
 
 #[component]
 pub fn TransactionsSection(
+    #[prop(default = None)] state_hash: Option<String>,
+    #[prop(default = false)] with_link: bool,
+) -> impl IntoView {
+    let (state_hash_sig, _) = create_signal(state_hash);
+    let (canonical_qp, _) = create_query_signal::<bool>("canonical");
+
+    let resource = create_resource(
+        move || (state_hash_sig.get(), canonical_qp.get()),
+        move |(state_hash, canonical)| async move {
+            load_data(50, None, None, state_hash, canonical).await
+        },
+    );
+        
+    view! {
+        {move || match resource.get() {
+            Some(Ok(data)) => view! {
+                <TransactionSection transactions=Some(data.transactions) with_link public_key=None/>
+            },
+            _ => {
+                view! {
+                    <TableSection
+                        section_heading="Transactions".to_owned()
+                        controls=|| ().into_view()
+                    >
+                        <Table data=LoadingPlaceholder {}/>
+                    </TableSection>
+                }
+            }
+        }}
+        
+    }
+    
+}
+
+#[component]
+pub fn AccountTransactionsSection(
     public_key: Option<String>,
     #[prop(default = None)] state_hash: Option<String>,
     #[prop(default = false)] with_link: bool,
@@ -126,20 +162,70 @@ pub fn TransactionsSection(
     let (pk, _set_public_key) = create_signal(public_key);
     let (state_hash_sig, _) = create_signal(state_hash);
     let (canonical_qp, _) = create_query_signal::<bool>("canonical");
+    let (data, set_data) = create_signal(None);
 
-    let resource = create_resource(
+    let transactions_from_resource = create_resource(
         move || (pk.get(), state_hash_sig.get(), canonical_qp.get()),
         move |(pk_value, state_hash, canonical)| async move {
-            load_data(50, pk_value, state_hash, canonical).await
+            logging::log!("create_resource");
+            load_data(50, pk_value, None, state_hash, canonical).await
         },
     );
 
+    let transactions_to_resource = create_resource(
+        move || (pk.get(), state_hash_sig.get(), canonical_qp.get()),
+        move |(pk_value, state_hash, canonical)| async move {
+            load_data(50, None, pk_value, state_hash, canonical).await
+        },
+    );
+
+    create_effect(move |_| {  
+        match (
+            transactions_from_resource.get(),
+            transactions_to_resource.get(),
+        ) {
+            (Some(Ok(data_from)), Some(Ok(data_to))) => {
+                let mut data = data_from
+                    .transactions
+                    .iter()
+                    .filter(|d| d.is_some())
+                    .chain(data_to.transactions.iter())
+                    .cloned()
+                    .collect::<Vec<_>>();
+                data.sort_by(|a, b| {
+                    match (&<std::option::Option<TransactionsQueryTransactions> as Clone>::clone(&a).unwrap().block.unwrap().date_time, &<std::option::Option<TransactionsQueryTransactions> as Clone>::clone(&b).unwrap().block.unwrap().date_time) {
+                        (Some(date_time_a), Some(date_time_b)) => date_time_b.cmp(date_time_a),
+                        (Some(_), None) => std::cmp::Ordering::Greater,
+                        (None, Some(_)) => std::cmp::Ordering::Less,
+                        (None, None) => std::cmp::Ordering::Equal,
+                    }
+                });
+                set_data.set(Some(data));
+
+            }
+            (_, _) => (),
+        }
+    
+    });
+
+    
+    {move || view! {
+        <TransactionSection transactions=data.get() with_link public_key=pk.get()/>
+    }}
+    
+}
+
+#[component]
+fn TransactionSection(
+    public_key: Option<String>,
+    #[prop(default = false)] with_link: bool,
+    transactions: Option<Vec<Option<TransactionsQueryTransactions>>>) -> impl IntoView {
+    let (pk, _set_public_key) = create_signal(public_key);
     let records_per_page = 10;
     let (current_page, set_current_page) = create_signal(1);
-
     view! {
-        {move || match resource.get() {
-            Some(Ok(data)) => {
+        {match transactions {
+            Some(data) => {
                 view! {
                     <TableSection
                         section_heading="Transactions".to_owned()
@@ -157,7 +243,7 @@ pub fn TransactionsSection(
                         }
                     >
 
-                        {move || match data.transactions.len() {
+                        {move || match data.len() {
                             0 => {
                                 view! {
                                     <EmptyTable message="This public key has no transactions"
@@ -167,13 +253,13 @@ pub fn TransactionsSection(
                             _ => {
                                 {
                                     let pag = build_pagination(
-                                        data.transactions.len(),
+                                        data.len(),
                                         records_per_page,
                                         current_page.get(),
                                         set_current_page,
                                     );
                                     let subset = get_subset(
-                                        &data.transactions,
+                                        &data,
                                         records_per_page,
                                         current_page.get() - 1,
                                     );
@@ -227,7 +313,6 @@ pub fn TransactionsSection(
                     </TableSection>
                 }
             }
-            _ => view! { <span></span> }.into_view(),
         }}
     }
 }
