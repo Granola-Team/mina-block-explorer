@@ -91,8 +91,7 @@ impl TableData for Vec<Option<DirectionalTransactionsQueryTransactions>> {
             "Age",
             "Type",
             "Direction",
-            "From",
-            "To",
+            "Participants",
             "Fee",
             "Amount",
         ]
@@ -137,17 +136,19 @@ impl TableData for Vec<Option<DirectionalTransactionsQueryTransactions>> {
                     .attr("class", "block"),
                     convert_to_pill(transaction.get_kind(), ColorVariant::Grey),
                     convert_to_pill(if transaction.outbound { "OUT".to_string() } else { "IN".to_string() }, if transaction.outbound { ColorVariant::Orange } else { ColorVariant::Green }),
-                    convert_to_link(
-                        transaction.get_from(),
-                        format!("/addresses/accounts/{}", transaction.get_from()),
-                    ),
-                    convert_to_link(
-                        transaction.get_receiver_public_key(),
-                        format!(
-                            "/addresses/accounts/{}",
-                            transaction.get_receiver_public_key()
+                    convert_array_to_span(vec![
+                        convert_to_link(
+                            transaction.get_from(),
+                            format!("/addresses/accounts/{}", transaction.get_from()),
                         ),
-                    ),
+                        convert_to_link(
+                            transaction.get_to(),
+                            format!(
+                                "/addresses/accounts/{}",
+                                transaction.get_to()
+                            ),
+                        )
+                    ]).attr("class", "block"),
                     wrap_in_pill(
                         decorate_with_currency_tag(transaction.get_fee(), "mina".to_string()),
                         ColorVariant::Orange,
