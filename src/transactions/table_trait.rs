@@ -92,8 +92,7 @@ impl TableData for Vec<Option<DirectionalTransactionsQueryTransactions>> {
             "Type",
             "Direction",
             "Participants",
-            "Fee",
-            "Amount",
+            "Amount/Fee",
         ]
         .iter()
         .map(ToString::to_string)
@@ -149,14 +148,10 @@ impl TableData for Vec<Option<DirectionalTransactionsQueryTransactions>> {
                             ),
                         )
                     ]).attr("class", "block"),
-                    wrap_in_pill(
-                        decorate_with_currency_tag(transaction.get_fee(), "mina".to_string()),
-                        ColorVariant::Orange,
-                    ),
-                    wrap_in_pill(
-                        decorate_with_currency_tag(transaction.get_amount(), "mina".to_string()),
-                        ColorVariant::Green,
-                    ),
+                    convert_array_to_span(vec![    
+                        wrap_in_pill(decorate_with_currency_tag(transaction.get_amount(), "mina".to_string()),ColorVariant::Green),
+                        wrap_in_pill(convert_array_to_span(vec![decorate_with_currency_tag(transaction.get_fee(), "mina".to_string())]).attr("class","text-xs text-slate-400"),ColorVariant::Transparent)
+                    ]).attr("class","flex flex-col items-start"),
                 ],
                 None => vec![],
             })
