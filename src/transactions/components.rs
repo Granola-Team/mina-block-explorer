@@ -217,7 +217,7 @@ pub fn AccountTransactionsSection(
 
     {
         move || {
-            view! { <TransactionSection transactions=data.get() with_link public_key=pk.get()/> }
+            view! { <TransactionSection transactions=data.get() public_key=pk.get()/> }
         }
     }
 }
