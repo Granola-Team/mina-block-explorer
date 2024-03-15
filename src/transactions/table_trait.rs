@@ -127,8 +127,8 @@ impl TableData for Vec<Option<DirectionalTransactionsQueryTransactions>> {
                         .attr("class", "block")
                     } else {
                         convert_to_link(
-                            transaction.get_from(),
-                            format!("/addresses/accounts/{}", transaction.get_from()),
+                            transaction.get_hash(),
+                            format!("/transactions/{}", transaction.get_hash()),
                         )
                     },
                     convert_to_pill(transaction.get_nonce(), ColorVariant::Grey),
