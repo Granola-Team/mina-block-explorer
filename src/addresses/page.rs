@@ -116,23 +116,30 @@ pub fn AccountSpotlightPage() -> impl IntoView {
                 }
                 _ => view! { <NullView/> },
             }}
-            {move || view! { 
-                <AccountTransactionsSection public_key=Some(public_key().unwrap_or_default())/> 
-                <SubSectionContainer>
-                    <AppSubSection heading="SNARK Jobs".to_string() position=SubSectionPosition::Left>
-                        <AccountOverviewSnarkJobTable public_key=Some(
-                            public_key().unwrap_or_default(),
-                        )/>
-                    </AppSubSection>
-                    <AppSubSection
-                        heading="Block Production".to_string()
-                        position=SubSectionPosition::Right
-                    >
-                        <AccountOverviewBlocksTable public_key=Some(public_key().unwrap_or_default())/>
-                    </AppSubSection>
-                </SubSectionContainer>
+            {move || {
+                view! {
+                    <AccountTransactionsSection public_key=Some(public_key().unwrap_or_default())/>
+                    <SubSectionContainer>
+                        <AppSubSection
+                            heading="SNARK Jobs".to_string()
+                            position=SubSectionPosition::Left
+                        >
+                            <AccountOverviewSnarkJobTable public_key=Some(
+                                public_key().unwrap_or_default(),
+                            )/>
+                        </AppSubSection>
+                        <AppSubSection
+                            heading="Block Production".to_string()
+                            position=SubSectionPosition::Right
+                        >
+                            <AccountOverviewBlocksTable public_key=Some(
+                                public_key().unwrap_or_default(),
+                            )/>
+                        </AppSubSection>
+                    </SubSectionContainer>
+                }
             }}
-            
+
         </PageContainer>
     }
 }
