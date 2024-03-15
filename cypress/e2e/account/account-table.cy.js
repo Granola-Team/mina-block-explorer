@@ -1,4 +1,4 @@
-suite(["@CI"],'account table',()=>{
+suite(["@CI"],'account transaction table',()=>{
     let account = 'B62qmPb2YVWP7vKXzpxgSNZRrRU8mrouzcLUG6v7EDNAVBbw7AiHodq';
 
     it('correctly references a counterparty', () => {
@@ -9,7 +9,7 @@ suite(["@CI"],'account table',()=>{
         {
             cy.aliasTableValue(i,'Counterparty','Transactions', 'counterparty');
             cy.get('@counterparty').invoke('text').then(text => {
-                expect(text.length).to.equal(55);
+                expect(text.length).to.equal(account.length);
                 expect(text).to.not.equal(account);
             })
             
