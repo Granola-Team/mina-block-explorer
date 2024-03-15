@@ -116,9 +116,8 @@ pub fn AccountSpotlightPage() -> impl IntoView {
                 }
                 _ => view! { <NullView/> },
             }}
-            <AccountTransactionsSection
-                public_key=Some(public_key().unwrap_or_default())
-            /> <SubSectionContainer>
+            <AccountTransactionsSection public_key=Some(public_key().unwrap_or_default())/>
+            <SubSectionContainer>
                 <AppSubSection heading="SNARK Jobs".to_string() position=SubSectionPosition::Left>
                     <AccountOverviewSnarkJobTable public_key=Some(
                         public_key().unwrap_or_default(),
