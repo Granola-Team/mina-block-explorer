@@ -95,7 +95,7 @@ Cypress.Commands.add('spotlightData', (label) => {
   cy.get('table:first tr th').contains(label).siblings('td');
 });
 
-Cypress.Commands.add('valueInTable', (nthRow, columnHeading, tableHeading, alias) => {
+Cypress.Commands.add('aliasTableValue', (nthRow, columnHeading, tableHeading, alias) => {
   cy.aliasTableHeaders(tableHeading, 'columns');
   cy.get('@columns')
     .contains(columnHeading, { timeout: 60000 }) 
