@@ -19,7 +19,7 @@ suite(["@VisualRegression"],'pill color', () => {
                     break;
                 case 'table':
                     const {table_name, table_column} = obj;
-                    cy.valueInTable(1, table_column, table_name, 'data');
+                    cy.valueInTable(0, table_column, table_name, 'data');
                     cy.get('@data').scrollIntoView();
                     break;
                 default:
