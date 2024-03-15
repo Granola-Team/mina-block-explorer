@@ -419,6 +419,14 @@ pub fn AnalyticsSimpleInfo(
             container_class_str.push_str(" bg-transparent ");
             value_class_str.push_str(" text-inherit ");
         }
+        ColorVariant::DarkBlue => {
+            container_class_str.push_str(" bg-dark-blue/25 ");
+            value_class_str.push_str(" text-dark-blue ");
+        }
+        ColorVariant::Purple => {
+            container_class_str.push_str(" bg-purple/25 ");
+            value_class_str.push_str(" text-purple ");
+        }
     }
     view! {
         <div class=container_class_str>
