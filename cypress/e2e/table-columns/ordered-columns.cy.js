@@ -32,6 +32,18 @@ suite(["@CI"],'snarks table', () => {
 });
 
 
+suite(["@CI"],'block spotlight snarks table', () => {
+
+    let pages = ['/blocks/3NKLE73AnqCKVit9h3yEZsPbbJBmVfW5WWKA6pNsUjqh3Nm1mKSK/snark-jobs'];
+    let columns = ['State Hash', 'Age', 'Prover', 'Work Ids', 'Fee'];
+
+    pages.forEach(page => it(`on ${page} includes correct columns`, () => {
+        cy.visit(page);
+        cy.tableHasOrderedColumns('SNARK Jobs', columns);
+    }));
+});
+
+
 suite(["@CI"],'internal commands table', () => {
 
     let pages = ['/blocks/3NKyujsdi2GtWA1XC9KJ6nvXeLAd3DNvYrm1PUGEagj9899s1LMz/internal-commands'];
