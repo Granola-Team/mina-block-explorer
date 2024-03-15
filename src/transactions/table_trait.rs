@@ -4,6 +4,7 @@ use super::{
 };
 use crate::common::{functions::*, models::ColorVariant, table::*};
 use leptos::*;
+use crate::icons::*;
 
 impl TableData for Vec<Option<TransactionsQueryTransactions>> {
     fn get_columns(&self) -> Vec<String> {
@@ -143,22 +144,32 @@ impl TableData for Vec<Option<DirectionalTransactionsQueryTransactions>> {
                             "IN".to_string()
                         },
                         if transaction.outbound {
-                            ColorVariant::Orange
-                        } else {
                             ColorVariant::Blue
+                        } else {
+                            ColorVariant::DarkBlue
                         },
                     ),
                     convert_array_to_span(vec![
-                        convert_to_link(
-                            transaction.get_from(),
-                            format!("/addresses/accounts/{}", transaction.get_from()),
-                        ),
-                        convert_to_link(
-                            transaction.get_to(),
-                            format!("/addresses/accounts/{}", transaction.get_to()),
-                        ),
-                    ])
-                    .attr("class", "block"),
+                        view! { <span class="flex justify-center w-8 max-w-8"><LongDownArrowIcon /></span> }.into(),
+                        convert_array_to_span(if transaction.outbound {
+                            vec![
+                                convert_to_span("Self".to_string()).attr("class","opacity-50"),
+                                convert_to_link(
+                                    transaction.get_to(),
+                                    format!("/addresses/accounts/{}", transaction.get_to())
+                                )
+                            ]
+                        } else {
+                            vec![
+                                convert_to_link(
+                                    transaction.get_to(),
+                                    format!("/addresses/accounts/{}", transaction.get_from())
+                                ),
+                                convert_to_span("Self".to_string()).attr("class","opacity-50"),
+                            ]
+                        })
+                        .attr("class", "flex flex-col items-start w-10/12"),
+                    ]).attr("class", "flex"),
                     convert_array_to_span(vec![
                         wrap_in_pill(
                             decorate_with_currency_tag(
