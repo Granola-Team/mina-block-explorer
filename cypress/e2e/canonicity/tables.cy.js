@@ -7,10 +7,13 @@ suite(["@CI"],'table', () => {
         }, {
             url: '/addresses/accounts/B62qnGNZRE5X6ZhnnDV4NeESEWyM2HbYbmULcyeJrZmVeKGqMtF22Fi',
             section: 'Block Production'
+        }, {
+            url: '/addresses/accounts/B62qkwrHj3YCKgQsXRktpwhVFij19RiwYDgMmiwp7iggNBi8712a4W4',
+            section: 'SNARK Jobs'
         },{
             url: '/summary',
             section: 'Blocks',
-        }, {
+        },{
             url: '/',
             section: 'Blocks',
         }, ];
