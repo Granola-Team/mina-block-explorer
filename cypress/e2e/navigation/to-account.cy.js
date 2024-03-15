@@ -1,6 +1,6 @@
 suite(["@CI"],'account page', () => {
     let pages = [
-        { origin: '/addresses/accounts/B62qq3TQ8AP7MFYPVtMx5tZGF3kWLJukfwG1A1RGvaBW1jfTPTkDBW6', column: 'Counterparty', tableHeader: 'Transactions' },
+        { origin: '/addresses/accounts/B62qmkGkjvFwmkqv6erSmTGMx9ABhuxJqpCi4gyUtxFDwif97j2X5zp', column: 'Counterparty', tableHeader: 'Transactions' },
         { origin: '/addresses/accounts/B62qq3TQ8AP7MFYPVtMx5tZGF3kWLJukfwG1A1RGvaBW1jfTPTkDBW6', column: 'Block Producer', tableHeader: 'Block Production' },
         { origin: '/addresses/accounts/B62qq3TQ8AP7MFYPVtMx5tZGF3kWLJukfwG1A1RGvaBW1jfTPTkDBW6', column: 'Coinbase Receiver', tableHeader: 'Block Production' },
         { origin: '/addresses/accounts/B62qq3TQ8AP7MFYPVtMx5tZGF3kWLJukfwG1A1RGvaBW1jfTPTkDBW6', column: 'Prover', tableHeader: 'SNARK Jobs' },
