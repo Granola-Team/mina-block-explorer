@@ -2,9 +2,11 @@ use super::{
     functions::*, graphql::transactions_query::TransactionsQueryTransactions,
     models::DirectionalTransactionsQueryTransactions,
 };
-use crate::common::{functions::*, models::ColorVariant, table::*};
+use crate::{
+    common::{functions::*, models::ColorVariant, table::*},
+    icons::*,
+};
 use leptos::*;
-use crate::icons::*;
 
 impl TableData for Vec<Option<TransactionsQueryTransactions>> {
     fn get_columns(&self) -> Vec<String> {
