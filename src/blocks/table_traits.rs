@@ -179,7 +179,7 @@ impl TableData for SummaryPageBlocksQueryBlocks {
 
 impl TableData for Vec<Option<BlocksQueryBlocksSnarkJobs>> {
     fn get_columns(&self) -> Vec<String> {
-        ["Height", "State Hash", "Age", "Prover", "Work Ids", "Fee"]
+        ["State Hash", "Age", "Prover", "Work Ids", "Fee"]
             .iter()
             .map(ToString::to_string)
             .collect::<Vec<_>>()
@@ -189,7 +189,6 @@ impl TableData for Vec<Option<BlocksQueryBlocksSnarkJobs>> {
         self.iter()
             .map(|opt_snark| match opt_snark {
                 Some(snark) => vec![
-                    convert_to_span(get_snark_block_height(snark)),
                     convert_to_link(
                         get_snark_block_state_hash(snark),
                         format!("/blocks/{}", get_snark_block_state_hash(snark)),
