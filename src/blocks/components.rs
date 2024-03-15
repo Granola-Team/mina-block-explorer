@@ -776,11 +776,12 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
 #[component]
 pub fn AccountOverviewBlocksTable(public_key: Option<String>) -> impl IntoView {
     let pk = public_key.clone();
+    let (canonical_sig, _) = create_query_signal::<bool>("canonical");
     let resource = create_resource(
-        || (),
-        move |_| {
+        move || canonical_sig.get(),
+        move |canonical| {
             let public_key_inner = public_key.clone();
-            async move { load_data(50, public_key_inner, None, Some(true)).await }
+            async move { load_data(50, public_key_inner, None, canonical).await }
         },
     );
 
