@@ -4,7 +4,6 @@ use super::{
 };
 use crate::{
     common::{functions::*, models::ColorVariant, table::*},
-    icons::*,
 };
 use leptos::*;
 
@@ -96,7 +95,7 @@ impl TableData for Vec<Option<DirectionalTransactionsQueryTransactions>> {
             "Age",
             "Type",
             "Direction",
-            "Participants",
+            "Counterparty",
             "Amount/Fee",
         ]
         .iter()
@@ -151,27 +150,17 @@ impl TableData for Vec<Option<DirectionalTransactionsQueryTransactions>> {
                             ColorVariant::DarkBlue
                         },
                     ),
-                    convert_array_to_span(vec![
-                        view! { <span class="flex justify-center w-8 max-w-8"><LongDownArrowIcon /></span> }.into(),
-                        convert_array_to_span(if transaction.outbound {
-                            vec![
-                                convert_to_span("Self".to_string()).attr("class","opacity-50"),
-                                convert_to_link(
-                                    transaction.get_to(),
-                                    format!("/addresses/accounts/{}", transaction.get_to())
-                                )
-                            ]
-                        } else {
-                            vec![
-                                convert_to_link(
-                                    transaction.get_to(),
-                                    format!("/addresses/accounts/{}", transaction.get_from())
-                                ),
-                                convert_to_span("Self".to_string()).attr("class","opacity-50"),
-                            ]
-                        })
-                        .attr("class", "flex flex-col items-start w-10/12"),
-                    ]).attr("class", "flex"),
+                    if transaction.outbound {
+                        convert_to_link(
+                            transaction.get_to(),
+                            format!("/addresses/accounts/{}", transaction.get_to()),
+                        )
+                    } else {
+                        convert_to_link(
+                            transaction.get_to(),
+                            format!("/addresses/accounts/{}", transaction.get_from()),
+                        )
+                    },
                     convert_array_to_span(vec![
                         wrap_in_pill(
                             decorate_with_currency_tag(
