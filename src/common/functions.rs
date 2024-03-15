@@ -541,7 +541,6 @@ pub fn pill_variant_to_style_str(pill_variant: ColorVariant) -> String {
         ColorVariant::Grey => "bg-slate-400".to_string(),
         ColorVariant::Transparent => "bg-transparent".to_string(),
         ColorVariant::DarkBlue => "bg-dark-blue".to_string(),
-        ColorVariant::Purple => "bg-purple".to_string(),
     }
 }
 
