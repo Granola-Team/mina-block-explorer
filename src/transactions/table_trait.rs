@@ -2,9 +2,7 @@ use super::{
     functions::*, graphql::transactions_query::TransactionsQueryTransactions,
     models::DirectionalTransactionsQueryTransactions,
 };
-use crate::{
-    common::{functions::*, models::ColorVariant, table::*},
-};
+use crate::common::{functions::*, models::ColorVariant, table::*};
 use leptos::*;
 
 impl TableData for Vec<Option<TransactionsQueryTransactions>> {
