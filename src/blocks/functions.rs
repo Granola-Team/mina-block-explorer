@@ -10,11 +10,6 @@ use crate::common::{
 };
 use graphql_client::reqwest::post_graphql;
 
-pub fn get_snark_block_height(snark: &BlocksQueryBlocksSnarkJobs) -> String {
-    snark
-        .block_height
-        .map_or_else(String::new, |o| o.to_string())
-}
 pub fn get_snark_block_state_hash(snark: &BlocksQueryBlocksSnarkJobs) -> String {
     snark
         .block_state_hash
