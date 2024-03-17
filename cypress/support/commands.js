@@ -24,6 +24,18 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
+Cypress.Commands.add('aliasTableRows', (tableHeading, alias) => {
+  cy.contains('section',tableHeading)
+    .find('table tr:not(:has(th))', {timeout: 60000})
+    .as(alias);
+});
+
+Cypress.Commands.add('aliasTableHeaders', (tableHeading, alias) => {
+  cy.contains('section',tableHeading)
+    .find('table th', {timeout: 60000})
+    .as(alias);
+})
+
 Cypress.Commands.add('closeAccountDialog', () => {
   cy.get('dialog button#closedialog a').click();
   cy.get('dialog').should('not.exist');
@@ -48,10 +60,7 @@ Cypress.Commands.add('openMobileMenu', () => {
 });
 
 Cypress.Commands.add('tableHasOrderedColumns', (tableHeading, columns) => {
-  cy.contains('section', tableHeading)
-      .find('table th')
-      .as('columns');
-
+  cy.aliasTableHeaders(tableHeading, 'columns');
   cy.get('@columns').should('have.length',columns.length);
   columns.forEach((col,i) => {
       cy.get('@columns').eq(i).contains(col);    
@@ -59,8 +68,9 @@ Cypress.Commands.add('tableHasOrderedColumns', (tableHeading, columns) => {
 });
 
 Cypress.Commands.add('clickLinkInTable', (nthRow, columnHeading, tableHeading) => {
-  cy.contains('section',tableHeading)
-    .contains('table th', columnHeading, { timeout: 60000 }) 
+  cy.aliasTableHeaders(tableHeading, 'columns');
+  cy.get('@columns')
+    .contains(columnHeading, { timeout: 60000 }) 
     .invoke('index')
     .then(columnIndex => {
       cy.contains('section',tableHeading)
@@ -74,8 +84,8 @@ Cypress.Commands.add('clickLinkInTable', (nthRow, columnHeading, tableHeading) =
 });
 
 Cypress.Commands.add('tableHasNRows', (tableHeading, n) => {
-  cy.contains('section',tableHeading)
-    .find('table tr:not(:has(th))', {timeout: 60000})
+  cy.aliasTableRows(tableHeading, 'table-rows');
+  cy.get('@table-rows')
     .should(($tr) => {
       expect($tr).to.have.length(n);
     })
@@ -85,13 +95,14 @@ Cypress.Commands.add('spotlightData', (label) => {
   cy.get('table:first tr th').contains(label).siblings('td');
 });
 
-Cypress.Commands.add('valueInTable', (nthRow, columnHeading, tableHeading, alias) => {
-  cy.contains('section',tableHeading)
-    .contains('table th', columnHeading, { timeout: 60000 }) 
+Cypress.Commands.add('aliasTableValue', (nthRow, columnHeading, tableHeading, alias) => {
+  cy.aliasTableHeaders(tableHeading, 'columns');
+  cy.get('@columns')
+    .contains(columnHeading, { timeout: 60000 }) 
     .invoke('index')
     .then(columnIndex => {
-      cy.contains('section',tableHeading)
-        .find('table tr', {timeout: 60000}) 
+      cy.aliasTableRows(tableHeading, 'table-rows');
+      cy.get('@table-rows')
         .eq(nthRow) 
         .find('td')
         .eq(columnIndex)
@@ -100,8 +111,8 @@ Cypress.Commands.add('valueInTable', (nthRow, columnHeading, tableHeading, alias
 });
 
 Cypress.Commands.add('tableHasLessThanNRows', (tableHeading, n) => {
-  cy.contains('section',tableHeading)
-    .find('table tr:not(:has(th))', {timeout: 60000})
+  cy.aliasTableRows(tableHeading, 'table-rows');
+  cy.get(`@table-rows`)
     .should(($tr) => {
       expect($tr).to.have.length.of.at.most(n);
     })
@@ -119,8 +130,9 @@ Cypress.Commands.add('testSpotlight',(heading, id, expected_fields) => {
 })
 
 Cypress.Commands.add('tableColumnValuesEqual', (heading, column, value) => {
-  cy.contains('section',heading)
-    .contains('table th', column, { timeout: 60000 }) 
+  cy.aliasTableHeaders(heading, 'columns');
+  cy.get('@columns')
+    .contains(column, { timeout: 60000 }) 
     .invoke('index')
     .then(columnIndex => {
       cy.contains('section',heading)

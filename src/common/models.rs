@@ -56,6 +56,8 @@ pub enum ColorVariant {
     Blue,
     Orange,
     Grey,
+    Transparent,
+    DarkBlue,
 }
 
 #[cfg(test)]

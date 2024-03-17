@@ -1,101 +1,7 @@
-use super::graphql::{transactions_query::TransactionsQueryTransactions, *};
-use crate::common::{functions::*, models::MyError};
+use super::graphql::*;
+use crate::common::models::MyError;
 use graphql_client::reqwest::post_graphql;
 use std::error::Error;
-
-pub fn get_failure_reason(transaction: &TransactionsQueryTransactions) -> Option<String> {
-    transaction.failure_reason.clone()
-}
-
-pub fn get_block_datetime(transaction: &TransactionsQueryTransactions) -> String {
-    transaction
-        .block
-        .as_ref()
-        .and_then(|b| b.date_time)
-        .map_or_else(String::new, |o1| o1.to_string())
-}
-
-pub fn get_block_height(transaction: &TransactionsQueryTransactions) -> String {
-    transaction
-        .block_height
-        .map_or_else(String::new, |o| o.to_string())
-}
-
-pub fn get_canonical(transaction: &TransactionsQueryTransactions) -> Option<bool> {
-    transaction.canonical
-}
-
-pub fn get_kind(transaction: &TransactionsQueryTransactions) -> String {
-    transaction
-        .kind
-        .as_ref()
-        .map_or_else(String::new, |o| o.to_string())
-}
-
-pub fn get_payment_id(transaction: &TransactionsQueryTransactions) -> String {
-    transaction
-        .id
-        .as_ref()
-        .map_or_else(String::new, |o| o.to_string())
-}
-
-pub fn get_nonce(transaction: &TransactionsQueryTransactions) -> String {
-    transaction
-        .nonce
-        .map_or_else(String::new, |o| o.to_string())
-}
-
-pub fn get_memo(transaction: &TransactionsQueryTransactions) -> String {
-    transaction
-        .memo
-        .as_ref()
-        .map_or_else(String::new, |o| decode_memo(o).unwrap_or("".to_string()))
-}
-
-pub fn get_block_state_hash(transaction: &TransactionsQueryTransactions) -> String {
-    transaction
-        .block
-        .as_ref()
-        .and_then(|b| b.state_hash.as_ref())
-        .map_or_else(String::new, |o1| o1.to_string())
-}
-
-pub fn get_from(transaction: &TransactionsQueryTransactions) -> String {
-    transaction
-        .from
-        .as_ref()
-        .map_or_else(String::new, |o| o.to_string())
-}
-
-pub fn get_receiver_public_key(transaction: &TransactionsQueryTransactions) -> String {
-    transaction.receiver.as_ref().map_or_else(String::new, |o| {
-        o.public_key
-            .as_ref()
-            .map_or_else(String::new, |o| o.to_string())
-    })
-}
-
-pub fn get_fee(transaction: &TransactionsQueryTransactions) -> String {
-    transaction.fee.map(nanomina_to_mina).unwrap_or_default()
-}
-
-pub fn get_hash(transaction: &TransactionsQueryTransactions) -> String {
-    transaction
-        .hash
-        .as_ref()
-        .map_or_else(String::new, |o| o.to_string())
-}
-
-pub fn get_amount(transaction: &TransactionsQueryTransactions) -> String {
-    transaction.amount.map(nanomina_to_mina).unwrap_or_default()
-}
-
-pub fn get_to(transaction: &TransactionsQueryTransactions) -> String {
-    transaction
-        .to
-        .as_ref()
-        .map_or_else(String::new, |o| o.to_string())
-}
 
 /// 0th byte is a tag to distinguish digests from other data
 /// 1st byte is length, always 32 for digests
@@ -116,7 +22,8 @@ pub fn decode_memo(encoded: &str) -> Result<String, Box<dyn Error>> {
 
 pub async fn load_data(
     limit: i32,
-    public_key: Option<String>,
+    from_account: Option<String>,
+    to_account: Option<String>,
     state_hash: Option<String>,
     canonical: Option<bool>,
 ) -> Result<transactions_query::ResponseData, MyError> {
@@ -125,7 +32,8 @@ pub async fn load_data(
         sort_by: transactions_query::TransactionSortByInput::BLOCKHEIGHT_DESC,
         limit: Some(limit.into()),
         query: transactions_query::TransactionQueryInput {
-            from: public_key,
+            from: from_account,
+            to: to_account,
             hash: state_hash,
             canonical: if canonical.is_none() {
                 Some(true)
