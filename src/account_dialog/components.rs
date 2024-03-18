@@ -8,7 +8,7 @@ pub fn AccountDialogSectionContainer(
     children: Children,
 ) -> impl IntoView {
     view! {
-        <section class="flex flex-col bg-white rounded-xl flex flex-col items-stretch mt-8 p-4 h-fit">
+        <section class="flex flex-col bg-white rounded-xl flex flex-col items-stretch mt-2 p-5 h-fit">
             <div class="flex justify-between items-baseline w-full mb-4">
                 <h2 class="text-xl">{title}</h2>
                 <span class="text-table-row-text-color text-xs flex items-center">
