@@ -625,7 +625,14 @@ fn AccountDialogBlockEntry(block: BlocksQueryBlocks) -> impl IntoView {
         <AccountDialogSubsectionTable>
             {sub_entries
                 .into_iter()
-                .map(|se| view! { <AccountDialogSubsectionRow label=se.label el=convert_to_ellipsis(se.value)/> })
+                .map(|se| {
+                    view! {
+                        <AccountDialogSubsectionRow
+                            label=se.label
+                            el=convert_to_ellipsis(se.value)
+                        />
+                    }
+                })
                 .collect::<Vec<_>>()}
         </AccountDialogSubsectionTable>
     }

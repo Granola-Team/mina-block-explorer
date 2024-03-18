@@ -29,7 +29,10 @@ pub fn AccountDialogSubsectionTable(children: Children) -> impl IntoView {
 }
 
 #[component]
-pub fn AccountDialogSubsectionRow(#[prop(into)] label: String, el: HtmlElement<html::AnyElement>) -> impl IntoView {
+pub fn AccountDialogSubsectionRow(
+    #[prop(into)] label: String,
+    el: HtmlElement<html::AnyElement>,
+) -> impl IntoView {
     view! {
         {match label.len() {
             0 => view! { <NullView/> }.into_view(),
@@ -168,24 +171,45 @@ fn TransactionEntry(
         <AccountDialogSubsectionTable>
             <AccountDialogSubsectionRow
                 label="Hash"
-                el=convert_to_link(hash_sig.get(),format!("/transactions/{}",hash_sig.get()))
+                el=convert_to_link(hash_sig.get(), format!("/transactions/{}", hash_sig.get()))
             />
             <AccountDialogSubsectionRow
                 label="Direction"
-                el=convert_to_pill(direction_sig.get(), if direction_sig.get() == "OUT" { ColorVariant::Blue } else { ColorVariant::DarkBlue })
+                el=convert_to_pill(
+                    direction_sig.get(),
+                    if direction_sig.get() == "OUT" {
+                        ColorVariant::Blue
+                    } else {
+                        ColorVariant::DarkBlue
+                    },
+                )
             />
+
             <AccountDialogSubsectionRow
                 label="Counterparty"
-                el=convert_to_link(counterparty_sig.get(), format!("/addresses/accounts/{}",counterparty_sig.get()))
+                el=convert_to_link(
+                    counterparty_sig.get(),
+                    format!("/addresses/accounts/{}", counterparty_sig.get()),
+                )
             />
+
             <AccountDialogSubsectionRow
                 label="Amount/Fee"
-                el=convert_array_to_span(vec![
-                    wrap_in_pill(decorate_with_currency_tag(amount, "MINA".to_string()), ColorVariant::Green),
-                    convert_to_span(" / ".to_string()).attr("class","whitespace-pre"),
-                    wrap_in_pill(decorate_with_currency_tag(fee, "MINA".to_string()), ColorVariant::Orange)
-                ])
+                el=convert_array_to_span(
+                    vec![
+                        wrap_in_pill(
+                            decorate_with_currency_tag(amount, "MINA".to_string()),
+                            ColorVariant::Green,
+                        ),
+                        convert_to_span(" / ".to_string()).attr("class", "whitespace-pre"),
+                        wrap_in_pill(
+                            decorate_with_currency_tag(fee, "MINA".to_string()),
+                            ColorVariant::Orange,
+                        ),
+                    ],
+                )
             />
+
         </AccountDialogSubsectionTable>
         <AccountDialogEntryDivider/>
     }

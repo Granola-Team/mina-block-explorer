@@ -1,6 +1,9 @@
-use crate::{account_dialog::graphql::account_activity_query::{
-    AccountActivityQueryIncomingTransactions, AccountActivityQueryOutgoingTransactions,
-}, common::functions::nanomina_to_mina};
+use crate::{
+    account_dialog::graphql::account_activity_query::{
+        AccountActivityQueryIncomingTransactions, AccountActivityQueryOutgoingTransactions,
+    },
+    common::functions::nanomina_to_mina,
+};
 use chrono::{DateTime, Utc};
 
 #[derive(Clone)]
@@ -68,19 +71,27 @@ impl AccountActivityQueryDirectionalTransactionTrait
     for AccountActivityQueryDirectionalTransactions
 {
     fn get_fee(&self) -> String {
-        self.fee.map(nanomina_to_mina).map_or(String::new(), |f| f.to_string())
+        self.fee
+            .map(nanomina_to_mina)
+            .map_or(String::new(), |f| f.to_string())
     }
     fn get_counterparty(&self) -> String {
-        self.counterparty.as_ref().map_or(String::new(), |f| f.to_string())
+        self.counterparty
+            .as_ref()
+            .map_or(String::new(), |f| f.to_string())
     }
     fn get_direction(&self) -> String {
-        self.direction.as_ref().map_or(String::new(), |f| f.to_string())
+        self.direction
+            .as_ref()
+            .map_or(String::new(), |f| f.to_string())
     }
     fn get_hash(&self) -> String {
         self.hash.as_ref().map_or(String::new(), |f| f.to_string())
     }
     fn get_amount(&self) -> String {
-        self.amount.map(nanomina_to_mina).map_or(String::new(), |f| f.to_string())
+        self.amount
+            .map(nanomina_to_mina)
+            .map_or(String::new(), |f| f.to_string())
     }
     fn get_date_time(&self) -> String {
         self.date_time.map_or(String::new(), |f| f.to_string())
