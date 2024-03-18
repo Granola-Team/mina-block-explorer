@@ -20,6 +20,17 @@ suite(["@CI"],'account transactions table', () => {
     }));
 });
 
+suite(["@CI"],'account activity transactions', () => {
+
+    let pages = ['/summary/accounts/B62qqW8uKTxHZueKJwsoPY8NZcKVeDK4bLEHRkpMM2uKtEmmqLbkiQC'];
+    let columns = ['Hash', 'Direction', 'Counterparty', 'Amount/Fee'];
+
+    pages.forEach(page => it(`on ${page} includes correct columns`, () => {
+        cy.visit(page);
+        cy.tableHasOrderedColumns('Transactions', columns, 'h2');
+    }));
+});
+
 suite(["@CI"],'blocks table', () => {
 
     let pages = ['/blocks', '/summary', '/'];
