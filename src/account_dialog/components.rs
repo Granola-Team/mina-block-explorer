@@ -1,4 +1,7 @@
-use crate::common::{components::*, functions::*, models::*};
+use super::models::{
+    AccountActivityQueryDirectionalTransactionTrait, AccountActivityQueryDirectionalTransactions,
+};
+use crate::common::{components::*, functions::*, models::*, table::EmptyTable};
 use leptos::*;
 
 #[component]
@@ -93,4 +96,111 @@ pub fn AccountDialogSectionEntryHeader(
 #[component]
 pub fn AccountDialogEntryDivider() -> impl IntoView {
     view! { <div class="border-b border-slate-100 my-2 h-1 w-full"></div> }
+}
+
+#[component]
+pub fn AccountDialogTransactionSection(
+    transactions: Vec<Option<AccountActivityQueryDirectionalTransactions>>,
+) -> impl IntoView {
+    let inner_transactions = transactions.clone();
+    let has_transactions = move || !transactions.clone().is_empty();
+    view! {
+        <AccountDialogSectionContainer
+            title=String::from("Transactions")
+            showing_message=format!("Showing latest {} transactions", inner_transactions.len())
+        >
+            <Show
+                when=has_transactions
+                fallback=move || {
+                    view! {
+                        <EmptyTable message="This public key has no transactions".to_string()/>
+                    }
+                }
+            >
+
+                {inner_transactions
+                    .iter()
+                    .map(|opt_transaction| {
+                        let check_opt_trans = opt_transaction.clone();
+                        let unwrap_opt_trans = opt_transaction.clone().unwrap();
+                        view! {
+                            <Show
+                                when=move || check_opt_trans.is_some()
+                                fallback=move || view! { <NullView/> }
+                            >
+                                <TransactionEntry
+                                    status=get_status(&unwrap_opt_trans.get_date_time())
+                                    date=unwrap_opt_trans.get_date_time()
+                                    moments_ago=print_time_since(&unwrap_opt_trans.get_date_time())
+
+                                    counterparty=unwrap_opt_trans.get_counterparty()
+                                    direction=unwrap_opt_trans.get_direction()
+                                    fee=unwrap_opt_trans.get_fee()
+                                    amount=unwrap_opt_trans.get_amount()
+                                    hash=unwrap_opt_trans.get_hash()
+                                />
+                            </Show>
+                        }
+                    })
+                    .collect::<Vec<_>>()}
+
+            </Show>
+        </AccountDialogSectionContainer>
+    }
+}
+
+#[component]
+fn TransactionEntry(
+    status: Status,
+    date: String,
+    moments_ago: String,
+    direction: String,
+    counterparty: String,
+    fee: String,
+    amount: String,
+    hash: String,
+) -> impl IntoView {
+    let entries = vec![
+        ("Hash", hash),
+        ("Direction", direction),
+        ("Counterparty", counterparty),
+        ("Fee", fee),
+        ("Amount", amount),
+    ];
+
+    let grouped: Vec<[(&str, String); 2]> = entries
+        .chunks(2)
+        .map(|chunk| match chunk {
+            [a, b] => [a.clone(), b.clone()], // For chunks of size 2
+            /* For the last chunk of size 1, with a default/filler value */
+            [a] => [a.clone(), ("", String::new())],
+            _ => unreachable!(), // This case will never happen with chunks(2)
+        })
+        .collect();
+
+    view! {
+        <AccountDialogSectionEntryHeader date=date status=status moments_ago=moments_ago/>
+        <AccountDialogSubsectionTable>
+            {grouped
+                .into_iter()
+                .map(|e| {
+                    view! {
+                        {e
+                            .into_iter()
+                            .map(|(label, value)| {
+                                view! {
+                                    <AccountDialogSubsectionRow
+                                        label=label.to_string()
+                                        value=value
+                                    />
+                                }
+                            })
+                            .collect::<Vec<_>>()}
+                    }
+                        .into_view()
+                })
+                .collect::<Vec<_>>()}
+        </AccountDialogSubsectionTable>
+        <AccountDialogEntryDivider/>
+    }
 }
