@@ -1,14 +1,14 @@
-use super::functions::{get_base_page_path, load_data};
+use super::{
+    components::AccountDialogTransactionSection,
+    functions::{get_base_page_path, load_data},
+    models::*,
+};
 use crate::{
     addresses::functions::{load_data as load_summary_data, *},
     blocks::components::AccountDialogBlocksSection,
     common::{components::*, models::MyError, spotlight::*},
     icons::*,
     snarks::components::AccountDialogSnarkJobSection,
-    transactions::{
-        components::AccountDialogTransactionSection,
-        graphql::transactions_query::TransactionsQueryTransactions,
-    },
 };
 use leptos::*;
 use leptos_router::*;
@@ -143,17 +143,13 @@ pub fn AccountDialogView() -> impl IntoView {
                                     .sort_by(|a, b| {
                                         match (
                                             <std::option::Option<
-                                                TransactionsQueryTransactions,
+                                                AccountActivityQueryDirectionalTransactions,
                                             > as Clone>::clone(a)
-                                                .unwrap()
-                                                .block
                                                 .unwrap()
                                                 .date_time,
                                             <std::option::Option<
-                                                TransactionsQueryTransactions,
+                                                AccountActivityQueryDirectionalTransactions,
                                             > as Clone>::clone(b)
-                                                .unwrap()
-                                                .block
                                                 .unwrap()
                                                 .date_time,
                                         ) {

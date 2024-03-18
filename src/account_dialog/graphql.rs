@@ -1,7 +1,9 @@
 use self::account_activity_query::{
-    AccountActivityQueryBlocks, AccountActivityQueryBlocksTransactions, AccountActivityQuerySnarks,
-    AccountActivityQuerySnarksBlock, AccountActivityQueryIncomingTransactions,AccountActivityQueryOutgoingTransactions,AccountActivityQueryOutgoingTransactionsBlock,
-    AccountActivityQueryIncomingTransactionsBlock, BlockQueryInput, SnarkQueryInput, TransactionQueryInput,
+    AccountActivityQueryBlocks, AccountActivityQueryBlocksTransactions,
+    AccountActivityQueryIncomingTransactions, AccountActivityQueryIncomingTransactionsBlock,
+    AccountActivityQueryOutgoingTransactions, AccountActivityQueryOutgoingTransactionsBlock,
+    AccountActivityQuerySnarks, AccountActivityQuerySnarksBlock, BlockQueryInput, SnarkQueryInput,
+    TransactionQueryInput,
 };
 use crate::{
     blocks::graphql::blocks_query::{BlocksQueryBlocks, BlocksQueryBlocksTransactions},
@@ -47,7 +49,6 @@ impl From<AccountActivityQueryIncomingTransactionsBlock> for TransactionsQueryTr
         }
     }
 }
-
 
 impl From<AccountActivityQueryOutgoingTransactions> for TransactionsQueryTransactions {
     fn from(item: AccountActivityQueryOutgoingTransactions) -> Self {
