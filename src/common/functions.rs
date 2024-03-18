@@ -2,6 +2,7 @@ use super::models::*;
 use chrono::{DateTime, Duration, Utc};
 use leptos::*;
 use rust_decimal::Decimal;
+use crate::icons::HelpIcon;
 
 // Function to calculate and print the time elapsed since the given timestamp
 pub fn print_time_since(timestamp: &str) -> String {
@@ -181,6 +182,14 @@ pub fn decorate_with_currency_tag(
         </span>
     }
     .into()
+}
+
+pub fn convert_to_tooltip(tooltip: String) -> HtmlElement<html::AnyElement>{
+    view! {
+        <span title=tooltip class="text-slate-600 font-sans text-xs m-0.5 p-1 hover:bg-slate-200 rounded-full cursor-help">
+            <HelpIcon width=15/>
+        </span>
+    }.into()
 }
 
 pub fn string_to_f64(str: &str) -> Option<f64> {
