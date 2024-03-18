@@ -29,7 +29,7 @@ pub fn AccountDialogSubsectionTable(children: Children) -> impl IntoView {
 }
 
 #[component]
-pub fn AccountDialogSubsectionRow(label: String, value: String) -> impl IntoView {
+pub fn AccountDialogSubsectionRow(#[prop(into)] label: String, el: HtmlElement<html::AnyElement>) -> impl IntoView {
     view! {
         {match label.len() {
             0 => view! { <NullView/> }.into_view(),
@@ -40,7 +40,7 @@ pub fn AccountDialogSubsectionRow(label: String, value: String) -> impl IntoView
                             {label} :
                         </th>
                         <td class="text-xs overflow-hidden text-ellipsis w-[60%] flex justify-start">
-                            {convert_to_ellipsis(value)}
+                            {el}
                         </td>
                     </tr>
                 }
@@ -160,46 +160,32 @@ fn TransactionEntry(
     amount: String,
     hash: String,
 ) -> impl IntoView {
-    let entries = vec![
-        ("Hash", hash),
-        ("Direction", direction),
-        ("Counterparty", counterparty),
-        ("Fee", fee),
-        ("Amount", amount),
-    ];
-
-    let grouped: Vec<[(&str, String); 2]> = entries
-        .chunks(2)
-        .map(|chunk| match chunk {
-            [a, b] => [a.clone(), b.clone()], // For chunks of size 2
-            /* For the last chunk of size 1, with a default/filler value */
-            [a] => [a.clone(), ("", String::new())],
-            _ => unreachable!(), // This case will never happen with chunks(2)
-        })
-        .collect();
-
+    let (hash_sig, _) = create_signal(hash);
+    let (direction_sig, _) = create_signal(direction);
+    let (counterparty_sig, _) = create_signal(counterparty);
     view! {
         <AccountDialogSectionEntryHeader date=date status=status moments_ago=moments_ago/>
         <AccountDialogSubsectionTable>
-            {grouped
-                .into_iter()
-                .map(|e| {
-                    view! {
-                        {e
-                            .into_iter()
-                            .map(|(label, value)| {
-                                view! {
-                                    <AccountDialogSubsectionRow
-                                        label=label.to_string()
-                                        value=value
-                                    />
-                                }
-                            })
-                            .collect::<Vec<_>>()}
-                    }
-                        .into_view()
-                })
-                .collect::<Vec<_>>()}
+            <AccountDialogSubsectionRow
+                label="Hash"
+                el=convert_to_link(hash_sig.get(),format!("/transactions/{}",hash_sig.get()))
+            />
+            <AccountDialogSubsectionRow
+                label="Direction"
+                el=convert_to_pill(direction_sig.get(), if direction_sig.get() == "OUT" { ColorVariant::Blue } else { ColorVariant::DarkBlue })
+            />
+            <AccountDialogSubsectionRow
+                label="Counterparty"
+                el=convert_to_link(counterparty_sig.get(), format!("/addresses/accounts/{}",counterparty_sig.get()))
+            />
+            <AccountDialogSubsectionRow
+                label="Amount/Fee"
+                el=convert_array_to_span(vec![
+                    wrap_in_pill(decorate_with_currency_tag(amount, "MINA".to_string()), ColorVariant::Green),
+                    convert_to_span(" / ".to_string()).attr("class","whitespace-pre"),
+                    wrap_in_pill(decorate_with_currency_tag(fee, "MINA".to_string()), ColorVariant::Orange)
+                ])
+            />
         </AccountDialogSubsectionTable>
         <AccountDialogEntryDivider/>
     }
