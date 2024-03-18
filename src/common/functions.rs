@@ -186,7 +186,7 @@ pub fn decorate_with_currency_tag(
 
 pub fn convert_to_tooltip(tooltip: String) -> HtmlElement<html::AnyElement>{
     view! {
-        <span title=tooltip class="text-slate-600 font-sans text-xs m-0.5 p-1 hover:bg-slate-200 rounded-full cursor-help">
+        <span title=tooltip class="tooltip text-slate-600 font-sans text-xs m-0.5 p-1 hover:bg-slate-200 rounded-full cursor-help">
             <HelpIcon width=15/>
         </span>
     }.into()
