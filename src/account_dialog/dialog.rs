@@ -5,7 +5,10 @@ use crate::{
     common::{components::*, models::MyError, spotlight::*},
     icons::*,
     snarks::components::AccountDialogSnarkJobSection,
-    transactions::components::AccountDialogTransactionSection,
+    transactions::{
+        components::AccountDialogTransactionSection,
+        graphql::transactions_query::TransactionsQueryTransactions,
+    },
 };
 use leptos::*;
 use leptos_router::*;
@@ -123,7 +126,7 @@ pub fn AccountDialogView() -> impl IntoView {
                             .get()
                             .and_then(|res| res.ok())
                             .map(|res| {
-                                let transactions = res
+                                let mut transactions: Vec<_> = res
                                     .incoming_transactions
                                     .into_iter()
                                     .filter(|t| t.is_some())
@@ -136,6 +139,32 @@ pub fn AccountDialogView() -> impl IntoView {
                                             .map(|r| r.map(|t| t.into())),
                                     )
                                     .collect();
+                                transactions
+                                    .sort_by(|a, b| {
+                                        match (
+                                            <std::option::Option<
+                                                TransactionsQueryTransactions,
+                                            > as Clone>::clone(a)
+                                                .unwrap()
+                                                .block
+                                                .unwrap()
+                                                .date_time,
+                                            <std::option::Option<
+                                                TransactionsQueryTransactions,
+                                            > as Clone>::clone(b)
+                                                .unwrap()
+                                                .block
+                                                .unwrap()
+                                                .date_time,
+                                        ) {
+                                            (Some(date_time_a), Some(date_time_b)) => {
+                                                date_time_b.cmp(&date_time_a)
+                                            }
+                                            (Some(_), None) => std::cmp::Ordering::Greater,
+                                            (None, Some(_)) => std::cmp::Ordering::Less,
+                                            (None, None) => std::cmp::Ordering::Equal,
+                                        }
+                                    });
                                 view! {
                                     <AccountDialogTransactionSection transactions/>
                                     <AccountDialogSnarkJobSection snarks=res
