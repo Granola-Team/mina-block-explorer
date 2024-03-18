@@ -34,8 +34,13 @@ pub async fn load_data(
             canonical: Some(true),
             ..Default::default()
         },
-        trans_query: account_activity_query::TransactionQueryInput {
-            from: public_key,
+        outgoing_trans_query: account_activity_query::TransactionQueryInput {
+            from: public_key.clone(),
+            canonical: Some(true),
+            ..Default::default()
+        },
+        incoming_trans_query: account_activity_query::TransactionQueryInput {
+            to: public_key,
             canonical: Some(true),
             ..Default::default()
         },

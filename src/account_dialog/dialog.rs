@@ -125,7 +125,7 @@ pub fn AccountDialogView() -> impl IntoView {
                             .map(|res| {
                                 view! {
                                     <AccountDialogTransactionSection transactions=res
-                                        .transactions
+                                        .incoming_transactions
                                         .into_iter()
                                         .map(|r| r.map(|t| t.into()))
                                         .collect()/>

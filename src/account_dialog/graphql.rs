@@ -1,7 +1,7 @@
 use self::account_activity_query::{
     AccountActivityQueryBlocks, AccountActivityQueryBlocksTransactions, AccountActivityQuerySnarks,
-    AccountActivityQuerySnarksBlock, AccountActivityQueryTransactions,
-    AccountActivityQueryTransactionsBlock, BlockQueryInput, SnarkQueryInput, TransactionQueryInput,
+    AccountActivityQuerySnarksBlock, AccountActivityQueryIncomingTransactions,AccountActivityQueryOutgoingTransactions,AccountActivityQueryOutgoingTransactionsBlock,
+    AccountActivityQueryIncomingTransactionsBlock, BlockQueryInput, SnarkQueryInput, TransactionQueryInput,
 };
 use crate::{
     blocks::graphql::blocks_query::{BlocksQueryBlocks, BlocksQueryBlocksTransactions},
@@ -25,8 +25,8 @@ type Long = i32;
 )]
 pub struct AccountActivityQuery;
 
-impl From<AccountActivityQueryTransactions> for TransactionsQueryTransactions {
-    fn from(item: AccountActivityQueryTransactions) -> Self {
+impl From<AccountActivityQueryIncomingTransactions> for TransactionsQueryTransactions {
+    fn from(item: AccountActivityQueryIncomingTransactions) -> Self {
         TransactionsQueryTransactions {
             fee: item.fee,
             from: item.from,
@@ -39,8 +39,32 @@ impl From<AccountActivityQueryTransactions> for TransactionsQueryTransactions {
     }
 }
 
-impl From<AccountActivityQueryTransactionsBlock> for TransactionsQueryTransactionsBlock {
-    fn from(item: AccountActivityQueryTransactionsBlock) -> Self {
+impl From<AccountActivityQueryIncomingTransactionsBlock> for TransactionsQueryTransactionsBlock {
+    fn from(item: AccountActivityQueryIncomingTransactionsBlock) -> Self {
+        TransactionsQueryTransactionsBlock {
+            date_time: item.date_time,
+            ..Default::default()
+        }
+    }
+}
+
+
+impl From<AccountActivityQueryOutgoingTransactions> for TransactionsQueryTransactions {
+    fn from(item: AccountActivityQueryOutgoingTransactions) -> Self {
+        TransactionsQueryTransactions {
+            fee: item.fee,
+            from: item.from,
+            hash: item.hash,
+            to: item.to,
+            amount: item.amount,
+            block: item.block.map(|b| b.into()),
+            ..Default::default()
+        }
+    }
+}
+
+impl From<AccountActivityQueryOutgoingTransactionsBlock> for TransactionsQueryTransactionsBlock {
+    fn from(item: AccountActivityQueryOutgoingTransactionsBlock) -> Self {
         TransactionsQueryTransactionsBlock {
             date_time: item.date_time,
             ..Default::default()
