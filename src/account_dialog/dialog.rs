@@ -123,12 +123,21 @@ pub fn AccountDialogView() -> impl IntoView {
                             .get()
                             .and_then(|res| res.ok())
                             .map(|res| {
+                                let transactions = res
+                                    .incoming_transactions
+                                    .into_iter()
+                                    .filter(|t| t.is_some())
+                                    .map(|r| r.map(|t| t.into()))
+                                    .chain(
+                                        res
+                                            .outgoing_transactions
+                                            .into_iter()
+                                            .filter(|t| t.is_some())
+                                            .map(|r| r.map(|t| t.into())),
+                                    )
+                                    .collect();
                                 view! {
-                                    <AccountDialogTransactionSection transactions=res
-                                        .incoming_transactions
-                                        .into_iter()
-                                        .map(|r| r.map(|t| t.into()))
-                                        .collect()/>
+                                    <AccountDialogTransactionSection transactions/>
                                     <AccountDialogSnarkJobSection snarks=res
                                         .snarks
                                         .into_iter()
