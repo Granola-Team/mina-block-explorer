@@ -37,7 +37,7 @@ pub fn StakesPage() -> impl IntoView {
         <Title
             text=move || {
                 if let Some(epoch) = epoch_sig.get() {
-                    format!("Epoch {}", epoch.to_string())
+                    format!("Epoch {}", epoch)
                 } else {
                     "Current Staking Ledger".to_string()
                 }

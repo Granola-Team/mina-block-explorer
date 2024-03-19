@@ -66,11 +66,11 @@ pub fn TransactionSpotlightPage() -> impl IntoView {
     );
 
     create_effect(move |_| {
-        resource.get().and_then(|res| res.ok()).map(|data| {
-            if let Some(Some(transaction)) = data.transactions.first() {
-                set_trx_memo.set(transaction.get_memo())
+        if let Some(Ok(data)) = resource.get() {
+            if let Some(Some(trx)) = data.transactions.first() {
+                set_trx_memo.set(trx.get_memo());
             }
-        });
+        }
     });
 
     view! {

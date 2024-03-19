@@ -90,10 +90,10 @@ pub fn AccountSpotlightPage() -> impl IntoView {
     let public_key = move || memo_params_map.get().get("id").cloned();
 
     create_effect(move |_| {
-        resource.get().and_then(|res| res.ok()).map(|res| {
-            logging::log!("Username: {}", res.account.username);
-            set_username.set(Some(res.account.username))
-        });
+        if let Some(Ok(data)) = resource.get() {
+            logging::log!("Username: {}", data.account.username);
+            set_username.set(Some(data.account.username))
+        };
     });
 
     view! {
