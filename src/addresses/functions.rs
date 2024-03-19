@@ -100,7 +100,10 @@ pub fn get_spotlight_data(account: &AccountSummary) -> Vec<SpotlightEntry> {
         },
         SpotlightEntry {
             label: String::from("Delegate"),
-            any_el: Some(convert_to_span(account.delegate.to_string())),
+            any_el: Some({
+                let account = account.delegate.to_string();
+                convert_to_link(account.clone(), format!("/addresses/accounts/{}", account))
+            }),
             copiable: true,
         },
         SpotlightEntry {

@@ -380,12 +380,21 @@ pub fn BlockSpotlight(block: BlocksQueryBlocks) -> impl IntoView {
     let spotlight_items = vec![
         SpotlightEntry {
             label: "State Hash".to_string(),
-            any_el: Some(convert_to_span(state_hash)),
+            any_el: Some(convert_to_link(
+                state_hash.clone(),
+                format!("/blocks/{}", state_hash),
+            )),
             copiable: true,
         },
         SpotlightEntry {
             label: "Previous State Hash".to_string(),
-            any_el: Some(convert_to_span(get_previous_state_hash(&block))),
+            any_el: Some({
+                let prev_state_hash = get_previous_state_hash(&block);
+                convert_to_link(
+                    prev_state_hash.clone(),
+                    format!("/blocks/{}", prev_state_hash),
+                )
+            }),
             copiable: true,
         },
         SpotlightEntry {
@@ -408,12 +417,24 @@ pub fn BlockSpotlight(block: BlocksQueryBlocks) -> impl IntoView {
         },
         SpotlightEntry {
             label: "Coinbase Receiver".to_string(),
-            any_el: Some(convert_to_span(get_coinbase_receiver(&block))),
+            any_el: Some({
+                let coinbase_receiver = get_coinbase_receiver(&block);
+                convert_to_link(
+                    coinbase_receiver.clone(),
+                    format!("/addresses/accounts/{}", coinbase_receiver),
+                )
+            }),
             copiable: true,
         },
         SpotlightEntry {
             label: "Winning Account".to_string(),
-            any_el: Some(convert_to_span(get_winning_account(&block))),
+            any_el: Some({
+                let winning_account = get_winning_account(&block);
+                convert_to_link(
+                    winning_account.clone(),
+                    format!("/addresses/accounts/{}", winning_account),
+                )
+            }),
             copiable: true,
         },
         SpotlightEntry {

@@ -104,7 +104,10 @@ pub fn TransactionSpotlightPage() -> impl IntoView {
                                 SpotlightEntry {
                                     label: "Block State Hash".to_string(),
                                     any_el: Some(
-                                        convert_to_span(transaction.get_block_state_hash()),
+                                        convert_to_link(
+                                            transaction.get_block_state_hash(),
+                                            format!("/blocks/{}", transaction.get_block_state_hash()),
+                                        ),
                                     ),
                                     copiable: true,
                                 },
@@ -150,12 +153,22 @@ pub fn TransactionSpotlightPage() -> impl IntoView {
                                 },
                                 SpotlightEntry {
                                     label: "From".to_string(),
-                                    any_el: Some(convert_to_span(transaction.get_from())),
+                                    any_el: Some(
+                                        convert_to_link(
+                                            transaction.get_from(),
+                                            format!("/addresses/accounts/{}", transaction.get_from()),
+                                        ),
+                                    ),
                                     copiable: true,
                                 },
                                 SpotlightEntry {
                                     label: "To".to_string(),
-                                    any_el: Some(convert_to_span(transaction.get_to())),
+                                    any_el: Some(
+                                        convert_to_link(
+                                            transaction.get_to(),
+                                            format!("/addresses/accounts/{}", transaction.get_to()),
+                                        ),
+                                    ),
                                     copiable: true,
                                 },
                                 SpotlightEntry {
