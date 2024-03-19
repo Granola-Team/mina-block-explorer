@@ -42,6 +42,7 @@ pub fn StakesPage() -> impl IntoView {
                     "Current Staking Ledger".to_string()
                 }
             }
+
             formatter=move |text| format!("Staking Ledger | {text}")
         />
         <SearchBar placeholder="Exact search for public key".to_string()/>

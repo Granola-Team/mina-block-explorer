@@ -4,6 +4,7 @@ use crate::{
     common::{components::*, search::*},
 };
 use leptos::*;
+use leptos_meta::Title;
 
 #[component]
 pub fn SummaryPage() -> impl IntoView {
@@ -15,6 +16,7 @@ pub fn SummaryPage() -> impl IntoView {
             subtext="Powered by Mina".to_string()
             search_placeholder="Exact search for block hash".to_string()
         />
+        <Title text="Mina Blockchain Explorer | Search For Blocks"/>
         <PageContainer>
             {move || match blockchain_summary_resource.get() {
                 Some(Ok(summary)) => view! { <SummaryGrid summary=Some(summary)/> },

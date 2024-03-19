@@ -24,7 +24,7 @@ pub fn SnarksPage() -> impl IntoView {
     let (current_page, set_current_page) = create_signal(1);
 
     view! {
-        <Title text="SNARKs | Search For SNARKs" />
+        <Title text="SNARKs | Search For SNARKs"/>
         <SearchBar placeholder="Exact search for prover".to_string()/>
         <PageContainer>
             <TableSection

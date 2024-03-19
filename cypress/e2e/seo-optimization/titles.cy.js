@@ -16,6 +16,8 @@ suite(["@CI"],'meta title',() => {
         { url: '/stakes', title: 'Staking Ledger | Current Staking Ledger'},
         { url: '/stakes?epoch=71', title: 'Staking Ledger | Epoch 71'},
         { url: '/snarks', title: 'SNARKs | Search For SNARKs'},
+        { url: '/', title: 'Mina Blockchain Explorer | Search For Blocks'},
+        { url: '/summary', title: 'Mina Blockchain Explorer | Search For Blocks'},
         { url: `/addresses/accounts/${public_key}`, title: `Account Overview | 'MinaExplorer'`},
     ];
 
