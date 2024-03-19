@@ -1,5 +1,6 @@
 use super::models::*;
 use crate::icons::HelpIcon;
+use crate::common::components::CopyToClipboard;
 use chrono::{DateTime, Duration, Utc};
 use leptos::*;
 use rust_decimal::Decimal;
@@ -281,18 +282,16 @@ mod nanomina_tests {
 }
 
 pub fn convert_to_link(data: String, href: String) -> HtmlElement<html::AnyElement> {
-    html::div()
-        .attr("class", "w-full text-ellipsis overflow-hidden")
-        .child(
-            html::a()
-                .attr("href", href)
-                .attr(
-                    "class",
-                    "hover:text-granola-orange hover:underline hover:decoration-2",
-                )
-                .child(convert_to_ellipsis(data)),
-        )
-        .into()
+    view! {
+        <span class="w-full text-ellipsis overflow-hidden">
+            <CopyToClipboard>
+                <a href=href class="hover:text-granola-orange hover:underline hover:decoration-2">
+                    {convert_to_ellipsis(data)}
+                </a>
+            </CopyToClipboard>
+        </span>
+    }
+    .into()
 }
 
 pub fn convert_to_ellipsis(text: String) -> HtmlElement<html::AnyElement> {
