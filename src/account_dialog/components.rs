@@ -1,4 +1,7 @@
-use crate::common::{components::*, functions::*, models::*};
+use super::models::{
+    AccountActivityQueryDirectionalTransactionTrait, AccountActivityQueryDirectionalTransactions,
+};
+use crate::common::{components::*, functions::*, models::*, table::EmptyTable};
 use leptos::*;
 
 #[component]
@@ -8,7 +11,7 @@ pub fn AccountDialogSectionContainer(
     children: Children,
 ) -> impl IntoView {
     view! {
-        <section class="flex flex-col bg-white rounded-xl flex flex-col items-stretch mt-8 p-4 h-fit">
+        <section class="flex flex-col bg-white rounded-xl flex flex-col items-stretch mt-2 p-5 h-fit">
             <div class="flex justify-between items-baseline w-full mb-4">
                 <h2 class="text-xl">{title}</h2>
                 <span class="text-table-row-text-color text-xs flex items-center">
@@ -26,7 +29,10 @@ pub fn AccountDialogSubsectionTable(children: Children) -> impl IntoView {
 }
 
 #[component]
-pub fn AccountDialogSubsectionRow(label: String, value: String) -> impl IntoView {
+pub fn AccountDialogSubsectionRow(
+    #[prop(into)] label: String,
+    el: HtmlElement<html::AnyElement>,
+) -> impl IntoView {
     view! {
         {match label.len() {
             0 => view! { <NullView/> }.into_view(),
@@ -37,7 +43,7 @@ pub fn AccountDialogSubsectionRow(label: String, value: String) -> impl IntoView
                             {label} :
                         </th>
                         <td class="text-xs overflow-hidden text-ellipsis w-[60%] flex justify-start">
-                            {convert_to_ellipsis(value)}
+                            {el}
                         </td>
                     </tr>
                 }
@@ -93,4 +99,118 @@ pub fn AccountDialogSectionEntryHeader(
 #[component]
 pub fn AccountDialogEntryDivider() -> impl IntoView {
     view! { <div class="border-b border-slate-100 my-2 h-1 w-full"></div> }
+}
+
+#[component]
+pub fn AccountDialogTransactionSection(
+    transactions: Vec<Option<AccountActivityQueryDirectionalTransactions>>,
+) -> impl IntoView {
+    let inner_transactions = transactions.clone();
+    let has_transactions = move || !transactions.clone().is_empty();
+    view! {
+        <AccountDialogSectionContainer
+            title=String::from("Transactions")
+            showing_message=format!("Showing latest {} transactions", inner_transactions.len())
+        >
+            <Show
+                when=has_transactions
+                fallback=move || {
+                    view! {
+                        <EmptyTable message="This public key has no transactions".to_string()/>
+                    }
+                }
+            >
+
+                {inner_transactions
+                    .iter()
+                    .map(|opt_transaction| {
+                        let check_opt_trans = opt_transaction.clone();
+                        let unwrap_opt_trans = opt_transaction.clone().unwrap();
+                        view! {
+                            <Show
+                                when=move || check_opt_trans.is_some()
+                                fallback=move || view! { <NullView/> }
+                            >
+                                <TransactionEntry
+                                    status=get_status(&unwrap_opt_trans.get_date_time())
+                                    date=unwrap_opt_trans.get_date_time()
+                                    moments_ago=print_time_since(&unwrap_opt_trans.get_date_time())
+
+                                    counterparty=unwrap_opt_trans.get_counterparty()
+                                    direction=unwrap_opt_trans.get_direction()
+                                    fee=unwrap_opt_trans.get_fee()
+                                    amount=unwrap_opt_trans.get_amount()
+                                    hash=unwrap_opt_trans.get_hash()
+                                />
+                            </Show>
+                        }
+                    })
+                    .collect::<Vec<_>>()}
+
+            </Show>
+        </AccountDialogSectionContainer>
+    }
+}
+
+#[component]
+fn TransactionEntry(
+    status: Status,
+    date: String,
+    moments_ago: String,
+    direction: String,
+    counterparty: String,
+    fee: String,
+    amount: String,
+    hash: String,
+) -> impl IntoView {
+    let (hash_sig, _) = create_signal(hash);
+    let (direction_sig, _) = create_signal(direction);
+    let (counterparty_sig, _) = create_signal(counterparty);
+    view! {
+        <AccountDialogSectionEntryHeader date=date status=status moments_ago=moments_ago/>
+        <AccountDialogSubsectionTable>
+            <AccountDialogSubsectionRow
+                label="Hash"
+                el=convert_to_link(hash_sig.get(), format!("/transactions/{}", hash_sig.get()))
+            />
+            <AccountDialogSubsectionRow
+                label="Direction"
+                el=convert_to_pill(
+                    direction_sig.get(),
+                    if direction_sig.get() == "OUT" {
+                        ColorVariant::Blue
+                    } else {
+                        ColorVariant::DarkBlue
+                    },
+                )
+            />
+
+            <AccountDialogSubsectionRow
+                label="Counterparty"
+                el=convert_to_link(
+                    counterparty_sig.get(),
+                    format!("/addresses/accounts/{}", counterparty_sig.get()),
+                )
+            />
+
+            <AccountDialogSubsectionRow
+                label="Amount/Fee"
+                el=convert_array_to_span(
+                    vec![
+                        wrap_in_pill(
+                            decorate_with_currency_tag(amount, "MINA".to_string()),
+                            ColorVariant::Green,
+                        ),
+                        convert_to_span(" / ".to_string()).attr("class", "whitespace-pre"),
+                        wrap_in_pill(
+                            decorate_with_currency_tag(fee, "MINA".to_string()),
+                            ColorVariant::Orange,
+                        ),
+                    ],
+                )
+            />
+
+        </AccountDialogSubsectionTable>
+        <AccountDialogEntryDivider/>
+    }
 }
