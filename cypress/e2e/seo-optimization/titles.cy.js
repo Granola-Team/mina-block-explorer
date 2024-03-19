@@ -13,6 +13,8 @@ suite(["@CI"],'meta title',() => {
         { url: '/broadcast/delegation', title: 'Offline Broadcasting | Broadcast Signed Delegation'},
         { url: '/broadcast/ledger', title: 'Offline Broadcasting | Broadcast Signed Transaction From Ledger'},
         { url: '/next-stakes', title: 'Next Staking Ledger | Search For Stakers'},
+        { url: '/stakes', title: 'Staking Ledger | Current Staking Ledger'},
+        { url: '/stakes?epoch=71', title: 'Staking Ledger | Epoch 71'},
         { url: `/addresses/accounts/${public_key}`, title: `Account Overview | 'MinaExplorer'`},
     ];
 
