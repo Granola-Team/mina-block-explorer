@@ -1,5 +1,6 @@
 suite(["@CI"],'account page', () => {
     let pages = [
+        { origin: '/summary/accounts/B62qqW8uKTxHZueKJwsoPY8NZcKVeDK4bLEHRkpMM2uKtEmmqLbkiQC', column: 'Counterparty', tableHeader: 'Transactions', tableHeaderEl: 'h2', transposed: true},
         { origin: '/addresses/accounts/B62qmkGkjvFwmkqv6erSmTGMx9ABhuxJqpCi4gyUtxFDwif97j2X5zp', column: 'Counterparty', tableHeader: 'Transactions' },
         { origin: '/addresses/accounts/B62qq3TQ8AP7MFYPVtMx5tZGF3kWLJukfwG1A1RGvaBW1jfTPTkDBW6', column: 'Block Producer', tableHeader: 'Block Production' },
         { origin: '/addresses/accounts/B62qq3TQ8AP7MFYPVtMx5tZGF3kWLJukfwG1A1RGvaBW1jfTPTkDBW6', column: 'Coinbase Receiver', tableHeader: 'Block Production' },
@@ -17,9 +18,14 @@ suite(["@CI"],'account page', () => {
         { origin: '/blocks/3NLXaJBYriRYe8LQUNwgSFsUvuikjkL8SDo1MHKRYsfRA4FjCsEv/internal-commands', column: 'Recipient', tableHeader: 'Internal Commands'},
     ];
 
-    pages.forEach(({ origin, column, tableHeader }) => it(`is navigated to from ${origin} by clicking link in '${column}'`,() => {
+    pages.forEach(({ origin, column, tableHeader, tableHeaderEl='h1', transposed }) => it(`is navigated to from ${origin} by clicking link in '${column}'`,() => {
         cy.visit(origin);
-        cy.clickLinkInTable(1, column, tableHeader);
+        if (transposed) {
+            cy.clickLinkInTransposedTable(column, tableHeader, tableHeaderEl);
+        } else {
+            cy.clickLinkInTable(1, column, tableHeader, tableHeaderEl);
+        }
+        
         cy.url().should('include', '/accounts/')
     }));
 })

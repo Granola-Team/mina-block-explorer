@@ -20,7 +20,7 @@ pub fn SpotlightSection(
     view! {
         <section
             id="spotlight-section"
-            class="@container md:col-start-2 md:col-end-3 md:rounded-lg bg-table-section p-0 p-4 mb-2"
+            class="@container md:col-start-2 md:col-end-3 md:rounded-lg bg-table-section px-4 py-1 md:py-4 mb-2"
         >
             <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-between items-center">
                 <span>{header}</span>
@@ -49,7 +49,7 @@ fn Spotlight(
     view! {
         <div
             id="spotlight-heading"
-            class="@3xl:grid @3xl:grid-cols-[10rem_5rem_auto_10rem] @3xl:grid-rows-[2.5rem_2.5rem] @3xl:gap-x-[2rem] @3xl:h-auto flex flex-col items-center mt-16 bg-light-granola-orange rounded-3xl h-36"
+            class="@3xl:grid @3xl:grid-cols-[10rem_5rem_auto_10rem] @3xl:grid-rows-[2.5rem_2.5rem] @3xl:gap-x-[2rem] @3xl:h-auto @3xl:pb-0 flex flex-col items-center mt-6 @3xl:mt-16 bg-light-granola-orange rounded-3xl h-36"
         >
             <div
                 id="spotlight-icon"
@@ -78,7 +78,7 @@ fn Spotlight(
 
             </div>
         </div>
-        <table class="font-mono @3xl:mx-[10rem] bg-white rounded-xl mt-8 md:p-4 table-fixed flex flex-wrap">
+        <table class="font-mono @3xl:mx-[10rem] bg-white rounded-xl mt-2 @3xl:mt-8 md:p-4 table-fixed flex flex-wrap">
             {spotlight_items
                 .into_iter()
                 .map(|entry| {
