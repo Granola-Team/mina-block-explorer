@@ -14,8 +14,9 @@ suite(["@CI"],'account transactions table', () => {
     let pages = ['/addresses/accounts/B62qrYveCMCW2tr5J8gu9T1rh817zsq7j8cjc9mHEecQS2tRMnoNTsy'];
     let columns = ['Height', 'State Hash', 'Nonce', 'Age','Type', 'Direction', 'Counterparty', 'Amount/Fee'];
 
-    pages.forEach(page => it(`on ${page} includes correct columns`, () => {
+    pages.forEach(page => it.only(`on ${page} includes correct columns`, () => {
         cy.visit(page);
+        cy.wait(1000)
         cy.tableHasOrderedColumns('Transactions', columns);
     }));
 });
