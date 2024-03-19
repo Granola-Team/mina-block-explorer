@@ -87,7 +87,7 @@ pub fn AccountSpotlightPage() -> impl IntoView {
         },
     );
 
-    let public_key = move || memo_params_map.get().get("id").cloned();
+    let public_key = move || memo_params_map.with(|p| p.get("id").cloned());
 
     create_effect(move |_| {
         if let Some(Ok(data)) = resource.get() {
