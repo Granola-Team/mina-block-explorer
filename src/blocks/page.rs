@@ -2,10 +2,12 @@ use super::{components::*, functions::*, models::*};
 use crate::common::{components::*, models::*, search::*};
 use leptos::*;
 use leptos_router::*;
+use leptos_meta::Title;
 
 #[component]
 pub fn LatestBlocksPage() -> impl IntoView {
     view! {
+        <Title text="Blocks | Search for Mina Blocks"/>
         <SearchBar placeholder="Exact search for block hash".to_string()/>
         <PageContainer>
             <BlocksSection/>

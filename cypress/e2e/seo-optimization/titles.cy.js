@@ -4,6 +4,7 @@ suite(["@CI"],'meta title',() => {
     let pages = [
         { url: `/addresses/accounts`, title: `Accounts | Search For Mina Account`},
         { url: `/addresses/accounts/${public_key}`, title: `Account Overview | 'MinaExplorer'`},
+        { url: '/blocks', title: 'Blocks | Search for Mina Blocks'},
     ];
 
     pages.forEach(({title, url}) => it(`'${title}' exists in <head> for page ${url}`, () => {
