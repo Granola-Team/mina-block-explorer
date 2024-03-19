@@ -1,6 +1,5 @@
 use super::models::*;
-use crate::icons::HelpIcon;
-use crate::common::components::CopyToClipboard;
+use crate::{common::components::CopyToClipboard, icons::HelpIcon};
 use chrono::{DateTime, Duration, Utc};
 use leptos::*;
 use rust_decimal::Decimal;
