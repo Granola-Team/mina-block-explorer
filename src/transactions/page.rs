@@ -4,6 +4,7 @@ use crate::{
     icons::*,
 };
 use leptos::*;
+use leptos_meta::Title;
 use leptos_router::*;
 
 #[component]
@@ -40,6 +41,7 @@ pub fn TransactionsPage() -> impl IntoView {
 
     view! {
         <SearchBar placeholder="Exact search by state hash".to_string()/>
+        <Title text="Transactions | Search For Transactions"/>
         <PageContainer>
             {move || {
                 let qp_map = query_params_map.get();
@@ -54,6 +56,7 @@ pub fn TransactionsPage() -> impl IntoView {
 pub fn TransactionSpotlightPage() -> impl IntoView {
     let memo_params_map = use_params_map();
     let (canonical_qp, _) = create_query_signal::<bool>("canonical");
+    let (trx_memo, set_trx_memo) = create_signal("No Memo".to_string());
     let resource = create_resource(
         move || (memo_params_map.get(), canonical_qp.get()),
         |(value, canonical)| async move {
@@ -62,7 +65,19 @@ pub fn TransactionSpotlightPage() -> impl IntoView {
         },
     );
 
+    create_effect(move |_| {
+        resource.get().and_then(|res| res.ok()).map(|data| {
+            if let Some(Some(transaction)) = data.transactions.first() {
+                set_trx_memo.set(transaction.get_memo())
+            }
+        });
+    });
+
     view! {
+        <Title
+            formatter=move |text| format!("Transaction Overview | {text}")
+            text=move || trx_memo.get()
+        />
         <PageContainer>
             {move || match resource.get() {
                 Some(Ok(data)) => {
