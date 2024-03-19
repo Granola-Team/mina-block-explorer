@@ -314,7 +314,8 @@ pub fn CopyToClipboard(children: Children) -> impl IntoView {
         <div class="relative group w-fit max-w-full text-ellipsis overflow-hidden" node_ref=element>
             <span
                 on:click=move |_| {
-                    let value = element.get().expect("<div> element").inner_text();
+                    let mut value = element.get().expect("<div> element").inner_text();
+                    value.retain(|c| !c.is_whitespace());
                     let window = window().expect("no global `window` exists");
                     let clipboard = window
                         .navigator()
@@ -339,8 +340,8 @@ pub fn CopyToClipboard(children: Children) -> impl IntoView {
             >
 
                 {move || match copied.get() {
-                    true => view! { <CopiedIcon width=20/> },
-                    false => view! { <ClipboardIcon width=20/> },
+                    true => view! { <CopiedIcon width=18/> },
+                    false => view! { <ClipboardIcon width=18/> },
                 }}
 
             </span>
