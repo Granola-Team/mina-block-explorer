@@ -25,6 +25,18 @@ suite(["@CI"],'transaction spotlight', () => {
                 .should('have.attr','title', 'Stake delegations have no transacted amount');
             });
         });
-    })
+    });
+
+    it('does not render the tooltip for regular payments',()=>{
+        cy.visit(`/transactions/${transaction_id}`);
+        cy.get("section#spotlight-section table").within(() => {
+            cy.get('th').contains('Amount').as('amount');
+            cy.get('@amount').parent('tr').as('row');
+            cy.get('@row').within(() => {
+                cy.get('td .tooltip')
+                .should('not.exist');
+            });
+        });
+    });
 });
 
