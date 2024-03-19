@@ -14,8 +14,8 @@ use crate::{
     transactions::components::*,
 };
 use leptos::*;
-use leptos_router::*;
 use leptos_meta::Title;
+use leptos_router::*;
 
 #[component]
 pub fn AccountsPage() -> impl IntoView {
@@ -36,7 +36,7 @@ pub fn AccountsPage() -> impl IntoView {
     let (current_page, set_current_page) = create_signal(1);
 
     view! {
-        <Title text="Accounts | Search For Mina Account" />
+        <Title text="Accounts | Search For Mina Account"/>
         <PageContainer>
             <TableSection section_heading="Accounts".to_string() controls=|| ().into_view()>
                 {move || match resource.get() {
@@ -88,18 +88,19 @@ pub fn AccountSpotlightPage() -> impl IntoView {
     );
 
     let public_key = move || memo_params_map.get().get("id").cloned();
-    
+
     create_effect(move |_| {
-        resource.get()
-            .and_then(|res| res.ok())
-            .map(|res| {
-                logging::log!("Username: {}",res.account.username);
-                set_username.set(Some(res.account.username))
-            });
+        resource.get().and_then(|res| res.ok()).map(|res| {
+            logging::log!("Username: {}", res.account.username);
+            set_username.set(Some(res.account.username))
+        });
     });
 
     view! {
-        <Title formatter=move |text| format!("Account Overview | '{text}'") text=move || username.get().unwrap_or_default() />
+        <Title
+            formatter=move |text| format!("Account Overview | '{text}'")
+            text=move || username.get().unwrap_or_default()
+        />
         <PageContainer>
             {move || match resource.get() {
                 Some(Ok(res)) => {
