@@ -1,8 +1,8 @@
 use super::{components::*, functions::*, models::*};
 use crate::common::{components::*, models::*, search::*};
 use leptos::*;
-use leptos_router::*;
 use leptos_meta::Title;
+use leptos_router::*;
 
 #[component]
 pub fn LatestBlocksPage() -> impl IntoView {
@@ -16,27 +16,42 @@ pub fn LatestBlocksPage() -> impl IntoView {
 }
 #[component]
 pub fn BlockSpotlightTab() -> impl IntoView {
-    view! { <BlockTabContainer content=BlockContent::Spotlight/> }
+    view! {
+        <Title text="Block Overview | Spotlight"/>
+        <BlockTabContainer content=BlockContent::Spotlight/>
+    }
 }
 
 #[component]
 pub fn BlockUserCommandsTab() -> impl IntoView {
-    view! { <BlockTabContainer content=BlockContent::UserCommands/> }
+    view! {
+        <Title text="Block Overview | User Commands"/>
+        <BlockTabContainer content=BlockContent::UserCommands/>
+    }
 }
 
 #[component]
 pub fn BlockSnarkJobsTab() -> impl IntoView {
-    view! { <BlockTabContainer content=BlockContent::SNARKJobs/> }
+    view! {
+        <Title text="Block Overview | SNARK Jobs"/>
+        <BlockTabContainer content=BlockContent::SNARKJobs/>
+    }
 }
 
 #[component]
 pub fn BlockInternalCommandsTab() -> impl IntoView {
-    view! { <BlockTabContainer content=BlockContent::FeeTransfers/> }
+    view! {
+        <Title text="Block Overview | Internal Commands"/>
+        <BlockTabContainer content=BlockContent::FeeTransfers/>
+    }
 }
 
 #[component]
 pub fn BlockAnalyticsTab() -> impl IntoView {
-    view! { <BlockTabContainer content=BlockContent::Analytics/> }
+    view! {
+        <Title text="Block Overview | Analytics"/>
+        <BlockTabContainer content=BlockContent::Analytics/>
+    }
 }
 
 #[component]
