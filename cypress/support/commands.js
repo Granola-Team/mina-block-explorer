@@ -24,15 +24,21 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
-Cypress.Commands.add('aliasTableRows', (tableHeading, alias) => {
-  cy.contains('section',tableHeading)
+Cypress.Commands.add('aliasTableRows', (tableHeading, alias, tableHeaderEl='h1') => {
+  cy.contains(`section:has(${tableHeaderEl})`,tableHeading)
     .find('table tr:not(:has(th))', {timeout: 60000})
     .as(alias);
 });
 
-Cypress.Commands.add('aliasTableHeaders', (tableHeading, alias) => {
-  cy.contains('section',tableHeading)
-    .find('table th', {timeout: 60000})
+Cypress.Commands.add('aliasTransposedTableRows', (tableHeading, alias, tableHeaderEl='h1') => {
+  cy.contains(`section:has(${tableHeaderEl})`,tableHeading)
+    .find('table tr:has(th)', {timeout: 60000})
+    .as(alias);
+});
+
+Cypress.Commands.add('aliasTableHeaders', (tableHeading, alias, tableHeadingEl='h1') => {
+  cy.contains(`section:has(${tableHeadingEl})`,tableHeading)
+    .find('table:first th', {timeout: 60000})
     .as(alias);
 })
 
@@ -59,22 +65,32 @@ Cypress.Commands.add('openMobileMenu', () => {
   cy.get('nav').should('be.visible');
 });
 
-Cypress.Commands.add('tableHasOrderedColumns', (tableHeading, columns) => {
-  cy.aliasTableHeaders(tableHeading, 'columns');
+Cypress.Commands.add('tableHasOrderedColumns', (tableHeading, columns, tableHeaderEl='h1') => {
+  cy.aliasTableHeaders(tableHeading, 'columns', tableHeaderEl);
   cy.get('@columns').should('have.length',columns.length);
   columns.forEach((col,i) => {
       cy.get('@columns').eq(i).contains(col);    
   });
 });
 
-Cypress.Commands.add('clickLinkInTable', (nthRow, columnHeading, tableHeading) => {
-  cy.aliasTableHeaders(tableHeading, 'columns');
+Cypress.Commands.add('clickLinkInTransposedTable', (columnHeading, tableHeading, tableHeadingEl='h1') => {
+  cy.aliasTransposedTableRows(tableHeading,'table-rows', tableHeadingEl)
+  cy.get('@table-rows')
+    .contains(columnHeading)
+    .siblings('td')
+    .first()
+    .find('a')
+    .click({force: true});            
+});
+
+Cypress.Commands.add('clickLinkInTable', (nthRow, columnHeading, tableHeading, tableHeadingEl='h1') => {
+  cy.aliasTableHeaders(tableHeading, 'columns', tableHeadingEl);
   cy.get('@columns')
     .contains(columnHeading, { timeout: 60000 }) 
     .invoke('index')
     .then(columnIndex => {
-      cy.contains('section',tableHeading)
-        .find('table tr', {timeout: 60000}) 
+      cy.aliasTableRows(columnHeading,'table-rows', tableHeadingEl)
+      cy.get('@table-rows')
         .eq(nthRow) 
         .find('td')
         .eq(columnIndex)
@@ -129,14 +145,15 @@ Cypress.Commands.add('testSpotlight',(heading, id, expected_fields) => {
   
 })
 
-Cypress.Commands.add('tableColumnValuesEqual', (heading, column, value) => {
-  cy.aliasTableHeaders(heading, 'columns');
+Cypress.Commands.add('tableColumnValuesEqual', (columnHeading, column, value) => {
+  cy.aliasTableHeaders(columnHeading, 'columns');
   cy.get('@columns')
     .contains(column, { timeout: 60000 }) 
     .invoke('index')
     .then(columnIndex => {
-      cy.contains('section',heading)
-        .find('table tr td', {timeout: 60000}) 
+      cy.aliasTableRows(columnHeading,'table-rows')
+      cy.get('@table-rows')
+        .find('td', {timeout: 60000}) 
         .eq(columnIndex)
         .find('a', { timeout: 60000 }) 
         .should('have.text', value)         
