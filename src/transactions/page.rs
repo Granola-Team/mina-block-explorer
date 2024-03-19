@@ -110,15 +110,29 @@ pub fn TransactionSpotlightPage() -> impl IntoView {
                                 },
                                 SpotlightEntry {
                                     label: "Amount".to_string(),
-                                    any_el: Some(
-                                        wrap_in_pill(
+                                    any_el: {
+                                        let amount_el = wrap_in_pill(
                                             decorate_with_currency_tag(
                                                 transaction.get_amount(),
                                                 "mina".to_string(),
                                             ),
                                             ColorVariant::Green,
-                                        ),
-                                    ),
+                                        );
+                                        Some(
+                                            if transaction.get_kind() == "STAKE_DELEGATION" {
+                                                convert_array_to_span(
+                                                    vec![
+                                                        amount_el,
+                                                        convert_to_tooltip(
+                                                            "Stake delegations have no transacted amount".to_string(),
+                                                        ),
+                                                    ],
+                                                )
+                                            } else {
+                                                amount_el
+                                            },
+                                        )
+                                    },
                                     ..Default::default()
                                 },
                                 SpotlightEntry {
