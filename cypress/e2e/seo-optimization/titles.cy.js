@@ -12,6 +12,7 @@ suite(["@CI"],'meta title',() => {
         { url: '/broadcast/transaction', title: 'Offline Broadcasting | Broadcast Signed Transaction'},
         { url: '/broadcast/delegation', title: 'Offline Broadcasting | Broadcast Signed Delegation'},
         { url: '/broadcast/ledger', title: 'Offline Broadcasting | Broadcast Signed Transaction From Ledger'},
+        { url: '/next-stakes', title: 'Next Staking Ledger | Search For Stakers'},
         { url: `/addresses/accounts/${public_key}`, title: `Account Overview | 'MinaExplorer'`},
     ];
 
