@@ -1,4 +1,4 @@
-suite(["@CI"],'transaction spotlight', () => {
+suite([],'transaction spotlight', () => {
     let pages = [
         { origin: '/summary/accounts/B62qqW8uKTxHZueKJwsoPY8NZcKVeDK4bLEHRkpMM2uKtEmmqLbkiQC', column: 'Hash', tableHeader: 'Transactions', tableHeaderEl: 'h2', transposed: true},   
         { origin: '/transactions', column: 'Hash', tableHeader: 'Transactions'},
