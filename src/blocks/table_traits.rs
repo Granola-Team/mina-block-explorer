@@ -4,7 +4,9 @@ use super::{
     models::*,
 };
 use crate::{
-    blocks::graphql::blocks_query::BlocksQueryBlocksSnarkJobs,
+    blocks::graphql::blocks_query::{
+        BlocksQueryBlocksSnarkJobs, BlocksQueryBlocksTransactionsFeeTransfer,
+    },
     common::{functions::*, models::*, table::*},
 };
 use leptos::*;
@@ -217,5 +219,57 @@ impl TableData for Vec<Option<BlocksQueryBlocksSnarkJobs>> {
                 None => vec![],
             })
             .collect::<Vec<_>>()
+    }
+}
+
+impl TableData for Vec<Option<BlocksQueryBlocksTransactionsFeeTransfer>> {
+    fn get_columns(&self) -> Vec<String> {
+        ["Recipient", "Fee", "Type"]
+            .iter()
+            .map(ToString::to_string)
+            .collect::<Vec<_>>()
+    }
+
+    fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
+        self.iter()
+            .map(|opt_fee_transfer| match opt_fee_transfer {
+                Some(fee_transfer) => vec![
+                    convert_to_link(
+                        fee_transfer.get_receipient(),
+                        format!("/addresses/accounts/{}", fee_transfer.get_receipient()),
+                    ),
+                    wrap_in_pill(
+                        decorate_with_currency_tag(fee_transfer.get_fee(), "mina".to_string()),
+                        ColorVariant::Orange,
+                    ),
+                    convert_to_pill(fee_transfer.get_type(), ColorVariant::Grey),
+                ],
+                None => vec![],
+            })
+            .collect::<Vec<_>>()
+    }
+}
+
+pub trait FeeTransferTrait {
+    fn get_receipient(&self) -> String;
+    fn get_fee(&self) -> String;
+    fn get_type(&self) -> String;
+}
+
+impl FeeTransferTrait for BlocksQueryBlocksTransactionsFeeTransfer {
+    fn get_receipient(&self) -> String {
+        self.recipient
+            .as_ref()
+            .map_or_else(String::new, |t| t.to_string())
+    }
+    fn get_fee(&self) -> String {
+        self.fee
+            .as_deref()
+            .and_then(string_to_f64)
+            .map(nanomina_to_mina)
+            .unwrap_or_default()
+    }
+    fn get_type(&self) -> String {
+        self.type_.as_ref().map_or_else(String::new, |t| t.to_string())
     }
 }

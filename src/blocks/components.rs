@@ -2,7 +2,6 @@ use super::{functions::*, graphql::blocks_query::BlocksQueryBlocks, models::*};
 use crate::{
     account_dialog::components::*,
     common::{components::*, functions::*, models::*, spotlight::*, table::*},
-    fee_transfers::components::BlockInternalCommandsTable,
     icons::*,
 };
 use charming::{
@@ -144,8 +143,32 @@ pub fn BlockSnarkJobs(block: BlocksQueryBlocks) -> impl IntoView {
 pub fn BlockInternalCommands(block: BlocksQueryBlocks) -> impl IntoView {
     view! {
         <TableSection section_heading="Internal Commands".to_string() controls=|| ().into_view()>
-            <BlockInternalCommandsTable block_state_hash=Option::from(get_state_hash(&block))/>
+            <BlockInternalCommandsTable block/>
         </TableSection>
+    }
+}
+
+#[component]
+pub fn BlockInternalCommandsTable(block: BlocksQueryBlocks) -> impl IntoView {
+    let records_per_page = 10;
+    let (current_page, set_current_page) = create_signal(1);
+
+    view! {
+        {match block.transactions.and_then(|trx| trx.fee_transfer) {
+            None => {
+                view! { <EmptyTable message="No internal commands for this block".to_string()/> }
+            }
+            Some(feetransfers) => {
+                let pag = build_pagination(
+                    feetransfers.len(),
+                    records_per_page,
+                    current_page.get(),
+                    set_current_page,
+                );
+                let subset = get_subset(&feetransfers, records_per_page, current_page.get() - 1);
+                view! { <Table data=subset pagination=pag/> }
+            }
+        }}
     }
 }
 
