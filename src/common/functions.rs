@@ -520,26 +520,26 @@ mod format_duration_tests {
 
     #[test]
     fn test_format_duration_days() {
-        let duration = Duration::days(3);
-        assert_eq!(format_duration(&duration), "3 days ago");
+        let duration = Duration::try_days(3);
+        assert_eq!(format_duration(&duration.unwrap()), "3 days ago");
     }
 
     #[test]
     fn test_format_duration_hours() {
-        let duration = Duration::hours(5);
-        assert_eq!(format_duration(&duration), "5 hours ago");
+        let duration = Duration::try_hours(5);
+        assert_eq!(format_duration(&duration.unwrap()), "5 hours ago");
     }
 
     #[test]
     fn test_format_duration_minutes() {
-        let duration = Duration::minutes(45);
-        assert_eq!(format_duration(&duration), "45 minutes ago");
+        let duration = Duration::try_minutes(45);
+        assert_eq!(format_duration(&duration.unwrap()), "45 minutes ago");
     }
 
     #[test]
     fn test_format_duration_mix() {
-        let duration = Duration::hours(26);
-        assert_eq!(format_duration(&duration), "1 days ago");
+        let duration = Duration::try_hours(26);
+        assert_eq!(format_duration(&duration.unwrap()), "1 days ago");
     }
 }
 

@@ -66,11 +66,11 @@ pub fn AccountDialogSectionEntryHeader(
 ) -> impl IntoView {
     let img_attr = match status {
         Status::Pending => StatusImg {
-            src: "/img/timelapse.svg",
+            src: "/assets/img/timelapse.svg",
             alt: "Pending",
         },
         Status::Complete => StatusImg {
-            src: "/img/success.svg",
+            src: "/assets/img/success.svg",
             alt: "Complete",
         },
         Status::Unknown => StatusImg {
