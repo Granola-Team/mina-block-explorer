@@ -1,10 +1,12 @@
 use super::components::*;
 use crate::common::{components::*, models::*};
 use leptos::*;
+use leptos_meta::Title;
 
 #[component]
 pub fn BroadcastTransactionPage() -> impl IntoView {
     view! {
+        <Title text="Offline Broadcasting | Broadcast Signed Transaction"/>
         <PageContainer>
             <AppSection>
                 <AppHeading heading="Broadcast Signed Transaction".to_string()/>
@@ -43,6 +45,7 @@ pub fn BroadcastTransactionPage() -> impl IntoView {
 #[component]
 pub fn BroadcastDelegationPage() -> impl IntoView {
     view! {
+        <Title text="Offline Broadcasting | Broadcast Signed Delegation"/>
         <PageContainer>
             <AppSection>
                 <AppHeading heading="Broadcast Signed Delegation".to_string()/>
@@ -79,6 +82,7 @@ pub fn BroadcastDelegationPage() -> impl IntoView {
 #[component]
 pub fn BroadcastFromLedgerPage() -> impl IntoView {
     view! {
+        <Title text="Offline Broadcasting | Broadcast Signed Transaction From Ledger"/>
         <PageContainer>
             <AppSection>
                 <AppHeading heading="Broadcast Signed Transaction From Ledger".to_string()/>

@@ -1,6 +1,7 @@
 use super::functions::*;
 use crate::common::{components::*, functions::*, models::*, search::*, table::*};
 use leptos::*;
+use leptos_meta::Title;
 use leptos_router::{create_query_signal, use_query_map};
 
 #[component]
@@ -23,6 +24,7 @@ pub fn SnarksPage() -> impl IntoView {
     let (current_page, set_current_page) = create_signal(1);
 
     view! {
+        <Title text="SNARKs | Search For SNARKs"/>
         <SearchBar placeholder="Exact search for prover".to_string()/>
         <PageContainer>
             <TableSection
