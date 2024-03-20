@@ -270,6 +270,8 @@ impl FeeTransferTrait for BlocksQueryBlocksTransactionsFeeTransfer {
             .unwrap_or_default()
     }
     fn get_type(&self) -> String {
-        self.type_.as_ref().map_or_else(String::new, |t| t.to_string())
+        self.type_
+            .as_ref()
+            .map_or_else(String::new, |t| t.to_string())
     }
 }
