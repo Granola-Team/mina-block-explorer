@@ -15,9 +15,11 @@ mod stakes;
 mod summary;
 mod transactions;
 
+use leptos_meta::provide_meta_context;
 use root::Root;
 
 fn main() {
     console_error_panic_hook::set_once();
+    provide_meta_context();
     leptos::mount_to_body(|| view! { <Root/> })
 }
