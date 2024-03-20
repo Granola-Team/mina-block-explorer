@@ -1,7 +1,5 @@
-[[hooks]]
-stage = "pre_build"
-command = "sh"
-command_arguments = ["-c", "just pre_build"]
-
 [watch]
 watch = ["index.html", "src", "assets", "graphql"]
+
+[tools]
+tailwindcss = "3.4.1"

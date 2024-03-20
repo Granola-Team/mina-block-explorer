@@ -46,7 +46,7 @@ where
                                     .map(|cell| {
                                         let cell_ellipsis_class = "text-ellipsis overflow-hidden";
                                         let cell_class = format!(
-                                            "{} {} first:pl-8 pl-2 text-table-row-text-color font-medium text-sm text-left whitespace-nowrap max-w-40",
+                                            "max-w-40 {} {} first:pl-8 pl-2 text-table-row-text-color font-medium text-sm text-left whitespace-nowrap",
                                             cell_padding_class,
                                             cell_ellipsis_class,
                                         );

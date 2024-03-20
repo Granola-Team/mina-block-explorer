@@ -34,25 +34,25 @@ fn SummaryGrid(summary: Option<BlockchainSummary>) -> impl IntoView {
                 Some(smry) => {
                     view! {
                         <SummaryItem
-                            imgsrc="/img/blockchain_length.svg".to_string()
+                            imgsrc="/assets/img/blockchain_length.svg".to_string()
                             id="blockchainLength".to_string()
                             label="Height".to_string()
                             value=Some(smry.blockchain_length.to_string())
                         />
                         <SummaryItem
-                            imgsrc="/img/circulating_supply.svg".to_string()
+                            imgsrc="/assets/img/circulating_supply.svg".to_string()
                             id="circulatingSupply".to_string()
                             label="Circulating Supply".to_string()
                             value=Some(format!("{:.2}", smry.circ_supply()))
                         />
                         <SummaryItem
-                            imgsrc="/img/epoch.svg".to_string()
+                            imgsrc="/assets/img/epoch.svg".to_string()
                             id="epoch".to_string()
                             label="Epoch".to_string()
                             value=Some(smry.epoch.to_string())
                         />
                         <SummaryItem
-                            imgsrc="/img/total_currency.svg".to_string()
+                            imgsrc="/assets/img/total_currency.svg".to_string()
                             id="totalCurrency".to_string()
                             label="Total Currency".to_string()
                             value=Some(format!("{:.2}", smry.tot_currency()))
@@ -62,25 +62,25 @@ fn SummaryGrid(summary: Option<BlockchainSummary>) -> impl IntoView {
                 None => {
                     view! {
                         <SummaryItem
-                            imgsrc="/img/blockchain_length.svg".to_string()
+                            imgsrc="/assets/img/blockchain_length.svg".to_string()
                             id="blockchainLength".to_string()
                             label="Height".to_string()
                             value=None
                         />
                         <SummaryItem
-                            imgsrc="/img/circulating_supply.svg".to_string()
+                            imgsrc="/assets/img/circulating_supply.svg".to_string()
                             id="circulatingSupply".to_string()
                             label="Circulating Supply".to_string()
                             value=None
                         />
                         <SummaryItem
-                            imgsrc="/img/epoch.svg".to_string()
+                            imgsrc="/assets/img/epoch.svg".to_string()
                             id="epoch".to_string()
                             label="Epoch".to_string()
                             value=None
                         />
                         <SummaryItem
-                            imgsrc="/img/total_currency.svg".to_string()
+                            imgsrc="/assets/img/total_currency.svg".to_string()
                             id="totalCurrency".to_string()
                             label="Total Currency".to_string()
                             value=None
