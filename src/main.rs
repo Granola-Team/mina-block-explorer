@@ -4,7 +4,6 @@ mod addresses;
 mod blocks;
 mod broadcast;
 mod common;
-mod fee_transfers;
 mod footer;
 mod header;
 mod icons;
