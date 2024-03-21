@@ -70,7 +70,7 @@ suite(["@CI"],'block spotlight snarks table', () => {
 suite(["@CI"],'internal commands table', () => {
 
     let pages = ['/blocks/3NKyujsdi2GtWA1XC9KJ6nvXeLAd3DNvYrm1PUGEagj9899s1LMz/internal-commands'];
-    let columns = ['Recipient', 'Fee', 'Type', 'Age'];
+    let columns = ['Recipient', 'Fee', 'Type'];
 
     pages.forEach(page => it(`on ${page} includes correct columns`, () => {
         cy.visit(page);
