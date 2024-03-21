@@ -40,7 +40,7 @@ pub fn AccountDialogView() -> impl IntoView {
         |value| async move {
             if let Some(id) = value.get("id").cloned() {
                 let id_clone = id.clone();
-                load_data(Some(id_clone)).await
+                load_data(Some(id_clone), Some(3), Some(3), Some(3), Some(true)).await
             } else {
                 Err(MyError::ParseError(String::from(
                     "Could not parse id parameter from url",

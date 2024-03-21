@@ -1,6 +1,4 @@
-use super::{
-    functions::*, models::DirectionalTransactionsQueryTransactions, table_trait::TransactionsTrait,
-};
+use super::{functions::*, table_trait::TransactionsTrait};
 use crate::{
     common::{components::*, functions::*, models::*, table::*},
     icons::*,
@@ -45,68 +43,6 @@ pub fn TransactionsSection(
                 }
             }
         }}
-    }
-}
-
-#[component]
-pub fn AccountTransactionsSection(
-    public_key: Option<String>,
-    #[prop(default = None)] state_hash: Option<String>,
-) -> impl IntoView {
-    let (pk, _set_public_key) = create_signal(public_key);
-    let (state_hash_sig, _) = create_signal(state_hash);
-    let (canonical_qp, _) = create_query_signal::<bool>("canonical");
-    let (data, set_data) = create_signal(None);
-
-    let transactions_from_resource = create_resource(
-        move || (pk.get(), state_hash_sig.get(), canonical_qp.get()),
-        move |(pk_value, state_hash, canonical)| async move {
-            logging::log!("create_resource");
-            load_data(50, pk_value, None, state_hash, canonical).await
-        },
-    );
-
-    let transactions_to_resource = create_resource(
-        move || (pk.get(), state_hash_sig.get(), canonical_qp.get()),
-        move |(pk_value, state_hash, canonical)| async move {
-            load_data(50, None, pk_value, state_hash, canonical).await
-        },
-    );
-
-    create_effect(move |_| {
-        if let (Some(Ok(data_from)), Some(Ok(data_to))) = (
-            transactions_from_resource.get(),
-            transactions_to_resource.get(),
-        ) {
-            let mut data = data_from
-                .transactions
-                .iter()
-                .filter(|d| d.is_some())
-                .chain(data_to.transactions.iter())
-                .map(|d| {
-                    let trx = d.clone().unwrap();
-                    Some(DirectionalTransactionsQueryTransactions::from_original(
-                        &trx,
-                        pk.get().unwrap(),
-                    ))
-                })
-                .collect::<Vec<_>>();
-            data.sort_by(|a, b| {
-                        match (&<std::option::Option<DirectionalTransactionsQueryTransactions> as Clone>::clone(a).unwrap().base_transaction.block.unwrap().date_time, &<std::option::Option<DirectionalTransactionsQueryTransactions> as Clone>::clone(b).unwrap().base_transaction.block.unwrap().date_time) {
-                            (Some(date_time_a), Some(date_time_b)) => date_time_b.cmp(date_time_a),
-                            (Some(_), None) => std::cmp::Ordering::Greater,
-                            (None, Some(_)) => std::cmp::Ordering::Less,
-                            (None, None) => std::cmp::Ordering::Equal,
-                        }
-                    });
-            set_data.set(Some(data));
-        }
-    });
-
-    {
-        move || {
-            view! { <TransactionSection transactions=data.get() public_key=pk.get()/> }
-        }
     }
 }
 
