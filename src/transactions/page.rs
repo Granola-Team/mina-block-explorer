@@ -4,6 +4,7 @@ use crate::{
     icons::*,
 };
 use leptos::*;
+use leptos_meta::Title;
 use leptos_router::*;
 
 #[component]
@@ -40,6 +41,7 @@ pub fn TransactionsPage() -> impl IntoView {
 
     view! {
         <SearchBar placeholder="Exact search by state hash".to_string()/>
+        <Title text="Transactions | Search For Transactions"/>
         <PageContainer>
             {move || {
                 let qp_map = query_params_map.get();
@@ -54,6 +56,7 @@ pub fn TransactionsPage() -> impl IntoView {
 pub fn TransactionSpotlightPage() -> impl IntoView {
     let memo_params_map = use_params_map();
     let (canonical_qp, _) = create_query_signal::<bool>("canonical");
+    let (trx_memo, set_trx_memo) = create_signal("No Memo".to_string());
     let resource = create_resource(
         move || (memo_params_map.get(), canonical_qp.get()),
         |(value, canonical)| async move {
@@ -62,7 +65,19 @@ pub fn TransactionSpotlightPage() -> impl IntoView {
         },
     );
 
+    create_effect(move |_| {
+        if let Some(Ok(data)) = resource.get() {
+            if let Some(Some(trx)) = data.transactions.first() {
+                set_trx_memo.set(trx.get_memo());
+            }
+        }
+    });
+
     view! {
+        <Title
+            formatter=move |text| format!("Transaction Overview | {text}")
+            text=move || trx_memo.get()
+        />
         <PageContainer>
             {move || match resource.get() {
                 Some(Ok(data)) => {
@@ -104,7 +119,10 @@ pub fn TransactionSpotlightPage() -> impl IntoView {
                                 SpotlightEntry {
                                     label: "Block State Hash".to_string(),
                                     any_el: Some(
-                                        convert_to_span(transaction.get_block_state_hash()),
+                                        convert_to_link(
+                                            transaction.get_block_state_hash(),
+                                            format!("/blocks/{}", transaction.get_block_state_hash()),
+                                        ),
                                     ),
                                     copiable: true,
                                 },
@@ -150,12 +168,22 @@ pub fn TransactionSpotlightPage() -> impl IntoView {
                                 },
                                 SpotlightEntry {
                                     label: "From".to_string(),
-                                    any_el: Some(convert_to_span(transaction.get_from())),
+                                    any_el: Some(
+                                        convert_to_link(
+                                            transaction.get_from(),
+                                            format!("/addresses/accounts/{}", transaction.get_from()),
+                                        ),
+                                    ),
                                     copiable: true,
                                 },
                                 SpotlightEntry {
                                     label: "To".to_string(),
-                                    any_el: Some(convert_to_span(transaction.get_to())),
+                                    any_el: Some(
+                                        convert_to_link(
+                                            transaction.get_to(),
+                                            format!("/addresses/accounts/{}", transaction.get_to()),
+                                        ),
+                                    ),
                                     copiable: true,
                                 },
                                 SpotlightEntry {

@@ -4,6 +4,7 @@ use crate::{
     stakes::components::StakesNavButton,
 };
 use leptos::*;
+use leptos_meta::Title;
 use leptos_router::*;
 
 #[component]
@@ -21,6 +22,7 @@ pub fn NextStakesPage() -> impl IntoView {
     let (current_page, set_current_page) = create_signal(1);
 
     view! {
+        <Title text="Next Staking Ledger | Search For Stakers"/>
         <SearchBar placeholder="Exact search for public key".to_string()/>
         <PageContainer>
             <ErrorBoundary fallback=move |_| view! { <NullView/> }>
