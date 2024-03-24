@@ -1,5 +1,6 @@
+import { DEFAULT_ACCOUNT_PK } from "../constants";
+
 suite(["@CI"],'account transaction table',()=>{
-    let account = 'B62qmPb2YVWP7vKXzpxgSNZRrRU8mrouzcLUG6v7EDNAVBbw7AiHodq';
 
     it('correctly references a counterparty', () => {
         cy.visit(`/addresses/accounts/${account}`);
@@ -12,9 +13,9 @@ suite(["@CI"],'account transaction table',()=>{
                 if (text == "Self") {
                     expect(true).to.equal(true);
                 } else {
-                    expect(text.length).to.equal(account.length);
+                    expect(text.length).to.equal(DEFAULT_ACCOUNT_PK.length);
                 }
-                expect(text).to.not.equal(account);
+                expect(text).to.not.equal(DEFAULT_ACCOUNT_PK);
             })
             
         }

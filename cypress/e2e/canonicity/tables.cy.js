@@ -1,3 +1,5 @@
+import { DEFAULT_ACCOUNT_PK } from "../constants";
+
 suite(["@CI"],'table', () => {
 
     let pages = [
@@ -5,10 +7,10 @@ suite(["@CI"],'table', () => {
             url: '/blocks',
             section: 'Blocks',
         }, {
-            url: '/addresses/accounts/B62qnGNZRE5X6ZhnnDV4NeESEWyM2HbYbmULcyeJrZmVeKGqMtF22Fi',
+            url: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
             section: 'Block Production'
         }, {
-            url: '/addresses/accounts/B62qkwrHj3YCKgQsXRktpwhVFij19RiwYDgMmiwp7iggNBi8712a4W4',
+            url: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
             section: 'SNARK Jobs'
         },{
             url: '/summary',
