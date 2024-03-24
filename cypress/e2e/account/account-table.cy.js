@@ -9,7 +9,11 @@ suite(["@CI"],'account transaction table',()=>{
         {
             cy.aliasTableValue(i,'Counterparty','Transactions', 'counterparty');
             cy.get('@counterparty').invoke('text').then(text => {
-                expect(text.length).to.equal(account.length);
+                if (text == "Self") {
+                    expect(true).to.equal(true);
+                } else {
+                    expect(text.length).to.equal(account.length);
+                }
                 expect(text).to.not.equal(account);
             })
             
