@@ -14,7 +14,7 @@ steps:
   key: build
   depends_on: prereqs
 
-- label: "Lint, Audit, Build, and Test"
+- label: "Test"
   env: 
     CYPRESS_tags: "@CI"
   command: |
