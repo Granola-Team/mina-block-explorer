@@ -15,7 +15,7 @@ default:
 set dotenv-load := true
 
 build_npm:
-  npm install
+  pnpm install
 
 build: build_npm
   trunk build
