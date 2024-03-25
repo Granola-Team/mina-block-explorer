@@ -38,7 +38,7 @@
             cargo-nextest
             leptosfmt
             just
-            # nodejs_18
+            nodejs_18
 	    nodePackages.pnpm
             openssl
             pkg-config
