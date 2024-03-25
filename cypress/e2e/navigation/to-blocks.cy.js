@@ -1,8 +1,10 @@
+import { DEFAULT_ACCOUNT_PK } from "../constants";
+
 suite(["@CI"],'block page', () => {
     [{
-        origin: '/addresses/accounts/B62qq3TQ8AP7MFYPVtMx5tZGF3kWLJukfwG1A1RGvaBW1jfTPTkDBW6',
+        origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
         dest:"blocks",
-        href:"/blocks?account=B62qq3TQ8AP7MFYPVtMx5tZGF3kWLJukfwG1A1RGvaBW1jfTPTkDBW6"
+        href:`/blocks?account=${DEFAULT_ACCOUNT_PK}`
     }].forEach(({origin, dest, href}) => it(`is navigated to from ${origin}`,() => {
         cy.visit(origin);
         cy.get('a').contains("See all block production", {timeout: 60000}).click();

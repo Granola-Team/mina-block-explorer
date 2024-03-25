@@ -1,5 +1,6 @@
 use super::functions::*;
 use crate::{
+    addresses::components::AccountTransactionsSection,
     blocks::components::AccountOverviewBlocksTable,
     common::{
         components::*,
@@ -11,7 +12,6 @@ use crate::{
     },
     icons::*,
     snarks::components::AccountOverviewSnarkJobTable,
-    transactions::components::*,
 };
 use leptos::*;
 use leptos_meta::Title;
