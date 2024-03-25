@@ -1,6 +1,5 @@
 use super::{functions::*, graphql::blocks_query::BlocksQueryBlocks, models::*};
 use crate::{
-    account_dialog::components::*,
     common::{components::*, functions::*, models::*, spotlight::*, table::*},
     icons::*,
 };
@@ -594,96 +593,6 @@ fn BlockSpotlightPlaceholder() -> impl IntoView {
 }
 
 #[component]
-pub fn AccountDialogBlocksSection(blocks: Vec<Option<BlocksQueryBlocks>>) -> impl IntoView {
-    let blocks_inner = blocks.clone();
-    let has_blocks = move || !blocks.clone().is_empty();
-
-    view! {
-        <AccountDialogSectionContainer
-            title=String::from("Block Production")
-            showing_message=format!("Showing latest {} blocks", blocks_inner.len())
-        >
-            <Show
-                when=has_blocks
-                fallback=move || {
-                    view! {
-                        <EmptyTable message="This public key has no block production".to_string()/>
-                    }
-                }
-            >
-
-                {blocks_inner
-                    .iter()
-                    .map(|opt_block| {
-                        let check_block = opt_block.clone();
-                        let block = opt_block.clone().unwrap();
-                        view! {
-                            <Show
-                                when=move || check_block.is_some()
-                                fallback=move || view! { <NullView/> }
-                            >
-
-                                {
-                                    let moments_ago = print_time_since(&get_date_time(&block));
-                                    let date_time = get_date_time(&block);
-                                    let status = get_status(&date_time);
-                                    view! {
-                                        <AccountDialogSectionEntryHeader
-                                            status=status
-                                            date=date_time
-                                            moments_ago=moments_ago
-                                        />
-                                        <AccountDialogBlockEntry block=block.clone()/>
-                                        <AccountDialogEntryDivider/>
-                                    }
-                                        .into_view()
-                                }
-
-                            </Show>
-                        }
-                    })
-                    .collect::<Vec<_>>()}
-            </Show>
-        </AccountDialogSectionContainer>
-    }
-}
-
-struct SubEntry {
-    label: String,
-    value: String,
-}
-
-#[component]
-fn AccountDialogBlockEntry(block: BlocksQueryBlocks) -> impl IntoView {
-    let sub_entries = vec![
-        SubEntry {
-            label: String::from("Hash"),
-            value: get_state_hash(&block),
-        },
-        SubEntry {
-            label: String::from("Coinbase"),
-            value: get_coinbase(&block),
-        },
-    ];
-    view! {
-        <AccountDialogSubsectionTable>
-            {sub_entries
-                .into_iter()
-                .map(|se| {
-                    view! {
-                        <AccountDialogSubsectionRow
-                            label=se.label
-                            el=convert_to_ellipsis(se.value)
-                        />
-                    }
-                })
-                .collect::<Vec<_>>()}
-        </AccountDialogSubsectionTable>
-    }
-    .into_view()
-}
-
-#[component]
 pub fn BlocksSection() -> impl IntoView {
     let query_params_map = use_query_map();
     let (canonical_qp, _) = create_query_signal::<bool>("canonical");
@@ -821,71 +730,6 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
 
         </ErrorBoundary>
         <Outlet/>
-    }
-}
-
-#[component]
-pub fn AccountOverviewBlocksTable(public_key: Option<String>) -> impl IntoView {
-    let pk = public_key.clone();
-    let (canonical_sig, _) = create_query_signal::<bool>("canonical");
-    let resource = create_resource(
-        move || canonical_sig.get(),
-        move |canonical| {
-            let public_key_inner = public_key.clone();
-            async move { load_data(50, public_key_inner, None, canonical).await }
-        },
-    );
-
-    let (href, _set_href) = create_signal(
-        pk.as_ref()
-            .map(|pk| format!("/blocks?account={}", pk))
-            .unwrap_or_else(|| "/blocks".to_string()),
-    );
-
-    let records_per_page = 5;
-    let (current_page, set_current_page) = create_signal(1);
-
-    view! {
-        {move || match resource.get() {
-            Some(Ok(data)) => {
-                view! {
-                    {match data.blocks.len() {
-                        0 => {
-                            view! {
-                                <EmptyTable message="This public key has no block production"
-                                    .to_string()/>
-                            }
-                        }
-                        _ => {
-                            {
-                                let pag = build_pagination(
-                                    data.blocks.len(),
-                                    records_per_page,
-                                    current_page.get(),
-                                    set_current_page,
-                                );
-                                let blocks_subset = get_subset(
-                                    &data.blocks,
-                                    records_per_page,
-                                    current_page.get() - 1,
-                                );
-                                view! {
-                                    <Table data=blocks_subset pagination=pag/>
-                                    <TableLink
-                                        href=href.get()
-                                        text="See all block production".to_string()
-                                    >
-                                        <BlockIcon/>
-                                    </TableLink>
-                                }
-                            }
-                                .into_view()
-                        }
-                    }}
-                }
-            }
-            _ => view! { <span></span> }.into_view(),
-        }}
     }
 }
 

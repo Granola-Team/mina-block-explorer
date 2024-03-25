@@ -1,6 +1,5 @@
 use leptos::*;
-mod account_dialog;
-mod addresses;
+mod account_activity;
 mod blocks;
 mod broadcast;
 mod common;
