@@ -163,11 +163,7 @@ pub fn AccountDialogView() -> impl IntoView {
                                         .into_iter()
                                         .map(|r| r.map(|t| t.into()))
                                         .collect()/>
-                                    <AccountDialogBlocksSection blocks=res
-                                        .blocks
-                                        .into_iter()
-                                        .map(|r| r.map(|t| t.into()))
-                                        .collect()/>
+                                    <AccountDialogBlocksSection blocks=res.blocks/>
                                 }
                             })}
 
