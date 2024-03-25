@@ -1,10 +1,12 @@
+import { DEFAULT_ACCOUNT_PK } from "../constants";
+
 suite(["@CI"],'account page', () => {
     let pages = [
         { origin: '/summary/accounts/B62qqW8uKTxHZueKJwsoPY8NZcKVeDK4bLEHRkpMM2uKtEmmqLbkiQC', column: 'Counterparty', tableHeader: 'Transactions', tableHeaderEl: 'h2', transposed: true},
-        { origin: '/addresses/accounts/B62qmkGkjvFwmkqv6erSmTGMx9ABhuxJqpCi4gyUtxFDwif97j2X5zp', column: 'Counterparty', tableHeader: 'Transactions' },
-        { origin: '/addresses/accounts/B62qq3TQ8AP7MFYPVtMx5tZGF3kWLJukfwG1A1RGvaBW1jfTPTkDBW6', column: 'Block Producer', tableHeader: 'Block Production' },
-        { origin: '/addresses/accounts/B62qq3TQ8AP7MFYPVtMx5tZGF3kWLJukfwG1A1RGvaBW1jfTPTkDBW6', column: 'Coinbase Receiver', tableHeader: 'Block Production' },
-        { origin: '/addresses/accounts/B62qq3TQ8AP7MFYPVtMx5tZGF3kWLJukfwG1A1RGvaBW1jfTPTkDBW6', column: 'Prover', tableHeader: 'SNARK Jobs' },
+        { origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`, column: 'Counterparty', tableHeader: 'Transactions' },
+        { origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`, column: 'Block Producer', tableHeader: 'Block Production' },
+        { origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`, column: 'Coinbase Receiver', tableHeader: 'Block Production' },
+        { origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`, column: 'Prover', tableHeader: 'SNARK Jobs' },
         { origin: '/snarks', column: 'Prover', tableHeader: 'SNARKs' },
         { origin: '/stakes', column: 'Key', tableHeader: 'Current Staking Ledger' },
         { origin: '/stakes', column: 'Delegate', tableHeader: 'Current Staking Ledger' },

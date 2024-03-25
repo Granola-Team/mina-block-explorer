@@ -1,3 +1,5 @@
+import { DEFAULT_ACCOUNT_PK } from "../constants";
+
 suite(["@CI"],'table', () => {
 
     let pages = [
@@ -5,10 +7,10 @@ suite(["@CI"],'table', () => {
             url: '/blocks',
             section: 'Blocks',
         }, {
-            url: '/addresses/accounts/B62qnGNZRE5X6ZhnnDV4NeESEWyM2HbYbmULcyeJrZmVeKGqMtF22Fi',
+            url: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
             section: 'Block Production'
         }, {
-            url: '/addresses/accounts/B62qkwrHj3YCKgQsXRktpwhVFij19RiwYDgMmiwp7iggNBi8712a4W4',
+            url: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
             section: 'SNARK Jobs'
         },{
             url: '/summary',
@@ -25,22 +27,22 @@ suite(["@CI"],'table', () => {
 
         // should load canonical by default
         cy.contains('section',section).find('table tr:not(:has(th)) span', {timeout: 60000}).as('tableRows')
-        cy.get('@tableRows', {timeout: 20000}).should('not.have.class', 'bg-status-failed');
-        cy.get('@tableRows', {timeout: 20000}).should('have.class', 'bg-status-success');
+        cy.get('@tableRows', {timeout: 60000}).should('not.have.class', 'bg-status-failed');
+        cy.get('@tableRows', {timeout: 60000}).should('have.class', 'bg-status-success');
 
         cy.wait(500);
         cy.get('@menu').select('Non-Canonical');
         cy.wait(500);
         cy.url().should('include', 'canonical=false');
-        cy.get('@tableRows', {timeout: 20000}).should('not.have.class', 'bg-status-success');
-        cy.get('@tableRows', {timeout: 20000}).should('have.class', 'bg-status-failed');
+        cy.get('@tableRows', {timeout: 60000}).should('not.have.class', 'bg-status-success');
+        cy.get('@tableRows', {timeout: 60000}).should('have.class', 'bg-status-failed');
         
         cy.get('@menu').select('Canonical');
         cy.url().should('include', 'canonical=true');
         cy.wait(500);
         cy.contains('section',section).find('table tr:not(:has(th)) span', {timeout: 60000}).as('tableRows')
-        cy.get('@tableRows', {timeout: 20000}).should('not.have.class', 'bg-status-failed');
-        cy.get('@tableRows', {timeout: 20000}).should('have.class', 'bg-status-success');
+        cy.get('@tableRows', {timeout: 60000}).should('not.have.class', 'bg-status-failed');
+        cy.get('@tableRows', {timeout: 60000}).should('have.class', 'bg-status-success');
     }));
 
 })

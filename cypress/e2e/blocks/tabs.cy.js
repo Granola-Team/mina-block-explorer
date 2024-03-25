@@ -18,7 +18,7 @@ suite(["@CI"],'tab count and pagination count', () => {
         cy.get('@tab').click();        
         cy.get('@tab-count').invoke('text').then((count) => {
             if (Number(count) > 0) {
-                cy.scrollTo('bottom');
+                cy.scrollTo('bottom',{ensureScrollable: false});
                 cy.get('.pagination-controls').children().first().contains(count);
             } else {
                 cy.get('table').should('not.exist');

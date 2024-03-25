@@ -1,11 +1,12 @@
 
 const devices = require('../../devices.json');
+const { DEFAULT_ACCOUNT_PK } = require('../constants');
 
 suite(["@VisualRegression"],'spotlight', () => {
 
     const pages = [
         { url: "/summary/accounts/B62qoiQhNWjwFkfCVBpkDTYytifftoYQB9qJ3z6X4d58ocxmiwUQY8U", name: 'account-dialog'},
-        { url: "/addresses/accounts/B62qoiQhNWjwFkfCVBpkDTYytifftoYQB9qJ3z6X4d58ocxmiwUQY8U", name: 'account-page' },
+        { url: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`, name: 'account-page' },
     ];
     
     pages.forEach(page => {
