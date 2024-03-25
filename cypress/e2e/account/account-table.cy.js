@@ -3,7 +3,7 @@ import { DEFAULT_ACCOUNT_PK } from "../constants";
 suite(["@CI"],'account transaction table',()=>{
 
     it('correctly references a counterparty', () => {
-        cy.visit(`/addresses/accounts/${account}`);
+        cy.visit(`/addresses/accounts/${DEFAULT_ACCOUNT_PK}`);
         cy.aliasTableValue(0,'Counterparty','Transactions', 'counterparty');
 
         for(let i=0;i<=9;i++)
