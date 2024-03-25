@@ -2,7 +2,7 @@
   description = "A development environment and build system for the mina-block-explorer project";
 
   inputs = {
-    nixpkgs.url      = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url      = "github:NixOS/nixpkgs/nixpkgs-unstable";
     rust-overlay.url = "github:oxalica/rust-overlay";
     flake-utils.url  = "github:numtide/flake-utils";
     flake-compat     = {
@@ -27,10 +27,9 @@
           }
         );
       in
-      with pkgs;
       {
-        devShells.default = mkShell {
-          buildInputs = [
+        devShells.default = pkgs.mkShell {
+          buildInputs = with pkgs; [
             nightlyToolchain.passthru.availableComponents.rustfmt
             awscli
             cacert
@@ -40,6 +39,7 @@
             leptosfmt
             just
             nodejs_18
+	    nodePackages.pnpm
             openssl
             pkg-config
             rsync
