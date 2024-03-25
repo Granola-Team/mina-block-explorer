@@ -32,17 +32,40 @@ query AccountActivityQuery($blocks_query: BlockQueryInput!, $blocks_limit: Int =
     memo
   }
   snarks(sortBy: $snarks_sort_by, limit: $snarks_limit, query: $snarks_query) {
+    canonical
+    blockHeight
     block {
       stateHash
     }
     fee
     dateTime
+    prover
+    workIds
   }
   blocks(sortBy: $blocks_sort_by, limit: $blocks_limit, query: $blocks_query) {
+    canonical
+    blockHeight
     stateHash
     dateTime
+    protocolState {
+      consensusState {
+        slot
+      }
+    }
+    creatorAccount {
+      publicKey
+    }
+    snarkJobs {
+      blockHeight
+    }
     transactions {
       coinbase
+      userCommands {
+        blockHeight
+      }
+      coinbaseReceiverAccount {
+        publicKey
+      }
     }
   }
 }
