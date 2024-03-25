@@ -16,14 +16,9 @@ for varying system configurations or dependency conflicts.
 
 ### Installing Nix
 
-1. Install Nix: Visit [Nix download
-   page](https://nixos.org/download.html) and follow the installation
-   instructions.
+1. Install [Nix](https://nixos.org/download.html).
 
-2. Enable Nix Flakes: Refer to the [Nix Flakes
-   guide](https://nixos.wiki/wiki/Flakes) for enabling Flakes in Nix.
-
-No additional dependencies are needed beyond this setup.
+2. Enable the [Nix Flakes](https://nixos.wiki/wiki/Flakes) feature.
 
 ## Quick Start Guide
 
