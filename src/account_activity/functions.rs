@@ -1,5 +1,5 @@
-use super::graphql::{account_activity_query, AccountActivityQuery};
-use crate::{common::{models::*, spotlight::*, functions::*}, addresses::models::*};
+use super::{graphql::{account_activity_query, AccountActivityQuery}, models::*};
+use crate::{common::{models::*, spotlight::*, functions::*}};
 use graphql_client::reqwest::post_graphql;
 use leptos::*;
 use leptos_router::*;
