@@ -1,6 +1,6 @@
 # Mina Block Explorer
 
-[![Build status](https://badge.buildkite.com/1f8c338cb4ede4e41a4d84de89479fb2eddf9a6f64b72dcf36.svg)](https://buildkite.com/granola/mina-block-explorer)
+[![Build status](https://badge.buildkite.com/1f8c338cb4ede4e41a4d84de89479fb2eddf9a6f64b72dcf36.svg?branch=main)](https://buildkite.com/granola/mina-block-explorer)
 
 The Mina Block Explorer is a user-friendly website for exploring the
 Mina Blockchain. It offers a straightforward interface to view details

@@ -4,13 +4,22 @@ steps:
   command: |
     echo HOME=$HOME
     echo PATH=$PATH
-    nix-shell shell.nix --run "just --justfile Justfile"
+    nix-shell --run just
   key: prereqs
 
-- label: "Lint, Audit, Build, and Test"
+- label: "Build, Lint, and Audit"
+  command: |
+    nix-shell --run "just build_npm"
+    nix-shell --run "just lint"
+  key: build
+  depends_on: prereqs
+
+- label: "Test"
   env: 
     CYPRESS_tags: "@CI"
   command: |
-    nix-shell shell.nix --run "just --justfile Justfile test"
-  key: build
-  depends_on: prereqs
+    nix-shell --run "just test"
+  key: test
+  depends_on: build
+  agents:
+    xwindows: true
