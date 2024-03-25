@@ -1,5 +1,8 @@
 [watch]
-watch = ["index.html", "src", "assets", "graphql"]
+watch = ["assets", "graphql"]
 
 [tools]
 tailwindcss = "3.4.1"
+
+[build]
+target = "src/index.html"
