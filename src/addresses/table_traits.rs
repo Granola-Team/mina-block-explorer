@@ -1,6 +1,6 @@
 use super::models::AllAccountSummary;
 use crate::{
-    account_dialog::models::{
+    account_activity::models::{
         AccountActivityQueryDirectionalTransactionTrait,
         AccountActivityQueryDirectionalTransactions,
     },

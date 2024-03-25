@@ -1,6 +1,6 @@
 use super::{functions::*, graphql::blocks_query::BlocksQueryBlocks, models::*};
 use crate::{
-    account_dialog::components::*,
+    account_activity::components::*,
     common::{components::*, functions::*, models::*, spotlight::*, table::*},
     icons::*,
 };

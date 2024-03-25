@@ -1,5 +1,5 @@
 use crate::{
-    account_dialog::{functions::load_data, models::AccountActivityQueryDirectionalTransactions},
+    account_activity::{functions::load_data, models::AccountActivityQueryDirectionalTransactions},
     common::{components::*, functions::*, models::*, table::*},
 };
 use leptos::*;

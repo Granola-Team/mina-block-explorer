@@ -1,5 +1,5 @@
 use crate::{
-    account_dialog::dialog::AccountDialogView,
+    account_activity::dialog::AccountDialogView,
     addresses::page::{AccountSpotlightPage, AccountsPage, AddressesTabbedPage},
     blocks::page::{
         BlockAnalyticsTab, BlockInternalCommandsTab, BlockSnarkJobsTab, BlockSpotlightTab,

@@ -3,7 +3,7 @@ use super::{
     graphql::snarks_query::SnarksQuerySnarks,
 };
 use crate::{
-    account_dialog::components::*,
+    account_activity::components::*,
     common::{components::*, functions::*, table::*},
     icons::*,
 };

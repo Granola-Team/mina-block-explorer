@@ -1,5 +1,5 @@
 use crate::{
-    account_dialog::graphql::account_activity_query::{
+    account_activity::graphql::account_activity_query::{
         AccountActivityQueryIncomingTransactions, AccountActivityQueryOutgoingTransactions,
     },
     common::functions::nanomina_to_mina,
