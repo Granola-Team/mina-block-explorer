@@ -14,12 +14,12 @@ steps:
   key: build
   depends_on: prereqs
 
-#- label: "Test"
-#  env: 
-#    CYPRESS_tags: "@CI"
-#  command: |
-#    nix-shell --run "just test"
-#  key: test
-#  depends_on: build
-#  agents:
-#    xwindows: true
+- label: "Test"
+  env: 
+    CYPRESS_tags: "@CI"
+  command: |
+    nix develop --command just test
+  key: test
+  depends_on: build
+  agents:
+    xwindows: true
