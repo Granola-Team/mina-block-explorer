@@ -1,8 +1,8 @@
 use crate::{
-    account_activity::graphql::account_activity_query::{
-        AccountActivityQueryIncomingTransactions, AccountActivityQueryOutgoingTransactions,
-    },
     common::functions::nanomina_to_mina,
+};
+use super::graphql::account_activity_query::{
+    AccountActivityQueryIncomingTransactions, AccountActivityQueryOutgoingTransactions,
 };
 use chrono::{DateTime, Utc};
 use crate::Params;

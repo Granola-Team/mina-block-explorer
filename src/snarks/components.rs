@@ -1,14 +1,12 @@
 use super::{
-    functions::{load_data, *},
+    functions::*,
     graphql::snarks_query::SnarksQuerySnarks,
 };
 use crate::{
     account_activity::components::*,
     common::{components::*, functions::*, table::*},
-    icons::*,
 };
 use leptos::*;
-use leptos_router::create_query_signal;
 
 #[component]
 pub fn AccountDialogSnarkJobSection(snarks: Vec<Option<SnarksQuerySnarks>>) -> impl IntoView {
@@ -105,64 +103,4 @@ fn AccountDialogSnarkJobEntry(snark: SnarksQuerySnarks) -> impl IntoView {
         </AccountDialogSubsectionTable>
     }
     .into_view()
-}
-
-#[component]
-pub fn AccountOverviewSnarkJobTable(public_key: Option<String>) -> impl IntoView {
-    let pk = public_key.clone();
-    let (canonical_qs, _) = create_query_signal::<bool>("canonical");
-    let resource = create_resource(
-        move || canonical_qs.get(),
-        move |canonical| {
-            let public_key_inner = public_key.clone();
-            async move { load_data(50, public_key_inner, None, canonical).await }
-        },
-    );
-
-    let (href, _set_href) = create_signal(
-        pk.as_ref()
-            .map(|pk| format!("/snarks?account={}", pk))
-            .unwrap_or_else(|| "/snarks".to_string()),
-    );
-
-    let records_per_page = 5;
-    let (current_page, set_current_page) = create_signal(1);
-
-    view! {
-        {move || match resource.get() {
-            Some(Ok(data)) => {
-                view! {
-                    {match data.snarks.len() {
-                        0 => {
-                            view! {
-                                <EmptyTable message="This public key has not completed any SNARK work"
-                                    .to_string()/>
-                            }
-                        }
-                        _ => {
-                            let pag = build_pagination(
-                                data.snarks.len(),
-                                records_per_page,
-                                current_page.get(),
-                                set_current_page,
-                            );
-                            let subset = get_subset(
-                                &data.snarks,
-                                records_per_page,
-                                current_page.get() - 1,
-                            );
-                            view! {
-                                <Table data=subset pagination=pag/>
-                                <TableLink href=href.get() text="See all snark jobs".to_string()>
-                                    <CheckCircleIcon/>
-                                </TableLink>
-                            }
-                                .into_view()
-                        }
-                    }}
-                }
-            }
-            _ => view! { <span></span> }.into_view(),
-        }}
-    }
 }

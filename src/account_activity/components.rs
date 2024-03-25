@@ -1,10 +1,13 @@
 use super::models::{
     AccountActivityQueryDirectionalTransactionTrait, AccountActivityQueryDirectionalTransactions,
 };
-use crate::{common::{components::*, functions::*, models::*, table::EmptyTable}, account_activity::functions::load_data};
+use crate::{common::{components::*, functions::*, models::*, table::EmptyTable}};
 use leptos::*;
-use leptos_router::create_query_signal;
 use crate::common::table::*;
+use super::graphql::account_activity_query::AccountActivityQuerySnarks;
+use super::graphql::account_activity_query::AccountActivityQueryBlocks;
+use crate::account_activity::table_traits::BlockTrait;
+use crate::icons::*;
 
 #[component]
 pub fn AccountDialogSectionContainer(
@@ -218,127 +221,227 @@ fn TransactionEntry(
 }
 
 #[component]
-pub fn AccountTransactionsSection(public_key: Option<String>) -> impl IntoView {
-    let (pk, _set_public_key) = create_signal(public_key);
-    let (transactions, set_transactions) = create_signal(None);
-    let (canonical_qp, _) = create_query_signal::<bool>("canonical");
-
+pub fn AccountTransactionsSection(transactions: Vec<Option<AccountActivityQueryDirectionalTransactions>>) -> impl IntoView {
+    
     let records_per_page = 10;
     let (current_page, set_current_page) = create_signal(1);
 
-    let account_activity_resource = create_resource(
-        move || (pk.get(), canonical_qp.get()),
-        |(id_opt, canonical)| async move {
-            if let Some(id) = id_opt {
-                load_data(
-                    Some(id),
-                    None,
-                    None,
-                    Some(100),
-                    Some(canonical.unwrap_or(true)),
-                )
-                .await
-            } else {
-                Err(MyError::ParseError(String::from(
-                    "Could not parse id parameter from url",
-                )))
-            }
-        },
-    );
-
-    create_effect(move |_| {
-        if let Some(res) = account_activity_resource.get().and_then(|res| res.ok()) {
-            let mut transactions: Vec<_> = res
-                .incoming_transactions
-                .into_iter()
-                .filter(|t| t.is_some())
-                .map(|r| r.map(|t| t.into()))
-                .chain(
-                    res.outgoing_transactions
-                        .into_iter()
-                        .filter(|t| t.is_some())
-                        .map(|r| r.map(|t| t.into())),
-                )
-                .collect();
-            transactions.sort_by(|a, b| {
-                match (
-                        <std::option::Option<
-                            AccountActivityQueryDirectionalTransactions,
-                        > as Clone>::clone(a)
-                            .unwrap()
-                            .date_time,
-                        <std::option::Option<
-                            AccountActivityQueryDirectionalTransactions,
-                        > as Clone>::clone(b)
-                            .unwrap()
-                            .date_time,
-                    ) {
-                        (Some(date_time_a), Some(date_time_b)) => {
-                            date_time_b.cmp(&date_time_a)
-                        }
-                        (Some(_), None) => std::cmp::Ordering::Greater,
-                        (None, Some(_)) => std::cmp::Ordering::Less,
-                        (None, None) => std::cmp::Ordering::Equal,
-                    }
-            });
-            set_transactions.set(Some(transactions));
-        };
-    });
-
     view! {
-        <ErrorBoundary fallback=move |_| {
-            view! { <NullView/> }
-        }>
-
-            {move || match transactions.get() {
-                Some(data) => {
-                    view! {
-                        <TableSection
-                            section_heading="Transactions".to_owned()
-                            controls=move || {
-                                view! {
-                                    <BooleanUrlParamSelectMenu
-                                        id="canonical-selection"
-                                        query_str_key="canonical"
-                                        labels=BooleanUrlParamSelectOptions {
-                                            true_case: String::from("Canonical"),
-                                            false_case: String::from("Non-Canonical"),
-                                        }
-                                    />
-                                }
-                            }
-                        >
-
-                            {move || {
-                                let pag = build_pagination(
-                                    data.len(),
-                                    records_per_page,
-                                    current_page.get(),
-                                    set_current_page,
-                                );
-                                let subset = get_subset(
-                                    &data,
-                                    records_per_page,
-                                    current_page.get() - 1,
-                                );
-                                view! { <Table data=subset pagination=pag/> }
-                            }}
-
-                        </TableSection>
-                    }
+        <TableSection
+            section_heading="Transactions".to_owned()
+            controls=move || {
+                view! {
+                    <BooleanUrlParamSelectMenu
+                        id="canonical-selection"
+                        query_str_key="canonical"
+                        labels=BooleanUrlParamSelectOptions {
+                            true_case: String::from("Canonical"),
+                            false_case: String::from("Non-Canonical"),
+                        }
+                    />
                 }
-                None => {
-                    view! {
-                        <TableSection
-                            section_heading="Transactions".to_string()
-                            controls=|| ().into_view()
-                        >
-                            <Table data=LoadingPlaceholder {}/>
-                        </TableSection>
-                    }
-                }
+            }
+        >
+
+            {move || {
+                let pag = build_pagination(
+                    transactions.len(),
+                    records_per_page,
+                    current_page.get(),
+                    set_current_page,
+                );
+                let subset = get_subset(
+                    &transactions,
+                    records_per_page,
+                    current_page.get() - 1,
+                );
+                view! { <Table data=subset pagination=pag/> }
             }}
 
-        </ErrorBoundary>
+        </TableSection>
     }
+     
+}
+
+
+#[component]
+pub fn AccountOverviewSnarkJobTable(snarks: Vec<Option<AccountActivityQuerySnarks>>, public_key: Option<String>) -> impl IntoView {
+    let (href, _set_href) = create_signal(
+        public_key.as_ref()
+            .map(|pk| format!("/snarks?account={}", pk))
+            .unwrap_or_else(|| "/snarks".to_string()),
+    );
+
+    let records_per_page = 5;
+    let (current_page, set_current_page) = create_signal(1);
+
+    view! {
+        {match snarks.len() {
+            0 => {
+                view! {
+                    <EmptyTable message="This public key has not completed any SNARK work"
+                        .to_string()/>
+                }
+            }
+            _ => {
+                let pag = build_pagination(
+                    snarks.len(),
+                    records_per_page,
+                    current_page.get(),
+                    set_current_page,
+                );
+                let subset = get_subset(
+                    &snarks,
+                    records_per_page,
+                    current_page.get() - 1,
+                );
+                view! {
+                    <Table data=subset pagination=pag/>
+                    <TableLink href=href.get() text="See all snark jobs".to_string()>
+                        <CheckCircleIcon/>
+                    </TableLink>
+                }
+                    .into_view()
+            }
+        }}
+    }
+}
+
+
+#[component]
+pub fn AccountOverviewBlocksTable(blocks: Vec<Option<AccountActivityQueryBlocks>>, public_key: Option<String>) -> impl IntoView {
+    let (href, _set_href) = create_signal(
+        public_key.as_ref()
+            .map(|pk| format!("/blocks?account={}", pk))
+            .unwrap_or_else(|| "/blocks".to_string()),
+    );
+
+    let records_per_page = 5;
+    let (current_page, set_current_page) = create_signal(1);
+    view! {
+        {match blocks.len() {
+            0 => {
+                view! {
+                    <EmptyTable message="This public key has no block production"
+                        .to_string()/>
+                }
+            }
+            _ => {
+                {
+                    let pag = build_pagination(
+                        blocks.len(),
+                        records_per_page,
+                        current_page.get(),
+                        set_current_page,
+                    );
+                    let blocks_subset = get_subset(
+                        &blocks,
+                        records_per_page,
+                        current_page.get() - 1,
+                    );
+                    view! {
+                        <Table data=blocks_subset pagination=pag/>
+                        <TableLink
+                            href=href.get()
+                            text="See all block production".to_string()
+                        >
+                            <BlockIcon/>
+                        </TableLink>
+                    }
+                }
+                    .into_view()
+            }
+        }}
+    }
+}
+
+#[component]
+pub fn AccountDialogBlocksSection(blocks: Vec<Option<AccountActivityQueryBlocks>>) -> impl IntoView {
+    let blocks_inner = blocks.clone();
+    let has_blocks = move || !blocks.clone().is_empty();
+
+    view! {
+        <AccountDialogSectionContainer
+            title=String::from("Block Production")
+            showing_message=format!("Showing latest {} blocks", blocks_inner.len())
+        >
+            <Show
+                when=has_blocks
+                fallback=move || {
+                    view! {
+                        <EmptyTable message="This public key has no block production".to_string()/>
+                    }
+                }
+            >
+
+                {blocks_inner
+                    .iter()
+                    .map(|opt_block| {
+                        let check_block = opt_block.clone();
+                        let block = opt_block.clone().unwrap();
+                        view! {
+                            <Show
+                                when=move || check_block.is_some()
+                                fallback=move || view! { <NullView/> }
+                            >
+
+                                {
+                                    let moments_ago = print_time_since(&block.get_date_time());
+                                    let date_time = block.get_date_time();
+                                    let status = get_status(&date_time);
+                                    view! {
+                                        <AccountDialogSectionEntryHeader
+                                            status=status
+                                            date=date_time
+                                            moments_ago=moments_ago
+                                        />
+                                        <AccountDialogBlockEntry block=block.clone()/>
+                                        <AccountDialogEntryDivider/>
+                                    }
+                                        .into_view()
+                                }
+
+                            </Show>
+                        }
+                    })
+                    .collect::<Vec<_>>()}
+            </Show>
+        </AccountDialogSectionContainer>
+    }
+}
+
+
+struct SubEntry {
+    label: String,
+    value: String,
+}
+
+#[component]
+fn AccountDialogBlockEntry(block: AccountActivityQueryBlocks) -> impl IntoView {
+    let sub_entries = vec![
+        SubEntry {
+            label: String::from("Hash"),
+            value: block.get_state_hash(),
+        },
+        SubEntry {
+            label: String::from("Coinbase"),
+            value: block.get_coinbase(),
+        },
+    ];
+    view! {
+        <AccountDialogSubsectionTable>
+            {sub_entries
+                .into_iter()
+                .map(|se| {
+                    view! {
+                        <AccountDialogSubsectionRow
+                            label=se.label
+                            el=convert_to_ellipsis(se.value)
+                        />
+                    }
+                })
+                .collect::<Vec<_>>()}
+        </AccountDialogSubsectionTable>
+    }
+    .into_view()
 }

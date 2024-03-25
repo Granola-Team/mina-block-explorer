@@ -4,13 +4,13 @@ use super::{
     models::*,
 };
 use crate::{
-    blocks::components::AccountDialogBlocksSection,
     common::{components::*, models::MyError, spotlight::*},
     icons::*,
     snarks::components::AccountDialogSnarkJobSection,
 };
 use leptos::*;
 use leptos_router::*;
+use crate::account_activity::components::AccountDialogBlocksSection;
 
 #[component]
 pub fn AccountDialogView() -> impl IntoView {
