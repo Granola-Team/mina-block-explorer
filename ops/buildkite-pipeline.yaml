@@ -7,11 +7,10 @@ steps:
     nix-shell --run just
   key: prereqs
 
-- label: "Build, Lint, and Audit"
+- label: "Lint, and Audit"
   command: |
-    nix-shell --run "just build"
     nix-shell --run "just lint"
-  key: build
+  key: lint
   depends_on: prereqs
 
 - label: "Test"
@@ -20,6 +19,6 @@ steps:
   command: |
     nix-shell --run "just test"
   key: test
-  depends_on: build
+  depends_on: lint
   agents:
     xwindows: true
