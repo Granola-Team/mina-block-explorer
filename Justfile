@@ -25,15 +25,15 @@ clean:
   trunk clean
   cargo clean
   rm -fr cypress/screenshots/
-  rm -fr cypress/snapshots/navigation/desktop-menu-look-and-feel.cy.js/__diff_output__/
-  rm -fr cypress/snapshots/navigation/mobile-menu-look-and-feel.cy.js/__diff_output__/
+  find cypress -name '__diff_output__' -prune -execdir rm -rf {} +
   rm -fr node_modules/
   rm -f package-lock.json
+  rm -fr assets/css
 
 test: lint test-unit test-e2e
 
 test-e2e: build_npm
-  CYPRESS_BASE_URL="{{cypress_base_url}}" node ./scripts/wait-on-port.js trunk serve --port="{{trunk_port}}" -- "{{trunk_port}}" -- npx cypress run -r list -q
+  CYPRESS_BASE_URL="{{cypress_base_url}}" node ./scripts/wait-on-port.js trunk serve --no-autoreload --port="{{trunk_port}}" -- "{{trunk_port}}" -- npx cypress run -r list -q
 
 test-e2e-local: build_npm
   CYPRESS_BASE_URL="{{cypress_base_url}}" node ./scripts/wait-on-port.js trunk serve --port="{{trunk_port}}" -- "{{trunk_port}}" -- npx cypress open
