@@ -1,14 +1,17 @@
-use super::models::AllAccountSummary;
+use super::{
+    graphql::account_activity_query::AccountActivityQuerySnarks, models::AllAccountSummary,
+};
 use crate::{
-    account_activity::models::{
-        AccountActivityQueryDirectionalTransactionTrait,
-        AccountActivityQueryDirectionalTransactions,
+    account_activity::{
+        graphql::account_activity_query::AccountActivityQueryBlocks,
+        models::{
+            AccountActivityQueryDirectionalTransactionTrait,
+            AccountActivityQueryDirectionalTransactions,
+        },
     },
     common::{functions::*, models::*, table::TableData},
 };
 use leptos::*;
-use super::graphql::account_activity_query::AccountActivityQuerySnarks;
-use crate::account_activity::graphql::account_activity_query::AccountActivityQueryBlocks;
 
 impl TableData for Vec<Option<AllAccountSummary>> {
     fn get_columns(&self) -> Vec<String> {
@@ -181,7 +184,8 @@ impl TableData for Vec<Option<AccountActivityQuerySnarks>> {
                         format!("/addresses/accounts/{}", snark.get_prover()),
                     ),
                     convert_array_to_span(
-                        snark.get_work_ids()
+                        snark
+                            .get_work_ids()
                             .iter()
                             .map(|w| convert_to_pill(w.to_string(), ColorVariant::Grey))
                             .collect::<Vec<_>>(),
@@ -196,7 +200,6 @@ impl TableData for Vec<Option<AccountActivityQuerySnarks>> {
             .collect::<Vec<_>>()
     }
 }
-
 
 pub trait SnarkTrait {
     fn get_canonical(&self) -> String;
@@ -226,7 +229,9 @@ impl SnarkTrait for AccountActivityQuerySnarks {
         self.date_time.map_or(String::new(), |f| f.to_string())
     }
     fn get_prover(&self) -> String {
-        self.prover.as_ref().map_or_else(String::new, |f| f.to_string())
+        self.prover
+            .as_ref()
+            .map_or_else(String::new, |f| f.to_string())
     }
     fn get_work_ids(&self) -> Vec<String> {
         self.work_ids.as_ref().map_or_else(Vec::new, |ids| {
@@ -239,7 +244,6 @@ impl SnarkTrait for AccountActivityQuerySnarks {
         self.fee.map(nanomina_to_mina).unwrap_or_default()
     }
 }
-
 
 impl TableData for Vec<Option<AccountActivityQueryBlocks>> {
     fn get_columns(&self) -> Vec<String> {
@@ -283,14 +287,8 @@ impl TableData for Vec<Option<AccountActivityQueryBlocks>> {
                         decorate_with_currency_tag(block.get_coinbase(), "mina".to_string()),
                         ColorVariant::Green,
                     ),
-                    convert_to_pill(
-                        block.get_transaction_count(),
-                        ColorVariant::Blue,
-                    ),
-                    convert_to_pill(
-                        block.get_snark_job_count(),
-                        ColorVariant::Blue,
-                    ),
+                    convert_to_pill(block.get_transaction_count(), ColorVariant::Blue),
+                    convert_to_pill(block.get_snark_job_count(), ColorVariant::Blue),
                     convert_to_link(
                         block.get_coinbase_receiver(),
                         format!("/blocks/accounts/{}", block.get_coinbase_receiver()),
@@ -339,33 +337,31 @@ impl BlockTrait for AccountActivityQueryBlocks {
         })
     }
     fn get_creator_account(&self) -> String {
-        self
-        .creator_account
-        .as_ref()
-        .map_or_else(String::new, |o| {
+        self.creator_account.as_ref().map_or_else(String::new, |o| {
             o.public_key
                 .as_ref()
                 .map_or_else(String::new, |o1| o1.to_string())
         })
     }
     fn get_coinbase(&self) -> String {
-        self
-        .transactions
-        .as_ref()
-        .and_then(|o| o.coinbase.as_deref())
-        .and_then(string_to_f64)
-        .map(nanomina_to_mina)
-        .unwrap_or_default()
+        self.transactions
+            .as_ref()
+            .and_then(|o| o.coinbase.as_deref())
+            .and_then(string_to_f64)
+            .map(nanomina_to_mina)
+            .unwrap_or_default()
     }
     fn get_transaction_count(&self) -> String {
-        self
-        .transactions
-        .as_ref()
-        .and_then(|o| o.user_commands.as_ref().map(|o1| o1.len()))
-        .map_or_else(String::new, |c| c.to_string())
+        self.transactions
+            .as_ref()
+            .and_then(|o| o.user_commands.as_ref().map(|o1| o1.len()))
+            .map_or_else(String::new, |c| c.to_string())
     }
     fn get_snark_job_count(&self) -> String {
-        self.snark_jobs.as_ref().map(|o| o.len()).map_or_else(String::new, |c| c.to_string())
+        self.snark_jobs
+            .as_ref()
+            .map(|o| o.len())
+            .map_or_else(String::new, |c| c.to_string())
     }
     fn get_coinbase_receiver(&self) -> String {
         self.transactions.as_ref().map_or_else(String::new, |o| {

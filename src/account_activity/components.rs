@@ -1,13 +1,21 @@
-use super::models::{
-    AccountActivityQueryDirectionalTransactionTrait, AccountActivityQueryDirectionalTransactions,
+use super::{
+    graphql::account_activity_query::{AccountActivityQueryBlocks, AccountActivityQuerySnarks},
+    models::{
+        AccountActivityQueryDirectionalTransactionTrait,
+        AccountActivityQueryDirectionalTransactions,
+    },
 };
-use crate::{common::{components::*, functions::*, models::*, table::EmptyTable}};
+use crate::{
+    account_activity::table_traits::BlockTrait,
+    common::{
+        components::*,
+        functions::*,
+        models::*,
+        table::{EmptyTable, *},
+    },
+    icons::*,
+};
 use leptos::*;
-use crate::common::table::*;
-use super::graphql::account_activity_query::AccountActivityQuerySnarks;
-use super::graphql::account_activity_query::AccountActivityQueryBlocks;
-use crate::account_activity::table_traits::BlockTrait;
-use crate::icons::*;
 
 #[component]
 pub fn AccountDialogSectionContainer(
@@ -221,8 +229,9 @@ fn TransactionEntry(
 }
 
 #[component]
-pub fn AccountTransactionsSection(transactions: Vec<Option<AccountActivityQueryDirectionalTransactions>>) -> impl IntoView {
-    
+pub fn AccountTransactionsSection(
+    transactions: Vec<Option<AccountActivityQueryDirectionalTransactions>>,
+) -> impl IntoView {
     let records_per_page = 10;
     let (current_page, set_current_page) = create_signal(1);
 
@@ -250,24 +259,22 @@ pub fn AccountTransactionsSection(transactions: Vec<Option<AccountActivityQueryD
                     current_page.get(),
                     set_current_page,
                 );
-                let subset = get_subset(
-                    &transactions,
-                    records_per_page,
-                    current_page.get() - 1,
-                );
+                let subset = get_subset(&transactions, records_per_page, current_page.get() - 1);
                 view! { <Table data=subset pagination=pag/> }
             }}
 
         </TableSection>
     }
-     
 }
 
-
 #[component]
-pub fn AccountOverviewSnarkJobTable(snarks: Vec<Option<AccountActivityQuerySnarks>>, public_key: Option<String>) -> impl IntoView {
+pub fn AccountOverviewSnarkJobTable(
+    snarks: Vec<Option<AccountActivityQuerySnarks>>,
+    public_key: Option<String>,
+) -> impl IntoView {
     let (href, _set_href) = create_signal(
-        public_key.as_ref()
+        public_key
+            .as_ref()
             .map(|pk| format!("/snarks?account={}", pk))
             .unwrap_or_else(|| "/snarks".to_string()),
     );
@@ -290,11 +297,7 @@ pub fn AccountOverviewSnarkJobTable(snarks: Vec<Option<AccountActivityQuerySnark
                     current_page.get(),
                     set_current_page,
                 );
-                let subset = get_subset(
-                    &snarks,
-                    records_per_page,
-                    current_page.get() - 1,
-                );
+                let subset = get_subset(&snarks, records_per_page, current_page.get() - 1);
                 view! {
                     <Table data=subset pagination=pag/>
                     <TableLink href=href.get() text="See all snark jobs".to_string()>
@@ -307,11 +310,14 @@ pub fn AccountOverviewSnarkJobTable(snarks: Vec<Option<AccountActivityQuerySnark
     }
 }
 
-
 #[component]
-pub fn AccountOverviewBlocksTable(blocks: Vec<Option<AccountActivityQueryBlocks>>, public_key: Option<String>) -> impl IntoView {
+pub fn AccountOverviewBlocksTable(
+    blocks: Vec<Option<AccountActivityQueryBlocks>>,
+    public_key: Option<String>,
+) -> impl IntoView {
     let (href, _set_href) = create_signal(
-        public_key.as_ref()
+        public_key
+            .as_ref()
             .map(|pk| format!("/blocks?account={}", pk))
             .unwrap_or_else(|| "/blocks".to_string()),
     );
@@ -322,8 +328,7 @@ pub fn AccountOverviewBlocksTable(blocks: Vec<Option<AccountActivityQueryBlocks>
         {match blocks.len() {
             0 => {
                 view! {
-                    <EmptyTable message="This public key has no block production"
-                        .to_string()/>
+                    <EmptyTable message="This public key has no block production".to_string()/>
                 }
             }
             _ => {
@@ -341,10 +346,7 @@ pub fn AccountOverviewBlocksTable(blocks: Vec<Option<AccountActivityQueryBlocks>
                     );
                     view! {
                         <Table data=blocks_subset pagination=pag/>
-                        <TableLink
-                            href=href.get()
-                            text="See all block production".to_string()
-                        >
+                        <TableLink href=href.get() text="See all block production".to_string()>
                             <BlockIcon/>
                         </TableLink>
                     }
@@ -356,7 +358,9 @@ pub fn AccountOverviewBlocksTable(blocks: Vec<Option<AccountActivityQueryBlocks>
 }
 
 #[component]
-pub fn AccountDialogBlocksSection(blocks: Vec<Option<AccountActivityQueryBlocks>>) -> impl IntoView {
+pub fn AccountDialogBlocksSection(
+    blocks: Vec<Option<AccountActivityQueryBlocks>>,
+) -> impl IntoView {
     let blocks_inner = blocks.clone();
     let has_blocks = move || !blocks.clone().is_empty();
 
@@ -409,7 +413,6 @@ pub fn AccountDialogBlocksSection(blocks: Vec<Option<AccountActivityQueryBlocks>
         </AccountDialogSectionContainer>
     }
 }
-
 
 struct SubEntry {
     label: String,

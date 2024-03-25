@@ -1,13 +1,10 @@
-use crate::{
-    common::functions::nanomina_to_mina,
-};
 use super::graphql::account_activity_query::{
     AccountActivityQueryIncomingTransactions, AccountActivityQueryOutgoingTransactions,
 };
+use crate::{common::functions::nanomina_to_mina, Params};
 use chrono::{DateTime, Utc};
-use crate::Params;
 use leptos_router::Params;
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 #[derive(Params, PartialEq)]
 pub struct URLParams {
@@ -60,7 +57,6 @@ pub struct AllAccountSummary {
     pub public_key: String,
     pub username: String,
 }
-
 
 #[derive(Clone)]
 pub struct AccountActivityQueryDirectionalTransactions {

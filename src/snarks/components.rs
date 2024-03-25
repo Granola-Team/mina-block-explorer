@@ -1,7 +1,4 @@
-use super::{
-    functions::*,
-    graphql::snarks_query::SnarksQuerySnarks,
-};
+use super::{functions::*, graphql::snarks_query::SnarksQuerySnarks};
 use crate::{
     account_activity::components::*,
     common::{components::*, functions::*, table::*},

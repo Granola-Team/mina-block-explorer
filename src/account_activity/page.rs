@@ -1,6 +1,11 @@
 use super::functions::*;
 use crate::{
-    account_activity::{components::AccountTransactionsSection, models::AccountActivityQueryDirectionalTransactions},
+    account_activity::{
+        components::{
+            AccountOverviewBlocksTable, AccountOverviewSnarkJobTable, AccountTransactionsSection,
+        },
+        models::AccountActivityQueryDirectionalTransactions,
+    },
     common::{
         components::*,
         functions::*,
@@ -11,8 +16,6 @@ use crate::{
     },
     icons::*,
 };
-use crate::account_activity::components::AccountOverviewSnarkJobTable;
-use crate::account_activity::components::AccountOverviewBlocksTable;
 use leptos::*;
 use leptos_meta::Title;
 use leptos_router::*;
@@ -95,15 +98,21 @@ pub fn AccountSpotlightPage() -> impl IntoView {
         move || (memo_params_map.get(), canonical_sig.get()),
         |(value, canonical_opt)| async move {
             if value.get("id").is_some() {
-                load_data(value.get("id").cloned(), Some(50), Some(50), Some(50), canonical_opt).await
+                load_data(
+                    value.get("id").cloned(),
+                    Some(50),
+                    Some(50),
+                    Some(50),
+                    canonical_opt,
+                )
+                .await
             } else {
                 Err(MyError::ParseError(String::from(
                     "Could not parse id parameter from url",
                 )))
             }
-        }
+        },
     );
-
 
     create_effect(move |_| {
         if let Some(res) = activity_resource.get().and_then(|res| res.ok()) {
@@ -189,33 +198,48 @@ pub fn AccountSpotlightPage() -> impl IntoView {
             }}
             {move || match transactions.get() {
                 Some(transactions) => view! { <AccountTransactionsSection transactions/> },
-                None => view! { 
-                    <TableSection
-                        section_heading="Transactions".to_string()
-                        controls=|| ().into_view()
-                    >
-                        <Table data=LoadingPlaceholder {}/>
-                    </TableSection>
-                },
+                None => {
+                    view! {
+                        <TableSection
+                            section_heading="Transactions".to_string()
+                            controls=|| ().into_view()
+                        >
+                            <Table data=LoadingPlaceholder {}/>
+                        </TableSection>
+                    }
+                }
             }}
             <SubSectionContainer>
-                <AppSubSection
-                    heading="SNARK Jobs".to_string()
-                    position=SubSectionPosition::Left
-                >
+                <AppSubSection heading="SNARK Jobs".to_string() position=SubSectionPosition::Left>
                     {move || match snarks.get() {
-                        Some(snarks) => view! { <AccountOverviewSnarkJobTable snarks public_key=memo_params_map.get().get("id").cloned()/> },
+                        Some(snarks) => {
+                            view! {
+                                <AccountOverviewSnarkJobTable
+                                    snarks
+                                    public_key=memo_params_map.get().get("id").cloned()
+                                />
+                            }
+                        }
                         None => view! { <Table data=LoadingPlaceholder {}/> },
                     }}
+
                 </AppSubSection>
                 <AppSubSection
                     heading="Block Production".to_string()
                     position=SubSectionPosition::Right
                 >
                     {move || match blocks.get() {
-                        Some(blocks) => view! { <AccountOverviewBlocksTable blocks public_key=memo_params_map.get().get("id").cloned()/> },
+                        Some(blocks) => {
+                            view! {
+                                <AccountOverviewBlocksTable
+                                    blocks
+                                    public_key=memo_params_map.get().get("id").cloned()
+                                />
+                            }
+                        }
                         None => view! { <Table data=LoadingPlaceholder {}/> },
                     }}
+
                 </AppSubSection>
             </SubSectionContainer>
         </PageContainer>

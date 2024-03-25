@@ -1,5 +1,8 @@
-use super::{graphql::{account_activity_query, AccountActivityQuery}, models::*};
-use crate::{common::{models::*, spotlight::*, functions::*}};
+use super::{
+    graphql::{account_activity_query, AccountActivityQuery},
+    models::*,
+};
+use crate::common::{functions::*, models::*, spotlight::*};
 use graphql_client::reqwest::post_graphql;
 use leptos::*;
 use leptos_router::*;
@@ -61,7 +64,6 @@ pub async fn load_all_accounts(
         Err(_) => Err(MyError::NetworkError(String::from("API error"))),
     }
 }
-
 
 pub async fn load_data(
     public_key: Option<String>,
@@ -130,7 +132,6 @@ pub async fn load_data(
         .data
         .ok_or(MyError::GraphQLEmpty("No data available".to_string()))
 }
-
 
 pub fn get_spotlight_loading_data() -> Vec<SpotlightEntry> {
     vec![

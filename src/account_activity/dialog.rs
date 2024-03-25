@@ -1,16 +1,12 @@
-use super::{
-    components::AccountDialogTransactionSection,
-    functions::*,
-    models::*,
-};
+use super::{components::AccountDialogTransactionSection, functions::*, models::*};
 use crate::{
+    account_activity::components::AccountDialogBlocksSection,
     common::{components::*, models::MyError, spotlight::*},
     icons::*,
     snarks::components::AccountDialogSnarkJobSection,
 };
 use leptos::*;
 use leptos_router::*;
-use crate::account_activity::components::AccountDialogBlocksSection;
 
 #[component]
 pub fn AccountDialogView() -> impl IntoView {
