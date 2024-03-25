@@ -1,10 +1,9 @@
 use super::{
     components::AccountDialogTransactionSection,
-    functions::{get_base_page_path, load_data},
+    functions::*,
     models::*,
 };
 use crate::{
-    addresses::functions::{load_data as load_summary_data, *},
     blocks::components::AccountDialogBlocksSection,
     common::{components::*, models::MyError, spotlight::*},
     icons::*,
@@ -24,7 +23,7 @@ pub fn AccountDialogView() -> impl IntoView {
         |value| async move {
             if let Some(id) = value.get("id").cloned() {
                 let id_clone = id.clone();
-                load_summary_data(&id_clone).await
+                load_account_data(&id_clone).await
             } else {
                 Err(MyError::ParseError(String::from(
                     "Could not parse id parameter from url",

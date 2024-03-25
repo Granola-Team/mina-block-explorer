@@ -28,7 +28,7 @@ pub fn AccountsPage() -> impl IntoView {
             if public_key.is_none() {
                 public_key = value.get("query");
             }
-            load_all_data(Some(0), Some(50), public_key.cloned()).await
+            load_all_accounts(Some(0), Some(50), public_key.cloned()).await
         },
     );
 
@@ -78,7 +78,7 @@ pub fn AccountSpotlightPage() -> impl IntoView {
         |value| async move {
             if let Some(id) = value.get("id").cloned() {
                 let id_clone = id.clone();
-                load_data(&id_clone).await
+                load_account_data(&id_clone).await
             } else {
                 Err(MyError::ParseError(String::from(
                     "Could not parse id parameter from url",

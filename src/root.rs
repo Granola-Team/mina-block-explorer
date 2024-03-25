@@ -1,6 +1,6 @@
 use crate::{
     account_activity::dialog::AccountDialogView,
-    addresses::page::{AccountSpotlightPage, AccountsPage, AddressesTabbedPage},
+    account_activity::page::{AccountSpotlightPage, AccountsPage, AddressesTabbedPage},
     blocks::page::{
         BlockAnalyticsTab, BlockInternalCommandsTab, BlockSnarkJobsTab, BlockSpotlightTab,
         BlockTabbedPage, BlockUserCommandsTab, LatestBlocksPage,
