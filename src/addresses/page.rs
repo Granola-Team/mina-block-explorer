@@ -1,6 +1,6 @@
 use super::functions::*;
 use crate::{
-    addresses::components::AccountTransactionsSection,
+    account_activity::components::AccountTransactionsSection,
     blocks::components::AccountOverviewBlocksTable,
     common::{
         components::*,
