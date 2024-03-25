@@ -15,13 +15,10 @@ default:
 set dotenv-load := true
 
 build_npm:
-  npm install
+  pnpm install
 
 build: build_npm
   trunk build
-
-build-release: build_npm
-  trunk build --release
 
 clean:
   rm -rf dist
