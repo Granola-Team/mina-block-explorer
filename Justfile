@@ -20,9 +20,6 @@ build_npm:
 build: build_npm
   trunk build
 
-build-release: build_npm
-  trunk build --release
-
 clean:
   rm -rf dist
   trunk clean
