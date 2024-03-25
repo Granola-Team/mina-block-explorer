@@ -189,7 +189,14 @@ pub fn AccountSpotlightPage() -> impl IntoView {
             }}
             {move || match transactions.get() {
                 Some(transactions) => view! { <AccountTransactionsSection transactions/> },
-                None => view! { <NullView /> }
+                None => view! { 
+                    <TableSection
+                        section_heading="Transactions".to_string()
+                        controls=|| ().into_view()
+                    >
+                        <Table data=LoadingPlaceholder {}/>
+                    </TableSection>
+                },
             }}
             <SubSectionContainer>
                 <AppSubSection
@@ -198,7 +205,7 @@ pub fn AccountSpotlightPage() -> impl IntoView {
                 >
                     {move || match snarks.get() {
                         Some(snarks) => view! { <AccountOverviewSnarkJobTable snarks public_key=memo_params_map.get().get("id").cloned()/> },
-                        None => view! { <NullView /> }
+                        None => view! { <Table data=LoadingPlaceholder {}/> },
                     }}
                 </AppSubSection>
                 <AppSubSection
@@ -207,7 +214,7 @@ pub fn AccountSpotlightPage() -> impl IntoView {
                 >
                     {move || match blocks.get() {
                         Some(blocks) => view! { <AccountOverviewBlocksTable blocks public_key=memo_params_map.get().get("id").cloned()/> },
-                        None => view! { <NullView /> }
+                        None => view! { <Table data=LoadingPlaceholder {}/> },
                     }}
                 </AppSubSection>
             </SubSectionContainer>
