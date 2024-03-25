@@ -118,7 +118,7 @@ impl TableData for Vec<Option<BlocksQueryBlocksTransactionsUserCommands>> {
                             get_user_command_amount(user_command),
                             "mina".to_string(),
                         ),
-                        ColorVariant::Blue,
+                        ColorVariant::Green,
                     ),
                 ],
                 None => vec![],
