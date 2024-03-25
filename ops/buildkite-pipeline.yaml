@@ -9,7 +9,7 @@ steps:
 
 - label: "Build, Lint, and Audit"
   command: |
-    nix develop --command build_npm
+    nix develop --command just build_npm
     nix develop --command just lint
   key: build
   depends_on: prereqs
