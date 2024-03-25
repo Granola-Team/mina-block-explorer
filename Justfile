@@ -25,10 +25,10 @@ clean:
   trunk clean
   cargo clean
   rm -fr cypress/screenshots/
-  rm -fr cypress/snapshots/navigation/desktop-menu-look-and-feel.cy.js/__diff_output__/
-  rm -fr cypress/snapshots/navigation/mobile-menu-look-and-feel.cy.js/__diff_output__/
+  find cypress -name '__diff_output__' -prune -execdir rm -rf {} +
   rm -fr node_modules/
   rm -f package-lock.json
+  rm -fr assets/css
 
 test: lint test-unit test-e2e
 
