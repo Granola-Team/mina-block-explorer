@@ -80,22 +80,38 @@ pub async fn load_data(
         trans_limit: Some(trans_limit.unwrap_or_default()),
         blocks_query: account_activity_query::BlockQueryInput {
             creator: public_key.clone(),
-            canonical,
+            canonical: if canonical.is_none() {
+                Some(true)
+            } else {
+                canonical
+            },
             ..Default::default()
         },
         snarks_query: account_activity_query::SnarkQueryInput {
             prover: public_key.clone(),
-            canonical,
+            canonical: if canonical.is_none() {
+                Some(true)
+            } else {
+                canonical
+            },
             ..Default::default()
         },
         outgoing_trans_query: account_activity_query::TransactionQueryInput {
             from: public_key.clone(),
-            canonical,
+            canonical: if canonical.is_none() {
+                Some(true)
+            } else {
+                canonical
+            },
             ..Default::default()
         },
         incoming_trans_query: account_activity_query::TransactionQueryInput {
             to: public_key,
-            canonical,
+            canonical: if canonical.is_none() {
+                Some(true)
+            } else {
+                canonical
+            },
             ..Default::default()
         },
     };
