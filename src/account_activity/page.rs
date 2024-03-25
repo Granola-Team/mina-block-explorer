@@ -156,6 +156,13 @@ pub fn AccountSpotlightPage() -> impl IntoView {
     });
 
     create_effect(move |_| {
+        canonical_sig.get();
+        set_transactions.set(None);
+        set_snarks.set(None);
+        set_blocks.set(None);
+    });
+
+    create_effect(move |_| {
         if let Some(Ok(data)) = resource.get() {
             logging::log!("Username: {}", data.account.username);
             set_username.set(Some(data.account.username))
