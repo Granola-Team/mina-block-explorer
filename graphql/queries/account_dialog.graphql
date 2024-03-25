@@ -1,5 +1,6 @@
 query AccountActivityQuery($blocks_query: BlockQueryInput!, $blocks_limit: Int = 3, $blocks_sort_by: BlockSortByInput!, $snarks_sort_by: SnarkSortByInput!, $snarks_limit: Int = 3, $snarks_query: SnarkQueryInput!, $trans_limit: Int = 10, $trans_sort_by: TransactionSortByInput!, $outgoing_trans_query: TransactionQueryInput!,$incoming_trans_query: TransactionQueryInput!) {
   incoming_transactions: transactions(sortBy: $trans_sort_by, limit: $trans_limit, query: $incoming_trans_query) {
+    canonical
     fee
     from
     hash
@@ -8,8 +9,14 @@ query AccountActivityQuery($blocks_query: BlockQueryInput!, $blocks_limit: Int =
     block {
       dateTime
     }
+    blockHeight
+    nonce
+    kind
+    failureReason
+    memo
   }
   outgoing_transactions:transactions(sortBy: $trans_sort_by, limit: $trans_limit, query: $outgoing_trans_query) {
+    canonical
     fee
     from
     hash
@@ -18,6 +25,11 @@ query AccountActivityQuery($blocks_query: BlockQueryInput!, $blocks_limit: Int =
     block {
       dateTime
     }
+    blockHeight
+    nonce
+    kind
+    failureReason
+    memo
   }
   snarks(sortBy: $snarks_sort_by, limit: $snarks_limit, query: $snarks_query) {
     block {

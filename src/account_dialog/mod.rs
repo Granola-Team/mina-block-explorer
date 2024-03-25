@@ -1,5 +1,5 @@
 pub mod components;
 pub mod dialog;
-mod functions;
+pub mod functions;
 mod graphql;
-mod models;
+pub mod models;

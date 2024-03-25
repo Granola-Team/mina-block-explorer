@@ -1,3 +1,5 @@
+import { DEFAULT_ACCOUNT_PK } from "../constants";
+
 suite(["@CI"],'transactions table', () => {
 
     let pages = ['/transactions'];
@@ -11,7 +13,7 @@ suite(["@CI"],'transactions table', () => {
 
 suite([""],'account transactions table', () => {
 
-    let pages = ['/addresses/accounts/B62qrYveCMCW2tr5J8gu9T1rh817zsq7j8cjc9mHEecQS2tRMnoNTsy'];
+    let pages = [`/addresses/accounts/${DEFAULT_ACCOUNT_PK}`];
     let columns = ['Height', 'State Hash', 'Nonce', 'Age','Type', 'Direction', 'Counterparty', 'Amount/Fee'];
 
     pages.forEach(page => it(`on ${page} includes correct columns`, () => {
@@ -23,7 +25,7 @@ suite([""],'account transactions table', () => {
 
 suite(["@CI"],'account activity transactions', () => {
 
-    let pages = ['/summary/accounts/B62qqW8uKTxHZueKJwsoPY8NZcKVeDK4bLEHRkpMM2uKtEmmqLbkiQC'];
+    let pages = [`/summary/accounts/${DEFAULT_ACCOUNT_PK}`];
     let columns = ['Hash', 'Direction', 'Counterparty', 'Amount/Fee'];
 
     pages.forEach(page => it(`on ${page} includes correct columns`, () => {

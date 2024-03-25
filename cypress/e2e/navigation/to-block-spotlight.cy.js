@@ -1,3 +1,5 @@
+import { DEFAULT_ACCOUNT_PK } from "../constants";
+
 suite(["@CI"],'block spotlight', () => {
     [{
         origin: '/summary',
@@ -7,7 +9,7 @@ suite(["@CI"],'block spotlight', () => {
         origin: '/blocks',
         selector: 'a[href^="/blocks/"]:not(a[href^="/blocks/account"])'
     },{
-        origin: '/addresses/accounts/B62qrCz3ehCqi8Pn8y3vWC9zYEB9RKsidauv15DeZxhzkxL3bKeba5h',
+        origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
         selector: 'a[href^="/blocks/"]:not(a[href^="/blocks/account"])'
     }].forEach(({ origin, selector}) => it(`is navigated to from ${origin}`,() => {
         cy.visit(origin);

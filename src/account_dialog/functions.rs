@@ -15,33 +15,37 @@ pub fn get_base_page_path(location: Location) -> String {
 
 pub async fn load_data(
     public_key: Option<String>,
+    blocks_limit: Option<i64>,
+    snarks_limit: Option<i64>,
+    trans_limit: Option<i64>,
+    canonical: Option<bool>,
 ) -> Result<account_activity_query::ResponseData, MyError> {
     let url = "https://graphql.minaexplorer.com";
     let variables = account_activity_query::Variables {
         blocks_sort_by: account_activity_query::BlockSortByInput::BLOCKHEIGHT_DESC,
         snarks_sort_by: account_activity_query::SnarkSortByInput::BLOCKHEIGHT_DESC,
         trans_sort_by: account_activity_query::TransactionSortByInput::BLOCKHEIGHT_DESC,
-        blocks_limit: Some(3),
-        snarks_limit: Some(3),
-        trans_limit: Some(3),
+        blocks_limit: Some(blocks_limit.unwrap_or_default()),
+        snarks_limit: Some(snarks_limit.unwrap_or_default()),
+        trans_limit: Some(trans_limit.unwrap_or_default()),
         blocks_query: account_activity_query::BlockQueryInput {
             creator: public_key.clone(),
-            canonical: Some(true),
+            canonical,
             ..Default::default()
         },
         snarks_query: account_activity_query::SnarkQueryInput {
             prover: public_key.clone(),
-            canonical: Some(true),
+            canonical,
             ..Default::default()
         },
         outgoing_trans_query: account_activity_query::TransactionQueryInput {
             from: public_key.clone(),
-            canonical: Some(true),
+            canonical,
             ..Default::default()
         },
         incoming_trans_query: account_activity_query::TransactionQueryInput {
             to: public_key,
-            canonical: Some(true),
+            canonical,
             ..Default::default()
         },
     };

@@ -1,6 +1,8 @@
+import { DEFAULT_ACCOUNT_PK } from "../constants";
+
 suite(["@CI"],'account page', () => {
     it(`has all sections`, () => {
-        cy.visit('/addresses/accounts/B62qrCz3ehCqi8Pn8y3vWC9zYEB9RKsidauv15DeZxhzkxL3bKeba5h');
+        cy.visit(`/addresses/accounts/${DEFAULT_ACCOUNT_PK}`);
         ["Transactions", "SNARK Jobs", "Block Production"].forEach(section => {
             cy.get('section h1').contains(section,{timeout:60000})
         });
