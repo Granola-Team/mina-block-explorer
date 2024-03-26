@@ -6,3 +6,7 @@ tailwindcss = "3.4.1"
 
 [build]
 target = "src/index.html"
+
+[clean]
+dist = "src/dist"
+cargo = true
