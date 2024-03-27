@@ -31,7 +31,7 @@ impl TableData for Vec<Option<AllAccountSummary>> {
                 Some(all_account_sum) => vec![
                     convert_to_link(
                         all_account_sum.pk.to_string(),
-                        format!("/addresses/accounts/{}", all_account_sum.pk),
+                        "/addresses/accounts/B62qr9zQ1LKnKM3d7wmFVjv3TzSV6fnXBZ162scK49NTHCA8Xc7PVKq".to_string(),
                     ),
                     convert_to_span(all_account_sum.username.to_string()),
                     wrap_in_pill(
@@ -41,16 +41,10 @@ impl TableData for Vec<Option<AllAccountSummary>> {
                         ),
                         ColorVariant::Green,
                     ),
-                    wrap_in_pill(
-                        decorate_with_currency_tag(
-                            all_account_sum.nonce.to_string(),
-                            "mina".to_string(),
-                        ),
-                        ColorVariant::Grey,
-                    ),
+                    convert_to_pill(all_account_sum.nonce.to_string(), ColorVariant::Grey),
                     convert_to_link(
                         all_account_sum.delegate.to_string(),
-                        format!("/addresses/accounts/{}", all_account_sum.delegate),
+                        "/addresses/accounts/B62qr9zQ1LKnKM3d7wmFVjv3TzSV6fnXBZ162scK49NTHCA8Xc7PVKq".to_string(),
                     ),
                     convert_to_span(false.to_string()),
                 ],

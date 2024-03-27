@@ -43,13 +43,11 @@ pub fn Header() -> impl IntoView {
             href: "/addresses".to_string(),
             text: "Addresses".to_string(),
             icon: NavIcon::Addresses,
-            disabled: true,
             sub_entries: Some(vec![
                 NavEntry {
                     href: "/addresses/accounts".to_string(),
                     text: "Accounts".to_string(),
                     icon: NavIcon::Accounts,
-                    disabled: true,
                     ..Default::default()
                 },
                 NavEntry {

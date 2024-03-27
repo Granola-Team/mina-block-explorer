@@ -6,7 +6,11 @@ use crate::common::{functions::*, models::*, spotlight::*};
 use graphql_client::reqwest::post_graphql;
 use leptos::*;
 use leptos_router::*;
-use url::Url;
+use rand::{
+    distributions::{Alphanumeric, Distribution, Uniform},
+    Rng,
+};
+use std::iter;
 
 pub fn get_base_page_path(location: Location) -> String {
     let path = location.pathname.with(|path| path.clone());
@@ -31,38 +35,50 @@ pub async fn load_account_data(id: &str) -> Result<AccountResponse, MyError> {
     }
 }
 
-pub async fn load_all_accounts(
-    offset: Option<i8>,
-    limit: Option<i8>,
-    public_key: Option<String>,
-) -> Result<AllAccountResponse, MyError> {
-    let base_url = "https://minaexplorer.com/all-accounts";
+fn generate_random_string(len: usize) -> String {
+    iter::repeat(())
+        .map(|()| rand::thread_rng().sample(Alphanumeric))
+        .map(char::from)
+        .take(len)
+        .collect()
+}
 
-    let mut url = Url::parse(base_url)?;
+fn generate_base58_string(len: usize) -> String {
+    const BASE58_CHARS: &[u8] = b"123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
+    let mut rng = rand::thread_rng();
+    (0..len)
+        .map(|_| {
+            let idx = rng.gen_range(0..BASE58_CHARS.len());
+            BASE58_CHARS[idx] as char
+        })
+        .collect()
+}
 
-    match public_key {
-        Some(pk) => {
-            url.query_pairs_mut().append_pair("search[value]", &pk);
-        }
-        None => {
-            url.query_pairs_mut()
-                .append_pair("start", &offset.unwrap_or(0).to_string());
-            url.query_pairs_mut()
-                .append_pair("length", &limit.unwrap_or(50).to_string());
-        }
-    }
+pub fn stub_account_summaries(size: usize) -> Vec<AllAccountSummary> {
+    let mut rng = rand::thread_rng();
+    let balance_dist = Uniform::from(0.0..=1000.0);
+    let int_dist = Uniform::from(0..=1000);
 
-    let response = reqwest::get(url.as_str()).await;
+    (0..size)
+        .map(|_| {
+            // Generate balance and limit to 9 decimal places
+            let balance = balance_dist.sample(&mut rng);
+            let formatted_balance = format!("{:.9}", balance);
+            let balance = formatted_balance.parse::<f64>().unwrap();
 
-    match response {
-        Ok(res) => match res.json::<AllAccountResponse>().await {
-            Ok(account) => Ok(account),
-            Err(_) => Err(MyError::ParseError(String::from(
-                "Error deserializing JSON",
-            ))),
-        },
-        Err(_) => Err(MyError::NetworkError(String::from("API error"))),
-    }
+            AllAccountSummary {
+                pk: generate_base58_string(44),
+                balance,
+                delegate: generate_base58_string(44),
+                token: int_dist.sample(&mut rng),
+                nonce: int_dist.sample(&mut rng),
+                receipt_chain_hash: generate_base58_string(44),
+                voting_for: generate_base58_string(44),
+                public_key: generate_base58_string(44),
+                username: generate_random_string(10),
+            }
+        })
+        .collect()
 }
 
 pub async fn load_data(

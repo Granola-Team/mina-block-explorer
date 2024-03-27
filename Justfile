@@ -21,14 +21,11 @@ build: build_npm
   trunk build
 
 clean:
-  rm -rf dist
   trunk clean
-  cargo clean
   rm -fr cypress/screenshots/
   find cypress -name '__diff_output__' -prune -execdir rm -rf {} +
   rm -fr node_modules/
-  rm -f package-lock.json
-  rm -fr assets/css
+  rm -f pnpm-lock.json
 
 test: lint test-unit test-e2e
 

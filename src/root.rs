@@ -36,6 +36,8 @@ pub fn Root() -> impl IntoView {
                         <Route path="/*any" view=NullView/>
                     </Route>
                     <Route path="/addresses" view=AddressesTabbedPage>
+                        <Route path="" view=AccountsPage/>
+                        <Route path="/accounts" view=AccountsPage/>
                         <Route path="/accounts/:id" view=AccountSpotlightPage/>
                         <Route path="/tokens" view=TokensPage/>
                         <Route path="/*any" view=AccountsPage/>
