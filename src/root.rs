@@ -20,6 +20,7 @@ use crate::{
     summary::page::SummaryPage,
     tokens::page::TokensPage,
     transactions::page::{TransactionSpotlightPage, TransactionTabbedPage, TransactionsPage},
+    zk_apps::page::ZkAppsPage,
 };
 use leptos::*;
 use leptos_router::*;
@@ -40,6 +41,7 @@ pub fn Root() -> impl IntoView {
                         <Route path="/accounts" view=AccountsPage/>
                         <Route path="/accounts/:id" view=AccountSpotlightPage/>
                         <Route path="/tokens" view=TokensPage/>
+                        <Route path="/zkApps" view=ZkAppsPage/>
                         <Route path="/*any" view=AccountsPage/>
                     </Route>
                     <Route path="/blocks" view=LatestBlocksPage>

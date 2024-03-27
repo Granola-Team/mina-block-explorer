@@ -19,8 +19,8 @@ impl TableData for Vec<Option<ZkAppData>> {
                         decorate_with_currency_tag(zk_app.balance.to_string(), "mina".to_string()),
                         ColorVariant::Green,
                     ),
-                    wrap_in_pill(
-                        decorate_with_currency_tag(zk_app.nonce.to_string(), "mina".to_string()),
+                    convert_to_pill(
+                        zk_app.nonce.to_string(),
                         ColorVariant::Blue,
                     ),
                     convert_to_link(zk_app.delegate.to_string(), "#".to_string()),
