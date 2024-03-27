@@ -267,7 +267,6 @@ pub fn AddressesTabbedPage() -> impl IntoView {
             href: "/addresses/tokens".to_string(),
             text: "Tokens".to_string(),
             icon: NavIcon::Tokens,
-            disabled: true,
             ..Default::default()
         },
         NavEntry {
