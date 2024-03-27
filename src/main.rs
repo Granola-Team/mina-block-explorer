@@ -11,8 +11,8 @@ mod root;
 mod snarks;
 mod stakes;
 mod summary;
-mod transactions;
 mod tokens;
+mod transactions;
 
 use leptos_meta::provide_meta_context;
 use root::Root;
