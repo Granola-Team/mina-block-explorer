@@ -2,7 +2,9 @@ use super::models::*;
 use crate::{common::components::CopyToClipboard, icons::HelpIcon};
 use chrono::{DateTime, Duration, Utc};
 use leptos::*;
+use rand::{distributions::Alphanumeric, Rng};
 use rust_decimal::Decimal;
+use std::iter;
 
 // Function to calculate and print the time elapsed since the given timestamp
 pub fn print_time_since(timestamp: &str) -> String {
@@ -291,6 +293,73 @@ pub fn convert_to_link(data: String, href: String) -> HtmlElement<html::AnyEleme
         </span>
     }
     .into()
+}
+
+pub fn generate_random_string(len: usize) -> String {
+    iter::repeat(())
+        .map(|()| rand::thread_rng().sample(Alphanumeric))
+        .map(char::from)
+        .take(len)
+        .collect()
+}
+
+#[cfg(test)]
+mod generate_random_string_tests {
+    use super::*;
+    use std::collections::HashSet;
+
+    #[test]
+    fn test_generate_random_string_length() {
+        let length = 10;
+        let random_string = generate_random_string(length);
+        assert_eq!(random_string.len(), length);
+    }
+
+    #[test]
+    fn test_non_zero_length_returns_non_empty_string() {
+        let length = 1;
+        let random_string = generate_random_string(length);
+        assert!(!random_string.is_empty());
+    }
+
+    #[test]
+    fn test_zero_length_returns_empty_string() {
+        let length = 0;
+        let random_string = generate_random_string(length);
+        assert!(random_string.is_empty());
+    }
+
+    #[test]
+    fn test_generated_string_is_alphanumeric() {
+        let length = 100; // Use a reasonably large length to have a good sample
+        let random_string = generate_random_string(length);
+        assert!(random_string.chars().all(|c| c.is_alphanumeric()));
+    }
+
+    #[test]
+    fn test_randomness() {
+        let length = 10;
+        let tries = 100;
+        let mut unique_strings = HashSet::new();
+        for _ in 0..tries {
+            let random_string = generate_random_string(length);
+            unique_strings.insert(random_string);
+        }
+        // This test may fail occasionally; it's a probabilistic approach to testing
+        // randomness
+        assert!(unique_strings.len() > 1, "Generated strings are not random");
+    }
+}
+
+pub fn generate_base58_string(len: usize) -> String {
+    const BASE58_CHARS: &[u8] = b"123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
+    let mut rng = rand::thread_rng();
+    (0..len)
+        .map(|_| {
+            let idx = rng.gen_range(0..BASE58_CHARS.len());
+            BASE58_CHARS[idx] as char
+        })
+        .collect()
 }
 
 pub fn convert_to_ellipsis(text: String) -> HtmlElement<html::AnyElement> {
