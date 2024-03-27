@@ -2,7 +2,7 @@ use super::models::*;
 use crate::{common::components::CopyToClipboard, icons::HelpIcon};
 use chrono::{DateTime, Duration, Utc};
 use leptos::*;
-use rand::{distributions::Alphanumeric, Rng};
+use rand::{distributions::{Alphanumeric, Uniform}, Rng, prelude::Distribution};
 use rust_decimal::Decimal;
 use std::iter;
 
@@ -348,6 +348,50 @@ mod generate_random_string_tests {
         // This test may fail occasionally; it's a probabilistic approach to testing
         // randomness
         assert!(unique_strings.len() > 1, "Generated strings are not random");
+    }
+}
+
+pub fn generate_random_mina_price() -> f64 {
+    let mut rng = rand::thread_rng();
+    let balance_dist = Uniform::from(0.0..=1000.0);
+    let balance = balance_dist.sample(&mut rng);
+    let formatted_balance = format!("{:.9}", balance);
+    let balance = formatted_balance.parse::<f64>().unwrap();
+    balance
+}
+
+#[cfg(test)]
+mod generate_random_mina_price_tests {
+    use super::*;
+
+    #[test]
+    fn test_generate_random_mina_price_range() {
+        let price = generate_random_mina_price();
+        // Check that the price is within the expected range
+        assert!(price >= 0.0 && price <= 1000.0);
+    }
+
+    #[test]
+    fn test_generate_random_mina_price_decimal_places() {
+        let price = generate_random_mina_price();
+        // Convert the price to a string to check the number of decimal places
+        let price_string = format!("{:?}", price);
+        // Count the number of digits after the decimal point
+        let decimal_places = price_string.split('.').nth(1).unwrap_or("").len();
+        // Check that there are exactly 9 digits after the decimal point
+        assert_eq!(decimal_places, 9);
+    }
+
+    #[test]
+    fn test_generate_random_mina_price_repeatability() {
+        // Generate a bunch of prices and check their properties
+        for _ in 0..100 {
+            let price = generate_random_mina_price();
+            assert!(price >= 0.0 && price <= 1000.0);
+            let price_string = format!("{:?}", price);
+            let decimal_places = price_string.split('.').nth(1).unwrap_or("").len();
+            assert_eq!(decimal_places, 9);
+        }
     }
 }
 
