@@ -31,7 +31,7 @@ pub fn AccountsPage() -> impl IntoView {
         <PageContainer>
             <TableSection section_heading="Accounts".to_string() controls=|| ().into_view()>
 
-                { move || {
+                {move || {
                     let data = data.clone();
                     let pag = build_pagination(
                         data.len(),
