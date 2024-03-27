@@ -17,7 +17,7 @@ pub fn TransactionTabbedPage() -> impl IntoView {
             ..Default::default()
         },
         NavEntry {
-            href: "/transactions/zkapp".to_string(),
+            href: "/transactions/zk-trx".to_string(),
             text: "zkApp Transactions".to_string(),
             icon: NavIcon::ZKApps,
             ..Default::default()
