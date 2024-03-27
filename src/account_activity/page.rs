@@ -31,7 +31,8 @@ pub fn AccountsPage() -> impl IntoView {
         <PageContainer>
             <TableSection section_heading="Accounts".to_string() controls=|| ().into_view()>
 
-                {
+                { move || {
+                    let data = data.clone();
                     let pag = build_pagination(
                         data.len(),
                         records_per_page,
@@ -44,7 +45,7 @@ pub fn AccountsPage() -> impl IntoView {
                         current_page.get() - 1,
                     );
                     view! { <Table data=subset pagination=pag/> }
-                }
+                }}
 
             </TableSection>
         </PageContainer>
