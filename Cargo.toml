@@ -18,6 +18,7 @@ console_error_panic_hook = "0.1.7"
 charming = { version = "0.3.1", features = ["wasm"] }
 gloo-timers = "0.3.0"
 leptos_meta = { version = "0.6.9", features = ["csr"] }
+rand = "0.8.5"
 
 [dependencies.web-sys]
 version = "0.3"

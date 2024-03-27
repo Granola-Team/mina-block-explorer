@@ -22,49 +22,29 @@ use leptos_router::*;
 
 #[component]
 pub fn AccountsPage() -> impl IntoView {
-    let query_params_map = use_query_map();
-
-    let resource = create_resource(
-        move || query_params_map.get(),
-        |value| async move {
-            let mut public_key = value.get("id");
-            if public_key.is_none() {
-                public_key = value.get("query");
-            }
-            load_all_accounts(Some(0), Some(50), public_key.cloned()).await
-        },
-    );
-
     let records_per_page = 10;
     let (current_page, set_current_page) = create_signal(1);
+    let data = stub_account_summaries(9000);
 
     view! {
         <Title text="Accounts | Search For Mina Account"/>
         <PageContainer>
             <TableSection section_heading="Accounts".to_string() controls=|| ().into_view()>
-                {move || match resource.get() {
-                    Some(Ok(data)) => {
-                        let pag = build_pagination(
-                            data.data.len(),
-                            records_per_page,
-                            current_page.get(),
-                            set_current_page,
-                        );
-                        let subset = get_subset(
-                            &data.data.into_iter().map(Some).collect::<Vec<_>>(),
-                            records_per_page,
-                            current_page.get() - 1,
-                        );
-                        view! { <Table data=subset pagination=pag/> }
-                    }
-                    None => view! { <Table data=LoadingPlaceholder {}/> },
-                    Some(Err(_)) => {
-                        view! {
-                            <EmptyTable message="Unable to list accounts at this time. Refresh to try again."
-                                .to_string()/>
-                        }
-                    }
-                }}
+
+                {
+                    let pag = build_pagination(
+                        data.len(),
+                        records_per_page,
+                        current_page.get(),
+                        set_current_page,
+                    );
+                    let subset = get_subset(
+                        &data.into_iter().map(Some).collect::<Vec<_>>(),
+                        records_per_page,
+                        current_page.get() - 1,
+                    );
+                    view! { <Table data=subset pagination=pag/> }
+                }
 
             </TableSection>
         </PageContainer>
@@ -260,7 +240,6 @@ pub fn AddressesTabbedPage() -> impl IntoView {
             href: "/addresses/accounts".to_string(),
             text: "Accounts".to_string(),
             icon: NavIcon::Addresses,
-            disabled: true,
             ..Default::default()
         },
         NavEntry {
