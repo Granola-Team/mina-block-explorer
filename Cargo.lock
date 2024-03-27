@@ -1430,6 +1430,7 @@ dependencies = [
  "leptos-use",
  "leptos_meta",
  "leptos_router",
+ "rand",
  "reqwest",
  "rust_decimal",
  "serde",
