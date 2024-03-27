@@ -5,5 +5,5 @@ pub struct ZkAppData {
     pub balance: usize,
     pub nonce: usize,
     pub receipt_chain_hash: String,
-    pub delegate: usize,
+    pub delegate: String,
 }

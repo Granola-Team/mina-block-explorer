@@ -6,11 +6,7 @@ use crate::common::{functions::*, models::*, spotlight::*};
 use graphql_client::reqwest::post_graphql;
 use leptos::*;
 use leptos_router::*;
-use rand::{
-    distributions::{Alphanumeric, Distribution, Uniform},
-    Rng,
-};
-use std::iter;
+use rand::distributions::{Distribution, Uniform};
 
 pub fn get_base_page_path(location: Location) -> String {
     let path = location.pathname.with(|path| path.clone());
@@ -33,25 +29,6 @@ pub async fn load_account_data(id: &str) -> Result<AccountResponse, MyError> {
         },
         Err(_) => Err(MyError::NetworkError(String::from("API error"))),
     }
-}
-
-fn generate_random_string(len: usize) -> String {
-    iter::repeat(())
-        .map(|()| rand::thread_rng().sample(Alphanumeric))
-        .map(char::from)
-        .take(len)
-        .collect()
-}
-
-fn generate_base58_string(len: usize) -> String {
-    const BASE58_CHARS: &[u8] = b"123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
-    let mut rng = rand::thread_rng();
-    (0..len)
-        .map(|_| {
-            let idx = rng.gen_range(0..BASE58_CHARS.len());
-            BASE58_CHARS[idx] as char
-        })
-        .collect()
 }
 
 pub fn stub_account_summaries(size: usize) -> Vec<AllAccountSummary> {
