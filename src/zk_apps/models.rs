@@ -7,3 +7,13 @@ pub struct ZkAppData {
     pub receipt_chain_hash: String,
     pub delegate: String,
 }
+
+#[derive(Clone)]
+pub struct ZkAppTransactionData {
+    pub hash: String,
+    pub prover: String,
+    pub updates: usize,
+    pub updated_accounts: Vec<String>,
+    pub fee: f64,
+    pub date_time: chrono::DateTime<chrono::Utc>,
+}
