@@ -1,8 +1,12 @@
 use super::models::*;
 use crate::{common::components::CopyToClipboard, icons::HelpIcon};
-use chrono::{DateTime, Duration, Utc};
+use chrono::{DateTime, Duration, LocalResult, TimeZone, Utc};
 use leptos::*;
-use rand::{distributions::{Alphanumeric, Uniform}, Rng, prelude::Distribution};
+use rand::{
+    distributions::{Alphanumeric, Uniform},
+    prelude::Distribution,
+    Rng,
+};
 use rust_decimal::Decimal;
 use std::iter;
 
@@ -392,6 +396,78 @@ mod generate_random_mina_price_tests {
             let decimal_places = price_string.split('.').nth(1).unwrap_or("").len();
             assert_eq!(decimal_places, 9);
         }
+    }
+}
+
+pub fn generate_random_datetime_within_days(days_before_today: i64) -> DateTime<Utc> {
+    let mut rng = rand::thread_rng();
+
+    // Calculate today's date and the start date (today - x days)
+    let today = Utc::now();
+    let start = today - Duration::days(days_before_today);
+
+    // Convert start and today to timestamps (seconds since the epoch)
+    let start_timestamp = start.timestamp();
+    let end_timestamp = today.timestamp();
+
+    // Generate a random timestamp between start and today
+    let random_timestamp = rng.gen_range(start_timestamp..=end_timestamp);
+
+    // Convert the random timestamp back to DateTime<Utc>
+    match Utc.timestamp_opt(random_timestamp, 0) {
+        LocalResult::Single(datetime) => datetime,
+        _ => panic!("Invalid timestamp generated"),
+    }
+}
+
+#[cfg(test)]
+mod generate_random_datetime_within_days_tests {
+    use super::*;
+    use chrono::Duration;
+
+    #[test]
+    fn random_datetime_is_within_range() {
+        let days_before_today = 30;
+        let generated_date = generate_random_datetime_within_days(days_before_today);
+        let today = Utc::now();
+        let start_date = today - Duration::days(days_before_today as i64);
+
+        // Check that the generated date is not earlier than start_date and not later
+        // than today
+        assert!(
+            generated_date >= start_date && generated_date <= today,
+            "Generated datetime is not within the expected range."
+        );
+    }
+
+    #[test]
+    fn random_datetime_today() {
+        // Generate a date for "0" days before today, which should effectively be today
+        let days_before_today = 0;
+        let generated_date = generate_random_datetime_within_days(days_before_today);
+        let today = Utc::now();
+
+        // Considering some small computation time, allow a minute difference
+        let diff = today - generated_date;
+        assert!(
+            diff < Duration::minutes(1),
+            "Generated datetime should be close to now."
+        );
+    }
+
+    #[test]
+    fn random_datetime_within_range() {
+        // Ensures that the range is not empty by generating a range that is always
+        // valid
+        let days_before_today = 1; // Adjust this to a positive number to avoid an empty range
+        let generated_date = generate_random_datetime_within_days(days_before_today);
+        let today = Utc::now();
+        let start_date = today - Duration::days(days_before_today as i64);
+
+        assert!(
+            generated_date >= start_date && generated_date <= today,
+            "Generated datetime is not within the expected range."
+        );
     }
 }
 
