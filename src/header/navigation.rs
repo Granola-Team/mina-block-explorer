@@ -60,7 +60,6 @@ pub fn Header() -> impl IntoView {
                     href: "/addresses/zkApps".to_string(),
                     text: "zkApps".to_string(),
                     icon: NavIcon::ZKApps,
-                    disabled: true,
                     ..Default::default()
                 },
             ]),
