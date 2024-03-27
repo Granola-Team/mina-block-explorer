@@ -1,5 +1,5 @@
-use crate::{common::{components::*, functions::*, table::*}};
 use super::functions::*;
+use crate::common::{components::*, functions::*, table::*};
 use leptos::*;
 use leptos_meta::*;
 
