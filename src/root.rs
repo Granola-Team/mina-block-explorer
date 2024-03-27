@@ -18,6 +18,7 @@ use crate::{
     snarks::page::SnarksPage,
     stakes::page::StakesPage,
     summary::page::SummaryPage,
+    tokens::page::TokensPage,
     transactions::page::{TransactionSpotlightPage, TransactionTabbedPage, TransactionsPage},
 };
 use leptos::*;
@@ -36,6 +37,7 @@ pub fn Root() -> impl IntoView {
                     </Route>
                     <Route path="/addresses" view=AddressesTabbedPage>
                         <Route path="/accounts/:id" view=AccountSpotlightPage/>
+                        <Route path="/tokens" view=TokensPage/>
                         <Route path="/*any" view=AccountsPage/>
                     </Route>
                     <Route path="/blocks" view=LatestBlocksPage>

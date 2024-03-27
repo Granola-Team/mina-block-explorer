@@ -1,4 +1,4 @@
 mod functions;
 mod models;
-mod page;
+pub mod page;
 mod table_trait;
