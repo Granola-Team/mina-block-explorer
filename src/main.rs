@@ -13,6 +13,7 @@ mod stakes;
 mod summary;
 mod tokens;
 mod transactions;
+mod zk_apps;
 
 use leptos_meta::provide_meta_context;
 use root::Root;
