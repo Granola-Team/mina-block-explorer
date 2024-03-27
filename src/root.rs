@@ -20,7 +20,7 @@ use crate::{
     summary::page::SummaryPage,
     tokens::page::TokensPage,
     transactions::page::{TransactionSpotlightPage, TransactionTabbedPage, TransactionsPage},
-    zk_apps::page::{ZkAppsPage,ZkAppTransactionsPage},
+    zk_apps::page::{ZkAppTransactionsPage, ZkAppsPage},
 };
 use leptos::*;
 use leptos_router::*;

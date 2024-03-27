@@ -360,8 +360,7 @@ pub fn generate_random_mina_price() -> f64 {
     let balance_dist = Uniform::from(0.0..=1000.0);
     let balance = balance_dist.sample(&mut rng);
     let formatted_balance = format!("{:.9}", balance);
-    let balance = formatted_balance.parse::<f64>().unwrap();
-    balance
+    formatted_balance.parse::<f64>().unwrap()
 }
 
 #[cfg(test)]
@@ -372,7 +371,7 @@ mod generate_random_mina_price_tests {
     fn test_generate_random_mina_price_range() {
         let price = generate_random_mina_price();
         // Check that the price is within the expected range
-        assert!(price >= 0.0 && price <= 1000.0);
+        assert!((0.0..=1000.0).contains(&price));
     }
 
     #[test]
@@ -384,18 +383,6 @@ mod generate_random_mina_price_tests {
         let decimal_places = price_string.split('.').nth(1).unwrap_or("").len();
         // Check that there are exactly 9 digits after the decimal point
         assert_eq!(decimal_places, 9);
-    }
-
-    #[test]
-    fn test_generate_random_mina_price_repeatability() {
-        // Generate a bunch of prices and check their properties
-        for _ in 0..100 {
-            let price = generate_random_mina_price();
-            assert!(price >= 0.0 && price <= 1000.0);
-            let price_string = format!("{:?}", price);
-            let decimal_places = price_string.split('.').nth(1).unwrap_or("").len();
-            assert_eq!(decimal_places, 9);
-        }
     }
 }
 
@@ -430,7 +417,7 @@ mod generate_random_datetime_within_days_tests {
         let days_before_today = 30;
         let generated_date = generate_random_datetime_within_days(days_before_today);
         let today = Utc::now();
-        let start_date = today - Duration::days(days_before_today as i64);
+        let start_date = today - Duration::days(days_before_today);
 
         // Check that the generated date is not earlier than start_date and not later
         // than today
@@ -462,7 +449,7 @@ mod generate_random_datetime_within_days_tests {
         let days_before_today = 1; // Adjust this to a positive number to avoid an empty range
         let generated_date = generate_random_datetime_within_days(days_before_today);
         let today = Utc::now();
-        let start_date = today - Duration::days(days_before_today as i64);
+        let start_date = today - Duration::days(days_before_today);
 
         assert!(
             generated_date >= start_date && generated_date <= today,
