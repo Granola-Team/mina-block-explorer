@@ -42,6 +42,7 @@ pub fn Root() -> impl IntoView {
                         <Route path="/accounts/:id" view=AccountSpotlightPage/>
                         <Route path="/tokens" view=TokensPage/>
                         <Route path="/zk-apps" view=ZkAppsPage/>
+                        <Route path="/zk-apps/:id" view=NullView/>
                         <Route path="/*any" view=AccountsPage/>
                     </Route>
                     <Route path="/blocks" view=LatestBlocksPage>
