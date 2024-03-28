@@ -4,6 +4,16 @@ use leptos::*;
 use leptos_meta::*;
 
 #[component]
+pub fn ZkAppSpotlight() -> impl IntoView {
+    view! {
+        <Title text="ZK App Spotlight"/>
+        <PageContainer>
+            <NullView/>
+        </PageContainer>
+    }
+}
+
+#[component]
 pub fn ZkAppTransactionsPage() -> impl IntoView {
     let records_per_page = 10;
     let (current_page, set_current_page) = create_signal(1);
