@@ -1,5 +1,8 @@
 use super::functions::*;
-use crate::common::{components::*, functions::*, table::*};
+use crate::{
+    common::{components::*, functions::*, models::*, spotlight::*, table::*},
+    icons::*,
+};
 use leptos::*;
 use leptos_meta::*;
 
@@ -8,7 +11,49 @@ pub fn ZkAppSpotlight() -> impl IntoView {
     view! {
         <Title text="ZK App Spotlight"/>
         <PageContainer>
-            <NullView/>
+            <SpotlightSection
+                header="ZK App Spotlight".to_string()
+                spotlight_items=vec![
+                    SpotlightEntry {
+                        label: String::from("Balance"),
+                        any_el: Some(
+                            wrap_in_pill(
+                                decorate_with_currency_tag(
+                                    "1324.593847562".to_string(),
+                                    "mina".to_string(),
+                                ),
+                                ColorVariant::Green,
+                            ),
+                        ),
+                        ..Default::default()
+                    },
+                    SpotlightEntry {
+                        label: String::from("Receipt Chain Hash"),
+                        any_el: Some(convert_to_span(generate_base58_string(44))),
+                        copiable: true,
+                    },
+                    SpotlightEntry {
+                        label: String::from("Voting For"),
+                        any_el: Some(convert_to_span(generate_base58_string(44))),
+                        copiable: true,
+                    },
+                    SpotlightEntry {
+                        label: String::from("Ver. Key Hash"),
+                        any_el: Some(convert_to_span(generate_base58_string(44))),
+                        copiable: true,
+                    },
+                ]
+
+                meta=Some(
+                    format!(
+                        "Last Active: {}",
+                        print_time_since(&generate_random_datetime_within_days(1).to_string()),
+                    ),
+                )
+                id=Some(generate_base58_string(44))
+            >
+                <ZKAppSymbol width=40/>
+            </SpotlightSection>
         </PageContainer>
     }
 }
