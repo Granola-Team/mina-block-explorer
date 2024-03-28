@@ -1,8 +1,12 @@
 use super::models::*;
 use crate::{common::components::CopyToClipboard, icons::HelpIcon};
-use chrono::{DateTime, Duration, Utc};
+use chrono::{DateTime, Duration, LocalResult, TimeZone, Utc};
 use leptos::*;
-use rand::{distributions::Alphanumeric, Rng};
+use rand::{
+    distributions::{Alphanumeric, Uniform},
+    prelude::Distribution,
+    Rng,
+};
 use rust_decimal::Decimal;
 use std::iter;
 
@@ -348,6 +352,109 @@ mod generate_random_string_tests {
         // This test may fail occasionally; it's a probabilistic approach to testing
         // randomness
         assert!(unique_strings.len() > 1, "Generated strings are not random");
+    }
+}
+
+pub fn generate_random_mina_price() -> f64 {
+    let mut rng = rand::thread_rng();
+    let balance_dist = Uniform::from(0.0..=1000.0);
+    let balance = balance_dist.sample(&mut rng);
+    let formatted_balance = format!("{:.9}", balance);
+    formatted_balance.parse::<f64>().unwrap()
+}
+
+#[cfg(test)]
+mod generate_random_mina_price_tests {
+    use super::*;
+
+    #[test]
+    fn test_generate_random_mina_price_range() {
+        let price = generate_random_mina_price();
+        // Check that the price is within the expected range
+        assert!((0.0..=1000.0).contains(&price));
+    }
+
+    #[test]
+    fn test_generate_random_mina_price_decimal_places() {
+        let price = generate_random_mina_price();
+        // Convert the price to a string to check the number of decimal places
+        let price_string = format!("{:?}", price);
+        // Count the number of digits after the decimal point
+        let decimal_places = price_string.split('.').nth(1).unwrap_or("").len();
+        // Check that there are exactly 9 digits after the decimal point
+        assert_eq!(decimal_places, 9);
+    }
+}
+
+pub fn generate_random_datetime_within_days(days_before_today: i64) -> DateTime<Utc> {
+    let mut rng = rand::thread_rng();
+
+    // Calculate today's date and the start date (today - x days)
+    let today = Utc::now();
+    let start = today - Duration::days(days_before_today);
+
+    // Convert start and today to timestamps (seconds since the epoch)
+    let start_timestamp = start.timestamp();
+    let end_timestamp = today.timestamp();
+
+    // Generate a random timestamp between start and today
+    let random_timestamp = rng.gen_range(start_timestamp..=end_timestamp);
+
+    // Convert the random timestamp back to DateTime<Utc>
+    match Utc.timestamp_opt(random_timestamp, 0) {
+        LocalResult::Single(datetime) => datetime,
+        _ => panic!("Invalid timestamp generated"),
+    }
+}
+
+#[cfg(test)]
+mod generate_random_datetime_within_days_tests {
+    use super::*;
+    use chrono::Duration;
+
+    #[test]
+    fn random_datetime_is_within_range() {
+        let days_before_today = 30;
+        let generated_date = generate_random_datetime_within_days(days_before_today);
+        let today = Utc::now();
+        let start_date = today - Duration::days(days_before_today);
+
+        // Check that the generated date is not earlier than start_date and not later
+        // than today
+        assert!(
+            generated_date >= start_date && generated_date <= today,
+            "Generated datetime is not within the expected range."
+        );
+    }
+
+    #[test]
+    fn random_datetime_today() {
+        // Generate a date for "0" days before today, which should effectively be today
+        let days_before_today = 0;
+        let generated_date = generate_random_datetime_within_days(days_before_today);
+        let today = Utc::now();
+
+        // Considering some small computation time, allow a minute difference
+        let diff = today - generated_date;
+        assert!(
+            diff < Duration::minutes(1),
+            "Generated datetime should be close to now."
+        );
+    }
+
+    #[test]
+    fn random_datetime_within_range() {
+        // Ensures that the range is not empty by generating a range that is always
+        // valid
+        let days_before_today = 1; // Adjust this to a positive number to avoid an empty range
+        let generated_date = generate_random_datetime_within_days(days_before_today);
+        let today = Utc::now();
+        let start_date = today - Duration::days(days_before_today);
+
+        assert!(
+            generated_date >= start_date && generated_date <= today,
+            "Generated datetime is not within the expected range."
+        );
     }
 }
 

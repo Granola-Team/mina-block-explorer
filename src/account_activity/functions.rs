@@ -33,15 +33,11 @@ pub async fn load_account_data(id: &str) -> Result<AccountResponse, MyError> {
 
 pub fn stub_account_summaries(size: usize) -> Vec<AllAccountSummary> {
     let mut rng = rand::thread_rng();
-    let balance_dist = Uniform::from(0.0..=1000.0);
     let int_dist = Uniform::from(0..=1000);
 
     (0..size)
         .map(|_| {
-            // Generate balance and limit to 9 decimal places
-            let balance = balance_dist.sample(&mut rng);
-            let formatted_balance = format!("{:.9}", balance);
-            let balance = formatted_balance.parse::<f64>().unwrap();
+            let balance = generate_random_mina_price();
 
             AllAccountSummary {
                 pk: generate_base58_string(44),

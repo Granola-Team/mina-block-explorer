@@ -15,3 +15,17 @@ pub fn stub_zk_apps_data(size: usize) -> Vec<ZkAppData> {
         })
         .collect()
 }
+
+pub fn stub_zk_app_trx_data(size: usize) -> Vec<ZkAppTransactionData> {
+    let mut rng = rand::thread_rng();
+    (0..size)
+        .map(|_| ZkAppTransactionData {
+            hash: generate_base58_string(44),
+            prover: generate_base58_string(44),
+            updates: rng.gen_range(1..=3),
+            updated_accounts: vec![generate_base58_string(44), generate_base58_string(44)],
+            fee: generate_random_mina_price(),
+            date_time: generate_random_datetime_within_days(rng.gen_range(1..=25)),
+        })
+        .collect()
+}

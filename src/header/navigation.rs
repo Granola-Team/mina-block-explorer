@@ -23,17 +23,9 @@ pub fn Header() -> impl IntoView {
                     ..Default::default()
                 },
                 NavEntry {
-                    href: "/transactions/token".to_string(),
-                    text: "Token Transactions".to_string(),
-                    icon: NavIcon::Tokens,
-                    disabled: true,
-                    ..Default::default()
-                },
-                NavEntry {
-                    href: "/transactions/zkapp".to_string(),
+                    href: "/transactions/zk-trx".to_string(),
                     text: "zkApp Transactions".to_string(),
                     icon: NavIcon::ZKApps,
-                    disabled: true,
                     ..Default::default()
                 },
             ]),
