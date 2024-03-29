@@ -104,11 +104,7 @@ pub fn SpotlightTable(children: Children) -> impl IntoView {
 
 #[component]
 fn SpotlighTableRow(children: Children) -> impl IntoView {
-    view!{
-        <tr class="h-9 w-full @7xl:w-1/2 overflow-hidden flex">
-            {children()}
-        </tr>
-    }
+    view! { <tr class="h-9 w-full @7xl:w-1/2 overflow-hidden flex">{children()}</tr> }
 }
 
 #[component]

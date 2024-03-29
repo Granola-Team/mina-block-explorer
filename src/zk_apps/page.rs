@@ -50,6 +50,7 @@ pub fn ZkAppSpotlight() -> impl IntoView {
                         print_time_since(&generate_random_datetime_within_days(1).to_string()),
                     ),
                 )
+
                 id=Some(generate_base58_string(44))
             >
                 <ZKAppSymbol width=40/>

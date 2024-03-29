@@ -437,3 +437,14 @@ pub fn AnalyticsSimpleInfo(
         </div>
     }
 }
+
+#[component]
+pub fn CodeBlock(children: Children) -> impl IntoView {
+    view! {
+        <div class="w-full overflow-x-auto">
+            <pre class="m-8 p-4 border-box stretch w-fit border border-[#DADCE0] rounded-md">
+                {children()}
+            </pre>
+        </div>
+    }
+}
