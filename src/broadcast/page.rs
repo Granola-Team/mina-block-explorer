@@ -18,11 +18,12 @@ pub fn BroadcastTransactionPage() -> impl IntoView {
             </AppSection>
             <AppSection>
                 <AppHeading heading="Sample Payment"/>
-                <CodeBlock>
+                <div class="m-8">
+                    <CodeBlock>
 
-                    {
-                        indoc! {
-                            r#"{
+                        {
+                            indoc! {
+                                r#"{
     "publicKey": "B62qrPN5Y5...",
     "signature": {
         "field": "1912885630...",
@@ -38,10 +39,11 @@ pub fn BroadcastTransactionPage() -> impl IntoView {
         "validUntil": "4294967295"
     }
 }"#
+                            }
                         }
-                    }
 
-                </CodeBlock>
+                    </CodeBlock>
+                </div>
             </AppSection>
         </PageContainer>
     }
@@ -61,11 +63,12 @@ pub fn BroadcastDelegationPage() -> impl IntoView {
             </AppSection>
             <AppSection>
                 <AppHeading heading="Sample Delegation Transaction"/>
-                <CodeBlock>
+                <div class="m-8">
+                    <CodeBlock>
 
-                    {
-                        indoc! {
-                            r#"{
+                        {
+                            indoc! {
+                                r#"{
     "publicKey": "B62qrPN5Y5...",
     "signature": {
         "field": "1912885630...",
@@ -80,10 +83,11 @@ pub fn BroadcastDelegationPage() -> impl IntoView {
         "validUntil": "4294967295"
     }
 }"#
+                            }
                         }
-                    }
 
-                </CodeBlock>
+                    </CodeBlock>
+                </div>
             </AppSection>
         </PageContainer>
     }
@@ -103,11 +107,12 @@ pub fn BroadcastFromLedgerPage() -> impl IntoView {
             </AppSection>
             <AppSection>
                 <AppHeading heading="Sample Ledger Payment"/>
-                <CodeBlock>
+                <div class="m-8">
+                    <CodeBlock>
 
-                    {
-                        indoc! {
-                            r#"{
+                        {
+                            indoc! {
+                                r#"{
     "signature": "389ac7d4077f3d485c1494782870979faa222cd906b25b2687333a92f41e40b925adb08705eddf2a7098e5ac9938498e8a0ce7c70b25ea392f4846b854086d43",
     "payment": {
         "to": "B62qnzbXmRNo9q32n4SNu2mpB8e7FYYLH8NmaX6oFCBYjjQ8SbD7uzV",
@@ -124,10 +129,11 @@ pub fn BroadcastFromLedgerPage() -> impl IntoView {
     "create_token_account": null,
     "mint_tokens": null
 }"#
+                            }
                         }
-                    }
 
-                </CodeBlock>
+                    </CodeBlock>
+                </div>
             </AppSection>
         </PageContainer>
     }
