@@ -30,7 +30,7 @@ pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
                         BlockContent::UserCommands => {
                             view! {
                                 <TableSection
-                                    section_heading="User Commands".to_string()
+                                    section_heading="User Commands"
                                     controls=|| ().into_view()
                                 >
                                     <Table data=LoadingPlaceholder {}/>
@@ -40,7 +40,7 @@ pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
                         BlockContent::SNARKJobs => {
                             view! {
                                 <TableSection
-                                    section_heading="SNARK Jobs".to_string()
+                                    section_heading="SNARK Jobs"
                                     controls=|| ().into_view()
                                 >
                                     <Table data=LoadingPlaceholder {}/>
@@ -50,7 +50,7 @@ pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
                         BlockContent::FeeTransfers => {
                             view! {
                                 <TableSection
-                                    section_heading="Internal Commands".to_string()
+                                    section_heading="Internal Commands"
                                     controls=|| ().into_view()
                                 >
                                     <Table data=LoadingPlaceholder {}/>
@@ -60,7 +60,7 @@ pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
                         BlockContent::Analytics => {
                             view! {
                                 <TableSection
-                                    section_heading="Analytics".to_string()
+                                    section_heading="Analytics"
                                     controls=|| ().into_view()
                                 >
                                     <span></span>
@@ -105,7 +105,7 @@ pub fn BlockUserCommands(block: BlocksQueryBlocks) -> impl IntoView {
     let records_per_page = 10;
     let (current_page, set_current_page) = create_signal(1);
     view! {
-        <TableSection section_heading="User Commands".to_string() controls=|| ().into_view()>
+        <TableSection section_heading="User Commands" controls=|| ().into_view()>
 
             {move || match get_user_commands(&block) {
                 Some(user_commands) => {
@@ -132,7 +132,7 @@ pub fn BlockUserCommands(block: BlocksQueryBlocks) -> impl IntoView {
 #[component]
 pub fn BlockSnarkJobs(block: BlocksQueryBlocks) -> impl IntoView {
     view! {
-        <TableSection section_heading="SNARK Jobs".to_string() controls=|| ().into_view()>
+        <TableSection section_heading="SNARK Jobs" controls=|| ().into_view()>
             <BlockSpotlightSnarkJobTable block=block/>
         </TableSection>
     }
@@ -141,7 +141,7 @@ pub fn BlockSnarkJobs(block: BlocksQueryBlocks) -> impl IntoView {
 #[component]
 pub fn BlockInternalCommands(block: BlocksQueryBlocks) -> impl IntoView {
     view! {
-        <TableSection section_heading="Internal Commands".to_string() controls=|| ().into_view()>
+        <TableSection section_heading="Internal Commands" controls=|| ().into_view()>
             <BlockInternalCommandsTable block/>
         </TableSection>
     }
@@ -155,7 +155,7 @@ pub fn BlockInternalCommandsTable(block: BlocksQueryBlocks) -> impl IntoView {
     view! {
         {match block.transactions.and_then(|txn| txn.fee_transfer) {
             None => {
-                view! { <EmptyTable message="No internal commands for this block".to_string()/> }
+                view! { <EmptyTable message="No internal commands for this block"/> }
             }
             Some(feetransfers) => {
                 let pag = build_pagination(
@@ -191,7 +191,7 @@ pub fn BlockAnalytics(block: BlocksQueryBlocks) -> impl IntoView {
     let winner_total = move || get_winner_total(&block_sig.get());
 
     view! {
-        <TableSection section_heading="Analytics".to_string() controls=|| ().into_view()>
+        <TableSection section_heading="Analytics" controls=|| ().into_view()>
             <AnalyticsLayout>
                 <AnalyticsSmContainer>
                     <AnalyticsSimpleInfo
@@ -582,7 +582,7 @@ fn BlockSpotlightPlaceholder() -> impl IntoView {
     ];
     view! {
         <SpotlightSection
-            header="Block Spotlight".to_string()
+            header="Block Spotlight"
             spotlight_items=spotlight_items
             id=None
             meta=None
@@ -686,7 +686,7 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
                 None => {
                     view! {
                         <TableSection
-                            section_heading="Blocks".to_string()
+                            section_heading="Blocks"
                             controls=move || view! { <NullView/> }
                         >
                             <Table data=LoadingPlaceholder {}/>
@@ -744,10 +744,7 @@ pub fn BlockSpotlightSnarkJobTable(block: BlocksQueryBlocks) -> impl IntoView {
                 view! {
                     {match snark_jobs.len() {
                         0 => {
-                            view! {
-                                <EmptyTable message="No SNARK work related to this block"
-                                    .to_string()/>
-                            }
+                            view! { <EmptyTable message="No SNARK work related to this block"/> }
                         }
                         _ => {
                             let pag = build_pagination(

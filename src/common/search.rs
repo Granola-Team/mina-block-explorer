@@ -5,7 +5,7 @@ use leptos_use::signal_debounced;
 
 #[component]
 pub fn SearchBar(
-    #[prop(default="Exact search for public key".to_string())] placeholder: String,
+    #[prop(default = "Exact search for public key".to_string(), into)] placeholder: String,
 ) -> impl IntoView {
     view! {
         <div class="flex self-stretch relative flex items-stretch md:mx-[10%] mb-4">
@@ -15,7 +15,7 @@ pub fn SearchBar(
 }
 
 #[component]
-fn SearchInput(placeholder: String) -> impl IntoView {
+fn SearchInput(#[prop(into)] placeholder: String) -> impl IntoView {
     let (query, set_query) = create_query_signal::<String>("query");
 
     let (input, set_input) = create_signal(None);
@@ -86,9 +86,9 @@ fn SearchInput(placeholder: String) -> impl IntoView {
 
 #[component]
 pub fn TitledSearchBar(
-    title: String,
-    subtext: String,
-    search_placeholder: String,
+    #[prop(into)] title: String,
+    #[prop(into)] subtext: String,
+    #[prop(into)] search_placeholder: String,
 ) -> impl IntoView {
     view! {
         <PreSectionContainer>

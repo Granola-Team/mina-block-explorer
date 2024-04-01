@@ -9,15 +9,14 @@ pub fn BroadcastTransactionPage() -> impl IntoView {
         <Title text="Offline Broadcasting | Broadcast Signed Transaction"/>
         <PageContainer>
             <AppSection>
-                <AppHeading heading="Broadcast Signed Transaction".to_string()/>
+                <AppHeading heading="Broadcast Signed Transaction"/>
                 <p class="px-8 text-sm">
                     "Generate a new offline transaction using the Javascript SDK and submit the transaction to the network using the form below."
                 </p>
-                <BroadcastForm endpoint="https://api.minaexplorer.com/broadcast/transaction"
-                    .to_string()/>
+                <BroadcastForm endpoint="https://api.minaexplorer.com/broadcast/transaction"/>
             </AppSection>
             <AppSection>
-                <AppHeading heading="Sample Payment".to_string()/>
+                <AppHeading heading="Sample Payment"/>
                 <Sample>
                     r#"{
                     "publicKey": "B62qrPN5Y5...",
@@ -48,15 +47,14 @@ pub fn BroadcastDelegationPage() -> impl IntoView {
         <Title text="Offline Broadcasting | Broadcast Signed Delegation"/>
         <PageContainer>
             <AppSection>
-                <AppHeading heading="Broadcast Signed Delegation".to_string()/>
+                <AppHeading heading="Broadcast Signed Delegation"/>
                 <p class="px-8 text-sm">
                     "Generate a new offline delegation using the Javascript SDK and submit the transaction to the network using the form below."
                 </p>
-                <BroadcastForm endpoint="https://api.minaexplorer.com/broadcast/delegation"
-                    .to_string()/>
+                <BroadcastForm endpoint="https://api.minaexplorer.com/broadcast/delegation"/>
             </AppSection>
             <AppSection>
-                <AppHeading heading="Sample Delegation Transaction".to_string()/>
+                <AppHeading heading="Sample Delegation Transaction"/>
                 <Sample>
                     r#"{
                     "publicKey": "B62qrPN5Y5...",
@@ -85,15 +83,14 @@ pub fn BroadcastFromLedgerPage() -> impl IntoView {
         <Title text="Offline Broadcasting | Broadcast Signed Transaction From Ledger"/>
         <PageContainer>
             <AppSection>
-                <AppHeading heading="Broadcast Signed Transaction From Ledger".to_string()/>
+                <AppHeading heading="Broadcast Signed Transaction From Ledger"/>
                 <p class="px-8 text-sm">
                     "Generate an offline transaction using the Ledger and submit the transaction to the network using the form below. This works for both payment and delegation transaction types."
                 </p>
-                <BroadcastForm endpoint="https://api.minaexplorer.com/broadcast/transaction"
-                    .to_string()/>
+                <BroadcastForm endpoint="https://api.minaexplorer.com/broadcast/transaction"/>
             </AppSection>
             <AppSection>
-                <AppHeading heading="Sample Ledger Payment".to_string()/>
+                <AppHeading heading="Sample Ledger Payment"/>
                 <Sample>
                     r#"{
                     "signature": "389ac7d4077f3d485c1494782870979faa222cd906b25b2687333a92f41e40b925adb08705eddf2a7098e5ac9938498e8a0ce7c70b25ea392f4846b854086d43",

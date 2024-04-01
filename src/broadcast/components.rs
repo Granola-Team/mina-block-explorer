@@ -7,7 +7,7 @@ struct ActionInputs {
 }
 
 #[component]
-pub fn BroadcastForm(endpoint: String) -> impl IntoView {
+pub fn BroadcastForm(#[prop(into)] endpoint: String) -> impl IntoView {
     let textarea_element: NodeRef<Textarea> = create_node_ref();
 
     let submit_action = create_action(|input: &ActionInputs| {

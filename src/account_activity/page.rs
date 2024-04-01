@@ -29,7 +29,7 @@ pub fn AccountsPage() -> impl IntoView {
     view! {
         <Title text="Accounts | Search For Mina Account"/>
         <PageContainer>
-            <TableSection section_heading="Accounts".to_string() controls=|| ().into_view()>
+            <TableSection section_heading="Accounts" controls=|| ().into_view()>
 
                 {move || {
                     let data = data.clone();
@@ -160,7 +160,7 @@ pub fn AccountSpotlightPage() -> impl IntoView {
                 Some(Ok(res)) => {
                     view! {
                         <SpotlightSection
-                            header="Account Spotlight".to_string()
+                            header="Account Spotlight"
                             spotlight_items=get_spotlight_data(&res.account)
                             meta=Some(format!("Username: {}", res.account.username))
                             id=memo_params_map.get().get("id").cloned()
@@ -173,7 +173,7 @@ pub fn AccountSpotlightPage() -> impl IntoView {
                 None => {
                     view! {
                         <SpotlightSection
-                            header="Account Spotlight".to_string()
+                            header="Account Spotlight"
                             spotlight_items=get_spotlight_loading_data()
                             meta=None
                             id=None
@@ -188,17 +188,14 @@ pub fn AccountSpotlightPage() -> impl IntoView {
                 Some(transactions) => view! { <AccountTransactionsSection transactions/> },
                 None => {
                     view! {
-                        <TableSection
-                            section_heading="Transactions".to_string()
-                            controls=|| ().into_view()
-                        >
+                        <TableSection section_heading="Transactions" controls=|| ().into_view()>
                             <Table data=LoadingPlaceholder {}/>
                         </TableSection>
                     }
                 }
             }}
             <SubSectionContainer>
-                <AppSubSection heading="SNARK Jobs".to_string() position=SubSectionPosition::Left>
+                <AppSubSection heading="SNARK Jobs" position=SubSectionPosition::Left>
                     {move || match snarks.get() {
                         Some(snarks) => {
                             view! {
@@ -212,10 +209,7 @@ pub fn AccountSpotlightPage() -> impl IntoView {
                     }}
 
                 </AppSubSection>
-                <AppSubSection
-                    heading="Block Production".to_string()
-                    position=SubSectionPosition::Right
-                >
+                <AppSubSection heading="Block Production" position=SubSectionPosition::Right>
                     {move || match blocks.get() {
                         Some(blocks) => {
                             view! {

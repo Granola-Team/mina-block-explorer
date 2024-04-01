@@ -23,13 +23,13 @@ pub fn NextStakesPage() -> impl IntoView {
 
     view! {
         <Title text="Next Staking Ledger | Search For Stakers"/>
-        <SearchBar placeholder="Exact search for public key".to_string()/>
+        <SearchBar placeholder="Exact search for public key"/>
         <PageContainer>
             <ErrorBoundary fallback=move |_| view! { <NullView/> }>
                 <Suspense fallback=move || {
                     view! {
                         <TableSection
-                            section_heading="Next Staking Ledger".to_string()
+                            section_heading="Next Staking Ledger"
                             controls=move || view! { <NullView/> }
                         >
                             <Table data=LoadingPlaceholder {}/>
@@ -54,13 +54,10 @@ pub fn NextStakesPage() -> impl IntoView {
                                 );
                                 view! {
                                     <TableSection
-                                        section_heading="Next Staking Ledger".to_string()
+                                        section_heading="Next Staking Ledger"
                                         controls=move || {
                                             view! {
-                                                <StakesNavButton
-                                                    href="/stakes".to_string()
-                                                    text="Current Stakes".to_string()
-                                                />
+                                                <StakesNavButton href="/stakes" text="Current Stakes"/>
                                             }
                                         }
                                     >

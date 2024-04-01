@@ -25,7 +25,7 @@ pub fn SnarksPage() -> impl IntoView {
 
     view! {
         <Title text="SNARKs | Search For SNARKs"/>
-        <SearchBar placeholder="Exact search for prover".to_string()/>
+        <SearchBar placeholder="Exact search for prover"/>
         <PageContainer>
             <TableSection
                 section_heading="SNARKs".to_owned()

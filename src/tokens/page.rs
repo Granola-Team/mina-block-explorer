@@ -11,7 +11,7 @@ pub fn TokensPage() -> impl IntoView {
     view! {
         <Title text="Tokens | Search For Tokens"/>
         <PageContainer>
-            <TableSection section_heading="Tokens".to_string() controls=|| ().into_view()>
+            <TableSection section_heading="Tokens" controls=|| ().into_view()>
 
                 {move || {
                     let data = data.clone();

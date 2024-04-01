@@ -10,11 +10,11 @@ pub struct SpotlightEntry {
 
 #[component]
 pub fn SpotlightSection(
-    header: String,
+    #[prop(into)] header: String,
     #[prop(default = None)] top_right: Option<Children>,
     spotlight_items: Vec<SpotlightEntry>,
-    id: Option<String>,
-    meta: Option<String>,
+    #[prop(into)] id: Option<String>,
+    #[prop(into)] meta: Option<String>,
     children: Children,
 ) -> impl IntoView {
     view! {
@@ -42,8 +42,8 @@ pub fn SpotlightSection(
 #[component]
 fn Spotlight(
     spotlight_items: Vec<SpotlightEntry>,
-    meta: Option<String>,
-    id: Option<String>,
+    #[prop(into)] meta: Option<String>,
+    #[prop(into)] id: Option<String>,
     children: Children,
 ) -> impl IntoView {
     view! {
