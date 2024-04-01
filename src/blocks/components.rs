@@ -153,7 +153,7 @@ pub fn BlockInternalCommandsTable(block: BlocksQueryBlocks) -> impl IntoView {
     let (current_page, set_current_page) = create_signal(1);
 
     view! {
-        {match block.transactions.and_then(|trx| trx.fee_transfer) {
+        {match block.transactions.and_then(|txn| txn.fee_transfer) {
             None => {
                 view! { <EmptyTable message="No internal commands for this block".to_string()/> }
             }

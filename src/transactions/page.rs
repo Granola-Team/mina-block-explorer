@@ -17,7 +17,7 @@ pub fn TransactionTabbedPage() -> impl IntoView {
             ..Default::default()
         },
         NavEntry {
-            href: "/transactions/zk-trx".to_string(),
+            href: "/transactions/zk-txn".to_string(),
             text: "zkApp Transactions".to_string(),
             icon: NavIcon::ZKApps,
             ..Default::default()
@@ -48,7 +48,7 @@ pub fn TransactionsPage() -> impl IntoView {
 pub fn TransactionSpotlightPage() -> impl IntoView {
     let memo_params_map = use_params_map();
     let (canonical_qp, _) = create_query_signal::<bool>("canonical");
-    let (trx_memo, set_trx_memo) = create_signal("No Memo".to_string());
+    let (txn_memo, set_txn_memo) = create_signal("No Memo".to_string());
     let resource = create_resource(
         move || (memo_params_map.get(), canonical_qp.get()),
         |(value, canonical)| async move {
@@ -59,8 +59,8 @@ pub fn TransactionSpotlightPage() -> impl IntoView {
 
     create_effect(move |_| {
         if let Some(Ok(data)) = resource.get() {
-            if let Some(Some(trx)) = data.transactions.first() {
-                set_trx_memo.set(trx.get_memo());
+            if let Some(Some(txn)) = data.transactions.first() {
+                set_txn_memo.set(txn.get_memo());
             }
         }
     });
@@ -68,7 +68,7 @@ pub fn TransactionSpotlightPage() -> impl IntoView {
     view! {
         <Title
             formatter=move |text| format!("Transaction Overview | {text}")
-            text=move || trx_memo.get()
+            text=move || txn_memo.get()
         />
         <PageContainer>
             {move || match resource.get() {

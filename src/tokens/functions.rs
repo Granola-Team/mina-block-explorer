@@ -24,7 +24,7 @@ pub fn stub_token_data(size: usize) -> Vec<TokenData> {
             token_symbol: generate_random_string(5), // Shorter string for symbol
             token_holders_count: rng.gen_range(1..=1000),
             token_balance: rng.gen_range(1..=1000),
-            trx_count: rng.gen_range(1..=1000),
+            txn_count: rng.gen_range(1..=1000),
             unlock_percent: rng.gen_range(1..=100),
         })
         .collect()

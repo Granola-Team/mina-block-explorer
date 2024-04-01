@@ -7,7 +7,7 @@ use leptos_meta::*;
 pub fn ZkAppTransactionsPage() -> impl IntoView {
     let records_per_page = 10;
     let (current_page, set_current_page) = create_signal(1);
-    let data = stub_zk_app_trx_data(1000);
+    let data = stub_zk_app_txn_data(1000);
     view! {
         <Title text="Transactions | ZK Apps"/>
         <PageContainer>

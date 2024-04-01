@@ -2,7 +2,7 @@ suite(["@CI"],'meta title',() => {
 
     let public_key="B62qpge4uMq4Vv5Rvc8Gw9qSquUYd6xoW1pz7HQkMSHm6h1o7pvLPAN";
     let block_hash="3NLhBh3d4b91DPoJn5hhwRAWmHSAaG8Qz4W5r9FhJBCXLD3WrAt4";
-    let trx_hash="CkpYzvzTZeYEoiAGNn6xquSPqittAb5wrhZHtR14RaLkZfiRYQgT3"
+    let txn_hash="CkpYzvzTZeYEoiAGNn6xquSPqittAb5wrhZHtR14RaLkZfiRYQgT3"
     let pages = [
         { url: `/addresses/accounts`, title: `Accounts | Search For Mina Account`},
         { url: '/blocks', title: 'Blocks | Search for Mina Blocks'},
@@ -19,7 +19,7 @@ suite(["@CI"],'meta title',() => {
         { url: '/snarks', title: 'SNARKs | Search For SNARKs'},
         { url: '/', title: 'Mina Blockchain Explorer | Search For Blocks'},
         { url: '/summary', title: 'Mina Blockchain Explorer | Search For Blocks'},
-        { url: `/transactions/${trx_hash}`, title: 'Transaction Overview | WeStake.Club payout #72'},
+        { url: `/transactions/${txn_hash}`, title: 'Transaction Overview | WeStake.Club payout #72'},
         { url: `/addresses/accounts/${public_key}`, title: `Account Overview | 'MinaExplorer'`},
     ];
 

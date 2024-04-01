@@ -58,7 +58,7 @@ pub fn Root() -> impl IntoView {
                     </Route>
                     <Route path="/transactions" view=TransactionTabbedPage>
                         <Route path="/" view=TransactionsPage/>
-                        <Route path="/zk-trx" view=ZkAppTransactionsPage/>
+                        <Route path="/zk-txn" view=ZkAppTransactionsPage/>
                     </Route>
                     <Route path="/transactions/:id" view=TransactionSpotlightPage/>
                     <Route path="/snarks" view=SnarksPage/>
