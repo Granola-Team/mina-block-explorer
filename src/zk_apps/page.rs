@@ -1,5 +1,6 @@
 use super::functions::*;
 use crate::{
+    account_activity::models::AccountActivityQueryDirectionalTransactions,
     common::{components::*, functions::*, models::*, spotlight::*, table::*},
     icons::*,
 };
@@ -9,9 +10,24 @@ use leptos_meta::*;
 
 #[component]
 pub fn ZkAppSpotlight() -> impl IntoView {
-    let records_per_page = 10;
+    let records_per_page = 5;
     let (current_txn_page, set_current_txn_page) = create_signal(1);
+    let (current_fees_page, set_current_fees_page) = create_signal(1);
     let txn = stub_zk_app_trx_data(10);
+    let fees = vec![AccountActivityQueryDirectionalTransactions {
+        fee: Some(0.01_f64),
+        counterparty: Some("B62qmQsEHcsPUs5xdtHKjEmWqqhUPRSF2GNmdguqnNvpEZpKftPC69f".to_string()),
+        direction: Some("IN".to_string()),
+        hash: Some("5JunUf7Niybx1d2CdLLZWL1D9wwtce5dBFM7nXsQ9GtiyopSh1Ee".to_string()),
+        amount: Some(0.01_f64),
+        date_time: Some(chrono::Utc::now()),
+        height: Some(5822_i64),
+        kind: Some("PAYMENT".to_string()),
+        nonce: Some(1),
+        failure_reason: None,
+        memo: None,
+        canonical: Some(true),
+    }];
     view! {
         <Title text="ZK App Spotlight"/>
         <PageContainer>
@@ -161,27 +177,27 @@ pub fn ZkAppSpotlight() -> impl IntoView {
                     }}
 
                 </AppSubSection>
-                // <AppSubSection
-                //     heading="Fee Payments".to_string()
-                //     position=SubSectionPosition::Left
-                // >
-                //     {move || {
-                //         let data = fees.clone();
-                //         let pag = build_pagination(
-                //             data.len(),
-                //             records_per_page,
-                //             current_page.get(),
-                //             set_current_page,
-                //         );
-                //         let subset = get_subset(
-                //             &data.into_iter().map(Some).collect::<Vec<_>>(),
-                //             records_per_page,
-                //             current_page.get() - 1,
-                //         );
-                //         view! { <Table data=subset pagination=pag/> }
-                //     }}
+                <AppSubSection
+                    heading="Fee Payments".to_string()
+                    position=SubSectionPosition::Right
+                >
+                    {move || {
+                        let data = fees.clone();
+                        let pag = build_pagination(
+                            data.len(),
+                            records_per_page,
+                            current_fees_page.get(),
+                            set_current_fees_page,
+                        );
+                        let subset = get_subset(
+                            &data.into_iter().map(Some).collect::<Vec<_>>(),
+                            records_per_page,
+                            current_fees_page.get() - 1,
+                        );
+                        view! { <Table data=subset pagination=pag/> }
+                    }}
 
-                // </AppSubSection>
+                </AppSubSection>
             </SubSectionContainer>
         </PageContainer>
     }
