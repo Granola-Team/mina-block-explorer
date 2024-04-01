@@ -3,7 +3,7 @@ use leptos::*;
 use leptos_router::*;
 
 #[component]
-pub fn StakesNavButton(href: String, text: String) -> impl IntoView {
+pub fn StakesNavButton(#[prop(into)] href: String, #[prop(into)] text: String) -> impl IntoView {
     view! {
         <a
             href=href
@@ -16,7 +16,7 @@ pub fn StakesNavButton(href: String, text: String) -> impl IntoView {
 
 #[component]
 pub fn EpochButton(
-    text: String,
+    #[prop(into)] text: String,
     epoch_target: i64,
     #[prop(default = false)] disabled: bool,
     style_variant: EpochStyleVariant,

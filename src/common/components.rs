@@ -21,7 +21,7 @@ pub fn SubSectionContainer(children: Children) -> impl IntoView {
 
 #[component]
 pub fn AppSubSection(
-    heading: String,
+    #[prop(into)] heading: String,
     children: Children,
     position: SubSectionPosition,
 ) -> impl IntoView {
@@ -49,7 +49,7 @@ pub fn AppSection(children: Children) -> impl IntoView {
 }
 
 #[component]
-pub fn AppHeading(heading: String) -> impl IntoView {
+pub fn AppHeading(#[prop(into)] heading: String) -> impl IntoView {
     view! {
         <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-start items-center">
             {heading}
@@ -58,7 +58,7 @@ pub fn AppHeading(heading: String) -> impl IntoView {
 }
 
 #[component]
-pub fn Checkbox<F>(label: String, value: bool, handle_change: F) -> impl IntoView
+pub fn Checkbox<F>(#[prop(into)] label: String, value: bool, handle_change: F) -> impl IntoView
 where
     F: Fn(Event) + 'static,
 {
@@ -110,10 +110,10 @@ pub fn BooleanUrlParamSelectMenu(
 
 #[component]
 pub fn SummaryItem(
-    label: String,
-    value: Option<String>,
-    id: String,
-    #[prop(optional)] imgsrc: String,
+    #[prop(into)] label: String,
+    #[prop(into)] value: Option<String>,
+    #[prop(into)] id: String,
+    #[prop(optional, into)] imgsrc: String,
 ) -> impl IntoView {
     view! {
         <div class="h-24 w-96 p-4 max-w-full grid gap-2 grid-cols-[minmax(50px,50px)_1fr] bg-white rounded-md">

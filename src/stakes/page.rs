@@ -45,7 +45,7 @@ pub fn StakesPage() -> impl IntoView {
 
             formatter=move |text| format!("Staking Ledger | {text}")
         />
-        <SearchBar placeholder="Exact search for public key".to_string()/>
+        <SearchBar placeholder="Exact search for public key"/>
         <PageContainer>
             {move || match resource.get() {
                 Some(Ok(data)) => {
@@ -84,21 +84,18 @@ pub fn StakesPage() -> impl IntoView {
                             controls=move || {
                                 view! {
                                     <EpochButton
-                                        text="Previous".to_string()
+                                        text="Previous"
                                         style_variant=EpochStyleVariant::Secondary
                                         epoch_target=previous_epoch
                                     />
                                     {if next_epoch == curr_epoch {
                                         view! {
-                                            <StakesNavButton
-                                                href="/next-stakes".to_string()
-                                                text="Next Stakes".to_string()
-                                            />
+                                            <StakesNavButton href="/next-stakes" text="Next Stakes"/>
                                         }
                                     } else {
                                         view! {
                                             <EpochButton
-                                                text="Next".to_string()
+                                                text="Next"
                                                 style_variant=EpochStyleVariant::Primary
                                                 epoch_target=next_epoch
                                             />

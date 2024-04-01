@@ -8,7 +8,7 @@ use leptos_router::*;
 
 #[component]
 pub fn TransactionsSection(
-    #[prop(default = None)] state_hash: Option<String>,
+    #[prop(default = None,into)] state_hash: Option<String>,
     #[prop(default = false)] with_link: bool,
 ) -> impl IntoView {
     let (state_hash_sig, _) = create_signal(state_hash);
@@ -48,7 +48,7 @@ pub fn TransactionsSection(
 
 #[component]
 fn TransactionSection<T>(
-    public_key: Option<String>,
+    #[prop(into)] public_key: Option<String>,
     #[prop(default = false)] with_link: bool,
     transactions: Option<Vec<Option<T>>>,
 ) -> impl IntoView
@@ -129,7 +129,7 @@ where
                                                     view! {
                                                         <TableLink
                                                             href=format!("/transactions?account={}", pk_i)
-                                                            text="See all transactions".to_string()
+                                                            text="See all transactions"
                                                         >
                                                             <TransactionIcon/>
                                                         </TableLink>

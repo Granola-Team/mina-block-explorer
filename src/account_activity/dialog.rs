@@ -56,7 +56,7 @@ pub fn AccountDialogView() -> impl IntoView {
                 <Suspense fallback=move || {
                     view! {
                         <SpotlightSection
-                            header="Account Spotlight".to_string()
+                            header="Account Spotlight"
                             top_right=Some(
                                 Box::new(move || Fragment::new(
                                     vec![
@@ -88,7 +88,7 @@ pub fn AccountDialogView() -> impl IntoView {
                                 let summary_items = get_spotlight_data(&res.account);
                                 view! {
                                     <SpotlightSection
-                                        header="Account Spotlight".to_string()
+                                        header="Account Spotlight"
                                         top_right=Some(
                                             Box::new(move || Fragment::new(
                                                 vec![

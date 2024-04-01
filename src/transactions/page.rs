@@ -202,7 +202,7 @@ pub fn TransactionSpotlightPage() -> impl IntoView {
                             ];
                             view! {
                                 <SpotlightSection
-                                    header="Transaction Spotlight".to_string()
+                                    header="Transaction Spotlight"
                                     spotlight_items=spotlight_items
                                     id=Some(state_hash)
                                     meta=Some(
@@ -275,7 +275,7 @@ pub fn TransactionSpotlightPage() -> impl IntoView {
                     ];
                     view! {
                         <SpotlightSection
-                            header="Transaction Spotlight".to_string()
+                            header="Transaction Spotlight"
                             spotlight_items=spotlight_items
                             id=None
                             meta=None
