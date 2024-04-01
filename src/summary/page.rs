@@ -12,9 +12,9 @@ pub fn SummaryPage() -> impl IntoView {
 
     view! {
         <TitledSearchBar
-            title="Blockchain Explorer".to_string()
-            subtext="Powered by Mina".to_string()
-            search_placeholder="Exact search for block hash".to_string()
+            title="Blockchain Explorer"
+            subtext="Powered by Mina"
+            search_placeholder="Exact search for block hash"
         />
         <Title text="Mina Blockchain Explorer | Search For Blocks"/>
         <PageContainer>
@@ -36,27 +36,27 @@ fn SummaryGrid(summary: Option<BlockchainSummary>) -> impl IntoView {
                 Some(smry) => {
                     view! {
                         <SummaryItem
-                            imgsrc="/assets/img/blockchain_length.svg".to_string()
-                            id="blockchainLength".to_string()
-                            label="Height".to_string()
+                            imgsrc="/assets/img/blockchain_length.svg"
+                            id="blockchainLength"
+                            label="Height"
                             value=Some(smry.blockchain_length.to_string())
                         />
                         <SummaryItem
-                            imgsrc="/assets/img/circulating_supply.svg".to_string()
-                            id="circulatingSupply".to_string()
-                            label="Circulating Supply".to_string()
+                            imgsrc="/assets/img/circulating_supply.svg"
+                            id="circulatingSupply"
+                            label="Circulating Supply"
                             value=Some(format!("{:.2}", smry.circ_supply()))
                         />
                         <SummaryItem
-                            imgsrc="/assets/img/epoch.svg".to_string()
-                            id="epoch".to_string()
-                            label="Epoch".to_string()
+                            imgsrc="/assets/img/epoch.svg"
+                            id="epoch"
+                            label="Epoch"
                             value=Some(smry.epoch.to_string())
                         />
                         <SummaryItem
-                            imgsrc="/assets/img/total_currency.svg".to_string()
-                            id="totalCurrency".to_string()
-                            label="Total Currency".to_string()
+                            imgsrc="/assets/img/total_currency.svg"
+                            id="totalCurrency"
+                            label="Total Currency"
                             value=Some(format!("{:.2}", smry.tot_currency()))
                         />
                     }
@@ -64,27 +64,27 @@ fn SummaryGrid(summary: Option<BlockchainSummary>) -> impl IntoView {
                 None => {
                     view! {
                         <SummaryItem
-                            imgsrc="/assets/img/blockchain_length.svg".to_string()
-                            id="blockchainLength".to_string()
-                            label="Height".to_string()
+                            imgsrc="/assets/img/blockchain_length.svg"
+                            id="blockchainLength"
+                            label="Height"
                             value=None
                         />
                         <SummaryItem
-                            imgsrc="/assets/img/circulating_supply.svg".to_string()
-                            id="circulatingSupply".to_string()
-                            label="Circulating Supply".to_string()
+                            imgsrc="/assets/img/circulating_supply.svg"
+                            id="circulatingSupply"
+                            label="Circulating Supply"
                             value=None
                         />
                         <SummaryItem
-                            imgsrc="/assets/img/epoch.svg".to_string()
-                            id="epoch".to_string()
-                            label="Epoch".to_string()
+                            imgsrc="/assets/img/epoch.svg"
+                            id="epoch"
+                            label="Epoch"
                             value=None
                         />
                         <SummaryItem
-                            imgsrc="/assets/img/total_currency.svg".to_string()
-                            id="totalCurrency".to_string()
-                            label="Total Currency".to_string()
+                            imgsrc="/assets/img/total_currency.svg"
+                            id="totalCurrency"
+                            label="Total Currency"
                             value=None
                         />
                     }

@@ -198,7 +198,11 @@ pub fn EmptyTable(#[prop(into)] message: String) -> impl IntoView {
 }
 
 #[component]
-pub fn TableSection<E, F>(section_heading: String, children: Children, controls: F) -> impl IntoView
+pub fn TableSection<E, F>(
+    #[prop(into)] section_heading: String,
+    children: Children,
+    controls: F,
+) -> impl IntoView
 where
     E: IntoView,
     F: Fn() -> E + 'static,

@@ -11,10 +11,7 @@ pub fn ZkAppTransactionsPage() -> impl IntoView {
     view! {
         <Title text="Transactions | ZK Apps"/>
         <PageContainer>
-            <TableSection
-                section_heading="ZK App Transactions".to_string()
-                controls=|| ().into_view()
-            >
+            <TableSection section_heading="ZK App Transactions" controls=|| ().into_view()>
 
                 {move || {
                     let data = data.clone();
@@ -45,7 +42,7 @@ pub fn ZkAppsPage() -> impl IntoView {
     view! {
         <Title text="ZK Apps | Search For ZK Apps"/>
         <PageContainer>
-            <TableSection section_heading="ZK Apps".to_string() controls=|| ().into_view()>
+            <TableSection section_heading="ZK Apps" controls=|| ().into_view()>
 
                 {move || {
                     let data = data.clone();

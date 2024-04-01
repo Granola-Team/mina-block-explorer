@@ -129,7 +129,7 @@ where
                                                     view! {
                                                         <TableLink
                                                             href=format!("/transactions?account={}", pk_i)
-                                                            text="See all transactions".to_string()
+                                                            text="See all transactions"
                                                         >
                                                             <TransactionIcon/>
                                                         </TableLink>

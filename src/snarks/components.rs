@@ -20,8 +20,7 @@ pub fn AccountDialogSnarkJobSection(snarks: Vec<Option<SnarksQuerySnarks>>) -> i
                 when=has_snarks
                 fallback=move || {
                     view! {
-                        <EmptyTable message="This public key has not completed any SNARK work"
-                            .to_string()/>
+                        <EmptyTable message="This public key has not completed any SNARK work"/>
                     }
                 }
             >

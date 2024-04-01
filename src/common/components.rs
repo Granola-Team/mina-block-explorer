@@ -113,7 +113,7 @@ pub fn SummaryItem(
     #[prop(into)] label: String,
     #[prop(into)] value: Option<String>,
     #[prop(into)] id: String,
-    #[prop(optional)] imgsrc: String,
+    #[prop(optional, into)] imgsrc: String,
 ) -> impl IntoView {
     view! {
         <div class="h-24 w-96 p-4 max-w-full grid gap-2 grid-cols-[minmax(50px,50px)_1fr] bg-white rounded-md">

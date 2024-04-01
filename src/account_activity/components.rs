@@ -128,9 +128,7 @@ pub fn AccountDialogTransactionSection(
             <Show
                 when=has_transactions
                 fallback=move || {
-                    view! {
-                        <EmptyTable message="This public key has no transactions".to_string()/>
-                    }
+                    view! { <EmptyTable message="This public key has no transactions"/> }
                 }
             >
 
@@ -285,10 +283,7 @@ pub fn AccountOverviewSnarkJobTable(
     view! {
         {match snarks.len() {
             0 => {
-                view! {
-                    <EmptyTable message="This public key has not completed any SNARK work"
-                        .to_string()/>
-                }
+                view! { <EmptyTable message="This public key has not completed any SNARK work"/> }
             }
             _ => {
                 let pag = build_pagination(
@@ -300,7 +295,7 @@ pub fn AccountOverviewSnarkJobTable(
                 let subset = get_subset(&snarks, records_per_page, current_page.get() - 1);
                 view! {
                     <Table data=subset pagination=pag/>
-                    <TableLink href=href.get() text="See all snark jobs".to_string()>
+                    <TableLink href=href.get() text="See all snark jobs">
                         <CheckCircleIcon/>
                     </TableLink>
                 }
@@ -327,9 +322,7 @@ pub fn AccountOverviewBlocksTable(
     view! {
         {match blocks.len() {
             0 => {
-                view! {
-                    <EmptyTable message="This public key has no block production".to_string()/>
-                }
+                view! { <EmptyTable message="This public key has no block production"/> }
             }
             _ => {
                 {
@@ -346,7 +339,7 @@ pub fn AccountOverviewBlocksTable(
                     );
                     view! {
                         <Table data=blocks_subset pagination=pag/>
-                        <TableLink href=href.get() text="See all block production".to_string()>
+                        <TableLink href=href.get() text="See all block production">
                             <BlockIcon/>
                         </TableLink>
                     }
@@ -372,9 +365,7 @@ pub fn AccountDialogBlocksSection(
             <Show
                 when=has_blocks
                 fallback=move || {
-                    view! {
-                        <EmptyTable message="This public key has no block production".to_string()/>
-                    }
+                    view! { <EmptyTable message="This public key has no block production"/> }
                 }
             >
 
