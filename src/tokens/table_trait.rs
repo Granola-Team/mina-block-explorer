@@ -33,7 +33,7 @@ impl TableData for Vec<Option<TokenData>> {
                     ),
                     convert_to_link(token.owner_pk.to_string(), "#".to_string()),
                     convert_to_pill(token.token_holders_count.to_string(), ColorVariant::Blue),
-                    convert_to_pill(token.trx_count.to_string(), ColorVariant::Blue),
+                    convert_to_pill(token.txn_count.to_string(), ColorVariant::Blue),
                     convert_to_span(token.locked.to_string()),
                 ],
                 None => vec![],

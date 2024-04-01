@@ -32,7 +32,7 @@ impl TableData for Vec<Option<ZkAppTransactionData>> {
     fn get_columns(&self) -> Vec<String> {
         [
             "Prover",
-            "Trx Hash",
+            "txn Hash",
             "Age",
             "Account Updates",
             "Updated Accounts",
@@ -45,26 +45,26 @@ impl TableData for Vec<Option<ZkAppTransactionData>> {
 
     fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
         self.iter()
-            .map(|opt_trx| match opt_trx {
-                Some(trx) => vec![
-                    convert_to_link(trx.prover.to_string(), "#".to_string()),
-                    convert_to_link(trx.hash.to_string(), "#".to_string()),
+            .map(|opt_txn| match opt_txn {
+                Some(txn) => vec![
+                    convert_to_link(txn.prover.to_string(), "#".to_string()),
+                    convert_to_link(txn.hash.to_string(), "#".to_string()),
                     convert_array_to_span(vec![
-                        convert_to_span(print_time_since(&trx.date_time.to_string())),
-                        convert_to_span(trx.date_time.to_string())
+                        convert_to_span(print_time_since(&txn.date_time.to_string())),
+                        convert_to_span(txn.date_time.to_string())
                             .attr("class", "block text-xs font-light text-slate-400"),
                     ])
                     .attr("class", "block"),
-                    convert_to_pill(trx.updated_accounts.len().to_string(), ColorVariant::Blue),
+                    convert_to_pill(txn.updated_accounts.len().to_string(), ColorVariant::Blue),
                     convert_array_to_span(
-                        trx.updated_accounts
+                        txn.updated_accounts
                             .iter()
                             .map(|ua| convert_to_link(ua.to_string(), "#".to_string()))
                             .collect::<Vec<_>>(),
                     )
                     .attr("class", "block"),
                     wrap_in_pill(
-                        decorate_with_currency_tag(trx.fee.to_string(), "mina".to_string()),
+                        decorate_with_currency_tag(txn.fee.to_string(), "mina".to_string()),
                         ColorVariant::Orange,
                     ),
                 ],
