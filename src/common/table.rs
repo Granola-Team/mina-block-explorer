@@ -215,7 +215,11 @@ where
 }
 
 #[component]
-pub fn TableLink(href: String, text: String, children: Children) -> impl IntoView {
+pub fn TableLink(
+    #[prop(into)] href: String,
+    #[prop(into)] text: String,
+    children: Children,
+) -> impl IntoView {
     view! {
         <div class="w-full bg-inherit flex justify-center items-center py-3">
             <a

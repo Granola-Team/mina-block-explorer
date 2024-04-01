@@ -19,7 +19,7 @@ use leptos::*;
 
 #[component]
 pub fn AccountDialogSectionContainer(
-    title: String,
+    #[prop(into)] title: String,
     showing_message: String,
     children: Children,
 ) -> impl IntoView {
@@ -73,9 +73,9 @@ pub struct StatusImg<'a> {
 
 #[component]
 pub fn AccountDialogSectionEntryHeader(
-    date: String,
+    #[prop(into)] date: String,
     status: Status,
-    moments_ago: String,
+    #[prop(into)] moments_ago: String,
 ) -> impl IntoView {
     let img_attr = match status {
         Status::Pending => StatusImg {
@@ -168,13 +168,13 @@ pub fn AccountDialogTransactionSection(
 #[component]
 fn TransactionEntry(
     status: Status,
-    date: String,
-    moments_ago: String,
-    direction: String,
-    counterparty: String,
-    fee: String,
-    amount: String,
-    hash: String,
+    #[prop(into)] date: String,
+    #[prop(into)] moments_ago: String,
+    #[prop(into)] direction: String,
+    #[prop(into)] counterparty: String,
+    #[prop(into)] fee: String,
+    #[prop(into)] amount: String,
+    #[prop(into)] hash: String,
 ) -> impl IntoView {
     let (hash_sig, _) = create_signal(hash);
     let (direction_sig, _) = create_signal(direction);
@@ -270,7 +270,7 @@ pub fn AccountTransactionsSection(
 #[component]
 pub fn AccountOverviewSnarkJobTable(
     snarks: Vec<Option<AccountActivityQuerySnarks>>,
-    public_key: Option<String>,
+    #[prop(into)] public_key: Option<String>,
 ) -> impl IntoView {
     let (href, _set_href) = create_signal(
         public_key
@@ -313,7 +313,7 @@ pub fn AccountOverviewSnarkJobTable(
 #[component]
 pub fn AccountOverviewBlocksTable(
     blocks: Vec<Option<AccountActivityQueryBlocks>>,
-    public_key: Option<String>,
+    #[prop(into)] public_key: Option<String>,
 ) -> impl IntoView {
     let (href, _set_href) = create_signal(
         public_key
