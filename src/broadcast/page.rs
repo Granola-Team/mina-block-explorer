@@ -1,5 +1,6 @@
 use super::components::*;
 use crate::common::{components::*, models::*};
+use indoc::indoc;
 use leptos::*;
 use leptos_meta::Title;
 
@@ -17,25 +18,32 @@ pub fn BroadcastTransactionPage() -> impl IntoView {
             </AppSection>
             <AppSection>
                 <AppHeading heading="Sample Payment"/>
-                <Sample>
-                    r#"{
-                    "publicKey": "B62qrPN5Y5...",
-                    "signature": {
-                    "field": "1912885630...",
-                    "scalar": "48899066..."
-                    },
-                    "payload": {
-                    "to": "B62qqUzKC9H...",
-                    "from": "B62qrPN5Y5y...",
-                    "fee": "100000000",
-                    "amount": "1000000000",
-                    "nonce": "305",
-                    "memo": "SDK payment",
-                    "validUntil": "4294967295"
-                    }
-                    }
-                    "#
-                </Sample>
+                <div class="m-8">
+                    <CodeBlock>
+
+                        {
+                            indoc! {
+                                r#"{
+    "publicKey": "B62qrPN5Y5...",
+    "signature": {
+        "field": "1912885630...",
+        "scalar": "48899066..."
+    },
+    "payload": {
+        "to": "B62qqUzKC9H...",
+        "from": "B62qrPN5Y5y...",
+        "fee": "100000000",
+        "amount": "1000000000",
+        "nonce": "305",
+        "memo": "SDK payment",
+        "validUntil": "4294967295"
+    }
+}"#
+                            }
+                        }
+
+                    </CodeBlock>
+                </div>
             </AppSection>
         </PageContainer>
     }
@@ -55,23 +63,31 @@ pub fn BroadcastDelegationPage() -> impl IntoView {
             </AppSection>
             <AppSection>
                 <AppHeading heading="Sample Delegation Transaction"/>
-                <Sample>
-                    r#"{
-                    "publicKey": "B62qrPN5Y5...",
-                    "signature": {
-                    "field": "1912885630...",
-                    "scalar": "48899066..."
-                    },
-                    "payload": {
-                    "to": "B62qqUzKC9H...",
-                    "from": "B62qrPN5Y5y...",
-                    "fee": "100000000",
-                    "nonce": "305",
-                    "memo": "SDK delegation",
-                    "validUntil": "4294967295"
-                    }
-                    }               "#
-                </Sample>
+                <div class="m-8">
+                    <CodeBlock>
+
+                        {
+                            indoc! {
+                                r#"{
+    "publicKey": "B62qrPN5Y5...",
+    "signature": {
+        "field": "1912885630...",
+        "scalar": "48899066..."
+    },
+    "payload": {
+        "to": "B62qqUzKC9H...",
+        "from": "B62qrPN5Y5y...",
+        "fee": "100000000",
+        "nonce": "305",
+        "memo": "SDK delegation",
+        "validUntil": "4294967295"
+    }
+}"#
+                            }
+                        }
+
+                    </CodeBlock>
+                </div>
             </AppSection>
         </PageContainer>
     }
@@ -91,25 +107,33 @@ pub fn BroadcastFromLedgerPage() -> impl IntoView {
             </AppSection>
             <AppSection>
                 <AppHeading heading="Sample Ledger Payment"/>
-                <Sample>
-                    r#"{
-                    "signature": "389ac7d4077f3d485c1494782870979faa222cd906b25b2687333a92f41e40b925adb08705eddf2a7098e5ac9938498e8a0ce7c70b25ea392f4846b854086d43",
-                    "payment": {
-                    "to": "B62qnzbXmRNo9q32n4SNu2mpB8e7FYYLH8NmaX6oFCBYjjQ8SbD7uzV",
-                    "from": "B62qnzbXmRNo9q32n4SNu2mpB8e7FYYLH8NmaX6oFCBYjjQ8SbD7uzV",
-                    "fee": "10000000",
-                    "token": "1",
-                    "nonce": "0",
-                    "memo": null,
-                    "amount": "1000000000",
-                    "valid_until": "4294967295"
-                    },
-                    "stake_delegation": null,
-                    "create_token": null,
-                    "create_token_account": null,
-                    "mint_tokens": null
-                    }               "#
-                </Sample>
+                <div class="m-8">
+                    <CodeBlock>
+
+                        {
+                            indoc! {
+                                r#"{
+    "signature": "389ac7d4077f3d485c1494782870979faa222cd906b25b2687333a92f41e40b925adb08705eddf2a7098e5ac9938498e8a0ce7c70b25ea392f4846b854086d43",
+    "payment": {
+        "to": "B62qnzbXmRNo9q32n4SNu2mpB8e7FYYLH8NmaX6oFCBYjjQ8SbD7uzV",
+        "from": "B62qnzbXmRNo9q32n4SNu2mpB8e7FYYLH8NmaX6oFCBYjjQ8SbD7uzV",
+        "fee": "10000000",
+        "token": "1",
+        "nonce": "0",
+        "memo": null,
+        "amount": "1000000000",
+        "valid_until": "4294967295"
+    },
+    "stake_delegation": null,
+    "create_token": null,
+    "create_token_account": null,
+    "mint_tokens": null
+}"#
+                            }
+                        }
+
+                    </CodeBlock>
+                </div>
             </AppSection>
         </PageContainer>
     }

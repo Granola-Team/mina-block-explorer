@@ -49,8 +49,8 @@ pub fn Header() -> impl IntoView {
                     ..Default::default()
                 },
                 NavEntry {
-                    href: "/addresses/zkApps".to_string(),
-                    text: "zkApps".to_string(),
+                    href: "/addresses/zk-apps".to_string(),
+                    text: "zk-apps".to_string(),
                     icon: NavIcon::ZKApps,
                     ..Default::default()
                 },

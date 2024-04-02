@@ -78,19 +78,33 @@ fn Spotlight(
 
             </div>
         </div>
-        <table class="font-mono @3xl:mx-[10rem] bg-white rounded-xl mt-2 @3xl:mt-8 md:p-4 table-fixed flex flex-wrap">
+        <SpotlightTable>
             {spotlight_items
                 .into_iter()
                 .map(|entry| {
                     view! {
-                        <tr class="h-9 w-full @7xl:w-1/2 overflow-hidden flex">
+                        <SpotlighTableRow>
                             <SpotlightRow entry=entry/>
-                        </tr>
+                        </SpotlighTableRow>
                     }
                 })
                 .collect::<Vec<_>>()}
+        </SpotlightTable>
+    }
+}
+
+#[component]
+pub fn SpotlightTable(children: Children) -> impl IntoView {
+    view! {
+        <table class="font-mono @3xl:mx-[10rem] bg-white rounded-xl mt-2 @3xl:mt-8 md:p-4 table-fixed flex flex-wrap">
+            {children()}
         </table>
     }
+}
+
+#[component]
+fn SpotlighTableRow(children: Children) -> impl IntoView {
+    view! { <tr class="h-9 w-full @7xl:w-1/2 overflow-hidden flex">{children()}</tr> }
 }
 
 #[component]
