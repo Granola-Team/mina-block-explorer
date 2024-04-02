@@ -13,7 +13,7 @@ pub fn ZkAppSpotlight() -> impl IntoView {
     let records_per_page = 5;
     let (current_txn_page, set_current_txn_page) = create_signal(1);
     let (current_fees_page, set_current_fees_page) = create_signal(1);
-    let txn = stub_zk_app_trx_data(10);
+    let txn = stub_zk_app_txn_data(10);
     let fees = vec![AccountActivityQueryDirectionalTransactions {
         fee: Some(0.01_f64),
         counterparty: Some("B62qmQsEHcsPUs5xdtHKjEmWqqhUPRSF2GNmdguqnNvpEZpKftPC69f".to_string()),
