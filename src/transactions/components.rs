@@ -34,10 +34,7 @@ pub fn TransactionsSection(
             }
             _ => {
                 view! {
-                    <TableSection
-                        section_heading="Transactions"
-                        controls=|| ().into_view()
-                    >
+                    <TableSection section_heading="Transactions" controls=|| ().into_view()>
                         <Table data=LoadingPlaceholder {}/>
                     </TableSection>
                 }
@@ -67,10 +64,7 @@ where
             when=move || transactions_show_condition.is_some()
             fallback=move || {
                 view! {
-                    <TableSection
-                        section_heading="Transactions"
-                        controls=|| ().into_view()
-                    >
+                    <TableSection section_heading="Transactions" controls=|| ().into_view()>
                         <Table data=LoadingPlaceholder {}/>
                     </TableSection>
                 }

@@ -648,10 +648,7 @@ pub fn BlocksSection() -> impl IntoView {
             }
             None => {
                 view! {
-                    <TableSection
-                        section_heading="Blocks"
-                        controls=move || view! { <NullView/> }
-                    >
+                    <TableSection section_heading="Blocks" controls=move || view! { <NullView/> }>
                         <Table data=LoadingPlaceholder {}/>
                     </TableSection>
                     <Outlet/>
