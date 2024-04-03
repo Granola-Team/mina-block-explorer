@@ -111,15 +111,12 @@ pub fn StakesPage() -> impl IntoView {
                 }
                 None => {
                     view! {
-                        <TableSection
-                            section_heading=String::new()
-                            controls=move || view! { <NullView/> }
-                        >
+                        <TableSection section_heading=String::new() controls=move || ().into_view()>
                             <Table data=LoadingPlaceholder {}/>
                         </TableSection>
                     }
                 }
-                _ => view! { <NullView/> },
+                _ => ().into_view(),
             }}
 
         </PageContainer>

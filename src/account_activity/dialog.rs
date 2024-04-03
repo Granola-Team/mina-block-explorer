@@ -1,7 +1,7 @@
 use super::{components::AccountDialogTransactionSection, functions::*, models::*};
 use crate::{
     account_activity::components::AccountDialogBlocksSection,
-    common::{components::*, models::MyError, spotlight::*},
+    common::{models::MyError, spotlight::*},
     icons::*,
     snarks::components::AccountDialogSnarkJobSection,
 };
@@ -47,7 +47,7 @@ pub fn AccountDialogView() -> impl IntoView {
     view! {
         <Show
             when=move || { memo_params_map.get().get("id").is_some() && !base.get().is_empty() }
-            fallback=move || view! { <NullView/> }
+            fallback=move || ().into_view()
         >
             <dialog
                 id="accountdialog"

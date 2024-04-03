@@ -1,7 +1,7 @@
 use super::{functions::*, graphql::snarks_query::SnarksQuerySnarks};
 use crate::{
     account_activity::components::*,
-    common::{components::*, functions::*, table::*},
+    common::{functions::*, table::*},
 };
 use leptos::*;
 
@@ -33,7 +33,7 @@ pub fn AccountDialogSnarkJobSection(snarks: Vec<Option<SnarksQuerySnarks>>) -> i
                         view! {
                             <Show
                                 when=move || check_opt_snark.is_some()
-                                fallback=move || view! { <NullView/> }
+                                fallback=move || ().into_view()
                             >
 
                                 {

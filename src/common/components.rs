@@ -149,11 +149,6 @@ pub fn ErrorView<E: std::fmt::Debug>(err: E) -> impl IntoView {
 }
 
 #[component]
-pub fn NullView() -> impl IntoView {
-    view! {}
-}
-
-#[component]
 pub fn PageContainer(children: Children) -> impl IntoView {
     view! {
         <div class="grid grid-cols-1 md:grid-cols-[10%_80%_10%] bg-secondary-background rounded-t-3xl py-6 px-2 sm:px-0 grow">
@@ -270,7 +265,7 @@ pub fn TabLink(nav_entry: NavEntry) -> impl IntoView {
                     }
                         .into_view()
                 }
-                None => view! { <NullView/> },
+                None => ().into_view(),
             }}
 
         </a>

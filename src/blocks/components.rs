@@ -22,7 +22,7 @@ pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
 
     view! {
         <PageContainer>
-            <ErrorBoundary fallback=move |_| view! { <NullView/> }>
+            <ErrorBoundary fallback=move |_| ().into_view()>
                 <Suspense fallback=move || {
                     let content_clone = content_for_fallback.clone();
                     match content_clone {
@@ -89,7 +89,7 @@ pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
                                 (Some(block), BlockContent::Analytics) => {
                                     view! { <BlockAnalytics block=block/> }
                                 }
-                                _ => view! { <NullView/> },
+                                _ => ().into_view(),
                             }
                         }
                     }
@@ -122,7 +122,7 @@ pub fn BlockUserCommands(block: BlocksQueryBlocks) -> impl IntoView {
                     );
                     view! { <Table data=subset pagination=pag/> }
                 }
-                None => view! { <NullView/> },
+                None => ().into_view(),
             }}
 
         </TableSection>
@@ -650,7 +650,7 @@ pub fn BlocksSection() -> impl IntoView {
                 view! {
                     <TableSection
                         section_heading="Blocks".to_owned()
-                        controls=move || view! { <NullView/> }
+                        controls=move || ().into_view()
                     >
                         <Table data=LoadingPlaceholder {}/>
                     </TableSection>
@@ -658,7 +658,7 @@ pub fn BlocksSection() -> impl IntoView {
                 }
                     .into_view()
             }
-            _ => view! { <span></span> }.into_view(),
+            _ => ().into_view(),
         }}
     }
 }
@@ -680,15 +680,12 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
 
     view! {
         <ErrorBoundary fallback=move |_| {
-            view! { <NullView/> }
+            ().into_view()
         }>
             {move || match resource.get().and_then(|res| res.ok()) {
                 None => {
                     view! {
-                        <TableSection
-                            section_heading="Blocks"
-                            controls=move || view! { <NullView/> }
-                        >
+                        <TableSection section_heading="Blocks" controls=move || ().into_view()>
                             <Table data=LoadingPlaceholder {}/>
                         </TableSection>
                     }
@@ -763,7 +760,7 @@ pub fn BlockSpotlightSnarkJobTable(block: BlocksQueryBlocks) -> impl IntoView {
                     }}
                 }
             }
-            _ => view! { <NullView/> },
+            _ => ().into_view(),
         }}
     }
 }
