@@ -28,7 +28,7 @@ pub fn SnarksPage() -> impl IntoView {
         <SearchBar placeholder="Exact search for prover"/>
         <PageContainer>
             <TableSection
-                section_heading="SNARKs".to_owned()
+                section_heading="SNARKs"
                 controls=move || {
                     view! {
                         <BooleanUrlParamSelectMenu
