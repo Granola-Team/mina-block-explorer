@@ -1,6 +1,6 @@
 use super::{components::*, functions::*, models::*};
 use crate::{
-    common::{components::*, functions::*, search::*, table::*},
+    common::{components::*, functions::*, models::MyError, search::*, table::*},
     summary::functions::load_data as load_summary_data,
 };
 use leptos::*;
@@ -22,11 +22,14 @@ pub fn StakesPage() -> impl IntoView {
     let resource = create_resource(
         move || (epoch_sig.get(), current_epoch(), query_sig.get()),
         move |(epoch_opt, c_epoch, public_key)| async move {
-            let resolved_epoch = match (c_epoch, epoch_opt) {
-                (Some(epoch), None) => Some(epoch),
-                _ => epoch_opt,
-            };
-            load_data(50, resolved_epoch, public_key).await
+            match (c_epoch, epoch_opt) {
+                (Some(epoch), None) | (_, Some(epoch)) => {
+                    load_data(50, Some(epoch), public_key).await
+                }
+                _ => Err(MyError::ParseError(String::from(
+                    "missing epoch information",
+                ))),
+            }
         },
     );
 
@@ -47,8 +50,8 @@ pub fn StakesPage() -> impl IntoView {
         />
         <SearchBar placeholder="Exact search for public key"/>
         <PageContainer>
-            {move || match resource.get() {
-                Some(Ok(data)) => {
+            {move || match (resource.get(), summary_resource.get()) {
+                (Some(Ok(data)), Some(Ok(_))) => {
                     let (previous_epoch, next_epoch, curr_epoch, section_heading) = match (
                         current_epoch(),
                         epoch_sig.get(),
@@ -109,17 +112,13 @@ pub fn StakesPage() -> impl IntoView {
                         </TableSection>
                     }
                 }
-                None => {
+                (_, _) => {
                     view! {
-                        <TableSection
-                            section_heading=String::new()
-                            controls=move || view! { <NullView/> }
-                        >
+                        <TableSection section_heading="" controls=move || ().into_view()>
                             <Table data=LoadingPlaceholder {}/>
                         </TableSection>
                     }
                 }
-                _ => view! { <NullView/> },
             }}
 
         </PageContainer>
