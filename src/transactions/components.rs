@@ -35,7 +35,7 @@ pub fn TransactionsSection(
             _ => {
                 view! {
                     <TableSection
-                        section_heading="Transactions".to_owned()
+                        section_heading="Transactions"
                         controls=|| ().into_view()
                     >
                         <Table data=LoadingPlaceholder {}/>
@@ -68,7 +68,7 @@ where
             fallback=move || {
                 view! {
                     <TableSection
-                        section_heading="Transactions".to_owned()
+                        section_heading="Transactions"
                         controls=|| ().into_view()
                     >
                         <Table data=LoadingPlaceholder {}/>
@@ -81,7 +81,7 @@ where
                 let data = transactions_inner.clone().unwrap();
                 view! {
                     <TableSection
-                        section_heading="Transactions".to_owned()
+                        section_heading="Transactions"
                         controls=move || {
                             view! {
                                 <BooleanUrlParamSelectMenu
