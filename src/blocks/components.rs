@@ -625,7 +625,7 @@ pub fn BlocksSection() -> impl IntoView {
                 );
                 view! {
                     <TableSection
-                        section_heading="Blocks".to_owned()
+                        section_heading="Blocks"
                         controls=move || {
                             view! {
                                 <BooleanUrlParamSelectMenu
@@ -704,7 +704,7 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
                     );
                     view! {
                         <TableSection
-                            section_heading="Blocks".to_owned()
+                            section_heading="Blocks"
                             controls=move || {
                                 view! {
                                     <BooleanUrlParamSelectMenu

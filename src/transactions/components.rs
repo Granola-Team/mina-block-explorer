@@ -34,10 +34,7 @@ pub fn TransactionsSection(
             }
             _ => {
                 view! {
-                    <TableSection
-                        section_heading="Transactions".to_owned()
-                        controls=|| ().into_view()
-                    >
+                    <TableSection section_heading="Transactions" controls=|| ().into_view()>
                         <Table data=LoadingPlaceholder {}/>
                     </TableSection>
                 }
@@ -67,10 +64,7 @@ where
             when=move || transactions_show_condition.is_some()
             fallback=move || {
                 view! {
-                    <TableSection
-                        section_heading="Transactions".to_owned()
-                        controls=|| ().into_view()
-                    >
+                    <TableSection section_heading="Transactions" controls=|| ().into_view()>
                         <Table data=LoadingPlaceholder {}/>
                     </TableSection>
                 }
@@ -78,73 +72,61 @@ where
         >
 
             {
-                let transactions_for_empty = transactions_inner.clone().unwrap();
-                let transactions_inner = transactions_inner.clone().unwrap();
+                let data = transactions_inner.clone().unwrap();
                 view! {
-                    <Show
-                        when=move || { !transactions_for_empty.is_empty() }
-                        fallback=move || view! { <EmptyTable message="No transactions found"/> }
+                    <TableSection
+                        section_heading="Transactions"
+                        controls=move || {
+                            view! {
+                                <BooleanUrlParamSelectMenu
+                                    id="canonical-selection"
+                                    query_str_key="canonical"
+                                    labels=BooleanUrlParamSelectOptions {
+                                        true_case: String::from("Canonical"),
+                                        false_case: String::from("Non-Canonical"),
+                                    }
+                                />
+                            }
+                        }
                     >
 
-                        {
-                            let data = transactions_inner.clone();
+                        {move || {
+                            let pag = build_pagination(
+                                data.len(),
+                                records_per_page,
+                                current_page.get(),
+                                set_current_page,
+                            );
+                            let subset = get_subset(
+                                &data,
+                                records_per_page,
+                                current_page.get() - 1,
+                            );
                             view! {
-                                <TableSection
-                                    section_heading="Transactions".to_owned()
-                                    controls=move || {
-                                        view! {
-                                            <BooleanUrlParamSelectMenu
-                                                id="canonical-selection"
-                                                query_str_key="canonical"
-                                                labels=BooleanUrlParamSelectOptions {
-                                                    true_case: String::from("Canonical"),
-                                                    false_case: String::from("Non-Canonical"),
-                                                }
-                                            />
-                                        }
-                                    }
+                                <Table data=subset pagination=pag/>
+                                <Show
+                                    when=move || pk.get().is_some() && with_link
+                                    fallback=move || view! { <NullView/> }
                                 >
 
-                                    {move || {
-                                        let pag = build_pagination(
-                                            data.len(),
-                                            records_per_page,
-                                            current_page.get(),
-                                            set_current_page,
-                                        );
-                                        let subset = get_subset(
-                                            &data,
-                                            records_per_page,
-                                            current_page.get() - 1,
-                                        );
+                                    {
+                                        let pk_i = pk.get().unwrap();
                                         view! {
                                             <Table data=subset pagination=pag/>
                                             <Show
                                                 when=move || pk.get().is_some() && with_link
                                                 fallback=move || ().into_view()
                                             >
-
-                                                {
-                                                    let pk_i = pk.get().unwrap();
-                                                    view! {
-                                                        <TableLink
-                                                            href=format!("/transactions?account={}", pk_i)
-                                                            text="See all transactions"
-                                                        >
-                                                            <TransactionIcon/>
-                                                        </TableLink>
-                                                    }
-                                                }
-
-                                            </Show>
+                                                <TransactionIcon/>
+                                            </TableLink>
                                         }
-                                    }}
+                                    }
 
-                                </TableSection>
+                                </Show>
                             }
-                        }
+                        }}
 
-                    </Show>
+                    </TableSection>
                 }
             }
 

@@ -1,5 +1,16 @@
 suite(["@CI"],'staking ledger', () => {
 
+    it('only has large positive stakes', () => {
+        cy.visit("/stakes");
+        cy.aliasTableColumnValue('Current Staking Ledger', 'Stake', 'stake-value');
+        cy.get('@stake-value').invoke('text').then(text => {
+            cy.log(text);
+            var numText = text.replace('mina','').trim();
+            var num = Number(numText);
+            expect(num).to.be.gt(0);
+        });
+    });
+
     it('defaults to current epoch',() => {
         cy.visit("/stakes");
         cy.get('section').contains("Current Staking Ledger");
@@ -34,5 +45,5 @@ suite(["@CI"],'staking ledger', () => {
         cy.get('button').contains("Previous").click();
         cy.wait(500);
         cy.get('section').contains("Epoch 67 Staking Ledger");
-    })
+    });
 })

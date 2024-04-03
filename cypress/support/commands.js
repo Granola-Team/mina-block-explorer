@@ -143,9 +143,9 @@ Cypress.Commands.add('testSpotlight',(heading, id, expected_fields) => {
     });
   });
   
-})
+});
 
-Cypress.Commands.add('tableColumnValuesEqual', (columnHeading, column, value) => {
+Cypress.Commands.add('aliasTableColumnValue', (columnHeading, column, alias='table-column-values') => {
   cy.aliasTableHeaders(columnHeading, 'columns');
   cy.get('@columns')
     .contains(column, { timeout: 60000 }) 
@@ -155,9 +155,15 @@ Cypress.Commands.add('tableColumnValuesEqual', (columnHeading, column, value) =>
       cy.get('@table-rows')
         .find('td', {timeout: 60000}) 
         .eq(columnIndex)
-        .find('a', { timeout: 60000 }) 
-        .should('have.text', value)         
+        .as(alias)
     });
+});
+
+Cypress.Commands.add('tableColumnValuesEqual', (columnHeading, column, value) => {
+  cy.aliasTableColumnValue(columnHeading, column, 'table-column-values');
+  cy.get('@table-column-values')
+    .find('a', { timeout: 60000 }) 
+    .should('have.text', value)         
 });
 
 Cypress.Commands.add('prepareSnapshotTest',() => {

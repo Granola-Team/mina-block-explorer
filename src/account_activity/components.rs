@@ -235,7 +235,7 @@ pub fn AccountTransactionsSection(
 
     view! {
         <TableSection
-            section_heading="Transactions".to_owned()
+            section_heading="Transactions"
             controls=move || {
                 view! {
                     <BooleanUrlParamSelectMenu
