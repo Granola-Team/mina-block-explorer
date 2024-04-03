@@ -682,10 +682,7 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
             {move || match resource.get().and_then(|res| res.ok()) {
                 None => {
                     view! {
-                        <TableSection
-                            section_heading="Blocks"
-                            controls=move || ().into_view()
-                        >
+                        <TableSection section_heading="Blocks" controls=move || ().into_view()>
                             <Table data=LoadingPlaceholder {}/>
                         </TableSection>
                     }
