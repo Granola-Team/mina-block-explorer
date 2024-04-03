@@ -648,17 +648,14 @@ pub fn BlocksSection() -> impl IntoView {
             }
             None => {
                 view! {
-                    <TableSection
-                        section_heading="Blocks".to_owned()
-                        controls=move || ().into_view()
-                    >
+                    <TableSection section_heading="Blocks" controls=move || ().into_view()>
                         <Table data=LoadingPlaceholder {}/>
                     </TableSection>
                     <Outlet/>
                 }
                     .into_view()
             }
-            _ => ().into_view(),
+            _ => view! { <span></span> }.into_view(),
         }}
     }
 }
@@ -685,7 +682,10 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
             {move || match resource.get().and_then(|res| res.ok()) {
                 None => {
                     view! {
-                        <TableSection section_heading="Blocks" controls=move || ().into_view()>
+                        <TableSection
+                            section_heading="Blocks"
+                            controls=move || ().into_view()
+                        >
                             <Table data=LoadingPlaceholder {}/>
                         </TableSection>
                     }

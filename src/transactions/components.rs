@@ -106,16 +106,15 @@ where
                                 <Table data=subset pagination=pag/>
                                 <Show
                                     when=move || pk.get().is_some() && with_link
-                                    fallback=move || view! { <NullView/> }
+                                    fallback=move || ().into_view()
                                 >
 
                                     {
                                         let pk_i = pk.get().unwrap();
                                         view! {
-                                            <Table data=subset pagination=pag/>
-                                            <Show
-                                                when=move || pk.get().is_some() && with_link
-                                                fallback=move || ().into_view()
+                                            <TableLink
+                                                href=format!("/transactions?account={}", pk_i)
+                                                text="See all transactions"
                                             >
                                                 <TransactionIcon/>
                                             </TableLink>
