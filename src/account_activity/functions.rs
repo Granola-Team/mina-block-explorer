@@ -2,7 +2,7 @@ use super::{
     graphql::{account_activity_query, AccountActivityQuery},
     models::*,
 };
-use crate::common::{functions::*, models::*, spotlight::*};
+use crate::common::{constants::GRAPHQL_ENDPOINT, functions::*, models::*, spotlight::*};
 use graphql_client::reqwest::post_graphql;
 use leptos::*;
 use leptos_router::*;
@@ -61,7 +61,6 @@ pub async fn load_data(
     trans_limit: Option<i64>,
     canonical: Option<bool>,
 ) -> Result<account_activity_query::ResponseData, MyError> {
-    let url = "https://graphql.minaexplorer.com";
     let variables = account_activity_query::Variables {
         blocks_sort_by: account_activity_query::BlockSortByInput::BLOCKHEIGHT_DESC,
         snarks_sort_by: account_activity_query::SnarkSortByInput::BLOCKHEIGHT_DESC,
@@ -109,7 +108,7 @@ pub async fn load_data(
 
     let client = reqwest::Client::new();
 
-    let response = post_graphql::<AccountActivityQuery, _>(&client, url, variables)
+    let response = post_graphql::<AccountActivityQuery, _>(&client, GRAPHQL_ENDPOINT, variables)
         .await
         .map_err(|e| MyError::NetworkError(e.to_string()))?;
 

@@ -1,5 +1,5 @@
 use super::graphql::{snarks_query::SnarksQuerySnarks, *};
-use crate::common::{functions::*, models::*};
+use crate::common::{constants::GRAPHQL_ENDPOINT, functions::*, models::*};
 use graphql_client::reqwest::post_graphql;
 
 pub async fn load_data(
@@ -8,7 +8,6 @@ pub async fn load_data(
     block_state_hash: Option<String>,
     canonical: Option<bool>,
 ) -> Result<snarks_query::ResponseData, MyError> {
-    let url = "https://graphql.minaexplorer.com";
     let variables = snarks_query::Variables {
         sort_by: snarks_query::SnarkSortByInput::BLOCKHEIGHT_DESC,
         limit: Some(limit.into()),
@@ -33,7 +32,7 @@ pub async fn load_data(
 
     let client = reqwest::Client::new();
 
-    let response = post_graphql::<SnarksQuery, _>(&client, url, variables)
+    let response = post_graphql::<SnarksQuery, _>(&client, GRAPHQL_ENDPOINT, variables)
         .await
         .map_err(|e| MyError::NetworkError(e.to_string()))?;
 

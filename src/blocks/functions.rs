@@ -5,6 +5,7 @@ use super::graphql::{
     *,
 };
 use crate::common::{
+    constants::GRAPHQL_ENDPOINT,
     functions::{nanomina_to_mina, string_to_f64},
     models::MyError,
 };
@@ -241,7 +242,6 @@ pub async fn load_data(
     state_hash: Option<String>,
     canonical: Option<bool>,
 ) -> Result<blocks_query::ResponseData, MyError> {
-    let url = "https://graphql.minaexplorer.com";
     let variables = blocks_query::Variables {
         sort_by: blocks_query::BlockSortByInput::BLOCKHEIGHT_DESC,
         limit: Some(limit),
@@ -262,7 +262,7 @@ pub async fn load_data(
 
     let client = reqwest::Client::new();
 
-    let response = post_graphql::<BlocksQuery, _>(&client, url, variables)
+    let response = post_graphql::<BlocksQuery, _>(&client, GRAPHQL_ENDPOINT, variables)
         .await
         .map_err(|e| MyError::NetworkError(e.to_string()))?;
 
