@@ -1,5 +1,5 @@
 use super::graphql::{stakes_query, stakes_query::StakesQueryStakes, StakesQuery};
-use crate::common::{functions::*, models::*};
+use crate::common::models::*;
 use graphql_client::reqwest::post_graphql;
 
 pub fn get_public_key(stake: &StakesQueryStakes) -> String {
@@ -10,7 +10,7 @@ pub fn get_public_key(stake: &StakesQueryStakes) -> String {
 }
 
 pub fn get_balance(stake: &StakesQueryStakes) -> String {
-    stake.balance.map(nanomina_to_mina).unwrap_or_default()
+    stake.balance.unwrap_or_default().to_string()
 }
 
 pub fn get_delegate(stake: &StakesQueryStakes) -> String {
