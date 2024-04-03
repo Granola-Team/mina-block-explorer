@@ -625,7 +625,7 @@ pub fn BlocksSection() -> impl IntoView {
                 );
                 view! {
                     <TableSection
-                        section_heading="Blocks".to_owned()
+                        section_heading="Blocks"
                         controls=move || {
                             view! {
                                 <BooleanUrlParamSelectMenu
@@ -648,10 +648,7 @@ pub fn BlocksSection() -> impl IntoView {
             }
             None => {
                 view! {
-                    <TableSection
-                        section_heading="Blocks".to_owned()
-                        controls=move || view! { <NullView/> }
-                    >
+                    <TableSection section_heading="Blocks" controls=move || view! { <NullView/> }>
                         <Table data=LoadingPlaceholder {}/>
                     </TableSection>
                     <Outlet/>
@@ -707,7 +704,7 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
                     );
                     view! {
                         <TableSection
-                            section_heading="Blocks".to_owned()
+                            section_heading="Blocks"
                             controls=move || {
                                 view! {
                                     <BooleanUrlParamSelectMenu
