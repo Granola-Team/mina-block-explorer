@@ -51,15 +51,6 @@ impl Pagination {
     }
 }
 
-pub enum ColorVariant {
-    Green,
-    Blue,
-    Orange,
-    Grey,
-    Transparent,
-    DarkBlue,
-}
-
 #[cfg(test)]
 mod pagination_tests {
     use super::*;
@@ -108,6 +99,15 @@ mod pagination_tests {
         };
         assert_eq!(pd.total_pages(), 7);
     }
+}
+
+pub enum ColorVariant {
+    Green,
+    Blue,
+    Orange,
+    Grey,
+    Transparent,
+    DarkBlue,
 }
 
 #[derive(Clone)]
