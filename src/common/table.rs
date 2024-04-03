@@ -21,7 +21,7 @@ where
 
     view! {
         <div class="@container w-full overflow-auto">
-            <table class="font-mono md:rounded-b-lg w-full @xs:w-[300%] @md:w-[200%] @2xl:w-[150%] @7xl:w-full">
+            <table class="font-mono md:rounded-b-lg w-full @xs:w-[175%] @md:w-[150%] @2xl:w-[125%] @7xl:w-full">
                 <tr class="h-12 bg-table-header-fill">
                     {columns
                         .into_iter()

@@ -38,11 +38,13 @@ pub struct Pagination {
 
 impl Pagination {
     pub fn start_index(&self) -> usize {
-        self.current_page * self.records_per_page - self.records_per_page + 1
+        let has_records = if self.total_records > 0 { 1 } else { 0 };
+        (self.current_page * self.records_per_page - self.records_per_page + 1) * has_records
     }
 
     pub fn end_index(&self) -> usize {
-        self.current_page * self.records_per_page
+        let has_records = if self.total_records > 0 { 1 } else { 0 };
+        (self.current_page * self.records_per_page) * has_records
     }
 
     pub fn total_pages(&self) -> usize {
@@ -51,18 +53,22 @@ impl Pagination {
     }
 }
 
-pub enum ColorVariant {
-    Green,
-    Blue,
-    Orange,
-    Grey,
-    Transparent,
-    DarkBlue,
-}
-
 #[cfg(test)]
 mod pagination_tests {
     use super::*;
+
+    #[test]
+    fn test_indexes_zero_records() {
+        let (_, set_page) = create_signal(1);
+        let pd = Pagination {
+            current_page: 1,
+            records_per_page: 15,
+            total_records: 0,
+            set_current_page: set_page,
+        };
+        assert_eq!(pd.start_index(), 0);
+        assert_eq!(pd.end_index(), 0);
+    }
 
     #[test]
     fn test_indexes_first_page() {
@@ -108,6 +114,15 @@ mod pagination_tests {
         };
         assert_eq!(pd.total_pages(), 7);
     }
+}
+
+pub enum ColorVariant {
+    Green,
+    Blue,
+    Orange,
+    Grey,
+    Transparent,
+    DarkBlue,
 }
 
 #[derive(Clone)]
