@@ -2,7 +2,12 @@ use super::{
     graphql::{account_activity_query, AccountActivityQuery},
     models::*,
 };
-use crate::common::{constants::GRAPHQL_ENDPOINT, functions::*, models::*, spotlight::*};
+use crate::common::{
+    constants::{GRAPHQL_ENDPOINT, REST_ENDPOINT},
+    functions::*,
+    models::*,
+    spotlight::*,
+};
 use graphql_client::reqwest::post_graphql;
 use leptos::*;
 use leptos_router::*;
@@ -18,7 +23,7 @@ pub fn get_base_page_path(location: Location) -> String {
 }
 
 pub async fn load_account_data(id: &str) -> Result<AccountResponse, MyError> {
-    let response = reqwest::get(format!("https://api.minaexplorer.com/accounts/{}", id)).await;
+    let response = reqwest::get(format!("{}/accounts/{}", REST_ENDPOINT, id)).await;
 
     match response {
         Ok(res) => match res.json::<AccountResponse>().await {
