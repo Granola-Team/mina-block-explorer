@@ -78,73 +78,60 @@ where
         >
 
             {
-                let transactions_for_empty = transactions_inner.clone().unwrap();
-                let transactions_inner = transactions_inner.clone().unwrap();
+                let data = transactions_inner.clone().unwrap();
                 view! {
-                    <Show
-                        when=move || { !transactions_for_empty.is_empty() }
-                        fallback=move || view! { <EmptyTable message="No transactions found"/> }
-                    >
-
-                        {
-                            let data = transactions_inner.clone();
+                    <TableSection
+                        section_heading="Transactions".to_owned()
+                        controls=move || {
                             view! {
-                                <TableSection
-                                    section_heading="Transactions".to_owned()
-                                    controls=move || {
-                                        view! {
-                                            <BooleanUrlParamSelectMenu
-                                                id="canonical-selection"
-                                                query_str_key="canonical"
-                                                labels=BooleanUrlParamSelectOptions {
-                                                    true_case: String::from("Canonical"),
-                                                    false_case: String::from("Non-Canonical"),
-                                                }
-                                            />
-                                        }
+                                <BooleanUrlParamSelectMenu
+                                    id="canonical-selection"
+                                    query_str_key="canonical"
+                                    labels=BooleanUrlParamSelectOptions {
+                                        true_case: String::from("Canonical"),
+                                        false_case: String::from("Non-Canonical"),
                                     }
-                                >
-
-                                    {move || {
-                                        let pag = build_pagination(
-                                            data.len(),
-                                            records_per_page,
-                                            current_page.get(),
-                                            set_current_page,
-                                        );
-                                        let subset = get_subset(
-                                            &data,
-                                            records_per_page,
-                                            current_page.get() - 1,
-                                        );
-                                        view! {
-                                            <Table data=subset pagination=pag/>
-                                            <Show
-                                                when=move || pk.get().is_some() && with_link
-                                                fallback=move || view! { <NullView/> }
-                                            >
-
-                                                {
-                                                    let pk_i = pk.get().unwrap();
-                                                    view! {
-                                                        <TableLink
-                                                            href=format!("/transactions?account={}", pk_i)
-                                                            text="See all transactions"
-                                                        >
-                                                            <TransactionIcon/>
-                                                        </TableLink>
-                                                    }
-                                                }
-
-                                            </Show>
-                                        }
-                                    }}
-
-                                </TableSection>
+                                />
                             }
                         }
+                    >
 
-                    </Show>
+                        {move || {
+                            let pag = build_pagination(
+                                data.len(),
+                                records_per_page,
+                                current_page.get(),
+                                set_current_page,
+                            );
+                            let subset = get_subset(
+                                &data,
+                                records_per_page,
+                                current_page.get() - 1,
+                            );
+                            view! {
+                                <Table data=subset pagination=pag/>
+                                <Show
+                                    when=move || pk.get().is_some() && with_link
+                                    fallback=move || view! { <NullView/> }
+                                >
+
+                                    {
+                                        let pk_i = pk.get().unwrap();
+                                        view! {
+                                            <TableLink
+                                                href=format!("/transactions?account={}", pk_i)
+                                                text="See all transactions"
+                                            >
+                                                <TransactionIcon/>
+                                            </TableLink>
+                                        }
+                                    }
+
+                                </Show>
+                            }
+                        }}
+
+                    </TableSection>
                 }
             }
 
