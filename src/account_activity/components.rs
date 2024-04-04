@@ -48,7 +48,7 @@ pub fn AccountDialogSubsectionRow(
 ) -> impl IntoView {
     view! {
         {match label.len() {
-            0 => view! { <NullView/> }.into_view(),
+            0 => ().into_view(),
             _ => {
                 view! {
                     <tr class="my-2 flex whitespace-nowrap">
@@ -140,7 +140,7 @@ pub fn AccountDialogTransactionSection(
                         view! {
                             <Show
                                 when=move || check_opt_trans.is_some()
-                                fallback=move || view! { <NullView/> }
+                                fallback=move || ().into_view()
                             >
                                 <TransactionEntry
                                     status=get_status(&unwrap_opt_trans.get_date_time())
@@ -377,7 +377,7 @@ pub fn AccountDialogBlocksSection(
                         view! {
                             <Show
                                 when=move || check_block.is_some()
-                                fallback=move || view! { <NullView/> }
+                                fallback=move || ().into_view()
                             >
 
                                 {

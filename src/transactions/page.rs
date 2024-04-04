@@ -215,7 +215,7 @@ pub fn TransactionSpotlightPage() -> impl IntoView {
                             }
                                 .into_view()
                         }
-                        _ => view! { <NullView/> },
+                        _ => ().into_view(),
                     }
                 }
                 None => {
@@ -285,7 +285,7 @@ pub fn TransactionSpotlightPage() -> impl IntoView {
                     }
                         .into_view()
                 }
-                _ => view! { <NullView/> },
+                _ => ().into_view(),
             }}
 
         </PageContainer>
