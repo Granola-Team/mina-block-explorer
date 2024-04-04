@@ -147,7 +147,7 @@ where
                 }
                     .into_view()
             }
-            None => view! { <NullView/> },
+            None => ().into_view(),
         }}
     }
 }

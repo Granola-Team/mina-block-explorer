@@ -106,7 +106,7 @@ where
                                 <Table data=subset pagination=pag/>
                                 <Show
                                     when=move || pk.get().is_some() && with_link
-                                    fallback=move || view! { <NullView/> }
+                                    fallback=move || ().into_view()
                                 >
 
                                     {

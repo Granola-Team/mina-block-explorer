@@ -1,5 +1,5 @@
 use super::graphql::*;
-use crate::common::models::MyError;
+use crate::common::{constants::GRAPHQL_ENDPOINT, models::MyError};
 use graphql_client::reqwest::post_graphql;
 use std::error::Error;
 
@@ -27,7 +27,6 @@ pub async fn load_data(
     state_hash: Option<String>,
     canonical: Option<bool>,
 ) -> Result<transactions_query::ResponseData, MyError> {
-    let url = "https://graphql.minaexplorer.com";
     let variables = transactions_query::Variables {
         sort_by: transactions_query::TransactionSortByInput::BLOCKHEIGHT_DESC,
         limit: Some(limit.into()),
@@ -46,7 +45,7 @@ pub async fn load_data(
 
     let client = reqwest::Client::new();
 
-    let response = post_graphql::<TransactionsQuery, _>(&client, url, variables)
+    let response = post_graphql::<TransactionsQuery, _>(&client, GRAPHQL_ENDPOINT, variables)
         .await
         .map_err(|e| MyError::NetworkError(e.to_string()))?;
 

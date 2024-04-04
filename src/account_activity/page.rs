@@ -182,7 +182,7 @@ pub fn AccountSpotlightPage() -> impl IntoView {
                         </SpotlightSection>
                     }
                 }
-                _ => view! { <NullView/> },
+                _ => ().into_view(),
             }}
             {move || match transactions.get() {
                 Some(transactions) => view! { <AccountTransactionsSection transactions/> },

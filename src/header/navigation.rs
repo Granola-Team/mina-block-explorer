@@ -130,7 +130,7 @@ pub fn Header() -> impl IntoView {
                                             }
                                                 .into_view()
                                         }
-                                        None => view! { <NullView/> },
+                                        None => ().into_view(),
                                     }}
 
                                 </li>

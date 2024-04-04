@@ -2,7 +2,12 @@ use super::{
     graphql::{account_activity_query, AccountActivityQuery},
     models::*,
 };
-use crate::common::{functions::*, models::*, spotlight::*};
+use crate::common::{
+    constants::{GRAPHQL_ENDPOINT, REST_ENDPOINT},
+    functions::*,
+    models::*,
+    spotlight::*,
+};
 use graphql_client::reqwest::post_graphql;
 use leptos::*;
 use leptos_router::*;
@@ -18,7 +23,7 @@ pub fn get_base_page_path(location: Location) -> String {
 }
 
 pub async fn load_account_data(id: &str) -> Result<AccountResponse, MyError> {
-    let response = reqwest::get(format!("https://api.minaexplorer.com/accounts/{}", id)).await;
+    let response = reqwest::get(format!("{}/accounts/{}", REST_ENDPOINT, id)).await;
 
     match response {
         Ok(res) => match res.json::<AccountResponse>().await {
@@ -61,7 +66,6 @@ pub async fn load_data(
     trans_limit: Option<i64>,
     canonical: Option<bool>,
 ) -> Result<account_activity_query::ResponseData, MyError> {
-    let url = "https://graphql.minaexplorer.com";
     let variables = account_activity_query::Variables {
         blocks_sort_by: account_activity_query::BlockSortByInput::BLOCKHEIGHT_DESC,
         snarks_sort_by: account_activity_query::SnarkSortByInput::BLOCKHEIGHT_DESC,
@@ -109,7 +113,7 @@ pub async fn load_data(
 
     let client = reqwest::Client::new();
 
-    let response = post_graphql::<AccountActivityQuery, _>(&client, url, variables)
+    let response = post_graphql::<AccountActivityQuery, _>(&client, GRAPHQL_ENDPOINT, variables)
         .await
         .map_err(|e| MyError::NetworkError(e.to_string()))?;
 

@@ -25,12 +25,12 @@ pub fn NextStakesPage() -> impl IntoView {
         <Title text="Next Staking Ledger | Search For Stakers"/>
         <SearchBar placeholder="Exact search for public key"/>
         <PageContainer>
-            <ErrorBoundary fallback=move |_| view! { <NullView/> }>
+            <ErrorBoundary fallback=move |_| ().into_view()>
                 <Suspense fallback=move || {
                     view! {
                         <TableSection
                             section_heading="Next Staking Ledger"
-                            controls=move || view! { <NullView/> }
+                            controls=move || ().into_view()
                         >
                             <Table data=LoadingPlaceholder {}/>
                         </TableSection>

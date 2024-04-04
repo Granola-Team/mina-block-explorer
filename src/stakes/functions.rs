@@ -1,5 +1,5 @@
 use super::graphql::{stakes_query, stakes_query::StakesQueryStakes, StakesQuery};
-use crate::common::models::*;
+use crate::common::{constants::GRAPHQL_ENDPOINT, models::*};
 use graphql_client::reqwest::post_graphql;
 
 pub fn get_public_key(stake: &StakesQueryStakes) -> String {
@@ -38,7 +38,6 @@ pub async fn load_data(
     epoch: Option<i64>,
     public_key: Option<String>,
 ) -> Result<stakes_query::ResponseData, MyError> {
-    let url = "https://graphql.minaexplorer.com";
     let variables = stakes_query::Variables {
         sort_by: stakes_query::StakeSortByInput::BALANCE_DESC,
         limit: Some(limit),
@@ -51,7 +50,7 @@ pub async fn load_data(
 
     let client = reqwest::Client::new();
 
-    let response = post_graphql::<StakesQuery, _>(&client, url, variables)
+    let response = post_graphql::<StakesQuery, _>(&client, GRAPHQL_ENDPOINT, variables)
         .await
         .map_err(|e| MyError::NetworkError(e.to_string()))?;
 
