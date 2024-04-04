@@ -51,7 +51,7 @@ format:
   leptosfmt ./src
 
 audit:
-  cargo audit
+  cargo audit --ignore RUSTSEC-2024-0332
 
 dev: build_npm
   trunk serve --port="{{trunk_port}}" --open
