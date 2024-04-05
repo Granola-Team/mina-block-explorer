@@ -5,7 +5,6 @@ use ga_opt_out::GAOptOut;
 
 enum Icon {
     Docs,
-    Feedback,
     Terms,
     Support,
 }
@@ -20,22 +19,17 @@ pub fn Footer() -> impl IntoView {
     let links = vec![
         Link {
             label: "Docs",
-            href: "#",
+            href: "https://docs.minaexplorer.com/minaexplorer",
             icon: Icon::Docs,
         },
         Link {
-            label: "Feedback",
-            href: "#",
-            icon: Icon::Feedback,
-        },
-        Link {
             label: "Terms",
-            href: "#",
+            href: "https://gist.github.com/jhult/0a633e7771a695b0ffa529ab55722523",
             icon: Icon::Terms,
         },
         Link {
             label: "Support",
-            href: "#",
+            href: "https://docs.minaexplorer.com/minaexplorer/get-help",
             icon: Icon::Support,
         },
     ];
@@ -53,7 +47,6 @@ pub fn Footer() -> impl IntoView {
                             >
                                 {match link.icon {
                                     Icon::Docs => view! { <DocsIcon width=12/> },
-                                    Icon::Feedback => view! { <FeedbackIcon width=12/> },
                                     Icon::Terms => view! { <TermsIcon width=12/> },
                                     Icon::Support => view! { <SupportIcon width=12/> },
                                 }}
