@@ -82,9 +82,8 @@ pub fn UrlParamSelectMenu(
     #[prop(into)] query_str_key: String,
     labels: UrlParamSelectOptions,
 ) -> impl IntoView {
-    let (query_val, set_query_val) = create_query_signal::<bool>(query_str_key);
-    let comparison_labels = labels.clone();
-    let is_true_case = move || (query_val.get().is_none() || query_val.get().unwrap_or_default());
+    let (query_val, set_query_val) = create_query_signal::<String>(query_str_key);
+    let comparison_labels = labels.cases.clone();
     view! {
         <select
             class="text-xs"
@@ -92,17 +91,23 @@ pub fn UrlParamSelectMenu(
             on:change=move |ev| {
                 if labels.is_boolean_option {
                     match event_target_value(&ev) {
-                        val if val == comparison_labels.cases[0] => set_query_val.set(Some(true)),
-                        val if val == comparison_labels.cases[1] => set_query_val.set(Some(false)),    
+                        val if val == comparison_labels[0] => set_query_val.set(Some("true".to_string())),
+                        val if val == comparison_labels[1] => set_query_val.set(Some("false".to_string())),    
                         val => logging::log!("unknown value {}", val),
                     }
                 } else {
-                    logging::log!("unhandled case")
+                    set_query_val.set(Some(event_target_value(&ev)))
                 }
             }
         >
             {
+                
                 if labels.is_boolean_option {
+                    let is_true_case = move || match query_val.get() { 
+                        Some(ref val) if val == "true" => true,
+                        Some(ref val) if val == "false" => false,
+                        Some(_) | None => true
+                    };
                     view! {
                         <option class="text-xs font-mono" selected=is_true_case()>
                             {labels.cases[0].clone()}
@@ -112,7 +117,16 @@ pub fn UrlParamSelectMenu(
                         </option>
                     }.into_view()
                 } else {
-                    ().into_view()
+                    let is_selected = move |selection| query_val.get().filter(|q| q == &selection).is_some();
+                    labels.cases
+                        .into_iter()
+                        .map(|c| view! {
+                            <option class="text-xs font-mono" selected=is_selected(c.clone())>
+                                {c}
+                            </option>
+                        }.into_view())
+                        .collect::<Vec<_>>()
+                        .into_view()
                 }
             }
             
