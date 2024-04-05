@@ -25,9 +25,7 @@ pub fn TransactionsSection(
                 Some(ref txn_type_str) if txn_type_str == "Non-Canonical" => {
                     load_data(50, None, None, state_hash, Some(false)).await
                 }
-                Some(_) | None => {
-                    load_data(50, None, None, state_hash, Some(true)).await
-                },
+                Some(_) | None => load_data(50, None, None, state_hash, Some(true)).await,
             }
         },
     );
@@ -94,7 +92,11 @@ where
                                     query_str_key="txn-type"
                                     labels=UrlParamSelectOptions {
                                         is_boolean_option: false,
-                                        cases: vec!["Canonical".to_string(),"Non-Canonical".to_string(),"Pending".to_string()]
+                                        cases: vec![
+                                            "Canonical".to_string(),
+                                            "Non-Canonical".to_string(),
+                                            "Pending".to_string(),
+                                        ],
                                     }
                                 />
                             }

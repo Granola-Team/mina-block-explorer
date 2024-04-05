@@ -1,17 +1,16 @@
-
-use serde::{Deserialize, Serialize};
 use crate::transactions::graphql::transactions_query;
+use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct PooledUserCommandSource {
     #[serde(rename = "publicKey")]
-    pub public_key: Option<String>
+    pub public_key: Option<String>,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct PoolUserCommandReceiver {
     #[serde(rename = "publicKey")]
-    pub public_key: Option<String>
+    pub public_key: Option<String>,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
@@ -26,18 +25,18 @@ pub struct PooledUserCommand {
     pub fee: Option<String>,
     pub memo: Option<String>,
     #[serde(rename = "fee_token")]
-    pub fee_token: Option<String>
+    pub fee_token: Option<String>,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct PooledUserCommandsResponse {
-    pub data: PooledUserCommands
+    pub data: PooledUserCommands,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct PooledUserCommands {
     #[serde(rename = "pooledUserCommands")]
-    pub pooled_user_commands: Vec<PooledUserCommand>
+    pub pooled_user_commands: Vec<PooledUserCommand>,
 }
 
 impl From<PooledUserCommand> for transactions_query::TransactionsQueryTransactions {
@@ -49,7 +48,7 @@ impl From<PooledUserCommand> for transactions_query::TransactionsQueryTransactio
             amount: if let Some(amount) = txn.amount {
                 match amount.parse() {
                     Ok(parsed_num) => Some(parsed_num),
-                    Err(_) => None
+                    Err(_) => None,
                 }
             } else {
                 None
@@ -57,7 +56,7 @@ impl From<PooledUserCommand> for transactions_query::TransactionsQueryTransactio
             fee: if let Some(fee) = txn.fee {
                 match fee.parse() {
                     Ok(parsed_num) => Some(parsed_num),
-                    Err(_) => None
+                    Err(_) => None,
                 }
             } else {
                 None
@@ -66,11 +65,11 @@ impl From<PooledUserCommand> for transactions_query::TransactionsQueryTransactio
             id: txn.id,
             to: match txn.receiver.clone() {
                 Some(receiver) => receiver.public_key.clone(),
-                None => None
+                None => None,
             },
             from: match txn.source {
                 Some(source) => source.public_key,
-                None => None
+                None => None,
             },
             nonce: txn.nonce,
             memo: txn.memo,
@@ -79,7 +78,7 @@ impl From<PooledUserCommand> for transactions_query::TransactionsQueryTransactio
             receiver: Some(transactions_query::TransactionsQueryTransactionsReceiver {
                 public_key: match txn.receiver {
                     Some(receiver) => receiver.public_key,
-                    None => None
+                    None => None,
                 },
             }),
         }

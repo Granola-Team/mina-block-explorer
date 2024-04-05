@@ -151,7 +151,7 @@ impl Default for NavEntry {
 #[derive(Clone)]
 pub struct UrlParamSelectOptions {
     pub is_boolean_option: bool,
-    pub cases: Vec<String>
+    pub cases: Vec<String>,
 }
 
 #[derive(Clone, PartialEq)]

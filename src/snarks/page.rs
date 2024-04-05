@@ -36,7 +36,7 @@ pub fn SnarksPage() -> impl IntoView {
                             query_str_key="canonical"
                             labels=UrlParamSelectOptions {
                                 is_boolean_option: true,
-                                cases: vec!["Canonical".to_string(),"Non-Canonical".to_string()]
+                                cases: vec!["Canonical".to_string(), "Non-Canonical".to_string()],
                             }
                         />
                     }

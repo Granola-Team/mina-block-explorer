@@ -91,8 +91,12 @@ pub fn UrlParamSelectMenu(
             on:change=move |ev| {
                 if labels.is_boolean_option {
                     match event_target_value(&ev) {
-                        val if val == comparison_labels[0] => set_query_val.set(Some("true".to_string())),
-                        val if val == comparison_labels[1] => set_query_val.set(Some("false".to_string())),    
+                        val if val == comparison_labels[0] => {
+                            set_query_val.set(Some("true".to_string()))
+                        }
+                        val if val == comparison_labels[1] => {
+                            set_query_val.set(Some("false".to_string()))
+                        }
                         val => logging::log!("unknown value {}", val),
                     }
                 } else {
@@ -100,36 +104,41 @@ pub fn UrlParamSelectMenu(
                 }
             }
         >
-            {
-                
-                if labels.is_boolean_option {
-                    let is_true_case = move || match query_val.get() { 
-                        Some(ref val) if val == "true" => true,
-                        Some(ref val) if val == "false" => false,
-                        Some(_) | None => true
-                    };
-                    view! {
-                        <option class="text-xs font-mono" selected=is_true_case()>
-                            {labels.cases[0].clone()}
-                        </option>
-                        <option class="text-xs font-mono" selected=!is_true_case()>
-                            {labels.cases[1].clone()}
-                        </option>
-                    }.into_view()
-                } else {
-                    let is_selected = move |selection| query_val.get().filter(|q| q == &selection).is_some();
-                    labels.cases
-                        .into_iter()
-                        .map(|c| view! {
+
+            {if labels.is_boolean_option {
+                let is_true_case = move || match query_val.get() {
+                    Some(ref val) if val == "true" => true,
+                    Some(ref val) if val == "false" => false,
+                    Some(_) | None => true,
+                };
+                view! {
+                    <option class="text-xs font-mono" selected=is_true_case()>
+                        {labels.cases[0].clone()}
+                    </option>
+                    <option class="text-xs font-mono" selected=!is_true_case()>
+                        {labels.cases[1].clone()}
+                    </option>
+                }
+                    .into_view()
+            } else {
+                let is_selected = move |selection| {
+                    query_val.get().filter(|q| q == &selection).is_some()
+                };
+                labels
+                    .cases
+                    .into_iter()
+                    .map(|c| {
+                        view! {
                             <option class="text-xs font-mono" selected=is_selected(c.clone())>
                                 {c}
                             </option>
-                        }.into_view())
-                        .collect::<Vec<_>>()
-                        .into_view()
-                }
-            }
-            
+                        }
+                            .into_view()
+                    })
+                    .collect::<Vec<_>>()
+                    .into_view()
+            }}
+
         </select>
     }
 }
