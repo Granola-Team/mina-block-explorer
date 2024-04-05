@@ -628,12 +628,12 @@ pub fn BlocksSection() -> impl IntoView {
                         section_heading="Blocks"
                         controls=move || {
                             view! {
-                                <BooleanUrlParamSelectMenu
+                                <UrlParamSelectMenu
                                     id="canonical-selection"
                                     query_str_key="canonical"
-                                    labels=BooleanUrlParamSelectOptions {
-                                        true_case: String::from("Canonical"),
-                                        false_case: String::from("Non-Canonical"),
+                                    labels=UrlParamSelectOptions {
+                                        is_boolean_option: true,
+                                        cases: vec!["Canonical".to_string(),"Non-Canonical".to_string()]
                                     }
                                 />
                             }
@@ -704,12 +704,12 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
                             section_heading="Blocks"
                             controls=move || {
                                 view! {
-                                    <BooleanUrlParamSelectMenu
+                                    <UrlParamSelectMenu
                                         id="canonical-selection"
                                         query_str_key="canonical"
-                                        labels=BooleanUrlParamSelectOptions {
-                                            true_case: String::from("Canonical"),
-                                            false_case: String::from("Non-Canonical"),
+                                        labels=UrlParamSelectOptions {
+                                            is_boolean_option: true,
+                                            cases: vec!["Canonical".to_string(),"Non-Canonical".to_string()]
                                         }
                                     />
                                 }

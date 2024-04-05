@@ -77,10 +77,10 @@ where
 }
 
 #[component]
-pub fn BooleanUrlParamSelectMenu(
+pub fn UrlParamSelectMenu(
     #[prop(into)] id: String,
     #[prop(into)] query_str_key: String,
-    labels: BooleanUrlParamSelectOptions,
+    labels: UrlParamSelectOptions,
 ) -> impl IntoView {
     let (query_val, set_query_val) = create_query_signal::<bool>(query_str_key);
     let comparison_labels = labels.clone();
@@ -90,20 +90,32 @@ pub fn BooleanUrlParamSelectMenu(
             class="text-xs"
             id=id
             on:change=move |ev| {
-                match event_target_value(&ev) {
-                    val if val == comparison_labels.true_case => set_query_val.set(Some(true)),
-                    val if val == comparison_labels.false_case => set_query_val.set(Some(false)),
-                    val => logging::log!("unknown value {}", val),
+                if labels.is_boolean_option {
+                    match event_target_value(&ev) {
+                        val if val == comparison_labels.cases[0] => set_query_val.set(Some(true)),
+                        val if val == comparison_labels.cases[1] => set_query_val.set(Some(false)),    
+                        val => logging::log!("unknown value {}", val),
+                    }
+                } else {
+                    logging::log!("unhandled case")
                 }
             }
         >
-
-            <option class="text-xs font-mono" selected=is_true_case()>
-                {labels.true_case}
-            </option>
-            <option class="text-xs font-mono" selected=!is_true_case()>
-                {labels.false_case}
-            </option>
+            {
+                if labels.is_boolean_option {
+                    view! {
+                        <option class="text-xs font-mono" selected=is_true_case()>
+                            {labels.cases[0].clone()}
+                        </option>
+                        <option class="text-xs font-mono" selected=!is_true_case()>
+                            {labels.cases[1].clone()}
+                        </option>
+                    }.into_view()
+                } else {
+                    ().into_view()
+                }
+            }
+            
         </select>
     }
 }
