@@ -1,4 +1,4 @@
-use super::graphql::*;
+use super::{graphql::*, models::PooledUserCommandsResponse};
 use crate::common::{constants::GRAPHQL_ENDPOINT, models::MyError};
 use graphql_client::reqwest::post_graphql;
 use std::error::Error;
@@ -18,6 +18,30 @@ pub fn decode_memo(encoded: &str) -> Result<String, Box<dyn Error>> {
     }
 
     Ok(String::from_utf8(decoded[3..3 + length].to_vec())?)
+}
+
+pub async fn load_pending_txn() -> Result<transactions_query::ResponseData, MyError> {
+    let response = reqwest::get("https://proxy.minaexplorer.com/graphql?query={pooledUserCommands{id hash kind nonce source{publicKey}receiver{publicKey}amount fee memo failureReason feeToken}}")
+        .await
+        .map_err(|e| MyError::NetworkError(e.to_string()))?;
+
+    if response.status().is_success() {
+        let pending_txn = response
+            .json::<PooledUserCommandsResponse>()
+            .await
+            .map_err(|e| MyError::ParseError(e.to_string()))?;
+
+        let txn: Vec<Option<transactions_query::TransactionsQueryTransactions>> = pending_txn
+            .data
+            .pooled_user_commands
+            .into_iter()
+            .map(|pt| Some(transactions_query::TransactionsQueryTransactions::from(pt)))
+            .collect::<Vec<_>>();
+
+        Ok(transactions_query::ResponseData { transactions: txn })
+    } else {
+        Err(MyError::NetworkError("Failed to fetch data".into()))
+    }
 }
 
 pub async fn load_data(

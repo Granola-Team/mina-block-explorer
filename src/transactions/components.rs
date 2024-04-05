@@ -12,12 +12,21 @@ pub fn TransactionsSection(
     #[prop(default = false)] with_link: bool,
 ) -> impl IntoView {
     let (state_hash_sig, _) = create_signal(state_hash);
-    let (canonical_qp, _) = create_query_signal::<bool>("canonical");
+    let (txn_type_qp, _) = create_query_signal::<String>("txn-type");
 
     let resource = create_resource(
-        move || (state_hash_sig.get(), canonical_qp.get()),
-        move |(state_hash, canonical)| async move {
-            load_data(50, None, None, state_hash, canonical).await
+        move || (state_hash_sig.get(), txn_type_qp.get()),
+        move |(state_hash, txn_type)| async move {
+            match txn_type {
+                Some(ref txn_type_str) if txn_type_str == "Pending" => load_pending_txn().await,
+                Some(ref txn_type_str) if txn_type_str == "Canonical" => {
+                    load_data(50, None, None, state_hash, Some(true)).await
+                }
+                Some(ref txn_type_str) if txn_type_str == "Non-Canonical" => {
+                    load_data(50, None, None, state_hash, Some(false)).await
+                }
+                Some(_) | None => load_data(50, None, None, state_hash, Some(true)).await,
+            }
         },
     );
 
@@ -78,12 +87,16 @@ where
                         section_heading="Transactions"
                         controls=move || {
                             view! {
-                                <BooleanUrlParamSelectMenu
-                                    id="canonical-selection"
-                                    query_str_key="canonical"
-                                    labels=BooleanUrlParamSelectOptions {
-                                        true_case: String::from("Canonical"),
-                                        false_case: String::from("Non-Canonical"),
+                                <UrlParamSelectMenu
+                                    id="transaction-type-selection"
+                                    query_str_key="txn-type"
+                                    labels=UrlParamSelectOptions {
+                                        is_boolean_option: false,
+                                        cases: vec![
+                                            "Canonical".to_string(),
+                                            "Non-Canonical".to_string(),
+                                            "Pending".to_string(),
+                                        ],
                                     }
                                 />
                             }
