@@ -3,6 +3,7 @@ mod account_activity;
 mod blocks;
 mod broadcast;
 mod common;
+mod config;
 mod footer;
 mod header;
 mod icons;

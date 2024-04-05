@@ -1,1 +1,1 @@
-pub const BERKELEY_FEATURES_ENABLED: bool = true;
+pub const BERKELEY_FEATURES_ENABLED: bool = false;

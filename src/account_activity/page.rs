@@ -14,6 +14,7 @@ use crate::{
         spotlight::*,
         table::*,
     },
+    config::BERKELEY_FEATURES_ENABLED,
     icons::*,
 };
 use leptos::*;
@@ -230,26 +231,26 @@ pub fn AccountSpotlightPage() -> impl IntoView {
 
 #[component]
 pub fn AddressesTabbedPage() -> impl IntoView {
-    let tabs = vec![
-        NavEntry {
-            href: "/addresses/accounts".to_string(),
-            text: "Accounts".to_string(),
-            icon: NavIcon::Addresses,
-            ..Default::default()
-        },
-        NavEntry {
+    let mut tabs = vec![NavEntry {
+        href: "/addresses/accounts".to_string(),
+        text: "Accounts".to_string(),
+        icon: NavIcon::Addresses,
+        ..Default::default()
+    }];
+    if BERKELEY_FEATURES_ENABLED {
+        tabs.push(NavEntry {
             href: "/addresses/tokens".to_string(),
             text: "Tokens".to_string(),
             icon: NavIcon::Tokens,
             ..Default::default()
-        },
-        NavEntry {
+        });
+        tabs.push(NavEntry {
             href: "/addresses/zk-apps".to_string(),
             text: "zk-apps".to_string(),
             icon: NavIcon::ZKApps,
             ..Default::default()
-        },
-    ];
+        })
+    }
     view! {
         <SearchBar/>
         <TabbedPage tabs/>
