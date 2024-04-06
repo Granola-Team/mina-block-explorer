@@ -302,7 +302,6 @@ pub fn ZkAppTransactionSpotlightPage() -> impl IntoView {
                 "5JvEERgjGA3dYZSKNAz7DnDVNgERvJQrek3tCdMhTUsacov6LUzy".to_string(),
             )),
             copiable: true,
-            ..Default::default()
         },
         SpotlightEntry {
             label: "Block Height".to_string(),
@@ -315,7 +314,6 @@ pub fn ZkAppTransactionSpotlightPage() -> impl IntoView {
                 "3NLoTnbvaSwU6zNwxVQd8vR6UcuEDrf9YuQusbjkgNzjEAHjwboG".to_string(),
             )),
             copiable: true,
-            ..Default::default()
         },
         SpotlightEntry {
             label: "Fee Payer".to_string(),
@@ -323,7 +321,6 @@ pub fn ZkAppTransactionSpotlightPage() -> impl IntoView {
                 "B62qpGSaBUHzKExDXp2N3ZPNPtFMFFXjSuAB84h4DSks12PWsRq5SEB".to_string(),
             )),
             copiable: true,
-            ..Default::default()
         },
         SpotlightEntry {
             label: "Account Updates".to_string(),
@@ -349,7 +346,6 @@ pub fn ZkAppTransactionSpotlightPage() -> impl IntoView {
                 "wSHV2S4qX9jFsLjQo8r1BsMLH2ZRKsZx6EJd1sbozGPieEC4Jf".to_string(),
             )),
             copiable: true,
-            ..Default::default()
         },
         SpotlightEntry {
             label: "Call Data".to_string(),
