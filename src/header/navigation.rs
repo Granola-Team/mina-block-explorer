@@ -1,9 +1,52 @@
-use crate::common::{components::*, models::*};
+use crate::{
+    common::{components::*, models::*},
+    config::BERKELEY_FEATURES_ENABLED,
+};
 use leptos::*;
 
 #[component]
 pub fn Header() -> impl IntoView {
     let (open, set_open) = create_signal(false);
+    let mut txn_entries = None;
+    let mut addr_entries = None;
+
+    if BERKELEY_FEATURES_ENABLED {
+        txn_entries = Some(vec![
+            NavEntry {
+                href: "/transactions".to_string(),
+                text: "Transactions".to_string(),
+                icon: NavIcon::Transactions,
+                ..Default::default()
+            },
+            NavEntry {
+                href: "/transactions/zk-txn".to_string(),
+                text: "zkApp Transactions".to_string(),
+                icon: NavIcon::ZKApps,
+                ..Default::default()
+            },
+        ]);
+        addr_entries = Some(vec![
+            NavEntry {
+                href: "/addresses/accounts".to_string(),
+                text: "Accounts".to_string(),
+                icon: NavIcon::Accounts,
+                ..Default::default()
+            },
+            NavEntry {
+                href: "/addresses/tokens".to_string(),
+                text: "Tokens".to_string(),
+                icon: NavIcon::Tokens,
+                ..Default::default()
+            },
+            NavEntry {
+                href: "/addresses/zk-apps".to_string(),
+                text: "zk-apps".to_string(),
+                icon: NavIcon::ZKApps,
+                ..Default::default()
+            },
+        ])
+    }
+
     let nav_items = vec![
         NavEntry {
             href: "/blocks".to_string(),
@@ -15,46 +58,14 @@ pub fn Header() -> impl IntoView {
             href: "/transactions".to_string(),
             text: "Transactions".to_string(),
             icon: NavIcon::Transactions,
-            sub_entries: Some(vec![
-                NavEntry {
-                    href: "/transactions".to_string(),
-                    text: "Transactions".to_string(),
-                    icon: NavIcon::Transactions,
-                    ..Default::default()
-                },
-                NavEntry {
-                    href: "/transactions/zk-txn".to_string(),
-                    text: "zkApp Transactions".to_string(),
-                    icon: NavIcon::ZKApps,
-                    ..Default::default()
-                },
-            ]),
+            sub_entries: txn_entries,
             ..Default::default()
         },
         NavEntry {
             href: "/addresses".to_string(),
             text: "Addresses".to_string(),
             icon: NavIcon::Addresses,
-            sub_entries: Some(vec![
-                NavEntry {
-                    href: "/addresses/accounts".to_string(),
-                    text: "Accounts".to_string(),
-                    icon: NavIcon::Accounts,
-                    ..Default::default()
-                },
-                NavEntry {
-                    href: "/addresses/tokens".to_string(),
-                    text: "Tokens".to_string(),
-                    icon: NavIcon::Tokens,
-                    ..Default::default()
-                },
-                NavEntry {
-                    href: "/addresses/zk-apps".to_string(),
-                    text: "zk-apps".to_string(),
-                    icon: NavIcon::ZKApps,
-                    ..Default::default()
-                },
-            ]),
+            sub_entries: addr_entries,
             ..Default::default()
         },
         NavEntry {

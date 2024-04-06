@@ -1,6 +1,7 @@
 use super::{components::*, functions::*, table_trait::*};
 use crate::{
     common::{components::*, functions::*, models::*, search::*, spotlight::*},
+    config::BERKELEY_FEATURES_ENABLED,
     icons::*,
 };
 use leptos::*;
@@ -9,20 +10,21 @@ use leptos_router::*;
 
 #[component]
 pub fn TransactionTabbedPage() -> impl IntoView {
-    let tabs = vec![
-        NavEntry {
-            href: "/transactions".to_string(),
-            text: "Transactions".to_string(),
-            icon: NavIcon::Transactions,
-            ..Default::default()
-        },
-        NavEntry {
+    let mut tabs = vec![NavEntry {
+        href: "/transactions".to_string(),
+        text: "Transactions".to_string(),
+        icon: NavIcon::Transactions,
+        ..Default::default()
+    }];
+
+    if BERKELEY_FEATURES_ENABLED {
+        tabs.push(NavEntry {
             href: "/transactions/zk-txn".to_string(),
             text: "zkApp Transactions".to_string(),
             icon: NavIcon::ZKApps,
             ..Default::default()
-        },
-    ];
+        });
+    }
 
     view! { <TabbedPage tabs=tabs/> }
 }

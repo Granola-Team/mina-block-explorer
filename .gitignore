@@ -1,4 +1,5 @@
 dist
+src/config.rs
 target
 node_modules/
 test-results/

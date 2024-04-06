@@ -17,6 +17,7 @@ steps:
 - label: "Test"
   env: 
     CYPRESS_tags: "@CI"
+    BERKELEY_FEATURES_ENABLED: true
   command: |
     nix develop --command just test
   key: test
