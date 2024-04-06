@@ -93,7 +93,17 @@ pub fn Root() -> impl IntoView {
 
                     </Route>
                     <Route path="/transactions/:id" view=TransactionSpotlightPage/>
-                    <Route path="/transactions/zk-app/:id" view=ZkAppTransactionSpotlightPage/>
+                    <Route
+                        path="/transactions/zk-app/:id"
+                        view=move || {
+                            if BERKELEY_FEATURES_ENABLED {
+                                view! { <ZkAppTransactionSpotlightPage/> }
+                            } else {
+                                view!().into_view()
+                            }
+                        }
+                    />
+
                     <Route path="/snarks" view=SnarksPage/>
                     <Route path="/stakes" view=StakesPage/>
                     <Route path="/next-stakes" view=NextStakesPage/>
