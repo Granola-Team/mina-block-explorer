@@ -6,7 +6,6 @@ query NextStakesQuery ($limit: Int = 10, $sort_by: NextstakeSortByInput!, $query
     nonce
     pk
     public_key
-    receipt_chain_hash
     token
     voting_for
     nextDelegationTotals {
