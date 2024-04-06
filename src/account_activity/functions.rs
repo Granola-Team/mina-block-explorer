@@ -50,7 +50,6 @@ pub fn stub_account_summaries(size: usize) -> Vec<AllAccountSummary> {
                 delegate: generate_base58_string(44),
                 token: int_dist.sample(&mut rng),
                 nonce: int_dist.sample(&mut rng),
-                receipt_chain_hash: generate_base58_string(44),
                 voting_for: generate_base58_string(44),
                 public_key: generate_base58_string(44),
                 username: generate_random_string(10),
@@ -137,10 +136,6 @@ pub fn get_spotlight_loading_data() -> Vec<SpotlightEntry> {
             ..Default::default()
         },
         SpotlightEntry {
-            label: String::from("Receipt Chain Hash"),
-            ..Default::default()
-        },
-        SpotlightEntry {
             label: String::from("Delegate"),
             ..Default::default()
         },
@@ -168,11 +163,6 @@ pub fn get_spotlight_data(account: &AccountSummary) -> Vec<SpotlightEntry> {
                 ColorVariant::Grey,
             )),
             ..Default::default()
-        },
-        SpotlightEntry {
-            label: String::from("Receipt Chain Hash"),
-            any_el: Some(convert_to_span(account.receipt_chain_hash.to_string())),
-            copiable: true,
         },
         SpotlightEntry {
             label: String::from("Delegate"),

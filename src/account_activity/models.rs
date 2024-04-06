@@ -26,7 +26,6 @@ pub struct AccountBalance {
 pub struct AccountSummary {
     pub public_key: String,
     pub nonce: u32,
-    pub receipt_chain_hash: String,
     pub delegate: String,
     pub voting_for: String,
     pub total_tx: u32,
@@ -52,7 +51,6 @@ pub struct AllAccountSummary {
     pub delegate: String,
     pub token: i32,
     pub nonce: i32,
-    pub receipt_chain_hash: String,
     pub voting_for: String,
     pub public_key: String,
     pub username: String,
