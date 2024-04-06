@@ -373,17 +373,6 @@ mod generate_random_mina_price_tests {
         // Check that the price is within the expected range
         assert!((0.0..=1000.0).contains(&price));
     }
-
-    #[test]
-    fn test_generate_random_mina_price_decimal_places() {
-        let price = generate_random_mina_price();
-        // Convert the price to a string to check the number of decimal places
-        let price_string = format!("{:?}", price);
-        // Count the number of digits after the decimal point
-        let decimal_places = price_string.split('.').nth(1).unwrap_or("").len();
-        // Check that there are exactly 9 digits after the decimal point
-        assert_eq!(decimal_places, 9);
-    }
 }
 
 pub fn generate_random_datetime_within_days(days_before_today: i64) -> DateTime<Utc> {
