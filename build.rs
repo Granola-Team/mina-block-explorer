@@ -9,7 +9,7 @@ fn main() {
     let file_path = "src/config.rs";
 
     let content = format!(
-        "pub const BERKELEY_FEATURES_ENABLED: bool = {};",
+        "pub const BERKELEY_FEATURES_ENABLED: bool = {};\n",
         feature_flag_enabled
     );
 
