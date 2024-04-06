@@ -19,11 +19,12 @@ use crate::{
     summary::page::SummaryPage,
     tokens::page::TokensPage,
     transactions::page::{TransactionSpotlightPage, TransactionTabbedPage, TransactionsPage},
-    zk_apps::page::{ZkAppSpotlight, ZkAppTransactionsPage, ZkAppsPage},
+    zk_apps::page::{
+        ZkAppSpotlight, ZkAppTransactionSpotlightPage, ZkAppTransactionsPage, ZkAppsPage,
+    },
 };
 use leptos::*;
 use leptos_router::*;
-
 #[component]
 pub fn Root() -> impl IntoView {
     view! {
@@ -61,6 +62,7 @@ pub fn Root() -> impl IntoView {
                         <Route path="/zk-txn" view=ZkAppTransactionsPage/>
                     </Route>
                     <Route path="/transactions/:id" view=TransactionSpotlightPage/>
+                    <Route path="/transactions/zk-app/:id" view=ZkAppTransactionSpotlightPage/>
                     <Route path="/snarks" view=SnarksPage/>
                     <Route path="/stakes" view=StakesPage/>
                     <Route path="/next-stakes" view=NextStakesPage/>
