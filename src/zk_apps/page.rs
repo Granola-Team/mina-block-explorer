@@ -282,3 +282,152 @@ pub fn ZkAppsPage() -> impl IntoView {
         </PageContainer>
     }
 }
+
+#[component]
+pub fn ZkAppTransactionSpotlightPage() -> impl IntoView {
+    let spotlight_items = vec![
+        SpotlightEntry {
+            label: "Transaction Type".to_string(),
+            any_el: Some(convert_to_pill("ZK".to_string(), ColorVariant::Green)),
+            ..Default::default()
+        },
+        SpotlightEntry {
+            label: "Transaction Hash".to_string(),
+            any_el: Some(convert_to_span(
+                "5JvEERgjGA3dYZSKNAz7DnDVNgERvJQrek3tCdMhTUsacov6LUzy".to_string(),
+            )),
+            copiable: true,
+        },
+        SpotlightEntry {
+            label: "Block Height".to_string(),
+            any_el: Some(convert_to_pill("7,326".to_string(), ColorVariant::Grey)),
+            ..Default::default()
+        },
+        SpotlightEntry {
+            label: "Block State Hash".to_string(),
+            any_el: Some(convert_to_span(
+                "3NLoTnbvaSwU6zNwxVQd8vR6UcuEDrf9YuQusbjkgNzjEAHjwboG".to_string(),
+            )),
+            copiable: true,
+        },
+        SpotlightEntry {
+            label: "Fee Payer".to_string(),
+            any_el: Some(convert_to_span(
+                "B62qpGSaBUHzKExDXp2N3ZPNPtFMFFXjSuAB84h4DSks12PWsRq5SEB".to_string(),
+            )),
+            copiable: true,
+        },
+        SpotlightEntry {
+            label: "Account Updates".to_string(),
+            any_el: Some(convert_to_pill("3".to_string(), ColorVariant::Grey)),
+            ..Default::default()
+        },
+    ];
+
+    let account_updates_1 = vec![
+        SpotlightEntry {
+            label: "Balance Change".to_string(),
+            any_el: Some(convert_to_pill("+20 MINA".to_string(), ColorVariant::Green)),
+            ..Default::default()
+        },
+        SpotlightEntry {
+            label: "Increment Nonce".to_string(),
+            any_el: Some(convert_to_pill("true".to_string(), ColorVariant::Grey)),
+            ..Default::default()
+        },
+        SpotlightEntry {
+            label: "Token ID".to_string(),
+            any_el: Some(convert_to_span(
+                "wSHV2S4qX9jFsLjQo8r1BsMLH2ZRKsZx6EJd1sbozGPieEC4Jf".to_string(),
+            )),
+            copiable: true,
+        },
+        SpotlightEntry {
+            label: "Call Data".to_string(),
+            any_el: Some(convert_to_pill("0".to_string(), ColorVariant::Grey)),
+            ..Default::default()
+        },
+        SpotlightEntry {
+            label: "Call Depth".to_string(),
+            any_el: Some(convert_to_pill("1".to_string(), ColorVariant::Grey)),
+            ..Default::default()
+        },
+        SpotlightEntry {
+            label: "Use Full Com.".to_string(),
+            any_el: Some(convert_to_pill("No".to_string(), ColorVariant::Grey)),
+            ..Default::default()
+        },
+    ];
+
+    view! {
+        <PageContainer>
+            <SpotlightSection
+                header="[zk] Transaction Spotlight"
+                spotlight_items
+                id=Some("3NK8nzfotTNSUopF4oEzJUHJ2EeLATBDnMRRgaqaTfR3zpfHK2yo".to_string())
+                meta=Some("2024-02-28 20:45:00 UTC (8 minutes ago)".to_string())
+            >
+                <ZKAppSymbol width=40/>
+            </SpotlightSection>
+            <TableSection section_heading="Account Update #1" controls=|| ().into_view()>
+                <SpotlightTable>
+                    {account_updates_1
+                        .into_iter()
+                        .map(|entry| {
+                            view! {
+                                <ZkAppDetailTr>
+                                    <ZkAppDetailTh>{entry.label}</ZkAppDetailTh>
+                                    <ZkAppDetailTd>{entry.any_el}</ZkAppDetailTd>
+                                </ZkAppDetailTr>
+                            }
+                        })
+                        .collect::<Vec<_>>()} <ZkAppDetailTr>
+                        <ZkAppDetailTh>"App State :"</ZkAppDetailTh>
+                        <ZkAppDetailTd>
+                            <CodeBlock>
+
+                                {
+                                    indoc! {
+                                        r#"[
+    "13085319543788982998999669060227968584120410722425376027756703205043792631731",
+    "88814049655838941284774570817345763621809698732252711808042102595406818641",
+    "525481201097986652723544789857104441"
+]"#
+                                    }
+                                }
+
+                            </CodeBlock>
+                        </ZkAppDetailTd>
+                    </ZkAppDetailTr> <ZkAppDetailTr>
+                        <ZkAppDetailTh>"Permissions: "</ZkAppDetailTh>
+                        <ZkAppDetailTd>
+                            <CodeBlock>
+
+                                {
+                                    indoc! {
+                                        r#"{
+    "access":"",
+    "editActionState":"proof",
+    "editState":"proof",
+    "incrementNonce":"signature",
+    "receive":"none",
+    "send":"proof",
+    "setDelegate":"signature",
+    "setPermissions":"signature",
+    "setTiming":"",
+    "setTokenSymbol":"signature",
+    "setVerificationKey":"signature",
+    "setVotingFor":"signature",
+    "setZkAppUri":"signature"
+}"#
+                                    }
+                                }
+
+                            </CodeBlock>
+                        </ZkAppDetailTd>
+                    </ZkAppDetailTr>
+                </SpotlightTable>
+            </TableSection>
+        </PageContainer>
+    }
+}
