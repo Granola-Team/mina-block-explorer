@@ -87,7 +87,7 @@ fn SearchInput(#[prop(into)] placeholder: String) -> impl IntoView {
 #[component]
 pub fn TitledSearchBar(
     #[prop(into)] title: String,
-    #[prop(into)] subtext: String,
+    #[prop(into)] subtext: HtmlElement<html::AnyElement>,
     #[prop(into)] search_placeholder: String,
 ) -> impl IntoView {
     view! {
