@@ -3,7 +3,7 @@ import { DEFAULT_ACCOUNT_PK } from "../constants";
 suite(["@CI"],'Account spotlight', () => {
 
     let expected_fields = [
-        'Balance', 'Receipt Chain Hash', 'Voting For', 'Delegate'
+        'Balance', 'Voting For', 'Delegate'
     ];
 
     it('displays complete information', () => {

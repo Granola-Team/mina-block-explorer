@@ -10,7 +10,6 @@ pub fn stub_zk_apps_data(size: usize) -> Vec<ZkAppData> {
             validator_pk: generate_base58_string(44),
             balance: rng.gen_range(1..=1000),
             nonce: rng.gen_range(1..=100),
-            receipt_chain_hash: generate_base58_string(44),
             delegate: generate_base58_string(44),
         })
         .collect()

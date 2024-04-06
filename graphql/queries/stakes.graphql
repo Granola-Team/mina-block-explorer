@@ -8,7 +8,6 @@ query StakesQuery($limit: Int = 10, $sort_by: StakeSortByInput!, $query: StakeQu
     nonce
     pk
     public_key
-    receipt_chain_hash
     token
     voting_for
     delegationTotals {
