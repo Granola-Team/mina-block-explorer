@@ -12,8 +12,8 @@ pub fn SummaryPage() -> impl IntoView {
 
     view! {
         <TitledSearchBar
-            title="Blockchain Explorer"
-            subtext="Powered by Mina"
+            title="Mina Blockchain Explorer"
+            subtext="Powered by Granola"
             search_placeholder="Exact search for block hash"
         />
         <Title text="Mina Blockchain Explorer | Search For Blocks"/>
