@@ -11,6 +11,7 @@ use crate::{
         BroadcastDelegationPage, BroadcastFromLedgerPage, BroadcastTransactionPage,
         DelegationTabbedPage,
     },
+    config::BERKELEY_FEATURES_ENABLED,
     footer::Footer,
     header::navigation::Header,
     next_stakes::page::NextStakesPage,
@@ -39,8 +40,23 @@ pub fn Root() -> impl IntoView {
                         <Route path="" view=AccountsPage/>
                         <Route path="/accounts" view=AccountsPage/>
                         <Route path="/accounts/:id" view=AccountSpotlightPage/>
-                        <Route path="/tokens" view=TokensPage/>
-                        <Route path="/zk-apps" view=ZkAppsPage/>
+                        <Route path="/tokens" view=move || {
+                            if BERKELEY_FEATURES_ENABLED {
+                                view! { <TokensPage/> }
+                            } else {
+                                view!().into_view()
+                            }
+                        }/>
+                        <Route
+                            path="/zk-apps"
+                            view=move || {
+                                if BERKELEY_FEATURES_ENABLED {
+                                    view! { <ZkAppsPage/> }
+                                } else {
+                                    view!().into_view()
+                                }
+                            }
+                        />
                         <Route path="/zk-apps/:id" view=ZkAppSpotlight/>
                         <Route path="/*any" view=AccountsPage/>
                     </Route>
@@ -58,7 +74,13 @@ pub fn Root() -> impl IntoView {
                     </Route>
                     <Route path="/transactions" view=TransactionTabbedPage>
                         <Route path="/" view=TransactionsPage/>
-                        <Route path="/zk-txn" view=ZkAppTransactionsPage/>
+                        <Route path="/zk-txn" view=move || {
+                            if BERKELEY_FEATURES_ENABLED {
+                                view! { <ZkAppTransactionsPage/> }
+                            } else {
+                                view!().into_view()
+                            }
+                        }/>
                     </Route>
                     <Route path="/transactions/:id" view=TransactionSpotlightPage/>
                     <Route path="/snarks" view=SnarksPage/>
