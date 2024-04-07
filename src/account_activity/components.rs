@@ -281,7 +281,7 @@ pub fn AccountOverviewSnarkJobTable(
     let (current_page, set_current_page) = create_signal(1);
 
     view! {
-        {match snarks.len() {
+        {move || match snarks.len() {
             0 => {
                 view! { <EmptyTable message="This public key has not completed any SNARK work"/> }
             }
@@ -320,7 +320,7 @@ pub fn AccountOverviewBlocksTable(
     let records_per_page = 5;
     let (current_page, set_current_page) = create_signal(1);
     view! {
-        {match blocks.len() {
+        {move || match blocks.len() {
             0 => {
                 view! { <EmptyTable message="This public key has no block production"/> }
             }
