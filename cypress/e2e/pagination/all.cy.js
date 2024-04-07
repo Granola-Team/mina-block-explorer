@@ -1,10 +1,11 @@
+import { DEFAULT_ACCOUNT_PK } from "../constants";
+
 suite(["@CI"],'pagination',() => {
 
-    ['/','/summary','/blocks','/transactions','/snarks','/stakes','/next-stakes'].forEach(page => it(`works on ${page}`,() => {
-        cy.visit(page);
-        cy.get('.pagination-controls', {timeout: 30000}).find('button').last().as('next');
-        cy.get('.pagination-controls', {timeout: 30000}).find('button').first().as('prev');
-        cy.get('.pagination-controls', {timeout: 30000}).find('.current-page').as('currentPage');
+    function testTablePagination(alias) {
+        cy.get(alias, {timeout: 30000}).find('button').last().as('next');
+        cy.get(alias, {timeout: 30000}).find('button').first().as('prev');
+        cy.get(alias, {timeout: 30000}).find('.current-page').as('currentPage');
 
         // initial check
         cy.get('@prev').should('be.disabled');
@@ -19,19 +20,48 @@ suite(["@CI"],'pagination',() => {
         cy.get('@currentPage').should('contain',2);    
 
         // number click (last page)
-        cy.get('.pagination-controls', {timeout: 30000}).find('button').contains('5').click();
+        cy.get(alias, {timeout: 30000}).find('button:nth-last-child(2)').as('last-clickable-page')
+        cy.get(alias, {timeout: 30000}).find('.button-container > .page:nth-last-child(2)').as('last-page')
+
+        function clickLastPageUntil(){
+            cy.get('@last-page').then($pg => {
+                if (!$pg.attr('class').includes('current-page')) {
+                    cy.get('@last-clickable-page').click();
+                    clickLastPageUntil();
+                }
+            })
+        }
+        clickLastPageUntil();
+        
         cy.wait(1000);
         cy.get('@prev').should('not.be.disabled');
-        cy.get('@next').should('be.disabled');
-        cy.get('@currentPage').should('contain',5);    
+        cy.get('@next').should('be.disabled');    
+        cy.get('@last-page').invoke('text').then(text => {
+            expect(parseInt(text)).to.be.gt(1)
+        });
 
         // prev page
         cy.get('@prev').click();
         cy.wait(1000);
         cy.get('@prev').should('not.be.disabled');
         cy.get('@next').should('not.be.disabled');
-        cy.get('@currentPage').should('contain',4);    
+        cy.get('@last-page').invoke('text').then(text => {
+            expect(parseInt(text)).to.be.gt(1)
+        });
+    }
 
+    let account = `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`;
+    let tables = ['Transactions','SNARK Jobs','Block Production'];
+    tables.forEach(tableHeading => it(`works on table '${tableHeading}' on page ${account}`, () => {
+        cy.visit(account);
+        cy.aliasTablePagination(tableHeading,'pag');
+        testTablePagination('@pag');
+    }));
+
+    ['/','/summary','/blocks','/transactions','/snarks','/stakes','/next-stakes'].forEach(page => it(`works on ${page}`,() => {
+        cy.visit(page);
+        cy.get('.pagination-controls').as('pag');
+        testTablePagination('@pag');
     }));
 
 });

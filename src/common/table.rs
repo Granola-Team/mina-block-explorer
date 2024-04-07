@@ -79,7 +79,7 @@ where
                             )}
 
                         </span>
-                        <span class="col-start-2 text-xs font-bold flex items-center justify-center my-2">
+                        <span class="button-container col-start-2 text-xs font-bold flex items-center justify-center my-2">
                             <PaginationButton
                                 on_click=move |_| pg.set_current_page.update(|cp| *cp -= 1)
                                 disabled=x_preceding_pages.is_empty()
@@ -97,7 +97,7 @@ where
                                             }
 
                                             class=format!(
-                                                "{} {}",
+                                                "page {} {}",
                                                 page_number_class,
                                                 inactive_page_number_class,
                                             )
@@ -110,7 +110,7 @@ where
                                 .collect::<Vec<_>>()}
 
                             <span class=format!(
-                                "current-page text-white rounded-md bg-granola-orange {}",
+                                "page current-page text-white rounded-md bg-granola-orange {}",
                                 page_number_class,
                             )>{pg.current_page}</span>
                             {x_following_pages
@@ -124,7 +124,7 @@ where
                                             }
 
                                             class=format!(
-                                                "{} {}",
+                                                "page {} {}",
                                                 page_number_class,
                                                 inactive_page_number_class,
                                             )
