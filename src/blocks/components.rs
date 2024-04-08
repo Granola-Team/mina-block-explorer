@@ -605,6 +605,11 @@ pub fn BlocksSection() -> impl IntoView {
         |(value, canonical)| async move {
             let public_key = value.get("account");
             let block_hash = value.get("query");
+            let canonical = if canonical.is_none() {
+                Some(true)
+            } else {
+                canonical
+            };
             load_data(
                 TABLE_RECORD_SIZE,
                 public_key.cloned(),
@@ -680,6 +685,11 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
         move || (query_params_map.get(), canonical_qp.get()),
         |(value, canonical)| async move {
             let state_hash = value.get("query");
+            let canonical = if canonical.is_none() {
+                Some(true)
+            } else {
+                canonical
+            };
             load_data(TABLE_RECORD_SIZE, None, state_hash.cloned(), canonical).await
         },
     );
