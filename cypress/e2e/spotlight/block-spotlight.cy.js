@@ -1,4 +1,4 @@
-import { DEFAULT_CANONICAL_BLOCK_HASH } from "../constants";
+import { DEFAULT_CANONICAL_BLOCK_HASH, DEFAULT_NON_CANONICAL_BLOCK_HASH } from "../constants";
 
 suite(["@CI"],'Block spotlight', () => {
 
@@ -37,5 +37,9 @@ suite(["@CI"],'Block spotlight', () => {
 
     it('displays complete information for canonical block', () => {
         testForCompleteness(DEFAULT_CANONICAL_BLOCK_HASH, 10, 10, 10);
+    });
+
+    it('displays complete information for non-canonical block', () => {
+        testForCompleteness(DEFAULT_NON_CANONICAL_BLOCK_HASH, 10, 10, 5);
     });
 });
