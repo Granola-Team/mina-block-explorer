@@ -1,4 +1,4 @@
-import { DEFAULT_ACCOUNT_PK } from "../constants";
+import { DEFAULT_ACCOUNT_PK, DEFAULT_CANONICAL_BLOCK_HASH } from "../constants";
 
 suite(["@CI"],'pagination',() => {
 
@@ -58,7 +58,7 @@ suite(["@CI"],'pagination',() => {
         testTablePagination('@pag');
     }));
 
-    ['/','/summary','/blocks','/transactions','/snarks','/stakes','/next-stakes'].forEach(page => it(`works on ${page}`,() => {
+    [`/blocks/${DEFAULT_CANONICAL_BLOCK_HASH}/user-commands`,`/blocks/${DEFAULT_CANONICAL_BLOCK_HASH}/internal-commands`,`/blocks/${DEFAULT_CANONICAL_BLOCK_HASH}/snark-jobs`,'/','/summary','/blocks','/transactions','/snarks','/stakes','/next-stakes'].forEach(page => it(`works on ${page}`,() => {
         cy.visit(page);
         cy.get('.pagination-controls').as('pag');
         testTablePagination('@pag');
