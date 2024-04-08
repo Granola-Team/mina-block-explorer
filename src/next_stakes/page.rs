@@ -1,6 +1,6 @@
 use super::functions::*;
 use crate::{
-    common::{components::*, functions::*, search::*, table::*},
+    common::{components::*, constants::TABLE_RECORD_SIZE, functions::*, search::*, table::*},
     stakes::components::StakesNavButton,
 };
 use leptos::*;
@@ -14,7 +14,7 @@ pub fn NextStakesPage() -> impl IntoView {
         move || query_params_map.get(),
         |params_map| async move {
             let public_key = params_map.get("query");
-            load_data(50, public_key.cloned()).await
+            load_data(TABLE_RECORD_SIZE, public_key.cloned()).await
         },
     );
 

@@ -45,7 +45,7 @@ pub async fn load_pending_txn() -> Result<transactions_query::ResponseData, MyEr
 }
 
 pub async fn load_data(
-    limit: i32,
+    limit: i64,
     from_account: Option<String>,
     to_account: Option<String>,
     state_hash: Option<String>,

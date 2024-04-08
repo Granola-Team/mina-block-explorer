@@ -1,5 +1,7 @@
 use super::functions::*;
-use crate::common::{components::*, functions::*, models::*, search::*, table::*};
+use crate::common::{
+    components::*, constants::TABLE_RECORD_SIZE, functions::*, models::*, search::*, table::*,
+};
 use leptos::*;
 use leptos_meta::Title;
 use leptos_router::{create_query_signal, use_query_map};
@@ -16,7 +18,7 @@ pub fn SnarksPage() -> impl IntoView {
             if public_key.is_none() {
                 public_key = value.get("query");
             }
-            load_data(50, public_key.cloned(), None, canonical).await
+            load_data(TABLE_RECORD_SIZE, public_key.cloned(), None, canonical).await
         },
     );
 

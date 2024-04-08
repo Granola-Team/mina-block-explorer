@@ -3,7 +3,7 @@ use crate::common::{constants::GRAPHQL_ENDPOINT, functions::*, models::*};
 use graphql_client::reqwest::post_graphql;
 
 pub async fn load_data(
-    limit: i32,
+    limit: i64,
     public_key: Option<String>,
     block_state_hash: Option<String>,
     canonical: Option<bool>,
