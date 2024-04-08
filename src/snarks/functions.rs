@@ -10,7 +10,7 @@ pub async fn load_data(
 ) -> Result<snarks_query::ResponseData, MyError> {
     let variables = snarks_query::Variables {
         sort_by: snarks_query::SnarkSortByInput::BLOCKHEIGHT_DESC,
-        limit: Some(limit.into()),
+        limit: Some(limit),
         query: snarks_query::SnarkQueryInput {
             prover: public_key,
             canonical: if canonical.is_none() {
