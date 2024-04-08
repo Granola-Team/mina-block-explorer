@@ -1,6 +1,9 @@
 use super::{components::*, functions::*, models::*};
 use crate::{
-    common::{components::*, functions::*, models::MyError, search::*, table::*},
+    common::{
+        components::*, constants::TABLE_RECORD_SIZE, functions::*, models::MyError, search::*,
+        table::*,
+    },
     summary::functions::load_data as load_summary_data,
 };
 use leptos::*;
@@ -24,7 +27,7 @@ pub fn StakesPage() -> impl IntoView {
         move |(epoch_opt, c_epoch, public_key)| async move {
             match (c_epoch, epoch_opt) {
                 (Some(epoch), None) | (_, Some(epoch)) => {
-                    load_data(50, Some(epoch), public_key).await
+                    load_data(TABLE_RECORD_SIZE, Some(epoch), public_key).await
                 }
                 _ => Err(MyError::ParseError(String::from(
                     "missing epoch information",
