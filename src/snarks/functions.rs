@@ -3,14 +3,14 @@ use crate::common::{constants::GRAPHQL_ENDPOINT, functions::*, models::*};
 use graphql_client::reqwest::post_graphql;
 
 pub async fn load_data(
-    limit: i32,
+    limit: i64,
     public_key: Option<String>,
     block_state_hash: Option<String>,
     canonical: Option<bool>,
 ) -> Result<snarks_query::ResponseData, MyError> {
     let variables = snarks_query::Variables {
         sort_by: snarks_query::SnarkSortByInput::BLOCKHEIGHT_DESC,
-        limit: Some(limit.into()),
+        limit: Some(limit),
         query: snarks_query::SnarkQueryInput {
             prover: public_key,
             canonical: if canonical.is_none() {

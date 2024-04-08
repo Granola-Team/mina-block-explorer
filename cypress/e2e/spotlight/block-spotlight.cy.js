@@ -1,5 +1,6 @@
 import { DEFAULT_CANONICAL_BLOCK_HASH, DEFAULT_NON_CANONICAL_BLOCK_HASH } from "../constants";
 
+
 suite(["@CI"],'Block spotlight', () => {
 
     let expected_fields = ["State Hash",

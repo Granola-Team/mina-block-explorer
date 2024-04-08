@@ -1,6 +1,6 @@
 use super::{functions::*, table_trait::TransactionsTrait};
 use crate::{
-    common::{components::*, functions::*, models::*, table::*},
+    common::{components::*, constants::TABLE_RECORD_SIZE, functions::*, models::*, table::*},
     icons::*,
 };
 use leptos::*;
@@ -20,12 +20,14 @@ pub fn TransactionsSection(
             match txn_type {
                 Some(ref txn_type_str) if txn_type_str == "Pending" => load_pending_txn().await,
                 Some(ref txn_type_str) if txn_type_str == "Canonical" => {
-                    load_data(50, None, None, state_hash, Some(true)).await
+                    load_data(TABLE_RECORD_SIZE, None, None, state_hash, Some(true)).await
                 }
                 Some(ref txn_type_str) if txn_type_str == "Non-Canonical" => {
-                    load_data(50, None, None, state_hash, Some(false)).await
+                    load_data(TABLE_RECORD_SIZE, None, None, state_hash, Some(false)).await
                 }
-                Some(_) | None => load_data(50, None, None, state_hash, Some(true)).await,
+                Some(_) | None => {
+                    load_data(TABLE_RECORD_SIZE, None, None, state_hash, Some(true)).await
+                }
             }
         },
     );

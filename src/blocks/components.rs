@@ -1,6 +1,9 @@
 use super::{functions::*, graphql::blocks_query::BlocksQueryBlocks, models::*};
 use crate::{
-    common::{components::*, functions::*, models::*, spotlight::*, table::*},
+    common::{
+        components::*, constants::TABLE_RECORD_SIZE, functions::*, models::*, spotlight::*,
+        table::*,
+    },
     icons::*,
 };
 use charming::{
@@ -153,7 +156,7 @@ pub fn BlockInternalCommandsTable(block: BlocksQueryBlocks) -> impl IntoView {
     let (current_page, set_current_page) = create_signal(1);
 
     view! {
-        {match block.transactions.and_then(|txn| txn.fee_transfer) {
+        {move || match block.transactions.clone().and_then(|txn| txn.fee_transfer) {
             None => {
                 view! { <EmptyTable message="No internal commands for this block"/> }
             }
@@ -607,7 +610,13 @@ pub fn BlocksSection() -> impl IntoView {
             } else {
                 canonical
             };
-            load_data(50, public_key.cloned(), block_hash.cloned(), canonical).await
+            load_data(
+                TABLE_RECORD_SIZE,
+                public_key.cloned(),
+                block_hash.cloned(),
+                canonical,
+            )
+            .await
         },
     );
 
@@ -681,7 +690,7 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
             } else {
                 canonical
             };
-            load_data(50, None, state_hash.cloned(), canonical).await
+            load_data(TABLE_RECORD_SIZE, None, state_hash.cloned(), canonical).await
         },
     );
 
