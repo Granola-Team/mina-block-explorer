@@ -1,6 +1,9 @@
 use super::{functions::*, graphql::blocks_query::BlocksQueryBlocks, models::*};
 use crate::{
-    common::{components::*, functions::*, models::*, spotlight::*, table::*},
+    common::{
+        components::*, constants::TABLE_RECORD_SIZE, functions::*, models::*, spotlight::*,
+        table::*,
+    },
     icons::*,
 };
 use charming::{
@@ -602,7 +605,13 @@ pub fn BlocksSection() -> impl IntoView {
         |(value, canonical)| async move {
             let public_key = value.get("account");
             let block_hash = value.get("query");
-            load_data(50, public_key.cloned(), block_hash.cloned(), canonical).await
+            load_data(
+                TABLE_RECORD_SIZE,
+                public_key.cloned(),
+                block_hash.cloned(),
+                canonical,
+            )
+            .await
         },
     );
 
@@ -671,7 +680,7 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
         move || (query_params_map.get(), canonical_qp.get()),
         |(value, canonical)| async move {
             let state_hash = value.get("query");
-            load_data(50, None, state_hash.cloned(), canonical).await
+            load_data(TABLE_RECORD_SIZE, None, state_hash.cloned(), canonical).await
         },
     );
 
