@@ -89,5 +89,9 @@ pub fn get_block_state_hash(snark: &SnarksQuerySnarks) -> String {
 }
 
 pub fn get_fee(snark: &SnarksQuerySnarks) -> String {
-    snark.fee.map(nanomina_to_mina).unwrap_or_default()
+    snark
+        .fee
+        .map(|f| f.round() as u64)
+        .map(nanomina_to_mina)
+        .unwrap_or_default()
 }

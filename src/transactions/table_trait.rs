@@ -162,7 +162,10 @@ impl TransactionsTrait for TransactionsQueryTransactions {
     }
 
     fn get_fee(&self) -> String {
-        self.fee.map(nanomina_to_mina).unwrap_or_default()
+        self.fee
+            .map(|f| f.round() as u64)
+            .map(nanomina_to_mina)
+            .unwrap_or_default()
     }
 
     fn get_hash(&self) -> String {
@@ -172,7 +175,10 @@ impl TransactionsTrait for TransactionsQueryTransactions {
     }
 
     fn get_amount(&self) -> String {
-        self.amount.map(nanomina_to_mina).unwrap_or_default()
+        self.amount
+            .map(|f| f.round() as u64)
+            .map(nanomina_to_mina)
+            .unwrap_or_default()
     }
 
     fn get_to(&self) -> String {

@@ -185,10 +185,11 @@ pub fn BlockAnalytics(block: BlocksQueryBlocks) -> impl IntoView {
                     transaction_option
                         .as_ref()
                         .map(|transaction| transaction.amount.unwrap_or(0.0))
+                        .map(|f| f.round() as u64)
                 })
                 .sum()
         } else {
-            0.0
+            0
         }
     };
     let winner_total = move || get_winner_total(&block_sig.get());
