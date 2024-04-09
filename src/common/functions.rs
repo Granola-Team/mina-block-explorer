@@ -240,7 +240,10 @@ mod nanomina_tests {
     #[test]
     fn test_large_number() {
         // Test 5 billion mina
-        assert_eq!(nanomina_to_mina(5_000_000_000_111_111_111), "5000000000.111111111");
+        assert_eq!(
+            nanomina_to_mina(5_000_000_000_111_111_111),
+            "5000000000.111111111"
+        );
     }
 
     #[test]
