@@ -249,11 +249,7 @@ pub async fn load_data(
         sort_by: blocks_query::BlockSortByInput::BLOCKHEIGHT_DESC,
         limit: Some(limit),
         query: blocks_query::BlockQueryInput {
-            canonical: if canonical.is_none() {
-                Some(true)
-            } else {
-                canonical
-            },
+            canonical,
             state_hash,
             creator_account: Some(blocks_query::BlockCreatorAccountQueryInput {
                 public_key,
