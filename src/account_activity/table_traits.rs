@@ -235,7 +235,10 @@ impl SnarkTrait for AccountActivityQuerySnarks {
         })
     }
     fn get_fee(&self) -> String {
-        self.fee.map(nanomina_to_mina).unwrap_or_default()
+        self.fee
+            .map(|f| f.round() as u64)
+            .map(nanomina_to_mina)
+            .unwrap_or_default()
     }
 }
 
@@ -341,8 +344,7 @@ impl BlockTrait for AccountActivityQueryBlocks {
         self.transactions
             .as_ref()
             .and_then(|o| o.coinbase.as_deref())
-            .and_then(string_to_f64)
-            .map(nanomina_to_mina)
+            .map(nanomina_str_to_mina)
             .unwrap_or_default()
     }
     fn get_transaction_count(&self) -> String {

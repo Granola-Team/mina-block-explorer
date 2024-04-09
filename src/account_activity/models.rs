@@ -154,6 +154,7 @@ impl AccountActivityQueryDirectionalTransactionTrait
 {
     fn get_fee(&self) -> String {
         self.fee
+            .map(|f| f.round() as u64)
             .map(nanomina_to_mina)
             .map_or(String::new(), |f| f.to_string())
     }
@@ -172,6 +173,7 @@ impl AccountActivityQueryDirectionalTransactionTrait
     }
     fn get_amount(&self) -> String {
         self.amount
+            .map(|f| f.round() as u64)
             .map(nanomina_to_mina)
             .map_or(String::new(), |f| f.to_string())
     }

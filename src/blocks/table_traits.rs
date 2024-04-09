@@ -265,8 +265,7 @@ impl FeeTransferTrait for BlocksQueryBlocksTransactionsFeeTransfer {
     fn get_fee(&self) -> String {
         self.fee
             .as_deref()
-            .and_then(string_to_f64)
-            .map(nanomina_to_mina)
+            .map(nanomina_str_to_mina)
             .unwrap_or_default()
     }
     fn get_type(&self) -> String {
