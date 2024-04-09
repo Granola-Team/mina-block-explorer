@@ -7,7 +7,7 @@ use rand::{
     prelude::Distribution,
     Rng,
 };
-use rust_decimal::Decimal;
+use rust_decimal::prelude::*;
 use std::iter;
 
 // Function to calculate and print the time elapsed since the given timestamp
@@ -201,19 +201,10 @@ pub fn convert_to_tooltip(tooltip: String) -> HtmlElement<html::AnyElement> {
     }.into()
 }
 
-pub fn string_to_f64(str: &str) -> Option<f64> {
-    let float_val: Result<f64, _> = str.parse();
-    match float_val {
-        Ok(val) => Some(val),
-        Err(_) => None,
-    }
-}
-
 const MINA_SCALE: u32 = 9;
 
-pub fn nanomina_to_mina(num: f64) -> String {
-    let rounded = unsafe { num.to_int_unchecked::<u64>() };
-    let mut dec = Decimal::from(rounded);
+pub fn nanomina_to_mina(num: u64) -> String {
+    let mut dec = Decimal::from(num);
     dec.set_scale(MINA_SCALE).unwrap();
     let mut dec_str = dec.to_string();
     if dec_str.contains('.') {
@@ -233,56 +224,28 @@ mod nanomina_tests {
 
     #[test]
     fn test_zero_value() {
-        assert_eq!(nanomina_to_mina(0.0), "0");
+        assert_eq!(nanomina_to_mina(0), "0");
     }
 
     #[test]
     fn test_exact_value() {
-        assert_eq!(nanomina_to_mina(123456789.0), "0.123456789");
-    }
-
-    #[test]
-    fn test_rounding() {
-        // This test assumes that the function should round down, based on the
-        // implementation
-        assert_eq!(nanomina_to_mina(123456789.123), "0.123456789");
+        assert_eq!(nanomina_to_mina(123_456_789), "0.123456789");
     }
 
     #[test]
     fn test_large_number() {
-        assert_eq!(
-            nanomina_to_mina(1_000_000_111_111_111.0),
-            "1000000.111111111"
-        );
+        // Test 5 billion mina
+        assert_eq!(nanomina_to_mina(5_000_000_000_111_111_111), "5000000000.111111111");
     }
 
     #[test]
-    fn test_larger_number() {
-        // document lack of precision in the conversion from f64 to u64
-        assert_eq!(
-            nanomina_to_mina(10_000_000_111_111_111.0),
-            "10000000.111111112"
-        );
-    }
-
-    #[test]
-    fn test_even_larger_number() {
-        // document lack of precision in the conversion from f64 to u64
-        assert_eq!(
-            nanomina_to_mina(100_000_000_111_111_111.0),
-            "100000000.111111104"
-        );
-    }
-
-    #[test]
-    fn test_small_fractional_value() {
-        assert_eq!(nanomina_to_mina(1.0), "0.000000001");
+    fn test_small_integer_value() {
+        assert_eq!(nanomina_to_mina(1), "0.000000001");
     }
 
     #[test]
     fn test_boundary_value() {
-        // Testing value just below a rounding boundary
-        assert_eq!(nanomina_to_mina(123456788.999999999), "0.123456789");
+        assert_eq!(nanomina_to_mina(123_456_788), "0.123456788");
     }
 }
 
