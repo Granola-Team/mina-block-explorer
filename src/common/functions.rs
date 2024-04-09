@@ -203,6 +203,11 @@ pub fn convert_to_tooltip(tooltip: String) -> HtmlElement<html::AnyElement> {
 
 const MINA_SCALE: u32 = 9;
 
+pub fn nanomina_str_to_mina(n_str: &str) -> String {
+    let dec = Decimal::from_str(n_str).unwrap();
+    nanomina_to_mina(dec.to_u64().unwrap())
+}
+
 pub fn nanomina_to_mina(num: u64) -> String {
     let mut dec = Decimal::from(num);
     dec.set_scale(MINA_SCALE).unwrap();
