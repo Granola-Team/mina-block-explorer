@@ -27,7 +27,7 @@ clean:
   rm -fr node_modules/
   rm -f pnpm-lock.json
 
-test: lint test-unit test-e2e
+test: build_npm lint test-unit test-e2e
 
 test-e2e: build_npm
   CYPRESS_BASE_URL="{{cypress_base_url}}" node ./scripts/wait-on-port.js trunk serve --no-autoreload --port="{{trunk_port}}" -- "{{trunk_port}}" -- npx cypress run -r list -q
@@ -39,6 +39,7 @@ test-unit:
   cargo nextest run
 
 lint: && audit disallow-unused-cargo-deps
+  pnpm exec prettier --check cypress/
   cargo fmt --all --check
   leptosfmt --check ./src
   cargo clippy --all-targets --all-features -- -D warnings
@@ -47,6 +48,7 @@ disallow-unused-cargo-deps:
   cargo machete Cargo.toml
 
 format:
+  pnpm exec prettier --write cypress/
   cargo fmt --all
   leptosfmt ./src
 
