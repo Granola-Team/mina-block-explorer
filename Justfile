@@ -39,6 +39,7 @@ test-unit:
   cargo nextest run
 
 lint: && audit disallow-unused-cargo-deps
+  pnpm exec prettier --check cypress/
   cargo fmt --all --check
   leptosfmt --check ./src
   cargo clippy --all-targets --all-features -- -D warnings
@@ -47,6 +48,7 @@ disallow-unused-cargo-deps:
   cargo machete Cargo.toml
 
 format:
+  pnpm exec prettier --write cypress/
   cargo fmt --all
   leptosfmt ./src
 
