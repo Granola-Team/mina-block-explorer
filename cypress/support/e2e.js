@@ -14,16 +14,16 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
-import './commands'
+import "./commands";
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
 
 // cypress/support/e2e.ts
 
-import {addMatchImageSnapshotCommand} from '@simonsmith/cypress-image-snapshot/command'
+import { addMatchImageSnapshotCommand } from "@simonsmith/cypress-image-snapshot/command";
 
-addMatchImageSnapshotCommand()
+addMatchImageSnapshotCommand();
 
 // can also add any default options to be used
 // by all instances of `matchImageSnapshot`
@@ -33,10 +33,12 @@ addMatchImageSnapshotCommand({
 
 function suite(tags, suiteName, callback) {
   if (tags.length == 0) {
-    tags=["n/a"];
+    tags = ["n/a"];
   }
-  const shouldSkip = Cypress.env('tags') && !tags.some(tag => Cypress.env('tags').includes(tag));
-  let tagsStr = tags.join(', ');
+  const shouldSkip =
+    Cypress.env("tags") &&
+    !tags.some((tag) => Cypress.env("tags").includes(tag));
+  let tagsStr = tags.join(", ");
 
   if (!shouldSkip) {
     describe(`[Tags: ${tagsStr}] ${suiteName}`, callback);

@@ -1,6 +1,1 @@
-[
-    "/blocks",
-    "/transactions",
-    "/snarks",
-    "/stakes"
-]
+["/blocks", "/transactions", "/snarks", "/stakes"]
