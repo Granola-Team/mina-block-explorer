@@ -219,9 +219,7 @@ pub fn TransactionSpotlightPage() -> impl IntoView {
                         }
                         _ => {
                             view! {
-                                <NotFound message=Some(
-                                    "Transaction Not Found :(".to_string()
-                                )/>
+                                <NotFound message=Some("Transaction Not Found :(".to_string())/>
                             }
                         }
                     }
