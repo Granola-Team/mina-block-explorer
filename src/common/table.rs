@@ -12,7 +12,7 @@ const PAGE_NUMBER_CLASS: &str =
     "page text-md m-1 h-6 w-6 flex justify-center items-center font-semibold";
 const INACTIVE_PAGE_NUMBER_CLASS: &str =
     "hover:bg-slate-300 bg-transparent rounded-full cursor-pointer";
-const CELL_PADDING_CLASS: &str = "first:pl-8 pl-2";
+const CELL_PADDING_CLASS: &str = "first:pl-8 pl-2 last:pr-4";
 
 #[component]
 pub fn Table<T>(data: T, #[prop(optional)] pagination: Option<Pagination>) -> impl IntoView
@@ -62,7 +62,7 @@ fn generate_table_rows(rows: &[Vec<HtmlElement<AnyElement>>]) -> impl IntoView {
                             .map(|cell| {
                                 let cell_ellipsis_class = "text-ellipsis overflow-hidden";
                                 let cell_class = format!(
-                                    "{} {} first:pl-8 pl-2 text-table-row-text-color font-medium text-sm text-left whitespace-nowrap max-w-40",
+                                    "{} {} text-table-row-text-color font-medium text-sm text-left whitespace-nowrap max-w-40",
                                     CELL_PADDING_CLASS,
                                     cell_ellipsis_class,
                                 );
