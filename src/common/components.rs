@@ -478,3 +478,14 @@ pub fn CodeBlock(children: Children) -> impl IntoView {
         </div>
     }
 }
+
+#[component]
+pub fn NotFound(message: Option<String>) -> impl IntoView {
+    view! {
+        <div class="md:col-start-2 md:col-end-3 bg-slate-100 flex justify-center items-start px-16 py-32">
+            <div class="text-slate-400 text-2xl font-extrabold">
+                {message.unwrap_or("Page Not Found :(".to_string())}
+            </div>
+        </div>
+    }
+}
