@@ -23,35 +23,41 @@ use leptos_router::*;
 
 #[component]
 pub fn AccountsPage() -> impl IntoView {
-    let records_per_page = 10;
-    let (current_page, set_current_page) = create_signal(1);
-    let data = stub_account_summaries(9000);
-
     view! {
         <Title text="Accounts | Search For Mina Account"/>
         <PageContainer>
-            <TableSection section_heading="Accounts" controls=|| ().into_view()>
-
-                {move || {
-                    let data = data.clone();
-                    let pag = build_pagination(
-                        data.len(),
-                        records_per_page,
-                        current_page.get(),
-                        set_current_page,
-                        None,
-                        None,
-                    );
-                    let subset = get_subset(
-                        &data.into_iter().map(Some).collect::<Vec<_>>(),
-                        records_per_page,
-                        current_page.get() - 1,
-                    );
-                    view! { <Table data=subset pagination=pag/> }
-                }}
-
-            </TableSection>
+            <AccountsPageContents/>
         </PageContainer>
+    }
+}
+
+#[component]
+fn AccountsPageContents() -> impl IntoView {
+    let records_per_page = 10;
+    let (current_page, set_current_page) = create_signal(1);
+    let data = stub_account_summaries(9000);
+    view! {
+        <TableSection section_heading="Accounts" controls=|| ().into_view()>
+
+            {move || {
+                let data = data.clone();
+                let pag = build_pagination(
+                    data.len(),
+                    records_per_page,
+                    current_page.get(),
+                    set_current_page,
+                    None,
+                    None,
+                );
+                let subset = get_subset(
+                    &data.into_iter().map(Some).collect::<Vec<_>>(),
+                    records_per_page,
+                    current_page.get() - 1,
+                );
+                view! { <Table data=subset pagination=pag/> }
+            }}
+
+        </TableSection>
     }
 }
 
