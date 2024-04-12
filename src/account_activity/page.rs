@@ -8,8 +8,9 @@ use crate::{
     },
     common::{
         components::*,
+        constants::*,
         functions::*,
-        models::{MyError, NavEntry, NavIcon},
+        models::{MyError, NavEntry, NavIcon, PageDimensions},
         search::*,
         spotlight::*,
         table::*,
@@ -31,9 +32,12 @@ pub fn AccountsPage() -> impl IntoView {
     }
 }
 
+const ESTIMATED_NON_TABLE_SPACE_IN_ACCOUNTS: usize = 160;
+
 #[component]
 fn AccountsPageContents() -> impl IntoView {
-    let records_per_page = 10;
+    let page_dim = use_context::<ReadSignal<PageDimensions>>()
+        .expect("there to be a `PageDimensions` signal provided");
     let (current_page, set_current_page) = create_signal(1);
     let data = stub_account_summaries(9000);
     view! {
@@ -43,15 +47,20 @@ fn AccountsPageContents() -> impl IntoView {
                 let data = data.clone();
                 let pag = build_pagination(
                     data.len(),
-                    records_per_page,
+                    TABLE_DEFAULT_PAGE_SIZE,
                     current_page.get(),
                     set_current_page,
-                    None,
-                    None,
+                    page_dim.get().height.map(|h| h as usize),
+                    Some(
+                        Box::new(|container_height: usize| {
+                            (container_height - ESTIMATED_NON_TABLE_SPACE_IN_ACCOUNTS)
+                                / ESTIMATED_ROW_HEIGHT
+                        }),
+                    ),
                 );
                 let subset = get_subset(
                     &data.into_iter().map(Some).collect::<Vec<_>>(),
-                    records_per_page,
+                    pag.records_per_page,
                     current_page.get() - 1,
                 );
                 view! { <Table data=subset pagination=pag/> }
