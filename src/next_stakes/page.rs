@@ -1,6 +1,6 @@
 use super::functions::*;
 use crate::{
-    common::{components::*, constants::TABLE_RECORD_SIZE, functions::*, search::*, table::*},
+    common::{components::*, constants::*, functions::*, models::*, search::*, table::*},
     stakes::components::StakesNavButton,
 };
 use leptos::*;
@@ -29,7 +29,8 @@ fn NextStakesPageContents() -> impl IntoView {
         },
     );
 
-    let records_per_page = 10;
+    let page_dim = use_context::<ReadSignal<PageDimensions>>()
+        .expect("there to be a `PageDimensions` signal provided");
     let (current_page, set_current_page) = create_signal(1);
     view! {
         <ErrorBoundary fallback=move |_| ().into_view()>
@@ -50,15 +51,21 @@ fn NextStakesPageContents() -> impl IntoView {
                         .map(|data| {
                             let pag = build_pagination(
                                 data.nextstakes.len(),
-                                records_per_page,
+                                TABLE_DEFAULT_PAGE_SIZE,
                                 current_page.get(),
                                 set_current_page,
-                                None,
-                                None,
+                                page_dim.get().height.map(|h| h as usize),
+                                Some(
+                                    Box::new(|container_height: usize| {
+                                        (container_height
+                                            - DEFAULT_ESTIMATED_NON_TABLE_SPACE_IN_SECTIONS)
+                                            / ESTIMATED_ROW_HEIGHT
+                                    }),
+                                ),
                             );
                             let subset = get_subset(
                                 &data.nextstakes,
-                                records_per_page,
+                                pag.records_per_page,
                                 current_page.get() - 1,
                             );
                             view! {
