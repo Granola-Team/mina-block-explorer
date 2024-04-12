@@ -256,6 +256,8 @@ pub fn AccountTransactionsSection(
                     records_per_page,
                     current_page.get(),
                     set_current_page,
+                    None,
+                    None,
                 );
                 let subset = get_subset(&transactions, records_per_page, current_page.get() - 1);
                 view! { <Table data=subset pagination=pag/> }
@@ -291,6 +293,8 @@ pub fn AccountOverviewSnarkJobTable(
                     records_per_page,
                     current_page.get(),
                     set_current_page,
+                    None,
+                    None,
                 );
                 let subset = get_subset(&snarks, records_per_page, current_page.get() - 1);
                 view! {
@@ -331,6 +335,8 @@ pub fn AccountOverviewBlocksTable(
                         records_per_page,
                         current_page.get(),
                         set_current_page,
+                        None,
+                        None,
                     );
                     let blocks_subset = get_subset(
                         &blocks,

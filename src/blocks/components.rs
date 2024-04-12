@@ -107,6 +107,10 @@ pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
 pub fn BlockUserCommands(block: BlocksQueryBlocks) -> impl IntoView {
     let records_per_page = 10;
     let (current_page, set_current_page) = create_signal(1);
+    // let page_dim = use_context::<ReadSignal<PageDimensions>>()
+    //     // we know we just provided this in the parent component
+    //     .expect("there to be a `PageDimensions` signal provided");
+
     view! {
         <TableSection section_heading="User Commands" controls=|| ().into_view()>
 
@@ -117,6 +121,8 @@ pub fn BlockUserCommands(block: BlocksQueryBlocks) -> impl IntoView {
                         records_per_page,
                         current_page.get(),
                         set_current_page,
+                        None,
+                        None,
                     );
                     let subset = get_subset(
                         &user_commands,
@@ -166,6 +172,8 @@ pub fn BlockInternalCommandsTable(block: BlocksQueryBlocks) -> impl IntoView {
                     records_per_page,
                     current_page.get(),
                     set_current_page,
+                    None,
+                    None,
                 );
                 let subset = get_subset(&feetransfers, records_per_page, current_page.get() - 1);
                 view! { <Table data=subset pagination=pag/> }
@@ -632,6 +640,8 @@ pub fn BlocksSection() -> impl IntoView {
                     records_per_page,
                     current_page.get(),
                     set_current_page,
+                    None,
+                    None,
                 );
                 let blocks_subset = get_subset(
                     &data.blocks,
@@ -716,6 +726,8 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
                         records_per_page,
                         current_page.get(),
                         set_current_page,
+                        None,
+                        None,
                     );
                     let blocks_subset = get_subset(
                         &data.blocks,
@@ -772,6 +784,8 @@ pub fn BlockSpotlightSnarkJobTable(block: BlocksQueryBlocks) -> impl IntoView {
                                 records_per_page,
                                 current_page.get(),
                                 set_current_page,
+                                None,
+                                None,
                             );
                             let subset = get_subset(
                                 &snark_jobs,

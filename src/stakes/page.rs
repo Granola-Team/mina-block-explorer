@@ -82,6 +82,8 @@ pub fn StakesPage() -> impl IntoView {
                         records_per_page,
                         current_page.get(),
                         set_current_page,
+                        None,
+                        None,
                     );
                     let subset = get_subset(&data.stakes, records_per_page, current_page.get() - 1);
                     view! {

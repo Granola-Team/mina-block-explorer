@@ -39,6 +39,8 @@ pub fn AccountsPage() -> impl IntoView {
                         records_per_page,
                         current_page.get(),
                         set_current_page,
+                        None,
+                        None,
                     );
                     let subset = get_subset(
                         &data.into_iter().map(Some).collect::<Vec<_>>(),

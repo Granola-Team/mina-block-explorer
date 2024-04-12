@@ -52,6 +52,8 @@ pub fn SnarksPage() -> impl IntoView {
                             records_per_page,
                             current_page.get(),
                             set_current_page,
+                            None,
+                            None,
                         );
                         let subset = get_subset(
                             &data.snarks,
