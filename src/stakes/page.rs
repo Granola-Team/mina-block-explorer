@@ -37,8 +37,6 @@ pub fn StakesPage() -> impl IntoView {
     }
 }
 
-
-
 #[component]
 fn StakesPageContents() -> impl IntoView {
     let (epoch_sig, _) = create_query_signal::<i64>("epoch");

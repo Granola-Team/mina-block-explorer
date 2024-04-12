@@ -22,8 +22,6 @@ pub fn SnarksPage() -> impl IntoView {
     }
 }
 
-
-
 #[component]
 fn SnarksPageContents() -> impl IntoView {
     let query_params_map = use_query_map();

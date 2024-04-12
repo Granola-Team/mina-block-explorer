@@ -614,8 +614,6 @@ fn BlockSpotlightPlaceholder() -> impl IntoView {
     }
 }
 
-
-
 #[component]
 pub fn BlocksSection() -> impl IntoView {
     let query_params_map = use_query_map();

@@ -32,8 +32,6 @@ pub fn AccountsPage() -> impl IntoView {
     }
 }
 
-
-
 #[component]
 fn AccountsPageContents() -> impl IntoView {
     let page_dim = use_context::<ReadSignal<PageDimensions>>()

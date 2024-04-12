@@ -60,8 +60,6 @@ pub fn TransactionsSection(
     }
 }
 
-
-
 #[component]
 fn TransactionSection<T>(
     #[prop(into)] public_key: Option<String>,
@@ -124,7 +122,8 @@ where
                                 page_dim.get().height.map(|h| h as usize),
                                 Some(
                                     Box::new(|container_height: usize| {
-                                        (container_height - DEFAULT_ESTIMATED_NON_TABLE_SPACE_IN_SECTIONS)
+                                        (container_height
+                                            - DEFAULT_ESTIMATED_NON_TABLE_SPACE_IN_SECTIONS)
                                             / ESTIMATED_ROW_HEIGHT
                                     }),
                                 ),
