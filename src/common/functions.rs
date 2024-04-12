@@ -778,9 +778,8 @@ pub fn build_pagination(
     Pagination {
         current_page,
         records_per_page: page_height
-            .map(|ph| resolved_scaling_function(ph))
-            .or(Some(records_per_page))
-            .unwrap(),
+            .map(resolved_scaling_function)
+            .unwrap_or(records_per_page),
         total_records,
         set_current_page,
     }
