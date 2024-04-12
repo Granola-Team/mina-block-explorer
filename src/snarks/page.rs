@@ -1,6 +1,11 @@
 use super::functions::*;
 use crate::common::{
-    components::*, constants::TABLE_RECORD_SIZE, functions::*, models::*, search::*, table::*,
+    components::*,
+    constants::{TABLE_RECORD_SIZE, *},
+    functions::*,
+    models::*,
+    search::*,
+    table::*,
 };
 use leptos::*;
 use leptos_meta::Title;
@@ -16,6 +21,8 @@ pub fn SnarksPage() -> impl IntoView {
         </PageContainer>
     }
 }
+
+const ESTIMATED_NON_TABLE_SPACE_IN_SNARKS: usize = 160;
 
 #[component]
 fn SnarksPageContents() -> impl IntoView {
@@ -33,7 +40,8 @@ fn SnarksPageContents() -> impl IntoView {
         },
     );
 
-    let records_per_page = 10;
+    let page_dim = use_context::<ReadSignal<PageDimensions>>()
+        .expect("there to be a `PageDimensions` signal provided");
     let (current_page, set_current_page) = create_signal(1);
     view! {
         <TableSection
@@ -56,13 +64,22 @@ fn SnarksPageContents() -> impl IntoView {
                 Some(Ok(data)) => {
                     let pag = build_pagination(
                         data.snarks.len(),
-                        records_per_page,
+                        TABLE_DEFAULT_PAGE_SIZE,
                         current_page.get(),
                         set_current_page,
-                        None,
-                        None,
+                        page_dim.get().height.map(|h| h as usize),
+                        Some(
+                            Box::new(|container_height: usize| {
+                                (container_height - ESTIMATED_NON_TABLE_SPACE_IN_SNARKS)
+                                    / ESTIMATED_ROW_HEIGHT
+                            }),
+                        ),
                     );
-                    let subset = get_subset(&data.snarks, records_per_page, current_page.get() - 1);
+                    let subset = get_subset(
+                        &data.snarks,
+                        pag.records_per_page,
+                        current_page.get() - 1,
+                    );
                     view! { <Table data=subset pagination=pag/> }
                 }
                 None => view! { <Table data=LoadingPlaceholder {}/> },
