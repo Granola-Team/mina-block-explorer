@@ -205,7 +205,7 @@ pub fn PageContainer(children: Children) -> impl IntoView {
     view! {
         <div
             node_ref=el
-            class="grid grid-cols-1 md:grid-cols-[10%_80%_10%] auto-rows-min bg-secondary-background rounded-t-3xl py-6 px-2 sm:px-0 grow h-[85vh]"
+            class="grid grid-cols-1 md:grid-cols-[10%_80%_10%] auto-rows-min bg-secondary-background rounded-t-3xl py-6 px-2 sm:px-0 grow min-h-[85vh]"
         >
             {children()}
         </div>
