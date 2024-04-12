@@ -32,7 +32,7 @@ pub fn AccountsPage() -> impl IntoView {
     }
 }
 
-const ESTIMATED_NON_TABLE_SPACE_IN_ACCOUNTS: usize = 160;
+
 
 #[component]
 fn AccountsPageContents() -> impl IntoView {
@@ -53,7 +53,7 @@ fn AccountsPageContents() -> impl IntoView {
                     page_dim.get().height.map(|h| h as usize),
                     Some(
                         Box::new(|container_height: usize| {
-                            (container_height - ESTIMATED_NON_TABLE_SPACE_IN_ACCOUNTS)
+                            (container_height - DEFAULT_ESTIMATED_NON_TABLE_SPACE_IN_SECTIONS)
                                 / ESTIMATED_ROW_HEIGHT
                         }),
                     ),

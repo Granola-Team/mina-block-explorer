@@ -22,7 +22,7 @@ pub fn SnarksPage() -> impl IntoView {
     }
 }
 
-const ESTIMATED_NON_TABLE_SPACE_IN_SNARKS: usize = 160;
+
 
 #[component]
 fn SnarksPageContents() -> impl IntoView {
@@ -70,7 +70,7 @@ fn SnarksPageContents() -> impl IntoView {
                         page_dim.get().height.map(|h| h as usize),
                         Some(
                             Box::new(|container_height: usize| {
-                                (container_height - ESTIMATED_NON_TABLE_SPACE_IN_SNARKS)
+                                (container_height - DEFAULT_ESTIMATED_NON_TABLE_SPACE_IN_SECTIONS)
                                     / ESTIMATED_ROW_HEIGHT
                             }),
                         ),

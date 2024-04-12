@@ -614,7 +614,7 @@ fn BlockSpotlightPlaceholder() -> impl IntoView {
     }
 }
 
-const ESTIMATED_NON_TABLE_SPACE_IN_BLOCK_PAGE: usize = 160;
+
 
 #[component]
 pub fn BlocksSection() -> impl IntoView {
@@ -656,7 +656,7 @@ pub fn BlocksSection() -> impl IntoView {
                     page_dim.get().height.map(|f| f as usize),
                     Some(
                         Box::new(|container_height: usize| {
-                            (container_height - ESTIMATED_NON_TABLE_SPACE_IN_BLOCK_PAGE)
+                            (container_height - DEFAULT_ESTIMATED_NON_TABLE_SPACE_IN_SECTIONS)
                                 / ESTIMATED_ROW_HEIGHT
                         }),
                     ),

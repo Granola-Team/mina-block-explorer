@@ -60,7 +60,7 @@ pub fn TransactionsSection(
     }
 }
 
-const ESTIMATED_NON_TABLE_SPACE_IN_TXN: usize = 160;
+
 
 #[component]
 fn TransactionSection<T>(
@@ -124,7 +124,7 @@ where
                                 page_dim.get().height.map(|h| h as usize),
                                 Some(
                                     Box::new(|container_height: usize| {
-                                        (container_height - ESTIMATED_NON_TABLE_SPACE_IN_TXN)
+                                        (container_height - DEFAULT_ESTIMATED_NON_TABLE_SPACE_IN_SECTIONS)
                                             / ESTIMATED_ROW_HEIGHT
                                     }),
                                 ),

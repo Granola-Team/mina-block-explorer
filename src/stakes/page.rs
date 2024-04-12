@@ -37,7 +37,7 @@ pub fn StakesPage() -> impl IntoView {
     }
 }
 
-const ESTIMATED_NON_TABLE_SPACE_IN_STAKES: usize = 160;
+
 
 #[component]
 fn StakesPageContents() -> impl IntoView {
@@ -101,7 +101,7 @@ fn StakesPageContents() -> impl IntoView {
                     page_dim.get().height.map(|h| h as usize),
                     Some(
                         Box::new(|container_height: usize| {
-                            (container_height - ESTIMATED_NON_TABLE_SPACE_IN_STAKES)
+                            (container_height - DEFAULT_ESTIMATED_NON_TABLE_SPACE_IN_SECTIONS)
                                 / ESTIMATED_ROW_HEIGHT
                         }),
                     ),
