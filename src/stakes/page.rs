@@ -1,7 +1,11 @@
 use super::{components::*, functions::*, models::*};
 use crate::{
     common::{
-        components::*, constants::TABLE_RECORD_SIZE, functions::*, models::MyError, search::*,
+        components::*,
+        constants::{TABLE_RECORD_SIZE, *},
+        functions::*,
+        models::{MyError, PageDimensions},
+        search::*,
         table::*,
     },
     summary::functions::load_data as load_summary_data,
@@ -33,6 +37,8 @@ pub fn StakesPage() -> impl IntoView {
     }
 }
 
+const ESTIMATED_NON_TABLE_SPACE_IN_STAKES: usize = 160;
+
 #[component]
 fn StakesPageContents() -> impl IntoView {
     let (epoch_sig, _) = create_query_signal::<i64>("epoch");
@@ -59,7 +65,8 @@ fn StakesPageContents() -> impl IntoView {
         },
     );
 
-    let records_per_page = 10;
+    let page_dim = use_context::<ReadSignal<PageDimensions>>()
+        .expect("there to be a `PageDimensions` signal provided");
     let (current_page, set_current_page) = create_signal(1);
     view! {
         {move || match (resource.get(), summary_resource.get()) {
@@ -88,13 +95,18 @@ fn StakesPageContents() -> impl IntoView {
                 };
                 let pag = build_pagination(
                     data.stakes.len(),
-                    records_per_page,
+                    TABLE_DEFAULT_PAGE_SIZE,
                     current_page.get(),
                     set_current_page,
-                    None,
-                    None,
+                    page_dim.get().height.map(|h| h as usize),
+                    Some(
+                        Box::new(|container_height: usize| {
+                            (container_height - ESTIMATED_NON_TABLE_SPACE_IN_STAKES)
+                                / ESTIMATED_ROW_HEIGHT
+                        }),
+                    ),
                 );
-                let subset = get_subset(&data.stakes, records_per_page, current_page.get() - 1);
+                let subset = get_subset(&data.stakes, pag.records_per_page, current_page.get() - 1);
                 view! {
                     <TableSection
                         section_heading=section_heading
