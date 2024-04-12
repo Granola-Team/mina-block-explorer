@@ -1,13 +1,6 @@
 use super::{functions::*, graphql::blocks_query::BlocksQueryBlocks, models::*};
 use crate::{
-    common::{
-        components::*,
-        constants::{TABLE_DEFAULT_PAGE_SIZE, TABLE_RECORD_SIZE},
-        functions::*,
-        models::*,
-        spotlight::*,
-        table::*,
-    },
+    common::{components::*, constants::*, functions::*, models::*, spotlight::*, table::*},
     icons::*,
 };
 use charming::{
@@ -608,6 +601,8 @@ fn BlockSpotlightPlaceholder() -> impl IntoView {
     }
 }
 
+const ESTIMATED_NON_TABLE_SPACE_IN_BLOCK_PAGE: usize = 160;
+
 #[component]
 pub fn BlocksSection() -> impl IntoView {
     let query_params_map = use_query_map();
@@ -646,7 +641,12 @@ pub fn BlocksSection() -> impl IntoView {
                     current_page.get(),
                     set_current_page,
                     page_dim.get().height.map(|f| f as usize),
-                    Some(Box::new(|page_height: usize| (page_height - 160) / 48)),
+                    Some(
+                        Box::new(|container_height: usize| {
+                            (container_height - ESTIMATED_NON_TABLE_SPACE_IN_BLOCK_PAGE)
+                                / ESTIMATED_ROW_HEIGHT
+                        }),
+                    ),
                 );
                 let blocks_subset = get_subset(
                     &data.blocks,
@@ -693,6 +693,8 @@ pub fn BlocksSection() -> impl IntoView {
     }
 }
 
+const ESTIMATED_NON_TABLE_SPACE_IN_SUMMARY: usize = 390;
+
 #[component]
 pub fn SummaryPageBlocksSection() -> impl IntoView {
     let query_params_map = use_query_map();
@@ -710,7 +712,8 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
         },
     );
 
-    let records_per_page = 10;
+    let page_dim = use_context::<ReadSignal<PageDimensions>>()
+        .expect("there to be a `PageDimensions` signal provided");
     let (current_page, set_current_page) = create_signal(1);
 
     view! {
@@ -728,15 +731,20 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
                 Some(data) => {
                     let pag = build_pagination(
                         data.blocks.len(),
-                        records_per_page,
+                        TABLE_DEFAULT_PAGE_SIZE,
                         current_page.get(),
                         set_current_page,
-                        None,
-                        None,
+                        page_dim.get().height.map(|f| f as usize),
+                        Some(
+                            Box::new(|container_height: usize| {
+                                (container_height - ESTIMATED_NON_TABLE_SPACE_IN_SUMMARY)
+                                    / ESTIMATED_ROW_HEIGHT
+                            }),
+                        ),
                     );
                     let blocks_subset = get_subset(
                         &data.blocks,
-                        records_per_page,
+                        pag.records_per_page,
                         current_page.get() - 1,
                     );
                     view! {
