@@ -191,15 +191,24 @@ pub fn PageContainer(children: Children) -> impl IntoView {
         height: None,
         width: None,
     });
+    let (is_init, set_init) = create_signal(false);
 
     provide_context(page_dim_sig);
 
     use_resize_observer(el, move |entries, _| {
         let rect = entries[0].content_rect();
-        set_page_dim.set(PageDimensions {
-            height: Some(rect.height()),
-            width: Some(rect.width()),
-        })
+        if !is_init.get() {
+            logging::log!(
+                "container dimension {}px x {}px",
+                rect.width(),
+                rect.height()
+            );
+            set_page_dim.set(PageDimensions {
+                height: Some(rect.height()),
+                width: Some(rect.width()),
+            });
+            set_init.set(true);
+        }
     });
 
     view! {
