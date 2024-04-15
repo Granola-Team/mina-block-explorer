@@ -769,10 +769,17 @@ pub fn build_pagination(
     records_per_page: usize,
     current_page: usize,
     set_current_page: WriteSignal<usize>,
+    page_height: Option<usize>,
+    scaling_function: Option<Box<dyn Fn(usize) -> usize>>,
 ) -> Pagination {
+    let resolved_scaling_function =
+        scaling_function.unwrap_or_else(|| Box::new(|_x: usize| records_per_page));
+
     Pagination {
         current_page,
-        records_per_page,
+        records_per_page: page_height
+            .map(resolved_scaling_function)
+            .unwrap_or(records_per_page),
         total_records,
         set_current_page,
     }

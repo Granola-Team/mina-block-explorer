@@ -160,6 +160,13 @@ Cypress.Commands.add("tableHasLessThanNRows", (tableHeading, n) => {
   });
 });
 
+Cypress.Commands.add("tableHasMoreThanNRows", (tableHeading, n) => {
+  cy.aliasTableRows(tableHeading, "table-rows");
+  cy.get(`@table-rows`).should(($tr) => {
+    expect($tr).to.have.length.of.at.least(n);
+  });
+});
+
 Cypress.Commands.add("testSpotlight", (heading, id, expected_fields) => {
   cy.get("section#spotlight-section h1").contains(heading);
   cy.get("#spotlight-id").contains(id);

@@ -169,3 +169,9 @@ pub enum NavIcon {
     FeeTransfers,
     Analytics,
 }
+
+#[derive(Clone, Debug)]
+pub struct PageDimensions {
+    pub height: Option<f64>,
+    pub width: Option<f64>,
+}

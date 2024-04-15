@@ -162,6 +162,8 @@ pub fn ZkAppSpotlight() -> impl IntoView {
                             records_per_page,
                             current_txn_page.get(),
                             set_current_txn_page,
+                            None,
+                            None,
                         );
                         let subset = get_subset(
                             &data.into_iter().map(Some).collect::<Vec<_>>(),
@@ -183,6 +185,8 @@ pub fn ZkAppSpotlight() -> impl IntoView {
                             records_per_page,
                             current_fees_page.get(),
                             set_current_fees_page,
+                            None,
+                            None,
                         );
                         let subset = get_subset(
                             &data.into_iter().map(Some).collect::<Vec<_>>(),
@@ -238,6 +242,8 @@ pub fn ZkAppTransactionsPage() -> impl IntoView {
                         records_per_page,
                         current_page.get(),
                         set_current_page,
+                        None,
+                        None,
                     );
                     let subset = get_subset(
                         &data.into_iter().map(Some).collect::<Vec<_>>(),
@@ -269,6 +275,8 @@ pub fn ZkAppsPage() -> impl IntoView {
                         records_per_page,
                         current_page.get(),
                         set_current_page,
+                        None,
+                        None,
                     );
                     let subset = get_subset(
                         &data.into_iter().map(Some).collect::<Vec<_>>(),

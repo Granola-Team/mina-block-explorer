@@ -36,6 +36,11 @@ suite(["@CI"], "search bar", () => {
 
   pages.forEach(({ origin, input, tableHeading }) =>
     it(`works on ${origin} page`, () => {
+      /* 
+        Sufficiently "tall" viewport to display many rows per table.
+        We want to see that the search bar is filtering results.  
+      */
+      cy.viewport(768, 2000);
       cy.visit(origin);
       cy.wait(1000);
       cy.get("input#searchbar").as("searchinput");
@@ -56,7 +61,7 @@ suite(["@CI"], "search bar", () => {
       // check url
       cy.url().should("not.contain", `query`);
       // check table
-      cy.tableHasNRows(tableHeading, 10);
+      cy.tableHasMoreThanNRows(tableHeading, 15);
     }),
   );
 });

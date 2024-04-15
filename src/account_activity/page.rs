@@ -8,8 +8,9 @@ use crate::{
     },
     common::{
         components::*,
+        constants::*,
         functions::*,
-        models::{MyError, NavEntry, NavIcon},
+        models::{MyError, NavEntry, NavIcon, PageDimensions},
         search::*,
         spotlight::*,
         table::*,
@@ -23,33 +24,47 @@ use leptos_router::*;
 
 #[component]
 pub fn AccountsPage() -> impl IntoView {
-    let records_per_page = 10;
-    let (current_page, set_current_page) = create_signal(1);
-    let data = stub_account_summaries(9000);
-
     view! {
         <Title text="Accounts | Search For Mina Account"/>
         <PageContainer>
-            <TableSection section_heading="Accounts" controls=|| ().into_view()>
-
-                {move || {
-                    let data = data.clone();
-                    let pag = build_pagination(
-                        data.len(),
-                        records_per_page,
-                        current_page.get(),
-                        set_current_page,
-                    );
-                    let subset = get_subset(
-                        &data.into_iter().map(Some).collect::<Vec<_>>(),
-                        records_per_page,
-                        current_page.get() - 1,
-                    );
-                    view! { <Table data=subset pagination=pag/> }
-                }}
-
-            </TableSection>
+            <AccountsPageContents/>
         </PageContainer>
+    }
+}
+
+#[component]
+fn AccountsPageContents() -> impl IntoView {
+    let page_dim = use_context::<ReadSignal<PageDimensions>>()
+        .expect("there to be a `PageDimensions` signal provided");
+    let (current_page, set_current_page) = create_signal(1);
+    let data = stub_account_summaries(9000);
+    view! {
+        <TableSection section_heading="Accounts" controls=|| ().into_view()>
+
+            {move || {
+                let data = data.clone();
+                let pag = build_pagination(
+                    data.len(),
+                    TABLE_DEFAULT_PAGE_SIZE,
+                    current_page.get(),
+                    set_current_page,
+                    page_dim.get().height.map(|h| h as usize),
+                    Some(
+                        Box::new(|container_height: usize| {
+                            (container_height - DEFAULT_ESTIMATED_NON_TABLE_SPACE_IN_SECTIONS)
+                                / ESTIMATED_ROW_HEIGHT
+                        }),
+                    ),
+                );
+                let subset = get_subset(
+                    &data.into_iter().map(Some).collect::<Vec<_>>(),
+                    pag.records_per_page,
+                    current_page.get() - 1,
+                );
+                view! { <Table data=subset pagination=pag/> }
+            }}
+
+        </TableSection>
     }
 }
 
