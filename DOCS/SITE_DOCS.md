@@ -11,3 +11,6 @@ https://docs.minaexplorer.com/minaexplorer/staking-pool
 
 ## Get support
 https://docs.minaexplorer.com/minaexplorer/get-help
+
+## License
+https://github.com/Granola-Team/mina-block-explorer/blob/main/LICENSE
