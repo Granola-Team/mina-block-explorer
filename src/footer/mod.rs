@@ -19,7 +19,7 @@ pub fn Footer() -> impl IntoView {
     let links = vec![
         Link {
             label: "Docs",
-            href: "https://docs.minaexplorer.com/minaexplorer",
+            href: "https://github.com/Granola-Team/mina-block-explorer/blob/main/DOCS/SITE_DOCS.md",
             icon: Icon::Docs,
         },
         Link {
