@@ -34,7 +34,10 @@ pub fn get_snark_work_ids(snark: &BlocksQueryBlocksSnarkJobs) -> Vec<String> {
     })
 }
 pub fn get_snark_fee(snark: &BlocksQueryBlocksSnarkJobs) -> String {
-    snark.fee.map_or_else(String::new, |o| o.to_string())
+    snark
+        .fee
+        .map(|i| nanomina_to_mina(i as u64))
+        .map_or_else(String::new, |o| o.to_string())
 }
 
 pub fn get_user_commands(
