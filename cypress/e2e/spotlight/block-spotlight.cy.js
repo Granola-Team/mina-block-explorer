@@ -48,6 +48,6 @@ suite(["@CI"], "Block spotlight", () => {
   });
 
   it("displays complete information for non-canonical block", () => {
-    testForCompleteness(DEFAULT_NON_CANONICAL_BLOCK_HASH, 10, 10, 5);
+    testForCompleteness(DEFAULT_NON_CANONICAL_BLOCK_HASH, 10, 10, 6);
   });
 });

@@ -109,7 +109,25 @@ pub fn BlockTabbedPage() -> impl IntoView {
                 href: format!("/blocks/{}/internal-commands", id()),
                 text: "Internal Commands".to_string(),
                 icon: NavIcon::FeeTransfers,
-                number_bubble: option_block.get().as_ref().and_then(get_fee_transfer_count),
+                number_bubble: option_block
+                    .get()
+                    .as_ref()
+                    .and_then(get_fee_transfer_count)
+                    .map(|c| {
+                        if option_block
+                            .get()
+                            .and_then(|block| {
+                                block.transactions.and_then(|trx| {
+                                    trx.coinbase_receiver_account.and_then(|ra| ra.public_key)
+                                })
+                            })
+                            .is_some()
+                        {
+                            c + 1
+                        } else {
+                            c
+                        }
+                    }),
                 sub_entries: None,
                 disabled: false,
             },

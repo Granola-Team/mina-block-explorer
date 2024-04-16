@@ -1,5 +1,6 @@
 use super::{functions::*, graphql::blocks_query::BlocksQueryBlocks, models::*};
 use crate::{
+    blocks::graphql::blocks_query::BlocksQueryBlocksTransactionsFeeTransfer,
     common::{components::*, constants::*, functions::*, models::*, spotlight::*, table::*},
     icons::*,
 };
@@ -163,11 +164,23 @@ pub fn BlockInternalCommandsTable(block: BlocksQueryBlocks) -> impl IntoView {
     let (current_page, set_current_page) = create_signal(1);
 
     view! {
-        {move || match block.transactions.clone().and_then(|txn| txn.fee_transfer) {
-            None => {
-                view! { <EmptyTable message="No internal commands for this block"/> }
-            }
-            Some(feetransfers) => {
+        {move || match (
+            block.transactions.clone().and_then(|txn| txn.fee_transfer),
+            block.transactions.clone().and_then(|txn| txn.coinbase),
+            block
+                .transactions
+                .clone()
+                .and_then(|txn| txn.coinbase_receiver_account.and_then(|ra| ra.public_key)),
+        ) {
+            (Some(mut feetransfers), Some(coinbase), Some(coinbase_receiver)) => {
+                feetransfers
+                    .push(
+                        Some(BlocksQueryBlocksTransactionsFeeTransfer {
+                            fee: Some(coinbase),
+                            type_: Some("Coinbase".to_string()),
+                            recipient: Some(coinbase_receiver),
+                        }),
+                    );
                 let pag = build_pagination(
                     feetransfers.len(),
                     TABLE_DEFAULT_PAGE_SIZE,
@@ -187,6 +200,9 @@ pub fn BlockInternalCommandsTable(block: BlocksQueryBlocks) -> impl IntoView {
                     current_page.get() - 1,
                 );
                 view! { <Table data=subset pagination=pag/> }
+            }
+            (_, _, _) => {
+                view! { <EmptyTable message="No internal commands for this block"/> }
             }
         }}
     }
