@@ -114,11 +114,15 @@ pub fn BlockTabbedPage() -> impl IntoView {
                     .as_ref()
                     .and_then(get_fee_transfer_count)
                     .map(|c| {
-                        if let Some(_) = option_block.get().and_then(|block| {
-                            block.transactions.and_then(|trx| {
-                                trx.coinbase_receiver_account.and_then(|ra| ra.public_key)
+                        if option_block
+                            .get()
+                            .and_then(|block| {
+                                block.transactions.and_then(|trx| {
+                                    trx.coinbase_receiver_account.and_then(|ra| ra.public_key)
+                                })
                             })
-                        }) {
+                            .is_some()
+                        {
                             c + 1
                         } else {
                             c
