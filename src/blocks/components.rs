@@ -173,6 +173,14 @@ pub fn BlockInternalCommandsTable(block: BlocksQueryBlocks) -> impl IntoView {
                 .and_then(|txn| txn.coinbase_receiver_account.and_then(|ra| ra.public_key)),
         ) {
             (Some(mut feetransfers), Some(coinbase), Some(coinbase_receiver)) => {
+                feetransfers
+                    .push(
+                        Some(BlocksQueryBlocksTransactionsFeeTransfer {
+                            fee: Some(coinbase),
+                            type_: Some("Coinbase".to_string()),
+                            recipient: Some(coinbase_receiver),
+                        }),
+                    );
                 let pag = build_pagination(
                     feetransfers.len(),
                     TABLE_DEFAULT_PAGE_SIZE,
@@ -186,14 +194,6 @@ pub fn BlockInternalCommandsTable(block: BlocksQueryBlocks) -> impl IntoView {
                         }),
                     ),
                 );
-                feetransfers
-                    .push(
-                        Some(BlocksQueryBlocksTransactionsFeeTransfer {
-                            fee: Some(coinbase),
-                            type_: Some("Coinbase".to_string()),
-                            recipient: Some(coinbase_receiver),
-                        }),
-                    );
                 let subset = get_subset(
                     &feetransfers,
                     pag.records_per_page,
