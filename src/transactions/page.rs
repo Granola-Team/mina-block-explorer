@@ -30,7 +30,7 @@ pub fn TransactionTabbedPage() -> impl IntoView {
 }
 
 #[component]
-pub fn TransactionsPage() -> impl IntoView {
+pub fn UserCommandsPage() -> impl IntoView {
     let query_params_map: Memo<ParamsMap> = use_query_map();
 
     view! {
