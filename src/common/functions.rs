@@ -2,7 +2,6 @@ use super::models::*;
 use crate::{common::components::CopyToClipboard, icons::HelpIcon};
 use chrono::{DateTime, Duration, LocalResult, TimeZone, Utc};
 use leptos::*;
-use num_format::{Locale, ToFormattedString};
 use rand::{
     distributions::{Alphanumeric, Uniform},
     prelude::Distribution,
@@ -212,23 +211,31 @@ pub fn nanomina_str_to_mina(n_str: &str) -> String {
 pub fn nanomina_to_mina(num: u64) -> String {
     let mut dec = Decimal::from(num);
     dec.set_scale(MINA_SCALE).unwrap();
-    let dec_str = dec.to_string();
 
-    let parts: Vec<&str> = dec_str.split('.').collect();
-    let int_part = parts[0].parse::<u64>().unwrap().to_formatted_string(&Locale::en);
-    
-    if parts.len() > 1 {
-        let mut dec_part = parts[1];
-        while dec_part.ends_with('0') {
-            dec_part = &dec_part[..dec_part.len() - 1];
+    let s = dec.to_string();
+
+    let parts: Vec<&str> = s.split('.').collect();
+    let mut integral_part = parts[0].to_string();
+    let decimal_part = parts.get(1).unwrap_or(&"").to_string();
+
+    if integral_part.len() > 3 {
+        let mut index = integral_part.len() - 3;
+        while index > 0 {
+            integral_part.insert(index, ',');
+            if index > 3 {
+                index -= 3;
+            } else {
+                break;
+            }
         }
-        if !dec_part.is_empty() {
-            format!("{}.{}", int_part, dec_part)
-        } else {
-            int_part
-        }
+    }
+
+    let trimmed_decimal_part = decimal_part.trim_end_matches('0');
+
+    if !trimmed_decimal_part.is_empty() {
+        format!("{}.{}", integral_part, trimmed_decimal_part)
     } else {
-        int_part
+        integral_part
     }
 }
 
@@ -243,26 +250,25 @@ mod nanomina_tests {
 
     #[test]
     fn test_exact_value() {
-        assert_eq!(nanomina_to_mina(123_456_789), "0.123456789"); // No commas in decimal part
+        assert_eq!(nanomina_to_mina(123_456_789), "0.123456789");
     }
 
     #[test]
     fn test_large_number() {
-        // Test 5 billion mina
         assert_eq!(
             nanomina_to_mina(5_000_000_000_111_111_111),
-            "5,000,000,000.111111111" // No commas in decimal part
+            "5,000,000,000.111111111"
         );
     }
 
     #[test]
     fn test_small_integer_value() {
-        assert_eq!(nanomina_to_mina(1), "0.000000001"); // No commas in decimal part
+        assert_eq!(nanomina_to_mina(1), "0.000000001");
     }
 
     #[test]
     fn test_boundary_value() {
-        assert_eq!(nanomina_to_mina(123_456_788), "0.123456788"); // No commas in decimal part
+        assert_eq!(nanomina_to_mina(999_999_999), "0.999999999");
     }
 }
 
