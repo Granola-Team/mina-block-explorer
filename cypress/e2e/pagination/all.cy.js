@@ -58,7 +58,7 @@ suite(["@CI"], "pagination", () => {
   }
 
   let account = `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`;
-  let tables = ["Transactions", "SNARK Jobs", "Block Production"];
+  let tables = ["User Commands", "SNARK Jobs", "Block Production"];
   tables.forEach((tableHeading) =>
     it(`works on table '${tableHeading}' on page ${account}`, () => {
       cy.visit(account);

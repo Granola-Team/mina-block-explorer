@@ -1,7 +1,7 @@
 import { DEFAULT_ACCOUNT_PK } from "../constants";
 
 suite(["@CI"], "transactions table", () => {
-  let pages = ["/commands"];
+  let pages = ["/commands/user"];
   let columns = [
     "Height",
     "State Hash",
@@ -17,7 +17,7 @@ suite(["@CI"], "transactions table", () => {
   pages.forEach((page) =>
     it(`on ${page} includes correct columns`, () => {
       cy.visit(page);
-      cy.tableHasOrderedColumns("Transactions", columns);
+      cy.tableHasOrderedColumns("User Commands", columns);
     }),
   );
 });
@@ -39,7 +39,7 @@ suite([""], "account transactions table", () => {
     it(`on ${page} includes correct columns`, () => {
       cy.visit(page);
       cy.wait(1000);
-      cy.tableHasOrderedColumns("Transactions", columns);
+      cy.tableHasOrderedColumns("User Commands", columns);
     }),
   );
 });
@@ -51,7 +51,7 @@ suite(["@CI"], "account activity transactions", () => {
   pages.forEach((page) =>
     it(`on ${page} includes correct columns`, () => {
       cy.visit(page);
-      cy.tableHasOrderedColumns("Transactions", columns, "h2");
+      cy.tableHasOrderedColumns("User Commands", columns, "h2");
     }),
   );
 });
@@ -65,7 +65,7 @@ suite(["@CI"], "blocks table", () => {
     "Age",
     "Block Producer",
     "Coinbase",
-    "Transactions",
+    "User Commands",
     "SNARKs",
     "Coinbase Receiver",
   ];

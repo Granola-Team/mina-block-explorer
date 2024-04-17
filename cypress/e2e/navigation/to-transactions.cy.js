@@ -6,11 +6,11 @@ suite([], "transaction spotlight", () => {
       origin:
         "/summary/accounts/B62qqW8uKTxHZueKJwsoPY8NZcKVeDK4bLEHRkpMM2uKtEmmqLbkiQC",
       column: "Hash",
-      tableHeader: "Transactions",
+      tableHeader: "User Commands",
       tableHeaderEl: "h2",
       transposed: true,
     },
-    { origin: "/commands", column: "Hash", tableHeader: "Transactions" },
+    { origin: "/commands", column: "Hash", tableHeader: "User Commands" },
     {
       origin:
         "/blocks/3NKnLbpRcFaY9WSzLFa4wYxejhnWBQNEPA2cnesvS75wcuNCr8nA/user-commands",
@@ -20,7 +20,7 @@ suite([], "transaction spotlight", () => {
     {
       origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
       column: "State Hash",
-      tableHeader: "Transactions",
+      tableHeader: "User Commands",
     },
   ];
 

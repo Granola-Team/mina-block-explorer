@@ -80,8 +80,9 @@ pub fn Root() -> impl IntoView {
                     </Route>
                     <Route path="/commands" view=TransactionTabbedPage>
                         <Route path="/" view=TransactionsPage/>
+                        <Route path="/user" view=TransactionsPage/>
                         <Route
-                            path="/zk-txn"
+                            path="/zk-app"
                             view=move || {
                                 if BERKELEY_FEATURES_ENABLED {
                                     view! { <ZkAppTransactionsPage/> }

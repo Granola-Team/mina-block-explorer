@@ -251,7 +251,7 @@ impl TableData for Vec<Option<AccountActivityQueryBlocks>> {
             String::from("Age"),
             String::from("Block Producer"),
             String::from("Coinbase"),
-            String::from("Transactions"),
+            String::from("User Commands"),
             String::from("SNARKs"),
             String::from("Coinbase Receiver"),
         ]

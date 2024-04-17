@@ -152,7 +152,7 @@ pub fn ZkAppSpotlight() -> impl IntoView {
             </TableSection>
             <SubSectionContainer>
                 <AppSubSection
-                    heading="App Transactions".to_string()
+                    heading="zkApp Commands".to_string()
                     position=SubSectionPosition::Left
                 >
                     {move || {
@@ -231,9 +231,9 @@ pub fn ZkAppTransactionsPage() -> impl IntoView {
     let (current_page, set_current_page) = create_signal(1);
     let data = stub_zk_app_txn_data(1000);
     view! {
-        <Title text="Transactions | ZK Apps"/>
+        <Title text="Commands | ZK Apps"/>
         <PageContainer>
-            <TableSection section_heading="ZK App Transactions" controls=|| ().into_view()>
+            <TableSection section_heading="ZK App Commands" controls=|| ().into_view()>
 
                 {move || {
                     let data = data.clone();
@@ -370,7 +370,7 @@ pub fn ZkAppTransactionSpotlightPage() -> impl IntoView {
     view! {
         <PageContainer>
             <SpotlightSection
-                header="[zk] Transaction Spotlight"
+                header="[zk] Command Spotlight"
                 spotlight_items
                 id=Some("3NK8nzfotTNSUopF4oEzJUHJ2EeLATBDnMRRgaqaTfR3zpfHK2yo".to_string())
                 meta=Some("2024-02-28 20:45:00 UTC (8 minutes ago)".to_string())

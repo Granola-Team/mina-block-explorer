@@ -6,14 +6,14 @@ suite(["@CI"], "account page", () => {
       origin:
         "/summary/accounts/B62qqW8uKTxHZueKJwsoPY8NZcKVeDK4bLEHRkpMM2uKtEmmqLbkiQC",
       column: "Counterparty",
-      tableHeader: "Transactions",
+      tableHeader: "User Commands",
       tableHeaderEl: "h2",
       transposed: true,
     },
     {
       origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
       column: "Counterparty",
-      tableHeader: "Transactions",
+      tableHeader: "User Commands",
     },
     {
       origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
@@ -47,8 +47,8 @@ suite(["@CI"], "account page", () => {
       column: "Delegate",
       tableHeader: "Next Staking Ledger",
     },
-    { origin: "/commands", column: "From", tableHeader: "Transactions" },
-    { origin: "/commands", column: "To", tableHeader: "Transactions" },
+    { origin: "/commands/user", column: "From", tableHeader: "User Commands" },
+    { origin: "/commands/user", column: "To", tableHeader: "User Commands" },
     {
       origin:
         "/blocks/3NKnLbpRcFaY9WSzLFa4wYxejhnWBQNEPA2cnesvS75wcuNCr8nA/user-commands",

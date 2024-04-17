@@ -11,16 +11,16 @@ use leptos_router::*;
 #[component]
 pub fn TransactionTabbedPage() -> impl IntoView {
     let mut tabs = vec![NavEntry {
-        href: "/commands".to_string(),
-        text: "Transactions".to_string(),
+        href: "/commands/user".to_string(),
+        text: "User Commands".to_string(),
         icon: NavIcon::Transactions,
         ..Default::default()
     }];
 
     if BERKELEY_FEATURES_ENABLED {
         tabs.push(NavEntry {
-            href: "/commands/zk-txn".to_string(),
-            text: "zkApp Transactions".to_string(),
+            href: "/commands/zk-app".to_string(),
+            text: "zkApp Commands".to_string(),
             icon: NavIcon::ZKApps,
             ..Default::default()
         });
@@ -35,7 +35,7 @@ pub fn TransactionsPage() -> impl IntoView {
 
     view! {
         <SearchBar placeholder="Exact search by state hash".to_string()/>
-        <Title text="Transactions | Search For Transactions"/>
+        <Title text="Commands | Search For Commands"/>
         <PageContainer>
             {move || {
                 let qp_map = query_params_map.get();
@@ -204,7 +204,7 @@ pub fn TransactionSpotlightPage() -> impl IntoView {
                             ];
                             view! {
                                 <SpotlightSection
-                                    header="Transaction Spotlight"
+                                    header="Command Spotlight"
                                     spotlight_items=spotlight_items
                                     id=Some(state_hash)
                                     meta=Some(
@@ -281,7 +281,7 @@ pub fn TransactionSpotlightPage() -> impl IntoView {
                     ];
                     view! {
                         <SpotlightSection
-                            header="Transaction Spotlight"
+                            header="Command Spotlight"
                             spotlight_items=spotlight_items
                             id=None
                             meta=None

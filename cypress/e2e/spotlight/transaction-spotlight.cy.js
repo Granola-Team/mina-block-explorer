@@ -22,7 +22,7 @@ suite(["@CI"], "transaction spotlight", () => {
   it("displays complete information", () => {
     cy.viewport(mobile);
     cy.visit(`/commands/${transaction_id}`);
-    cy.testSpotlight("Transaction Spotlight", transaction_id, expected_fields);
+    cy.testSpotlight("Command Spotlight", transaction_id, expected_fields);
   });
 
   it("renders the tooltip for stake delegations", () => {

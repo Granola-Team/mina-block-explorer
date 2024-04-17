@@ -4,7 +4,7 @@ use leptos::{html, HtmlElement};
 
 impl TableData for Vec<Option<ZkAppData>> {
     fn get_columns(&self) -> Vec<String> {
-        ["Account", "Balance", "Outgoing Transactions", "Delegate"]
+        ["Account", "Balance", "Commands", "Delegate"]
             .iter()
             .map(ToString::to_string)
             .collect::<Vec<_>>()

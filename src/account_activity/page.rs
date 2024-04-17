@@ -204,7 +204,7 @@ pub fn AccountSpotlightPage() -> impl IntoView {
                 Some(transactions) => view! { <AccountTransactionsSection transactions/> },
                 None => {
                     view! {
-                        <TableSection section_heading="Transactions" controls=|| ().into_view()>
+                        <TableSection section_heading="User Commands" controls=|| ().into_view()>
                             <Table data=LoadingPlaceholder {}/>
                         </TableSection>
                     }

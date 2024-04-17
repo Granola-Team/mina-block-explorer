@@ -122,7 +122,7 @@ pub fn AccountDialogTransactionSection(
     let has_transactions = move || !transactions.clone().is_empty();
     view! {
         <AccountDialogSectionContainer
-            title=String::from("Transactions")
+            title=String::from("User Commands")
             showing_message=format!("Showing latest {} transactions", inner_transactions.len())
         >
             <Show
@@ -235,7 +235,7 @@ pub fn AccountTransactionsSection(
 
     view! {
         <TableSection
-            section_heading="Transactions"
+            section_heading="User Commands"
             controls=move || {
                 view! {
                     <UrlParamSelectMenu
