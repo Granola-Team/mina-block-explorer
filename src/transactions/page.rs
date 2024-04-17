@@ -11,7 +11,7 @@ use leptos_router::*;
 #[component]
 pub fn TransactionTabbedPage() -> impl IntoView {
     let mut tabs = vec![NavEntry {
-        href: "/transactions".to_string(),
+        href: "/commands".to_string(),
         text: "Transactions".to_string(),
         icon: NavIcon::Transactions,
         ..Default::default()
@@ -19,7 +19,7 @@ pub fn TransactionTabbedPage() -> impl IntoView {
 
     if BERKELEY_FEATURES_ENABLED {
         tabs.push(NavEntry {
-            href: "/transactions/zk-txn".to_string(),
+            href: "/commands/zk-txn".to_string(),
             text: "zkApp Transactions".to_string(),
             icon: NavIcon::ZKApps,
             ..Default::default()

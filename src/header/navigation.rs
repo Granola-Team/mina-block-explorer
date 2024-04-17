@@ -13,13 +13,13 @@ pub fn Header() -> impl IntoView {
     if BERKELEY_FEATURES_ENABLED {
         txn_entries = Some(vec![
             NavEntry {
-                href: "/transactions".to_string(),
+                href: "/commands".to_string(),
                 text: "Transactions".to_string(),
                 icon: NavIcon::Transactions,
                 ..Default::default()
             },
             NavEntry {
-                href: "/transactions/zk-txn".to_string(),
+                href: "/commands/zk-txn".to_string(),
                 text: "zkApp Transactions".to_string(),
                 icon: NavIcon::ZKApps,
                 ..Default::default()
@@ -55,7 +55,7 @@ pub fn Header() -> impl IntoView {
             ..Default::default()
         },
         NavEntry {
-            href: "/transactions".to_string(),
+            href: "/commands".to_string(),
             text: "Transactions".to_string(),
             icon: NavIcon::Transactions,
             sub_entries: txn_entries,

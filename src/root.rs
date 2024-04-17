@@ -78,7 +78,7 @@ pub fn Root() -> impl IntoView {
                         <Route path="/analytics" view=BlockAnalyticsTab/>
                         <Route path="/*any" view=BlockSpotlightTab/>
                     </Route>
-                    <Route path="/transactions" view=TransactionTabbedPage>
+                    <Route path="/commands" view=TransactionTabbedPage>
                         <Route path="/" view=TransactionsPage/>
                         <Route
                             path="/zk-txn"
@@ -92,9 +92,9 @@ pub fn Root() -> impl IntoView {
                         />
 
                     </Route>
-                    <Route path="/transactions/:id" view=TransactionSpotlightPage/>
+                    <Route path="/commands/:id" view=TransactionSpotlightPage/>
                     <Route
-                        path="/transactions/zk-app/:id"
+                        path="/commands/zk-app/:id"
                         view=move || {
                             if BERKELEY_FEATURES_ENABLED {
                                 view! { <ZkAppTransactionSpotlightPage/> }

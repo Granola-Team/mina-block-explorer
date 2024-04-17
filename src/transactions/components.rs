@@ -144,7 +144,7 @@ where
                                         let pk_i = pk.get().unwrap();
                                         view! {
                                             <TableLink
-                                                href=format!("/transactions?account={}", pk_i)
+                                                href=format!("/commands?account={}", pk_i)
                                                 text="See all transactions"
                                             >
                                                 <TransactionIcon/>

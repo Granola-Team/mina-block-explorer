@@ -182,7 +182,7 @@ fn TransactionEntry(
         <AccountDialogSubsectionTable>
             <AccountDialogSubsectionRow
                 label="Hash"
-                el=convert_to_link(hash_sig.get(), format!("/transactions/{}", hash_sig.get()))
+                el=convert_to_link(hash_sig.get(), format!("/commands/{}", hash_sig.get()))
             />
             <AccountDialogSubsectionRow
                 label="Direction"
