@@ -14,7 +14,7 @@ pub fn Header() -> impl IntoView {
         txn_entries = Some(vec![
             NavEntry {
                 href: "/commands".to_string(),
-                text: "Commands".to_string(),
+                text: "Transactions".to_string(),
                 icon: NavIcon::Transactions,
                 ..Default::default()
             },
@@ -56,7 +56,7 @@ pub fn Header() -> impl IntoView {
         },
         NavEntry {
             href: "/commands".to_string(),
-            text: "Commands".to_string(),
+            text: "Transactions".to_string(),
             icon: NavIcon::Transactions,
             sub_entries: txn_entries,
             ..Default::default()
