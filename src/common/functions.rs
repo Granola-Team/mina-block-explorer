@@ -2,6 +2,7 @@ use super::models::*;
 use crate::{common::components::CopyToClipboard, icons::HelpIcon};
 use chrono::{DateTime, Duration, LocalResult, TimeZone, Utc};
 use leptos::*;
+use num_format::{Locale, ToFormattedString};
 use rand::{
     distributions::{Alphanumeric, Uniform},
     prelude::Distribution,
@@ -211,16 +212,24 @@ pub fn nanomina_str_to_mina(n_str: &str) -> String {
 pub fn nanomina_to_mina(num: u64) -> String {
     let mut dec = Decimal::from(num);
     dec.set_scale(MINA_SCALE).unwrap();
-    let mut dec_str = dec.to_string();
-    if dec_str.contains('.') {
-        while dec_str.ends_with('0') {
-            dec_str.pop();
+    let dec_str = dec.to_string();
+
+    let parts: Vec<&str> = dec_str.split('.').collect();
+    let int_part = parts[0].parse::<u64>().unwrap().to_formatted_string(&Locale::en);
+    
+    if parts.len() > 1 {
+        let mut dec_part = parts[1];
+        while dec_part.ends_with('0') {
+            dec_part = &dec_part[..dec_part.len() - 1];
         }
-        if dec_str.ends_with('.') {
-            dec_str.pop();
+        if !dec_part.is_empty() {
+            format!("{}.{}", int_part, dec_part)
+        } else {
+            int_part
         }
+    } else {
+        int_part
     }
-    dec_str
 }
 
 #[cfg(test)]
@@ -234,7 +243,7 @@ mod nanomina_tests {
 
     #[test]
     fn test_exact_value() {
-        assert_eq!(nanomina_to_mina(123_456_789), "0.123456789");
+        assert_eq!(nanomina_to_mina(123_456_789), "0.123456789"); // No commas in decimal part
     }
 
     #[test]
@@ -242,18 +251,18 @@ mod nanomina_tests {
         // Test 5 billion mina
         assert_eq!(
             nanomina_to_mina(5_000_000_000_111_111_111),
-            "5000000000.111111111"
+            "5,000,000,000.111111111" // No commas in decimal part
         );
     }
 
     #[test]
     fn test_small_integer_value() {
-        assert_eq!(nanomina_to_mina(1), "0.000000001");
+        assert_eq!(nanomina_to_mina(1), "0.000000001"); // No commas in decimal part
     }
 
     #[test]
     fn test_boundary_value() {
-        assert_eq!(nanomina_to_mina(123_456_788), "0.123456788");
+        assert_eq!(nanomina_to_mina(123_456_788), "0.123456788"); // No commas in decimal part
     }
 }
 
