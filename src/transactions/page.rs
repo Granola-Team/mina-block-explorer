@@ -9,7 +9,7 @@ use leptos_meta::Title;
 use leptos_router::*;
 
 #[component]
-pub fn TransactionTabbedPage() -> impl IntoView {
+pub fn CommandsTabbedPage() -> impl IntoView {
     let mut tabs = vec![NavEntry {
         href: "/commands/user".to_string(),
         text: "User Commands".to_string(),

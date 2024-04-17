@@ -19,7 +19,7 @@ use crate::{
     stakes::page::StakesPage,
     summary::page::SummaryPage,
     tokens::page::TokensPage,
-    transactions::page::{TransactionSpotlightPage, TransactionTabbedPage, UserCommandsPage},
+    transactions::page::{TransactionSpotlightPage, CommandsTabbedPage, UserCommandsPage},
     zk_apps::page::{
         ZkAppSpotlight, ZkAppTransactionSpotlightPage, ZkAppTransactionsPage, ZkAppsPage,
     },
@@ -78,7 +78,7 @@ pub fn Root() -> impl IntoView {
                         <Route path="/analytics" view=BlockAnalyticsTab/>
                         <Route path="/*any" view=BlockSpotlightTab/>
                     </Route>
-                    <Route path="/commands" view=TransactionTabbedPage>
+                    <Route path="/commands" view=CommandsTabbedPage>
                         <Route path="/" view=UserCommandsPage/>
                         <Route path="/user" view=UserCommandsPage/>
                         <Route
