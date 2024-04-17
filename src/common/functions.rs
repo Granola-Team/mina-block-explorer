@@ -211,10 +211,12 @@ pub fn nanomina_str_to_mina(n_str: &str) -> String {
 pub fn nanomina_to_mina(num: u64) -> String {
     let mut dec = Decimal::from(num);
     dec.set_scale(MINA_SCALE).unwrap();
+    let num_str = dec.to_string();
+    format_mina(num_str)
+}
 
-    let s = dec.to_string();
-
-    let parts: Vec<&str> = s.split('.').collect();
+pub fn format_mina(num_str: String) -> String {
+    let parts: Vec<&str> = num_str.split('.').collect();
     let mut integral_part = parts[0].to_string();
     let decimal_part = parts.get(1).unwrap_or(&"").to_string();
 
