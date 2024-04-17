@@ -47,7 +47,7 @@ pub fn UserCommandsPage() -> impl IntoView {
 }
 
 #[component]
-pub fn TransactionSpotlightPage() -> impl IntoView {
+pub fn CommandSpotlightPage() -> impl IntoView {
     let memo_params_map = use_params_map();
     let (canonical_qp, _) = create_query_signal::<bool>("canonical");
     let (txn_memo, set_txn_memo) = create_signal("No Memo".to_string());
