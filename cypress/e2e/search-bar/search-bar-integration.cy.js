@@ -8,7 +8,7 @@ suite(["@CI"], "search bar", () => {
     { origin: "/summary", input: block_hash, tableHeading: "Blocks" },
     { origin: "/blocks", input: block_hash, tableHeading: "Blocks" },
     {
-      origin: "/transactions",
+      origin: "/commands",
       input: state_hash,
       tableHeading: "Transactions",
     },

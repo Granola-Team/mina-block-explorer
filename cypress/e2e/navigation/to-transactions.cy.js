@@ -10,7 +10,7 @@ suite([], "transaction spotlight", () => {
       tableHeaderEl: "h2",
       transposed: true,
     },
-    { origin: "/transactions", column: "Hash", tableHeader: "Transactions" },
+    { origin: "/commands", column: "Hash", tableHeader: "Transactions" },
     {
       origin:
         "/blocks/3NKnLbpRcFaY9WSzLFa4wYxejhnWBQNEPA2cnesvS75wcuNCr8nA/user-commands",
@@ -33,7 +33,7 @@ suite([], "transaction spotlight", () => {
         } else {
           cy.clickLinkInTable(1, column, tableHeader, tableHeaderEl);
         }
-        cy.url().should("include", "/transactions/");
+        cy.url().should("include", "/commands/");
       }),
   );
 });

@@ -74,7 +74,7 @@ suite(["@CI"], "pagination", () => {
     "/",
     "/summary",
     "/blocks",
-    "/transactions",
+    "/commands",
     "/snarks",
     "/stakes",
     "/next-stakes",

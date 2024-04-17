@@ -1,7 +1,7 @@
 import { DEFAULT_ACCOUNT_PK } from "../constants";
 
 suite(["@CI"], "transactions table", () => {
-  let pages = ["/transactions"];
+  let pages = ["/commands"];
   let columns = [
     "Height",
     "State Hash",
