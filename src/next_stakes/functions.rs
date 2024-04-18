@@ -1,5 +1,5 @@
 use crate::{
-    common::{constants::GRAPHQL_ENDPOINT, models::*, functions::*},
+    common::{constants::GRAPHQL_ENDPOINT, functions::*, models::*},
     next_stakes::graphql::{next_stakes_query, *},
 };
 use graphql_client::reqwest::post_graphql;
@@ -13,7 +13,10 @@ pub fn get_public_key(nextstakes: &NextStakesQueryNextstakes) -> String {
 }
 
 pub fn get_balance(nextstakes: &NextStakesQueryNextstakes) -> String {
-    nextstakes.balance.map(|b| format_mina(b.to_string())).unwrap_or_default()
+    nextstakes
+        .balance
+        .map(|b| format_mina(b.to_string()))
+        .unwrap_or_default()
 }
 
 pub fn get_delegate(nextstakes: &NextStakesQueryNextstakes) -> String {
