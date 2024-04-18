@@ -7,6 +7,7 @@ mod config;
 mod footer;
 mod header;
 mod icons;
+mod internal_commands;
 mod next_stakes;
 mod root;
 mod snarks;
