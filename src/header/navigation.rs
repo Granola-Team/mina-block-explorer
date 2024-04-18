@@ -81,7 +81,7 @@ pub fn Header() -> impl IntoView {
             ..Default::default()
         },
         NavEntry {
-            href: "/broadcast".to_string(),
+            href: "/broadcast/transaction".to_string(),
             text: "Send".to_string(),
             icon: NavIcon::Send,
             disabled: false,
