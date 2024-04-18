@@ -20,7 +20,6 @@ gloo-timers = "0.3.0"
 leptos_meta = { version = "0.6.9", features = ["csr"] }
 rand = "0.8.5"
 indoc = "2"
-num-format = "0.4"
 
 [dependencies.web-sys]
 version = "0.3"
