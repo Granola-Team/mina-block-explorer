@@ -1,4 +1,4 @@
-query FeeTransfersQuery(
+query InternalCommandsQuery(
   $sort_by: FeetransferSortByInput!
   $limit: Int = 10
   $query: FeetransferQueryInput!
