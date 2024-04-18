@@ -1,5 +1,5 @@
 use super::graphql::{stakes_query, stakes_query::StakesQueryStakes, StakesQuery};
-use crate::common::{constants::GRAPHQL_ENDPOINT, models::*};
+use crate::common::{constants::GRAPHQL_ENDPOINT, functions::*, models::*};
 use graphql_client::reqwest::post_graphql;
 
 pub fn get_public_key(stake: &StakesQueryStakes) -> String {
@@ -10,7 +10,10 @@ pub fn get_public_key(stake: &StakesQueryStakes) -> String {
 }
 
 pub fn get_balance(stake: &StakesQueryStakes) -> String {
-    stake.balance.unwrap_or_default().to_string()
+    stake
+        .balance
+        .map(|b| format_mina(b.to_string()))
+        .unwrap_or_default()
 }
 
 pub fn get_delegate(stake: &StakesQueryStakes) -> String {

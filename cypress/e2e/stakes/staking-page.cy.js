@@ -7,7 +7,7 @@ suite(["@CI"], "staking ledger", () => {
       .then((text) => {
         cy.log(text);
         var numText = text.replace("mina", "").trim();
-        var num = Number(numText);
+        var num = parseFloat(numText);
         expect(num).to.be.gt(0);
       });
   });
