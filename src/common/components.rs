@@ -264,10 +264,9 @@ where
             {match nav_entry.icon {
                 NavIcon::Blocks => view! { <BlockIcon/> },
                 NavIcon::Transactions => view! { <TransactionIcon/> },
-                NavIcon::More => view! { <MoreIcon/> },
+                NavIcon::Send => view! { <SendIcon/> },
                 NavIcon::SNARKs => view! { <CheckCircleIcon/> },
                 NavIcon::Staking => view! { <StakingIcon/> },
-                NavIcon::Broadcast => view! { <BroadcastIcon/> },
                 NavIcon::Accounts => view! { <AccountIcon/> },
                 NavIcon::ZKApps => view! { <ZKAppSymbol/> },
                 NavIcon::Tokens => view! { <TokenSymbol/> },
@@ -307,10 +306,9 @@ pub fn TabLink(nav_entry: NavEntry) -> impl IntoView {
             {match nav_entry.icon {
                 NavIcon::Blocks => view! { <BlockIcon/> },
                 NavIcon::Transactions => view! { <TransactionIcon/> },
-                NavIcon::More => view! { <MoreIcon/> },
+                NavIcon::Send => view! { <SendIcon/> },
                 NavIcon::SNARKs => view! { <CheckCircleIcon/> },
                 NavIcon::Staking => view! { <StakingIcon/> },
-                NavIcon::Broadcast => view! { <BroadcastIcon/> },
                 NavIcon::Accounts => view! { <AccountIcon/> },
                 NavIcon::ZKApps => view! { <ZKAppSymbol/> },
                 NavIcon::Tokens => view! { <TokenSymbol/> },

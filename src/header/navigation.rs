@@ -81,16 +81,11 @@ pub fn Header() -> impl IntoView {
             ..Default::default()
         },
         NavEntry {
-            href: "#".to_string(),
-            text: "More".to_string(),
-            icon: NavIcon::More,
+            href: "/broadcast/transaction".to_string(),
+            text: "Send".to_string(),
+            icon: NavIcon::Send,
             disabled: false,
-            sub_entries: Some(vec![NavEntry {
-                href: "/broadcast".to_string(),
-                text: "Broadcast".to_string(),
-                icon: NavIcon::Broadcast,
-                ..Default::default()
-            }]),
+            sub_entries: None,
             ..Default::default()
         },
     ];

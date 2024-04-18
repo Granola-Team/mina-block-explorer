@@ -6,7 +6,7 @@ suite(["@CI"], "broadcast page", () => {
   ];
 
   it(`contains a tab menu with ${tabs.length} tabs`, () => {
-    cy.visit("/broadcast");
+    cy.visit("/broadcast/transaction");
     cy.get("menu#tabs li a").should("have.lengthOf", tabs.length);
     tabs.forEach((tab) => {
       cy.get("menu#tabs li a").contains(tab.text).click();
