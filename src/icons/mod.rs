@@ -389,27 +389,7 @@ pub fn SearchIcon(#[prop(default = 20)] width: i8) -> impl IntoView {
 }
 
 #[component]
-pub fn MoreIcon(#[prop(default = 20)] width: i8) -> impl IntoView {
-    view! {
-        <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            width=width
-        >
-            <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
-            ></path>
-        </svg>
-    }
-}
-
-#[component]
-pub fn BroadcastIcon(#[prop(default = 20)] width: i8) -> impl IntoView {
+pub fn SendIcon(#[prop(default = 20)] width: i8) -> impl IntoView {
     view! {
         <svg
             xmlns="http://www.w3.org/2000/svg"
