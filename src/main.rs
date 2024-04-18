@@ -13,7 +13,7 @@ mod snarks;
 mod stakes;
 mod summary;
 mod tokens;
-mod transactions;
+mod user_commands;
 mod zk_apps;
 
 use leptos_meta::provide_meta_context;

@@ -1,4 +1,4 @@
-use crate::transactions::graphql::transactions_query;
+use super::graphql::transactions_query;
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Clone, Debug)]

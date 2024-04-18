@@ -20,6 +20,7 @@ use crate::{
     summary::page::SummaryPage,
     tokens::page::TokensPage,
     transactions::page::{CommandSpotlightPage, CommandsTabbedPage, UserCommandsPage},
+    user_commands::page::{TransactionSpotlightPage, TransactionTabbedPage, TransactionsPage},
     zk_apps::page::{
         ZkAppSpotlight, ZkAppTransactionSpotlightPage, ZkAppTransactionsPage, ZkAppsPage,
     },
