@@ -19,7 +19,7 @@ fn shared_get_columns() -> Vec<String> {
         String::from("Age"),
         String::from("Block Producer"),
         String::from("Coinbase"),
-        String::from("Transactions"),
+        String::from("User Commands"),
         String::from("SNARKs"),
         String::from("Coinbase Receiver"),
     ]
@@ -104,7 +104,7 @@ impl TableData for Vec<Option<BlocksQueryBlocksTransactionsUserCommands>> {
                     ),
                     convert_to_link(
                         get_user_command_hash(user_command),
-                        format!("/transactions/{}", get_user_command_hash(user_command)),
+                        format!("/commands/{}", get_user_command_hash(user_command)),
                     ),
                     wrap_in_pill(
                         decorate_with_currency_tag(

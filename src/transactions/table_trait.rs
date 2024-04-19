@@ -33,7 +33,7 @@ impl TableData for Vec<Option<TransactionsQueryTransactions>> {
                     ]),
                     convert_to_link(
                         transaction.get_hash(),
-                        format!("/transactions/{}", transaction.get_hash()),
+                        format!("/commands/{}", transaction.get_hash()),
                     ),
                     convert_array_to_span(vec![
                         convert_to_span(print_time_since(&transaction.get_block_datetime())),

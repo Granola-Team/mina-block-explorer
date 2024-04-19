@@ -24,7 +24,7 @@ suite(["@VisualRegression"], "pill color", () => {
         "blocks?query=3NLss1SvtWDK2rUAjHFwF6LMtD8thLoNhcYNSckgqM9bQksUDLFa",
       type: "table",
       table_name: "Blocks",
-      table_column: "Transactions",
+      table_column: "User Commands",
     },
   };
 

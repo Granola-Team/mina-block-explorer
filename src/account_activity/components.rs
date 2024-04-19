@@ -122,7 +122,7 @@ pub fn AccountDialogTransactionSection(
     let has_transactions = move || !transactions.clone().is_empty();
     view! {
         <AccountDialogSectionContainer
-            title=String::from("Transactions")
+            title=String::from("User Commands")
             showing_message=format!("Showing latest {} transactions", inner_transactions.len())
         >
             <Show
@@ -182,7 +182,7 @@ fn TransactionEntry(
         <AccountDialogSubsectionTable>
             <AccountDialogSubsectionRow
                 label="Hash"
-                el=convert_to_link(hash_sig.get(), format!("/transactions/{}", hash_sig.get()))
+                el=convert_to_link(hash_sig.get(), format!("/commands/{}", hash_sig.get()))
             />
             <AccountDialogSubsectionRow
                 label="Direction"
@@ -235,7 +235,7 @@ pub fn AccountTransactionsSection(
 
     view! {
         <TableSection
-            section_heading="Transactions"
+            section_heading="User Commands"
             controls=move || {
                 view! {
                     <UrlParamSelectMenu

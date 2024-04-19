@@ -37,7 +37,7 @@ suite(["@CI"], "meta title", () => {
     { url: "/", title: "Mina Blockchain Explorer | Search For Blocks" },
     { url: "/summary", title: "Mina Blockchain Explorer | Search For Blocks" },
     {
-      url: `/transactions/${txn_hash}`,
+      url: `/commands/${txn_hash}`,
       title: "Transaction Overview | WeStake.Club payout #72",
     },
     {

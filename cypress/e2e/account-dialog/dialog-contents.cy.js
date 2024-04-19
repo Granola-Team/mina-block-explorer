@@ -6,7 +6,7 @@ suite(["@CI"], "dialog", () => {
   });
 
   it(`has correct sections`, () => {
-    ["Transactions", "SNARK Jobs", "Block Production"].forEach((section) => {
+    ["User Commands", "SNARK Jobs", "Block Production"].forEach((section) => {
       cy.get("section h2", { timeout: 60000 }).contains(section, {
         timeout: 60000,
       });

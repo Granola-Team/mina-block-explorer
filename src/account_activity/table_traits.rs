@@ -90,7 +90,7 @@ impl TableData for Vec<Option<AccountActivityQueryDirectionalTransactions>> {
                         convert_array_to_span(vec![
                             convert_to_link(
                                 transaction.get_hash(),
-                                format!("/transactions/{}", transaction.get_hash()),
+                                format!("/commands/{}", transaction.get_hash()),
                             ),
                             convert_to_span(transaction.get_memo())
                                 .attr("class", "block text-xs font-light text-slate-400"),
@@ -99,7 +99,7 @@ impl TableData for Vec<Option<AccountActivityQueryDirectionalTransactions>> {
                     } else {
                         convert_to_link(
                             transaction.get_hash(),
-                            format!("/transactions/{}", transaction.get_hash()),
+                            format!("/commands/{}", transaction.get_hash()),
                         )
                     },
                     convert_to_pill(transaction.get_nonce(), ColorVariant::Grey),
@@ -251,7 +251,7 @@ impl TableData for Vec<Option<AccountActivityQueryBlocks>> {
             String::from("Age"),
             String::from("Block Producer"),
             String::from("Coinbase"),
-            String::from("Transactions"),
+            String::from("User Commands"),
             String::from("SNARKs"),
             String::from("Coinbase Receiver"),
         ]

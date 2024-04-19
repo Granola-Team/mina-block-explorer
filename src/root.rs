@@ -19,7 +19,7 @@ use crate::{
     stakes::page::StakesPage,
     summary::page::SummaryPage,
     tokens::page::TokensPage,
-    transactions::page::{TransactionSpotlightPage, TransactionTabbedPage, TransactionsPage},
+    transactions::page::{CommandSpotlightPage, CommandsTabbedPage, UserCommandsPage},
     zk_apps::page::{
         ZkAppSpotlight, ZkAppTransactionSpotlightPage, ZkAppTransactionsPage, ZkAppsPage,
     },
@@ -78,10 +78,11 @@ pub fn Root() -> impl IntoView {
                         <Route path="/analytics" view=BlockAnalyticsTab/>
                         <Route path="/*any" view=BlockSpotlightTab/>
                     </Route>
-                    <Route path="/transactions" view=TransactionTabbedPage>
-                        <Route path="/" view=TransactionsPage/>
+                    <Route path="/commands" view=CommandsTabbedPage>
+                        <Route path="/" view=UserCommandsPage/>
+                        <Route path="/user" view=UserCommandsPage/>
                         <Route
-                            path="/zk-txn"
+                            path="/zk-app"
                             view=move || {
                                 if BERKELEY_FEATURES_ENABLED {
                                     view! { <ZkAppTransactionsPage/> }
@@ -92,9 +93,9 @@ pub fn Root() -> impl IntoView {
                         />
 
                     </Route>
-                    <Route path="/transactions/:id" view=TransactionSpotlightPage/>
+                    <Route path="/commands/:id" view=CommandSpotlightPage/>
                     <Route
-                        path="/transactions/zk-app/:id"
+                        path="/commands/zk-app/:id"
                         view=move || {
                             if BERKELEY_FEATURES_ENABLED {
                                 view! { <ZkAppTransactionSpotlightPage/> }

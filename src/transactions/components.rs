@@ -51,7 +51,7 @@ pub fn TransactionsSection(
             }
             _ => {
                 view! {
-                    <TableSection section_heading="Transactions" controls=|| ().into_view()>
+                    <TableSection section_heading="User Commands" controls=|| ().into_view()>
                         <Table data=LoadingPlaceholder {}/>
                     </TableSection>
                 }
@@ -83,7 +83,7 @@ where
             when=move || transactions_show_condition.is_some()
             fallback=move || {
                 view! {
-                    <TableSection section_heading="Transactions" controls=|| ().into_view()>
+                    <TableSection section_heading="User Commands" controls=|| ().into_view()>
                         <Table data=LoadingPlaceholder {}/>
                     </TableSection>
                 }
@@ -94,7 +94,7 @@ where
                 let data = transactions_inner.clone().unwrap();
                 view! {
                     <TableSection
-                        section_heading="Transactions"
+                        section_heading="User Commands"
                         controls=move || {
                             view! {
                                 <UrlParamSelectMenu
@@ -144,7 +144,7 @@ where
                                         let pk_i = pk.get().unwrap();
                                         view! {
                                             <TableLink
-                                                href=format!("/transactions?account={}", pk_i)
+                                                href=format!("/commands?account={}", pk_i)
                                                 text="See all transactions"
                                             >
                                                 <TransactionIcon/>
