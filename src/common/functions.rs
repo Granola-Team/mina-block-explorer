@@ -211,16 +211,34 @@ pub fn nanomina_str_to_mina(n_str: &str) -> String {
 pub fn nanomina_to_mina(num: u64) -> String {
     let mut dec = Decimal::from(num);
     dec.set_scale(MINA_SCALE).unwrap();
-    let mut dec_str = dec.to_string();
-    if dec_str.contains('.') {
-        while dec_str.ends_with('0') {
-            dec_str.pop();
-        }
-        if dec_str.ends_with('.') {
-            dec_str.pop();
+    let num_str = dec.to_string();
+    format_mina(num_str)
+}
+
+pub fn format_mina(num_str: String) -> String {
+    let parts: Vec<&str> = num_str.split('.').collect();
+    let mut integral_part = parts[0].to_string();
+    let decimal_part = parts.get(1).unwrap_or(&"").to_string();
+
+    if integral_part.len() > 3 {
+        let mut index = integral_part.len() - 3;
+        while index > 0 {
+            integral_part.insert(index, ',');
+            if index > 3 {
+                index -= 3;
+            } else {
+                break;
+            }
         }
     }
-    dec_str
+
+    let trimmed_decimal_part = decimal_part.trim_end_matches('0');
+
+    if !trimmed_decimal_part.is_empty() {
+        format!("{}.{}", integral_part, trimmed_decimal_part)
+    } else {
+        integral_part
+    }
 }
 
 #[cfg(test)]
@@ -239,10 +257,9 @@ mod nanomina_tests {
 
     #[test]
     fn test_large_number() {
-        // Test 5 billion mina
         assert_eq!(
             nanomina_to_mina(5_000_000_000_111_111_111),
-            "5000000000.111111111"
+            "5,000,000,000.111111111"
         );
     }
 
@@ -253,7 +270,7 @@ mod nanomina_tests {
 
     #[test]
     fn test_boundary_value() {
-        assert_eq!(nanomina_to_mina(123_456_788), "0.123456788");
+        assert_eq!(nanomina_to_mina(999_999_999), "0.999999999");
     }
 }
 
