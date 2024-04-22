@@ -14,6 +14,7 @@ use crate::{
     config::BERKELEY_FEATURES_ENABLED,
     footer::Footer,
     header::navigation::Header,
+    internal_commands::components::InternalCommandsTab,
     next_stakes::page::NextStakesPage,
     snarks::page::SnarksPage,
     stakes::page::StakesPage,
@@ -81,7 +82,8 @@ pub fn Root() -> impl IntoView {
                     </Route>
                     <Route path="/commands" view=CommandsTabbedPage>
                         <Route path="/" view=UserCommandsPage/>
-                        <Route path="/user" view=UserCommandsPage/>
+                        <Route path="/user-commands" view=UserCommandsPage/>
+                        <Route path="/internal-commands" view=InternalCommandsTab/>
                         <Route
                             path="/zk-app"
                             view=move || {

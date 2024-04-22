@@ -10,12 +10,20 @@ use leptos_router::*;
 
 #[component]
 pub fn CommandsTabbedPage() -> impl IntoView {
-    let mut tabs = vec![NavEntry {
-        href: "/commands/user".to_string(),
-        text: "User Commands".to_string(),
-        icon: NavIcon::Transactions,
-        ..Default::default()
-    }];
+    let mut tabs = vec![
+        NavEntry {
+            href: "/commands/user-commands".to_string(),
+            text: "User Commands".to_string(),
+            icon: NavIcon::Transactions,
+            ..Default::default()
+        },
+        NavEntry {
+            href: "commands/internal-commands".to_string(),
+            text: "Internal Commands".to_string(),
+            icon: NavIcon::Transactions,
+            ..Default::default()
+        },
+    ];
 
     if BERKELEY_FEATURES_ENABLED {
         tabs.push(NavEntry {
