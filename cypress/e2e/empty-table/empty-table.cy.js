@@ -1,7 +1,8 @@
 suite(["@CI"], "empty table", () => {
   let pages = [
     "/blocks?query=fake",
-    "/commands?query=fake",
+    "/commands/user-commands?query=fake",
+    "/commands/internal-commands?query=fake",
     "/snarks?query=fake",
     "/stakes?query=fake",
     "/next-stakes?query=fake",

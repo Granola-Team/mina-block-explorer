@@ -4,3 +4,5 @@ export const DEFAULT_CANONICAL_BLOCK_HASH =
   "3NLn8e9HoJgvmbJubfX7wbhNzgcz9BSeS2LDNk4X7XngzhPgBfjf";
 export const DEFAULT_NON_CANONICAL_BLOCK_HASH =
   "3NK5vbcACcrrNL4SsJAbjJGirW1kfLLTZpU3W4ubvR54RsQj3G9t";
+export const DEFAULT_RECIPIENT =
+  "B62qjpvd42ctrFxmdHCCSGenEuhRQLv3QTLCaH8UYbHPJQDPCpphaka";

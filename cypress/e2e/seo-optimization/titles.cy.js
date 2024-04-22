@@ -3,6 +3,10 @@ suite(["@CI"], "meta title", () => {
   let block_hash = "3NLhBh3d4b91DPoJn5hhwRAWmHSAaG8Qz4W5r9FhJBCXLD3WrAt4";
   let txn_hash = "CkpYzvzTZeYEoiAGNn6xquSPqittAb5wrhZHtR14RaLkZfiRYQgT3";
   let pages = [
+    {
+      url: `/transactions/internal-commands`,
+      title: `Transactions | Internal Commands`,
+    },
     { url: `/addresses/accounts`, title: `Accounts | Search For Mina Account` },
     { url: "/blocks", title: "Blocks | Search for Mina Blocks" },
     { url: `/blocks/${block_hash}/`, title: "Block Overview | Spotlight" },

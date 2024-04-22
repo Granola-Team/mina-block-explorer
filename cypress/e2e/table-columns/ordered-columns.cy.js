@@ -22,6 +22,18 @@ suite(["@CI"], "transactions table", () => {
   );
 });
 
+suite(["@CI"], "internal commands table", () => {
+  let pages = ["/transactions/internal-commands"];
+  let columns = ["Recipient", "Fee", "Type", "Age"];
+
+  pages.forEach((page) =>
+    it(`on ${page} includes correct columns`, () => {
+      cy.visit(page);
+      cy.tableHasOrderedColumns("Internal Commands", columns);
+    }),
+  );
+});
+
 suite([""], "account transactions table", () => {
   let pages = [`/addresses/accounts/${DEFAULT_ACCOUNT_PK}`];
   let columns = [
