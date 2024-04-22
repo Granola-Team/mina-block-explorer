@@ -1,17 +1,22 @@
 use crate::{
-    common::{components::*, constants::*, functions::*, models::PageDimensions, table::*},
+    common::{
+        components::*, constants::*, functions::*, models::PageDimensions, search::SearchBar,
+        table::*,
+    },
     internal_commands::{
         functions::load_data, graphql::internal_commands_query::InternalCommandsQueryFeetransfers,
     },
 };
 use leptos::*;
 use leptos_meta::Title;
+use leptos_router::create_query_signal;
 
 #[component]
 pub fn InternalCommands(
     internal_commands: Vec<Option<InternalCommandsQueryFeetransfers>>,
 ) -> impl IntoView {
     view! {
+        <SearchBar placeholder="Exact search by recipient".to_string()/>
         <PageContainer>
             <TableSection section_heading="Internal Commands" controls=|| ().into_view()>
                 <InternalCommandsTable internal_commands/>
@@ -55,7 +60,11 @@ pub fn InternalCommandsTable(
 
 #[component]
 pub fn InternalCommandsTab() -> impl IntoView {
-    let resource = create_resource(|| (), |_| async move { load_data(TABLE_RECORD_SIZE, None).await });
+    let (recipient, _) = create_query_signal::<String>("query");
+    let resource = create_resource(
+        move || recipient.get(),
+        |opt_recipient| async move { load_data(TABLE_RECORD_SIZE, opt_recipient).await },
+    );
     view! {
         <Title text="Transactions | Internal Commands"/>
         {move || match resource.get() {
