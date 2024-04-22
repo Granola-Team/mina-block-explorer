@@ -84,7 +84,7 @@ pub async fn load_data(
 
 #[cfg(test)]
 mod tests {
-    use crate::transactions::functions::decode_memo;
+    use crate::user_commands::functions::decode_memo;
 
     #[test]
     fn test_b58_decoding() {

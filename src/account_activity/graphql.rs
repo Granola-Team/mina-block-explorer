@@ -8,7 +8,7 @@ use self::account_activity_query::{
 use crate::{
     blocks::graphql::blocks_query::{BlocksQueryBlocks, BlocksQueryBlocksTransactions},
     snarks::graphql::snarks_query::{SnarksQuerySnarks, SnarksQuerySnarksBlock},
-    transactions::graphql::transactions_query::{
+    user_commands::graphql::transactions_query::{
         TransactionsQueryTransactions, TransactionsQueryTransactionsBlock,
     },
 };

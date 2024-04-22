@@ -1,7 +1,7 @@
 import { DEFAULT_ACCOUNT_PK } from "../constants";
 
 suite(["@CI"], "transactions table", () => {
-  let pages = ["/commands/user"];
+  let pages = ["/commands/user-commands"];
   let columns = [
     "Height",
     "State Hash",
@@ -18,6 +18,18 @@ suite(["@CI"], "transactions table", () => {
     it(`on ${page} includes correct columns`, () => {
       cy.visit(page);
       cy.tableHasOrderedColumns("User Commands", columns);
+    }),
+  );
+});
+
+suite(["@CI"], "internal commands table", () => {
+  let pages = ["/commands/internal-commands"];
+  let columns = ["Recipient", "Fee", "Type", "Age"];
+
+  pages.forEach((page) =>
+    it(`on ${page} includes correct columns`, () => {
+      cy.visit(page);
+      cy.tableHasOrderedColumns("Internal Commands", columns);
     }),
   );
 });

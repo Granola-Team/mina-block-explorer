@@ -1,3 +1,5 @@
+import { DEFAULT_RECIPIENT } from "../constants";
+
 suite(["@CI"], "search bar", () => {
   let state_hash = "CkpYfTKJyVjWmM5Lb5SdzRL6GuEbJf6q7yYAyW6NkvkYFZQaY5PGz";
   let block_hash = "3NLqPGGVtxXdsQg2orrp3SFFE3ToeMuqWRerSRWbmAKuSk2tphWy";
@@ -8,7 +10,7 @@ suite(["@CI"], "search bar", () => {
     { origin: "/summary", input: block_hash, tableHeading: "Blocks" },
     { origin: "/blocks", input: block_hash, tableHeading: "Blocks" },
     {
-      origin: "/commands/user",
+      origin: "/commands/user-commands",
       input: state_hash,
       tableHeading: "User Commands",
     },
@@ -32,6 +34,15 @@ suite(["@CI"], "search bar", () => {
     cy.wait(1000);
     cy.get("input#searchbar").type(prover, { delay: 0 });
     cy.tableColumnValuesEqual(tableHeading, tableColumn, prover);
+  });
+
+  it("works on /commands/internal-commands page", () => {
+    let tableHeading = "Internal Commands";
+    let tableColumn = "Recipient";
+    cy.visit("/commands/internal-commands");
+    cy.wait(1000);
+    cy.get("input#searchbar").type(DEFAULT_RECIPIENT, { delay: 0 });
+    cy.tableColumnValuesEqual(tableHeading, tableColumn, DEFAULT_RECIPIENT);
   });
 
   pages.forEach(({ origin, input, tableHeading }) =>

@@ -7,13 +7,14 @@ mod config;
 mod footer;
 mod header;
 mod icons;
+mod internal_commands;
 mod next_stakes;
 mod root;
 mod snarks;
 mod stakes;
 mod summary;
 mod tokens;
-mod transactions;
+mod user_commands;
 mod zk_apps;
 
 use leptos_meta::provide_meta_context;

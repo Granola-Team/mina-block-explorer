@@ -78,6 +78,7 @@ suite(["@CI"], "pagination", () => {
     "/snarks",
     "/stakes",
     "/next-stakes",
+    "/transactions/internal-commands",
   ].forEach((page) =>
     it(`works on ${page}`, () => {
       cy.visit(page);

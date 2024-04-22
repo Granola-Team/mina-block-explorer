@@ -21,7 +21,14 @@ suite(["@CI"], "table of dynamic height", () => {
       url: `/blocks/${DEFAULT_CANONICAL_BLOCK_HASH}/internal-commands`,
       tableHeading: "Internal Commands",
     },
-    { url: "/commands/user", tableHeading: "User Commands" },
+
+    { url: "/commands/user-commands", tableHeading: "User Commands" },
+
+    {
+      url: "/commands/internal-commands",
+      tableHeading: "Internal Commands",
+    },
+
     { url: "/snarks", tableHeading: "SNARKs" },
     { url: "/stakes", tableHeading: "Current Staking Ledger" },
     { url: "/next-stakes", tableHeading: "Next Staking Ledger" },
