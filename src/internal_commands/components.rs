@@ -55,7 +55,7 @@ pub fn InternalCommandsTable(
 
 #[component]
 pub fn InternalCommandsTab() -> impl IntoView {
-    let resource = create_resource(|| (), |_| async move { load_data(TABLE_RECORD_SIZE).await });
+    let resource = create_resource(|| (), |_| async move { load_data(TABLE_RECORD_SIZE, None).await });
     view! {
         <Title text="Transactions | Internal Commands"/>
         {move || match resource.get() {
