@@ -10,7 +10,7 @@ suite(["@CI"], "search bar", () => {
     { origin: "/summary", input: block_hash, tableHeading: "Blocks" },
     { origin: "/blocks", input: block_hash, tableHeading: "Blocks" },
     {
-      origin: "/commands/user",
+      origin: "/commands/user-commands",
       input: state_hash,
       tableHeading: "User Commands",
     },
