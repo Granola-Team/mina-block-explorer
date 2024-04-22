@@ -39,7 +39,7 @@ suite(["@CI"], "search bar", () => {
   it("works on /transactions/internal-commands page", () => {
     let tableHeading = "Internal Commands";
     let tableColumn = "Recipient";
-    cy.visit("/internal-commands");
+    cy.visit("/commands/internal-commands");
     cy.wait(1000);
     cy.get("input#searchbar").type(DEFAULT_RECIPIENT, { delay: 0 });
     cy.tableColumnValuesEqual(tableHeading, tableColumn, DEFAULT_RECIPIENT);
