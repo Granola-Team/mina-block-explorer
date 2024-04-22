@@ -4,7 +4,7 @@ suite(["@CI"], "meta title", () => {
   let txn_hash = "CkpYzvzTZeYEoiAGNn6xquSPqittAb5wrhZHtR14RaLkZfiRYQgT3";
   let pages = [
     {
-      url: `/transactions/internal-commands`,
+      url: `/commands/internal-commands`,
       title: `Transactions | Internal Commands`,
     },
     { url: `/addresses/accounts`, title: `Accounts | Search For Mina Account` },

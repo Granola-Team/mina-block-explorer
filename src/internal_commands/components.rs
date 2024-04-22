@@ -17,6 +17,7 @@ pub fn InternalCommands(
 ) -> impl IntoView {
     view! {
         <SearchBar placeholder="Exact search by recipient".to_string()/>
+        <Title text="Transactions | Internal Commands"/>
         <PageContainer>
             <TableSection section_heading="Internal Commands" controls=|| ().into_view()>
                 <InternalCommandsTable internal_commands/>
@@ -66,7 +67,6 @@ pub fn InternalCommandsTab() -> impl IntoView {
         |opt_recipient| async move { load_data(TABLE_RECORD_SIZE, opt_recipient).await },
     );
     view! {
-        <Title text="Transactions | Internal Commands"/>
         {move || match resource.get() {
             Some(Ok(data)) => view! { <InternalCommands internal_commands=data.feetransfers/> },
             Some(Err(_)) => {

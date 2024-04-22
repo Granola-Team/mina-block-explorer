@@ -36,7 +36,7 @@ suite(["@CI"], "search bar", () => {
     cy.tableColumnValuesEqual(tableHeading, tableColumn, prover);
   });
 
-  it("works on /transactions/internal-commands page", () => {
+  it("works on /commands/internal-commands page", () => {
     let tableHeading = "Internal Commands";
     let tableColumn = "Recipient";
     cy.visit("/commands/internal-commands");

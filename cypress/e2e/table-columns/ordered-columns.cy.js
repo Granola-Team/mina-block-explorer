@@ -23,7 +23,7 @@ suite(["@CI"], "transactions table", () => {
 });
 
 suite(["@CI"], "internal commands table", () => {
-  let pages = ["/transactions/internal-commands"];
+  let pages = ["/commands/internal-commands"];
   let columns = ["Recipient", "Fee", "Type", "Age"];
 
   pages.forEach((page) =>
