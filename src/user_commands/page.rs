@@ -18,7 +18,7 @@ pub fn CommandsTabbedPage() -> impl IntoView {
             ..Default::default()
         },
         NavEntry {
-            href: "commands/internal-commands".to_string(),
+            href: "/commands/internal-commands".to_string(),
             text: "Internal Commands".to_string(),
             icon: NavIcon::Transactions,
             ..Default::default()
