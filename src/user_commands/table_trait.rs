@@ -6,7 +6,7 @@ impl TableData for Vec<Option<TransactionsQueryTransactions>> {
     fn get_columns(&self) -> Vec<String> {
         [
             "Height",
-            "State Hash",
+            "Txn Hash",
             "Age",
             "Type",
             "From",
