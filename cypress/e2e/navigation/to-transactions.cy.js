@@ -19,7 +19,7 @@ suite([], "transaction spotlight", () => {
     },
     {
       origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
-      column: "State Hash",
+      column: "Txn Hash",
       tableHeader: "User Commands",
     },
   ];
