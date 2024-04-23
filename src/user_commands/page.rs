@@ -94,7 +94,7 @@ pub fn CommandSpotlightPage() -> impl IntoView {
                                     ..Default::default()
                                 },
                                 SpotlightEntry {
-                                    label: "Transaction Hash".to_string(),
+                                    label: "Txn Hash".to_string(),
                                     any_el: Some(convert_to_span(transaction.get_hash())),
                                     copiable: true,
                                 },
@@ -239,7 +239,7 @@ pub fn CommandSpotlightPage() -> impl IntoView {
                             ..Default::default()
                         },
                         SpotlightEntry {
-                            label: "Transaction Hash".to_string(),
+                            label: "Txn Hash".to_string(),
                             ..Default::default()
                         },
                         SpotlightEntry {
