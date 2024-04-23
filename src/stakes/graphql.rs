@@ -8,7 +8,7 @@ use graphql_client::GraphQLQuery;
 #[derive(GraphQLQuery)]
 #[graphql(
     schema_path = "graphql/schemas/mina-explorer.graphql",
-    query_path = "graphql/queries/stakes.graphql",
+    query_path = "graphql/queries/staking_ledgers.graphql",
     response_derives = "Serialize,PartialEq,Debug,Clone",
     skip_serializing_none
 )]

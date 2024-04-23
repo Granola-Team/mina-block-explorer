@@ -1,5 +1,9 @@
-query StakesQuery($limit: Int = 10, $sort_by: StakeSortByInput!, $query: StakeQueryInput!) {
-  stakes(limit: $limit, sortBy: $sort_by, query: $query ) {
+query StakesQuery(
+  $limit: Int = 10
+  $sort_by: StakeSortByInput!
+  $query: StakeQueryInput!
+) {
+  stakes(limit: $limit, sortBy: $sort_by, query: $query) {
     balance
     chainId
     delegate

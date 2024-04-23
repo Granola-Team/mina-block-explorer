@@ -1,5 +1,9 @@
-query NextStakesQuery ($limit: Int = 10, $sort_by: NextstakeSortByInput!, $query: NextstakeQueryInput!) {
-  nextstakes(limit: $limit, sortBy: $sort_by, query: $query ) {
+query NextStakesQuery(
+  $limit: Int = 10
+  $sort_by: NextstakeSortByInput!
+  $query: NextstakeQueryInput!
+) {
+  nextstakes(limit: $limit, sortBy: $sort_by, query: $query) {
     balance
     delegate
     ledgerHash
