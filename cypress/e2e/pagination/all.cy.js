@@ -76,7 +76,7 @@ suite(["@CI"], "pagination", () => {
     "/blocks",
     "/commands",
     "/snarks",
-    "/stakes",
+    "/staking-ledgers",
     "/next-stakes",
     "/transactions/internal-commands",
   ].forEach((page) =>
