@@ -73,7 +73,10 @@ fn NextStakesPageContents() -> impl IntoView {
                                     section_heading="Next Staking Ledger"
                                     controls=move || {
                                         view! {
-                                            <StakesNavButton href="/staking-ledgers" text="Current Stakes"/>
+                                            <StakesNavButton
+                                                href="/staking-ledgers"
+                                                text="Current Stakes"
+                                            />
                                         }
                                     }
                                 >

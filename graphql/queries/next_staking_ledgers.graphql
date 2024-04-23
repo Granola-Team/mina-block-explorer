@@ -1,4 +1,4 @@
-query NextStakesQuery(
+query NextStakingLedgersQuery(
   $limit: Int = 10
   $sort_by: NextstakeSortByInput!
   $query: NextstakeQueryInput!

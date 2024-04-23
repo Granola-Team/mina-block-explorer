@@ -1,5 +1,5 @@
 // use chrono::Utc;
-use self::stakes_query::StakeQueryInput;
+use self::staking_ledgers_query::StakeQueryInput;
 use graphql_client::GraphQLQuery;
 
 // type DateTime = chrono::DateTime<Utc>;
@@ -12,7 +12,7 @@ use graphql_client::GraphQLQuery;
     response_derives = "Serialize,PartialEq,Debug,Clone",
     skip_serializing_none
 )]
-pub struct StakesQuery;
+pub struct StakingLedgersQuery;
 
 #[allow(clippy::derivable_impls)]
 impl Default for StakeQueryInput {

@@ -1,4 +1,4 @@
-query StakesQuery(
+query StakingLedgersQuery(
   $limit: Int = 10
   $sort_by: StakeSortByInput!
   $query: StakeQueryInput!
