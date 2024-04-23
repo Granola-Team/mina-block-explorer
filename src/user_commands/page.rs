@@ -155,12 +155,9 @@ pub fn CommandSpotlightPage() -> impl IntoView {
                                 SpotlightEntry {
                                     label: "Fee".to_string(),
                                     any_el: Some(
-                                        wrap_in_pill(
-                                            decorate_with_currency_tag(
-                                                transaction.get_fee(),
-                                                "mina".to_string(),
-                                            ),
-                                            ColorVariant::Orange,
+                                        decorate_with_currency_tag(
+                                            transaction.get_fee(),
+                                            "mina".to_string(),
                                         ),
                                     ),
                                     ..Default::default()

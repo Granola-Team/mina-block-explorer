@@ -119,7 +119,6 @@ mod pagination_tests {
 pub enum ColorVariant {
     Green,
     Blue,
-    Orange,
     Grey,
     Transparent,
     DarkBlue,

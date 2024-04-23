@@ -60,10 +60,7 @@ impl TableData for Vec<Option<ZkAppTransactionData>> {
                             .collect::<Vec<_>>(),
                     )
                     .attr("class", "block"),
-                    wrap_in_pill(
-                        decorate_with_currency_tag(txn.fee.to_string(), "mina".to_string()),
-                        ColorVariant::Orange,
-                    ),
+                    decorate_with_currency_tag(txn.fee.to_string(), "mina".to_string()),
                 ],
                 None => vec![],
             })

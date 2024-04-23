@@ -470,10 +470,6 @@ pub fn AnalyticsSimpleInfo(
             container_class_str.push_str(" bg-green/25 ");
             value_class_str.push_str(" text-green ");
         }
-        ColorVariant::Orange => {
-            container_class_str.push_str(" bg-granola-orange/25 ");
-            value_class_str.push_str(" text-granola-orange ");
-        }
         ColorVariant::Grey => {
             container_class_str.push_str(" bg-slate-400/25 ");
             value_class_str.push_str(" text-slate-400 ");

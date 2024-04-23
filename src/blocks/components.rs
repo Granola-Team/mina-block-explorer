@@ -246,15 +246,13 @@ pub fn BlockAnalytics(block: BlocksQueryBlocks) -> impl IntoView {
                 <AnalyticsSmContainer>
                     <AnalyticsSimpleInfo
                         label=convert_to_span("Total Internal Fees Transferred".into())
-                        value=wrap_in_pill(
+                        value=
                             decorate_with_currency_tag(
                                 get_transaction_fees(&block_sig.get()),
                                 "mina".to_string(),
-                            ),
-                            ColorVariant::Orange,
-                        )
+                            )
 
-                        variant=ColorVariant::Orange
+                        variant=ColorVariant::Transparent
                     />
                 </AnalyticsSmContainer>
                 <AnalyticsSmContainer>
@@ -497,9 +495,9 @@ pub fn BlockSpotlight(block: BlocksQueryBlocks) -> impl IntoView {
         },
         SpotlightEntry {
             label: "SNARK Fees".to_string(),
-            any_el: Some(wrap_in_pill(
-                decorate_with_currency_tag(get_snark_fees(&block), "mina".to_string()),
-                ColorVariant::Orange,
+            any_el: Some(decorate_with_currency_tag(
+                get_snark_fees(&block),
+                "mina".to_string(),
             )),
             ..Default::default()
         },
@@ -520,9 +518,9 @@ pub fn BlockSpotlight(block: BlocksQueryBlocks) -> impl IntoView {
         },
         SpotlightEntry {
             label: "Transaction Fees".to_string(),
-            any_el: Some(wrap_in_pill(
-                decorate_with_currency_tag(get_transaction_fees(&block), "mina".to_string()),
-                ColorVariant::Orange,
+            any_el: Some(decorate_with_currency_tag(
+                get_transaction_fees(&block),
+                "mina".to_string(),
             )),
             ..Default::default()
         },

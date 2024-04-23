@@ -700,7 +700,6 @@ pub fn pill_variant_to_style_str(pill_variant: ColorVariant) -> String {
     match pill_variant {
         ColorVariant::Green => "bg-green".to_string(),
         ColorVariant::Blue => "bg-blue".to_string(),
-        ColorVariant::Orange => "bg-granola-orange".to_string(),
         ColorVariant::Grey => "bg-slate-400".to_string(),
         ColorVariant::Transparent => "bg-transparent".to_string(),
         ColorVariant::DarkBlue => "bg-dark-blue".to_string(),
