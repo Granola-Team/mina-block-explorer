@@ -70,10 +70,7 @@ impl TableData for Vec<Option<TransactionsQueryTransactions>> {
                         decorate_with_currency_tag(transaction.get_fee(), "mina".to_string()),
                         ColorVariant::Orange,
                     ),
-                    wrap_in_pill(
-                        decorate_with_currency_tag(transaction.get_amount(), "mina".to_string()),
-                        ColorVariant::Green,
-                    ),
+                    decorate_with_currency_tag(transaction.get_amount(), "mina".to_string()),
                 ],
                 None => vec![],
             })

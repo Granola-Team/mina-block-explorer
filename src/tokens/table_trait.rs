@@ -24,12 +24,9 @@ impl TableData for Vec<Option<TokenData>> {
                 Some(token) => vec![
                     convert_to_pill(token.token_symbol.to_string(), ColorVariant::Grey),
                     convert_to_link(token.token_id.to_string(), "#".to_string()),
-                    wrap_in_pill(
-                        decorate_with_currency_tag(
-                            token.token_balance.to_string(),
-                            token.token_symbol.to_string(),
-                        ),
-                        ColorVariant::Green,
+                    decorate_with_currency_tag(
+                        token.token_balance.to_string(),
+                        token.token_symbol.to_string(),
                     ),
                     convert_to_link(token.owner_pk.to_string(), "#".to_string()),
                     convert_to_pill(token.token_holders_count.to_string(), ColorVariant::Blue),

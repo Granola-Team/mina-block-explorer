@@ -34,13 +34,10 @@ impl TableData for Vec<Option<AllAccountSummary>> {
                         "/addresses/accounts/B62qr9zQ1LKnKM3d7wmFVjv3TzSV6fnXBZ162scK49NTHCA8Xc7PVKq".to_string(),
                     ),
                     convert_to_span(all_account_sum.username.to_string()),
-                    wrap_in_pill(
                         decorate_with_currency_tag(
                             all_account_sum.balance.to_string(),
                             "mina".to_string(),
                         ),
-                        ColorVariant::Green,
-                    ),
                     convert_to_pill(all_account_sum.nonce.to_string(), ColorVariant::Grey),
                     convert_to_link(
                         all_account_sum.delegate.to_string(),
@@ -123,13 +120,7 @@ impl TableData for Vec<Option<AccountActivityQueryDirectionalTransactions>> {
                         format!("/addresses/accounts/{}", transaction.get_counterparty()),
                     ),
                     convert_array_to_span(vec![
-                        wrap_in_pill(
-                            decorate_with_currency_tag(
-                                transaction.get_amount(),
-                                "mina".to_string(),
-                            ),
-                            ColorVariant::Green,
-                        ),
+                        decorate_with_currency_tag(transaction.get_amount(), "mina".to_string()),
                         wrap_in_pill(
                             convert_array_to_span(vec![decorate_with_currency_tag(
                                 transaction.get_fee(),
@@ -280,10 +271,7 @@ impl TableData for Vec<Option<AccountActivityQueryBlocks>> {
                         block.get_creator_account(),
                         format!("/blocks/accounts/{}", block.get_creator_account()),
                     ),
-                    wrap_in_pill(
-                        decorate_with_currency_tag(block.get_coinbase(), "mina".to_string()),
-                        ColorVariant::Green,
-                    ),
+                    decorate_with_currency_tag(block.get_coinbase(), "mina".to_string()),
                     convert_to_pill(block.get_transaction_count(), ColorVariant::Blue),
                     convert_to_pill(block.get_snark_job_count(), ColorVariant::Blue),
                     convert_to_link(

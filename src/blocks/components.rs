@@ -234,16 +234,14 @@ pub fn BlockAnalytics(block: BlocksQueryBlocks) -> impl IntoView {
                 <AnalyticsSmContainer>
                     <AnalyticsSimpleInfo
                         label=convert_to_span("Total User Amounts Transferred".into())
-                        value=wrap_in_pill(
-                            decorate_with_currency_tag(
-                                nanomina_to_mina(user_command_amount_total()),
-                                "mina".to_string(),
-                            ),
-                            ColorVariant::Green,
+                        value=decorate_with_currency_tag(
+                            nanomina_to_mina(user_command_amount_total()),
+                            "mina".to_string(),
                         )
 
-                        variant=ColorVariant::Green
+                        variant=ColorVariant::Transparent
                     />
+
                 </AnalyticsSmContainer>
                 <AnalyticsSmContainer>
                     <AnalyticsSimpleInfo
@@ -469,9 +467,9 @@ pub fn BlockSpotlight(block: BlocksQueryBlocks) -> impl IntoView {
         },
         SpotlightEntry {
             label: "Coinbase".to_string(),
-            any_el: Some(wrap_in_pill(
-                decorate_with_currency_tag(get_coinbase(&block), "mina".to_string()),
-                ColorVariant::Green,
+            any_el: Some(decorate_with_currency_tag(
+                get_coinbase(&block),
+                "mina".to_string(),
             )),
             ..Default::default()
         },
@@ -538,9 +536,9 @@ pub fn BlockSpotlight(block: BlocksQueryBlocks) -> impl IntoView {
         },
         SpotlightEntry {
             label: "Total Currency".to_string(),
-            any_el: Some(wrap_in_pill(
-                decorate_with_currency_tag(get_total_currency(&block), "mina".to_string()),
-                ColorVariant::Green,
+            any_el: Some(decorate_with_currency_tag(
+                get_total_currency(&block),
+                "mina".to_string(),
             )),
             ..Default::default()
         },

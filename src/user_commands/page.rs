@@ -131,12 +131,9 @@ pub fn CommandSpotlightPage() -> impl IntoView {
                                 SpotlightEntry {
                                     label: "Amount".to_string(),
                                     any_el: {
-                                        let amount_el = wrap_in_pill(
-                                            decorate_with_currency_tag(
-                                                transaction.get_amount(),
-                                                "mina".to_string(),
-                                            ),
-                                            ColorVariant::Green,
+                                        let amount_el = decorate_with_currency_tag(
+                                            transaction.get_amount(),
+                                            "mina".to_string(),
                                         );
                                         Some(
                                             if transaction.get_kind() == "STAKE_DELEGATION" {

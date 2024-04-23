@@ -53,10 +53,7 @@ impl TableData for Vec<Option<BlocksQueryBlocks>> {
                         get_creator_account(block),
                         format!("/blocks/accounts/{}", get_creator_account(block)),
                     ),
-                    wrap_in_pill(
-                        decorate_with_currency_tag(get_coinbase(block), "mina".to_string()),
-                        ColorVariant::Green,
-                    ),
+                    decorate_with_currency_tag(get_coinbase(block), "mina".to_string()),
                     convert_to_pill(
                         get_transaction_count(block).map_or_else(String::new, |o| o.to_string()),
                         ColorVariant::Blue,
@@ -113,12 +110,9 @@ impl TableData for Vec<Option<BlocksQueryBlocksTransactionsUserCommands>> {
                         ),
                         ColorVariant::Orange,
                     ),
-                    wrap_in_pill(
-                        decorate_with_currency_tag(
-                            get_user_command_amount(user_command),
-                            "mina".to_string(),
-                        ),
-                        ColorVariant::Green,
+                    decorate_with_currency_tag(
+                        get_user_command_amount(user_command),
+                        "mina".to_string(),
                     ),
                 ],
                 None => vec![],
@@ -157,10 +151,7 @@ impl TableData for SummaryPageBlocksQueryBlocks {
                         get_creator_account(block),
                         format!("/summary/accounts/{}", get_creator_account(block)),
                     ),
-                    wrap_in_pill(
-                        decorate_with_currency_tag(get_coinbase(block), "mina".to_string()),
-                        ColorVariant::Green,
-                    ),
+                    decorate_with_currency_tag(get_coinbase(block), "mina".to_string()),
                     convert_to_pill(
                         get_transaction_count(block).map_or_else(String::new, |o| o.to_string()),
                         ColorVariant::Blue,

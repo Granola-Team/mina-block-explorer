@@ -37,12 +37,9 @@ pub fn ZkAppSpotlight() -> impl IntoView {
                     SpotlightEntry {
                         label: String::from("Balance"),
                         any_el: Some(
-                            wrap_in_pill(
-                                decorate_with_currency_tag(
-                                    "1324.593847562".to_string(),
-                                    "mina".to_string(),
-                                ),
-                                ColorVariant::Green,
+                            decorate_with_currency_tag(
+                                "1324.593847562".to_string(),
+                                "mina".to_string(),
                             ),
                         ),
                         ..Default::default()

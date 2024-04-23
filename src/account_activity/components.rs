@@ -208,15 +208,9 @@ fn TransactionEntry(
                 label="Amount/Fee"
                 el=convert_array_to_span(
                     vec![
-                        wrap_in_pill(
-                            decorate_with_currency_tag(amount, "MINA".to_string()),
-                            ColorVariant::Green,
-                        ),
+                        decorate_with_currency_tag(amount, "MINA".to_string()),
                         convert_to_span(" / ".to_string()).attr("class", "whitespace-pre"),
-                        wrap_in_pill(
-                            decorate_with_currency_tag(fee, "MINA".to_string()),
-                            ColorVariant::Orange,
-                        ),
+                        decorate_with_currency_tag(fee, "MINA".to_string()),
                     ],
                 )
             />
