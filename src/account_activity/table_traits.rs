@@ -121,14 +121,11 @@ impl TableData for Vec<Option<AccountActivityQueryDirectionalTransactions>> {
                     ),
                     convert_array_to_span(vec![
                         decorate_with_currency_tag(transaction.get_amount(), "mina".to_string()),
-                        wrap_in_pill(
-                            convert_array_to_span(vec![decorate_with_currency_tag(
-                                transaction.get_fee(),
-                                "mina".to_string(),
-                            )])
-                            .attr("class", "text-xs text-slate-400"),
-                            ColorVariant::Transparent,
-                        ),
+                        convert_array_to_span(vec![decorate_with_currency_tag(
+                            transaction.get_fee(),
+                            "mina".to_string(),
+                        )])
+                        .attr("class", "text-xs text-slate-400"),
                     ])
                     .attr("class", "flex flex-col items-start"),
                 ],

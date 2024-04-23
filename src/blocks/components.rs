@@ -246,11 +246,10 @@ pub fn BlockAnalytics(block: BlocksQueryBlocks) -> impl IntoView {
                 <AnalyticsSmContainer>
                     <AnalyticsSimpleInfo
                         label=convert_to_span("Total Internal Fees Transferred".into())
-                        value=
-                            decorate_with_currency_tag(
-                                get_transaction_fees(&block_sig.get()),
-                                "mina".to_string(),
-                            )
+                        value=decorate_with_currency_tag(
+                            get_transaction_fees(&block_sig.get()),
+                            "mina".to_string(),
+                        )
 
                         variant=ColorVariant::Transparent
                     />
