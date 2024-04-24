@@ -634,7 +634,7 @@ pub fn BlocksSection() -> impl IntoView {
         move || (query_params_map.get(), canonical_qp.get()),
         |(value, canonical)| async move {
             let public_key = value.get("account");
-            let block_hash = value.get("query");
+            let block_search = parse_query_for_multisearch(value.get("query").cloned());
             let canonical = if canonical.is_none() {
                 Some(true)
             } else {
@@ -642,9 +642,13 @@ pub fn BlocksSection() -> impl IntoView {
             };
             load_data(
                 TABLE_RECORD_SIZE,
-                public_key.cloned(),
-                block_hash.cloned(),
-                None,
+                if let Some(_) = public_key {
+                    public_key.cloned()
+                } else {
+                    block_search.public_key
+                },
+                block_search.state_hash,
+                block_search.block_height,
                 canonical,
             )
             .await
