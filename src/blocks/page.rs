@@ -1,5 +1,10 @@
 use super::{components::*, functions::*, models::*};
-use crate::common::{components::*, constants::TABLE_RECORD_SIZE, models::*, search::*};
+use crate::common::{
+    components::*,
+    constants::{TABLE_RECORD_SIZE, *},
+    models::*,
+    search::*,
+};
 use leptos::*;
 use leptos_meta::Title;
 use leptos_router::*;
@@ -8,7 +13,7 @@ use leptos_router::*;
 pub fn LatestBlocksPage() -> impl IntoView {
     view! {
         <Title text="Blocks | Search for Mina Blocks"/>
-        <SearchBar placeholder="Exact search for block hash"/>
+        <SearchBar placeholder=BLOCK_SEARCH_PLACEHOLDER_TEXT/>
         <PageContainer>
             <BlocksSection/>
         </PageContainer>

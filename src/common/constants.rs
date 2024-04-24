@@ -4,3 +4,5 @@ pub const TABLE_RECORD_SIZE: i64 = 100;
 pub const TABLE_DEFAULT_PAGE_SIZE: usize = 10;
 pub const ESTIMATED_ROW_HEIGHT: usize = 48;
 pub const DEFAULT_ESTIMATED_NON_TABLE_SPACE_IN_SECTIONS: usize = 160;
+pub const BLOCK_SEARCH_PLACEHOLDER_TEXT: &str =
+    "Height: H348465; State Hash: 3N...; Address: B62...";
