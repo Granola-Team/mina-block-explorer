@@ -274,6 +274,66 @@ pub fn parse_query_for_multisearch(query_opt: Option<String>) -> BlockMultiSearc
     }
 }
 
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_none_input() {
+        let result = parse_query_for_multisearch(None);
+        assert!(result.public_key.is_none());
+        assert!(result.state_hash.is_none());
+        assert!(result.block_height.is_none());
+    }
+
+    #[test]
+    fn test_state_hash_input() {
+        let state_hash = "3NKGgTk7en3347KH81yDra876GPAUSoSePrfVKPmwR1KHfMpvJC5";
+        let query = Some(state_hash.to_string());
+        let result = parse_query_for_multisearch(query);
+        assert_eq!(result.state_hash, Some(state_hash.to_string()));
+        assert!(result.public_key.is_none());
+        assert!(result.block_height.is_none());
+    }
+
+    #[test]
+    fn test_block_height_input() {
+        let query = Some("H123".to_string());
+        let result = parse_query_for_multisearch(query);
+        assert_eq!(result.block_height, Some(123));
+        assert!(result.public_key.is_none());
+        assert!(result.state_hash.is_none());
+    }
+
+    #[test]
+    fn test_public_key_input() {
+        let pk = "B62qqhURJQo3CvWC3WFo9LhUhtcaJWLBcJsaA3DXaU2GH5KgXujZiwB";
+        let query = Some(pk.to_string());
+        let result = parse_query_for_multisearch(query);
+        assert_eq!(result.public_key, Some(pk.to_string()));
+        assert!(result.state_hash.is_none());
+        assert!(result.block_height.is_none());
+    }
+
+    #[test]
+    fn test_invalid_input() {
+        let query = Some("invalid_input".to_string());
+        let result = parse_query_for_multisearch(query);
+        assert!(result.public_key.is_none());
+        assert!(result.state_hash.is_none());
+        assert!(result.block_height.is_none());
+    }
+
+    #[test]
+    fn test_block_height_edge_case_empty() {
+        let query = Some("H".to_string());
+        let result = parse_query_for_multisearch(query);
+        assert!(result.block_height.is_none());
+        assert!(result.public_key.is_none());
+        assert!(result.state_hash.is_none());
+    }
+}
+
 pub async fn load_data(
     limit: i64,
     public_key: Option<String>,
