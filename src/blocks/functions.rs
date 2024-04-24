@@ -252,7 +252,7 @@ pub fn parse_query_for_multisearch(query_opt: Option<String>) -> BlockMultiSearc
     let mut block_height = None;
     match query_opt {
         Some(query) if query.starts_with("3N") => state_hash = Some(query),
-        Some(query) if query.starts_with("H") => {
+        Some(query) if query.starts_with('H') => {
             let height = if !query.is_empty() {
                 query.chars().skip(1).collect::<String>()
             } else {
@@ -267,11 +267,11 @@ pub fn parse_query_for_multisearch(query_opt: Option<String>) -> BlockMultiSearc
         Some(query) if query.starts_with("B62") => public_key = Some(query),
         _ => (),
     }
-    return BlockMultiSearch {
+    BlockMultiSearch {
         public_key,
         state_hash,
         block_height,
-    };
+    }
 }
 
 pub async fn load_data(

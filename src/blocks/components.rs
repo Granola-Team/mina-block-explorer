@@ -642,7 +642,7 @@ pub fn BlocksSection() -> impl IntoView {
             };
             load_data(
                 TABLE_RECORD_SIZE,
-                if let Some(_) = public_key {
+                if public_key.is_some() {
                     public_key.cloned()
                 } else {
                     block_search.public_key
