@@ -10,3 +10,9 @@ pub enum BlockContent {
     SNARKJobs,
     Analytics,
 }
+
+pub struct BlockMultiSearch {
+    pub block_height: Option<i64>,
+    pub public_key: Option<String>,
+    pub state_hash: Option<String>
+}

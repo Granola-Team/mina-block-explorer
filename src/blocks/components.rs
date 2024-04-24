@@ -726,26 +726,7 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
         move || (query_params_map.get(), canonical_qp.get()),
         |(value, canonical)| async move {
             let query_opt = value.get("query");
-            let mut public_key = None;
-            let mut state_hash = None;
-            let mut block_height = None;
-            match query_opt {
-                Some(query) if query.starts_with("3N") => state_hash = Some(query),
-                Some(query) if query.starts_with("H") => {
-                    let height = if !query.is_empty() {
-                        query.chars().skip(1).collect::<String>()
-                    } else {
-                        query.to_string()
-                    };
-                    let parsed_value: Result<i64, _> = height.parse();
-                    match parsed_value {
-                        Ok(number) => block_height = Some(number),
-                        Err(_e) => (),
-                    }
-                }
-                Some(query) if query.starts_with("B62") => public_key = Some(query),
-                _ => (),
-            }
+            let block_search = parse_query_for_multisearch(query_opt.cloned());
             let canonical = if canonical.is_none() {
                 Some(true)
             } else {
@@ -753,9 +734,9 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
             };
             load_data(
                 TABLE_RECORD_SIZE,
-                public_key.cloned(),
-                state_hash.cloned(),
-                block_height,
+                block_search.public_key,
+                block_search.state_hash,
+                block_search.block_height,
                 canonical,
             )
             .await
