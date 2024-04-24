@@ -1,9 +1,13 @@
-use super::{graphql::{
-    blocks_query::{
-        BlocksQueryBlocks, BlocksQueryBlocksSnarkJobs, BlocksQueryBlocksTransactionsUserCommands,
+use super::{
+    graphql::{
+        blocks_query::{
+            BlocksQueryBlocks, BlocksQueryBlocksSnarkJobs,
+            BlocksQueryBlocksTransactionsUserCommands,
+        },
+        *,
     },
-    *,
-}, models::BlockMultiSearch};
+    models::BlockMultiSearch,
+};
 use crate::common::{
     constants::GRAPHQL_ENDPOINT,
     functions::{nanomina_str_to_mina, nanomina_to_mina},
@@ -267,7 +271,7 @@ pub fn parse_query_for_multisearch(query_opt: Option<String>) -> BlockMultiSearc
         public_key,
         state_hash,
         block_height,
-    }
+    };
 }
 
 pub async fn load_data(
