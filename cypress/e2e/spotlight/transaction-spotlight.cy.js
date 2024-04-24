@@ -9,7 +9,7 @@ suite(["@CI"], "transaction spotlight", () => {
     "From",
     "Nonce",
     "Kind",
-    "Transaction Hash",
+    "Txn Hash",
     "Block Height",
     "Block State Hash",
     "Fee",

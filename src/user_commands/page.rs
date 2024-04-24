@@ -18,7 +18,7 @@ pub fn CommandsTabbedPage() -> impl IntoView {
             ..Default::default()
         },
         NavEntry {
-            href: "commands/internal-commands".to_string(),
+            href: "/commands/internal-commands".to_string(),
             text: "Internal Commands".to_string(),
             icon: NavIcon::Transactions,
             ..Default::default()
@@ -42,7 +42,7 @@ pub fn UserCommandsPage() -> impl IntoView {
     let query_params_map: Memo<ParamsMap> = use_query_map();
 
     view! {
-        <SearchBar placeholder="Exact search by state hash".to_string()/>
+        <SearchBar placeholder="Exact search by txn hash".to_string()/>
         <Title text="Commands | Search For Commands"/>
         <PageContainer>
             {move || {
@@ -94,7 +94,7 @@ pub fn CommandSpotlightPage() -> impl IntoView {
                                     ..Default::default()
                                 },
                                 SpotlightEntry {
-                                    label: "Transaction Hash".to_string(),
+                                    label: "Txn Hash".to_string(),
                                     any_el: Some(convert_to_span(transaction.get_hash())),
                                     copiable: true,
                                 },
@@ -233,7 +233,7 @@ pub fn CommandSpotlightPage() -> impl IntoView {
                             ..Default::default()
                         },
                         SpotlightEntry {
-                            label: "Transaction Hash".to_string(),
+                            label: "Txn Hash".to_string(),
                             ..Default::default()
                         },
                         SpotlightEntry {

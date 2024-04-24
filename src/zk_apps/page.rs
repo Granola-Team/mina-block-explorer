@@ -297,7 +297,7 @@ pub fn ZkAppTransactionSpotlightPage() -> impl IntoView {
             ..Default::default()
         },
         SpotlightEntry {
-            label: "Transaction Hash".to_string(),
+            label: "Txn Hash".to_string(),
             any_el: Some(convert_to_span(
                 "5JvEERgjGA3dYZSKNAz7DnDVNgERvJQrek3tCdMhTUsacov6LUzy".to_string(),
             )),

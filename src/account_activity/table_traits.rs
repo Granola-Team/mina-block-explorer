@@ -55,7 +55,7 @@ impl TableData for Vec<Option<AccountActivityQueryDirectionalTransactions>> {
     fn get_columns(&self) -> Vec<String> {
         [
             "Height",
-            "State Hash",
+            "Txn Hash",
             "Nonce",
             "Age",
             "Type",

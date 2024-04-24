@@ -288,8 +288,8 @@ pub fn TabLink(nav_entry: NavEntry) -> impl IntoView {
     let base_link_class = "mx-1 p-2 flex font-bold text-sm uppercase border-b border-b-2 whitespace-nowrap box-border";
     let disabled_link_class =
         "text-white border-transparent opacity-50 cursor-not-allowed pointer-events-none";
-    let active_state = "text-granola-orange border-granola-orange";
-    let inactive_state = "text-white border-transparent hover:border-white";
+    let active_state = "active text-granola-orange border-granola-orange";
+    let inactive_state = "inactive text-white border-transparent hover:border-white";
     view! {
         <a
             class=move || {
