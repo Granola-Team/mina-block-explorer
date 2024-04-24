@@ -27,7 +27,7 @@ pub fn SummaryPage() -> impl IntoView {
                 ],
             )
 
-            search_placeholder="Height: H348465; Txn Hash: 3N...; Address: B62..."
+            search_placeholder="Height: H348465; State Hash: 3N...; Address: B62..."
         />
         <Title text="Mina Blockchain Explorer | Search For Blocks"/>
         <PageContainer>
