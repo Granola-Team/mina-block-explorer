@@ -8,7 +8,7 @@ use crate::{
         search::*,
         table::*,
     },
-    summary::functions::load_data as load_summary_data,
+    summary::{components::EpochSlotIndicator, functions::load_data as load_summary_data},
 };
 use leptos::*;
 use leptos_meta::Title;
@@ -32,6 +32,7 @@ pub fn StakesPage() -> impl IntoView {
         />
         <SearchBar placeholder="Exact search for public key"/>
         <PageContainer>
+            <EpochSlotIndicator/>
             <StakesPageContents/>
         </PageContainer>
     }
