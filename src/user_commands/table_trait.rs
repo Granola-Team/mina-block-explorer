@@ -5,15 +5,7 @@ use leptos::*;
 impl TableData for Vec<Option<TransactionsQueryTransactions>> {
     fn get_columns(&self) -> Vec<String> {
         [
-            "Height",
-            "State Hash",
-            "Age",
-            "Type",
-            "From",
-            "To",
-            "Nonce",
-            "Fee",
-            "Amount",
+            "Height", "Txn Hash", "Age", "Type", "From", "To", "Nonce", "Fee", "Amount",
         ]
         .iter()
         .map(ToString::to_string)

@@ -4,7 +4,7 @@ suite(["@CI"], "transactions table", () => {
   let pages = ["/commands/user-commands"];
   let columns = [
     "Height",
-    "State Hash",
+    "Txn Hash",
     "Age",
     "Type",
     "From",
@@ -38,7 +38,7 @@ suite([""], "account transactions table", () => {
   let pages = [`/addresses/accounts/${DEFAULT_ACCOUNT_PK}`];
   let columns = [
     "Height",
-    "State Hash",
+    "Txn Hash",
     "Nonce",
     "Age",
     "Type",
