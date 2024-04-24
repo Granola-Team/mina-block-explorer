@@ -1,9 +1,9 @@
-use super::graphql::{
+use super::{graphql::{
     blocks_query::{
         BlocksQueryBlocks, BlocksQueryBlocksSnarkJobs, BlocksQueryBlocksTransactionsUserCommands,
     },
     *,
-};
+}, models::BlockMultiSearch};
 use crate::common::{
     constants::GRAPHQL_ENDPOINT,
     functions::{nanomina_str_to_mina, nanomina_to_mina},
@@ -240,6 +240,34 @@ pub fn get_coinbase_receiver(block: &BlocksQueryBlocks) -> String {
                     .map_or_else(String::new, |o| o.to_string())
             })
     })
+}
+
+pub fn parse_query_for_multisearch(query_opt: Option<String>) -> BlockMultiSearch {
+    let mut public_key = None;
+    let mut state_hash = None;
+    let mut block_height = None;
+    match query_opt {
+        Some(query) if query.starts_with("3N") => state_hash = Some(query),
+        Some(query) if query.starts_with("H") => {
+            let height = if !query.is_empty() {
+                query.chars().skip(1).collect::<String>()
+            } else {
+                query.to_string()
+            };
+            let parsed_value: Result<i64, _> = height.parse();
+            match parsed_value {
+                Ok(number) => block_height = Some(number),
+                Err(_e) => (),
+            }
+        }
+        Some(query) if query.starts_with("B62") => public_key = Some(query),
+        _ => (),
+    }
+    return BlockMultiSearch {
+        public_key,
+        state_hash,
+        block_height,
+    }
 }
 
 pub async fn load_data(
