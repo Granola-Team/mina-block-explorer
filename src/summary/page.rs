@@ -51,7 +51,7 @@ fn SummaryGrid(summary: Option<BlockchainSummary>) -> impl IntoView {
                         <SummaryItem
                             imgsrc="/assets/img/blockchain_length.svg"
                             id="blockchainLength"
-                            label="Height"
+                            label="Block Height"
                             value=Some(smry.blockchain_length.to_string())
                         />
                         <SummaryItem
