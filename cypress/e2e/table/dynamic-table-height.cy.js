@@ -30,7 +30,7 @@ suite(["@CI"], "table of dynamic height", () => {
     },
 
     { url: "/snarks", tableHeading: "SNARKs" },
-    { url: "/stakes", tableHeading: "Current Staking Ledger" },
+    { url: "/staking-ledgers", tableHeading: "Current Staking Ledger" },
     { url: "/next-stakes", tableHeading: "Next Staking Ledger" },
   ];
 

@@ -108,7 +108,7 @@ pub fn Root() -> impl IntoView {
                     />
 
                     <Route path="/snarks" view=SnarksPage/>
-                    <Route path="/stakes" view=StakesPage/>
+                    <Route path="/staking-ledgers" view=StakesPage/>
                     <Route path="/next-stakes" view=NextStakesPage/>
                     <Route path="/broadcast" view=DelegationTabbedPage>
                         <Route path="/transaction" view=BroadcastTransactionPage/>

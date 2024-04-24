@@ -1,5 +1,5 @@
 // use chrono::Utc;
-use self::next_stakes_query::NextstakeQueryInput;
+use self::next_staking_ledgers_query::NextstakeQueryInput;
 use graphql_client::GraphQLQuery;
 
 // type DateTime = chrono::DateTime<Utc>;
@@ -8,11 +8,11 @@ use graphql_client::GraphQLQuery;
 #[derive(GraphQLQuery)]
 #[graphql(
     schema_path = "graphql/schemas/mina-explorer.graphql",
-    query_path = "graphql/queries/next_stakes.graphql",
+    query_path = "graphql/queries/next_staking_ledgers.graphql",
     response_derives = "Serialize,PartialEq,Debug,Clone",
     skip_serializing_none
 )]
-pub struct NextStakesQuery;
+pub struct NextStakingLedgersQuery;
 
 #[allow(clippy::derivable_impls)]
 impl Default for NextstakeQueryInput {

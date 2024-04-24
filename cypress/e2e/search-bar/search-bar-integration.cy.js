@@ -15,7 +15,7 @@ suite(["@CI"], "search bar", () => {
       tableHeading: "User Commands",
     },
     {
-      origin: "/stakes",
+      origin: "/staking-ledgers",
       input: public_key,
       tableHeading: "Current Staking Ledger",
     },

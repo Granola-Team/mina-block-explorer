@@ -75,7 +75,7 @@ pub fn Header() -> impl IntoView {
             ..Default::default()
         },
         NavEntry {
-            href: "/stakes".to_string(),
+            href: "/staking-ledgers".to_string(),
             text: "Staking".to_string(),
             icon: NavIcon::Staking,
             ..Default::default()

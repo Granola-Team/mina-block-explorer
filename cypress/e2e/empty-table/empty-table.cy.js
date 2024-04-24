@@ -4,7 +4,7 @@ suite(["@CI"], "empty table", () => {
     "/commands/user-commands?query=fake",
     "/commands/internal-commands?query=fake",
     "/snarks?query=fake",
-    "/stakes?query=fake",
+    "/staking-ledgers?query=fake",
     "/next-stakes?query=fake",
   ];
 

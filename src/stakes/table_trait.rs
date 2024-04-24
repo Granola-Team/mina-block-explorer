@@ -1,9 +1,9 @@
-use super::{functions::*, graphql::stakes_query};
+use super::{functions::*, graphql::staking_ledgers_query};
 use crate::common::{functions::*, models::*, table::*};
 use leptos::*;
-use stakes_query::StakesQueryStakes;
+use staking_ledgers_query::StakingLedgersQueryStakes;
 
-impl TableData for Vec<Option<StakesQueryStakes>> {
+impl TableData for Vec<Option<StakingLedgersQueryStakes>> {
     fn get_columns(&self) -> Vec<String> {
         ["Key", "Stake", "Delegate", "Delegators", "Ledger Hash"]
             .iter()
