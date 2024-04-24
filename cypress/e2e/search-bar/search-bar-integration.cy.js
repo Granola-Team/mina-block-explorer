@@ -1,11 +1,46 @@
-import { DEFAULT_RECIPIENT } from "../constants";
+import { DEFAULT_ACCOUNT_PK, DEFAULT_RECIPIENT } from "../constants";
 
-suite(["@CI"], "search bar", () => {
+suite(["@CI"], "search with multiple results", () => {
+  let multi_response_searches = [
+    {
+      origin: "/snarks",
+      input: "B62qkwrHj3YCKgQsXRktpwhVFij19RiwYDgMmiwp7iggNBi8712a4W4",
+      tableHeading: "SNARKs",
+      expectation: {
+        column: "Prover",
+        value: "B62qkwrHj3YCKgQsXRktpwhVFij19RiwYDgMmiwp7iggNBi8712a4W4",
+      },
+    },
+    {
+      origin: "/commands/internal-commands",
+      input: DEFAULT_RECIPIENT,
+      tableHeading: "Internal Commands",
+      expectation: { column: "Recipient", value: DEFAULT_RECIPIENT },
+    },
+  ];
+
+  multi_response_searches.forEach(
+    ({ origin, input, tableHeading, expectation }) =>
+      it(`works on ${origin} page`, () => {
+        cy.visit(origin);
+        cy.wait(1000);
+        cy.get("input#searchbar").type(input, { delay: 0 });
+        cy.tableColumnValuesEqual(
+          tableHeading,
+          expectation.column,
+          expectation.value,
+        );
+      }),
+  );
+});
+
+suite(["@CI"], "search with single result", () => {
   let state_hash = "CkpYfTKJyVjWmM5Lb5SdzRL6GuEbJf6q7yYAyW6NkvkYFZQaY5PGz";
   let block_hash = "3NLqPGGVtxXdsQg2orrp3SFFE3ToeMuqWRerSRWbmAKuSk2tphWy";
   let public_key = "B62qrQKS9ghd91shs73TCmBJRW9GzvTJK443DPx2YbqcyoLc56g1ny9";
 
-  let pages = [
+  let exact_searches = [
+    { origin: "/", input: block_hash, tableHeading: "Blocks" },
     { origin: "/", input: block_hash, tableHeading: "Blocks" },
     { origin: "/summary", input: block_hash, tableHeading: "Blocks" },
     { origin: "/blocks", input: block_hash, tableHeading: "Blocks" },
@@ -26,26 +61,7 @@ suite(["@CI"], "search bar", () => {
     },
   ];
 
-  it("works on /snarks page", () => {
-    let prover = "B62qkwrHj3YCKgQsXRktpwhVFij19RiwYDgMmiwp7iggNBi8712a4W4";
-    let tableHeading = "SNARKs";
-    let tableColumn = "Prover";
-    cy.visit("/snarks");
-    cy.wait(1000);
-    cy.get("input#searchbar").type(prover, { delay: 0 });
-    cy.tableColumnValuesEqual(tableHeading, tableColumn, prover);
-  });
-
-  it("works on /commands/internal-commands page", () => {
-    let tableHeading = "Internal Commands";
-    let tableColumn = "Recipient";
-    cy.visit("/commands/internal-commands");
-    cy.wait(1000);
-    cy.get("input#searchbar").type(DEFAULT_RECIPIENT, { delay: 0 });
-    cy.tableColumnValuesEqual(tableHeading, tableColumn, DEFAULT_RECIPIENT);
-  });
-
-  pages.forEach(({ origin, input, tableHeading }) =>
+  exact_searches.forEach(({ origin, input, tableHeading, expectation }) =>
     it(`works on ${origin} page`, () => {
       /* 
         Sufficiently "tall" viewport to display many rows per table.
@@ -62,7 +78,8 @@ suite(["@CI"], "search bar", () => {
       // check url
       cy.url().should("include", `query=${input}`);
       // check table
-      cy.tableHasLessThanNRows(tableHeading, 5);
+      cy.aliasTableRows(tableHeading, "table-rows");
+      cy.get("@table-rows").should("have.length", 1);
       cy.wait(1000);
 
       cy.go("back");
