@@ -1,6 +1,6 @@
 suite(["@CI"], "staking ledger", () => {
   it("only has large positive stakes", () => {
-    cy.visit("/stakes");
+    cy.visit("/staking-ledgers");
     cy.aliasTableColumnValue("Current Staking Ledger", "Stake", "stake-value");
     cy.get("@stake-value")
       .invoke("text")
@@ -13,12 +13,12 @@ suite(["@CI"], "staking ledger", () => {
   });
 
   it("defaults to current epoch", () => {
-    cy.visit("/stakes");
+    cy.visit("/staking-ledgers");
     cy.get("section").contains("Current Staking Ledger");
   });
 
   it("displays link to next stakes page", () => {
-    cy.visit("/stakes");
+    cy.visit("/staking-ledgers");
     cy.get("section").contains("Current Staking Ledger");
     cy.get("a").contains("Next Stakes").click();
     cy.wait(500);
@@ -37,7 +37,7 @@ suite(["@CI"], "staking ledger", () => {
   });
 
   it("contains buttons for epoch navigation", () => {
-    cy.visit("/stakes?epoch=67");
+    cy.visit("/staking-ledgers?epoch=67");
     cy.get("section").contains("Epoch 67 Staking Ledger");
     cy.get("button").contains("Next").click();
     cy.wait(500);

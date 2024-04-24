@@ -1,32 +1,32 @@
 use crate::{
     common::{constants::GRAPHQL_ENDPOINT, functions::*, models::*},
-    next_stakes::graphql::{next_stakes_query, *},
+    next_stakes::graphql::{next_staking_ledgers_query, *},
 };
 use graphql_client::reqwest::post_graphql;
-use next_stakes_query::NextStakesQueryNextstakes;
+use next_staking_ledgers_query::NextStakingLedgersQueryNextstakes;
 
-pub fn get_public_key(nextstakes: &NextStakesQueryNextstakes) -> String {
+pub fn get_public_key(nextstakes: &NextStakingLedgersQueryNextstakes) -> String {
     nextstakes
         .public_key
         .as_ref()
         .map_or("".to_string(), |o| o.to_string())
 }
 
-pub fn get_balance(nextstakes: &NextStakesQueryNextstakes) -> String {
+pub fn get_balance(nextstakes: &NextStakingLedgersQueryNextstakes) -> String {
     nextstakes
         .balance
         .map(|b| format_mina(b.to_string()))
         .unwrap_or_default()
 }
 
-pub fn get_delegate(nextstakes: &NextStakesQueryNextstakes) -> String {
+pub fn get_delegate(nextstakes: &NextStakingLedgersQueryNextstakes) -> String {
     nextstakes
         .delegate
         .as_ref()
         .map_or("".to_string(), |o| o.to_string())
 }
 
-pub fn get_delegators_count(nextstakes: &NextStakesQueryNextstakes) -> String {
+pub fn get_delegators_count(nextstakes: &NextStakingLedgersQueryNextstakes) -> String {
     nextstakes
         .next_delegation_totals
         .as_ref()
@@ -34,7 +34,7 @@ pub fn get_delegators_count(nextstakes: &NextStakesQueryNextstakes) -> String {
         .map_or("0".to_string(), |o| o.to_string())
 }
 
-pub fn get_ledger_hash(nextstakes: &NextStakesQueryNextstakes) -> String {
+pub fn get_ledger_hash(nextstakes: &NextStakingLedgersQueryNextstakes) -> String {
     nextstakes
         .ledger_hash
         .as_ref()
@@ -44,11 +44,11 @@ pub fn get_ledger_hash(nextstakes: &NextStakesQueryNextstakes) -> String {
 pub async fn load_data(
     limit: i64,
     public_key: Option<String>,
-) -> Result<next_stakes_query::ResponseData, MyError> {
-    let variables = next_stakes_query::Variables {
-        sort_by: next_stakes_query::NextstakeSortByInput::BALANCE_DESC,
+) -> Result<next_staking_ledgers_query::ResponseData, MyError> {
+    let variables = next_staking_ledgers_query::Variables {
+        sort_by: next_staking_ledgers_query::NextstakeSortByInput::BALANCE_DESC,
         limit: Some(limit),
-        query: next_stakes_query::NextstakeQueryInput {
+        query: next_staking_ledgers_query::NextstakeQueryInput {
             public_key,
             ..Default::default()
         },
@@ -56,7 +56,7 @@ pub async fn load_data(
 
     let client = reqwest::Client::new();
 
-    let response = post_graphql::<NextStakesQuery, _>(&client, GRAPHQL_ENDPOINT, variables)
+    let response = post_graphql::<NextStakingLedgersQuery, _>(&client, GRAPHQL_ENDPOINT, variables)
         .await
         .map_err(|e| MyError::NetworkError(e.to_string()))?;
 
