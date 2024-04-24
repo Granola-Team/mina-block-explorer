@@ -34,8 +34,8 @@ pub fn Footer() -> impl IntoView {
         },
     ];
     view! {
-        <footer class="overflow-x-auto bg-main-background w-full h-12 min-h-12 flex flex-wrap justify-end md:grid md:grid-cols-[10%_80%_10%]">
-            <div class="md:col-start-2 md:col-end-3 w-full flex justify-between sm:justify-end p-4">
+        <footer class="overflow-x-auto bg-main-background w-full h-12 min-h-12 flex flex-wrap justify-end">
+            <div class="w-full flex justify-between sm:justify-end p-4">
                 <GAOptOut/>
                 {links
                     .into_iter()

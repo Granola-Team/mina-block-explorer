@@ -12,7 +12,7 @@ use leptos::*;
 pub fn EpochSlotIndicator() -> impl IntoView {
     let blockchain_summary_resource = create_resource(|| (), |_| async move { load_data().await });
 
-    let class_base = "font-light text-sm p-2 whitespace-nowrap flex w-fit";
+    let class_base = "font-light text-sm p-4 whitespace-nowrap flex w-fit";
 
     view! {
         <AppSection>
