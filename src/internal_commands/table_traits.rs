@@ -18,10 +18,7 @@ impl TableData for Vec<Option<InternalCommandsQueryFeetransfers>> {
                         internal_command.get_receipient(),
                         format!("/addresses/accounts/{}", internal_command.get_receipient()),
                     ),
-                    wrap_in_pill(
-                        decorate_with_currency_tag(internal_command.get_fee(), "mina".to_string()),
-                        ColorVariant::Orange,
-                    ),
+                    decorate_with_currency_tag(internal_command.get_fee(), "mina".to_string()),
                     convert_to_pill(internal_command.get_type(), ColorVariant::Grey),
                     convert_array_to_span(vec![
                         convert_to_span(print_time_since(&internal_command.get_block_datetime())),

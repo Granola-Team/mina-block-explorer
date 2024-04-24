@@ -234,29 +234,24 @@ pub fn BlockAnalytics(block: BlocksQueryBlocks) -> impl IntoView {
                 <AnalyticsSmContainer>
                     <AnalyticsSimpleInfo
                         label=convert_to_span("Total User Amounts Transferred".into())
-                        value=wrap_in_pill(
-                            decorate_with_currency_tag(
-                                nanomina_to_mina(user_command_amount_total()),
-                                "mina".to_string(),
-                            ),
-                            ColorVariant::Green,
+                        value=decorate_with_currency_tag(
+                            nanomina_to_mina(user_command_amount_total()),
+                            "mina".to_string(),
                         )
 
-                        variant=ColorVariant::Green
+                        variant=ColorVariant::Transparent
                     />
+
                 </AnalyticsSmContainer>
                 <AnalyticsSmContainer>
                     <AnalyticsSimpleInfo
                         label=convert_to_span("Total Internal Fees Transferred".into())
-                        value=wrap_in_pill(
-                            decorate_with_currency_tag(
-                                get_transaction_fees(&block_sig.get()),
-                                "mina".to_string(),
-                            ),
-                            ColorVariant::Orange,
+                        value=decorate_with_currency_tag(
+                            get_transaction_fees(&block_sig.get()),
+                            "mina".to_string(),
                         )
 
-                        variant=ColorVariant::Orange
+                        variant=ColorVariant::Transparent
                     />
                 </AnalyticsSmContainer>
                 <AnalyticsSmContainer>
@@ -469,9 +464,9 @@ pub fn BlockSpotlight(block: BlocksQueryBlocks) -> impl IntoView {
         },
         SpotlightEntry {
             label: "Coinbase".to_string(),
-            any_el: Some(wrap_in_pill(
-                decorate_with_currency_tag(get_coinbase(&block), "mina".to_string()),
-                ColorVariant::Green,
+            any_el: Some(decorate_with_currency_tag(
+                get_coinbase(&block),
+                "mina".to_string(),
             )),
             ..Default::default()
         },
@@ -499,9 +494,9 @@ pub fn BlockSpotlight(block: BlocksQueryBlocks) -> impl IntoView {
         },
         SpotlightEntry {
             label: "SNARK Fees".to_string(),
-            any_el: Some(wrap_in_pill(
-                decorate_with_currency_tag(get_snark_fees(&block), "mina".to_string()),
-                ColorVariant::Orange,
+            any_el: Some(decorate_with_currency_tag(
+                get_snark_fees(&block),
+                "mina".to_string(),
             )),
             ..Default::default()
         },
@@ -522,9 +517,9 @@ pub fn BlockSpotlight(block: BlocksQueryBlocks) -> impl IntoView {
         },
         SpotlightEntry {
             label: "Transaction Fees".to_string(),
-            any_el: Some(wrap_in_pill(
-                decorate_with_currency_tag(get_transaction_fees(&block), "mina".to_string()),
-                ColorVariant::Orange,
+            any_el: Some(decorate_with_currency_tag(
+                get_transaction_fees(&block),
+                "mina".to_string(),
             )),
             ..Default::default()
         },
@@ -538,9 +533,9 @@ pub fn BlockSpotlight(block: BlocksQueryBlocks) -> impl IntoView {
         },
         SpotlightEntry {
             label: "Total Currency".to_string(),
-            any_el: Some(wrap_in_pill(
-                decorate_with_currency_tag(get_total_currency(&block), "mina".to_string()),
-                ColorVariant::Green,
+            any_el: Some(decorate_with_currency_tag(
+                get_total_currency(&block),
+                "mina".to_string(),
             )),
             ..Default::default()
         },

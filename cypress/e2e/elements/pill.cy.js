@@ -1,17 +1,5 @@
 suite(["@VisualRegression"], "pill color", () => {
   let pills = {
-    green: {
-      label: "Coinbase",
-      location:
-        "/blocks/3NKRWwREPywcAGZa6JeMm3dKq9gri6152y4tY5zJ2bz794DJAZm5/spotlight",
-      type: "spotlight",
-    },
-    orange: {
-      label: "SNARK Fees",
-      location:
-        "/blocks/3NKRWwREPywcAGZa6JeMm3dKq9gri6152y4tY5zJ2bz794DJAZm5/spotlight",
-      type: "spotlight",
-    },
     grey: {
       label: "Global",
       location:
