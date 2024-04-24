@@ -53,10 +53,7 @@ impl TableData for Vec<Option<BlocksQueryBlocks>> {
                         get_creator_account(block),
                         format!("/blocks/accounts/{}", get_creator_account(block)),
                     ),
-                    wrap_in_pill(
-                        decorate_with_currency_tag(get_coinbase(block), "mina".to_string()),
-                        ColorVariant::Green,
-                    ),
+                    decorate_with_currency_tag(get_coinbase(block), "mina".to_string()),
                     convert_to_pill(
                         get_transaction_count(block).map_or_else(String::new, |o| o.to_string()),
                         ColorVariant::Blue,
@@ -106,19 +103,13 @@ impl TableData for Vec<Option<BlocksQueryBlocksTransactionsUserCommands>> {
                         get_user_command_hash(user_command),
                         format!("/commands/{}", get_user_command_hash(user_command)),
                     ),
-                    wrap_in_pill(
-                        decorate_with_currency_tag(
-                            get_user_command_fee(user_command),
-                            "mina".to_string(),
-                        ),
-                        ColorVariant::Orange,
+                    decorate_with_currency_tag(
+                        get_user_command_fee(user_command),
+                        "mina".to_string(),
                     ),
-                    wrap_in_pill(
-                        decorate_with_currency_tag(
-                            get_user_command_amount(user_command),
-                            "mina".to_string(),
-                        ),
-                        ColorVariant::Green,
+                    decorate_with_currency_tag(
+                        get_user_command_amount(user_command),
+                        "mina".to_string(),
                     ),
                 ],
                 None => vec![],
@@ -157,10 +148,7 @@ impl TableData for SummaryPageBlocksQueryBlocks {
                         get_creator_account(block),
                         format!("/summary/accounts/{}", get_creator_account(block)),
                     ),
-                    wrap_in_pill(
-                        decorate_with_currency_tag(get_coinbase(block), "mina".to_string()),
-                        ColorVariant::Green,
-                    ),
+                    decorate_with_currency_tag(get_coinbase(block), "mina".to_string()),
                     convert_to_pill(
                         get_transaction_count(block).map_or_else(String::new, |o| o.to_string()),
                         ColorVariant::Blue,
@@ -211,10 +199,7 @@ impl TableData for Vec<Option<BlocksQueryBlocksSnarkJobs>> {
                             .map(|w| convert_to_pill(w.to_string(), ColorVariant::Grey))
                             .collect::<Vec<_>>(),
                     ),
-                    wrap_in_pill(
-                        decorate_with_currency_tag(get_snark_fee(snark), "mina".to_string()),
-                        ColorVariant::Orange,
-                    ),
+                    decorate_with_currency_tag(get_snark_fee(snark), "mina".to_string()),
                 ],
                 None => vec![],
             })
@@ -238,10 +223,7 @@ impl TableData for Vec<Option<BlocksQueryBlocksTransactionsFeeTransfer>> {
                         fee_transfer.get_receipient(),
                         format!("/addresses/accounts/{}", fee_transfer.get_receipient()),
                     ),
-                    wrap_in_pill(
-                        decorate_with_currency_tag(fee_transfer.get_fee(), "mina".to_string()),
-                        ColorVariant::Orange,
-                    ),
+                    decorate_with_currency_tag(fee_transfer.get_fee(), "mina".to_string()),
                     convert_to_pill(fee_transfer.get_type(), ColorVariant::Grey),
                 ],
                 None => vec![],

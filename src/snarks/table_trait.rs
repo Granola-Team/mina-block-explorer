@@ -39,10 +39,7 @@ impl TableData for Vec<Option<SnarksQuerySnarks>> {
                             .map(|w| convert_to_pill(w.to_string(), ColorVariant::Grey))
                             .collect::<Vec<_>>(),
                     ),
-                    wrap_in_pill(
-                        decorate_with_currency_tag(get_fee(snark), "mina".to_string()),
-                        ColorVariant::Orange,
-                    ),
+                    decorate_with_currency_tag(get_fee(snark), "mina".to_string()),
                 ],
                 None => vec![],
             })
