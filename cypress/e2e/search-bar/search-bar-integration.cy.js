@@ -17,6 +17,24 @@ suite(["@CI"], "search with multiple results", () => {
       tableHeading: "Internal Commands",
       expectation: { column: "Recipient", value: DEFAULT_RECIPIENT },
     },
+    {
+      origin: "/",
+      input: DEFAULT_ACCOUNT_PK,
+      tableHeading: "Blocks",
+      expectation: { column: "Block Producer", value: DEFAULT_ACCOUNT_PK },
+    },
+    {
+      origin: "/summary",
+      input: DEFAULT_ACCOUNT_PK,
+      tableHeading: "Blocks",
+      expectation: { column: "Block Producer", value: DEFAULT_ACCOUNT_PK },
+    },
+    {
+      origin: "/blocks",
+      input: DEFAULT_ACCOUNT_PK,
+      tableHeading: "Blocks",
+      expectation: { column: "Block Producer", value: DEFAULT_ACCOUNT_PK },
+    },
   ];
 
   multi_response_searches.forEach(
@@ -41,9 +59,11 @@ suite(["@CI"], "search with single result", () => {
 
   let exact_searches = [
     { origin: "/", input: block_hash, tableHeading: "Blocks" },
-    { origin: "/", input: block_hash, tableHeading: "Blocks" },
+    { origin: "/", input: "H132", tableHeading: "Blocks" },
     { origin: "/summary", input: block_hash, tableHeading: "Blocks" },
+    { origin: "/summary", input: "H34780", tableHeading: "Blocks" },
     { origin: "/blocks", input: block_hash, tableHeading: "Blocks" },
+    { origin: "/blocks", input: "H20345", tableHeading: "Blocks" },
     {
       origin: "/commands/user-commands",
       input: state_hash,
