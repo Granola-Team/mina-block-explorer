@@ -24,7 +24,7 @@ pub fn AppSubSection(
 ) -> impl IntoView {
     let position_class = match position {
         SubSectionPosition::Left => "md:col-start-1 md:col-end-2",
-        SubSectionPosition::Right => "[md]:col-start-2 [md]:col-end-3",
+        SubSectionPosition::Right => "md:col-start-2 md:col-end-3",
     };
     view! {
         <section class=format!("{} md:rounded-lg bg-table-section", position_class)>
@@ -39,7 +39,7 @@ pub fn AppSubSection(
 #[component]
 pub fn AppSection(children: Children) -> impl IntoView {
     view! {
-        <section class="[md]:col-start-2 [md]:col-end-3 md:rounded-lg bg-table-section mb-4">
+        <section class="md:rounded-lg bg-table-section mb-4">
             {children()}
         </section>
     }
@@ -501,7 +501,7 @@ pub fn CodeBlock(children: Children) -> impl IntoView {
 #[component]
 pub fn NotFound(message: Option<String>) -> impl IntoView {
     view! {
-        <div class="[md]:col-start-2 [md]:col-end-3 bg-slate-100 flex justify-center items-start px-16 py-32">
+        <div class="bg-slate-100 flex justify-center items-start px-16 py-32">
             <div class="text-slate-400 text-2xl font-extrabold">
                 {message.unwrap_or("Page Not Found :(".to_string())}
             </div>
