@@ -1,4 +1,55 @@
 suite(["@CI"], "staking ledger", () => {
+  it("shows slot progress indicator", () => {
+    cy.visit("/stakes");
+    cy.get(".pg-container").as("progress");
+    cy.get(".pg-container .pg-completeness").as("pg-completeness");
+    cy.get(".pg-container .pg-slot").as("pg-slot");
+    cy.get(".pg-container .pg-total-slots").as("pg-total-slots");
+
+    cy.get("@pg-total-slots")
+      .invoke("text")
+      .then((totalSlots) => {
+        expect(extractTotalSlots(totalSlots)).to.equal("7140");
+        let totalSlotsInt = parseInt(extractTotalSlots(totalSlots));
+        cy.log("Total slots: ", totalSlotsInt);
+        cy.get("@pg-slot")
+          .invoke("text")
+          .then((slot) => {
+            let slotInt = parseInt(extractSlot(slot));
+            cy.log("Current Slot: ", slotInt);
+            cy.get("@pg-completeness")
+              .invoke("text")
+              .then((progress) => {
+                let progressFloat = parseFloat(
+                  extractProgressPercent(progress),
+                );
+                cy.log("Percent Complete: ", progressFloat);
+                expect("" + progressFloat).to.equal(
+                  ((slotInt / totalSlotsInt) * 100).toFixed(2),
+                );
+              });
+          });
+      });
+  });
+
+  function extractProgressPercent(input) {
+    let regex = /Epoch is (\d+).(\d+)% complete/;
+    const match = input.match(regex);
+    return match ? match[1] + "." + match[2] : null;
+  }
+
+  function extractSlot(input) {
+    let regex = /Current slot: (\d+)/;
+    const match = input.match(regex);
+    return match ? match[1] : null;
+  }
+
+  function extractTotalSlots(input) {
+    let regex = /Epoch slots: (\d+)/;
+    const match = input.match(regex);
+    return match ? match[1] : null;
+  }
+
   it("only has large positive stakes", () => {
     cy.visit("/staking-ledgers");
     cy.aliasTableColumnValue("Current Staking Ledger", "Stake", "stake-value");
