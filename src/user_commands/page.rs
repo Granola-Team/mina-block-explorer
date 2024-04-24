@@ -1,6 +1,6 @@
 use super::{components::*, functions::*, table_trait::*};
 use crate::{
-    common::{components::*, functions::*, models::*, search::*, spotlight::*},
+    common::{components::*, constants::*, functions::*, models::*, search::*, spotlight::*},
     config::BERKELEY_FEATURES_ENABLED,
     icons::*,
 };
@@ -39,15 +39,12 @@ pub fn CommandsTabbedPage() -> impl IntoView {
 
 #[component]
 pub fn UserCommandsPage() -> impl IntoView {
-    let query_params_map: Memo<ParamsMap> = use_query_map();
-
     view! {
-        <SearchBar placeholder="Exact search by txn hash".to_string()/>
+        <SearchBar placeholder=TXN_SEARCH_PLACEHOLDER_TEXT/>
         <Title text="Commands | Search For Commands"/>
         <PageContainer>
             {move || {
-                let qp_map = query_params_map.get();
-                view! { <TransactionsSection state_hash=qp_map.get("query").cloned()/> }
+                view! { <TransactionsSection/> }
             }}
 
         </PageContainer>
@@ -63,7 +60,7 @@ pub fn CommandSpotlightPage() -> impl IntoView {
         move || (memo_params_map.get(), canonical_qp.get()),
         |(value, canonical)| async move {
             let state_hash = value.get("id");
-            load_data(1, None, None, state_hash.cloned(), canonical).await
+            load_data(1, None, None, state_hash.cloned(), None, canonical).await
         },
     );
 

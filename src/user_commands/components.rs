@@ -13,26 +13,48 @@ use leptos::*;
 use leptos_router::*;
 
 #[component]
-pub fn TransactionsSection(
-    #[prop(default = None,into)] state_hash: Option<String>,
-    #[prop(default = false)] with_link: bool,
-) -> impl IntoView {
-    let (state_hash_sig, _) = create_signal(state_hash);
+pub fn TransactionsSection(#[prop(default = false)] with_link: bool) -> impl IntoView {
+    let (query_sig, _) = create_query_signal::<String>("query");
     let (txn_type_qp, _) = create_query_signal::<String>("txn-type");
 
     let resource = create_resource(
-        move || (state_hash_sig.get(), txn_type_qp.get()),
-        move |(state_hash, txn_type)| async move {
+        move || (query_sig.get(), txn_type_qp.get()),
+        move |(query_opt, txn_type)| async move {
+            let multi_search = parse_query_for_multisearch(query_opt);
             match txn_type {
                 Some(ref txn_type_str) if txn_type_str == "Pending" => load_pending_txn().await,
                 Some(ref txn_type_str) if txn_type_str == "Canonical" => {
-                    load_data(TABLE_RECORD_SIZE, None, None, state_hash, Some(true)).await
+                    load_data(
+                        TABLE_RECORD_SIZE,
+                        None,
+                        None,
+                        multi_search.txn_hash,
+                        multi_search.block_height,
+                        Some(true),
+                    )
+                    .await
                 }
                 Some(ref txn_type_str) if txn_type_str == "Non-Canonical" => {
-                    load_data(TABLE_RECORD_SIZE, None, None, state_hash, Some(false)).await
+                    load_data(
+                        TABLE_RECORD_SIZE,
+                        None,
+                        None,
+                        multi_search.txn_hash,
+                        multi_search.block_height,
+                        Some(false),
+                    )
+                    .await
                 }
                 Some(_) | None => {
-                    load_data(TABLE_RECORD_SIZE, None, None, state_hash, Some(true)).await
+                    load_data(
+                        TABLE_RECORD_SIZE,
+                        None,
+                        None,
+                        multi_search.txn_hash,
+                        multi_search.block_height,
+                        Some(true),
+                    )
+                    .await
                 }
             }
         },

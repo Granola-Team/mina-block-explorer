@@ -176,6 +176,7 @@ pub struct PageDimensions {
 }
 
 pub struct MultiSearch {
+    pub txn_hash: Option<String>,
     pub block_height: Option<i64>,
     pub public_key: Option<String>,
     pub state_hash: Option<String>,

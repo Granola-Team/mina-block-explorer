@@ -806,7 +806,9 @@ pub fn parse_query_for_multisearch(query_opt: Option<String>) -> MultiSearch {
     let mut public_key = None;
     let mut state_hash = None;
     let mut block_height = None;
+    let mut txn_hash = None;
     match query_opt {
+        Some(query) if query.starts_with("Ckp") => txn_hash = Some(query),
         Some(query) if query.starts_with("3N") => state_hash = Some(query),
         Some(query) if query.starts_with('H') => {
             let height = if !query.is_empty() {
@@ -824,6 +826,7 @@ pub fn parse_query_for_multisearch(query_opt: Option<String>) -> MultiSearch {
         _ => (),
     }
     MultiSearch {
+        txn_hash,
         public_key,
         state_hash,
         block_height,
