@@ -1,6 +1,6 @@
 suite(["@CI"], "staking ledger", () => {
   it("shows slot progress indicator", () => {
-    cy.visit("/stakes");
+    cy.visit("/staking-ledgers");
     cy.get(".pg-container").as("progress");
     cy.get(".pg-container .pg-completeness").as("pg-completeness");
     cy.get(".pg-container .pg-slot").as("pg-slot");
