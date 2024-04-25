@@ -800,3 +800,91 @@ pub fn build_pagination(
         set_current_page,
     }
 }
+
+pub fn parse_query_for_multisearch(query_opt: Option<String>) -> MultiSearch {
+    let mut public_key = None;
+    let mut state_hash = None;
+    let mut block_height = None;
+    match query_opt {
+        Some(query) if query.starts_with("3N") => state_hash = Some(query),
+        Some(query) if query.starts_with('H') => {
+            let height = if !query.is_empty() {
+                query.chars().skip(1).collect::<String>()
+            } else {
+                query.to_string()
+            };
+            let parsed_value: Result<i64, _> = height.parse();
+            match parsed_value {
+                Ok(number) => block_height = Some(number),
+                Err(_e) => (),
+            }
+        }
+        Some(query) if query.starts_with("B62") => public_key = Some(query),
+        _ => (),
+    }
+    MultiSearch {
+        public_key,
+        state_hash,
+        block_height,
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_none_input() {
+        let result = parse_query_for_multisearch(None);
+        assert!(result.public_key.is_none());
+        assert!(result.state_hash.is_none());
+        assert!(result.block_height.is_none());
+    }
+
+    #[test]
+    fn test_state_hash_input() {
+        let state_hash = "3NKGgTk7en3347KH81yDra876GPAUSoSePrfVKPmwR1KHfMpvJC5";
+        let query = Some(state_hash.to_string());
+        let result = parse_query_for_multisearch(query);
+        assert_eq!(result.state_hash, Some(state_hash.to_string()));
+        assert!(result.public_key.is_none());
+        assert!(result.block_height.is_none());
+    }
+
+    #[test]
+    fn test_block_height_input() {
+        let query = Some("H123".to_string());
+        let result = parse_query_for_multisearch(query);
+        assert_eq!(result.block_height, Some(123));
+        assert!(result.public_key.is_none());
+        assert!(result.state_hash.is_none());
+    }
+
+    #[test]
+    fn test_public_key_input() {
+        let pk = "B62qqhURJQo3CvWC3WFo9LhUhtcaJWLBcJsaA3DXaU2GH5KgXujZiwB";
+        let query = Some(pk.to_string());
+        let result = parse_query_for_multisearch(query);
+        assert_eq!(result.public_key, Some(pk.to_string()));
+        assert!(result.state_hash.is_none());
+        assert!(result.block_height.is_none());
+    }
+
+    #[test]
+    fn test_invalid_input() {
+        let query = Some("invalid_input".to_string());
+        let result = parse_query_for_multisearch(query);
+        assert!(result.public_key.is_none());
+        assert!(result.state_hash.is_none());
+        assert!(result.block_height.is_none());
+    }
+
+    #[test]
+    fn test_block_height_edge_case_empty() {
+        let query = Some("H".to_string());
+        let result = parse_query_for_multisearch(query);
+        assert!(result.block_height.is_none());
+        assert!(result.public_key.is_none());
+        assert!(result.state_hash.is_none());
+    }
+}

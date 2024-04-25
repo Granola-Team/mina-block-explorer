@@ -634,7 +634,7 @@ pub fn BlocksSection() -> impl IntoView {
         move || (query_params_map.get(), canonical_qp.get()),
         |(value, canonical)| async move {
             let public_key = value.get("account");
-            let block_hash = value.get("query");
+            let block_search = parse_query_for_multisearch(value.get("query").cloned());
             let canonical = if canonical.is_none() {
                 Some(true)
             } else {
@@ -642,8 +642,13 @@ pub fn BlocksSection() -> impl IntoView {
             };
             load_data(
                 TABLE_RECORD_SIZE,
-                public_key.cloned(),
-                block_hash.cloned(),
+                if public_key.is_some() {
+                    public_key.cloned()
+                } else {
+                    block_search.public_key
+                },
+                block_search.state_hash,
+                block_search.block_height,
                 canonical,
             )
             .await
@@ -724,13 +729,21 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
     let resource = create_resource(
         move || (query_params_map.get(), canonical_qp.get()),
         |(value, canonical)| async move {
-            let state_hash = value.get("query");
+            let query_opt = value.get("query");
+            let block_search = parse_query_for_multisearch(query_opt.cloned());
             let canonical = if canonical.is_none() {
                 Some(true)
             } else {
                 canonical
             };
-            load_data(TABLE_RECORD_SIZE, None, state_hash.cloned(), canonical).await
+            load_data(
+                TABLE_RECORD_SIZE,
+                block_search.public_key,
+                block_search.state_hash,
+                block_search.block_height,
+                canonical,
+            )
+            .await
         },
     );
 
