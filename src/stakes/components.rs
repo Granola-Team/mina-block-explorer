@@ -7,7 +7,7 @@ pub fn StakesNavButton(#[prop(into)] href: String, #[prop(into)] text: String) -
     view! {
         <a
             href=href
-            class="cursor-pointer text-sm rounded-md p-2 h-9 font-semibold mx-2 flex justify-center items-center border border-granola-orange border-[1px] text-white bg-granola-orange"
+            class="cursor-pointer text-sm rounded-md p-2 h-9 font-semibold ml-2 flex justify-center items-center border border-granola-orange border-[1px] text-white bg-granola-orange"
         >
             {text}
         </a>
@@ -21,7 +21,7 @@ pub fn EpochButton(
     #[prop(default = false)] disabled: bool,
     style_variant: EpochStyleVariant,
 ) -> impl IntoView {
-    let button_base_styles = "text-sm rounded-md p-2 h-9 font-semibold mx-2 flex justify-center items-center border border-granola-orange border-[1px]";
+    let button_base_styles = "text-sm rounded-md p-2 h-9 font-semibold ml-2 flex justify-center items-center border border-granola-orange border-[1px]";
     let mut button_variant_styles = match style_variant {
         EpochStyleVariant::Primary => {
             format!("{} {}", button_base_styles, "text-white bg-granola-orange")

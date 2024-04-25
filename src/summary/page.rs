@@ -43,7 +43,7 @@ pub fn SummaryPage() -> impl IntoView {
 #[component]
 fn SummaryGrid(summary: Option<BlockchainSummary>) -> impl IntoView {
     view! {
-        <section class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-4 md:col-start-2 auto-rows-min gap-4 py-4 pt-0">
+        <section class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-4 auto-rows-min gap-4 py-4 pt-0">
             <h1 class="h-0 w-0 overflow-hidden absolute">"Summary"</h1>
             {match summary {
                 Some(smry) => {

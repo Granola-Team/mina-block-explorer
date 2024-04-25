@@ -8,7 +8,7 @@ pub fn SearchBar(
     #[prop(default = "Exact search for public key".to_string(), into)] placeholder: String,
 ) -> impl IntoView {
     view! {
-        <div class="flex self-stretch relative flex items-stretch md:mx-[10%] mb-4">
+        <div class="flex self-stretch relative flex items-stretch mx-4 mb-4">
             <SearchInput placeholder=placeholder/>
         </div>
     }

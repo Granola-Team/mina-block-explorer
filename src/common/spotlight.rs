@@ -20,7 +20,7 @@ pub fn SpotlightSection(
     view! {
         <section
             id="spotlight-section"
-            class="@container md:col-start-2 md:col-end-3 md:rounded-lg bg-table-section px-4 py-1 md:py-4 mb-2"
+            class="@container md:rounded-lg bg-table-section px-4 py-1 md:py-4 mb-2"
         >
             <h1 class="md:rounded-lg h-16 pl-8 text-xl bg-table-section flex justify-between items-center">
                 <span>{header}</span>
