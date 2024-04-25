@@ -1,7 +1,7 @@
 use super::{functions::*, models::*};
 use crate::{
     blocks::components::SummaryPageBlocksSection,
-    common::{components::*, functions::*, search::*},
+    common::{components::*, constants::*, functions::*, search::*},
 };
 use leptos::*;
 use leptos_meta::Title;
@@ -27,7 +27,7 @@ pub fn SummaryPage() -> impl IntoView {
                 ],
             )
 
-            search_placeholder="Exact search for block hash"
+            search_placeholder=BLOCK_SEARCH_PLACEHOLDER_TEXT
         />
         <Title text="Mina Blockchain Explorer | Search For Blocks"/>
         <PageContainer>

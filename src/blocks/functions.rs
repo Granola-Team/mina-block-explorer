@@ -246,6 +246,7 @@ pub async fn load_data(
     limit: i64,
     public_key: Option<String>,
     state_hash: Option<String>,
+    block_height: Option<i64>,
     canonical: Option<bool>,
 ) -> Result<blocks_query::ResponseData, MyError> {
     let variables = blocks_query::Variables {
@@ -254,6 +255,7 @@ pub async fn load_data(
         query: blocks_query::BlockQueryInput {
             canonical,
             state_hash,
+            block_height,
             creator_account: Some(blocks_query::BlockCreatorAccountQueryInput {
                 public_key,
                 ..Default::default()
