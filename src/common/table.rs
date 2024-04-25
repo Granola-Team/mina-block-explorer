@@ -96,6 +96,8 @@ fn generate_pagination(pagination: Option<Pagination>) -> impl IntoView {
             }.into_view()]
         };
 
+        let pg_clone = pg.clone();
+
         view! {
             <div class="pagination-controls flex flex-col md:grid md:grid-cols-3 min-h-12 bg-table-header-fill">
                 <span class="col-start-1 text-xs flex justify-center md:justify-start items-center font-bold pl-8 my-2">
@@ -108,6 +110,13 @@ fn generate_pagination(pagination: Option<Pagination>) -> impl IntoView {
 
                 </span>
                 <span class="button-container col-start-2 text-xs font-bold flex items-center justify-center my-2">
+                    <PaginationButton
+                        on_click=move |_| { pg.set_current_page.update(|cp| *cp = 1) }
+
+                        disabled=pg.current_page == 1
+                    >
+                        <ChevronDoubleLeft width=16/>
+                    </PaginationButton>
                     <PaginationButton
                         on_click=move |_| {
                             pg.set_current_page.update(|cp| *cp = pg.current_page.saturating_sub(1))
@@ -131,6 +140,15 @@ fn generate_pagination(pagination: Option<Pagination>) -> impl IntoView {
                         disabled=pg.current_page == pg.total_pages()
                     >
                         <ChevronRight width=16/>
+                    </PaginationButton>
+                    <PaginationButton
+                        on_click=move |_| {
+                            pg.set_current_page.update(|cp| *cp = pg_clone.total_pages())
+                        }
+
+                        disabled=pg.current_page == pg.total_pages()
+                    >
+                        <ChevronDoubleRight width=16/>
                     </PaginationButton>
                 </span>
             </div>
