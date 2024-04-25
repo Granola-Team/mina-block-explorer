@@ -111,6 +111,7 @@ fn generate_pagination(pagination: Option<Pagination>) -> impl IntoView {
                 </span>
                 <span class="button-container col-start-2 text-xs font-bold flex items-center justify-center my-2">
                     <PaginationButton
+                        class_id="go_to_first"
                         on_click=move |_| { pg.set_current_page.update(|cp| *cp = 1) }
 
                         disabled=pg.current_page == 1
@@ -118,6 +119,7 @@ fn generate_pagination(pagination: Option<Pagination>) -> impl IntoView {
                         <ChevronDoubleLeft width=16/>
                     </PaginationButton>
                     <PaginationButton
+                        class_id="go_to_prev"
                         on_click=move |_| {
                             pg.set_current_page.update(|cp| *cp = pg.current_page.saturating_sub(1))
                         }
@@ -136,12 +138,14 @@ fn generate_pagination(pagination: Option<Pagination>) -> impl IntoView {
                         .flat_map(|&p| create_page_button(p, pg.current_page))
                         .collect::<Vec<_>>()}
                     <PaginationButton
+                        class_id="go_to_next"
                         on_click=move |_| pg.set_current_page.update(|cp| *cp = pg.current_page + 1)
                         disabled=pg.current_page == pg.total_pages()
                     >
                         <ChevronRight width=16/>
                     </PaginationButton>
                     <PaginationButton
+                        class_id="go_to_last"
                         on_click=move |_| {
                             pg.set_current_page.update(|cp| *cp = pg_clone.total_pages())
                         }
@@ -158,6 +162,7 @@ fn generate_pagination(pagination: Option<Pagination>) -> impl IntoView {
 
 #[component]
 fn PaginationButton(
+    #[prop(into)] class_id: String,
     children: Children,
     #[prop(into)] on_click: Callback<MouseEvent>,
     disabled: bool,
@@ -173,7 +178,7 @@ fn PaginationButton(
 
     view! {
         <button
-            class=button_class
+            class=class_id + " " + &button_class
             disabled=disabled
             type="button"
             on:click=move |event: MouseEvent| {
