@@ -7,9 +7,9 @@ pub trait TableData {
     fn get_rows(&self) -> Vec<Vec<HtmlElement<AnyElement>>>;
 }
 
-const BUTTON_CLASS_BASE: &str = "font-semibold h-6 w-6 flex justify-center items-center";
-const PAGE_NUMBER_CLASS: &str =
-    "page text-md m-1 h-6 w-6 flex justify-center items-center font-semibold";
+const PAGINATION_BUTTON_SIZE: &str = "h-7 w-7";
+const BUTTON_CLASS_BASE: &str = "font-semibold flex justify-center items-center";
+const PAGE_NUMBER_CLASS: &str = "page text-md m-1 flex justify-center items-center font-semibold";
 const INACTIVE_PAGE_NUMBER_CLASS: &str =
     "hover:bg-slate-300 bg-transparent rounded-full cursor-pointer";
 const CELL_PADDING_CLASS: &str = "first:pl-8 pl-2 last:pr-4";
@@ -82,7 +82,8 @@ fn generate_pagination(pagination: Option<Pagination>) -> impl IntoView {
         let create_page_button = |page_num: usize, current_page: usize| {
             let is_current_page = page_num == current_page;
             let button_classes = format!(
-                "{} {}", 
+                "{} {} {}",
+                PAGINATION_BUTTON_SIZE,
                 PAGE_NUMBER_CLASS,
                 if is_current_page { "current-page text-white rounded-md bg-granola-orange" } else { INACTIVE_PAGE_NUMBER_CLASS }
             );
@@ -94,6 +95,8 @@ fn generate_pagination(pagination: Option<Pagination>) -> impl IntoView {
                 >{page_num}</button>
             }.into_view()]
         };
+
+        let pg_clone = pg.clone();
 
         view! {
             <div class="pagination-controls flex flex-col md:grid md:grid-cols-3 min-h-12 bg-table-header-fill">
@@ -108,6 +111,15 @@ fn generate_pagination(pagination: Option<Pagination>) -> impl IntoView {
                 </span>
                 <span class="button-container col-start-2 text-xs font-bold flex items-center justify-center my-2">
                     <PaginationButton
+                        class_id="go_to_first"
+                        on_click=move |_| { pg.set_current_page.update(|cp| *cp = 1) }
+
+                        disabled=pg.current_page == 1
+                    >
+                        <ChevronDoubleLeft width=16/>
+                    </PaginationButton>
+                    <PaginationButton
+                        class_id="go_to_prev"
                         on_click=move |_| {
                             pg.set_current_page.update(|cp| *cp = pg.current_page.saturating_sub(1))
                         }
@@ -126,10 +138,21 @@ fn generate_pagination(pagination: Option<Pagination>) -> impl IntoView {
                         .flat_map(|&p| create_page_button(p, pg.current_page))
                         .collect::<Vec<_>>()}
                     <PaginationButton
+                        class_id="go_to_next"
                         on_click=move |_| pg.set_current_page.update(|cp| *cp = pg.current_page + 1)
                         disabled=pg.current_page == pg.total_pages()
                     >
                         <ChevronRight width=16/>
+                    </PaginationButton>
+                    <PaginationButton
+                        class_id="go_to_last"
+                        on_click=move |_| {
+                            pg.set_current_page.update(|cp| *cp = pg_clone.total_pages())
+                        }
+
+                        disabled=pg.current_page == pg.total_pages()
+                    >
+                        <ChevronDoubleRight width=16/>
                     </PaginationButton>
                 </span>
             </div>
@@ -139,22 +162,23 @@ fn generate_pagination(pagination: Option<Pagination>) -> impl IntoView {
 
 #[component]
 fn PaginationButton(
+    #[prop(into)] class_id: String,
     children: Children,
     #[prop(into)] on_click: Callback<MouseEvent>,
     disabled: bool,
 ) -> impl IntoView {
     let button_class = if disabled {
         format!(
-            "{} text-slate-400 hover:cursor-not-allowed",
-            BUTTON_CLASS_BASE
+            "{} {} text-slate-400 hover:cursor-not-allowed",
+            PAGINATION_BUTTON_SIZE, BUTTON_CLASS_BASE
         )
     } else {
-        format!("{} hover:cursor-pointer hover:text-granola-orange hover:underline rounded-full bg-transparent hover:bg-slate-300", BUTTON_CLASS_BASE)
+        format!("{} {} hover:cursor-pointer hover:text-granola-orange hover:underline rounded-full bg-transparent hover:bg-slate-300", PAGINATION_BUTTON_SIZE, BUTTON_CLASS_BASE)
     };
 
     view! {
         <button
-            class=button_class
+            class=class_id + " " + &button_class
             disabled=disabled
             type="button"
             on:click=move |event: MouseEvent| {

@@ -29,6 +29,7 @@ pub enum Status {
     Unknown,
 }
 
+#[derive(Clone)]
 pub struct Pagination {
     pub current_page: usize,
     pub records_per_page: usize,
