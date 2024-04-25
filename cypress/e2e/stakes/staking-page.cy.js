@@ -24,8 +24,8 @@ suite(["@CI"], "staking ledger", () => {
                   extractProgressPercent(progress),
                 );
                 cy.log("Percent Complete: ", progressFloat);
-                expect("" + progressFloat).to.equal(
-                  ((slotInt / totalSlotsInt) * 100).toFixed(2),
+                expect(progressFloat).to.equal(
+                  parseFloat(((slotInt / totalSlotsInt) * 100).toFixed(2)),
                 );
               });
           });
