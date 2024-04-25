@@ -58,7 +58,7 @@ audit:
 dev: build_npm
   trunk serve --port="{{trunk_port}}" --open
 
-publish: 
+publish: clean && build_npm
   trunk build --release --filehash true
   aws cloudfront create-invalidation --distribution-id "$DIST_ID" --paths "/*"
   aws s3 rm "s3://$BUCKET_NAME" --recursive
