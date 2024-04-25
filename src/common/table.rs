@@ -7,9 +7,9 @@ pub trait TableData {
     fn get_rows(&self) -> Vec<Vec<HtmlElement<AnyElement>>>;
 }
 
-const BUTTON_CLASS_BASE: &str = "font-semibold h-6 w-6 flex justify-center items-center";
-const PAGE_NUMBER_CLASS: &str =
-    "page text-md m-1 h-6 w-6 flex justify-center items-center font-semibold";
+const PAGINATION_BUTTON_SIZE: &str = "h-7 w-7";
+const BUTTON_CLASS_BASE: &str = "font-semibold flex justify-center items-center";
+const PAGE_NUMBER_CLASS: &str = "page text-md m-1 flex justify-center items-center font-semibold";
 const INACTIVE_PAGE_NUMBER_CLASS: &str =
     "hover:bg-slate-300 bg-transparent rounded-full cursor-pointer";
 const CELL_PADDING_CLASS: &str = "first:pl-8 pl-2 last:pr-4";
@@ -82,7 +82,8 @@ fn generate_pagination(pagination: Option<Pagination>) -> impl IntoView {
         let create_page_button = |page_num: usize, current_page: usize| {
             let is_current_page = page_num == current_page;
             let button_classes = format!(
-                "{} {}", 
+                "{} {} {}",
+                PAGINATION_BUTTON_SIZE,
                 PAGE_NUMBER_CLASS,
                 if is_current_page { "current-page text-white rounded-md bg-granola-orange" } else { INACTIVE_PAGE_NUMBER_CLASS }
             );
@@ -145,11 +146,11 @@ fn PaginationButton(
 ) -> impl IntoView {
     let button_class = if disabled {
         format!(
-            "{} text-slate-400 hover:cursor-not-allowed",
-            BUTTON_CLASS_BASE
+            "{} {} text-slate-400 hover:cursor-not-allowed",
+            PAGINATION_BUTTON_SIZE, BUTTON_CLASS_BASE
         )
     } else {
-        format!("{} hover:cursor-pointer hover:text-granola-orange hover:underline rounded-full bg-transparent hover:bg-slate-300", BUTTON_CLASS_BASE)
+        format!("{} {} hover:cursor-pointer hover:text-granola-orange hover:underline rounded-full bg-transparent hover:bg-slate-300", PAGINATION_BUTTON_SIZE, BUTTON_CLASS_BASE)
     };
 
     view! {
