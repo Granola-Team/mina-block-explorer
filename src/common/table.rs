@@ -25,14 +25,15 @@ where
     view! {
         <div class="@container w-full overflow-auto">
             <table class="font-mono md:rounded-b-lg w-full @xs:w-[175%] @md:w-[150%] @2xl:w-[125%] @7xl:w-full">
-                {generate_table_header(&columns)} {generate_table_rows(&rows)}
+                <TableHeader columns/> {generate_table_rows(&rows)}
             </table>
         </div>
         {generate_pagination(pagination)}
     }
 }
 
-fn generate_table_header(columns: &[String]) -> impl IntoView {
+#[component]
+fn TableHeader(columns: Vec<String>) -> impl IntoView {
     view! {
         <tr class="h-12 bg-table-header-fill">
             {columns
