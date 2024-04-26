@@ -1,7 +1,9 @@
 use super::{components::*, functions::*, models::*};
-use crate::icons::*;
+use crate::{common::constants::*, icons::*};
 use heck::ToKebabCase;
 use leptos::{html::*, web_sys::MouseEvent, *};
+use leptos_router::*;
+use leptos_use::{use_debounce_fn_with_options, DebounceOptions};
 
 pub trait TableData {
     fn get_columns(&self) -> Vec<String>;
@@ -59,23 +61,60 @@ fn TableHeader(columns: Vec<TableColumn>) -> impl IntoView {
                 .iter()
                 .map(|s| {
                     let id = "q-".to_string() + &s.column.as_str().to_kebab_case();
-                    view! {
-                        <th class=format!(
-                            "{} text-table-header-text-color font-semibold uppercase text-xs text-left p-2 box-border",
-                            CELL_PADDING_CLASS,
-                        )>
-                            <div class="whitespace-nowrap">{s.column.clone()}</div>
-                            {if s.is_searchable {
-                                view! { <input class=INPUT_CLASS id=id/> }.into_view()
-                            } else {
-                                view! { <div class=INPUT_CLASS></div> }.into_view()
-                            }}
-
-                        </th>
-                    }
+                    view! { <ColumnHeader id=id column=s.clone()/> }
                 })
                 .collect::<Vec<_>>()}
         </tr>
+    }
+}
+
+#[component]
+fn ColumnHeader(id: String, column: TableColumn) -> impl IntoView {
+    let id_copy = id.clone();
+    let (value, set_value) = create_query_signal::<String>(id);
+    let input_element: NodeRef<html::Input> = create_node_ref();
+
+    let update_value = use_debounce_fn_with_options(
+        move || {
+            let v = input_element
+                .get()
+                .expect("<input/> should be mounted")
+                .value();
+            if v.is_empty() {
+                set_value.set(None);
+            } else {
+                set_value.set(Some(v));
+            }
+        },
+        DEFAULT_USER_INPUT_DEBOUNCE_INTERNVAL,
+        DebounceOptions::default(),
+    );
+
+    view! {
+        <th class=format!(
+            "{} text-table-header-text-color font-semibold uppercase text-xs text-left p-2 box-border",
+            CELL_PADDING_CLASS,
+        )>
+            <div class="whitespace-nowrap">{column.column.clone()}</div>
+            {if column.is_searchable {
+                view! {
+                    <input
+                        value=value
+                        on:input=move |_| {
+                            update_value();
+                        }
+
+                        node_ref=input_element
+                        class=INPUT_CLASS
+                        id=id_copy
+                    />
+                }
+                    .into_view()
+            } else {
+                view! { <div class=INPUT_CLASS></div> }.into_view()
+            }}
+
+        </th>
     }
 }
 
