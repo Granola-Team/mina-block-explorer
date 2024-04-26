@@ -1,12 +1,23 @@
 use super::{components::*, functions::*, models::*};
 use crate::icons::*;
+use heck::ToKebabCase;
 use leptos::{html::*, web_sys::MouseEvent, *};
 
 pub trait TableData {
     fn get_columns(&self) -> Vec<String>;
     fn get_rows(&self) -> Vec<Vec<HtmlElement<AnyElement>>>;
+    fn get_exact_search_columns(&self) -> Vec<String> {
+        Vec::new()
+    }
 }
 
+#[derive(Clone)]
+struct TableColumn {
+    column: String,
+    is_searchable: bool,
+}
+
+const INPUT_CLASS: &str = "mt-1 h-7 text-base text-sm font-normal font-mono p-2 rounded";
 const PAGINATION_BUTTON_SIZE: &str = "h-7 w-7";
 const BUTTON_CLASS_BASE: &str = "font-semibold flex justify-center items-center";
 const PAGE_NUMBER_CLASS: &str = "page text-md m-1 flex justify-center items-center font-semibold";
@@ -19,13 +30,21 @@ pub fn Table<T>(data: T, #[prop(optional)] pagination: Option<Pagination>) -> im
 where
     T: TableData,
 {
-    let columns = data.get_columns();
+    let columns = data
+        .get_columns()
+        .iter()
+        .map(|c| TableColumn {
+            column: c.to_string(),
+            is_searchable: data.get_exact_search_columns().contains(c),
+        })
+        .collect::<Vec<_>>();
     let rows = data.get_rows();
 
     view! {
         <div class="@container w-full overflow-auto">
             <table class="font-mono md:rounded-b-lg w-full @xs:w-[175%] @md:w-[150%] @2xl:w-[125%] @7xl:w-full">
-                <TableHeader columns/> {generate_table_rows(&rows)}
+                <TableHeader columns=columns/>
+                {generate_table_rows(&rows)}
             </table>
         </div>
         {generate_pagination(pagination)}
@@ -33,17 +52,26 @@ where
 }
 
 #[component]
-fn TableHeader(columns: Vec<String>) -> impl IntoView {
+fn TableHeader(columns: Vec<TableColumn>) -> impl IntoView {
     view! {
         <tr class="h-12 bg-table-header-fill">
             {columns
                 .iter()
                 .map(|s| {
+                    let id = "q-".to_string() + &s.column.as_str().to_kebab_case();
                     view! {
                         <th class=format!(
-                            "{} text-table-header-text-color font-semibold uppercase text-xs text-left",
+                            "{} text-table-header-text-color font-semibold uppercase text-xs text-left p-2 box-border",
                             CELL_PADDING_CLASS,
-                        )>{s}</th>
+                        )>
+                            <div class="whitespace-nowrap">{s.column.clone()}</div>
+                            {if s.is_searchable {
+                                view! { <input class=INPUT_CLASS id=id/> }.into_view()
+                            } else {
+                                view! { <div class=INPUT_CLASS></div> }.into_view()
+                            }}
+
+                        </th>
                     }
                 })
                 .collect::<Vec<_>>()}
