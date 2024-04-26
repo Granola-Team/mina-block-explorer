@@ -13,21 +13,37 @@ use leptos::*;
 
 fn shared_get_columns() -> Vec<String> {
     vec![
-        String::from("Height"),
-        String::from("State Hash"),
-        String::from("Slot"),
-        String::from("Age"),
-        String::from("Block Producer"),
-        String::from("Coinbase"),
-        String::from("User Commands"),
-        String::from("SNARKs"),
-        String::from("Coinbase Receiver"),
+        "Height",
+        "State Hash",
+        "Slot",
+        "Age",
+        "Block Producer",
+        "Coinbase",
+        "User Commands",
+        "SNARKs",
+        "Coinbase Receiver",
     ]
+    .iter()
+    .map(|slc| slc.to_string())
+    .collect::<Vec<_>>()
 }
 
 impl TableData for Vec<Option<BlocksQueryBlocks>> {
     fn get_columns(&self) -> Vec<String> {
         shared_get_columns()
+    }
+
+    fn get_exact_search_columns(&self) -> Vec<String> {
+        vec![
+            "Height",
+            "State Hash",
+            "Slot",
+            "Block Producer",
+            "Coinbase Receiver",
+        ]
+        .iter()
+        .map(|slc| slc.to_string())
+        .collect::<Vec<_>>()
     }
 
     fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
