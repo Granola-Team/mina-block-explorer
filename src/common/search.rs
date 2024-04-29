@@ -12,7 +12,7 @@ pub fn SearchBar(
 ) -> impl IntoView {
     view! {
         <div class="flex self-stretch relative flex items-stretch mx-4 mb-4">
-            <SearchInput placeholder=placeholder/>
+            <SearchInput placeholder=placeholder disabled/>
         </div>
     }
 }
