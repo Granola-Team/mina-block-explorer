@@ -244,9 +244,10 @@ pub fn get_coinbase_receiver(block: &BlocksQueryBlocks) -> String {
 
 pub async fn load_data(
     limit: i64,
-    public_key: Option<String>,
+    block_creator_account: Option<String>,
     state_hash: Option<String>,
     block_height: Option<i64>,
+    slot: Option<i64>,
     canonical: Option<bool>,
 ) -> Result<blocks_query::ResponseData, MyError> {
     let variables = blocks_query::Variables {
@@ -257,7 +258,14 @@ pub async fn load_data(
             state_hash,
             block_height,
             creator_account: Some(blocks_query::BlockCreatorAccountQueryInput {
-                public_key,
+                public_key: block_creator_account,
+                ..Default::default()
+            }),
+            protocol_state: Some(blocks_query::BlockProtocolStateQueryInput {
+                consensus_state: Some(blocks_query::BlockProtocolStateConsensusStateQueryInput {
+                    slot,
+                    ..Default::default()
+                }),
                 ..Default::default()
             }),
             ..Default::default()
