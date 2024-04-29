@@ -16,7 +16,7 @@ pub fn InternalCommands(
     internal_commands: Vec<Option<InternalCommandsQueryFeetransfers>>,
 ) -> impl IntoView {
     view! {
-        <SearchBar placeholder="Exact search by recipient".to_string()/>
+        <SearchBar placeholder=MULTI_SEARCH_PLACEHOLDER_TEXT/>
         <Title text="Transactions | Internal Commands"/>
         <PageContainer>
             <TableSection section_heading="Internal Commands" controls=|| ().into_view()>
