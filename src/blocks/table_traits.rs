@@ -34,16 +34,10 @@ impl TableData for Vec<Option<BlocksQueryBlocks>> {
     }
 
     fn get_exact_search_columns(&self) -> Vec<String> {
-        vec![
-            "Height",
-            "State Hash",
-            "Slot",
-            "Block Producer",
-            "Coinbase Receiver",
-        ]
-        .iter()
-        .map(|slc| slc.to_string())
-        .collect::<Vec<_>>()
+        vec!["Height", "State Hash", "Slot", "Block Producer"]
+            .iter()
+            .map(|slc| slc.to_string())
+            .collect::<Vec<_>>()
     }
 
     fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
@@ -137,6 +131,13 @@ impl TableData for Vec<Option<BlocksQueryBlocksTransactionsUserCommands>> {
 impl TableData for SummaryPageBlocksQueryBlocks {
     fn get_columns(&self) -> Vec<String> {
         shared_get_columns()
+    }
+
+    fn get_exact_search_columns(&self) -> Vec<String> {
+        vec!["Height", "State Hash", "Slot", "Block Producer"]
+            .iter()
+            .map(|slc| slc.to_string())
+            .collect::<Vec<_>>()
     }
 
     fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
