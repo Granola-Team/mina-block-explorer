@@ -12,7 +12,7 @@ pub fn SearchBar(
 ) -> impl IntoView {
     view! {
         <div class="flex self-stretch relative flex items-stretch mx-4 mb-4">
-            <SearchInput placeholder=placeholder disabled/>
+            <SearchInput placeholder=placeholder/>
         </div>
     }
 }
@@ -102,7 +102,6 @@ pub fn TitledSearchBar(
     #[prop(into)] title: String,
     #[prop(into)] subtext: HtmlElement<html::AnyElement>,
     #[prop(into)] search_placeholder: String,
-    #[prop(default = false)] disabled: bool,
 ) -> impl IntoView {
     view! {
         <PreSectionContainer>
@@ -113,7 +112,7 @@ pub fn TitledSearchBar(
                 </span>
             </div>
             <div class="mx-2 my-2 md:mx-0 md:w-full relative align-stretch flex items-center">
-                <SearchInput placeholder=search_placeholder disabled/>
+                <SearchInput placeholder=search_placeholder/>
             </div>
         </PreSectionContainer>
     }
