@@ -1,8 +1,5 @@
 use crate::{
-    common::{
-        components::*, constants::*, functions::*, models::PageDimensions,
-        table::*,
-    },
+    common::{components::*, constants::*, functions::*, models::PageDimensions, table::*},
     internal_commands::{
         functions::load_data, graphql::internal_commands_query::InternalCommandsQueryFeetransfers,
     },
