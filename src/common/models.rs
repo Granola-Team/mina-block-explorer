@@ -174,4 +174,3 @@ pub struct PageDimensions {
     pub height: Option<f64>,
     pub width: Option<f64>,
 }
-

@@ -8,3 +8,4 @@ pub const EPOCH_SLOTS: u16 = 7140;
 pub const BLOCK_SEARCH_PLACEHOLDER_TEXT: &str =
     "Height: H348465; State Hash: 3N...; Address: B62...";
 pub const DEFAULT_USER_INPUT_DEBOUNCE_INTERNVAL: f64 = 500.0;
+pub const MULTI_SEARCH_PLACEHOLDER_TEXT: &str = "Paste + Enter";
