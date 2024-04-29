@@ -1,10 +1,5 @@
 use super::{components::*, functions::*, models::*};
-use crate::common::{
-    components::*,
-    constants::{TABLE_RECORD_SIZE, *},
-    models::*,
-    search::*,
-};
+use crate::common::{components::*, constants::*, models::*, search::*};
 use leptos::*;
 use leptos_meta::Title;
 use leptos_router::*;
@@ -67,7 +62,7 @@ pub fn BlockTabbedPage() -> impl IntoView {
         move || memo_params_map.get(),
         |value| async move {
             let state_hash = value.get("id");
-            load_data(TABLE_RECORD_SIZE, None, state_hash.cloned(), None, None).await
+            load_data(1, None, state_hash.cloned(), None, None).await
         },
     );
 
