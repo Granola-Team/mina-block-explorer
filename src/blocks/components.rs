@@ -628,28 +628,31 @@ fn BlockSpotlightPlaceholder() -> impl IntoView {
 #[component]
 pub fn BlocksSection() -> impl IntoView {
     let query_params_map = use_query_map();
-    let (canonical_qp, _) = create_query_signal::<bool>("canonical");
+    let (block_height_sig, _) = create_query_signal::<i64>("q-height");
+    let (slot_sig, _) = create_query_signal::<i64>("q-slot");
+    let (canonical_sig, _) = create_query_signal::<bool>("canonical");
 
     let resource = create_resource(
-        move || (query_params_map.get(), canonical_qp.get()),
-        |(value, canonical)| async move {
-            let public_key = value.get("account");
-            let block_search = parse_query_for_multisearch(value.get("query").cloned());
-            let canonical = if canonical.is_none() {
-                Some(true)
-            } else {
-                canonical
-            };
+        move || {
+            (
+                query_params_map.get(),
+                block_height_sig.get(),
+                slot_sig.get(),
+                canonical_sig.get(),
+            )
+        },
+        |(q_map, block_height, slot, canonical)| async move {
             load_data(
                 TABLE_RECORD_SIZE,
-                if public_key.is_some() {
-                    public_key.cloned()
+                q_map.get("q-block-producer").cloned(),
+                q_map.get("q-state-hash").cloned(),
+                block_height,
+                slot,
+                if canonical.is_some() {
+                    canonical
                 } else {
-                    block_search.public_key
+                    Some(true)
                 },
-                block_search.state_hash,
-                block_search.block_height,
-                canonical,
             )
             .await
         },
@@ -725,23 +728,31 @@ const ESTIMATED_NON_TABLE_SPACE_IN_SUMMARY: usize = 390;
 #[component]
 pub fn SummaryPageBlocksSection() -> impl IntoView {
     let query_params_map = use_query_map();
-    let (canonical_qp, _) = create_query_signal::<bool>("canonical");
+    let (block_height_sig, _) = create_query_signal::<i64>("q-height");
+    let (slot_sig, _) = create_query_signal::<i64>("q-slot");
+    let (canonical_sig, _) = create_query_signal::<bool>("canonical");
+
     let resource = create_resource(
-        move || (query_params_map.get(), canonical_qp.get()),
-        |(value, canonical)| async move {
-            let query_opt = value.get("query");
-            let block_search = parse_query_for_multisearch(query_opt.cloned());
-            let canonical = if canonical.is_none() {
-                Some(true)
-            } else {
-                canonical
-            };
+        move || {
+            (
+                query_params_map.get(),
+                block_height_sig.get(),
+                slot_sig.get(),
+                canonical_sig.get(),
+            )
+        },
+        |(q_map, block_height, slot, canonical)| async move {
             load_data(
                 TABLE_RECORD_SIZE,
-                block_search.public_key,
-                block_search.state_hash,
-                block_search.block_height,
-                canonical,
+                q_map.get("q-block-producer").cloned(),
+                q_map.get("q-state-hash").cloned(),
+                block_height,
+                slot,
+                if canonical.is_some() {
+                    canonical
+                } else {
+                    Some(true)
+                },
             )
             .await
         },
