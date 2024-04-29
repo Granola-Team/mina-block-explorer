@@ -1,6 +1,6 @@
 use crate::{
     common::{
-        components::*, constants::*, functions::*, models::PageDimensions, search::SearchBar,
+        components::*, constants::*, functions::*, models::PageDimensions,
         table::*,
     },
     internal_commands::{
@@ -16,7 +16,6 @@ pub fn InternalCommands(
     internal_commands: Vec<Option<InternalCommandsQueryFeetransfers>>,
 ) -> impl IntoView {
     view! {
-        <SearchBar placeholder=MULTI_SEARCH_PLACEHOLDER_TEXT/>
         <Title text="Transactions | Internal Commands"/>
         <PageContainer>
             <TableSection section_heading="Internal Commands" controls=|| ().into_view()>

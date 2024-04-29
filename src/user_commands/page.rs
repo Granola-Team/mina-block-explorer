@@ -34,7 +34,10 @@ pub fn CommandsTabbedPage() -> impl IntoView {
         });
     }
 
-    view! { <TabbedPage tabs=tabs/> }
+    view! {
+        <SearchBar placeholder=MULTI_SEARCH_PLACEHOLDER_TEXT/>
+        <TabbedPage tabs=tabs/>
+    }
 }
 
 #[component]
@@ -42,7 +45,6 @@ pub fn UserCommandsPage() -> impl IntoView {
     let query_params_map: Memo<ParamsMap> = use_query_map();
 
     view! {
-        <SearchBar placeholder=MULTI_SEARCH_PLACEHOLDER_TEXT/>
         <Title text="Commands | Search For Commands"/>
         <PageContainer>
             {move || {
