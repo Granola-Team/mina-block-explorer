@@ -1,10 +1,5 @@
 use super::{components::*, functions::*, models::*};
-use crate::common::{
-    components::*,
-    constants::{TABLE_RECORD_SIZE, *},
-    models::*,
-    search::*,
-};
+use crate::common::{components::*, constants::*, models::*};
 use leptos::*;
 use leptos_meta::Title;
 use leptos_router::*;
@@ -13,7 +8,6 @@ use leptos_router::*;
 pub fn LatestBlocksPage() -> impl IntoView {
     view! {
         <Title text="Blocks | Search for Mina Blocks"/>
-        <SearchBar placeholder=BLOCK_SEARCH_PLACEHOLDER_TEXT/>
         <PageContainer>
             <BlocksSection/>
         </PageContainer>
@@ -67,7 +61,15 @@ pub fn BlockTabbedPage() -> impl IntoView {
         move || memo_params_map.get(),
         |value| async move {
             let state_hash = value.get("id");
-            load_data(TABLE_RECORD_SIZE, None, state_hash.cloned(), None, None).await
+            load_data(
+                TABLE_RECORD_SIZE,
+                None,
+                state_hash.cloned(),
+                None,
+                None,
+                None,
+            )
+            .await
         },
     );
 
