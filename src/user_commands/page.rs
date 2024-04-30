@@ -42,16 +42,10 @@ pub fn CommandsTabbedPage() -> impl IntoView {
 
 #[component]
 pub fn UserCommandsPage() -> impl IntoView {
-    let query_params_map: Memo<ParamsMap> = use_query_map();
-
     view! {
         <Title text="Commands | Search For Commands"/>
         <PageContainer>
-            {move || {
-                let qp_map = query_params_map.get();
-                view! { <TransactionsSection state_hash=qp_map.get("query").cloned()/> }
-            }}
-
+            <TransactionsSection/>
         </PageContainer>
     }
 }
