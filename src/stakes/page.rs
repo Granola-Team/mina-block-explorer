@@ -112,13 +112,18 @@ fn StakesPageContents() -> impl IntoView {
                         controls=move || {
                             view! {
                                 <EpochButton
+                                    disabled=previous_epoch < 1
                                     text="Previous"
                                     style_variant=EpochStyleVariant::Secondary
                                     epoch_target=previous_epoch
                                 />
                                 {if next_epoch == curr_epoch {
                                     view! {
-                                        <StakesNavButton href="/next-stakes" text="Next Stakes"/>
+                                        <EpochButton
+                                            href="/next-stakes"
+                                            text="Next"
+                                            style_variant=EpochStyleVariant::Primary
+                                        />
                                     }
                                 } else {
                                     view! {
