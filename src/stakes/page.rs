@@ -136,12 +136,16 @@ fn StakesPageContents() -> impl IntoView {
                             }
                         }
 
-                        additional_info=format!(
-                            "{:.2}% complete ({}/{} slots filled)",
-                            (sum_data.slot as f64 / EPOCH_SLOTS as f64) * 100.0,
-                            sum_data.slot,
-                            EPOCH_SLOTS,
-                        )
+                        additional_info=if next_epoch-1 == curr_epoch {
+                            format!(
+                                "{:.2}% complete ({}/{} slots filled)",
+                                (sum_data.slot as f64 / EPOCH_SLOTS as f64) * 100.0,
+                                sum_data.slot,
+                                EPOCH_SLOTS,
+                            )
+                        } else {
+                            "".to_string()
+                        }
                     >
 
                         <Table data=subset pagination=pag/>
