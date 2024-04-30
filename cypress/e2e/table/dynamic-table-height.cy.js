@@ -1,11 +1,7 @@
+import { extractRows } from "../../support/helpers";
 import { DEFAULT_CANONICAL_BLOCK_HASH } from "../constants";
 
 suite(["@CI"], "table of dynamic height", () => {
-  Cypress.on("uncaught:exception", (err, runnable) => {
-    if (err.message.includes("ResizeObserver")) {
-      return false;
-    }
-  });
   let pages = [
     { url: "/", tableHeading: "Blocks" },
     { url: "/blocks", tableHeading: "Blocks" },
@@ -52,9 +48,3 @@ suite(["@CI"], "table of dynamic height", () => {
     }),
   );
 });
-
-function extractRows(input) {
-  const regex = /Showing 1 to (\d+) of (\d+) records/;
-  const match = input.match(regex);
-  return match ? match[1] : null;
-}

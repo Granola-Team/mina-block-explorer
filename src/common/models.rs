@@ -174,9 +174,3 @@ pub struct PageDimensions {
     pub height: Option<f64>,
     pub width: Option<f64>,
 }
-
-pub struct MultiSearch {
-    pub block_height: Option<i64>,
-    pub public_key: Option<String>,
-    pub state_hash: Option<String>,
-}

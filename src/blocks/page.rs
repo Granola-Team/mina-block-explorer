@@ -62,7 +62,15 @@ pub fn BlockTabbedPage() -> impl IntoView {
         move || memo_params_map.get(),
         |value| async move {
             let state_hash = value.get("id");
-            load_data(1, None, state_hash.cloned(), None, None).await
+            load_data(
+                TABLE_RECORD_SIZE,
+                None,
+                state_hash.cloned(),
+                None,
+                None,
+                None,
+            )
+            .await
         },
     );
 
