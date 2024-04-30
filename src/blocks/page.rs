@@ -1,6 +1,5 @@
 use super::{components::*, functions::*, models::*};
 use crate::common::{components::*, constants::*, models::*, search::*};
-
 use leptos::*;
 use leptos_meta::Title;
 use leptos_router::*;
