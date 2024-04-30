@@ -9,6 +9,24 @@ const kebabCase = (string) =>
 suite(["@CI"], "search with multiple results", () => {
   let multi_response_searches = [
     {
+      origin: "/commands/user-commands",
+      tableHeading: "User Commands",
+      input: "350137",
+      expectation: { column: "Height", value: "350137" },
+    },
+    {
+      origin: "/commands/user-commands",
+      tableHeading: "User Commands",
+      input: DEFAULT_ACCOUNT_PK,
+      expectation: { column: "From", value: DEFAULT_ACCOUNT_PK },
+    },
+    {
+      origin: "/commands/user-commands",
+      tableHeading: "User Commands",
+      input: DEFAULT_ACCOUNT_PK,
+      expectation: { column: "To", value: DEFAULT_ACCOUNT_PK },
+    },
+    {
       origin: "/",
       input: DEFAULT_ACCOUNT_PK,
       tableHeading: "Blocks",
@@ -48,6 +66,12 @@ suite(["@CI"], "search with single result", () => {
   let block_hash = "3NLqPGGVtxXdsQg2orrp3SFFE3ToeMuqWRerSRWbmAKuSk2tphWy";
 
   let exact_searches = [
+    {
+      origin: "/commands/user-commands",
+      input: "CkpZuatq9Q4CC39FbMbJVZucBmzwyJySvWXGq3s3JtX5Wr2ccpMMN",
+      tableHeading: "User Commands",
+      column: "Txn Hash",
+    },
     {
       origin: "/",
       input: block_hash,
