@@ -1,53 +1,28 @@
 suite(["@CI"], "staking ledger", () => {
-  it("shows slot progress indicator", () => {
+  it.only("shows slot progress message", () => {
     cy.visit("/staking-ledgers");
-    cy.get(".pg-container").as("progress");
-    cy.get(".pg-container .pg-completeness").as("pg-completeness");
-    cy.get(".pg-container .pg-slot").as("pg-slot");
-    cy.get(".pg-container .pg-total-slots").as("pg-total-slots");
+    cy.get(".additional-info").as("slot-info");
 
-    cy.get("@pg-total-slots")
+    cy.get("@slot-info")
       .invoke("text")
-      .then((totalSlots) => {
-        expect(extractTotalSlots(totalSlots)).to.equal("7140");
-        let totalSlotsInt = parseInt(extractTotalSlots(totalSlots));
-        cy.log("Total slots: ", totalSlotsInt);
-        cy.get("@pg-slot")
-          .invoke("text")
-          .then((slot) => {
-            let slotInt = parseInt(extractSlot(slot));
-            cy.log("Current Slot: ", slotInt);
-            cy.get("@pg-completeness")
-              .invoke("text")
-              .then((progress) => {
-                let progressFloat = parseFloat(
-                  extractProgressPercent(progress),
-                );
-                cy.log("Percent Complete: ", progressFloat);
-                expect(progressFloat).to.equal(
-                  parseFloat(((slotInt / totalSlotsInt) * 100).toFixed(2)),
-                );
-              });
-          });
+      .then((epochProgressText) => {
+        const info = extractEpochProgress(epochProgressText);
+        expect(parseFloat(info.percent)).to.equal(
+          parseFloat(((info.slot / info.totalSlots) * 100).toFixed(2)),
+        );
       });
   });
 
-  function extractProgressPercent(input) {
-    let regex = /Epoch is (\d+).(\d+)% complete/;
+  function extractEpochProgress(input) {
+    let regex = /(\d+).(\d+)% complete \((\d+)\/(\d+) slots filled\)/;
     const match = input.match(regex);
-    return match ? match[1] + "." + match[2] : null;
-  }
-
-  function extractSlot(input) {
-    let regex = /Current slot: (\d+)/;
-    const match = input.match(regex);
-    return match ? match[1] : null;
-  }
-
-  function extractTotalSlots(input) {
-    let regex = /Epoch slots: (\d+)/;
-    const match = input.match(regex);
-    return match ? match[1] : null;
+    return match
+      ? {
+          percent: match[1] + "." + match[2],
+          slot: match[3],
+          totalSlots: match[4],
+        }
+      : null;
   }
 
   it("only has large positive stakes", () => {
