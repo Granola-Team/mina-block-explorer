@@ -12,6 +12,13 @@ impl TableData for Vec<Option<TransactionsQueryTransactions>> {
         .collect::<Vec<_>>()
     }
 
+    fn get_exact_search_columns(&self) -> Vec<String> {
+        ["Height", "Txn Hash", "From", "To"]
+            .iter()
+            .map(ToString::to_string)
+            .collect::<Vec<_>>()
+    }
+
     fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
         self.iter()
             .map(|opt_trans| match opt_trans {
