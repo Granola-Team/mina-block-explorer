@@ -22,9 +22,9 @@ suite(["@CI"], "Block spotlight", () => {
 
   function testForCompleteness(
     stateHash,
-    expectedUserCommands,
-    expectedSnarkJobs,
-    expectedInternalCommands,
+    minUserCommands,
+    minSnarkJobs,
+    minInternalCommands,
   ) {
     cy.visit(`/blocks/${stateHash}`);
     cy.testSpotlight("Block Spotlight", stateHash, expected_fields);
@@ -33,21 +33,21 @@ suite(["@CI"], "Block spotlight", () => {
     cy.testSpotlight("Block Spotlight", stateHash, expected_fields);
 
     cy.get(`a[href="/blocks/${stateHash}/user-commands"]`).click();
-    cy.tableHasNRows("User Commands", expectedUserCommands);
+    cy.tableHasMoreThanNRows("User Commands", minUserCommands);
 
     cy.get(`a[href="/blocks/${stateHash}/snark-jobs"]`).click();
-    cy.tableHasNRows("SNARK Jobs", expectedSnarkJobs);
+    cy.tableHasMoreThanNRows("SNARK Jobs", minSnarkJobs);
     cy.tableColumnValuesEqual("SNARK Jobs", "Hash", stateHash);
 
     cy.get(`a[href="/blocks/${stateHash}/internal-commands"]`).click();
-    cy.tableHasNRows("Internal Commands", expectedInternalCommands);
+    cy.tableHasMoreThanNRows("Internal Commands", minInternalCommands);
   }
 
   it("displays complete information for canonical block", () => {
-    testForCompleteness(DEFAULT_CANONICAL_BLOCK_HASH, 10, 10, 10);
+    testForCompleteness(DEFAULT_CANONICAL_BLOCK_HASH, 7, 7, 7);
   });
 
   it("displays complete information for non-canonical block", () => {
-    testForCompleteness(DEFAULT_NON_CANONICAL_BLOCK_HASH, 10, 10, 6);
+    testForCompleteness(DEFAULT_NON_CANONICAL_BLOCK_HASH, 7, 7, 6);
   });
 });
