@@ -69,28 +69,17 @@ fn StakesPageContents() -> impl IntoView {
     view! {
         {move || match (resource.get(), summary_resource.get()) {
             (Some(Ok(data)), Some(Ok(sum_data))) => {
-                let (previous_epoch, next_epoch, curr_epoch, section_heading) = match (
-                    current_epoch(),
-                    epoch_sig.get(),
-                ) {
-                    (Some(curr_epoch), Some(qs_epoch)) => {
-                        let header = if curr_epoch == qs_epoch {
-                            "Current Staking Ledger".to_string()
-                        } else {
-                            format!("Epoch {} Staking Ledger", qs_epoch)
-                        };
-                        ((qs_epoch - 1), (qs_epoch + 1), (curr_epoch), header)
+                let curr_epoch = sum_data.epoch as i64;
+                let mut section_heading = "Current Staking Ledger".to_string();
+                let mut next_epoch = curr_epoch + 1;
+                let mut prev_epoch = curr_epoch - 1;
+                if let Some(qs_epoch) = epoch_sig.get() {
+                    if qs_epoch != curr_epoch {
+                        section_heading = format!("Epoch {} Staking Ledger", qs_epoch);
+                        next_epoch = qs_epoch + 1;
+                        prev_epoch = qs_epoch - 1;
                     }
-                    (Some(curr_epoch), None) => {
-                        (
-                            (curr_epoch - 1),
-                            (curr_epoch + 1),
-                            (curr_epoch),
-                            "Current Staking Ledger".to_string(),
-                        )
-                    }
-                    _ => (0, 0, 0, "".to_string()),
-                };
+                }
                 let pag = build_pagination(
                     data.stakes.len(),
                     TABLE_DEFAULT_PAGE_SIZE,
@@ -111,10 +100,10 @@ fn StakesPageContents() -> impl IntoView {
                         controls=move || {
                             view! {
                                 <EpochButton
-                                    disabled=previous_epoch < 1
+                                    disabled=prev_epoch < 1
                                     text="Previous"
                                     style_variant=EpochStyleVariant::Secondary
-                                    epoch_target=previous_epoch
+                                    epoch_target=prev_epoch
                                 />
                                 {if next_epoch - 1 == curr_epoch {
                                     view! {
