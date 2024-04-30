@@ -116,7 +116,7 @@ fn StakesPageContents() -> impl IntoView {
                                     style_variant=EpochStyleVariant::Secondary
                                     epoch_target=previous_epoch
                                 />
-                                {if next_epoch-1 == curr_epoch {
+                                {if next_epoch - 1 == curr_epoch {
                                     view! {
                                         <EpochButton
                                             href="/next-stakes"
@@ -136,7 +136,7 @@ fn StakesPageContents() -> impl IntoView {
                             }
                         }
 
-                        additional_info=if next_epoch-1 == curr_epoch {
+                        additional_info=if next_epoch - 1 == curr_epoch {
                             format!(
                                 "{:.2}% complete ({}/{} slots filled)",
                                 (sum_data.slot as f64 / EPOCH_SLOTS as f64) * 100.0,
