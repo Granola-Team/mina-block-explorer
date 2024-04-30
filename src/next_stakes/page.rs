@@ -11,7 +11,7 @@ use leptos_router::*;
 pub fn NextStakesPage() -> impl IntoView {
     view! {
         <Title text="Next Staking Ledger | Search For Stakers"/>
-        <SearchBar placeholder="Exact search for public key"/>
+        <SearchBar placeholder=MULTI_SEARCH_PLACEHOLDER_TEXT/>
         <PageContainer>
             <NextStakesPageContents/>
         </PageContainer>

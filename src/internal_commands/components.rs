@@ -1,8 +1,5 @@
 use crate::{
-    common::{
-        components::*, constants::*, functions::*, models::PageDimensions, search::SearchBar,
-        table::*,
-    },
+    common::{components::*, constants::*, functions::*, models::PageDimensions, table::*},
     internal_commands::{
         functions::load_data, graphql::internal_commands_query::InternalCommandsQueryFeetransfers,
     },
@@ -16,7 +13,6 @@ pub fn InternalCommands(
     internal_commands: Vec<Option<InternalCommandsQueryFeetransfers>>,
 ) -> impl IntoView {
     view! {
-        <SearchBar placeholder="Exact search by recipient".to_string()/>
         <Title text="Transactions | Internal Commands"/>
         <PageContainer>
             <TableSection section_heading="Internal Commands" controls=|| ().into_view()>

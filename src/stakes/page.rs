@@ -30,7 +30,7 @@ pub fn StakesPage() -> impl IntoView {
 
             formatter=move |text| format!("Staking Ledger | {text}")
         />
-        <SearchBar placeholder="Exact search for public key"/>
+        <SearchBar placeholder=MULTI_SEARCH_PLACEHOLDER_TEXT/>
         <PageContainer>
             <EpochSlotIndicator/>
             <StakesPageContents/>

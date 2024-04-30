@@ -8,7 +8,7 @@ use leptos_router::*;
 pub fn LatestBlocksPage() -> impl IntoView {
     view! {
         <Title text="Blocks | Search for Mina Blocks"/>
-        <SearchBar placeholder=BLOCK_SEARCH_PLACEHOLDER_TEXT/>
+        <SearchBar placeholder=MULTI_SEARCH_PLACEHOLDER_TEXT/>
         <PageContainer>
             <BlocksSection/>
         </PageContainer>

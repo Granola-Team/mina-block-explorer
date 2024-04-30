@@ -1,6 +1,6 @@
 use super::{components::*, functions::*, table_trait::*};
 use crate::{
-    common::{components::*, functions::*, models::*, search::*, spotlight::*},
+    common::{components::*, constants::*, functions::*, models::*, search::*, spotlight::*},
     config::BERKELEY_FEATURES_ENABLED,
     icons::*,
 };
@@ -34,7 +34,10 @@ pub fn CommandsTabbedPage() -> impl IntoView {
         });
     }
 
-    view! { <TabbedPage tabs=tabs/> }
+    view! {
+        <SearchBar placeholder=MULTI_SEARCH_PLACEHOLDER_TEXT/>
+        <TabbedPage tabs=tabs/>
+    }
 }
 
 #[component]
@@ -42,7 +45,6 @@ pub fn UserCommandsPage() -> impl IntoView {
     let query_params_map: Memo<ParamsMap> = use_query_map();
 
     view! {
-        <SearchBar placeholder="Exact search by txn hash".to_string()/>
         <Title text="Commands | Search For Commands"/>
         <PageContainer>
             {move || {

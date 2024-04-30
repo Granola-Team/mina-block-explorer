@@ -15,7 +15,7 @@ use leptos_router::{create_query_signal, use_query_map};
 pub fn SnarksPage() -> impl IntoView {
     view! {
         <Title text="SNARKs | Search For SNARKs"/>
-        <SearchBar placeholder="Exact search for prover"/>
+        <SearchBar placeholder=MULTI_SEARCH_PLACEHOLDER_TEXT/>
         <PageContainer>
             <SnarksPageContents/>
         </PageContainer>

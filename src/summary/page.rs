@@ -27,7 +27,7 @@ pub fn SummaryPage() -> impl IntoView {
                 ],
             )
 
-            search_placeholder=BLOCK_SEARCH_PLACEHOLDER_TEXT
+            search_placeholder=MULTI_SEARCH_PLACEHOLDER_TEXT
         />
         <Title text="Mina Blockchain Explorer | Search For Blocks"/>
         <PageContainer>
