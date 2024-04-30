@@ -207,6 +207,7 @@ pub fn EmptyTable(#[prop(into)] message: String) -> impl IntoView {
 pub fn TableSection<E, F>(
     #[prop(into)] section_heading: String,
     children: Children,
+    #[prop(optional, into)] additional_info: String,
     controls: F,
 ) -> impl IntoView
 where
@@ -215,9 +216,10 @@ where
 {
     view! {
         <AppSection>
-            <span class="w-full flex justify-between">
+            <span class="w-full flex justify-between flex-wrap">
                 <AppHeading heading=section_heading/>
-                <div class="self-stretch flex items-center pr-4">{controls()}</div>
+                <div class="additional-info h-8 grow flex justify-center items-center px-4 text-slate-400 text-normal text-sm italic font-thin">{additional_info}</div>
+                <div class="grow md:grow-0 h-16 flex justify-end items-center pr-4">{controls()}</div>
             </span>
             {children()}
         </AppSection>
