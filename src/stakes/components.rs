@@ -22,7 +22,8 @@ pub fn EpochButton(
     button_variant_styles = match disabled {
         true => format!(
             "{} {}",
-            button_variant_styles, "bg-slate-100 text-slate-400 border-slate-100 hover:cursor-not-allowed"
+            button_variant_styles,
+            "bg-slate-100 text-slate-400 border-slate-100 hover:cursor-not-allowed"
         ),
         false => button_variant_styles,
     };
@@ -34,7 +35,7 @@ pub fn EpochButton(
     if href.clone().is_empty() {
         let handle_click = move |_| {
             if disabled {
-                return
+                return;
             }
             let pathname = location.pathname.get();
             let mut pm = query_params_map.get();
