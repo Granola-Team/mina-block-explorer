@@ -26,13 +26,13 @@ pub fn TransactionsSection(
             match txn_type {
                 Some(ref txn_type_str) if txn_type_str == "Pending" => load_pending_txn().await,
                 Some(ref txn_type_str) if txn_type_str == "Canonical" => {
-                    load_data(TABLE_RECORD_SIZE, None, None, state_hash, Some(true)).await
+                    load_data(TABLE_RECORD_SIZE, None, None, state_hash, None, Some(true)).await
                 }
                 Some(ref txn_type_str) if txn_type_str == "Non-Canonical" => {
-                    load_data(TABLE_RECORD_SIZE, None, None, state_hash, Some(false)).await
+                    load_data(TABLE_RECORD_SIZE, None, None, state_hash, None, Some(false)).await
                 }
                 Some(_) | None => {
-                    load_data(TABLE_RECORD_SIZE, None, None, state_hash, Some(true)).await
+                    load_data(TABLE_RECORD_SIZE, None, None, state_hash, None, Some(true)).await
                 }
             }
         },

@@ -65,7 +65,7 @@ pub fn CommandSpotlightPage() -> impl IntoView {
         move || (memo_params_map.get(), canonical_qp.get()),
         |(value, canonical)| async move {
             let state_hash = value.get("id");
-            load_data(1, None, None, state_hash.cloned(), canonical).await
+            load_data(1, None, None, state_hash.cloned(), None, canonical).await
         },
     );
 
