@@ -145,6 +145,7 @@ Cypress.Commands.add(
     cy.aliasTableHeaders(tableHeading, "columns");
     cy.get("@columns")
       .contains(columnHeading, { timeout: 60000 })
+      .parent()
       .invoke("index")
       .then((columnIndex) => {
         cy.aliasTableRows(tableHeading, "table-rows");
