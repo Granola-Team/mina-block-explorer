@@ -1,5 +1,5 @@
 suite(["@CI"], "staking ledger", () => {
-  it.only("shows slot progress message", () => {
+  it("shows slot progress message", () => {
     cy.visit("/staking-ledgers");
     cy.get(".additional-info").as("slot-info");
 
