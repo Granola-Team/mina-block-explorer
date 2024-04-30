@@ -8,7 +8,7 @@ use crate::{
         search::*,
         table::*,
     },
-    summary::{components::EpochSlotIndicator, functions::load_data as load_summary_data},
+    summary::functions::load_data as load_summary_data,
 };
 use leptos::*;
 use leptos_meta::Title;
@@ -32,7 +32,6 @@ pub fn StakesPage() -> impl IntoView {
         />
         <SearchBar placeholder=MULTI_SEARCH_PLACEHOLDER_TEXT/>
         <PageContainer>
-            <EpochSlotIndicator/>
             <StakesPageContents/>
         </PageContainer>
     }
@@ -69,7 +68,7 @@ fn StakesPageContents() -> impl IntoView {
     let (current_page, set_current_page) = create_signal(1);
     view! {
         {move || match (resource.get(), summary_resource.get()) {
-            (Some(Ok(data)), Some(Ok(_))) => {
+            (Some(Ok(data)), Some(Ok(sum_data))) => {
                 let (previous_epoch, next_epoch, curr_epoch, section_heading) = match (
                     current_epoch(),
                     epoch_sig.get(),
@@ -136,6 +135,13 @@ fn StakesPageContents() -> impl IntoView {
                                 }}
                             }
                         }
+
+                        additional_info=format!(
+                            "{:.2}% complete ({}/{} slots filled)",
+                            (sum_data.slot as f64 / EPOCH_SLOTS as f64) * 100.0,
+                            sum_data.slot,
+                            EPOCH_SLOTS,
+                        )
                     >
 
                         <Table data=subset pagination=pag/>
