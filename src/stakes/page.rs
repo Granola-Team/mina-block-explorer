@@ -84,7 +84,7 @@ fn StakesPageContents() -> impl IntoView {
                     (Some(curr_epoch), None) => {
                         (
                             (curr_epoch - 1),
-                            (curr_epoch),
+                            (curr_epoch + 1),
                             (curr_epoch),
                             "Current Staking Ledger".to_string(),
                         )
@@ -116,7 +116,7 @@ fn StakesPageContents() -> impl IntoView {
                                     style_variant=EpochStyleVariant::Secondary
                                     epoch_target=previous_epoch
                                 />
-                                {if next_epoch == curr_epoch {
+                                {if next_epoch-1 == curr_epoch {
                                     view! {
                                         <EpochButton
                                             href="/next-stakes"

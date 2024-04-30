@@ -218,9 +218,15 @@ where
         <AppSection>
             <span class="w-full flex justify-between flex-wrap">
                 <AppHeading heading=section_heading/>
-                <div class="additional-info pl-8 pr-4 h-16 grow flex justify-start md:justify-center items-center text-slate-400 text-normal text-sm italic font-thin">
-                    {additional_info}
-                </div>
+                {if !additional_info.is_empty() {
+                    view! {
+                        <div class="additional-info pl-8 pr-4 h-16 grow flex justify-start md:justify-center items-center text-slate-400 text-normal text-sm italic font-thin">
+                            {additional_info}
+                        </div>
+                    }.into_view()
+                } else {
+                    ().into_view()
+                }}
                 <div class="grow md:grow-0 h-16 flex justify-end items-center pr-4">
                     {controls()}
                 </div>
