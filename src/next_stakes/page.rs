@@ -1,7 +1,7 @@
 use super::functions::*;
 use crate::{
     common::{components::*, constants::*, functions::*, models::*, search::*, table::*},
-    stakes::components::StakesNavButton,
+    stakes::{components::EpochButton, models::EpochStyleVariant},
 };
 use leptos::*;
 use leptos_meta::Title;
@@ -73,9 +73,15 @@ fn NextStakesPageContents() -> impl IntoView {
                                     section_heading="Next Staking Ledger"
                                     controls=move || {
                                         view! {
-                                            <StakesNavButton
+                                            <EpochButton
                                                 href="/staking-ledgers"
-                                                text="Current Stakes"
+                                                text="Previous"
+                                                style_variant=EpochStyleVariant::Secondary
+                                            />
+                                            <EpochButton
+                                                text="Next"
+                                                disabled=true
+                                                style_variant=EpochStyleVariant::Primary
                                             />
                                         }
                                     }

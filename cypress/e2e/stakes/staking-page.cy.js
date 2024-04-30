@@ -71,7 +71,7 @@ suite(["@CI"], "staking ledger", () => {
   it("displays link to next stakes page", () => {
     cy.visit("/staking-ledgers");
     cy.get("section").contains("Current Staking Ledger");
-    cy.get("a").contains("Next Stakes").click();
+    cy.get("a").contains("Next").click();
     cy.wait(500);
     cy.get("section").contains("Next Staking Ledger");
   });
@@ -79,10 +79,10 @@ suite(["@CI"], "staking ledger", () => {
   it("provides navigation between current and Next staking ledger", () => {
     cy.visit("/next-stakes");
     cy.get("section").contains("Next Staking Ledger");
-    cy.get("a").contains("Current Stakes").click();
+    cy.get("a").contains("Previous").click();
     cy.wait(500);
     cy.get("section").contains("Current Staking Ledger");
-    cy.get("a").contains("Next Stakes").click();
+    cy.get("a").contains("Next").click();
     cy.wait(500);
     cy.get("section").contains("Next Staking Ledger");
   });
