@@ -12,11 +12,17 @@ use crate::{
 use leptos::*;
 use leptos_router::*;
 
+const QP_TXN_HASH: &str = "q-txn-hash";
+const QP_TXN_TYPE: &str = "txn-type";
+const QP_HEIGHT: &str = "q-height";
+const QP_FROM: &str = "q-from";
+const QP_TO: &str = "q-to";
+
 #[component]
 pub fn TransactionsSection(#[prop(default = false)] with_link: bool) -> impl IntoView {
-    let (txn_type_qp, _) = create_query_signal::<String>("txn-type");
+    let (txn_type_qp, _) = create_query_signal::<String>(QP_TXN_TYPE);
     let query_params_map = use_query_map();
-    let (block_height_sig, _) = create_query_signal::<i64>("q-block-height");
+    let (block_height_sig, _) = create_query_signal::<i64>(QP_HEIGHT);
 
     let resource = create_resource(
         move || {
@@ -32,9 +38,9 @@ pub fn TransactionsSection(#[prop(default = false)] with_link: bool) -> impl Int
                 Some(ref txn_type_str) if txn_type_str == "Canonical" => {
                     load_data(
                         TABLE_RECORD_SIZE,
-                        url_query_map.get("q-from").cloned(),
-                        url_query_map.get("q-to").cloned(),
-                        url_query_map.get("q-state-hash").cloned(),
+                        url_query_map.get(QP_FROM).cloned(),
+                        url_query_map.get(QP_TO).cloned(),
+                        url_query_map.get(QP_TXN_HASH).cloned(),
                         block_height,
                         Some(true),
                     )
@@ -43,9 +49,9 @@ pub fn TransactionsSection(#[prop(default = false)] with_link: bool) -> impl Int
                 Some(ref txn_type_str) if txn_type_str == "Non-Canonical" => {
                     load_data(
                         TABLE_RECORD_SIZE,
-                        url_query_map.get("q-from").cloned(),
-                        url_query_map.get("q-to").cloned(),
-                        url_query_map.get("q-state-hash").cloned(),
+                        url_query_map.get(QP_FROM).cloned(),
+                        url_query_map.get(QP_TO).cloned(),
+                        url_query_map.get(QP_TXN_HASH).cloned(),
                         block_height,
                         Some(false),
                     )
@@ -54,9 +60,9 @@ pub fn TransactionsSection(#[prop(default = false)] with_link: bool) -> impl Int
                 Some(_) | None => {
                     load_data(
                         TABLE_RECORD_SIZE,
-                        url_query_map.get("q-from").cloned(),
-                        url_query_map.get("q-to").cloned(),
-                        url_query_map.get("q-state-hash").cloned(),
+                        url_query_map.get(QP_FROM).cloned(),
+                        url_query_map.get(QP_TO).cloned(),
+                        url_query_map.get(QP_TXN_HASH).cloned(),
                         block_height,
                         Some(true),
                     )
