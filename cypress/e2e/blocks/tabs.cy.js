@@ -1,4 +1,9 @@
 suite(["@CI"], "tab count and pagination count", () => {
+  Cypress.on("uncaught:exception", (err, runnable) => {
+    if (err.message.includes("ResizeObserver")) {
+      return false;
+    }
+  });
   let tabs = ["SNARK Jobs", "User Commands", "Internal Commands"];
 
   tabs.forEach((tab) =>
