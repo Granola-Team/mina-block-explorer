@@ -1,11 +1,6 @@
 import { DEFAULT_CANONICAL_BLOCK_HASH } from "../constants";
 
 suite(["@CI"], "table of dynamic height", () => {
-  Cypress.on("uncaught:exception", (err, runnable) => {
-    if (err.message.includes("ResizeObserver")) {
-      return false;
-    }
-  });
   let pages = [
     { url: "/", tableHeading: "Blocks" },
     { url: "/blocks", tableHeading: "Blocks" },
