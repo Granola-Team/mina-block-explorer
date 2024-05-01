@@ -11,6 +11,13 @@ impl TableData for Vec<Option<StakingLedgersQueryStakes>> {
             .collect::<Vec<_>>()
     }
 
+    fn get_exact_search_columns(&self) -> Vec<String> {
+        ["Key", "Delegate"]
+            .iter()
+            .map(ToString::to_string)
+            .collect::<Vec<_>>()
+    }
+
     fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
         self.iter()
             .map(|opt_stake| match opt_stake {
