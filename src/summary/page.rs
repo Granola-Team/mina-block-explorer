@@ -1,8 +1,5 @@
 use super::{functions::*, models::*};
-use crate::{
-    blocks::components::SummaryPageBlocksSection,
-    common::{components::*},
-};
+use crate::{blocks::components::SummaryPageBlocksSection, common::components::*};
 use leptos::*;
 use leptos_meta::Title;
 

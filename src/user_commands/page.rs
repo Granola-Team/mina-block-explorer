@@ -1,6 +1,6 @@
 use super::{components::*, functions::*, table_trait::*};
 use crate::{
-    common::{components::*, functions::*, models::*,  spotlight::*},
+    common::{components::*, functions::*, models::*, spotlight::*},
     config::BERKELEY_FEATURES_ENABLED,
     icons::*,
 };
