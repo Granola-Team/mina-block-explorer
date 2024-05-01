@@ -1,5 +1,5 @@
 use super::{components::*, functions::*, models::*};
-use crate::common::{components::*, constants::*, models::*, search::*};
+use crate::common::{components::*, constants::*, models::*};
 use leptos::*;
 use leptos_meta::Title;
 use leptos_router::*;
@@ -8,7 +8,6 @@ use leptos_router::*;
 pub fn LatestBlocksPage() -> impl IntoView {
     view! {
         <Title text="Blocks | Search for Mina Blocks"/>
-        <SearchBar placeholder=MULTI_SEARCH_PLACEHOLDER_TEXT/>
         <PageContainer>
             <BlocksSection/>
         </PageContainer>
