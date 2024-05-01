@@ -9,6 +9,12 @@ const kebabCase = (string) =>
 suite(["@CI"], "search with multiple results", () => {
   let multi_response_searches = [
     {
+      origin: "/commands/internal-commands",
+      input: DEFAULT_ACCOUNT_PK,
+      tableHeading: "Internal Commands",
+      expectation: { column: "Recipient", value: DEFAULT_ACCOUNT_PK },
+    },
+    {
       origin: "/",
       input: DEFAULT_ACCOUNT_PK,
       tableHeading: "Blocks",
