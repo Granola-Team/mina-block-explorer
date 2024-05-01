@@ -10,6 +10,10 @@ impl TableData for Vec<Option<InternalCommandsQueryFeetransfers>> {
             .collect::<Vec<_>>()
     }
 
+    fn get_exact_search_columns(&self) -> Vec<String> {
+        vec!["Recipient".to_string()]
+    }
+
     fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
         self.iter()
             .map(|opt_internal_command| match opt_internal_command {

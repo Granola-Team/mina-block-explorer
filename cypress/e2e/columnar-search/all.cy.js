@@ -27,6 +27,12 @@ suite(["@CI"], "search with multiple results", () => {
       expectation: { column: "To", value: DEFAULT_ACCOUNT_PK },
     },
     {
+      origin: "/commands/internal-commands",
+      input: DEFAULT_ACCOUNT_PK,
+      tableHeading: "Internal Commands",
+      expectation: { column: "Recipient", value: DEFAULT_ACCOUNT_PK },
+    },
+    {
       origin: "/",
       input: DEFAULT_ACCOUNT_PK,
       tableHeading: "Blocks",
