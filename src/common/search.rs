@@ -24,19 +24,13 @@ pub fn GlobalSearchBar() -> impl IntoView {
                     &format!("/addresses/accounts/{}", value),
                     Default::default(),
                 );
-            },
+            }
             _ if value.starts_with("3N") => {
-                navigate(
-                    &format!("/blocks/{}", value),
-                    Default::default(),
-                );
-            },
+                navigate(&format!("/blocks/{}", value), Default::default());
+            }
             _ if value.starts_with("Ckp") => {
-                navigate(
-                    &format!("/commands/{}", value),
-                    Default::default(),
-                );
-            },
+                navigate(&format!("/commands/{}", value), Default::default());
+            }
             _ if value.chars().all(char::is_numeric) => {
                 navigate(
                     &format!("/staking-ledgers?epoch={}", value),
