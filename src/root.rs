@@ -11,6 +11,7 @@ use crate::{
         BroadcastDelegationPage, BroadcastFromLedgerPage, BroadcastTransactionPage,
         DelegationTabbedPage,
     },
+    common::search::*,
     config::BERKELEY_FEATURES_ENABLED,
     footer::Footer,
     header::navigation::Header,
@@ -32,6 +33,7 @@ pub fn Root() -> impl IntoView {
     view! {
         <Router>
             <Header/>
+            <GlobalSearchBar/>
             <main>
                 <Routes>
                     <Route path="/summary" view=SummaryPage>
