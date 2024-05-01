@@ -21,6 +21,24 @@ suite(["@CI"], "search with multiple results", () => {
       expectation: { column: "Delegate", value: DEFAULT_ACCOUNT_PK },
     },
     {
+      origin: "/commands/user-commands",
+      tableHeading: "User Commands",
+      input: "350137",
+      expectation: { column: "Height", value: "350137" },
+    },
+    {
+      origin: "/commands/user-commands",
+      tableHeading: "User Commands",
+      input: DEFAULT_ACCOUNT_PK,
+      expectation: { column: "From", value: DEFAULT_ACCOUNT_PK },
+    },
+    {
+      origin: "/commands/user-commands",
+      tableHeading: "User Commands",
+      input: DEFAULT_ACCOUNT_PK,
+      expectation: { column: "To", value: DEFAULT_ACCOUNT_PK },
+    },
+    {
       origin: "/commands/internal-commands",
       input: DEFAULT_ACCOUNT_PK,
       tableHeading: "Internal Commands",
@@ -77,6 +95,12 @@ suite(["@CI"], "search with single result", () => {
       input: DEFAULT_ACCOUNT_PK,
       tableHeading: "Next Staking Ledger",
       column: "Key",
+    },
+    {
+      origin: "/commands/user-commands",
+      input: "CkpZuatq9Q4CC39FbMbJVZucBmzwyJySvWXGq3s3JtX5Wr2ccpMMN",
+      tableHeading: "User Commands",
+      column: "Txn Hash",
     },
     {
       origin: "/",

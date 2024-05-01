@@ -12,27 +12,61 @@ use crate::{
 use leptos::*;
 use leptos_router::*;
 
+const QP_TXN_HASH: &str = "q-txn-hash";
+const QP_TXN_TYPE: &str = "txn-type";
+const QP_HEIGHT: &str = "q-height";
+const QP_FROM: &str = "q-from";
+const QP_TO: &str = "q-to";
+
 #[component]
-pub fn TransactionsSection(
-    #[prop(default = None,into)] state_hash: Option<String>,
-    #[prop(default = false)] with_link: bool,
-) -> impl IntoView {
-    let (state_hash_sig, _) = create_signal(state_hash);
-    let (txn_type_qp, _) = create_query_signal::<String>("txn-type");
+pub fn TransactionsSection(#[prop(default = false)] with_link: bool) -> impl IntoView {
+    let (txn_type_qp, _) = create_query_signal::<String>(QP_TXN_TYPE);
+    let query_params_map = use_query_map();
+    let (block_height_sig, _) = create_query_signal::<i64>(QP_HEIGHT);
 
     let resource = create_resource(
-        move || (state_hash_sig.get(), txn_type_qp.get()),
-        move |(state_hash, txn_type)| async move {
+        move || {
+            (
+                query_params_map.get(),
+                txn_type_qp.get(),
+                block_height_sig.get(),
+            )
+        },
+        move |(url_query_map, txn_type, block_height)| async move {
             match txn_type {
                 Some(ref txn_type_str) if txn_type_str == "Pending" => load_pending_txn().await,
                 Some(ref txn_type_str) if txn_type_str == "Canonical" => {
-                    load_data(TABLE_RECORD_SIZE, None, None, state_hash, Some(true)).await
+                    load_data(
+                        TABLE_RECORD_SIZE,
+                        url_query_map.get(QP_FROM).cloned(),
+                        url_query_map.get(QP_TO).cloned(),
+                        url_query_map.get(QP_TXN_HASH).cloned(),
+                        block_height,
+                        Some(true),
+                    )
+                    .await
                 }
                 Some(ref txn_type_str) if txn_type_str == "Non-Canonical" => {
-                    load_data(TABLE_RECORD_SIZE, None, None, state_hash, Some(false)).await
+                    load_data(
+                        TABLE_RECORD_SIZE,
+                        url_query_map.get(QP_FROM).cloned(),
+                        url_query_map.get(QP_TO).cloned(),
+                        url_query_map.get(QP_TXN_HASH).cloned(),
+                        block_height,
+                        Some(false),
+                    )
+                    .await
                 }
                 Some(_) | None => {
-                    load_data(TABLE_RECORD_SIZE, None, None, state_hash, Some(true)).await
+                    load_data(
+                        TABLE_RECORD_SIZE,
+                        url_query_map.get(QP_FROM).cloned(),
+                        url_query_map.get(QP_TO).cloned(),
+                        url_query_map.get(QP_TXN_HASH).cloned(),
+                        block_height,
+                        Some(true),
+                    )
+                    .await
                 }
             }
         },
