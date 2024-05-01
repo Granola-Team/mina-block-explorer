@@ -1,6 +1,6 @@
 use super::{components::*, functions::*, table_trait::*};
 use crate::{
-    common::{components::*, constants::*, functions::*, models::*, search::*, spotlight::*},
+    common::{components::*, functions::*, models::*, spotlight::*},
     config::BERKELEY_FEATURES_ENABLED,
     icons::*,
 };
@@ -34,10 +34,7 @@ pub fn CommandsTabbedPage() -> impl IntoView {
         });
     }
 
-    view! {
-        <SearchBar placeholder=MULTI_SEARCH_PLACEHOLDER_TEXT/>
-        <TabbedPage tabs=tabs/>
-    }
+    view! { <TabbedPage tabs=tabs/> }
 }
 
 #[component]

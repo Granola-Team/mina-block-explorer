@@ -1,6 +1,6 @@
 use super::functions::*;
 use crate::{
-    common::{components::*, constants::*, functions::*, models::*, search::*, table::*},
+    common::{components::*, constants::*, functions::*, models::*, table::*},
     stakes::{components::EpochButton, models::EpochStyleVariant},
 };
 use leptos::*;
@@ -11,7 +11,6 @@ use leptos_router::*;
 pub fn NextStakesPage() -> impl IntoView {
     view! {
         <Title text="Next Staking Ledger | Search For Stakers"/>
-        <SearchBar placeholder=MULTI_SEARCH_PLACEHOLDER_TEXT/>
         <PageContainer>
             <NextStakesPageContents/>
         </PageContainer>
