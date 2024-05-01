@@ -4,8 +4,8 @@ suite(["@CI"], "empty table", () => {
     "/commands/user-commands?query=fake",
     "/commands/internal-commands?q-recipient=B62qfake",
     "/snarks?query=fake",
-    "/staking-ledgers?query=fake",
-    "/next-stakes?query=fake",
+    "/staking-ledgers?q-key=B62qfake",
+    "/next-stakes?q-key=B62qfake",
   ];
 
   pages.forEach((page) =>

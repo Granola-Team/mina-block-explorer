@@ -9,6 +9,18 @@ const kebabCase = (string) =>
 suite(["@CI"], "search with multiple results", () => {
   let multi_response_searches = [
     {
+      origin: "/staking-ledgers",
+      input: DEFAULT_ACCOUNT_PK,
+      tableHeading: "Current Staking Ledger",
+      expectation: { column: "Delegate", value: DEFAULT_ACCOUNT_PK },
+    },
+    {
+      origin: "/next-stakes",
+      input: DEFAULT_ACCOUNT_PK,
+      tableHeading: "Next Staking Ledger",
+      expectation: { column: "Delegate", value: DEFAULT_ACCOUNT_PK },
+    },
+    {
       origin: "/commands/internal-commands",
       input: DEFAULT_ACCOUNT_PK,
       tableHeading: "Internal Commands",
@@ -54,6 +66,18 @@ suite(["@CI"], "search with single result", () => {
   let block_hash = "3NLqPGGVtxXdsQg2orrp3SFFE3ToeMuqWRerSRWbmAKuSk2tphWy";
 
   let exact_searches = [
+    {
+      origin: "/staking-ledgers",
+      input: DEFAULT_ACCOUNT_PK,
+      tableHeading: "Current Staking Ledger",
+      column: "Key",
+    },
+    {
+      origin: "/next-stakes",
+      input: DEFAULT_ACCOUNT_PK,
+      tableHeading: "Next Staking Ledger",
+      column: "Key",
+    },
     {
       origin: "/",
       input: block_hash,
