@@ -201,9 +201,7 @@ Cypress.Commands.add(
   "tableColumnValuesEqual",
   (columnHeading, column, value) => {
     cy.aliasTableColumnValue(columnHeading, column, "table-column-values");
-    cy.get("@table-column-values")
-      .find("a", { timeout: 60000 })
-      .should("have.text", value);
+    cy.get("@table-column-values").should("have.text", value);
   },
 );
 
