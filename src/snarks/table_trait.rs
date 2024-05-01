@@ -11,6 +11,13 @@ impl TableData for Vec<Option<SnarksQuerySnarks>> {
             .collect::<Vec<_>>()
     }
 
+    fn get_exact_search_columns(&self) -> Vec<String> {
+        ["Height", "State Hash", "Prover"]
+            .iter()
+            .map(ToString::to_string)
+            .collect::<Vec<_>>()
+    }
+
     fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
         self.iter()
             .map(|opt_snark| match opt_snark {
