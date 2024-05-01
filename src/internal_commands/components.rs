@@ -57,7 +57,7 @@ pub fn InternalCommandsTable(
 
 #[component]
 pub fn InternalCommandsTab() -> impl IntoView {
-    let (recipient, _) = create_query_signal::<String>("query");
+    let (recipient, _) = create_query_signal::<String>("q-recipient");
     let resource = create_resource(
         move || recipient.get(),
         |opt_recipient| async move { load_data(TABLE_RECORD_SIZE, opt_recipient).await },
