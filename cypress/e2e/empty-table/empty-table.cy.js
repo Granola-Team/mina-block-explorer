@@ -3,9 +3,9 @@ suite(["@CI"], "empty table", () => {
     "/blocks?q-state-hash=3Nfake",
     "/commands/user-commands?q-txn-hash=Cpkfake",
     "/commands/internal-commands?q-recipient=B62qfake",
-    "/snarks?query=fake",
     "/staking-ledgers?q-key=B62qfake",
     "/next-stakes?q-key=B62qfake",
+    "/snarks?q-state-hash=3Nfake",
   ];
 
   pages.forEach((page) =>

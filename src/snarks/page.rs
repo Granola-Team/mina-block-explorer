@@ -24,15 +24,27 @@ pub fn SnarksPage() -> impl IntoView {
 fn SnarksPageContents() -> impl IntoView {
     let query_params_map = use_query_map();
     let (canonical_qp, _) = create_query_signal::<bool>("canonical");
+    let (block_height_sig, _) = create_query_signal::<i64>("q-height");
 
     let resource = create_resource(
-        move || (query_params_map.get(), canonical_qp.get()),
-        |(value, canonical)| async move {
-            let mut public_key = value.get("account");
-            if public_key.is_none() {
-                public_key = value.get("query");
-            }
-            load_data(TABLE_RECORD_SIZE, public_key.cloned(), None, canonical).await
+        move || {
+            (
+                query_params_map.get(),
+                canonical_qp.get(),
+                block_height_sig.get(),
+            )
+        },
+        |(value, canonical, block_height)| async move {
+            let prover = value.get("q-prover");
+            let block_state_hash = value.get("q-state-hash");
+            load_data(
+                TABLE_RECORD_SIZE,
+                prover.cloned(),
+                block_state_hash.cloned(),
+                block_height,
+                canonical,
+            )
+            .await
         },
     );
 
