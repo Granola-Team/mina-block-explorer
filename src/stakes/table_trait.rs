@@ -29,7 +29,7 @@ impl TableData for Vec<Option<StakingLedgersQueryStakes>> {
                         format!("/addresses/accounts/{}", get_delegate(stake)),
                     ),
                     convert_to_pill(get_delegators_count(stake), ColorVariant::Blue),
-                    convert_to_span(get_ledger_hash(stake)),
+                    convert_to_link(get_ledger_hash(stake), "#".to_string()),
                 ],
                 None => vec![],
             })
