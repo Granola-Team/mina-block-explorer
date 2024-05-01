@@ -8,6 +8,8 @@ use leptos::*;
 pub fn GlobalSearchBar() -> impl IntoView {
     let input_element: NodeRef<html::Input> = create_node_ref();
 
+    let navigate = leptos_router::use_navigate();
+
     let on_submit = move |ev: leptos::ev::SubmitEvent| {
         ev.prevent_default();
 
@@ -16,7 +18,33 @@ pub fn GlobalSearchBar() -> impl IntoView {
             .expect("<input> should be mounted")
             .value();
 
-        logging::log!("{}", value)
+        match value {
+            _ if value.starts_with("B62q") => {
+                navigate(
+                    &format!("/addresses/accounts/{}", value),
+                    Default::default(),
+                );
+            },
+            _ if value.starts_with("3N") => {
+                navigate(
+                    &format!("/blocks/{}", value),
+                    Default::default(),
+                );
+            },
+            _ if value.starts_with("Ckp") => {
+                navigate(
+                    &format!("/commands/{}", value),
+                    Default::default(),
+                );
+            },
+            _ if value.chars().all(char::is_numeric) => {
+                navigate(
+                    &format!("/staking-ledgers?epoch={}", value),
+                    Default::default(),
+                );
+            }
+            _ => {}
+        }
     };
 
     view! {
@@ -42,7 +70,7 @@ pub fn GlobalSearchBar() -> impl IntoView {
                     <input
                         id="searchbar"
                         type="text"
-                        placeholder=MULTI_SEARCH_PLACEHOLDER_TEXT
+                        placeholder=GLOBAL_SEARCH_PLACEHOLDER_TEXT
                         class="h-14 flex justify-start items-center text-base text-white pl-14 placeholder:text-slate-400 placeholder:font-medium placeholder:text-base focus:outline-none box-border w-full rounded-2xl bg-[#383B42]"
                         node_ref=input_element
                     />
