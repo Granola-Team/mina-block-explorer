@@ -5,7 +5,6 @@ use crate::{
         constants::{TABLE_RECORD_SIZE, *},
         functions::*,
         models::{MyError, PageDimensions},
-        search::*,
         table::*,
     },
     summary::functions::load_data as load_summary_data,
@@ -30,7 +29,6 @@ pub fn StakesPage() -> impl IntoView {
 
             formatter=move |text| format!("Staking Ledger | {text}")
         />
-        <SearchBar placeholder=MULTI_SEARCH_PLACEHOLDER_TEXT/>
         <PageContainer>
             <StakesPageContents/>
         </PageContainer>

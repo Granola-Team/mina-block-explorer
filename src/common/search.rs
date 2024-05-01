@@ -1,5 +1,5 @@
 use crate::{
-    common::{components::*, constants::*},
+    common::{components::*, constants::*, functions::*},
     icons::*,
 };
 use leptos::*;
@@ -98,7 +98,31 @@ fn SearchInput(
 }
 
 #[component]
-pub fn TitledSearchBar(
+pub fn GlobalSearchBar() -> impl IntoView {
+    view! {
+        <TitledSearchBar
+            title="Mina Blockchain Explorer"
+            subtext=convert_array_to_span(
+                vec![
+                    convert_to_span("Powered by ".to_string()).attr("class", "whitespace-pre"),
+                    html::a()
+                        .attr("href", "https://granola.team")
+                        .attr(
+                            "class",
+                            "hover:text-granola-orange hover:underline hover:decoration-2",
+                        )
+                        .child("Granola")
+                        .into(),
+                ],
+            )
+
+            search_placeholder=MULTI_SEARCH_PLACEHOLDER_TEXT
+        />
+    }
+}
+
+#[component]
+fn TitledSearchBar(
     #[prop(into)] title: String,
     #[prop(into)] subtext: HtmlElement<html::AnyElement>,
     #[prop(into)] search_placeholder: String,

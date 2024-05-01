@@ -11,7 +11,6 @@ use crate::{
         constants::*,
         functions::*,
         models::{MyError, NavEntry, NavIcon, PageDimensions},
-        search::*,
         spotlight::*,
         table::*,
     },
@@ -266,8 +265,5 @@ pub fn AddressesTabbedPage() -> impl IntoView {
             ..Default::default()
         })
     }
-    view! {
-        <SearchBar/>
-        <TabbedPage tabs/>
-    }
+    view! { <TabbedPage tabs/> }
 }

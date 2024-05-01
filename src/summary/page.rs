@@ -1,7 +1,7 @@
 use super::{functions::*, models::*};
 use crate::{
     blocks::components::SummaryPageBlocksSection,
-    common::{components::*, constants::*, functions::*, search::*},
+    common::{components::*},
 };
 use leptos::*;
 use leptos_meta::Title;
@@ -11,24 +11,6 @@ pub fn SummaryPage() -> impl IntoView {
     let blockchain_summary_resource = create_resource(|| (), |_| async move { load_data().await });
 
     view! {
-        <TitledSearchBar
-            title="Mina Blockchain Explorer"
-            subtext=convert_array_to_span(
-                vec![
-                    convert_to_span("Powered by ".to_string()).attr("class", "whitespace-pre"),
-                    html::a()
-                        .attr("href", "https://granola.team")
-                        .attr(
-                            "class",
-                            "hover:text-granola-orange hover:underline hover:decoration-2",
-                        )
-                        .child("Granola")
-                        .into(),
-                ],
-            )
-
-            search_placeholder=MULTI_SEARCH_PLACEHOLDER_TEXT
-        />
         <Title text="Mina Blockchain Explorer | Search For Blocks"/>
         <PageContainer>
             {move || match blockchain_summary_resource.get() {
