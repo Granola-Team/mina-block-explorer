@@ -7,7 +7,26 @@ const kebabCase = (string) =>
     .toLowerCase();
 
 suite(["@CI"], "search with multiple results", () => {
+  let state_hash = "3NKypQg4LpXcWW2BPzue3e93eDKPHMpZ5J4jLNptVwuS7xDBDPzX";
   let multi_response_searches = [
+    {
+      origin: "/snarks",
+      input: "350428",
+      tableHeading: "SNARKs",
+      expectation: { column: "Height", value: "350428" },
+    },
+    {
+      origin: "/snarks",
+      input: state_hash,
+      tableHeading: "SNARKs",
+      expectation: { column: "State Hash", value: state_hash },
+    },
+    {
+      origin: "/snarks",
+      input: DEFAULT_ACCOUNT_PK,
+      tableHeading: "SNARKs",
+      expectation: { column: "Prover", value: DEFAULT_ACCOUNT_PK },
+    },
     {
       origin: "/commands/user-commands",
       tableHeading: "User Commands",

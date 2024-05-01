@@ -4,15 +4,17 @@ use graphql_client::reqwest::post_graphql;
 
 pub async fn load_data(
     limit: i64,
-    public_key: Option<String>,
+    prover: Option<String>,
     block_state_hash: Option<String>,
+    block_height: Option<i64>,
     canonical: Option<bool>,
 ) -> Result<snarks_query::ResponseData, MyError> {
     let variables = snarks_query::Variables {
         sort_by: snarks_query::SnarkSortByInput::BLOCKHEIGHT_DESC,
         limit: Some(limit),
         query: snarks_query::SnarkQueryInput {
-            prover: public_key,
+            block_height,
+            prover,
             canonical: if canonical.is_none() {
                 Some(true)
             } else {

@@ -3,7 +3,7 @@ suite(["@CI"], "empty table", () => {
     "/blocks?q-state-hash=3Nfake",
     "/commands/user-commands?q-txn-hash=Cpkfake",
     "/commands/internal-commands?q-recipient=B62qfake",
-    "/snarks?query=fake",
+    "/snarks?q-state-hash=3Nfake",
     "/staking-ledgers?query=fake",
     "/next-stakes?query=fake",
   ];
