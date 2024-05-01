@@ -52,7 +52,7 @@ fn StakesPageContents() -> impl IntoView {
         move |(epoch_opt, c_epoch, public_key)| async move {
             match (c_epoch, epoch_opt) {
                 (Some(epoch), None) | (_, Some(epoch)) => {
-                    load_data(TABLE_RECORD_SIZE, Some(epoch), public_key).await
+                    load_data(TABLE_RECORD_SIZE, Some(epoch), public_key, None).await
                 }
                 _ => Err(MyError::ParseError(String::from(
                     "missing epoch information",
