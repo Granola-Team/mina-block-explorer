@@ -10,6 +10,18 @@ suite(["@CI"], "search with multiple results", () => {
   let state_hash = "3NKypQg4LpXcWW2BPzue3e93eDKPHMpZ5J4jLNptVwuS7xDBDPzX";
   let multi_response_searches = [
     {
+      origin: "/staking-ledgers",
+      input: DEFAULT_ACCOUNT_PK,
+      tableHeading: "Current Staking Ledger",
+      expectation: { column: "Delegate", value: DEFAULT_ACCOUNT_PK },
+    },
+    {
+      origin: "/next-stakes",
+      input: DEFAULT_ACCOUNT_PK,
+      tableHeading: "Next Staking Ledger",
+      expectation: { column: "Delegate", value: DEFAULT_ACCOUNT_PK },
+    },
+    {
       origin: "/snarks",
       input: "350428",
       tableHeading: "SNARKs",
@@ -91,6 +103,18 @@ suite(["@CI"], "search with single result", () => {
   let block_hash = "3NLqPGGVtxXdsQg2orrp3SFFE3ToeMuqWRerSRWbmAKuSk2tphWy";
 
   let exact_searches = [
+    {
+      origin: "/staking-ledgers",
+      input: DEFAULT_ACCOUNT_PK,
+      tableHeading: "Current Staking Ledger",
+      column: "Key",
+    },
+    {
+      origin: "/next-stakes",
+      input: DEFAULT_ACCOUNT_PK,
+      tableHeading: "Next Staking Ledger",
+      column: "Key",
+    },
     {
       origin: "/commands/user-commands",
       input: "CkpZuatq9Q4CC39FbMbJVZucBmzwyJySvWXGq3s3JtX5Wr2ccpMMN",

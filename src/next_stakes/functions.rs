@@ -44,11 +44,13 @@ pub fn get_ledger_hash(nextstakes: &NextStakingLedgersQueryNextstakes) -> String
 pub async fn load_data(
     limit: i64,
     public_key: Option<String>,
+    delegate: Option<String>,
 ) -> Result<next_staking_ledgers_query::ResponseData, MyError> {
     let variables = next_staking_ledgers_query::Variables {
         sort_by: next_staking_ledgers_query::NextstakeSortByInput::BALANCE_DESC,
         limit: Some(limit),
         query: next_staking_ledgers_query::NextstakeQueryInput {
+            delegate,
             public_key,
             ..Default::default()
         },
