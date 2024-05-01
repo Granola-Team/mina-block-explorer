@@ -23,8 +23,9 @@ fn NextStakesPageContents() -> impl IntoView {
     let resource = create_resource(
         move || query_params_map.get(),
         |params_map| async move {
-            let public_key = params_map.get("query");
-            load_data(TABLE_RECORD_SIZE, public_key.cloned(), None).await
+            let public_key = params_map.get("q-key").cloned();
+            let delegate = params_map.get("q-delegate").cloned();
+            load_data(TABLE_RECORD_SIZE, public_key, delegate).await
         },
     );
 

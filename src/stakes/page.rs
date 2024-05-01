@@ -38,7 +38,7 @@ pub fn StakesPage() -> impl IntoView {
 #[component]
 fn StakesPageContents() -> impl IntoView {
     let (epoch_sig, _) = create_query_signal::<i64>("epoch");
-    let (query_sig, _) = create_query_signal::<String>("query");
+    let query_params_map = use_query_map();
 
     let summary_resource = create_resource(|| (), |_| async move { load_summary_data().await });
 
@@ -48,11 +48,13 @@ fn StakesPageContents() -> impl IntoView {
     };
 
     let resource = create_resource(
-        move || (epoch_sig.get(), current_epoch(), query_sig.get()),
-        move |(epoch_opt, c_epoch, public_key)| async move {
+        move || (epoch_sig.get(), current_epoch(), query_params_map.get()),
+        move |(epoch_opt, c_epoch, params_map)| async move {
             match (c_epoch, epoch_opt) {
                 (Some(epoch), None) | (_, Some(epoch)) => {
-                    load_data(TABLE_RECORD_SIZE, Some(epoch), public_key, None).await
+                    let public_key = params_map.get("q-key").cloned();
+                    let delegate = params_map.get("q-delegate").cloned();
+                    load_data(TABLE_RECORD_SIZE, Some(epoch), public_key, delegate).await
                 }
                 _ => Err(MyError::ParseError(String::from(
                     "missing epoch information",
