@@ -34,7 +34,7 @@ fn SnarksPageContents() -> impl IntoView {
             if public_key.is_none() {
                 public_key = value.get("query");
             }
-            load_data(TABLE_RECORD_SIZE, public_key.cloned(), None, canonical).await
+            load_data(TABLE_RECORD_SIZE, public_key.cloned(), None, None, canonical).await
         },
     );
 
