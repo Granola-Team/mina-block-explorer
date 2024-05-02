@@ -221,26 +221,33 @@ suite(["@CI"], "search with single result", () => {
       cy.wait(1000);
       let key = "q-" + kebabCase(column);
       let cssSelector = "#" + key;
-      cy.get(cssSelector).as("searchinput");
-      cy.get("@searchinput").type(input, { delay: 0 });
 
-      // check input
-      cy.get("@searchinput").should("have.value", input);
-      // check url
-      cy.url().should("include", `${key}=${input}`);
-      // check table
+      // store initial length of table rows
       cy.aliasTableRows(tableHeading, "table-rows");
-      cy.get("@table-rows").should("have.length", 1);
-      cy.wait(1000);
+      cy.get("@table-rows").then(($trs) => {
+        const initialLength = $trs.length;
 
-      cy.go("back");
+        cy.get(cssSelector).as("searchinput");
+        cy.get("@searchinput").type(input, { delay: 0 });
 
-      // check input
-      cy.get("@searchinput").should("have.value", "");
-      // check url
-      cy.url().should("not.contain", key);
-      // check table
-      cy.tableHasMoreThanNRows(tableHeading, 15);
+        // check input
+        cy.get("@searchinput").should("have.value", input);
+        // check url
+        cy.url().should("include", `${key}=${input}`);
+
+        // check table
+        cy.get("@table-rows").should("have.length", 1);
+        cy.wait(1000);
+
+        cy.go("back");
+
+        // check input
+        cy.get("@searchinput").should("have.value", "");
+        // check url
+        cy.url().should("not.contain", key);
+        // check table
+        cy.tableHasMoreThanNRows(tableHeading, initialLength - 1);
+      });
     }),
   );
 });
