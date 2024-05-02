@@ -10,10 +10,16 @@ suite(["@CI"], "search with multiple results", () => {
   let state_hash = "3NKypQg4LpXcWW2BPzue3e93eDKPHMpZ5J4jLNptVwuS7xDBDPzX";
   let multi_response_searches = [
     {
-      origin: "/staking-ledgers",
-      input: DEFAULT_ACCOUNT_PK,
-      tableHeading: "Current Staking Ledger",
-      expectation: { column: "Delegate", value: DEFAULT_ACCOUNT_PK },
+      origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
+      input: "253134",
+      tableHeading: "User Commands",
+      expectation: { column: "Height", value: "253134" },
+    },
+    {
+      origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
+      input: "253134",
+      tableHeading: "SNARK Jobs",
+      expectation: { column: "Height", value: "253134" },
     },
     {
       origin: "/next-stakes",
@@ -103,6 +109,12 @@ suite(["@CI"], "search with single result", () => {
   let block_hash = "3NLqPGGVtxXdsQg2orrp3SFFE3ToeMuqWRerSRWbmAKuSk2tphWy";
 
   let exact_searches = [
+    {
+      origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
+      input: "253134",
+      tableHeading: "Block Production",
+      expectation: { column: "Height", value: "253134" },
+    },
     {
       origin: "/staking-ledgers",
       input: DEFAULT_ACCOUNT_PK,
