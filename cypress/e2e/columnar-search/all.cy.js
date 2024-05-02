@@ -197,6 +197,7 @@ suite(["@CI"], "search with single result", () => {
       tableHeading: "Blocks",
       column: "Height",
     },
+    // { origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`, input: "5783", tableHeading: "Block Production", column: "Slot" },
     // { origin: "/", input: "20345", tableHeading: "Blocks", column: "Slot" },
     // { origin: "/summary", input: "20345", tableHeading: "Blocks", column: "Slot" },
     // { origin: "/blocks", input: "20345", tableHeading: "Blocks", column: "Slot" },
