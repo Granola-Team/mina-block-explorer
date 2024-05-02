@@ -137,7 +137,7 @@ pub fn Header() -> impl IntoView {
                                     {match sub_entries {
                                         Some(s_entries) => {
                                             view! {
-                                                <ul class="md:px-2 md:hidden md:absolute md:top-0 md:left-0 md:bg-main-background md:shadow-md md:translate-y-16 group-hover:block">
+                                                <ul class="md:px-2 md:hidden md:absolute md:top-0 md:left-0 md:bg-main-background md:shadow-md md:translate-y-16 group-hover:block -translate-x-1/2">
                                                     {s_entries
                                                         .into_iter()
                                                         .map(|sub_entry| {
