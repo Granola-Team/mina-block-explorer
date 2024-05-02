@@ -265,7 +265,6 @@ impl TableData for Vec<Option<AccountActivityQueryBlocks>> {
             "State Hash",
             "Slot",
             "Block Producer",
-            "Coinbase Receiver",
         ]
         .iter()
         .map(ToString::to_string)
