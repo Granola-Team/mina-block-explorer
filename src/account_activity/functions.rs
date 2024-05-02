@@ -2,11 +2,16 @@ use super::{
     graphql::{account_activity_query, AccountActivityQuery},
     models::*,
 };
-use crate::common::{
-    constants::{GRAPHQL_ENDPOINT, REST_ENDPOINT},
-    functions::*,
-    models::*,
-    spotlight::*,
+use crate::{
+    account_activity::graphql::account_activity_query::{
+        BlockProtocolStateConsensusStateQueryInput, BlockProtocolStateQueryInput, BlockQueryInput,
+    },
+    common::{
+        constants::{GRAPHQL_ENDPOINT, REST_ENDPOINT},
+        functions::*,
+        models::*,
+        spotlight::*,
+    },
 };
 use graphql_client::reqwest::post_graphql;
 use leptos::*;
@@ -58,11 +63,20 @@ pub fn stub_account_summaries(size: usize) -> Vec<AllAccountSummary> {
         .collect()
 }
 
+#[allow(clippy::too_many_arguments)]
 pub async fn load_data(
     public_key: Option<String>,
     blocks_limit: Option<i64>,
     snarks_limit: Option<i64>,
     trans_limit: Option<i64>,
+    block_height: Option<i64>,
+    txn_hash: Option<String>,
+    state_hash: Option<String>,
+    prover: Option<String>,
+    nonce: Option<i64>,
+    counterparty: Option<String>,
+    slot: Option<i64>,
+    block_producer: Option<String>,
     canonical: Option<bool>,
 ) -> Result<account_activity_query::ResponseData, MyError> {
     let variables = account_activity_query::Variables {
@@ -73,7 +87,20 @@ pub async fn load_data(
         snarks_limit: Some(snarks_limit.unwrap_or_default()),
         trans_limit: Some(trans_limit.unwrap_or_default()),
         blocks_query: account_activity_query::BlockQueryInput {
-            creator: public_key.clone(),
+            block_height,
+            state_hash: state_hash.clone(),
+            creator: block_producer.clone(),
+            protocol_state: if slot.is_some() {
+                Some(BlockProtocolStateQueryInput {
+                    consensus_state: Some(BlockProtocolStateConsensusStateQueryInput {
+                        slot,
+                        ..Default::default()
+                    }),
+                    ..Default::default()
+                })
+            } else {
+                None
+            },
             canonical: if canonical.is_none() {
                 Some(true)
             } else {
@@ -82,7 +109,28 @@ pub async fn load_data(
             ..Default::default()
         },
         snarks_query: account_activity_query::SnarkQueryInput {
-            prover: public_key.clone(),
+            block_height,
+            prover,
+            block: if block_producer.is_some() || slot.is_some() || state_hash.is_some() {
+                Some(BlockQueryInput {
+                    state_hash,
+                    creator: block_producer,
+                    protocol_state: if slot.is_some() {
+                        Some(BlockProtocolStateQueryInput {
+                            consensus_state: Some(BlockProtocolStateConsensusStateQueryInput {
+                                slot,
+                                ..Default::default()
+                            }),
+                            ..Default::default()
+                        })
+                    } else {
+                        None
+                    },
+                    ..Default::default()
+                })
+            } else {
+                None
+            },
             canonical: if canonical.is_none() {
                 Some(true)
             } else {
@@ -91,7 +139,11 @@ pub async fn load_data(
             ..Default::default()
         },
         outgoing_trans_query: account_activity_query::TransactionQueryInput {
+            block_height,
+            hash: txn_hash.clone(),
             from: public_key.clone(),
+            to: counterparty.clone(),
+            nonce,
             canonical: if canonical.is_none() {
                 Some(true)
             } else {
@@ -100,7 +152,11 @@ pub async fn load_data(
             ..Default::default()
         },
         incoming_trans_query: account_activity_query::TransactionQueryInput {
+            block_height,
+            hash: txn_hash,
             to: public_key,
+            from: counterparty,
+            nonce,
             canonical: if canonical.is_none() {
                 Some(true)
             } else {

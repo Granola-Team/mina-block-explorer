@@ -70,7 +70,11 @@ fn AccountsPageContents() -> impl IntoView {
 #[component]
 pub fn AccountSpotlightPage() -> impl IntoView {
     let memo_params_map = use_params_map();
+    let query_params_map = use_query_map();
     let (canonical_sig, _) = create_query_signal::<bool>("canonical");
+    let (block_height_sig, _) = create_query_signal::<i64>("q-height");
+    let (nonce_sig, _) = create_query_signal::<i64>("q-nonce");
+    let (slot_sig, _) = create_query_signal::<i64>("q-slot");
     let (transactions, set_transactions) = create_signal(None);
     let (snarks, set_snarks) = create_signal(None);
     let (blocks, set_blocks) = create_signal(None);
@@ -91,14 +95,31 @@ pub fn AccountSpotlightPage() -> impl IntoView {
     );
 
     let activity_resource = create_resource(
-        move || (memo_params_map.get(), canonical_sig.get()),
-        |(value, canonical_opt)| async move {
+        move || {
+            (
+                memo_params_map.get(),
+                canonical_sig.get(),
+                query_params_map.get(),
+                block_height_sig.get(),
+                nonce_sig.get(),
+                slot_sig.get(),
+            )
+        },
+        |(value, canonical_opt, qp_map, block_height, nonce, slot)| async move {
             if value.get("id").is_some() {
                 load_data(
                     value.get("id").cloned(),
                     Some(50),
                     Some(50),
                     Some(50),
+                    block_height,
+                    qp_map.get("q-txn-hash").cloned(),
+                    qp_map.get("q-state-hash").cloned(),
+                    qp_map.get("q-prover").cloned(),
+                    nonce,
+                    qp_map.get("q-counterparty").cloned(),
+                    slot,
+                    qp_map.get("q-block-producer").cloned(),
                     canonical_opt,
                 )
                 .await
