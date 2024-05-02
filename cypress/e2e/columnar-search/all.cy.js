@@ -9,9 +9,16 @@ const kebabCase = (string) =>
 let state_hash = "3NKypQg4LpXcWW2BPzue3e93eDKPHMpZ5J4jLNptVwuS7xDBDPzX";
 let counterparty = "B62qrrx8JKpWzZUq5kEc8Yh3qZqwUjTSr5wztmrPYJZRiowhZUZcs5g";
 let prover = "B62qopzjbycAJDzvhc1tEuYSmJYfRQQbfS9nvkKtUzBS1fmLCyTz4dJ";
+let block_producer = "B62qkgy1rQQmSL91aFeFvrYi9ptqavvgVkUiPZHmy5tZacSupTTCGi6";
 
 suite(["@CI"], "search with multiple results", () => {
   let multi_response_searches = [
+    {
+      origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
+      input: block_producer,
+      tableHeading: "Block Production",
+      expectation: { column: "Block Producer", value: block_producer },
+    },
     {
       origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
       input: prover,
