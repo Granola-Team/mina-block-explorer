@@ -7,24 +7,32 @@ use leptos::*;
 #[component]
 pub fn Header() -> impl IntoView {
     let (open, set_open) = create_signal(false);
-    let mut txn_entries = None;
     let mut addr_entries = None;
 
+    let mut txn_entries = Some(vec![
+        NavEntry {
+            href: "/commands/user-commands".to_string(),
+            text: "User Commands".to_string(),
+            icon: NavIcon::Transactions,
+            ..Default::default()
+        },
+        NavEntry {
+            href: "/commands/internal-commands".to_string(),
+            text: "Internal Commands".to_string(),
+            icon: NavIcon::Transactions,
+            ..Default::default()
+        },
+    ]);
+
     if BERKELEY_FEATURES_ENABLED {
-        txn_entries = Some(vec![
-            NavEntry {
-                href: "/commands".to_string(),
-                text: "Transactions".to_string(),
-                icon: NavIcon::Transactions,
-                ..Default::default()
-            },
-            NavEntry {
+        txn_entries.as_mut().map(|v| {
+            v.push(NavEntry {
                 href: "/commands/zk-txn".to_string(),
                 text: "zkApp Commands".to_string(),
                 icon: NavIcon::ZKApps,
                 ..Default::default()
-            },
-        ]);
+            })
+        });
         addr_entries = Some(vec![
             NavEntry {
                 href: "/addresses/accounts".to_string(),
@@ -55,7 +63,7 @@ pub fn Header() -> impl IntoView {
             ..Default::default()
         },
         NavEntry {
-            href: "/commands".to_string(),
+            href: "/commands/user-commands".to_string(),
             text: "Transactions".to_string(),
             icon: NavIcon::Transactions,
             sub_entries: txn_entries,
