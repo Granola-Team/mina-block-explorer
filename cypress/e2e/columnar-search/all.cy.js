@@ -7,9 +7,16 @@ const kebabCase = (string) =>
     .toLowerCase();
 
 let state_hash = "3NKypQg4LpXcWW2BPzue3e93eDKPHMpZ5J4jLNptVwuS7xDBDPzX";
+let counterparty = "B62qrrx8JKpWzZUq5kEc8Yh3qZqwUjTSr5wztmrPYJZRiowhZUZcs5g";
 
 suite(["@CI"], "search with multiple results", () => {
   let multi_response_searches = [
+    {
+      origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
+      input: counterparty,
+      tableHeading: "User Commands",
+      expectation: { column: "Counterparty", value: counterparty },
+    },
     {
       origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
       input: "1",
@@ -104,7 +111,7 @@ suite(["@CI"], "search with multiple results", () => {
 
   multi_response_searches.forEach(
     ({ origin, input, tableHeading, expectation }) =>
-      it(`works on ${origin} page`, () => {
+      it(`works on ${origin} page when searching column '${expectation.column}'`, () => {
         let cssSelector = "#q-" + kebabCase(expectation.column);
         cy.visit(origin);
         cy.wait(1000);
@@ -189,7 +196,7 @@ suite(["@CI"], "search with single result", () => {
   ];
 
   exact_searches.forEach(({ origin, input, tableHeading, column }) =>
-    it(`works on ${origin} page`, () => {
+    it(`works on ${origin} page when searching column '${column}'`, () => {
       /* 
         Sufficiently "tall" viewport to display many rows per table.
         We want to see that the search bar is filtering results.  
