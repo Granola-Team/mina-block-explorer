@@ -1,3 +1,5 @@
+import { DEFAULT_ACCOUNT_PK } from "../constants";
+
 suite(["@CI"], "empty table", () => {
   let pages = [
     "/blocks?q-state-hash=3Nfake",
@@ -6,6 +8,7 @@ suite(["@CI"], "empty table", () => {
     "/staking-ledgers?q-key=B62qfake",
     "/next-stakes?q-key=B62qfake",
     "/snarks?q-state-hash=3Nfake",
+    `/addresses/accounts/${DEFAULT_ACCOUNT_PK}?q-height=-1`,
   ];
 
   pages.forEach((page) =>
