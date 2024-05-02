@@ -6,14 +6,54 @@ const kebabCase = (string) =>
     .replace(/[\s_]+/g, "-")
     .toLowerCase();
 
+let state_hash = "3NKypQg4LpXcWW2BPzue3e93eDKPHMpZ5J4jLNptVwuS7xDBDPzX";
+let counterparty = "B62qrrx8JKpWzZUq5kEc8Yh3qZqwUjTSr5wztmrPYJZRiowhZUZcs5g";
+let prover = "B62qopzjbycAJDzvhc1tEuYSmJYfRQQbfS9nvkKtUzBS1fmLCyTz4dJ";
+let block_producer = "B62qkgy1rQQmSL91aFeFvrYi9ptqavvgVkUiPZHmy5tZacSupTTCGi6";
+
 suite(["@CI"], "search with multiple results", () => {
-  let state_hash = "3NKypQg4LpXcWW2BPzue3e93eDKPHMpZ5J4jLNptVwuS7xDBDPzX";
   let multi_response_searches = [
     {
-      origin: "/staking-ledgers",
-      input: DEFAULT_ACCOUNT_PK,
-      tableHeading: "Current Staking Ledger",
-      expectation: { column: "Delegate", value: DEFAULT_ACCOUNT_PK },
+      origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
+      input: block_producer,
+      tableHeading: "Block Production",
+      expectation: { column: "Block Producer", value: block_producer },
+    },
+    {
+      origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
+      input: prover,
+      tableHeading: "SNARK Jobs",
+      expectation: { column: "Prover", value: prover },
+    },
+    {
+      origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
+      input: counterparty,
+      tableHeading: "User Commands",
+      expectation: { column: "Counterparty", value: counterparty },
+    },
+    {
+      origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
+      input: "1",
+      tableHeading: "User Commands",
+      expectation: { column: "Nonce", value: "1" },
+    },
+    {
+      origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
+      input: state_hash,
+      tableHeading: "SNARK Jobs",
+      expectation: { column: "State Hash", value: state_hash },
+    },
+    {
+      origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
+      input: "253134",
+      tableHeading: "User Commands",
+      expectation: { column: "Height", value: "253134" },
+    },
+    {
+      origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
+      input: "253134",
+      tableHeading: "SNARK Jobs",
+      expectation: { column: "Height", value: "253134" },
     },
     {
       origin: "/next-stakes",
@@ -85,7 +125,7 @@ suite(["@CI"], "search with multiple results", () => {
 
   multi_response_searches.forEach(
     ({ origin, input, tableHeading, expectation }) =>
-      it(`works on ${origin} page`, () => {
+      it(`works on ${origin} page when searching column '${expectation.column}'`, () => {
         let cssSelector = "#q-" + kebabCase(expectation.column);
         cy.visit(origin);
         cy.wait(1000);
@@ -103,6 +143,18 @@ suite(["@CI"], "search with single result", () => {
   let block_hash = "3NLqPGGVtxXdsQg2orrp3SFFE3ToeMuqWRerSRWbmAKuSk2tphWy";
 
   let exact_searches = [
+    {
+      origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
+      input: state_hash,
+      tableHeading: "Block Production",
+      column: "State Hash",
+    },
+    {
+      origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
+      input: "253134",
+      tableHeading: "Block Production",
+      column: "Height",
+    },
     {
       origin: "/staking-ledgers",
       input: DEFAULT_ACCOUNT_PK,
@@ -152,13 +204,14 @@ suite(["@CI"], "search with single result", () => {
       tableHeading: "Blocks",
       column: "Height",
     },
+    // { origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`, input: "5783", tableHeading: "Block Production", column: "Slot" },
     // { origin: "/", input: "20345", tableHeading: "Blocks", column: "Slot" },
     // { origin: "/summary", input: "20345", tableHeading: "Blocks", column: "Slot" },
     // { origin: "/blocks", input: "20345", tableHeading: "Blocks", column: "Slot" },
   ];
 
   exact_searches.forEach(({ origin, input, tableHeading, column }) =>
-    it(`works on ${origin} page`, () => {
+    it(`works on ${origin} page when searching column '${column}'`, () => {
       /* 
         Sufficiently "tall" viewport to display many rows per table.
         We want to see that the search bar is filtering results.  
@@ -168,26 +221,33 @@ suite(["@CI"], "search with single result", () => {
       cy.wait(1000);
       let key = "q-" + kebabCase(column);
       let cssSelector = "#" + key;
-      cy.get(cssSelector).as("searchinput");
-      cy.get("@searchinput").type(input, { delay: 0 });
 
-      // check input
-      cy.get("@searchinput").should("have.value", input);
-      // check url
-      cy.url().should("include", `${key}=${input}`);
-      // check table
+      // store initial length of table rows
       cy.aliasTableRows(tableHeading, "table-rows");
-      cy.get("@table-rows").should("have.length", 1);
-      cy.wait(1000);
+      cy.get("@table-rows").then(($trs) => {
+        const initialLength = $trs.length;
 
-      cy.go("back");
+        cy.get(cssSelector).as("searchinput");
+        cy.get("@searchinput").type(input, { delay: 0 });
 
-      // check input
-      cy.get("@searchinput").should("have.value", "");
-      // check url
-      cy.url().should("not.contain", key);
-      // check table
-      cy.tableHasMoreThanNRows(tableHeading, 15);
+        // check input
+        cy.get("@searchinput").should("have.value", input);
+        // check url
+        cy.url().should("include", `${key}=${input}`);
+
+        // check table
+        cy.get("@table-rows").should("have.length", 1);
+        cy.wait(1000);
+
+        cy.go("back");
+
+        // check input
+        cy.get("@searchinput").should("have.value", "");
+        // check url
+        cy.url().should("not.contain", key);
+        // check table
+        cy.tableHasMoreThanNRows(tableHeading, initialLength - 1);
+      });
     }),
   );
 });

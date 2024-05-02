@@ -68,6 +68,13 @@ impl TableData for Vec<Option<AccountActivityQueryDirectionalTransactions>> {
         .collect::<Vec<_>>()
     }
 
+    fn get_exact_search_columns(&self) -> Vec<String> {
+        ["Height", "Txn Hash", "Nonce", "Counterparty"]
+            .iter()
+            .map(ToString::to_string)
+            .collect::<Vec<_>>()
+    }
+
     fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
         self.iter()
             .map(|opt_trans| match opt_trans {
@@ -138,6 +145,13 @@ impl TableData for Vec<Option<AccountActivityQueryDirectionalTransactions>> {
 impl TableData for Vec<Option<AccountActivityQuerySnarks>> {
     fn get_columns(&self) -> Vec<String> {
         ["Height", "State Hash", "Age", "Prover", "Work Ids", "Fee"]
+            .iter()
+            .map(ToString::to_string)
+            .collect::<Vec<_>>()
+    }
+
+    fn get_exact_search_columns(&self) -> Vec<String> {
+        ["Height", "State Hash", "Prover"]
             .iter()
             .map(ToString::to_string)
             .collect::<Vec<_>>()
@@ -229,17 +243,27 @@ impl SnarkTrait for AccountActivityQuerySnarks {
 
 impl TableData for Vec<Option<AccountActivityQueryBlocks>> {
     fn get_columns(&self) -> Vec<String> {
-        vec![
-            String::from("Height"),
-            String::from("State Hash"),
-            String::from("Slot"),
-            String::from("Age"),
-            String::from("Block Producer"),
-            String::from("Coinbase"),
-            String::from("User Commands"),
-            String::from("SNARKs"),
-            String::from("Coinbase Receiver"),
+        [
+            "Height",
+            "State Hash",
+            "Slot",
+            "Age",
+            "Block Producer",
+            "Coinbase",
+            "User Commands",
+            "SNARKs",
+            "Coinbase Receiver",
         ]
+        .iter()
+        .map(ToString::to_string)
+        .collect::<Vec<_>>()
+    }
+
+    fn get_exact_search_columns(&self) -> Vec<String> {
+        ["Height", "State Hash", "Slot", "Block Producer"]
+            .iter()
+            .map(ToString::to_string)
+            .collect::<Vec<_>>()
     }
 
     fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
