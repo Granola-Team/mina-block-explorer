@@ -6,9 +6,16 @@ const kebabCase = (string) =>
     .replace(/[\s_]+/g, "-")
     .toLowerCase();
 
+let state_hash = "3NKypQg4LpXcWW2BPzue3e93eDKPHMpZ5J4jLNptVwuS7xDBDPzX";
+
 suite(["@CI"], "search with multiple results", () => {
-  let state_hash = "3NKypQg4LpXcWW2BPzue3e93eDKPHMpZ5J4jLNptVwuS7xDBDPzX";
   let multi_response_searches = [
+    {
+      origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
+      input: state_hash,
+      tableHeading: "SNARK Jobs",
+      expectation: { column: "State Hash", value: state_hash },
+    },
     {
       origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
       input: "253134",
@@ -111,9 +118,15 @@ suite(["@CI"], "search with single result", () => {
   let exact_searches = [
     {
       origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
+      input: state_hash,
+      tableHeading: "Block Production",
+      column: "State Hash",
+    },
+    {
+      origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
       input: "253134",
       tableHeading: "Block Production",
-      expectation: { column: "Height", value: "253134" },
+      column: "Height",
     },
     {
       origin: "/staking-ledgers",

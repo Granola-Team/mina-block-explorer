@@ -87,7 +87,7 @@ pub async fn load_data(
         trans_limit: Some(trans_limit.unwrap_or_default()),
         blocks_query: account_activity_query::BlockQueryInput {
             block_height,
-            state_hash,
+            state_hash: state_hash.clone(),
             creator: block_producer.clone(),
             protocol_state: if slot.is_some() {
                 Some(BlockProtocolStateQueryInput {
@@ -110,8 +110,9 @@ pub async fn load_data(
         snarks_query: account_activity_query::SnarkQueryInput {
             block_height,
             prover: prover,
-            block: if block_producer.is_some() || slot.is_some() {
+            block: if block_producer.is_some() || slot.is_some() || state_hash.is_some() {
                 Some(BlockQueryInput {
+                    state_hash,
                     creator: block_producer,
                     protocol_state: if slot.is_some() {
                         Some(BlockProtocolStateQueryInput {
