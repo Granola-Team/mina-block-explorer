@@ -99,6 +99,14 @@ pub fn AccountSpotlightPage() -> impl IntoView {
                     Some(50),
                     Some(50),
                     Some(50),
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
                     canonical_opt,
                 )
                 .await

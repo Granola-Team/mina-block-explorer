@@ -6,6 +6,9 @@ use self::account_activity_query::{
     TransactionQueryInput,
 };
 use crate::{
+    account_activity::graphql::account_activity_query::{
+        BlockProtocolStateConsensusStateQueryInput, BlockProtocolStateQueryInput,
+    },
     blocks::graphql::blocks_query::{BlocksQueryBlocks, BlocksQueryBlocksTransactions},
     snarks::graphql::snarks_query::{SnarksQuerySnarks, SnarksQuerySnarksBlock},
     user_commands::graphql::transactions_query::{
@@ -14,7 +17,6 @@ use crate::{
 };
 use chrono::Utc;
 use graphql_client::GraphQLQuery;
-
 type DateTime = chrono::DateTime<Utc>;
 type Long = i32;
 
@@ -108,6 +110,127 @@ impl From<AccountActivityQueryBlocksTransactions> for BlocksQueryBlocksTransacti
         BlocksQueryBlocksTransactions {
             coinbase: item.coinbase,
             ..Default::default()
+        }
+    }
+}
+
+#[allow(clippy::derivable_impls)]
+impl Default for BlockProtocolStateConsensusStateQueryInput {
+    fn default() -> Self {
+        BlockProtocolStateConsensusStateQueryInput {
+            slot_ne: None,
+            block_height_nin: None,
+            min_window_density_gt: None,
+            block_height_in: None,
+            slot_since_genesis_gte: None,
+            epoch_count_ne: None,
+            slot_lt: None,
+            epoch_exists: None,
+            or: None,
+            blockchain_length_gt: None,
+            min_window_density_ne: None,
+            total_currency_ne: None,
+            slot_since_genesis_lte: None,
+            slot_exists: None,
+            next_epoch_data: None,
+            block_height: None,
+            total_currency_gt: None,
+            epoch_lt: None,
+            epoch_count_gt: None,
+            epoch_ne: None,
+            blockchain_length_lte: None,
+            slot_lte: None,
+            slot_nin: None,
+            blockchain_length_nin: None,
+            slot_in: None,
+            min_window_density_gte: None,
+            and: None,
+            epoch_gt: None,
+            slot_since_genesis_nin: None,
+            slot_since_genesis_exists: None,
+            has_ancestor_in_same_checkpoint_window_exists: None,
+            total_currency_lt: None,
+            staking_epoch_data: None,
+            slot_since_genesis_ne: None,
+            slot_gte: None,
+            slot: None,
+            next_epoch_data_exists: None,
+            min_window_density_lt: None,
+            blockchain_length_exists: None,
+            has_ancestor_in_same_checkpoint_window: None,
+            blockchain_length_gte: None,
+            epoch: None,
+            last_vrf_output_lte: None,
+            min_window_density_exists: None,
+            epoch_count_nin: None,
+            block_height_lte: None,
+            total_currency_nin: None,
+            block_height_exists: None,
+            epoch_count_gte: None,
+            blockchain_length_ne: None,
+            total_currency_lte: None,
+            slot_since_genesis_in: None,
+            total_currency_gte: None,
+            epoch_nin: None,
+            min_window_density_lte: None,
+            epoch_count_lte: None,
+            slot_gt: None,
+            slot_since_genesis_gt: None,
+            has_ancestor_in_same_checkpoint_window_ne: None,
+            min_window_density_in: None,
+            total_currency_in: None,
+            total_currency_exists: None,
+            min_window_density: None,
+            min_window_density_nin: None,
+            epoch_gte: None,
+            last_vrf_output_gt: None,
+            block_height_gte: None,
+            blockchain_length_lt: None,
+            block_height_gt: None,
+            last_vrf_output_nin: None,
+            epoch_count: None,
+            blockchain_length: None,
+            last_vrf_output_exists: None,
+            epoch_count_exists: None,
+            last_vrf_output_in: None,
+            epoch_count_in: None,
+            last_vrf_output_ne: None,
+            block_height_lt: None,
+            slot_since_genesis_lt: None,
+            epoch_in: None,
+            block_height_ne: None,
+            last_vrf_output: None,
+            blockchain_length_in: None,
+            last_vrf_output_gte: None,
+            staking_epoch_data_exists: None,
+            epoch_count_lt: None,
+            slot_since_genesis: None,
+            epoch_lte: None,
+            last_vrf_output_lt: None,
+            total_currency: None,
+        }
+    }
+}
+
+#[allow(clippy::derivable_impls)]
+impl Default for BlockProtocolStateQueryInput {
+    fn default() -> Self {
+        BlockProtocolStateQueryInput {
+            previous_state_hash_exists: None,
+            blockchain_state_exists: None,
+            consensus_state: None,
+            previous_state_hash_ne: None,
+            consensus_state_exists: None,
+            previous_state_hash_nin: None,
+            previous_state_hash_lt: None,
+            or: None,
+            previous_state_hash_lte: None,
+            blockchain_state: None,
+            previous_state_hash_gte: None,
+            previous_state_hash_gt: None,
+            previous_state_hash_in: None,
+            and: None,
+            previous_state_hash: None,
         }
     }
 }
