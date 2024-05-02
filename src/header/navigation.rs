@@ -33,6 +33,7 @@ pub fn Header() -> impl IntoView {
                 ..Default::default()
             })
         }
+
         addr_entries = Some(vec![
             NavEntry {
                 href: "/addresses/accounts".to_string(),
