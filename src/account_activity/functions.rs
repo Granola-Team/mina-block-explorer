@@ -63,6 +63,7 @@ pub fn stub_account_summaries(size: usize) -> Vec<AllAccountSummary> {
         .collect()
 }
 
+#[allow(clippy::too_many_arguments)]
 pub async fn load_data(
     public_key: Option<String>,
     blocks_limit: Option<i64>,
@@ -109,7 +110,7 @@ pub async fn load_data(
         },
         snarks_query: account_activity_query::SnarkQueryInput {
             block_height,
-            prover: prover,
+            prover,
             block: if block_producer.is_some() || slot.is_some() || state_hash.is_some() {
                 Some(BlockQueryInput {
                     state_hash,
@@ -142,7 +143,7 @@ pub async fn load_data(
             hash: txn_hash.clone(),
             from: public_key.clone(),
             to: counterparty.clone(),
-            nonce: nonce.clone(),
+            nonce,
             canonical: if canonical.is_none() {
                 Some(true)
             } else {

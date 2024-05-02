@@ -260,15 +260,10 @@ impl TableData for Vec<Option<AccountActivityQueryBlocks>> {
     }
 
     fn get_exact_search_columns(&self) -> Vec<String> {
-        [
-            "Height",
-            "State Hash",
-            "Slot",
-            "Block Producer",
-        ]
-        .iter()
-        .map(ToString::to_string)
-        .collect::<Vec<_>>()
+        ["Height", "State Hash", "Slot", "Block Producer"]
+            .iter()
+            .map(ToString::to_string)
+            .collect::<Vec<_>>()
     }
 
     fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
