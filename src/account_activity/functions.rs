@@ -89,29 +89,46 @@ pub async fn load_data(
             block_height,
             state_hash,
             creator: block_producer.clone(),
-            protocol_state: Some(BlockProtocolStateQueryInput {
-                consensus_state: Some(BlockProtocolStateConsensusStateQueryInput {
-                    slot,
-                    ..Default::default()
-                }),
-                ..Default::default()
-            }),
-            ..Default::default()
-        },
-        snarks_query: account_activity_query::SnarkQueryInput {
-            block_height,
-            prover: prover,
-            block: Some(BlockQueryInput {
-                creator: block_producer,
-                protocol_state: Some(BlockProtocolStateQueryInput {
+            protocol_state: if slot.is_some() {
+                Some(BlockProtocolStateQueryInput {
                     consensus_state: Some(BlockProtocolStateConsensusStateQueryInput {
                         slot,
                         ..Default::default()
                     }),
                     ..Default::default()
-                }),
-                ..Default::default()
-            }),
+                })
+            } else {
+                None
+            },
+            canonical: if canonical.is_none() {
+                Some(true)
+            } else {
+                canonical
+            },
+            ..Default::default()
+        },
+        snarks_query: account_activity_query::SnarkQueryInput {
+            block_height,
+            prover: prover,
+            block: if block_producer.is_some() || slot.is_some() {
+                Some(BlockQueryInput {
+                    creator: block_producer,
+                    protocol_state: if slot.is_some() {
+                        Some(BlockProtocolStateQueryInput {
+                            consensus_state: Some(BlockProtocolStateConsensusStateQueryInput {
+                                slot,
+                                ..Default::default()
+                            }),
+                            ..Default::default()
+                        })
+                    } else {
+                        None
+                    },
+                    ..Default::default()
+                })
+            } else {
+                None
+            },
             canonical: if canonical.is_none() {
                 Some(true)
             } else {
