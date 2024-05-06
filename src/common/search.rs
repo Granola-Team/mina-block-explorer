@@ -16,10 +16,7 @@ pub fn GlobalSearchBar() -> impl IntoView {
 
         match value.get() {
             val if val.starts_with("B62q") => {
-                navigate(
-                    &format!("/addresses/accounts/{}", val),
-                    Default::default(),
-                );
+                navigate(&format!("/addresses/accounts/{}", val), Default::default());
                 set_value.set("".to_string());
             }
             val if val.starts_with("3N") => {
@@ -67,6 +64,7 @@ pub fn GlobalSearchBar() -> impl IntoView {
                         on:input=move |ev| {
                             set_value.set(event_target_value(&ev));
                         }
+
                         prop:value=value
                         placeholder=GLOBAL_SEARCH_PLACEHOLDER_TEXT
                         class="h-14 flex justify-start items-center text-base text-white pl-14 placeholder:text-slate-400 placeholder:font-medium placeholder:text-base focus:outline-none box-border w-full rounded-2xl bg-[#383B42]"
