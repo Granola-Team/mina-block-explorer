@@ -20,18 +20,22 @@ pub fn GlobalSearchBar() -> impl IntoView {
                     &format!("/addresses/accounts/{}", val),
                     Default::default(),
                 );
+                set_value.set("".to_string());
             }
             val if val.starts_with("3N") => {
                 navigate(&format!("/blocks/{}", val), Default::default());
+                set_value.set("".to_string());
             }
             val if val.starts_with("Ckp") => {
                 navigate(&format!("/commands/{}", val), Default::default());
+                set_value.set("".to_string());
             }
             val if val.chars().all(char::is_numeric) => {
                 navigate(
                     &format!("/staking-ledgers?epoch={}", val),
                     Default::default(),
                 );
+                set_value.set("".to_string());
             }
             _ => {}
         }
