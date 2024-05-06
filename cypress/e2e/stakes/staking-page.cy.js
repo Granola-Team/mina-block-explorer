@@ -40,36 +40,36 @@ suite(["@CI"], "staking ledger", () => {
 
   it("defaults to current epoch", () => {
     cy.visit("/staking-ledgers");
-    cy.get("section").contains("Current Staking Ledger", { timeout: 10000 });
+    cy.get("section").contains("Current Staking Ledger");
   });
 
   it("displays link to next stakes page", () => {
     cy.visit("/staking-ledgers");
     cy.get("section").contains("Current Staking Ledger");
-    cy.get("a").contains("Next", { timeout: 10000 }).click();
+    cy.get("a").contains("Next").click();
     cy.wait(500);
-    cy.get("section").contains("Next Staking Ledger", { timeout: 10000 });
+    cy.get("section").contains("Next Staking Ledger");
   });
 
   it("provides navigation between current and Next staking ledger", () => {
     cy.visit("/next-stakes");
-    cy.get("section").contains("Next Staking Ledger", { timeout: 10000 });
-    cy.get("a").contains("Previous", { timeout: 10000 }).click();
+    cy.get("section").contains("Next Staking Ledger");
+    cy.get("a").contains("Previous").click();
     cy.wait(500);
-    cy.get("section").contains("Current Staking Ledger", { timeout: 10000 });
-    cy.get("a").contains("Next", { timeout: 10000 }).click();
+    cy.get("section").contains("Current Staking Ledger");
+    cy.get("a").contains("Next").click();
     cy.wait(500);
-    cy.get("section").contains("Next Staking Ledger", { timeout: 10000 });
+    cy.get("section").contains("Next Staking Ledger");
   });
 
   it("contains buttons for epoch navigation", () => {
     cy.visit("/staking-ledgers?epoch=67");
-    cy.get("section").contains("Epoch 67 Staking Ledger", { timeout: 10000 });
-    cy.get("button").contains("Next", { timeout: 10000 }).click();
+    cy.get("section").contains("Epoch 67 Staking Ledger");
+    cy.get("button").contains("Next").click();
     cy.wait(500);
-    cy.get("section").contains("Epoch 68 Staking Ledger", { timeout: 10000 });
-    cy.get("button").contains("Previous", { timeout: 10000 }).click();
+    cy.get("section").contains("Epoch 68 Staking Ledger");
+    cy.get("button").contains("Previous").click();
     cy.wait(500);
-    cy.get("section").contains("Epoch 67 Staking Ledger", { timeout: 10000 });
+    cy.get("section").contains("Epoch 67 Staking Ledger");
   });
 });
