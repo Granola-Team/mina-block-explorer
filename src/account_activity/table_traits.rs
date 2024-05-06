@@ -144,7 +144,7 @@ impl TableData for Vec<Option<AccountActivityQueryDirectionalTransactions>> {
 
 impl TableData for Vec<Option<AccountActivityQuerySnarks>> {
     fn get_columns(&self) -> Vec<String> {
-        ["Height", "State Hash", "Age", "Prover", "Work Ids", "Fee"]
+        ["Height", "State Hash", "Age", "Prover", "Fee"]
             .iter()
             .map(ToString::to_string)
             .collect::<Vec<_>>()
@@ -178,13 +178,6 @@ impl TableData for Vec<Option<AccountActivityQuerySnarks>> {
                     convert_to_link(
                         snark.get_prover(),
                         format!("/addresses/accounts/{}", snark.get_prover()),
-                    ),
-                    convert_array_to_span(
-                        snark
-                            .get_work_ids()
-                            .iter()
-                            .map(|w| convert_to_pill(w.to_string(), ColorVariant::Grey))
-                            .collect::<Vec<_>>(),
                     ),
                     decorate_with_currency_tag(snark.get_fee(), "mina".to_string()),
                 ],

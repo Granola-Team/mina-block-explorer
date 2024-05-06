@@ -195,10 +195,6 @@ pub fn get_spotlight_loading_data() -> Vec<SpotlightEntry> {
             label: String::from("Delegate"),
             ..Default::default()
         },
-        SpotlightEntry {
-            label: String::from("Voting For"),
-            ..Default::default()
-        },
     ]
 }
 
@@ -226,11 +222,6 @@ pub fn get_spotlight_data(account: &AccountSummary) -> Vec<SpotlightEntry> {
                 let account = account.delegate.to_string();
                 convert_to_link(account.clone(), format!("/addresses/accounts/{}", account))
             }),
-            copiable: true,
-        },
-        SpotlightEntry {
-            label: String::from("Voting For"),
-            any_el: Some(convert_to_span(account.voting_for.to_string())),
             copiable: true,
         },
     ]
