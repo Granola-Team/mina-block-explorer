@@ -21,7 +21,7 @@ pub struct TableColumn {
     pub is_searchable: bool,
 }
 
-const INPUT_CLASS: &str = "mt-1 h-7 text-base text-sm font-normal font-mono p-2 rounded";
+const INPUT_CLASS: &str = "w-5/6 mt-1 h-7 text-base text-sm font-normal font-mono p-2 rounded";
 const PAGINATION_BUTTON_SIZE: &str = "h-7 w-7";
 const BUTTON_CLASS_BASE: &str = "font-semibold flex justify-center items-center";
 const PAGE_NUMBER_CLASS: &str = "page text-md m-1 flex justify-center items-center font-semibold";
@@ -37,7 +37,7 @@ pub fn TableContainer(children: Children) -> impl IntoView {
 #[component]
 pub fn Table(children: Children) -> impl IntoView {
     view! {
-        <table class="font-mono md:rounded-b-lg w-full @xs:w-[175%] @md:w-[150%] @2xl:w-[125%] @7xl:w-full">
+        <table class="font-mono table-fixed md:rounded-b-lg w-full @xs:w-[175%] @md:w-[150%] @2xl:w-[125%] @7xl:w-full">
             {children()}
         </table>
     }
