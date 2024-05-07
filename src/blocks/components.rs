@@ -34,7 +34,7 @@ pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
                                     section_heading="User Commands"
                                     controls=|| ().into_view()
                                 >
-                                    <Table data=LoadingPlaceholder {}/>
+                                    <DeprecatedTable data=LoadingPlaceholder {}/>
                                 </TableSection>
                             }
                         }
@@ -44,7 +44,7 @@ pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
                                     section_heading="SNARK Jobs"
                                     controls=|| ().into_view()
                                 >
-                                    <Table data=LoadingPlaceholder {}/>
+                                    <DeprecatedTable data=LoadingPlaceholder {}/>
                                 </TableSection>
                             }
                         }
@@ -54,7 +54,7 @@ pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
                                     section_heading="Internal Commands"
                                     controls=|| ().into_view()
                                 >
-                                    <Table data=LoadingPlaceholder {}/>
+                                    <DeprecatedTable data=LoadingPlaceholder {}/>
                                 </TableSection>
                             }
                         }
@@ -130,7 +130,7 @@ pub fn BlockUserCommands(block: BlocksQueryBlocks) -> impl IntoView {
                         pag.records_per_page,
                         current_page.get() - 1,
                     );
-                    view! { <Table data=subset pagination=pag/> }
+                    view! { <DeprecatedTable data=subset pagination=pag/> }
                 }
                 None => ().into_view(),
             }}
@@ -199,7 +199,7 @@ pub fn BlockInternalCommandsTable(block: BlocksQueryBlocks) -> impl IntoView {
                     pag.records_per_page,
                     current_page.get() - 1,
                 );
-                view! { <Table data=subset pagination=pag/> }
+                view! { <DeprecatedTable data=subset pagination=pag/> }
             }
             (_, _, _) => {
                 view! { <EmptyTable message="No internal commands for this block"/> }
@@ -703,7 +703,7 @@ pub fn BlocksSection() -> impl IntoView {
                         }
                     >
 
-                        <Table data=blocks_subset pagination=pag/>
+                        <DeprecatedTable data=blocks_subset pagination=pag/>
                     </TableSection>
                     <Outlet/>
                 }
@@ -712,7 +712,7 @@ pub fn BlocksSection() -> impl IntoView {
             None => {
                 view! {
                     <TableSection section_heading="Blocks" controls=move || ().into_view()>
-                        <Table data=LoadingPlaceholder {}/>
+                        <DeprecatedTable data=LoadingPlaceholder {}/>
                     </TableSection>
                     <Outlet/>
                 }
@@ -770,7 +770,7 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
                 None => {
                     view! {
                         <TableSection section_heading="Blocks" controls=move || ().into_view()>
-                            <Table data=LoadingPlaceholder {}/>
+                            <DeprecatedTable data=LoadingPlaceholder {}/>
                         </TableSection>
                     }
                 }
@@ -813,7 +813,10 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
                             }
                         >
 
-                            <Table data=SummaryPageBlocksQueryBlocks(blocks_subset) pagination=pag/>
+                            <DeprecatedTable
+                                data=SummaryPageBlocksQueryBlocks(blocks_subset)
+                                pagination=pag
+                            />
                         </TableSection>
                     }
                 }
@@ -858,7 +861,7 @@ pub fn BlockSpotlightSnarkJobTable(block: BlocksQueryBlocks) -> impl IntoView {
                                 pag.records_per_page,
                                 current_page.get() - 1,
                             );
-                            view! { <Table data=subset pagination=pag/> }
+                            view! { <DeprecatedTable data=subset pagination=pag/> }
                         }
                     }}
                 }

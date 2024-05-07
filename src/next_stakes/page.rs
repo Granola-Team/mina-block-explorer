@@ -40,7 +40,7 @@ fn NextStakesPageContents() -> impl IntoView {
                         section_heading="Next Staking Ledger"
                         controls=move || ().into_view()
                     >
-                        <Table data=LoadingPlaceholder {}/>
+                        <DeprecatedTable data=LoadingPlaceholder {}/>
                     </TableSection>
                 }
             }>
@@ -87,7 +87,7 @@ fn NextStakesPageContents() -> impl IntoView {
                                     }
                                 >
 
-                                    <Table data=subset pagination=pag/>
+                                    <DeprecatedTable data=subset pagination=pag/>
                                 </TableSection>
                             }
                         })

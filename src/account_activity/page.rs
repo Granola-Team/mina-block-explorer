@@ -60,7 +60,7 @@ fn AccountsPageContents() -> impl IntoView {
                     pag.records_per_page,
                     current_page.get() - 1,
                 );
-                view! { <Table data=subset pagination=pag/> }
+                view! { <DeprecatedTable data=subset pagination=pag/> }
             }}
 
         </TableSection>
@@ -225,7 +225,7 @@ pub fn AccountSpotlightPage() -> impl IntoView {
                 None => {
                     view! {
                         <TableSection section_heading="User Commands" controls=|| ().into_view()>
-                            <Table data=LoadingPlaceholder {}/>
+                            <DeprecatedTable data=LoadingPlaceholder {}/>
                         </TableSection>
                     }
                 }
@@ -241,7 +241,7 @@ pub fn AccountSpotlightPage() -> impl IntoView {
                                 />
                             }
                         }
-                        None => view! { <Table data=LoadingPlaceholder {}/> },
+                        None => view! { <DeprecatedTable data=LoadingPlaceholder {}/> },
                     }}
 
                 </AppSubSection>
@@ -255,7 +255,7 @@ pub fn AccountSpotlightPage() -> impl IntoView {
                                 />
                             }
                         }
-                        None => view! { <Table data=LoadingPlaceholder {}/> },
+                        None => view! { <DeprecatedTable data=LoadingPlaceholder {}/> },
                     }}
 
                 </AppSubSection>

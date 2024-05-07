@@ -137,14 +137,14 @@ fn StakesPageContents() -> impl IntoView {
                         }
                     >
 
-                        <Table data=subset pagination=pag/>
+                        <DeprecatedTable data=subset pagination=pag/>
                     </TableSection>
                 }
             }
             (_, _) => {
                 view! {
                     <TableSection section_heading="" controls=move || ().into_view()>
-                        <Table data=LoadingPlaceholder {}/>
+                        <DeprecatedTable data=LoadingPlaceholder {}/>
                     </TableSection>
                 }
             }

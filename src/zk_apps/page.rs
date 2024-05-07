@@ -167,7 +167,7 @@ pub fn ZkAppSpotlight() -> impl IntoView {
                             records_per_page,
                             current_txn_page.get() - 1,
                         );
-                        view! { <Table data=subset pagination=pag/> }
+                        view! { <DeprecatedTable data=subset pagination=pag/> }
                     }}
 
                 </AppSubSection>
@@ -190,7 +190,7 @@ pub fn ZkAppSpotlight() -> impl IntoView {
                             records_per_page,
                             current_fees_page.get() - 1,
                         );
-                        view! { <Table data=subset pagination=pag/> }
+                        view! { <DeprecatedTable data=subset pagination=pag/> }
                     }}
 
                 </AppSubSection>
@@ -247,7 +247,7 @@ pub fn ZkAppTransactionsPage() -> impl IntoView {
                         records_per_page,
                         current_page.get() - 1,
                     );
-                    view! { <Table data=subset pagination=pag/> }
+                    view! { <DeprecatedTable data=subset pagination=pag/> }
                 }}
 
             </TableSection>
@@ -280,7 +280,7 @@ pub fn ZkAppsPage() -> impl IntoView {
                         records_per_page,
                         current_page.get() - 1,
                     );
-                    view! { <Table data=subset pagination=pag/> }
+                    view! { <DeprecatedTable data=subset pagination=pag/> }
                 }}
 
             </TableSection>

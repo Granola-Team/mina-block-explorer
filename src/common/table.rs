@@ -28,7 +28,10 @@ const INACTIVE_PAGE_NUMBER_CLASS: &str =
 const CELL_PADDING_CLASS: &str = "first:pl-8 pl-2 last:pr-4";
 
 #[component]
-pub fn Table<T>(data: T, #[prop(optional)] pagination: Option<Pagination>) -> impl IntoView
+pub fn DeprecatedTable<T>(
+    data: T,
+    #[prop(optional)] pagination: Option<Pagination>,
+) -> impl IntoView
 where
     T: TableData,
 {
