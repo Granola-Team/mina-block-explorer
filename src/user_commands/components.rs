@@ -86,7 +86,7 @@ pub fn TransactionsSection(#[prop(default = false)] with_link: bool) -> impl Int
             _ => {
                 view! {
                     <TableSection section_heading="User Commands" controls=|| ().into_view()>
-                        <DeprecatedTable data=LoadingPlaceholder {}/>
+                        <DeprecatedTable data=DeprecatedLoadingPlaceholder {}/>
                     </TableSection>
                 }
             }
@@ -118,7 +118,7 @@ where
             fallback=move || {
                 view! {
                     <TableSection section_heading="User Commands" controls=|| ().into_view()>
-                        <DeprecatedTable data=LoadingPlaceholder {}/>
+                        <DeprecatedTable data=DeprecatedLoadingPlaceholder {}/>
                     </TableSection>
                 }
             }

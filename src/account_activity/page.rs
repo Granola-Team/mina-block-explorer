@@ -225,7 +225,7 @@ pub fn AccountSpotlightPage() -> impl IntoView {
                 None => {
                     view! {
                         <TableSection section_heading="User Commands" controls=|| ().into_view()>
-                            <DeprecatedTable data=LoadingPlaceholder {}/>
+                            <DeprecatedTable data=DeprecatedLoadingPlaceholder {}/>
                         </TableSection>
                     }
                 }
@@ -241,7 +241,7 @@ pub fn AccountSpotlightPage() -> impl IntoView {
                                 />
                             }
                         }
-                        None => view! { <DeprecatedTable data=LoadingPlaceholder {}/> },
+                        None => view! { <DeprecatedTable data=DeprecatedLoadingPlaceholder {}/> },
                     }}
 
                 </AppSubSection>
@@ -255,7 +255,7 @@ pub fn AccountSpotlightPage() -> impl IntoView {
                                 />
                             }
                         }
-                        None => view! { <DeprecatedTable data=LoadingPlaceholder {}/> },
+                        None => view! { <DeprecatedTable data=DeprecatedLoadingPlaceholder {}/> },
                     }}
 
                 </AppSubSection>

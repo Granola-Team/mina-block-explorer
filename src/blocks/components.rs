@@ -1,6 +1,6 @@
 use super::{functions::*, graphql::blocks_query::BlocksQueryBlocks, models::*};
 use crate::{
-    blocks::graphql::blocks_query::BlocksQueryBlocksTransactionsFeeTransfer,
+    blocks::graphql::blocks_query::{BlocksQueryBlocksTransactionsFeeTransfer, ResponseData},
     common::{components::*, constants::*, functions::*, models::*, spotlight::*, table::*},
     icons::*,
 };
@@ -34,7 +34,7 @@ pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
                                     section_heading="User Commands"
                                     controls=|| ().into_view()
                                 >
-                                    <DeprecatedTable data=LoadingPlaceholder {}/>
+                                    <DeprecatedTable data=DeprecatedLoadingPlaceholder {}/>
                                 </TableSection>
                             }
                         }
@@ -44,7 +44,7 @@ pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
                                     section_heading="SNARK Jobs"
                                     controls=|| ().into_view()
                                 >
-                                    <DeprecatedTable data=LoadingPlaceholder {}/>
+                                    <DeprecatedTable data=DeprecatedLoadingPlaceholder {}/>
                                 </TableSection>
                             }
                         }
@@ -54,7 +54,7 @@ pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
                                     section_heading="Internal Commands"
                                     controls=|| ().into_view()
                                 >
-                                    <DeprecatedTable data=LoadingPlaceholder {}/>
+                                    <DeprecatedTable data=DeprecatedLoadingPlaceholder {}/>
                                 </TableSection>
                             }
                         }
@@ -715,11 +715,6 @@ pub fn BlocksSection() -> impl IntoView {
                         <DeprecatedTable data=LoadingPlaceholder {}/>
                     </TableSection>
                     <Outlet/>
-                }
-                    .into_view()
-            }
-            _ => view! { <span></span> }.into_view(),
-        }}
     }
 }
 
@@ -770,7 +765,7 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
                 None => {
                     view! {
                         <TableSection section_heading="Blocks" controls=move || ().into_view()>
-                            <DeprecatedTable data=LoadingPlaceholder {}/>
+                            <DeprecatedTable data=DeprecatedLoadingPlaceholder {}/>
                         </TableSection>
                     }
                 }

@@ -6,7 +6,9 @@ use leptos_router::*;
 use leptos_use::{use_debounce_fn_with_options, DebounceOptions};
 
 pub trait TableData {
-    fn get_columns(&self) -> Vec<String>;
+    fn get_columns(&self) -> Vec<String> {
+        Vec::new()
+    }
     fn get_rows(&self) -> Vec<Vec<HtmlElement<AnyElement>>>;
     fn get_exact_search_columns(&self) -> Vec<String> {
         Vec::new()
@@ -329,15 +331,27 @@ pub fn TableLink(
     }.into_view()
 }
 
+
+#[derive(Clone)]
 pub struct LoadingPlaceholder;
 
-impl TableData for LoadingPlaceholder {
+impl TableData for Vec<Vec<LoadingPlaceholder>> {
+    fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
+        self.into_iter()
+            .map(|row| row.iter().map(|_| data_placeholder()).collect())
+            .collect()
+    }
+}
+
+pub struct DeprecatedLoadingPlaceholder;
+
+impl TableData for DeprecatedLoadingPlaceholder {
     fn get_columns(&self) -> Vec<String> {
         vec![String::new().clone(); 5]
     }
 
     fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
-        vec![vec![String::new().clone(); 5]; 10]
+        vec![vec![String::new().clone(); 5]; 5]
             .iter()
             .map(|o| o.iter().map(|_| data_placeholder()).collect::<Vec<_>>())
             .collect()

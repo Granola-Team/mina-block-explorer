@@ -144,7 +144,7 @@ fn StakesPageContents() -> impl IntoView {
             (_, _) => {
                 view! {
                     <TableSection section_heading="" controls=move || ().into_view()>
-                        <DeprecatedTable data=LoadingPlaceholder {}/>
+                        <DeprecatedTable data=DeprecatedLoadingPlaceholder {}/>
                     </TableSection>
                 }
             }

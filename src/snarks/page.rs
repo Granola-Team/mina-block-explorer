@@ -90,7 +90,7 @@ fn SnarksPageContents() -> impl IntoView {
                     );
                     view! { <DeprecatedTable data=subset pagination=pag/> }
                 }
-                None => view! { <DeprecatedTable data=LoadingPlaceholder {}/> },
+                None => view! { <DeprecatedTable data=DeprecatedLoadingPlaceholder {}/> },
                 _ => view! { <span></span> }.into_view(),
             }}
 
