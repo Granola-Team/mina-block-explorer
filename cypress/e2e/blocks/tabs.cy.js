@@ -7,8 +7,8 @@ suite(["@CI"], "tab count and pagination count", () => {
       cy.clickLinkInTable(1, "State Hash", "Blocks");
 
       cy.url().should("include", "/spotlight");
-      cy.get("a").contains(tab).as("tab");
-      cy.get("@tab").siblings(".number-bubble").first().as("tab-count");
+      cy.contains("a.tab", tab).as("tab");
+      cy.get("@tab").find(".number-bubble").as("tab-count");
 
       cy.get("@tab").click();
       cy.get("@tab-count")
