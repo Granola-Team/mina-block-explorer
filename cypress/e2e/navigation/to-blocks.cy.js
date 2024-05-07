@@ -10,9 +10,7 @@ suite(["@CI"], "block page", () => {
   ].forEach(({ origin, dest, href }) =>
     it(`is navigated to from ${origin}`, () => {
       cy.visit(origin);
-      cy.get("a")
-        .contains("See all block production", { timeout: 60000 })
-        .click();
+      cy.get("a").contains("See all block production").click();
       cy.url().should("contain", href);
     }),
   );
