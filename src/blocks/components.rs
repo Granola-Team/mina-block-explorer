@@ -783,6 +783,7 @@ pub fn BlocksSection() -> impl IntoView {
                             })
                             .collect_view()
                     }}
+
                 </Suspense>
             </TableContainer>
         </TableSection>
