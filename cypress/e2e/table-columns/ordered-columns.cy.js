@@ -92,7 +92,7 @@ suite(["@CI"], "blocks table", () => {
 
 suite(["@CI"], "snarks table", () => {
   let pages = ["/snarks"];
-  let columns = ["Height", "State Hash", "Age", "Prover", "Work Ids", "Fee"];
+  let columns = ["Height", "State Hash", "Age", "Prover", "Fee"];
 
   pages.forEach((page) =>
     it(`on ${page} includes correct columns`, () => {
@@ -106,7 +106,7 @@ suite(["@CI"], "block spotlight snarks table", () => {
   let pages = [
     "/blocks/3NKLE73AnqCKVit9h3yEZsPbbJBmVfW5WWKA6pNsUjqh3Nm1mKSK/snark-jobs",
   ];
-  let columns = ["State Hash", "Age", "Prover", "Work Ids", "Fee"];
+  let columns = ["State Hash", "Age", "Prover", "Fee"];
 
   pages.forEach((page) =>
     it(`on ${page} includes correct columns`, () => {
