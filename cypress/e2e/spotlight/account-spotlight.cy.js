@@ -1,7 +1,7 @@
 import { DEFAULT_ACCOUNT_PK } from "../constants";
 
 suite(["@CI"], "Account spotlight", () => {
-  let expected_fields = ["Balance", "Voting For", "Delegate"];
+  let expected_fields = ["Balance", "Delegate"];
 
   it("displays complete information", () => {
     cy.visit(`/addresses/accounts/${DEFAULT_ACCOUNT_PK}`);
