@@ -74,14 +74,6 @@ pub fn get_canonical(snark: &SnarksQuerySnarks) -> Option<bool> {
     snark.canonical
 }
 
-pub fn get_work_ids(snark: &SnarksQuerySnarks) -> Vec<String> {
-    snark.work_ids.as_ref().map_or_else(Vec::new, |ids| {
-        ids.iter()
-            .map(|id| id.map_or_else(String::new, |id| id.to_string()))
-            .collect::<Vec<_>>()
-    })
-}
-
 pub fn get_block_state_hash(snark: &SnarksQuerySnarks) -> String {
     snark.block.as_ref().map_or_else(String::new, |blk| {
         blk.state_hash

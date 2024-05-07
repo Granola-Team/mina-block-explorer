@@ -1,11 +1,11 @@
 use super::{functions::*, graphql::snarks_query};
-use crate::common::{functions::*, models::*, table::*};
+use crate::common::{functions::*, table::*};
 use leptos::*;
 use snarks_query::SnarksQuerySnarks;
 
 impl TableData for Vec<Option<SnarksQuerySnarks>> {
     fn get_columns(&self) -> Vec<String> {
-        ["Height", "State Hash", "Age", "Prover", "Work Ids", "Fee"]
+        ["Height", "State Hash", "Age", "Prover", "Fee"]
             .iter()
             .map(ToString::to_string)
             .collect::<Vec<_>>()
@@ -39,12 +39,6 @@ impl TableData for Vec<Option<SnarksQuerySnarks>> {
                     convert_to_link(
                         get_prover(snark),
                         format!("/addresses/accounts/{}", get_prover(snark)),
-                    ),
-                    convert_array_to_span(
-                        get_work_ids(snark)
-                            .iter()
-                            .map(|w| convert_to_pill(w.to_string(), ColorVariant::Grey))
-                            .collect::<Vec<_>>(),
                     ),
                     decorate_with_currency_tag(get_fee(snark), "mina".to_string()),
                 ],

@@ -50,11 +50,6 @@ pub fn ZkAppSpotlight() -> impl IntoView {
                         ..Default::default()
                     },
                     SpotlightEntry {
-                        label: String::from("Voting For"),
-                        any_el: Some(convert_to_span(generate_base58_string(44))),
-                        copiable: true,
-                    },
-                    SpotlightEntry {
                         label: String::from("Ver. Key Hash"),
                         any_el: Some(convert_to_span(generate_base58_string(44))),
                         copiable: true,
