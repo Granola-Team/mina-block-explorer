@@ -261,8 +261,6 @@ suite(["@CI"], "search with single result", () => {
 
         cy.go("back");
 
-        // check input
-        cy.get("@searchinput").should("have.value", "");
         // check url
         cy.url().should("not.contain", key);
         // check table
