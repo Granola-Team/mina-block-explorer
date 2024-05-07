@@ -46,7 +46,7 @@ suite(["@CI"], "staking ledger", () => {
   it("displays link to next stakes page", () => {
     cy.visit("/staking-ledgers");
     cy.get("section").contains("Current Staking Ledger");
-    cy.get("a").contains("Next").click();
+    cy.get("section").contains("a", "Next").click();
     cy.wait(500);
     cy.get("section").contains("Next Staking Ledger");
   });
@@ -57,7 +57,7 @@ suite(["@CI"], "staking ledger", () => {
     cy.get("a").contains("Previous").click();
     cy.wait(500);
     cy.get("section").contains("Current Staking Ledger");
-    cy.get("a").contains("Next").click();
+    cy.get("section").contains("a", "Next").click();
     cy.wait(500);
     cy.get("section").contains("Next Staking Ledger");
   });
@@ -65,7 +65,7 @@ suite(["@CI"], "staking ledger", () => {
   it("contains buttons for epoch navigation", () => {
     cy.visit("/staking-ledgers?epoch=67");
     cy.get("section").contains("Epoch 67 Staking Ledger");
-    cy.get("button").contains("Next").click();
+    cy.get("section").contains("button", "Next").click();
     cy.wait(500);
     cy.get("section").contains("Epoch 68 Staking Ledger");
     cy.get("button").contains("Previous").click();
