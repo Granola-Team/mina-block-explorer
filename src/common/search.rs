@@ -7,35 +7,32 @@ use leptos::*;
 #[component]
 pub fn GlobalSearchBar() -> impl IntoView {
     let input_element: NodeRef<html::Input> = create_node_ref();
+    let (value, set_value) = create_signal("".to_string());
 
     let navigate = leptos_router::use_navigate();
 
     let on_submit = move |ev: leptos::ev::SubmitEvent| {
         ev.prevent_default();
 
-        let value = input_element
-            .get()
-            .expect("<input> should be mounted")
-            .value();
-
-        match value {
-            _ if value.starts_with("B62q") => {
+        match value.get() {
+            val if val.starts_with("B62q") => {
+                navigate(&format!("/addresses/accounts/{}", val), Default::default());
+                set_value.set("".to_string());
+            }
+            val if val.starts_with("3N") => {
+                navigate(&format!("/blocks/{}", val), Default::default());
+                set_value.set("".to_string());
+            }
+            val if val.starts_with("Ckp") => {
+                navigate(&format!("/commands/{}", val), Default::default());
+                set_value.set("".to_string());
+            }
+            val if val.chars().all(char::is_numeric) => {
                 navigate(
-                    &format!("/addresses/accounts/{}", value),
+                    &format!("/staking-ledgers?epoch={}", val),
                     Default::default(),
                 );
-            }
-            _ if value.starts_with("3N") => {
-                navigate(&format!("/blocks/{}", value), Default::default());
-            }
-            _ if value.starts_with("Ckp") => {
-                navigate(&format!("/commands/{}", value), Default::default());
-            }
-            _ if value.chars().all(char::is_numeric) => {
-                navigate(
-                    &format!("/staking-ledgers?epoch={}", value),
-                    Default::default(),
-                );
+                set_value.set("".to_string());
             }
             _ => {}
         }
@@ -64,6 +61,11 @@ pub fn GlobalSearchBar() -> impl IntoView {
                     <input
                         id="searchbar"
                         type="text"
+                        on:input=move |ev| {
+                            set_value.set(event_target_value(&ev));
+                        }
+
+                        prop:value=value
                         placeholder=GLOBAL_SEARCH_PLACEHOLDER_TEXT
                         class="h-14 flex justify-start items-center text-base text-white pl-14 placeholder:text-slate-400 placeholder:font-medium placeholder:text-base focus:outline-none box-border w-full rounded-2xl bg-[#383B42]"
                         node_ref=input_element
