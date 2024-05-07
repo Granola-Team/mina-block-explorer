@@ -10,7 +10,7 @@ suite(["@CI"], "snarks page", () => {
   ].forEach(({ origin, dest, href }) =>
     it(`is navigated to from ${dest}`, () => {
       cy.visit(origin);
-      cy.get("a").contains("See all snark jobs", { timeout: 60000 }).click();
+      cy.get("a").contains("See all snark jobs").click();
       cy.url().should("contain", href);
     }),
   );
