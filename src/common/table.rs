@@ -361,7 +361,7 @@ pub struct LoadingPlaceholder;
 
 impl TableData for Vec<Vec<LoadingPlaceholder>> {
     fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
-        self.into_iter()
+        self.iter()
             .map(|row| row.iter().map(|_| data_placeholder()).collect())
             .collect()
     }
@@ -375,7 +375,7 @@ impl TableData for DeprecatedLoadingPlaceholder {
     }
 
     fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
-        vec![vec![String::new().clone(); 5]; 5]
+        [[""; 5]; 5]
             .iter()
             .map(|o| o.iter().map(|_| data_placeholder()).collect::<Vec<_>>())
             .collect()
