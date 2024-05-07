@@ -27,7 +27,7 @@ Cypress.Commands.add(
   "aliasTablePagination",
   (tableHeading, alias, tableHeaderEl = "h1") => {
     cy.contains(`section:has(${tableHeaderEl})`, tableHeading)
-      .find(".pagination-controls", { timeout: 60000 })
+      .find(".pagination-controls")
       .as(alias);
   },
 );
@@ -36,7 +36,7 @@ Cypress.Commands.add(
   "aliasTableRows",
   (tableHeading, alias, tableHeaderEl = "h1") => {
     cy.contains(`section:has(${tableHeaderEl})`, tableHeading)
-      .find("table tr:not(:has(th))", { timeout: 60000 })
+      .find("table tr:not(:has(th))")
       .as(alias);
   },
 );
@@ -45,7 +45,7 @@ Cypress.Commands.add(
   "aliasTransposedTableRows",
   (tableHeading, alias, tableHeaderEl = "h1") => {
     cy.contains(`section:has(${tableHeaderEl})`, tableHeading)
-      .find("table tr:has(th)", { timeout: 60000 })
+      .find("table tr:has(th)")
       .as(alias);
   },
 );
@@ -54,7 +54,7 @@ Cypress.Commands.add(
   "aliasTableHeaders",
   (tableHeading, alias, tableHeadingEl = "h1") => {
     cy.contains(`section:has(${tableHeadingEl})`, tableHeading)
-      .find("table:first th", { timeout: 60000 })
+      .find("table:first th")
       .as(alias);
   },
 );
@@ -68,7 +68,7 @@ Cypress.Commands.add(
   "openAccountDialog",
   (nthRow, columnHeading, tableHeading) => {
     cy.clickLinkInTable(nthRow, columnHeading, tableHeading);
-    cy.get("dialog", { timeout: 60000 }).should("be.visible");
+    cy.get("dialog").should("be.visible");
   },
 );
 
@@ -114,7 +114,7 @@ Cypress.Commands.add(
   (nthRow, columnHeading, tableHeading, tableHeadingEl = "h1") => {
     cy.aliasTableHeaders(tableHeading, "columns", tableHeadingEl);
     cy.get("@columns")
-      .contains(columnHeading, { timeout: 60000 })
+      .contains(columnHeading)
       .parent()
       .invoke("index")
       .then((columnIndex) => {
@@ -145,7 +145,7 @@ Cypress.Commands.add(
   (nthRow, columnHeading, tableHeading, alias) => {
     cy.aliasTableHeaders(tableHeading, "columns");
     cy.get("@columns")
-      .contains(columnHeading, { timeout: 60000 })
+      .contains(columnHeading)
       .parent()
       .invoke("index")
       .then((columnIndex) => {
@@ -184,15 +184,12 @@ Cypress.Commands.add(
   (columnHeading, column, alias = "table-column-values") => {
     cy.aliasTableHeaders(columnHeading, "columns");
     cy.get("@columns")
-      .contains(column, { timeout: 60000 })
+      .contains(column)
       .parent()
       .invoke("index")
       .then((columnIndex) => {
         cy.aliasTableRows(columnHeading, "table-rows");
-        cy.get("@table-rows")
-          .find("td", { timeout: 60000 })
-          .eq(columnIndex)
-          .as(alias);
+        cy.get("@table-rows").find("td").eq(columnIndex).as(alias);
       });
   },
 );
@@ -201,7 +198,7 @@ Cypress.Commands.add(
   "tableColumnValuesEqual",
   (columnHeading, column, value) => {
     cy.aliasTableColumnValue(columnHeading, column, "table-column-values");
-    cy.get("@table-column-values", { timeout: 60000 }).should("contain", value);
+    cy.get("@table-column-values").should("contain", value);
   },
 );
 
