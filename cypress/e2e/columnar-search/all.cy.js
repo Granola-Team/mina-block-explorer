@@ -21,7 +21,7 @@ suite(["@CI"], "input", () => {
   ];
 
   slow_input_searches.forEach(({ origin, input, column }) =>
-    it.only("remains focused as user types slowly", () => {
+    it("remains focused as user types slowly", () => {
       cy.visit(origin);
       cy.wait(1000);
       let cssSelector = "#q-" + kebabCase(column);
