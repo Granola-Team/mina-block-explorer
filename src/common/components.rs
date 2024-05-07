@@ -277,7 +277,7 @@ pub fn TabLink(nav_entry: NavEntry) -> impl IntoView {
     let location = use_location();
     let pathname = move || location.pathname.get();
     let href = nav_entry.href.clone();
-    let base_link_class = "mx-1 p-2 flex font-bold text-sm uppercase border-b border-b-2 whitespace-nowrap box-border";
+    let base_link_class = "tab mx-1 p-2 flex font-bold text-sm uppercase border-b border-b-2 whitespace-nowrap box-border";
     let disabled_link_class =
         "text-white border-transparent opacity-50 cursor-not-allowed pointer-events-none";
     let active_state = "active text-granola-orange border-granola-orange";
