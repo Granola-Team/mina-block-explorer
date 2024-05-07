@@ -743,7 +743,33 @@ pub fn BlocksSection() -> impl IntoView {
                             <TableRows data=vec![vec![LoadingPlaceholder; table_cols_length]; 10]/>
                         }
                     }>
-                        {resource
+                        {move || {
+                            resource
+                                .get()
+                                .and_then(|res| res.ok())
+                                .map(|data| {
+                                    let pag = build_blocks_pag(
+                                        &data,
+                                        current_page,
+                                        set_current_page,
+                                        page_dim,
+                                    );
+                                    let blocks_subset = get_subset(
+                                        &data.blocks,
+                                        pag.records_per_page,
+                                        current_page.get() - 1,
+                                    );
+                                    view! { <TableRows data=blocks_subset/> }
+                                })
+                        }}
+
+                    </Suspense>
+                </Table>
+                <Suspense fallback=|| {
+                    ().into_view()
+                }>
+                    {move || {
+                        resource
                             .get()
                             .and_then(|res| res.ok())
                             .map(|data| {
@@ -753,33 +779,10 @@ pub fn BlocksSection() -> impl IntoView {
                                     set_current_page,
                                     page_dim,
                                 );
-                                let blocks_subset = get_subset(
-                                    &data.blocks,
-                                    pag.records_per_page,
-                                    current_page.get() - 1,
-                                );
-                                view! { <TableRows data=blocks_subset/> }
-                            })}
-
-                    </Suspense>
-                </Table>
-                <Suspense fallback=|| {
-                    ().into_view()
-                }>
-
-                    {resource
-                        .get()
-                        .and_then(|res| res.ok())
-                        .map(|data| {
-                            let pag = build_blocks_pag(
-                                &data,
-                                current_page,
-                                set_current_page,
-                                page_dim,
-                            );
-                            view! { <Pagination pagination=pag/> }
-                        })
-                        .collect_view()}
+                                view! { <Pagination pagination=pag/> }
+                            })
+                            .collect_view()
+                    }}
                 </Suspense>
             </TableContainer>
         </TableSection>
