@@ -32,6 +32,7 @@ suite(["@CI"], "global search", () => {
       cy.get("@form").submit();
 
       cy.url().should("include", expectedUrl);
+      cy.get("@input").should("not.have.value", input);
     }),
   );
 });
