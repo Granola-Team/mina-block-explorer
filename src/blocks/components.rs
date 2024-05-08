@@ -821,7 +821,7 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
         },
         TableColumn {
             column: "Slot".to_string(),
-            is_searchable: true,
+            is_searchable: false,
         },
         TableColumn {
             column: "Age".to_string(),
