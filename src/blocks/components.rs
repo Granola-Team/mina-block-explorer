@@ -12,6 +12,7 @@ use charming::{
 use gloo_timers::future::TimeoutFuture;
 use leptos::*;
 use leptos_router::*;
+use leptos_use::{use_interval, UseIntervalReturn};
 use std::collections::HashMap;
 
 #[component]
@@ -731,17 +732,19 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
     let (block_height_sig, _) = create_query_signal::<i64>("q-height");
     let (slot_sig, _) = create_query_signal::<i64>("q-slot");
     let (canonical_sig, _) = create_query_signal::<bool>("canonical");
+    let UseIntervalReturn { counter, .. } = use_interval(LIVE_RELOAD_INTERVAL);
 
     let resource = create_resource(
         move || {
             (
+                counter.get(),
                 query_params_map.get(),
                 block_height_sig.get(),
                 slot_sig.get(),
                 canonical_sig.get(),
             )
         },
-        |(q_map, block_height, slot, canonical)| async move {
+        |(_, q_map, block_height, slot, canonical)| async move {
             load_data(
                 TABLE_RECORD_SIZE,
                 q_map.get("q-block-producer").cloned(),
