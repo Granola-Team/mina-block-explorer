@@ -226,7 +226,6 @@ pub fn BlockAnalytics(block: BlocksQueryBlocks) -> impl IntoView {
             0
         }
     };
-    let winner_total = move || get_winner_total(&block_sig.get());
 
     view! {
         <TableSection section_heading="Analytics" controls=|| ().into_view()>
@@ -269,15 +268,7 @@ pub fn BlockAnalytics(block: BlocksQueryBlocks) -> impl IntoView {
                     />
                 </AnalyticsSmContainer>
                 <AnalyticsSmContainer>
-                    <AnalyticsSimpleInfo
-                        label=convert_to_span("Winner Total".into())
-                        value=wrap_in_pill(
-                            decorate_with_currency_tag(winner_total(), "mina".to_string()),
-                            ColorVariant::Grey,
-                        )
-
-                        variant=ColorVariant::Grey
-                    />
+                    <span/>
                 </AnalyticsSmContainer>
                 <AnalyticsLgContainer>
                     <BlockSpotlightFeeTransferAnalytics block=block_sig.get()/>
