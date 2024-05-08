@@ -1,6 +1,6 @@
 use super::{functions::*, graphql::blocks_query::BlocksQueryBlocks, models::*};
 use crate::{
-    blocks::graphql::blocks_query::BlocksQueryBlocksTransactionsFeeTransfer,
+    blocks::graphql::blocks_query::{BlocksQueryBlocksTransactionsFeeTransfer, ResponseData},
     common::{components::*, constants::*, functions::*, models::*, spotlight::*, table::*},
     icons::*,
 };
@@ -13,7 +13,6 @@ use gloo_timers::future::TimeoutFuture;
 use leptos::*;
 use leptos_router::*;
 use std::collections::HashMap;
-
 #[component]
 pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
     let option_block = use_context::<ReadSignal<Option<BlocksQueryBlocks>>>()
