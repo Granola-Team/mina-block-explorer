@@ -268,7 +268,7 @@ pub fn BlockAnalytics(block: BlocksQueryBlocks) -> impl IntoView {
                     />
                 </AnalyticsSmContainer>
                 <AnalyticsSmContainer>
-                    <span/>
+                    <span></span>
                 </AnalyticsSmContainer>
                 <AnalyticsLgContainer>
                     <BlockSpotlightFeeTransferAnalytics block=block_sig.get()/>
