@@ -11,6 +11,7 @@ use crate::{
 };
 use leptos::*;
 use leptos_router::*;
+use leptos_use::{use_interval, UseIntervalReturn};
 
 const QP_TXN_HASH: &str = "q-txn-hash";
 const QP_TXN_TYPE: &str = "txn-type";
@@ -23,16 +24,18 @@ pub fn TransactionsSection(#[prop(default = false)] with_link: bool) -> impl Int
     let (txn_type_qp, _) = create_query_signal::<String>(QP_TXN_TYPE);
     let query_params_map = use_query_map();
     let (block_height_sig, _) = create_query_signal::<i64>(QP_HEIGHT);
+    let UseIntervalReturn { counter, .. } = use_interval(LIVE_RELOAD_INTERVAL);
 
     let resource = create_resource(
         move || {
             (
+                counter.get(),
                 query_params_map.get(),
                 txn_type_qp.get(),
                 block_height_sig.get(),
             )
         },
-        move |(url_query_map, txn_type, block_height)| async move {
+        move |(_, url_query_map, txn_type, block_height)| async move {
             match txn_type {
                 Some(ref txn_type_str) if txn_type_str == "Pending" => load_pending_txn().await,
                 Some(ref txn_type_str) if txn_type_str == "Canonical" => {
