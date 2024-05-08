@@ -1,6 +1,6 @@
 use super::{functions::*, graphql::blocks_query::BlocksQueryBlocks, models::*};
 use crate::{
-    blocks::graphql::blocks_query::{BlocksQueryBlocksTransactionsFeeTransfer},
+    blocks::graphql::blocks_query::BlocksQueryBlocksTransactionsFeeTransfer,
     common::{components::*, constants::*, functions::*, models::*, spotlight::*, table::*},
     icons::*,
 };
@@ -791,7 +791,7 @@ pub fn BlocksSection() -> impl IntoView {
     }
 }
 
-const ESTIMATED_NON_TABLE_SPACE_IN_SUMMARY: usize = 390;
+const ESTIMATED_NON_TABLE_SPACE_IN_SUMMARY: usize = 290;
 
 #[component]
 pub fn SummaryPageBlocksSection() -> impl IntoView {
@@ -830,66 +830,133 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
         .expect("there to be a `PageDimensions` signal provided");
     let (current_page, set_current_page) = create_signal(1);
 
+    let table_columns = vec![
+        TableColumn {
+            column: "Height".to_string(),
+            is_searchable: true,
+        },
+        TableColumn {
+            column: "State Hash".to_string(),
+            is_searchable: true,
+        },
+        TableColumn {
+            column: "Slot".to_string(),
+            is_searchable: true,
+        },
+        TableColumn {
+            column: "Age".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "Block Producer".to_string(),
+            is_searchable: true,
+        },
+        TableColumn {
+            column: "Coinbase".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "User Commands".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "SNARKs".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "Coinbase Receiver".to_string(),
+            is_searchable: false,
+        },
+    ];
+    let table_cols_length = table_columns.len();
+
     view! {
-        <ErrorBoundary fallback=move |_| {
-            ().into_view()
-        }>
-            {move || match resource.get().and_then(|res| res.ok()) {
-                None => {
+        <ErrorBoundary fallback=move |_| { ().into_view() }>
+
+            <TableSection
+                section_heading="Blocks"
+                controls=move || {
                     view! {
-                        <TableSection section_heading="Blocks" controls=move || ().into_view()>
-                            <DeprecatedTable data=DeprecatedLoadingPlaceholder {}/>
-                        </TableSection>
-                    }
-                }
-                Some(data) => {
-                    let pag = build_pagination(
-                        data.blocks.len(),
-                        TABLE_DEFAULT_PAGE_SIZE,
-                        current_page.get(),
-                        set_current_page,
-                        page_dim.get().height.map(|f| f as usize),
-                        Some(
-                            Box::new(|container_height: usize| {
-                                (container_height - ESTIMATED_NON_TABLE_SPACE_IN_SUMMARY)
-                                    / ESTIMATED_ROW_HEIGHT
-                            }),
-                        ),
-                    );
-                    let blocks_subset = get_subset(
-                        &data.blocks,
-                        pag.records_per_page,
-                        current_page.get() - 1,
-                    );
-                    view! {
-                        <TableSection
-                            section_heading="Blocks"
-                            controls=move || {
-                                view! {
-                                    <UrlParamSelectMenu
-                                        id="canonical-selection"
-                                        query_str_key="canonical"
-                                        labels=UrlParamSelectOptions {
-                                            is_boolean_option: true,
-                                            cases: vec![
-                                                "Canonical".to_string(),
-                                                "Non-Canonical".to_string(),
-                                            ],
-                                        }
-                                    />
-                                }
+                        <UrlParamSelectMenu
+                            id="canonical-selection"
+                            query_str_key="canonical"
+                            labels=UrlParamSelectOptions {
+                                is_boolean_option: true,
+                                cases: vec!["Canonical".to_string(), "Non-Canonical".to_string()],
                             }
-                        >
-
-                            <DeprecatedTable
-                                data=SummaryPageBlocksQueryBlocks(blocks_subset)
-                                pagination=pag
-                            />
-                        </TableSection>
+                        />
                     }
                 }
-            }}
+            >
 
+                <TableContainer>
+                    <Table>
+                        <TableHeader columns=table_columns/>
+                        <Suspense fallback=move || {
+                            view! {
+                                <TableRows data=vec![
+                                    vec![LoadingPlaceholder; table_cols_length];
+                                    10
+                                ]/>
+                            }
+                        }>
+                            {move || {
+                                resource
+                                    .get()
+                                    .and_then(|res| res.ok())
+                                    .map(|data| {
+                                        let pag = build_pagination(
+                                            data.blocks.len(),
+                                            TABLE_DEFAULT_PAGE_SIZE,
+                                            current_page.get(),
+                                            set_current_page,
+                                            page_dim.get().height.map(|f| f as usize),
+                                            Some(
+                                                Box::new(|container_height: usize| {
+                                                    (container_height - ESTIMATED_NON_TABLE_SPACE_IN_SUMMARY)
+                                                        / ESTIMATED_ROW_HEIGHT
+                                                }),
+                                            ),
+                                        );
+                                        let blocks_subset = get_subset(
+                                            &data.blocks,
+                                            pag.records_per_page,
+                                            current_page.get() - 1,
+                                        );
+                                        view! { <TableRows data=blocks_subset/> }
+                                    })
+                            }}
+
+                        </Suspense>
+                    </Table>
+                    <Suspense fallback=|| {
+                        ().into_view()
+                    }>
+                        {move || {
+                            resource
+                                .get()
+                                .and_then(|res| res.ok())
+                                .map(|data| {
+                                    let pag = build_pagination(
+                                        data.blocks.len(),
+                                        TABLE_DEFAULT_PAGE_SIZE,
+                                        current_page.get(),
+                                        set_current_page,
+                                        page_dim.get().height.map(|f| f as usize),
+                                        Some(
+                                            Box::new(|container_height: usize| {
+                                                (container_height - ESTIMATED_NON_TABLE_SPACE_IN_SUMMARY)
+                                                    / ESTIMATED_ROW_HEIGHT
+                                            }),
+                                        ),
+                                    );
+                                    view! { <Pagination pagination=pag/> }
+                                })
+                        }}
+
+                    </Suspense>
+                </TableContainer>
+            </TableSection>
         </ErrorBoundary>
         <Outlet/>
     }
