@@ -186,7 +186,7 @@ impl TableData for SummaryPageBlocksQueryBlocks {
 
 impl TableData for Vec<Option<BlocksQueryBlocksSnarkJobs>> {
     fn get_columns(&self) -> Vec<String> {
-        ["State Hash", "Age", "Prover", "Work Ids", "Fee"]
+        ["State Hash", "Age", "Prover", "Fee"]
             .iter()
             .map(ToString::to_string)
             .collect::<Vec<_>>()
@@ -209,12 +209,6 @@ impl TableData for Vec<Option<BlocksQueryBlocksSnarkJobs>> {
                     convert_to_link(
                         get_snark_prover(snark),
                         format!("/addresses/accounts/{}", get_snark_prover(snark)),
-                    ),
-                    convert_array_to_span(
-                        get_snark_work_ids(snark)
-                            .iter()
-                            .map(|w| convert_to_pill(w.to_string(), ColorVariant::Grey))
-                            .collect::<Vec<_>>(),
                     ),
                     decorate_with_currency_tag(get_snark_fee(snark), "mina".to_string()),
                 ],

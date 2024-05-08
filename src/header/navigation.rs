@@ -7,24 +7,33 @@ use leptos::*;
 #[component]
 pub fn Header() -> impl IntoView {
     let (open, set_open) = create_signal(false);
-    let mut txn_entries = None;
     let mut addr_entries = None;
 
+    let mut txn_entries = Some(vec![
+        NavEntry {
+            href: "/commands/user-commands".to_string(),
+            text: "User Commands".to_string(),
+            icon: NavIcon::Transactions,
+            ..Default::default()
+        },
+        NavEntry {
+            href: "/commands/internal-commands".to_string(),
+            text: "Internal Commands".to_string(),
+            icon: NavIcon::Transactions,
+            ..Default::default()
+        },
+    ]);
+
     if BERKELEY_FEATURES_ENABLED {
-        txn_entries = Some(vec![
-            NavEntry {
-                href: "/commands".to_string(),
-                text: "Transactions".to_string(),
-                icon: NavIcon::Transactions,
-                ..Default::default()
-            },
-            NavEntry {
+        if let Some(v) = txn_entries.as_mut() {
+            v.push(NavEntry {
                 href: "/commands/zk-txn".to_string(),
                 text: "zkApp Commands".to_string(),
                 icon: NavIcon::ZKApps,
                 ..Default::default()
-            },
-        ]);
+            })
+        }
+
         addr_entries = Some(vec![
             NavEntry {
                 href: "/addresses/accounts".to_string(),
@@ -47,6 +56,21 @@ pub fn Header() -> impl IntoView {
         ])
     }
 
+    let staking_entries = Some(vec![
+        NavEntry {
+            href: "/staking-ledgers".to_string(),
+            text: "Staking Ledgers".to_string(),
+            icon: NavIcon::Staking,
+            ..Default::default()
+        },
+        NavEntry {
+            href: "/next-stakes".to_string(),
+            text: "Next Staking Ledger".to_string(),
+            icon: NavIcon::Staking,
+            ..Default::default()
+        },
+    ]);
+
     let nav_items = vec![
         NavEntry {
             href: "/blocks".to_string(),
@@ -55,7 +79,7 @@ pub fn Header() -> impl IntoView {
             ..Default::default()
         },
         NavEntry {
-            href: "/commands".to_string(),
+            href: "/commands/user-commands".to_string(),
             text: "Transactions".to_string(),
             icon: NavIcon::Transactions,
             sub_entries: txn_entries,
@@ -78,6 +102,7 @@ pub fn Header() -> impl IntoView {
             href: "/staking-ledgers".to_string(),
             text: "Staking".to_string(),
             icon: NavIcon::Staking,
+            sub_entries: staking_entries,
             ..Default::default()
         },
         NavEntry {
@@ -121,7 +146,7 @@ pub fn Header() -> impl IntoView {
                                     {match sub_entries {
                                         Some(s_entries) => {
                                             view! {
-                                                <ul class="md:px-2 md:hidden md:absolute md:top-0 md:left-0 md:bg-main-background md:shadow-md md:translate-y-16 group-hover:block">
+                                                <ul class="md:px-2 md:hidden md:absolute md:top-0 md:left-0 md:bg-main-background md:shadow-md md:translate-y-16 group-hover:block -translate-x-1/2">
                                                     {s_entries
                                                         .into_iter()
                                                         .map(|sub_entry| {

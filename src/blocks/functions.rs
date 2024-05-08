@@ -26,13 +26,6 @@ pub fn get_snark_prover(snark: &BlocksQueryBlocksSnarkJobs) -> String {
         .as_ref()
         .map_or_else(String::new, |o| o.to_string())
 }
-pub fn get_snark_work_ids(snark: &BlocksQueryBlocksSnarkJobs) -> Vec<String> {
-    snark.work_ids.as_ref().map_or_else(Vec::new, |ids| {
-        ids.iter()
-            .map(|id| id.map_or_else(String::new, |id| id.to_string()))
-            .collect::<Vec<_>>()
-    })
-}
 pub fn get_snark_fee(snark: &BlocksQueryBlocksSnarkJobs) -> String {
     snark
         .fee
