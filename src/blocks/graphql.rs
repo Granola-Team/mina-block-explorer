@@ -26,7 +26,6 @@ impl Default for blocks_query::BlocksQueryBlocks {
             creator_account: None,
             snark_jobs: None,
             protocol_state: None,
-            winner_account: None,
             snark_fees: None,
             tx_fees: None,
         }

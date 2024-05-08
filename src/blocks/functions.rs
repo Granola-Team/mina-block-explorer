@@ -144,14 +144,6 @@ pub fn get_snarked_ledger_hash(block: &BlocksQueryBlocks) -> String {
         .map_or_else(|| "".to_string(), ToString::to_string)
 }
 
-pub fn get_winning_account(block: &BlocksQueryBlocks) -> String {
-    block
-        .winner_account
-        .as_ref()
-        .and_then(|o| o.public_key.as_ref())
-        .map_or_else(|| "".to_string(), ToString::to_string)
-}
-
 pub fn get_global_slot(block: &BlocksQueryBlocks) -> String {
     block
         .protocol_state

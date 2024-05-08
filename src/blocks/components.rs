@@ -473,17 +473,6 @@ pub fn BlockSpotlight(block: BlocksQueryBlocks) -> impl IntoView {
             copiable: true,
         },
         SpotlightEntry {
-            label: "Winning Account".to_string(),
-            any_el: Some({
-                let winning_account = get_winning_account(&block);
-                convert_to_link(
-                    winning_account.clone(),
-                    format!("/addresses/accounts/{}", winning_account),
-                )
-            }),
-            copiable: true,
-        },
-        SpotlightEntry {
             label: "SNARK Fees".to_string(),
             any_el: Some(decorate_with_currency_tag(
                 get_snark_fees(&block),
@@ -569,10 +558,6 @@ fn BlockSpotlightPlaceholder() -> impl IntoView {
         },
         SpotlightEntry {
             label: "Coinbase Receiver".to_string(),
-            ..Default::default()
-        },
-        SpotlightEntry {
-            label: "Winning Account".to_string(),
             ..Default::default()
         },
         SpotlightEntry {
