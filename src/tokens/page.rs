@@ -28,7 +28,7 @@ pub fn TokensPage() -> impl IntoView {
                         records_per_page,
                         current_page.get() - 1,
                     );
-                    view! { <Table data=subset pagination=pag/> }
+                    view! { <DeprecatedTable data=subset pagination=pag/> }
                 }}
 
             </TableSection>
