@@ -193,7 +193,6 @@ pub trait SnarkTrait {
     fn get_block_state_hash(&self) -> String;
     fn get_date_time(&self) -> String;
     fn get_prover(&self) -> String;
-    fn get_work_ids(&self) -> Vec<String>;
     fn get_fee(&self) -> String;
 }
 
@@ -218,13 +217,6 @@ impl SnarkTrait for AccountActivityQuerySnarks {
         self.prover
             .as_ref()
             .map_or_else(String::new, |f| f.to_string())
-    }
-    fn get_work_ids(&self) -> Vec<String> {
-        self.work_ids.as_ref().map_or_else(Vec::new, |ids| {
-            ids.iter()
-                .map(|id| id.map_or_else(String::new, |id| id.to_string()))
-                .collect::<Vec<_>>()
-        })
     }
     fn get_fee(&self) -> String {
         self.fee
