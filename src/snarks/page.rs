@@ -91,9 +91,9 @@ fn SnarksPageContents() -> impl IntoView {
                         pag.records_per_page,
                         current_page.get() - 1,
                     );
-                    view! { <Table data=subset pagination=pag/> }
+                    view! { <DeprecatedTable data=subset pagination=pag/> }
                 }
-                None => view! { <Table data=LoadingPlaceholder {}/> },
+                None => view! { <DeprecatedTable data=DeprecatedLoadingPlaceholder {}/> },
                 _ => view! { <span></span> }.into_view(),
             }}
 

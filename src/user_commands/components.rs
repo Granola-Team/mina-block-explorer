@@ -89,7 +89,7 @@ pub fn TransactionsSection(#[prop(default = false)] with_link: bool) -> impl Int
             _ => {
                 view! {
                     <TableSection section_heading="User Commands" controls=|| ().into_view()>
-                        <Table data=LoadingPlaceholder {}/>
+                        <DeprecatedTable data=DeprecatedLoadingPlaceholder {}/>
                     </TableSection>
                 }
             }
@@ -121,7 +121,7 @@ where
             fallback=move || {
                 view! {
                     <TableSection section_heading="User Commands" controls=|| ().into_view()>
-                        <Table data=LoadingPlaceholder {}/>
+                        <DeprecatedTable data=DeprecatedLoadingPlaceholder {}/>
                     </TableSection>
                 }
             }
@@ -171,7 +171,7 @@ where
                                 current_page.get() - 1,
                             );
                             view! {
-                                <Table data=subset pagination=pag/>
+                                <DeprecatedTable data=subset pagination=pag/>
                                 <Show
                                     when=move || pk.get().is_some() && with_link
                                     fallback=move || ().into_view()

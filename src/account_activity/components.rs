@@ -254,7 +254,7 @@ pub fn AccountTransactionsSection(
                     None,
                 );
                 let subset = get_subset(&transactions, records_per_page, current_page.get() - 1);
-                view! { <Table data=subset pagination=pag/> }
+                view! { <DeprecatedTable data=subset pagination=pag/> }
             }}
 
         </TableSection>
@@ -292,7 +292,7 @@ pub fn AccountOverviewSnarkJobTable(
                 );
                 let subset = get_subset(&snarks, records_per_page, current_page.get() - 1);
                 view! {
-                    <Table data=subset pagination=pag/>
+                    <DeprecatedTable data=subset pagination=pag/>
                     <TableLink href=href.get() text="See all snark jobs">
                         <CheckCircleIcon/>
                     </TableLink>
@@ -338,7 +338,7 @@ pub fn AccountOverviewBlocksTable(
                         current_page.get() - 1,
                     );
                     view! {
-                        <Table data=blocks_subset pagination=pag/>
+                        <DeprecatedTable data=blocks_subset pagination=pag/>
                         <TableLink href=href.get() text="See all block production">
                             <BlockIcon/>
                         </TableLink>

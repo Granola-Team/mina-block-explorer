@@ -1,6 +1,6 @@
 use super::{functions::*, graphql::blocks_query::BlocksQueryBlocks, models::*};
 use crate::{
-    blocks::graphql::blocks_query::BlocksQueryBlocksTransactionsFeeTransfer,
+    blocks::graphql::blocks_query::{BlocksQueryBlocksTransactionsFeeTransfer, ResponseData},
     common::{components::*, constants::*, functions::*, models::*, spotlight::*, table::*},
     icons::*,
 };
@@ -35,7 +35,7 @@ pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
                                     section_heading="User Commands"
                                     controls=|| ().into_view()
                                 >
-                                    <Table data=LoadingPlaceholder {}/>
+                                    <DeprecatedTable data=DeprecatedLoadingPlaceholder {}/>
                                 </TableSection>
                             }
                         }
@@ -45,7 +45,7 @@ pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
                                     section_heading="SNARK Jobs"
                                     controls=|| ().into_view()
                                 >
-                                    <Table data=LoadingPlaceholder {}/>
+                                    <DeprecatedTable data=DeprecatedLoadingPlaceholder {}/>
                                 </TableSection>
                             }
                         }
@@ -55,7 +55,7 @@ pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
                                     section_heading="Internal Commands"
                                     controls=|| ().into_view()
                                 >
-                                    <Table data=LoadingPlaceholder {}/>
+                                    <DeprecatedTable data=DeprecatedLoadingPlaceholder {}/>
                                 </TableSection>
                             }
                         }
@@ -131,7 +131,7 @@ pub fn BlockUserCommands(block: BlocksQueryBlocks) -> impl IntoView {
                         pag.records_per_page,
                         current_page.get() - 1,
                     );
-                    view! { <Table data=subset pagination=pag/> }
+                    view! { <DeprecatedTable data=subset pagination=pag/> }
                 }
                 None => ().into_view(),
             }}
@@ -200,7 +200,7 @@ pub fn BlockInternalCommandsTable(block: BlocksQueryBlocks) -> impl IntoView {
                     pag.records_per_page,
                     current_page.get() - 1,
                 );
-                view! { <Table data=subset pagination=pag/> }
+                view! { <DeprecatedTable data=subset pagination=pag/> }
             }
             (_, _, _) => {
                 view! { <EmptyTable message="No internal commands for this block"/> }
@@ -665,64 +665,132 @@ pub fn BlocksSection() -> impl IntoView {
         .expect("there to be a `PageDimensions` signal provided");
     let (current_page, set_current_page) = create_signal(1);
 
-    view! {
-        {move || match resource.get() {
-            Some(Ok(data)) => {
-                let pag = build_pagination(
-                    data.blocks.len(),
-                    TABLE_DEFAULT_PAGE_SIZE,
-                    current_page.get(),
-                    set_current_page,
-                    page_dim.get().height.map(|f| f as usize),
-                    Some(
-                        Box::new(|container_height: usize| {
-                            (container_height - DEFAULT_ESTIMATED_NON_TABLE_SPACE_IN_SECTIONS)
-                                / ESTIMATED_ROW_HEIGHT
-                        }),
-                    ),
-                );
-                let blocks_subset = get_subset(
-                    &data.blocks,
-                    pag.records_per_page,
-                    current_page.get() - 1,
-                );
-                view! {
-                    <TableSection
-                        section_heading="Blocks"
-                        controls=move || {
-                            view! {
-                                <UrlParamSelectMenu
-                                    id="canonical-selection"
-                                    query_str_key="canonical"
-                                    labels=UrlParamSelectOptions {
-                                        is_boolean_option: true,
-                                        cases: vec![
-                                            "Canonical".to_string(),
-                                            "Non-Canonical".to_string(),
-                                        ],
-                                    }
-                                />
-                            }
-                        }
-                    >
+    let table_columns = vec![
+        TableColumn {
+            column: "Height".to_string(),
+            is_searchable: true,
+        },
+        TableColumn {
+            column: "State Hash".to_string(),
+            is_searchable: true,
+        },
+        TableColumn {
+            column: "Slot".to_string(),
+            is_searchable: true,
+        },
+        TableColumn {
+            column: "Age".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "Block Producer".to_string(),
+            is_searchable: true,
+        },
+        TableColumn {
+            column: "Coinbase".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "User Commands".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "SNARKs".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "Coinbase Receiver".to_string(),
+            is_searchable: false,
+        },
+    ];
+    let table_cols_length = table_columns.len();
+    let build_blocks_pag = |data: &ResponseData,
+                            current_page: ReadSignal<usize>,
+                            set_current_page: WriteSignal<usize>,
+                            page_dim: ReadSignal<PageDimensions>| {
+        build_pagination(
+            data.blocks.len(),
+            TABLE_DEFAULT_PAGE_SIZE,
+            current_page.get(),
+            set_current_page,
+            page_dim.get().height.map(|f| f as usize),
+            Some(Box::new(|container_height: usize| {
+                (container_height - DEFAULT_ESTIMATED_NON_TABLE_SPACE_IN_SECTIONS)
+                    / ESTIMATED_ROW_HEIGHT
+            })),
+        )
+    };
 
-                        <Table data=blocks_subset pagination=pag/>
-                    </TableSection>
-                    <Outlet/>
-                }
-                    .into_view()
-            }
-            None => {
+    view! {
+        <TableSection
+            section_heading="Blocks"
+            controls=move || {
                 view! {
-                    <TableSection section_heading="Blocks" controls=move || ().into_view()>
-                        <Table data=LoadingPlaceholder {}/>
-                    </TableSection>
-                    <Outlet/>
+                    <UrlParamSelectMenu
+                        id="canonical-selection"
+                        query_str_key="canonical"
+                        labels=UrlParamSelectOptions {
+                            is_boolean_option: true,
+                            cases: vec!["Canonical".to_string(), "Non-Canonical".to_string()],
+                        }
+                    />
                 }
-                    .into_view()
             }
-            _ => view! { <span></span> }.into_view(),
-        }}
+        >
+
+            <TableContainer>
+                <Table>
+                    <TableHeader columns=table_columns/>
+                    <Suspense fallback=move || {
+                        view! {
+                            <TableRows data=vec![vec![LoadingPlaceholder; table_cols_length]; 10]/>
+                        }
+                    }>
+                        {move || {
+                            resource
+                                .get()
+                                .and_then(|res| res.ok())
+                                .map(|data| {
+                                    let pag = build_blocks_pag(
+                                        &data,
+                                        current_page,
+                                        set_current_page,
+                                        page_dim,
+                                    );
+                                    let blocks_subset = get_subset(
+                                        &data.blocks,
+                                        pag.records_per_page,
+                                        current_page.get() - 1,
+                                    );
+                                    view! { <TableRows data=blocks_subset/> }
+                                })
+                        }}
+
+                    </Suspense>
+                </Table>
+                <Suspense fallback=|| {
+                    ().into_view()
+                }>
+                    {move || {
+                        resource
+                            .get()
+                            .and_then(|res| res.ok())
+                            .map(|data| {
+                                let pag = build_blocks_pag(
+                                    &data,
+                                    current_page,
+                                    set_current_page,
+                                    page_dim,
+                                );
+                                view! { <Pagination pagination=pag/> }
+                            })
+                            .collect_view()
+                    }}
+
+                </Suspense>
+            </TableContainer>
+        </TableSection>
+        <Outlet/>
     }
 }
 
@@ -775,7 +843,7 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
                 None => {
                     view! {
                         <TableSection section_heading="Blocks" controls=move || ().into_view()>
-                            <Table data=LoadingPlaceholder {}/>
+                            <DeprecatedTable data=DeprecatedLoadingPlaceholder {}/>
                         </TableSection>
                     }
                 }
@@ -818,7 +886,10 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
                             }
                         >
 
-                            <Table data=SummaryPageBlocksQueryBlocks(blocks_subset) pagination=pag/>
+                            <DeprecatedTable
+                                data=SummaryPageBlocksQueryBlocks(blocks_subset)
+                                pagination=pag
+                            />
                         </TableSection>
                     }
                 }
@@ -863,7 +934,7 @@ pub fn BlockSpotlightSnarkJobTable(block: BlocksQueryBlocks) -> impl IntoView {
                                 pag.records_per_page,
                                 current_page.get() - 1,
                             );
-                            view! { <Table data=subset pagination=pag/> }
+                            view! { <DeprecatedTable data=subset pagination=pag/> }
                         }
                     }}
                 }
