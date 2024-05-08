@@ -9,6 +9,7 @@ use crate::common::{
 use leptos::*;
 use leptos_meta::Title;
 use leptos_router::{create_query_signal, use_query_map};
+use leptos_use::{use_interval, UseIntervalReturn};
 
 #[component]
 pub fn SnarksPage() -> impl IntoView {
@@ -25,16 +26,18 @@ fn SnarksPageContents() -> impl IntoView {
     let query_params_map = use_query_map();
     let (canonical_qp, _) = create_query_signal::<bool>("canonical");
     let (block_height_sig, _) = create_query_signal::<i64>("q-height");
+    let UseIntervalReturn { counter, .. } = use_interval(LIVE_RELOAD_INTERVAL);
 
     let resource = create_resource(
         move || {
             (
+                counter.get(),
                 query_params_map.get(),
                 canonical_qp.get(),
                 block_height_sig.get(),
             )
         },
-        |(value, canonical, block_height)| async move {
+        |(_, value, canonical, block_height)| async move {
             let prover = value.get("q-prover");
             let block_state_hash = value.get("q-state-hash");
             load_data(
