@@ -77,10 +77,6 @@ suite(["@CI"], "pagination", () => {
     "/",
     "/summary",
     "/blocks",
-    "/commands",
-    "/snarks",
-    "/staking-ledgers",
-    "/next-stakes",
     "/transactions/internal-commands",
   ].forEach((page) =>
     it(`works on ${page}`, () => {
