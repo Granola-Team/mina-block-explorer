@@ -1,6 +1,6 @@
 use super::{functions::*, graphql::blocks_query::BlocksQueryBlocks, models::*};
 use crate::{
-    blocks::graphql::blocks_query::{BlocksQueryBlocksTransactionsFeeTransfer, ResponseData},
+    blocks::graphql::blocks_query::{BlocksQueryBlocksTransactionsFeeTransfer},
     common::{components::*, constants::*, functions::*, models::*, spotlight::*, table::*},
     icons::*,
 };
