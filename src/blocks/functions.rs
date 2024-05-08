@@ -144,14 +144,6 @@ pub fn get_snarked_ledger_hash(block: &BlocksQueryBlocks) -> String {
         .map_or_else(|| "".to_string(), ToString::to_string)
 }
 
-pub fn get_winning_account(block: &BlocksQueryBlocks) -> String {
-    block
-        .winner_account
-        .as_ref()
-        .and_then(|o| o.public_key.as_ref())
-        .map_or_else(|| "".to_string(), ToString::to_string)
-}
-
 pub fn get_global_slot(block: &BlocksQueryBlocks) -> String {
     block
         .protocol_state
@@ -193,15 +185,6 @@ pub fn get_transaction_fees(block: &BlocksQueryBlocks) -> String {
         .as_deref()
         .map(nanomina_str_to_mina)
         .unwrap_or_default()
-}
-
-pub fn get_winner_total(block: &BlocksQueryBlocks) -> String {
-    block
-        .winner_account
-        .as_ref()
-        .and_then(|w| w.balance.as_ref())
-        .and_then(|b| b.total.as_deref())
-        .map_or(String::new(), nanomina_str_to_mina)
 }
 
 pub fn get_snark_fees(block: &BlocksQueryBlocks) -> String {
