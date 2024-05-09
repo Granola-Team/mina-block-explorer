@@ -103,36 +103,30 @@ pub fn InternalCommandsTable() -> impl IntoView {
 
                 </Suspense>
             </Table>
-            <Suspense fallback=|| {
-                ().into_view()
-            }>
-                {move || {
-                    resource
-                        .get()
-                        .and_then(|res| res.ok())
-                        .map(|data| {
-                            if data.feetransfers.is_empty() {
-                                return view! { <EmptyTable message="No internal commands found"/> };
-                            }
-                            let pag = build_pagination(
-                                data.feetransfers.len(),
-                                TABLE_DEFAULT_PAGE_SIZE,
-                                current_page.get(),
-                                set_current_page,
-                                page_dim.get().height.map(|h| h as usize),
-                                Some(
-                                    Box::new(|container_height: usize| {
-                                        (container_height
-                                            - DEFAULT_ESTIMATED_NON_TABLE_SPACE_IN_SECTIONS)
-                                            / ESTIMATED_ROW_HEIGHT
-                                    }),
-                                ),
-                            );
-                            view! { <Pagination pagination=pag/> }
-                        })
-                }}
 
-            </Suspense>
+            {move || {
+                resource
+                    .get()
+                    .and_then(|res| res.ok())
+                    .map(|data| {
+                        let pag = build_pagination(
+                            data.feetransfers.len(),
+                            TABLE_DEFAULT_PAGE_SIZE,
+                            current_page.get(),
+                            set_current_page,
+                            page_dim.get().height.map(|h| h as usize),
+                            Some(
+                                Box::new(|container_height: usize| {
+                                    (container_height
+                                        - DEFAULT_ESTIMATED_NON_TABLE_SPACE_IN_SECTIONS)
+                                        / ESTIMATED_ROW_HEIGHT
+                                }),
+                            ),
+                        );
+                        view! { <Pagination pagination=pag/> }
+                    })
+            }}
+
         </TableContainer>
     }
 }
