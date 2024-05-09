@@ -37,6 +37,7 @@ suite(["@CI"], "pagination", () => {
     cy.get("@currentPage").should("contain", 2);
 
     cy.get("@last").click();
+    cy.get("@last").click();
     cy.wait(1000);
     cy.get("@first").should("not.be.disabled");
     cy.get("@prev").should("not.be.disabled");
@@ -71,14 +72,14 @@ suite(["@CI"], "pagination", () => {
   );
 
   [
+    "/commands/internal-commands",
+    "/commands/user-commands",
     `/blocks/${DEFAULT_CANONICAL_BLOCK_HASH}/user-commands`,
     `/blocks/${DEFAULT_CANONICAL_BLOCK_HASH}/internal-commands`,
     `/blocks/${DEFAULT_CANONICAL_BLOCK_HASH}/snark-jobs`,
     "/",
     "/summary",
     "/blocks",
-    "/commands/user-commands",
-    "/commands/internal-commands",
   ].forEach((page) =>
     it(`works on ${page}`, () => {
       cy.visit(page);
