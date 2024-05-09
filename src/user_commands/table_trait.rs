@@ -80,7 +80,6 @@ pub trait TransactionsTrait {
     fn get_block_height(&self) -> String;
     fn get_canonical(&self) -> Option<bool>;
     fn get_kind(&self) -> String;
-    fn get_payment_id(&self) -> String;
     fn get_nonce(&self) -> String;
     fn get_memo(&self) -> String;
     fn get_block_state_hash(&self) -> String;
@@ -117,10 +116,6 @@ impl TransactionsTrait for TransactionsQueryTransactions {
         self.kind
             .as_ref()
             .map_or_else(String::new, |o| o.to_string())
-    }
-
-    fn get_payment_id(&self) -> String {
-        self.id.as_ref().map_or_else(String::new, |o| o.to_string())
     }
 
     fn get_nonce(&self) -> String {

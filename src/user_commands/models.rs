@@ -62,7 +62,6 @@ impl From<PooledUserCommand> for transactions_query::TransactionsQueryTransactio
                 None
             },
             kind: txn.kind,
-            id: txn.id,
             to: match txn.receiver.clone() {
                 Some(receiver) => receiver.public_key.clone(),
                 None => None,

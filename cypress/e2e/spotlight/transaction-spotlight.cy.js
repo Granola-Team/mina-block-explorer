@@ -3,7 +3,6 @@ const devices = require("../../devices.json");
 suite(["@CI"], "transaction spotlight", () => {
   let expected_fields = [
     "Date",
-    "Payment ID",
     "Canonical",
     "Amount",
     "From",

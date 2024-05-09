@@ -1,12 +1,15 @@
-query TransactionsQuery($limit: Int = 10, $sort_by: TransactionSortByInput!, $query: TransactionQueryInput!) {
-  transactions(limit: $limit, sortBy: $sort_by, query: $query ) {
+query TransactionsQuery(
+  $limit: Int = 10
+  $sort_by: TransactionSortByInput!
+  $query: TransactionQueryInput!
+) {
+  transactions(limit: $limit, sortBy: $sort_by, query: $query) {
     blockHeight
     failureReason
     canonical
     amount
     fee
     kind
-    id
     to
     from
     nonce
