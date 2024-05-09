@@ -1,13 +1,10 @@
 use super::functions::*;
-use crate::{
-    common::{
-        components::*,
-        constants::{TABLE_RECORD_SIZE, *},
-        functions::*,
-        models::*,
-        table::*,
-    },
-    icons::*,
+use crate::common::{
+    components::*,
+    constants::{TABLE_RECORD_SIZE, *},
+    functions::*,
+    models::*,
+    table::*,
 };
 use leptos::*;
 use leptos_router::*;
