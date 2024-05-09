@@ -61,11 +61,11 @@ pub fn InternalCommandsTable() -> impl IntoView {
                     {move || {
                         resource
                             .get()
-                            .map(|res| {
-                                res.map_err(|_| {
+                            .map(|result| {
+                                result
+                                    .map_err(|_| {
                                         view! {
-                                            <EmptyTable message="Unable to list internal commands at
-                                            this time. Try refreshing."/>
+                                            <EmptyTable message="Unable to list internal commands at this time. Try refreshing."/>
                                         }
                                     })
                                     .map_or_else(
@@ -73,6 +73,11 @@ pub fn InternalCommandsTable() -> impl IntoView {
                                             view! { <EmptyTable message="No internal commands found"/> }
                                         },
                                         |data| {
+                                            if data.feetransfers.is_empty() {
+                                                return view! {
+                                                    <EmptyTable message="No internal commands found"/>
+                                                };
+                                            }
                                             let pag = build_pagination(
                                                 data.feetransfers.len(),
                                                 TABLE_DEFAULT_PAGE_SIZE,
@@ -87,11 +92,9 @@ pub fn InternalCommandsTable() -> impl IntoView {
                                                     }),
                                                 ),
                                             );
-                                            let subset = get_subset(
-                                                &data.feetransfers,
-                                                pag.records_per_page,
-                                                current_page.get() - 1,
-                                            );
+                                            let subset = data
+                                                .feetransfers[pag.start_index()..pag.end_index()]
+                                                .to_vec();
                                             view! { <TableRows data=subset/> }
                                         },
                                     )
@@ -100,6 +103,36 @@ pub fn InternalCommandsTable() -> impl IntoView {
 
                 </Suspense>
             </Table>
+            <Suspense fallback=|| {
+                ().into_view()
+            }>
+                {move || {
+                    resource
+                        .get()
+                        .and_then(|res| res.ok())
+                        .map(|data| {
+                            if data.feetransfers.is_empty() {
+                                return view! { <EmptyTable message="No internal commands found"/> };
+                            }
+                            let pag = build_pagination(
+                                data.feetransfers.len(),
+                                TABLE_DEFAULT_PAGE_SIZE,
+                                current_page.get(),
+                                set_current_page,
+                                page_dim.get().height.map(|h| h as usize),
+                                Some(
+                                    Box::new(|container_height: usize| {
+                                        (container_height
+                                            - DEFAULT_ESTIMATED_NON_TABLE_SPACE_IN_SECTIONS)
+                                            / ESTIMATED_ROW_HEIGHT
+                                    }),
+                                ),
+                            );
+                            view! { <Pagination pagination=pag/> }
+                        })
+                }}
+
+            </Suspense>
         </TableContainer>
     }
 }
