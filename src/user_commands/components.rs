@@ -20,10 +20,7 @@ const QP_FROM: &str = "q-from";
 const QP_TO: &str = "q-to";
 
 #[component]
-pub fn TransactionsSection(
-    #[prop(default = false)] with_link: bool,
-    #[prop(optional)] account: Option<String>,
-) -> impl IntoView {
+pub fn TransactionsSection() -> impl IntoView {
     let (txn_type_qp, _) = create_query_signal::<String>(QP_TXN_TYPE);
     let query_params_map = use_query_map();
     let (block_height_sig, _) = create_query_signal::<i64>(QP_HEIGHT);
@@ -120,7 +117,6 @@ pub fn TransactionsSection(
         },
     ];
     let table_cols_length = table_columns.len();
-    let account_clone = account.clone();
 
     view! {
         <TableSection
@@ -208,24 +204,6 @@ pub fn TransactionsSection(
                     }}
 
                 </Suspense>
-                <Show
-                    when=move || account_clone.is_some() && with_link
-                    fallback=move || ().into_view()
-                >
-
-                    {
-                        let account = account.clone().unwrap();
-                        view! {
-                            <TableLink
-                                href=format!("/commands?q-from={}", account)
-                                text="See all transactions"
-                            >
-                                <TransactionIcon/>
-                            </TableLink>
-                        }
-                    }
-
-                </Show>
             </TableContainer>
 
         </TableSection>
