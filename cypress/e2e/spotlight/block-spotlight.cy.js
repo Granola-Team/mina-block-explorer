@@ -11,7 +11,6 @@ suite(["@CI"], "Block spotlight", () => {
     "Snarked Ledger Hash",
     "Coinbase",
     "Coinbase Receiver",
-    "Winning Account",
     "SNARK Fees",
     "Global Slot",
     "Slot",

@@ -32,7 +32,6 @@ query BlocksQuery(
     }
     snarkJobs {
       prover
-      workIds
       blockStateHash
       blockHeight
       fee
