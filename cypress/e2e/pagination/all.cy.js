@@ -78,6 +78,8 @@ suite(["@CI"], "pagination", () => {
     "/summary",
     "/blocks",
     "/transactions/internal-commands",
+    "/commands/user-commands",
+    "/commands/internal-commands",
   ].forEach((page) =>
     it(`works on ${page}`, () => {
       cy.visit(page);
