@@ -38,7 +38,6 @@ suite(["@CI"], "pagination", () => {
 
     cy.get("@last").click();
     cy.wait(1000);
-    cy.get("@last").click();
     cy.get("@first").should("not.be.disabled");
     cy.get("@prev").should("not.be.disabled");
     cy.get("@next").should("be.disabled");
