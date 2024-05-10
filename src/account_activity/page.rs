@@ -220,17 +220,7 @@ pub fn AccountSpotlightPage() -> impl IntoView {
                 }
                 _ => ().into_view(),
             }}
-            {move || match transactions.get() {
-                Some(transactions) => view! { <AccountTransactionsSection transactions/> },
-                None => {
-                    view! {
-                        <TableSection section_heading="User Commands" controls=|| ().into_view()>
-                            <DeprecatedTable data=DeprecatedLoadingPlaceholder {}/>
-                        </TableSection>
-                    }
-                }
-            }}
-            <SubSectionContainer>
+            <AccountTransactionsSection transactions_sig=transactions/> <SubSectionContainer>
                 <AppSubSection heading="SNARK Jobs" position=SubSectionPosition::Left>
                     {move || match snarks.get() {
                         Some(snarks) => {

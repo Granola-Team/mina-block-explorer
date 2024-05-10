@@ -222,10 +222,46 @@ fn TransactionEntry(
 
 #[component]
 pub fn AccountTransactionsSection(
-    transactions: Vec<Option<AccountActivityQueryDirectionalTransactions>>,
+    transactions_sig: ReadSignal<Option<Vec<Option<AccountActivityQueryDirectionalTransactions>>>>,
 ) -> impl IntoView {
     let records_per_page = 10;
     let (current_page, set_current_page) = create_signal(1);
+
+    let table_columns = vec![
+        TableColumn {
+            column: "Height".to_string(),
+            is_searchable: true,
+        },
+        TableColumn {
+            column: "Txn Hash".to_string(),
+            is_searchable: true,
+        },
+        TableColumn {
+            column: "Nonce".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "Age".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "Type".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "Direction".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "Counterparty".to_string(),
+            is_searchable: true,
+        },
+        TableColumn {
+            column: "Amount/Fee".to_string(),
+            is_searchable: false,
+        },
+    ];
+    let table_cols_length = table_columns.len();
 
     view! {
         <TableSection
@@ -244,19 +280,55 @@ pub fn AccountTransactionsSection(
             }
         >
 
-            {move || {
-                let pag = build_pagination(
-                    transactions.len(),
-                    records_per_page,
-                    current_page.get(),
-                    set_current_page,
-                    None,
-                    None,
-                );
-                let subset = get_subset(&transactions, records_per_page, current_page.get() - 1);
-                view! { <DeprecatedTable data=subset pagination=pag/> }
-            }}
+            <TableContainer>
+                <Table>
+                    <TableHeader columns=table_columns/>
+                    {move || match transactions_sig.get() {
+                        None => {
+                            view! {
+                                <TableRows data=vec![
+                                    vec![LoadingPlaceholder; table_cols_length];
+                                    10
+                                ]/>
+                            }
+                        }
+                        Some(transactions) => {
+                            let pag = build_pagination(
+                                transactions.len(),
+                                records_per_page,
+                                current_page.get(),
+                                set_current_page,
+                                None,
+                                None,
+                            );
+                            view! {
+                                <TableRows data=transactions[pag
+                                        .start_index()..std::cmp::min(
+                                        pag.end_index() + 1,
+                                        pag.total_records,
+                                    )]
+                                    .to_vec()/>
+                            }
+                        }
+                    }}
 
+                </Table>
+                {move || match transactions_sig.get() {
+                    None => ().into_view(),
+                    Some(transactions) => {
+                        let pag = build_pagination(
+                            transactions.len(),
+                            records_per_page,
+                            current_page.get(),
+                            set_current_page,
+                            None,
+                            None,
+                        );
+                        view! { <Pagination pagination=pag/> }
+                    }
+                }}
+
+            </TableContainer>
         </TableSection>
     }
 }
