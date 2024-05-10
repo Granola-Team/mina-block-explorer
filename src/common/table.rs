@@ -197,8 +197,8 @@ pub fn Pagination(pagination: Pagination) -> impl IntoView {
             <span class="col-start-1 text-xs flex justify-center md:justify-start items-center font-bold pl-8 my-2">
                 {format!(
                     "Showing {} to {} of {} records",
-                    pagination.start_index(),
-                    std::cmp::min(pagination.end_index(), pagination.total_records),
+                    std::cmp::min(pagination.start_index() + 1, pagination.total_records),
+                    std::cmp::min(pagination.end_index() + 1, pagination.total_records),
                     pagination.total_records,
                 )}
 
