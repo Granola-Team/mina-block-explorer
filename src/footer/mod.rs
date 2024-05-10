@@ -34,8 +34,17 @@ pub fn Footer() -> impl IntoView {
         },
     ];
     view! {
-        <footer class="overflow-x-auto bg-main-background w-full h-12 min-h-12 flex flex-wrap justify-end">
-            <div class="w-full flex justify-between sm:justify-end p-4">
+        <footer class="overflow-x-auto bg-main-background w-full h-14 min-h-14 flex flex-wrap justify-between">
+            <span class="text-white text-sm p-4 whitespace-nowrap">
+                "Powered by "
+                <a
+                    href="https://granola.team"
+                    class="text-granola-orange hover:underline hover:decoration-2"
+                >
+                    "Granola"
+                </a>
+            </span>
+            <div class="flex justify-between sm:justify-end p-4">
                 <GAOptOut/>
                 {links
                     .into_iter()

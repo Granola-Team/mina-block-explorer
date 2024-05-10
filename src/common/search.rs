@@ -40,23 +40,7 @@ pub fn GlobalSearchBar() -> impl IntoView {
 
     view! {
         <PreSectionContainer>
-            <div class="pl-8 md:pl-0 flex flex-col md:pr-4">
-                <span class="text-white font-bold text-2xl p-1 whitespace-nowrap">
-                    "Mina Blockchain Explorer"
-                </span>
-                <span class="text-white font-medium text-base p-1 whitespace-nowrap">
-                    <span class="whitespace-pre">
-                        "Powered by "
-                        <a
-                            href="https://granola.team"
-                            class="hover:text-granola-orange hover:underline hover:decoration-2"
-                        >
-                            "Granola"
-                        </a>
-                    </span>
-                </span>
-            </div>
-            <div class="mx-2 my-2 md:mx-0 md:w-full relative align-stretch flex items-center">
+            <div class="mx-2 my-2 md:mx-0 md:w-full -mt-2 relative align-stretch flex items-center">
                 <form class="flex grow" on:submit=on_submit>
                     <input
                         id="searchbar"
