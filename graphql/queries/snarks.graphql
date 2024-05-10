@@ -1,10 +1,13 @@
-query SnarksQuery($sort_by: SnarkSortByInput!, $limit: Int = 10, $query: SnarkQueryInput!) {
-  snarks(sortBy: $sort_by, limit: $limit, query: $query ) {
+query SnarksQuery(
+  $sort_by: SnarkSortByInput!
+  $limit: Int = 10
+  $query: SnarkQueryInput!
+) {
+  snarks(sortBy: $sort_by, limit: $limit, query: $query) {
     blockHeight
     dateTime
     prover
     canonical
-    workIds
     block {
       stateHash
     }
