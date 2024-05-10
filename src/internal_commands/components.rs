@@ -84,7 +84,11 @@ pub fn InternalCommandsTable() -> impl IntoView {
                                 }
                                 view! {
                                     <TableRows data=data
-                                        .feetransfers[pag.start_index() - 1..pag.end_index()]
+                                        .feetransfers[pag
+                                            .start_index()..std::cmp::min(
+                                            pag.end_index() + 1,
+                                            pag.total_records,
+                                        )]
                                         .to_vec()/>
                                 }
                             })
