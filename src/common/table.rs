@@ -37,7 +37,7 @@ pub fn TableContainer(children: Children) -> impl IntoView {
 #[component]
 pub fn Table(children: Children) -> impl IntoView {
     view! {
-        <table class="font-mono table-fixed md:rounded-b-lg w-full @xs:w-[175%] @md:w-[150%] @2xl:w-[125%] @7xl:w-full">
+        <table class="font-mono md:rounded-b-lg w-full @xs:w-[175%] @md:w-[150%] @2xl:w-[125%] @7xl:w-full">
             {children()}
         </table>
     }
