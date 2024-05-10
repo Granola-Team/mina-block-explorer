@@ -66,88 +66,169 @@ fn StakesPageContents() -> impl IntoView {
     let page_dim = use_context::<ReadSignal<PageDimensions>>()
         .expect("there to be a `PageDimensions` signal provided");
     let (current_page, set_current_page) = create_signal(1);
+
+    let get_data_and_pagination = move || {
+        resource.get().and_then(|res| res.ok()).map(|data| {
+            let pag = build_pagination(
+                data.stakes.len(),
+                TABLE_DEFAULT_PAGE_SIZE,
+                current_page.get(),
+                set_current_page,
+                page_dim.get().height.map(|h| h as usize),
+                Some(Box::new(|container_height: usize| {
+                    (container_height - DEFAULT_ESTIMATED_NON_TABLE_SPACE_IN_SECTIONS)
+                        / ESTIMATED_ROW_HEIGHT
+                })),
+            );
+            (data, pag)
+        })
+    };
+
+    let table_columns = vec![
+        TableColumn {
+            column: "Key".to_string(),
+            is_searchable: true,
+        },
+        TableColumn {
+            column: "Stake".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "Delegate".to_string(),
+            is_searchable: true,
+        },
+        TableColumn {
+            column: "Delegators".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "Ledger Hash".to_string(),
+            is_searchable: false,
+        },
+    ];
+    let table_cols_length = table_columns.len();
+    let table_columns_clone = table_columns.clone();
+    let table_columns_clone_2 = table_columns.clone();
+
     view! {
-        {move || match (resource.get(), summary_resource.get()) {
-            (Some(Ok(data)), Some(Ok(sum_data))) => {
-                let curr_epoch = sum_data.epoch as i64;
-                let mut section_heading = "Current Staking Ledger".to_string();
-                let mut next_epoch = curr_epoch + 1;
-                let mut prev_epoch = curr_epoch - 1;
-                if let Some(qs_epoch) = epoch_sig.get() {
-                    if qs_epoch != curr_epoch {
-                        section_heading = format!("Epoch {} Staking Ledger", qs_epoch);
-                        next_epoch = qs_epoch + 1;
-                        prev_epoch = qs_epoch - 1;
-                    }
-                }
-                let pag = build_pagination(
-                    data.stakes.len(),
-                    TABLE_DEFAULT_PAGE_SIZE,
-                    current_page.get(),
-                    set_current_page,
-                    page_dim.get().height.map(|h| h as usize),
-                    Some(
-                        Box::new(|container_height: usize| {
-                            (container_height - DEFAULT_ESTIMATED_NON_TABLE_SPACE_IN_SECTIONS)
-                                / ESTIMATED_ROW_HEIGHT
-                        }),
-                    ),
-                );
-                let subset = get_subset(&data.stakes, pag.records_per_page, current_page.get() - 1);
-                view! {
-                    <TableSection
-                        section_heading=section_heading
-                        controls=move || {
-                            view! {
-                                <EpochButton
-                                    disabled=prev_epoch < 1
-                                    text="Previous"
-                                    style_variant=EpochStyleVariant::Secondary
-                                    epoch_target=prev_epoch
-                                />
-                                {if next_epoch - 1 == curr_epoch {
-                                    view! {
-                                        <EpochButton
-                                            href="/next-stakes"
-                                            text="Next"
-                                            style_variant=EpochStyleVariant::Primary
-                                        />
-                                    }
-                                } else {
-                                    view! {
-                                        <EpochButton
-                                            text="Next"
-                                            style_variant=EpochStyleVariant::Primary
-                                            epoch_target=next_epoch
-                                        />
-                                    }
-                                }}
+        <Suspense fallback=move || {
+            let table_columns_clone = table_columns_clone.clone();
+            view! {
+                <TableSection section_heading="" controls=move || ().into_view()>
+                    <TableContainer>
+                        <Table>
+                            <TableHeader columns=table_columns_clone/>
+                            <TableRows data=vec![vec![LoadingPlaceholder; table_cols_length]; 10]/>
+                        </Table>
+                    </TableContainer>
+                </TableSection>
+            }
+        }>
+
+            {
+                let table_columns_clone_2 = table_columns_clone_2.clone();
+                move || {
+                    summary_resource
+                        .get()
+                        .and_then(|res| res.ok())
+                        .map(|sum_data| {
+                            let table_columns_clone_2 = table_columns_clone_2.clone();
+                            let curr_epoch = sum_data.epoch as i64;
+                            let mut section_heading = "Current Staking Ledger".to_string();
+                            let mut next_epoch = curr_epoch + 1;
+                            let mut prev_epoch = curr_epoch - 1;
+                            if let Some(qs_epoch) = epoch_sig.get() {
+                                if qs_epoch != curr_epoch {
+                                    section_heading = format!("Epoch {} Staking Ledger", qs_epoch);
+                                    next_epoch = qs_epoch + 1;
+                                    prev_epoch = qs_epoch - 1;
+                                }
                             }
-                        }
+                            view! {
+                                <TableSection
+                                    section_heading=section_heading
+                                    controls=move || {
+                                        view! {
+                                            <EpochButton
+                                                disabled=prev_epoch < 1
+                                                text="Previous"
+                                                style_variant=EpochStyleVariant::Secondary
+                                                epoch_target=prev_epoch
+                                            />
+                                            {if next_epoch - 1 == curr_epoch {
+                                                view! {
+                                                    <EpochButton
+                                                        href="/next-stakes"
+                                                        text="Next"
+                                                        style_variant=EpochStyleVariant::Primary
+                                                    />
+                                                }
+                                            } else {
+                                                view! {
+                                                    <EpochButton
+                                                        text="Next"
+                                                        style_variant=EpochStyleVariant::Primary
+                                                        epoch_target=next_epoch
+                                                    />
+                                                }
+                                            }}
+                                        }
+                                    }
 
-                        additional_info=if next_epoch - 1 == curr_epoch {
-                            format!(
-                                "{:.2}% complete ({}/{} slots filled)",
-                                (sum_data.slot as f64 / EPOCH_SLOTS as f64) * 100.0,
-                                sum_data.slot,
-                                EPOCH_SLOTS,
-                            )
-                        } else {
-                            "".to_string()
-                        }
-                    >
+                                    additional_info=if next_epoch - 1 == curr_epoch {
+                                        format!(
+                                            "{:.2}% complete ({}/{} slots filled)",
+                                            (sum_data.slot as f64 / EPOCH_SLOTS as f64) * 100.0,
+                                            sum_data.slot,
+                                            EPOCH_SLOTS,
+                                        )
+                                    } else {
+                                        "".to_string()
+                                    }
+                                >
 
-                        <DeprecatedTable data=subset pagination=pag/>
-                    </TableSection>
+                                    <TableContainer>
+                                        <Table>
+                                            <TableHeader columns=table_columns_clone_2/>
+                                            <Suspense fallback=move || {
+                                                view! {
+                                                    <TableRows data=vec![
+                                                        vec![LoadingPlaceholder; table_cols_length];
+                                                        10
+                                                    ]/>
+                                                }
+                                            }>
+                                                {move || {
+                                                    get_data_and_pagination()
+                                                        .map(|(data, pag)| {
+                                                            view! {
+                                                                <TableRows data=data
+                                                                    .stakes[pag
+                                                                        .start_index()..std::cmp::min(
+                                                                        pag.end_index() + 1,
+                                                                        pag.total_records,
+                                                                    )]
+                                                                    .to_vec()/>
+                                                            }
+                                                        })
+                                                }}
+
+                                            </Suspense>
+                                        </Table>
+                                        {move || {
+                                            get_data_and_pagination()
+                                                .map(|(_, pag)| {
+                                                    view! { <Pagination pagination=pag/> }
+                                                })
+                                        }}
+
+                                    </TableContainer>
+                                </TableSection>
+                            }
+                        })
                 }
             }
-            (_, _) => {
-                view! {
-                    <TableSection section_heading="" controls=move || ().into_view()>
-                        <DeprecatedTable data=DeprecatedLoadingPlaceholder {}/>
-                    </TableSection>
-                }
-            }
-        }}
+
+        </Suspense>
     }
 }
