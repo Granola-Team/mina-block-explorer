@@ -125,7 +125,11 @@ fn SnarksPageContents() -> impl IntoView {
                             get_pagination_and_data()
                                 .map(|(data, pag)| {
                                     let subset = data
-                                        .snarks[pag.start_index() - 1..pag.end_index()]
+                                        .snarks[pag
+                                            .start_index()..std::cmp::min(
+                                            pag.end_index() + 1,
+                                            pag.total_records,
+                                        )]
                                         .to_vec();
                                     view! { <TableRows data=subset/> }
                                 })
