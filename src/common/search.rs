@@ -40,11 +40,6 @@ pub fn GlobalSearchBar() -> impl IntoView {
 
     view! {
         <PreSectionContainer>
-            <div class="pl-8 md:pl-0 flex flex-col md:pr-4">
-                <span class="text-white font-bold text-2xl p-1 whitespace-nowrap">
-                    "Mina Blockchain Explorer"
-                </span>
-            </div>
             <div class="mx-2 my-2 md:mx-0 md:w-full relative align-stretch flex items-center">
                 <form class="flex grow" on:submit=on_submit>
                     <input
