@@ -79,6 +79,23 @@ fn SnarksPageContents() -> impl IntoView {
     ];
     let table_cols_length = table_columns.len();
 
+    let get_pagination_and_data = move || {
+        resource.get().and_then(|res| res.ok()).map(|data| {
+            let pag = build_pagination(
+                data.snarks.len(),
+                TABLE_DEFAULT_PAGE_SIZE,
+                current_page.get(),
+                set_current_page,
+                page_dim.get().height.map(|h| h as usize),
+                Some(Box::new(|container_height: usize| {
+                    (container_height - DEFAULT_ESTIMATED_NON_TABLE_SPACE_IN_SECTIONS)
+                        / ESTIMATED_ROW_HEIGHT
+                })),
+            );
+            (data, pag)
+        })
+    };
+
     view! {
         <TableSection
             section_heading="SNARKs"
@@ -105,24 +122,8 @@ fn SnarksPageContents() -> impl IntoView {
                         }
                     }>
                         {move || {
-                            resource
-                                .get()
-                                .and_then(|res| res.ok())
-                                .map(|data| {
-                                    let pag = build_pagination(
-                                        data.snarks.len(),
-                                        TABLE_DEFAULT_PAGE_SIZE,
-                                        current_page.get(),
-                                        set_current_page,
-                                        page_dim.get().height.map(|h| h as usize),
-                                        Some(
-                                            Box::new(|container_height: usize| {
-                                                (container_height
-                                                    - DEFAULT_ESTIMATED_NON_TABLE_SPACE_IN_SECTIONS)
-                                                    / ESTIMATED_ROW_HEIGHT
-                                            }),
-                                        ),
-                                    );
+                            get_pagination_and_data()
+                                .map(|(data, pag)| {
                                     let subset = data
                                         .snarks[pag.start_index()..pag.end_index()]
                                         .to_vec();
@@ -133,27 +134,16 @@ fn SnarksPageContents() -> impl IntoView {
                     </Suspense>
                 </Table>
                 {move || {
-                    resource
-                        .get()
-                        .and_then(|res| res.ok())
-                        .map(|data| {
-                            let pag = build_pagination(
-                                data.snarks.len(),
-                                TABLE_DEFAULT_PAGE_SIZE,
-                                current_page.get(),
-                                set_current_page,
-                                page_dim.get().height.map(|h| h as usize),
-                                Some(
-                                    Box::new(|container_height: usize| {
-                                        (container_height
-                                            - DEFAULT_ESTIMATED_NON_TABLE_SPACE_IN_SECTIONS)
-                                            / ESTIMATED_ROW_HEIGHT
-                                    }),
-                                ),
-                            );
-                            view! { <Pagination pagination=pag/> }
-                        })
+                    {
+                        move || {
+                            get_pagination_and_data()
+                                .map(|(_, pag)| {
+                                    view! { <Pagination pagination=pag/> }
+                                })
+                        }
+                    }
                 }}
+
             </TableContainer>
         </TableSection>
     }
