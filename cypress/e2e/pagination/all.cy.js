@@ -71,6 +71,7 @@ suite(["@CI"], "pagination", () => {
   );
 
   [
+    "/stakes",
     "/snarks",
     "/commands/internal-commands",
     "/commands/user-commands",
