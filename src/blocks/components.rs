@@ -900,7 +900,7 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
                                     .map(|(data, pag)| {
                                         view! {
                                             <TableRows data=data
-                                                .blocks[pag.start_index()..pag.end_index()]
+                                                .blocks[pag.start_index() - 1..pag.end_index()]
                                                 .to_vec()/>
                                         }
                                     })
