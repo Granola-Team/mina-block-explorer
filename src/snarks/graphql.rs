@@ -21,7 +21,6 @@ impl Default for snarks_query::SnarksQuerySnarks {
             block_height: None,
             date_time: None,
             prover: None,
-            work_ids: None,
             block: None,
             fee: None,
             canonical: None,

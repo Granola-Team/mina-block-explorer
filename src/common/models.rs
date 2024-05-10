@@ -41,7 +41,7 @@ impl Pagination {
         if self.total_records == 0 {
             0
         } else {
-            (self.current_page - 1) * self.records_per_page + 1
+            (self.current_page - 1) * self.records_per_page
         }
     }
 
@@ -49,10 +49,8 @@ impl Pagination {
         if self.total_records == 0 {
             0
         } else {
-            std::cmp::min(
-                self.current_page * self.records_per_page,
-                self.total_records,
-            )
+            let end_idx = self.current_page * self.records_per_page - 1;
+            std::cmp::min(end_idx, self.total_records - 1)
         }
     }
 
@@ -91,8 +89,8 @@ mod pagination_tests {
             total_records: 90,
             set_current_page: set_page,
         };
-        assert_eq!(pd.start_index(), 1);
-        assert_eq!(pd.end_index(), 15);
+        assert_eq!(pd.start_index(), 0);
+        assert_eq!(pd.end_index(), 14);
     }
 
     #[test]
@@ -104,8 +102,8 @@ mod pagination_tests {
             total_records: 90,
             set_current_page: set_page,
         };
-        assert_eq!(pd.start_index(), 16);
-        assert_eq!(pd.end_index(), 30);
+        assert_eq!(pd.start_index(), 15);
+        assert_eq!(pd.end_index(), 29);
     }
 
     #[test]
@@ -137,8 +135,8 @@ mod pagination_tests {
             total_records: 10,
             set_current_page: set_page,
         };
-        assert_eq!(pd.start_index(), 1);
-        assert_eq!(pd.end_index(), 10);
+        assert_eq!(pd.start_index(), 0);
+        assert_eq!(pd.end_index(), 9);
         assert_eq!(pd.total_pages(), 1);
     }
 }

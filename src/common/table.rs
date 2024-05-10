@@ -37,7 +37,7 @@ pub fn TableContainer(children: Children) -> impl IntoView {
 #[component]
 pub fn Table(children: Children) -> impl IntoView {
     view! {
-        <table class="font-mono table-fixed md:rounded-b-lg w-full @xs:w-[175%] @md:w-[150%] @2xl:w-[125%] @7xl:w-full">
+        <table class="font-mono md:rounded-b-lg w-full @xs:w-[175%] @md:w-[150%] @2xl:w-[125%] @7xl:w-full">
             {children()}
         </table>
     }
@@ -197,8 +197,8 @@ pub fn Pagination(pagination: Pagination) -> impl IntoView {
             <span class="col-start-1 text-xs flex justify-center md:justify-start items-center font-bold pl-8 my-2">
                 {format!(
                     "Showing {} to {} of {} records",
-                    pagination.start_index(),
-                    std::cmp::min(pagination.end_index(), pagination.total_records),
+                    std::cmp::min(pagination.start_index() + 1, pagination.total_records),
+                    std::cmp::min(pagination.end_index() + 1, pagination.total_records),
                     pagination.total_records,
                 )}
 
