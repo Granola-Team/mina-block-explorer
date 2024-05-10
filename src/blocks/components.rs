@@ -849,6 +849,21 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
         },
     ];
     let table_cols_length = table_columns.len();
+    let get_data_and_pagination = move || {
+        resource.get().and_then(|res| res.ok()).map(|data| {
+            let pag = build_pagination(
+                data.blocks.len(),
+                TABLE_DEFAULT_PAGE_SIZE,
+                current_page.get(),
+                set_current_page,
+                page_dim.get().height.map(|f| f as usize),
+                Some(Box::new(|container_height: usize| {
+                    (container_height - ESTIMATED_NON_TABLE_SPACE_IN_SUMMARY) / ESTIMATED_ROW_HEIGHT
+                })),
+            );
+            (data, pag)
+        })
+    };
 
     view! {
         <ErrorBoundary fallback=move |_| { ().into_view() }>
@@ -881,29 +896,13 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
                             }
                         }>
                             {move || {
-                                resource
-                                    .get()
-                                    .and_then(|res| res.ok())
-                                    .map(|data| {
-                                        let pag = build_pagination(
-                                            data.blocks.len(),
-                                            TABLE_DEFAULT_PAGE_SIZE,
-                                            current_page.get(),
-                                            set_current_page,
-                                            page_dim.get().height.map(|f| f as usize),
-                                            Some(
-                                                Box::new(|container_height: usize| {
-                                                    (container_height - ESTIMATED_NON_TABLE_SPACE_IN_SUMMARY)
-                                                        / ESTIMATED_ROW_HEIGHT
-                                                }),
-                                            ),
-                                        );
-                                        let blocks_subset = get_subset(
-                                            &data.blocks,
-                                            pag.records_per_page,
-                                            current_page.get() - 1,
-                                        );
-                                        view! { <TableRows data=blocks_subset/> }
+                                get_data_and_pagination()
+                                    .map(|(data, pag)| {
+                                        view! {
+                                            <TableRows data=data
+                                                .blocks[pag.start_index()..pag.end_index()]
+                                                .to_vec()/>
+                                        }
                                     })
                             }}
 
@@ -913,23 +912,8 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
                         ().into_view()
                     }>
                         {move || {
-                            resource
-                                .get()
-                                .and_then(|res| res.ok())
-                                .map(|data| {
-                                    let pag = build_pagination(
-                                        data.blocks.len(),
-                                        TABLE_DEFAULT_PAGE_SIZE,
-                                        current_page.get(),
-                                        set_current_page,
-                                        page_dim.get().height.map(|f| f as usize),
-                                        Some(
-                                            Box::new(|container_height: usize| {
-                                                (container_height - ESTIMATED_NON_TABLE_SPACE_IN_SUMMARY)
-                                                    / ESTIMATED_ROW_HEIGHT
-                                            }),
-                                        ),
-                                    );
+                            get_data_and_pagination()
+                                .map(|(_, pag)| {
                                     view! { <Pagination pagination=pag/> }
                                 })
                         }}
