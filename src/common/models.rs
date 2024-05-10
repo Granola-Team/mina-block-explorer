@@ -49,7 +49,10 @@ impl Pagination {
         if self.total_records == 0 {
             0
         } else {
-            std::cmp::min(self.current_page * self.records_per_page, self.total_records)
+            std::cmp::min(
+                self.current_page * self.records_per_page,
+                self.total_records,
+            )
         }
     }
 
