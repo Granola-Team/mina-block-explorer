@@ -92,12 +92,11 @@ pub fn InternalCommandsTable() -> impl IntoView {
 
                 </Suspense>
             </Table>
-
             {move || {
                 get_data_and_pagination()
                     .map(|(_, pag)| {
                         view! { <Pagination pagination=pag/> }
-                    });
+                    })
             }}
 
         </TableContainer>
