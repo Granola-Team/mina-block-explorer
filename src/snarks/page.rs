@@ -54,6 +54,48 @@ fn SnarksPageContents() -> impl IntoView {
     let page_dim = use_context::<ReadSignal<PageDimensions>>()
         .expect("there to be a `PageDimensions` signal provided");
     let (current_page, set_current_page) = create_signal(1);
+
+    let table_columns = vec![
+        TableColumn {
+            column: "Height".to_string(),
+            is_searchable: true,
+        },
+        TableColumn {
+            column: "State Hash".to_string(),
+            is_searchable: true,
+        },
+        TableColumn {
+            column: "Age".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "Prover".to_string(),
+            is_searchable: true,
+        },
+        TableColumn {
+            column: "Fee".to_string(),
+            is_searchable: false,
+        },
+    ];
+    let table_cols_length = table_columns.len();
+
+    let get_pagination_and_data = move || {
+        resource.get().and_then(|res| res.ok()).map(|data| {
+            let pag = build_pagination(
+                data.snarks.len(),
+                TABLE_DEFAULT_PAGE_SIZE,
+                current_page.get(),
+                set_current_page,
+                page_dim.get().height.map(|h| h as usize),
+                Some(Box::new(|container_height: usize| {
+                    (container_height - DEFAULT_ESTIMATED_NON_TABLE_SPACE_IN_SECTIONS)
+                        / ESTIMATED_ROW_HEIGHT
+                })),
+            );
+            (data, pag)
+        })
+    };
+
     view! {
         <TableSection
             section_heading="SNARKs"
@@ -71,32 +113,42 @@ fn SnarksPageContents() -> impl IntoView {
             }
         >
 
-            {move || match resource.get() {
-                Some(Ok(data)) => {
-                    let pag = build_pagination(
-                        data.snarks.len(),
-                        TABLE_DEFAULT_PAGE_SIZE,
-                        current_page.get(),
-                        set_current_page,
-                        page_dim.get().height.map(|h| h as usize),
-                        Some(
-                            Box::new(|container_height: usize| {
-                                (container_height - DEFAULT_ESTIMATED_NON_TABLE_SPACE_IN_SECTIONS)
-                                    / ESTIMATED_ROW_HEIGHT
-                            }),
-                        ),
-                    );
-                    let subset = get_subset(
-                        &data.snarks,
-                        pag.records_per_page,
-                        current_page.get() - 1,
-                    );
-                    view! { <DeprecatedTable data=subset pagination=pag/> }
-                }
-                None => view! { <DeprecatedTable data=DeprecatedLoadingPlaceholder {}/> },
-                _ => view! { <span></span> }.into_view(),
-            }}
+            <TableContainer>
+                <Table>
+                    <TableHeader columns=table_columns/>
+                    <Suspense fallback=move || {
+                        view! {
+                            <TableRows data=vec![vec![LoadingPlaceholder; table_cols_length]; 10]/>
+                        }
+                    }>
+                        {move || {
+                            get_pagination_and_data()
+                                .map(|(data, pag)| {
+                                    let subset = data
+                                        .snarks[pag
+                                            .start_index()..std::cmp::min(
+                                            pag.end_index() + 1,
+                                            pag.total_records,
+                                        )]
+                                        .to_vec();
+                                    view! { <TableRows data=subset/> }
+                                })
+                        }}
 
+                    </Suspense>
+                </Table>
+                {move || {
+                    {
+                        move || {
+                            get_pagination_and_data()
+                                .map(|(_, pag)| {
+                                    view! { <Pagination pagination=pag/> }
+                                })
+                        }
+                    }
+                }}
+
+            </TableContainer>
         </TableSection>
     }
 }

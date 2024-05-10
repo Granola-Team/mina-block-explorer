@@ -71,6 +71,7 @@ suite(["@CI"], "pagination", () => {
   );
 
   [
+    "/snarks",
     "/commands/internal-commands",
     "/commands/user-commands",
     `/blocks/${DEFAULT_CANONICAL_BLOCK_HASH}/user-commands`,
