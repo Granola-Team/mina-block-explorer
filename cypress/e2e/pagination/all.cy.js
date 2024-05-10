@@ -72,13 +72,14 @@ suite(["@CI"], "pagination", () => {
 
   [
     "/snarks",
+    "/commands/internal-commands",
+    "/commands/user-commands",
     `/blocks/${DEFAULT_CANONICAL_BLOCK_HASH}/user-commands`,
     `/blocks/${DEFAULT_CANONICAL_BLOCK_HASH}/internal-commands`,
     `/blocks/${DEFAULT_CANONICAL_BLOCK_HASH}/snark-jobs`,
     "/",
     "/summary",
     "/blocks",
-    "/transactions/internal-commands",
   ].forEach((page) =>
     it(`works on ${page}`, () => {
       cy.visit(page);
