@@ -84,7 +84,7 @@ pub fn InternalCommandsTable() -> impl IntoView {
                                 }
                                 view! {
                                     <TableRows data=data
-                                        .feetransfers[pag.start_index()..pag.end_index()]
+                                        .feetransfers[pag.start_index() - 1..pag.end_index()]
                                         .to_vec()/>
                                 }
                             })
