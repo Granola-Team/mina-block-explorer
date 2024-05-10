@@ -165,7 +165,7 @@ pub fn TransactionsSection() -> impl IntoView {
                                 .map(|(data, pag)| {
                                     view! {
                                         <TableRows data=data
-                                            .transactions[pag.start_index()-1..pag.end_index()]
+                                            .transactions[pag.start_index() - 1..pag.end_index()]
                                             .to_vec()/>
                                     }
                                 })
