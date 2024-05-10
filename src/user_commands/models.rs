@@ -15,7 +15,6 @@ pub struct PoolUserCommandReceiver {
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct PooledUserCommand {
-    pub id: Option<String>,
     pub hash: Option<String>,
     pub kind: Option<String>,
     pub nonce: Option<i64>,
