@@ -1,8 +1,8 @@
 use super::models::BlockchainSummary;
-use crate::common::models::*;
+use crate::common::{constants::REST_ENDPOINT, models::*};
 
 pub async fn load_data() -> Result<BlockchainSummary, MyError> {
-    let response = reqwest::get("https://api.minaexplorer.com/summary")
+    let response = reqwest::get(format!("{}/summary", REST_ENDPOINT))
         .await
         .map_err(|e| MyError::NetworkError(e.to_string()))?;
 
