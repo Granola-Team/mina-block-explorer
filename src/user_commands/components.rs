@@ -114,6 +114,22 @@ pub fn TransactionsSection() -> impl IntoView {
         },
     ];
     let table_cols_length = table_columns.len();
+    let get_data_and_pagination = move || {
+        resource.get().and_then(|res| res.ok()).map(|data| {
+            let pag = build_pagination(
+                data.transactions.len(),
+                TABLE_DEFAULT_PAGE_SIZE,
+                current_page.get(),
+                set_current_page,
+                page_dim.get().height.map(|h| h as usize),
+                Some(Box::new(|container_height: usize| {
+                    (container_height - DEFAULT_ESTIMATED_NON_TABLE_SPACE_IN_SECTIONS)
+                        / ESTIMATED_ROW_HEIGHT
+                })),
+            );
+            (data, pag)
+        })
+    };
 
     view! {
         <TableSection
@@ -145,62 +161,25 @@ pub fn TransactionsSection() -> impl IntoView {
                         }
                     }>
                         {move || {
-                            resource
-                                .get()
-                                .and_then(|res| res.ok())
-                                .map(|data| {
-                                    let pag = build_pagination(
-                                        data.transactions.len(),
-                                        TABLE_DEFAULT_PAGE_SIZE,
-                                        current_page.get(),
-                                        set_current_page,
-                                        page_dim.get().height.map(|h| h as usize),
-                                        Some(
-                                            Box::new(|container_height: usize| {
-                                                (container_height
-                                                    - DEFAULT_ESTIMATED_NON_TABLE_SPACE_IN_SECTIONS)
-                                                    / ESTIMATED_ROW_HEIGHT
-                                            }),
-                                        ),
-                                    );
-                                    let subset = get_subset(
-                                        &data.transactions,
-                                        pag.records_per_page,
-                                        current_page.get() - 1,
-                                    );
-                                    view! { <TableRows data=subset/> }
+                            get_data_and_pagination()
+                                .map(|(data, pag)| {
+                                    view! {
+                                        <TableRows data=data
+                                            .transactions[pag.start_index()..pag.end_index()]
+                                            .to_vec()/>
+                                    }
                                 })
                         }}
 
                     </Suspense>
                 </Table>
-                <Suspense fallback=|| {
-                    ().into_view()
-                }>
-                    {move || {
-                        resource
-                            .get()
-                            .and_then(|res| res.ok())
-                            .map(|data| {
-                                let pag = build_pagination(
-                                    data.transactions.len(),
-                                    TABLE_DEFAULT_PAGE_SIZE,
-                                    current_page.get(),
-                                    set_current_page,
-                                    page_dim.get().height.map(|h| h as usize),
-                                    Some(
-                                        Box::new(|container_height: usize| {
-                                            (container_height
-                                                - DEFAULT_ESTIMATED_NON_TABLE_SPACE_IN_SECTIONS)
-                                                / ESTIMATED_ROW_HEIGHT
-                                        }),
-                                    ),
-                                );
-                                view! { <Pagination pagination=pag/> }
-                            })
-                    }}
+                {move || {
+                    get_data_and_pagination()
+                        .map(|(_, pag)| {
+                            view! { <Pagination pagination=pag/> }
+                        })
+                }}
 
-                </Suspense>
             </TableContainer>
 
         </TableSection>
