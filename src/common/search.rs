@@ -49,7 +49,7 @@ pub fn GlobalSearchBar() -> impl IntoView {
                         "Powered by "
                         <a
                             href="https://granola.team"
-                            class="hover:text-granola-orange hover:underline hover:decoration-2"
+                            class="text-granola-orange hover:underline hover:decoration-2"
                         >
                             "Granola"
                         </a>
