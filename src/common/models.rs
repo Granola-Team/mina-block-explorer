@@ -36,21 +36,29 @@ pub struct Pagination {
     pub total_records: usize,
     pub set_current_page: WriteSignal<usize>,
 }
-
 impl Pagination {
     pub fn start_index(&self) -> usize {
-        let has_records = if self.total_records > 0 { 1 } else { 0 };
-        (self.current_page * self.records_per_page - self.records_per_page + 1) * has_records
+        if self.total_records == 0 {
+            0
+        } else {
+            (self.current_page - 1) * self.records_per_page + 1
+        }
     }
 
     pub fn end_index(&self) -> usize {
-        let has_records = if self.total_records > 0 { 1 } else { 0 };
-        (self.current_page * self.records_per_page) * has_records
+        if self.total_records == 0 {
+            0
+        } else {
+            std::cmp::min(self.current_page * self.records_per_page, self.total_records)
+        }
     }
 
     pub fn total_pages(&self) -> usize {
-        self.total_records / self.records_per_page
-            + (self.total_records % self.records_per_page).clamp(0, 1)
+        if self.total_records == 0 {
+            0
+        } else {
+            (self.total_records + self.records_per_page - 1) / self.records_per_page
+        }
     }
 }
 
@@ -81,7 +89,7 @@ mod pagination_tests {
             set_current_page: set_page,
         };
         assert_eq!(pd.start_index(), 1);
-        assert_eq!(pd.end_index(), 15)
+        assert_eq!(pd.end_index(), 15);
     }
 
     #[test]
@@ -94,7 +102,7 @@ mod pagination_tests {
             set_current_page: set_page,
         };
         assert_eq!(pd.start_index(), 16);
-        assert_eq!(pd.end_index(), 30)
+        assert_eq!(pd.end_index(), 30);
     }
 
     #[test]
@@ -114,6 +122,21 @@ mod pagination_tests {
             set_current_page: set_page,
         };
         assert_eq!(pd.total_pages(), 7);
+    }
+
+    // Test for total records less than records per page
+    #[test]
+    fn test_fewer_records_than_page_size() {
+        let (_, set_page) = create_signal(1);
+        let pd = Pagination {
+            current_page: 1,
+            records_per_page: 15,
+            total_records: 10,
+            set_current_page: set_page,
+        };
+        assert_eq!(pd.start_index(), 1);
+        assert_eq!(pd.end_index(), 10);
+        assert_eq!(pd.total_pages(), 1);
     }
 }
 
