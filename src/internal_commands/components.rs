@@ -48,6 +48,22 @@ pub fn InternalCommandsTable() -> impl IntoView {
         },
     ];
     let table_cols_length = table_columns.len();
+    let get_data_and_pagination = move || {
+        resource.get().and_then(|res| res.ok()).map(|data| {
+            let pag = build_pagination(
+                data.feetransfers.len(),
+                TABLE_DEFAULT_PAGE_SIZE,
+                current_page.get(),
+                set_current_page,
+                page_dim.get().height.map(|h| h as usize),
+                Some(Box::new(|container_height: usize| {
+                    (container_height - DEFAULT_ESTIMATED_NON_TABLE_SPACE_IN_SECTIONS)
+                        / ESTIMATED_ROW_HEIGHT
+                })),
+            );
+            (data, pag)
+        })
+    };
 
     view! {
         <TableContainer>
@@ -59,45 +75,18 @@ pub fn InternalCommandsTable() -> impl IntoView {
                     }
                 }>
                     {move || {
-                        resource
-                            .get()
-                            .map(|result| {
-                                result
-                                    .map_err(|_| {
-                                        view! {
-                                            <EmptyTable message="Unable to list internal commands at this time. Try refreshing."/>
-                                        }
-                                    })
-                                    .map_or_else(
-                                        |_| {
-                                            view! { <EmptyTable message="No internal commands found"/> }
-                                        },
-                                        |data| {
-                                            if data.feetransfers.is_empty() {
-                                                return view! {
-                                                    <EmptyTable message="No internal commands found"/>
-                                                };
-                                            }
-                                            let pag = build_pagination(
-                                                data.feetransfers.len(),
-                                                TABLE_DEFAULT_PAGE_SIZE,
-                                                current_page.get(),
-                                                set_current_page,
-                                                page_dim.get().height.map(|h| h as usize),
-                                                Some(
-                                                    Box::new(|container_height: usize| {
-                                                        (container_height
-                                                            - DEFAULT_ESTIMATED_NON_TABLE_SPACE_IN_SECTIONS)
-                                                            / ESTIMATED_ROW_HEIGHT
-                                                    }),
-                                                ),
-                                            );
-                                            let subset = data
-                                                .feetransfers[pag.start_index()..pag.end_index()]
-                                                .to_vec();
-                                            view! { <TableRows data=subset/> }
-                                        },
-                                    )
+                        get_data_and_pagination()
+                            .map(|(data, pag)| {
+                                if data.feetransfers.is_empty() {
+                                    return view! {
+                                        <EmptyTable message="No internal commands found"/>
+                                    };
+                                }
+                                view! {
+                                    <TableRows data=data
+                                        .feetransfers[pag.start_index()..pag.end_index()]
+                                        .to_vec()/>
+                                }
                             })
                     }}
 
@@ -105,26 +94,10 @@ pub fn InternalCommandsTable() -> impl IntoView {
             </Table>
 
             {move || {
-                resource
-                    .get()
-                    .and_then(|res| res.ok())
-                    .map(|data| {
-                        let pag = build_pagination(
-                            data.feetransfers.len(),
-                            TABLE_DEFAULT_PAGE_SIZE,
-                            current_page.get(),
-                            set_current_page,
-                            page_dim.get().height.map(|h| h as usize),
-                            Some(
-                                Box::new(|container_height: usize| {
-                                    (container_height
-                                        - DEFAULT_ESTIMATED_NON_TABLE_SPACE_IN_SECTIONS)
-                                        / ESTIMATED_ROW_HEIGHT
-                                }),
-                            ),
-                        );
+                get_data_and_pagination()
+                    .map(|(_, pag)| {
                         view! { <Pagination pagination=pag/> }
-                    })
+                    });
             }}
 
         </TableContainer>
