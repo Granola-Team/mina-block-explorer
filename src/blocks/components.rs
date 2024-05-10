@@ -900,7 +900,11 @@ pub fn SummaryPageBlocksSection() -> impl IntoView {
                                     .map(|(data, pag)| {
                                         view! {
                                             <TableRows data=data
-                                                .blocks[pag.start_index() - 1..pag.end_index()]
+                                                .blocks[pag
+                                                    .start_index()..std::cmp::min(
+                                                    pag.end_index() + 1,
+                                                    pag.total_records,
+                                                )]
                                                 .to_vec()/>
                                         }
                                     })
