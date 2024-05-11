@@ -86,7 +86,7 @@ pub fn Header() -> impl IntoView {
             ..Default::default()
         },
         NavEntry {
-            href: "/addresses".to_string(),
+            href: "/addresses/accounts".to_string(),
             text: "Addresses".to_string(),
             icon: NavIcon::Addresses,
             sub_entries: addr_entries,
