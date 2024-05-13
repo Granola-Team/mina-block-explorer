@@ -18,18 +18,6 @@ suite(["@CI"], "search with multiple results", () => {
       expectation: { column: "Recipient", value: DEFAULT_RECIPIENT },
     },
     {
-      origin: "/",
-      input: DEFAULT_ACCOUNT_PK,
-      tableHeading: "Blocks",
-      expectation: { column: "Block Producer", value: DEFAULT_ACCOUNT_PK },
-    },
-    {
-      origin: "/summary",
-      input: DEFAULT_ACCOUNT_PK,
-      tableHeading: "Blocks",
-      expectation: { column: "Block Producer", value: DEFAULT_ACCOUNT_PK },
-    },
-    {
       origin: "/blocks",
       input: DEFAULT_ACCOUNT_PK,
       tableHeading: "Blocks",
@@ -58,10 +46,7 @@ suite(["@CI"], "search with single result", () => {
   let public_key = "B62qrQKS9ghd91shs73TCmBJRW9GzvTJK443DPx2YbqcyoLc56g1ny9";
 
   let exact_searches = [
-    { origin: "/", input: block_hash, tableHeading: "Blocks" },
-    { origin: "/", input: "H132", tableHeading: "Blocks" },
-    { origin: "/summary", input: block_hash, tableHeading: "Blocks" },
-    { origin: "/summary", input: "H34780", tableHeading: "Blocks" },
+
     { origin: "/blocks", input: block_hash, tableHeading: "Blocks" },
     { origin: "/blocks", input: "H20345", tableHeading: "Blocks" },
     {
@@ -83,9 +68,9 @@ suite(["@CI"], "search with single result", () => {
 
   exact_searches.forEach(({ origin, input, tableHeading, expectation }) =>
     it(`works on ${origin} page`, () => {
-      /* 
+      /*
         Sufficiently "tall" viewport to display many rows per table.
-        We want to see that the search bar is filtering results.  
+        We want to see that the search bar is filtering results.
       */
       cy.viewport(768, 2000);
       cy.visit(origin);

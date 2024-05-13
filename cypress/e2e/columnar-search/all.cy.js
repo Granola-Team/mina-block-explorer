@@ -118,18 +118,6 @@ suite(["@CI"], "search with multiple results", () => {
       expectation: { column: "Recipient", value: DEFAULT_ACCOUNT_PK },
     },
     {
-      origin: "/",
-      input: DEFAULT_ACCOUNT_PK,
-      tableHeading: "Blocks",
-      expectation: { column: "Block Producer", value: DEFAULT_ACCOUNT_PK },
-    },
-    {
-      origin: "/summary",
-      input: DEFAULT_ACCOUNT_PK,
-      tableHeading: "Blocks",
-      expectation: { column: "Block Producer", value: DEFAULT_ACCOUNT_PK },
-    },
-    {
       origin: "/blocks",
       input: DEFAULT_ACCOUNT_PK,
       tableHeading: "Blocks",
@@ -188,29 +176,10 @@ suite(["@CI"], "search with single result", () => {
       column: "Txn Hash",
     },
     {
-      origin: "/",
-      input: block_hash,
-      tableHeading: "Blocks",
-      column: "State Hash",
-    },
-    {
-      origin: "/summary",
-      input: block_hash,
-      tableHeading: "Blocks",
-      column: "State Hash",
-    },
-    {
       origin: "/blocks",
       input: block_hash,
       tableHeading: "Blocks",
       column: "State Hash",
-    },
-    { origin: "/", input: "20345", tableHeading: "Blocks", column: "Height" },
-    {
-      origin: "/summary",
-      input: "20345",
-      tableHeading: "Blocks",
-      column: "Height",
     },
     {
       origin: "/blocks",
@@ -219,16 +188,14 @@ suite(["@CI"], "search with single result", () => {
       column: "Height",
     },
     // { origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`, input: "5783", tableHeading: "Block Production", column: "Slot" },
-    // { origin: "/", input: "20345", tableHeading: "Blocks", column: "Slot" },
-    // { origin: "/summary", input: "20345", tableHeading: "Blocks", column: "Slot" },
     // { origin: "/blocks", input: "20345", tableHeading: "Blocks", column: "Slot" },
   ];
 
   exact_searches.forEach(({ origin, input, tableHeading, column }) =>
     it(`works on ${origin} page when searching column '${column}'`, () => {
-      /* 
+      /*
         Sufficiently "tall" viewport to display many rows per table.
-        We want to see that the search bar is filtering results.  
+        We want to see that the search bar is filtering results.
       */
       cy.viewport(768, 2000);
       cy.visit(origin);

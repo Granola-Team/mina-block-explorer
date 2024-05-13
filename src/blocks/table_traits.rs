@@ -1,7 +1,6 @@
 use super::{
     functions::*,
     graphql::blocks_query::{BlocksQueryBlocks, BlocksQueryBlocksTransactionsUserCommands},
-    models::*,
 };
 use crate::{
     blocks::graphql::blocks_query::{
@@ -123,62 +122,6 @@ impl TableData for Vec<Option<BlocksQueryBlocksTransactionsUserCommands>> {
                     ),
                 ],
                 None => vec![],
-            })
-            .collect()
-    }
-}
-
-impl TableData for SummaryPageBlocksQueryBlocks {
-    fn get_columns(&self) -> Vec<String> {
-        shared_get_columns()
-    }
-
-    fn get_exact_search_columns(&self) -> Vec<String> {
-        ["Height", "State Hash", "Slot", "Block Producer"]
-            .iter()
-            .map(|slc| slc.to_string())
-            .collect::<Vec<_>>()
-    }
-
-    fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
-        self.0
-            .iter()
-            .filter_map(|block_opt| block_opt.as_ref())
-            .map(|block| {
-                vec![
-                    convert_array_to_span(vec![
-                        convert_to_status_bubble(get_canonical(block), None),
-                        convert_to_span(get_block_height(block)),
-                    ]),
-                    convert_to_link(
-                        get_state_hash(block),
-                        format!("/blocks/{}/spotlight", get_state_hash(block)),
-                    ),
-                    convert_to_pill(get_slot(block), ColorVariant::Grey),
-                    convert_array_to_span(vec![
-                        convert_to_span(print_time_since(&get_date_time(block))),
-                        convert_to_span(get_date_time(block))
-                            .attr("class", "block text-xs font-light text-slate-400"),
-                    ])
-                    .attr("class", "block"),
-                    convert_to_link(
-                        get_creator_account(block),
-                        format!("/summary/accounts/{}", get_creator_account(block)),
-                    ),
-                    decorate_with_currency_tag(get_coinbase(block), "mina".to_string()),
-                    convert_to_pill(
-                        get_transaction_count(block).map_or_else(String::new, |o| o.to_string()),
-                        ColorVariant::Blue,
-                    ),
-                    convert_to_pill(
-                        get_snark_job_count(block).map_or_else(String::new, |o| o.to_string()),
-                        ColorVariant::Blue,
-                    ),
-                    convert_to_link(
-                        get_coinbase_receiver(block),
-                        format!("/summary/accounts/{}", get_coinbase_receiver(block)),
-                    ),
-                ]
             })
             .collect()
     }

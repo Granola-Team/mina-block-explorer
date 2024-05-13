@@ -79,8 +79,6 @@ suite(["@CI"], "pagination", () => {
     `/blocks/${DEFAULT_CANONICAL_BLOCK_HASH}/user-commands`,
     `/blocks/${DEFAULT_CANONICAL_BLOCK_HASH}/internal-commands`,
     `/blocks/${DEFAULT_CANONICAL_BLOCK_HASH}/snark-jobs`,
-    "/",
-    "/summary",
     "/blocks",
   ].forEach((page) =>
     it(`works on ${page}`, () => {

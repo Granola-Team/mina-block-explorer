@@ -5,7 +5,7 @@ use crate::{
     },
     blocks::page::{
         BlockAnalyticsTab, BlockInternalCommandsTab, BlockSnarkJobsTab, BlockSpotlightTab,
-        BlockTabbedPage, BlockUserCommandsTab, LatestBlocksPage,
+        BlockTabbedPage, BlockUserCommandsTab,
     },
     broadcast::page::{
         BroadcastDelegationPage, BroadcastFromLedgerPage, BroadcastTransactionPage,
@@ -36,10 +36,9 @@ pub fn Root() -> impl IntoView {
             <GlobalSearchBar/>
             <main>
                 <Routes>
-                    <Route path="/summary" view=SummaryPage>
-                        <Route path="accounts/:id" view=AccountDialogView/>
-                        <Route path="/*any" view=|| ().into_view()/>
-                    </Route>
+                    // redirect any non-existent URL back to the blocks page
+                    <Route path="/*" view=move || view! { <Redirect path="/blocks"/> } />
+
                     <Route path="/addresses" view=AddressesTabbedPage>
                         <Route path="" view=AccountsPage/>
                         <Route path="/accounts" view=AccountsPage/>
@@ -69,9 +68,10 @@ pub fn Root() -> impl IntoView {
                         <Route path="/zk-apps/:id" view=ZkAppSpotlight/>
                         <Route path="/*any" view=AccountsPage/>
                     </Route>
-                    <Route path="/blocks" view=LatestBlocksPage>
-                        <Route path="accounts/:id" view=AccountDialogView/>
-                        <Route path="/*any" view=|| ().into_view()/>
+
+                    <Route path="/blocks" view=SummaryPage>
+                        <Route path="/accounts/:id" view=AccountDialogView/>
+                        <Route path="/*" view=|| ().into_view()/>
                     </Route>
                     <Route path="/blocks/:id" view=BlockTabbedPage>
                         <Route path="/spotlight" view=BlockSpotlightTab/>
@@ -118,7 +118,6 @@ pub fn Root() -> impl IntoView {
                         <Route path="/ledger" view=BroadcastFromLedgerPage/>
                         <Route path="/*any" view=BroadcastTransactionPage/>
                     </Route>
-                    <Route path="/*any" view=SummaryPage/>
                 </Routes>
             </main>
             <Footer/>

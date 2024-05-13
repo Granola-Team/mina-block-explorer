@@ -57,7 +57,7 @@ suite([""], "account transactions table", () => {
 });
 
 suite(["@CI"], "account activity transactions", () => {
-  let pages = [`/summary/accounts/${DEFAULT_ACCOUNT_PK}`];
+  let pages = [`/blocks/accounts/${DEFAULT_ACCOUNT_PK}`];
   let columns = ["Hash", "Direction", "Counterparty", "Amount/Fee"];
 
   pages.forEach((page) =>
@@ -69,7 +69,7 @@ suite(["@CI"], "account activity transactions", () => {
 });
 
 suite(["@CI"], "blocks table", () => {
-  let pages = ["/blocks", "/summary", "/"];
+  let pages = ["/blocks"];
   let columns = [
     "Height",
     "State Hash",

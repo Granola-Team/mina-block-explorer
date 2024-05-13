@@ -41,8 +41,6 @@ suite(["@CI"], "meta title", () => {
     },
     { url: "/staking-ledgers?epoch=71", title: "Staking Ledger | Epoch 71" },
     { url: "/snarks", title: "SNARKs | Search For SNARKs" },
-    { url: "/", title: "Mina Blockchain Explorer | Search For Blocks" },
-    { url: "/summary", title: "Mina Blockchain Explorer | Search For Blocks" },
     {
       url: `/commands/${txn_hash}`,
       title: "Transaction Overview | WeStake.Club payout #72",

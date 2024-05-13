@@ -4,7 +4,7 @@ suite(["@CI"], "account page", () => {
   let pages = [
     {
       origin:
-        "/summary/accounts/B62qqW8uKTxHZueKJwsoPY8NZcKVeDK4bLEHRkpMM2uKtEmmqLbkiQC",
+        "/blocks/accounts/B62qqW8uKTxHZueKJwsoPY8NZcKVeDK4bLEHRkpMM2uKtEmmqLbkiQC",
       column: "Counterparty",
       tableHeader: "User Commands",
       tableHeaderEl: "h2",

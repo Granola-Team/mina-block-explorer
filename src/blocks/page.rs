@@ -5,15 +5,6 @@ use leptos_meta::Title;
 use leptos_router::*;
 
 #[component]
-pub fn LatestBlocksPage() -> impl IntoView {
-    view! {
-        <Title text="Blocks | Search for Mina Blocks"/>
-        <PageContainer>
-            <BlocksSection/>
-        </PageContainer>
-    }
-}
-#[component]
 pub fn BlockSpotlightTab() -> impl IntoView {
     view! {
         <Title text="Block Overview | Spotlight"/>
