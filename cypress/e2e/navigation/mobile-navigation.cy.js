@@ -14,7 +14,7 @@ suite(["@CI"], "mobile menu", () => {
     }),
   );
 
-  it.only("has all menu items visible", () => {
+  it("has all menu items visible", () => {
     cy.get("a.nav-link span").each(($el) => {
       cy.wrap($el).should("be.visible");
     });
