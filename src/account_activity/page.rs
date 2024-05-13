@@ -225,18 +225,7 @@ pub fn AccountSpotlightPage() -> impl IntoView {
                     <AccountOverviewSnarkJobTable snarks_sig=snarks/>
                 </AppSubSection>
                 <AppSubSection heading="Block Production" position=SubSectionPosition::Right>
-                    {move || match blocks.get() {
-                        Some(blocks) => {
-                            view! {
-                                <AccountOverviewBlocksTable
-                                    blocks
-                                    public_key=memo_params_map.get().get("id").cloned()
-                                />
-                            }
-                        }
-                        None => view! { <DeprecatedTable data=DeprecatedLoadingPlaceholder {}/> },
-                    }}
-
+                    <AccountOverviewBlocksTable blocks_sig=blocks/>
                 </AppSubSection>
             </SubSectionContainer>
         </PageContainer>

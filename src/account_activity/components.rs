@@ -423,48 +423,108 @@ pub fn AccountOverviewSnarkJobTable(
 
 #[component]
 pub fn AccountOverviewBlocksTable(
-    blocks: Vec<Option<AccountActivityQueryBlocks>>,
-    #[prop(into)] public_key: Option<String>,
+    blocks_sig: ReadSignal<Option<Vec<Option<AccountActivityQueryBlocks>>>>,
 ) -> impl IntoView {
+    let memo_params_map = use_params_map();
     let (href, _set_href) = create_signal(
-        public_key
+        memo_params_map
+            .get()
+            .get("id")
             .as_ref()
-            .map(|pk| format!("/blocks?account={}", pk))
-            .unwrap_or_else(|| "/blocks".to_string()),
+            .map(|pk| format!("/snarks?account={}", pk))
+            .unwrap_or_else(|| "/snarks".to_string()),
     );
 
     let records_per_page = 5;
     let (current_page, set_current_page) = create_signal(1);
+
+    let table_columns = vec![
+        TableColumn {
+            column: "Height".to_string(),
+            is_searchable: true,
+        },
+        TableColumn {
+            column: "State Hash".to_string(),
+            is_searchable: true,
+        },
+        TableColumn {
+            column: "Slot".to_string(),
+            is_searchable: true,
+        },
+        TableColumn {
+            column: "Age".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "Block Producer".to_string(),
+            is_searchable: true,
+        },
+        TableColumn {
+            column: "Coinbase".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "User Commands".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "Snarks".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "Coinbase Receiver".to_string(),
+            is_searchable: false,
+        },
+    ];
+    let table_cols_length = table_columns.len();
+
     view! {
-        {move || match blocks.len() {
-            0 => {
-                view! { <EmptyTable message="This public key has no block production"/> }
-            }
-            _ => {
-                {
-                    let pag = build_pagination(
-                        blocks.len(),
-                        records_per_page,
-                        current_page.get(),
-                        set_current_page,
-                        None,
-                        None,
-                    );
-                    let blocks_subset = get_subset(
-                        &blocks,
-                        records_per_page,
-                        current_page.get() - 1,
-                    );
-                    view! {
-                        <DeprecatedTable data=blocks_subset pagination=pag/>
-                        <TableLink href=href.get() text="See all block production">
-                            <BlockIcon/>
-                        </TableLink>
+        <TableContainer>
+            <Table>
+                <TableHeader columns=table_columns/>
+                {move || match blocks_sig.get() {
+                    None => {
+                        view! {
+                            <TableRows data=vec![vec![LoadingPlaceholder; table_cols_length]; 10]/>
+                        }
                     }
-                }
-                    .into_view()
-            }
-        }}
+                    Some(blocks) => {
+                        let pag = build_pagination(
+                            blocks.len(),
+                            records_per_page,
+                            current_page.get(),
+                            set_current_page,
+                            None,
+                            None,
+                        );
+                        let blocks_subset = blocks[pag
+                                .start_index()..std::cmp::min(
+                                pag.end_index() + 1,
+                                pag.total_records,
+                            )]
+                            .to_vec();
+                        view! { <TableRows data=blocks_subset/> }
+                    }
+                }}
+
+            </Table>
+            {move || {
+                let length = blocks_sig.get().and_then(|s| Some(s.len())).unwrap_or(0);
+                let pag = build_pagination(
+                    length,
+                    records_per_page,
+                    current_page.get(),
+                    set_current_page,
+                    None,
+                    None,
+                );
+                view! { <Pagination pagination=pag/> }
+            }}
+
+            <TableLink href=href.get() text="See all block production">
+                <BlockIcon/>
+            </TableLink>
+        </TableContainer>
     }
 }
 
