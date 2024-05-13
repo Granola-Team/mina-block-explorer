@@ -2,7 +2,7 @@ import { DEFAULT_ACCOUNT_PK } from "../constants";
 
 suite(["@CI"], "dialog", () => {
   beforeEach(() => {
-    cy.visit(`/summary/accounts/${DEFAULT_ACCOUNT_PK}`);
+    cy.visit(`/blocks/accounts/${DEFAULT_ACCOUNT_PK}`);
   });
 
   it(`has correct sections`, () => {

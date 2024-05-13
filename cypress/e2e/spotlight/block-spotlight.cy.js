@@ -31,14 +31,14 @@ suite(["@CI"], "Block spotlight", () => {
     cy.visit(`/blocks/${stateHash}/spotlight`);
     cy.testSpotlight("Block Spotlight", stateHash, expected_fields);
 
-    cy.get(`a[href="/blocks/${stateHash}/user-commands"]`).click();
+    cy.get(`a[href="/blocks/${stateHash}/commands/user"]`).click();
     cy.tableHasMoreThanNRows("User Commands", minUserCommands);
 
     cy.get(`a[href="/blocks/${stateHash}/snark-jobs"]`).click();
     cy.tableHasMoreThanNRows("SNARK Jobs", minSnarkJobs);
     cy.tableColumnValuesEqual("SNARK Jobs", "Hash", stateHash);
 
-    cy.get(`a[href="/blocks/${stateHash}/internal-commands"]`).click();
+    cy.get(`a[href="/blocks/${stateHash}/commands/internal"]`).click();
     cy.tableHasMoreThanNRows("Internal Commands", minInternalCommands);
   }
 

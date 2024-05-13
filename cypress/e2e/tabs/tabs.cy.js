@@ -1,14 +1,14 @@
 suite(["@CI"], "tab", () => {
   let tabs = [
     {
-      page: "/commands/internal-commands",
+      page: "/commands/internal",
       tab: "User Commands",
-      expectedUrl: "/commands/user-commands",
+      expectedUrl: "/commands/user",
     },
     {
-      page: "/commands/user-commands",
+      page: "/commands/user",
       tab: "Internal Commands",
-      expectedUrl: "/commands/internal-commands",
+      expectedUrl: "/commands/internal",
     },
   ];
 

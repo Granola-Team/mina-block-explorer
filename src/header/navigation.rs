@@ -11,13 +11,13 @@ pub fn Header() -> impl IntoView {
 
     let mut txn_entries = Some(vec![
         NavEntry {
-            href: "/commands/user-commands".to_string(),
+            href: "/commands/user".to_string(),
             text: "User Commands".to_string(),
             icon: NavIcon::Transactions,
             ..Default::default()
         },
         NavEntry {
-            href: "/commands/internal-commands".to_string(),
+            href: "/commands/internal".to_string(),
             text: "Internal Commands".to_string(),
             icon: NavIcon::Transactions,
             ..Default::default()
@@ -79,7 +79,7 @@ pub fn Header() -> impl IntoView {
             ..Default::default()
         },
         NavEntry {
-            href: "/commands/user-commands".to_string(),
+            href: "/commands/user".to_string(),
             text: "Transactions".to_string(),
             icon: NavIcon::Transactions,
             sub_entries: txn_entries,

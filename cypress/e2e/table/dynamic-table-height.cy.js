@@ -6,7 +6,7 @@ suite(["@CI"], "table of dynamic height", () => {
     { url: "/", tableHeading: "Blocks" },
     { url: "/blocks", tableHeading: "Blocks" },
     {
-      url: `/blocks/${DEFAULT_CANONICAL_BLOCK_HASH}/user-commands`,
+      url: `/blocks/${DEFAULT_CANONICAL_BLOCK_HASH}/commands/user`,
       tableHeading: "User Commands",
     },
     {
@@ -14,14 +14,14 @@ suite(["@CI"], "table of dynamic height", () => {
       tableHeading: "SNARK Jobs",
     },
     {
-      url: `/blocks/${DEFAULT_CANONICAL_BLOCK_HASH}/internal-commands`,
+      url: `/blocks/${DEFAULT_CANONICAL_BLOCK_HASH}/commands/internal`,
       tableHeading: "Internal Commands",
     },
 
-    { url: "/commands/user-commands", tableHeading: "User Commands" },
+    { url: "/commands/user", tableHeading: "User Commands" },
 
     {
-      url: "/commands/internal-commands",
+      url: "/commands/internal",
       tableHeading: "Internal Commands",
     },
 

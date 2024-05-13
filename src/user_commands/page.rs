@@ -12,13 +12,13 @@ use leptos_router::*;
 pub fn CommandsTabbedPage() -> impl IntoView {
     let mut tabs = vec![
         NavEntry {
-            href: "/commands/user-commands".to_string(),
+            href: "/commands/user".to_string(),
             text: "User Commands".to_string(),
             icon: NavIcon::Transactions,
             ..Default::default()
         },
         NavEntry {
-            href: "/commands/internal-commands".to_string(),
+            href: "/commands/internal".to_string(),
             text: "Internal Commands".to_string(),
             icon: NavIcon::Transactions,
             ..Default::default()

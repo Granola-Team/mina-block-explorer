@@ -1,5 +1,5 @@
 suite(["@CI"], "account dialog", () => {
-  let pages_with_account_dialog = ["/summary", "/blocks"];
+  let pages_with_account_dialog = ["/blocks"];
 
   let columns = ["Block Producer", "Coinbase Receiver"];
 
