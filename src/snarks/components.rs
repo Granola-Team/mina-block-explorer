@@ -13,7 +13,7 @@ pub fn AccountDialogSnarkJobSection(snarks: Vec<Option<SnarksQuerySnarks>>) -> i
     view! {
         <AccountDialogSectionContainer
             title=String::from("SNARK Jobs")
-            showing_message=format!("Showing latest {} SNARK jobs", snarks_inner.len())
+            showing_message=format!("{} most recent SNARK jobs", snarks_inner.len())
         >
 
             <Show

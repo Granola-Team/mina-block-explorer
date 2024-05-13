@@ -32,68 +32,111 @@ fn NextStakesPageContents() -> impl IntoView {
     let page_dim = use_context::<ReadSignal<PageDimensions>>()
         .expect("there to be a `PageDimensions` signal provided");
     let (current_page, set_current_page) = create_signal(1);
+
+    let get_data_and_pagination = move || {
+        resource.get().and_then(|res| res.ok()).map(|data| {
+            let pag = build_pagination(
+                data.nextstakes.len(),
+                TABLE_DEFAULT_PAGE_SIZE,
+                current_page.get(),
+                set_current_page,
+                page_dim.get().height.map(|h| h as usize),
+                Some(Box::new(|container_height: usize| {
+                    (container_height - DEFAULT_ESTIMATED_NON_TABLE_SPACE_IN_SECTIONS)
+                        / ESTIMATED_ROW_HEIGHT
+                })),
+            );
+            (data, pag)
+        })
+    };
+
+    let table_columns = vec![
+        TableColumn {
+            column: "Key".to_string(),
+            is_searchable: true,
+        },
+        TableColumn {
+            column: "Stake".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "Delegate".to_string(),
+            is_searchable: true,
+        },
+        TableColumn {
+            column: "Delegators".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "Ledger Hash".to_string(),
+            is_searchable: false,
+        },
+    ];
+    let table_cols_length = table_columns.len();
+
     view! {
         <ErrorBoundary fallback=move |_| ().into_view()>
-            <Suspense fallback=move || {
-                view! {
-                    <TableSection
-                        section_heading="Next Staking Ledger"
-                        controls=move || ().into_view()
-                    >
-                        <DeprecatedTable data=DeprecatedLoadingPlaceholder {}/>
-                    </TableSection>
+            <TableSection
+                section_heading="Next Staking Ledger"
+                controls=move || {
+                    view! {
+                        <EpochButton
+                            href="/staking-ledgers"
+                            text="Previous"
+                            style_variant=EpochStyleVariant::Secondary
+                        />
+                        <EpochButton
+                            text="Next"
+                            disabled=true
+                            style_variant=EpochStyleVariant::Primary
+                        />
+                    }
                 }
-            }>
-                {move || {
-                    resource
-                        .get()
-                        .and_then(|res| res.ok())
-                        .map(|data| {
-                            let pag = build_pagination(
-                                data.nextstakes.len(),
-                                TABLE_DEFAULT_PAGE_SIZE,
-                                current_page.get(),
-                                set_current_page,
-                                page_dim.get().height.map(|h| h as usize),
-                                Some(
-                                    Box::new(|container_height: usize| {
-                                        (container_height
-                                            - DEFAULT_ESTIMATED_NON_TABLE_SPACE_IN_SECTIONS)
-                                            / ESTIMATED_ROW_HEIGHT
-                                    }),
-                                ),
-                            );
-                            let subset = get_subset(
-                                &data.nextstakes,
-                                pag.records_per_page,
-                                current_page.get() - 1,
-                            );
+            >
+
+                <TableContainer>
+                    <Table>
+                        <TableHeader columns=table_columns/>
+                        <Suspense fallback=move || {
                             view! {
-                                <TableSection
-                                    section_heading="Next Staking Ledger"
-                                    controls=move || {
-                                        view! {
-                                            <EpochButton
-                                                href="/staking-ledgers"
-                                                text="Previous"
-                                                style_variant=EpochStyleVariant::Secondary
-                                            />
-                                            <EpochButton
-                                                text="Next"
-                                                disabled=true
-                                                style_variant=EpochStyleVariant::Primary
-                                            />
-                                        }
-                                    }
-                                >
-
-                                    <DeprecatedTable data=subset pagination=pag/>
-                                </TableSection>
+                                <TableRows data=vec![
+                                    vec![LoadingPlaceholder; table_cols_length];
+                                    10
+                                ]/>
                             }
-                        })
-                }}
+                        }>
+                            {move || {
+                                get_data_and_pagination()
+                                    .map(|(data, pag)| {
+                                        view! {
+                                            <TableRows data=data
+                                                .nextstakes[pag
+                                                    .start_index()..std::cmp::min(
+                                                    pag.end_index() + 1,
+                                                    pag.total_records,
+                                                )]
+                                                .to_vec()/>
+                                        }
+                                    })
+                            }}
 
-            </Suspense>
+                        </Suspense>
+                    </Table>
+                    <Suspense fallback=move || {
+                        view! {
+                            <TableRows data=vec![vec![LoadingPlaceholder; table_cols_length]; 10]/>
+                        }
+                    }>
+                        {move || {
+                            get_data_and_pagination()
+                                .map(|(_, pag)| {
+                                    view! { <Pagination pagination=pag/> }
+                                })
+                        }}
+
+                    </Suspense>
+                </TableContainer>
+            </TableSection>
         </ErrorBoundary>
     }
 }
