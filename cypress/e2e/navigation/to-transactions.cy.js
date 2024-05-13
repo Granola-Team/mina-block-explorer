@@ -13,7 +13,7 @@ suite([], "transaction spotlight", () => {
     { origin: "/commands", column: "Hash", tableHeader: "User Commands" },
     {
       origin:
-        "/blocks/3NKnLbpRcFaY9WSzLFa4wYxejhnWBQNEPA2cnesvS75wcuNCr8nA/user-commands",
+        "/blocks/3NKnLbpRcFaY9WSzLFa4wYxejhnWBQNEPA2cnesvS75wcuNCr8nA/commands/user",
       column: "Hash",
       tableHeader: "User Commands",
     },

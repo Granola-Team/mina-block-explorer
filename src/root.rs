@@ -37,10 +37,10 @@ pub fn Root() -> impl IntoView {
             <main>
                 <Routes>
                     // redirect any non-existent URL back to the blocks page
-                    <Route path="/*" view=move || view! { <Redirect path="/blocks"/> } />
+                    <Route path="/*" view=move || view! { <Redirect path="/blocks"/> }/>
 
                     <Route path="/addresses" view=AddressesTabbedPage>
-                        <Route path="" view=AccountsPage/>
+                        <Route path="/*" view=move || view! { <Redirect path="accounts"/> }/>
                         <Route path="/accounts" view=AccountsPage/>
                         <Route path="/accounts/:id" view=AccountSpotlightPage/>
                         <Route
@@ -66,7 +66,6 @@ pub fn Root() -> impl IntoView {
                         />
 
                         <Route path="/zk-apps/:id" view=ZkAppSpotlight/>
-                        <Route path="/*any" view=AccountsPage/>
                     </Route>
 
                     <Route path="/blocks" view=SummaryPage>
@@ -74,17 +73,18 @@ pub fn Root() -> impl IntoView {
                         <Route path="/*" view=|| ().into_view()/>
                     </Route>
                     <Route path="/blocks/:id" view=BlockTabbedPage>
+                        <Route path="/*" view=move || view! { <Redirect path="spotlight"/> }/>
                         <Route path="/spotlight" view=BlockSpotlightTab/>
-                        <Route path="/user-commands" view=BlockUserCommandsTab/>
                         <Route path="/snark-jobs" view=BlockSnarkJobsTab/>
-                        <Route path="/internal-commands" view=BlockInternalCommandsTab/>
+                        <Route path="/commands/user" view=BlockUserCommandsTab/>
+                        <Route path="/commands/internal" view=BlockInternalCommandsTab/>
                         <Route path="/analytics" view=BlockAnalyticsTab/>
-                        <Route path="/*any" view=BlockSpotlightTab/>
                     </Route>
+
                     <Route path="/commands" view=CommandsTabbedPage>
-                        <Route path="/" view=UserCommandsPage/>
-                        <Route path="/user-commands" view=UserCommandsPage/>
-                        <Route path="/internal-commands" view=InternalCommandsTab/>
+                        <Route path="*" view=move || view! { <Redirect path="user"/> }/>
+                        <Route path="/user" view=UserCommandsPage/>
+                        <Route path="/internal" view=InternalCommandsTab/>
                         <Route
                             path="/zk-app"
                             view=move || {
@@ -110,13 +110,16 @@ pub fn Root() -> impl IntoView {
                     />
 
                     <Route path="/snarks" view=SnarksPage/>
+
                     <Route path="/staking-ledgers" view=StakesPage/>
+
                     <Route path="/next-stakes" view=NextStakesPage/>
+
                     <Route path="/broadcast" view=DelegationTabbedPage>
+                        <Route path="/*" view=move || view! { <Redirect path="transaction"/> }/>
                         <Route path="/transaction" view=BroadcastTransactionPage/>
                         <Route path="/delegation" view=BroadcastDelegationPage/>
                         <Route path="/ledger" view=BroadcastFromLedgerPage/>
-                        <Route path="/*any" view=BroadcastTransactionPage/>
                     </Route>
                 </Routes>
             </main>

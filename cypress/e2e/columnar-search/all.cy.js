@@ -94,25 +94,25 @@ suite(["@CI"], "search with multiple results", () => {
       expectation: { column: "Prover", value: DEFAULT_ACCOUNT_PK },
     },
     {
-      origin: "/commands/user-commands",
+      origin: "/commands/user",
       tableHeading: "User Commands",
       input: "350137",
       expectation: { column: "Height", value: "350137" },
     },
     {
-      origin: "/commands/user-commands",
+      origin: "/commands/user",
       tableHeading: "User Commands",
       input: DEFAULT_ACCOUNT_PK,
       expectation: { column: "From", value: DEFAULT_ACCOUNT_PK },
     },
     {
-      origin: "/commands/user-commands",
+      origin: "/commands/user",
       tableHeading: "User Commands",
       input: DEFAULT_ACCOUNT_PK,
       expectation: { column: "To", value: DEFAULT_ACCOUNT_PK },
     },
     {
-      origin: "/commands/internal-commands",
+      origin: "/commands/internal",
       input: DEFAULT_ACCOUNT_PK,
       tableHeading: "Internal Commands",
       expectation: { column: "Recipient", value: DEFAULT_ACCOUNT_PK },
@@ -170,7 +170,7 @@ suite(["@CI"], "search with single result", () => {
       column: "Key",
     },
     {
-      origin: "/commands/user-commands",
+      origin: "/commands/user",
       input: "CkpZuatq9Q4CC39FbMbJVZucBmzwyJySvWXGq3s3JtX5Wr2ccpMMN",
       tableHeading: "User Commands",
       column: "Txn Hash",

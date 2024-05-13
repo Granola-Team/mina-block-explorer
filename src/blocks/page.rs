@@ -80,7 +80,7 @@ pub fn BlockTabbedPage() -> impl IntoView {
                 ..Default::default()
             },
             NavEntry {
-                href: format!("/blocks/{}/user-commands", id()),
+                href: format!("/blocks/{}/commands/user", id()),
                 text: "User Commands".to_string(),
                 icon: NavIcon::Transactions,
                 number_bubble: option_block.get().as_ref().and_then(get_transaction_count),
@@ -96,7 +96,7 @@ pub fn BlockTabbedPage() -> impl IntoView {
                 disabled: false,
             },
             NavEntry {
-                href: format!("/blocks/{}/internal-commands", id()),
+                href: format!("/blocks/{}/commands/internal", id()),
                 text: "Internal Commands".to_string(),
                 icon: NavIcon::FeeTransfers,
                 number_bubble: option_block

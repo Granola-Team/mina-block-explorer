@@ -52,24 +52,24 @@ suite(["@CI"], "account page", () => {
       tableHeader: "Next Staking Ledger",
     },
     {
-      origin: "/commands/user-commands",
+      origin: "/commands/user",
       column: "From",
       tableHeader: "User Commands",
     },
     {
-      origin: "/commands/user-commands",
+      origin: "/commands/user",
       column: "To",
       tableHeader: "User Commands",
     },
     {
       origin:
-        "/blocks/3NKnLbpRcFaY9WSzLFa4wYxejhnWBQNEPA2cnesvS75wcuNCr8nA/user-commands",
+        "/blocks/3NKnLbpRcFaY9WSzLFa4wYxejhnWBQNEPA2cnesvS75wcuNCr8nA/commands/user",
       column: "From",
       tableHeader: "User Commands",
     },
     {
       origin:
-        "/blocks/3NKnLbpRcFaY9WSzLFa4wYxejhnWBQNEPA2cnesvS75wcuNCr8nA/user-commands",
+        "/blocks/3NKnLbpRcFaY9WSzLFa4wYxejhnWBQNEPA2cnesvS75wcuNCr8nA/commands/user",
       column: "To",
       tableHeader: "User Commands",
     },
@@ -81,7 +81,7 @@ suite(["@CI"], "account page", () => {
     },
     {
       origin:
-        "/blocks/3NLXaJBYriRYe8LQUNwgSFsUvuikjkL8SDo1MHKRYsfRA4FjCsEv/internal-commands",
+        "/blocks/3NLXaJBYriRYe8LQUNwgSFsUvuikjkL8SDo1MHKRYsfRA4FjCsEv/commands/internal",
       column: "Recipient",
       tableHeader: "Internal Commands",
     },

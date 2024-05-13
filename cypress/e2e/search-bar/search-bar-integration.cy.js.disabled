@@ -12,7 +12,7 @@ suite(["@CI"], "search with multiple results", () => {
       },
     },
     {
-      origin: "/commands/internal-commands",
+      origin: "/commands/internal",
       input: DEFAULT_RECIPIENT,
       tableHeading: "Internal Commands",
       expectation: { column: "Recipient", value: DEFAULT_RECIPIENT },
@@ -50,7 +50,7 @@ suite(["@CI"], "search with single result", () => {
     { origin: "/blocks", input: block_hash, tableHeading: "Blocks" },
     { origin: "/blocks", input: "H20345", tableHeading: "Blocks" },
     {
-      origin: "/commands/user-commands",
+      origin: "/commands/user",
       input: state_hash,
       tableHeading: "User Commands",
     },
