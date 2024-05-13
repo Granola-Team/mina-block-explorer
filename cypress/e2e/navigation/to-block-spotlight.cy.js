@@ -3,7 +3,7 @@ import { DEFAULT_ACCOUNT_PK } from "../constants";
 suite(["@CI"], "block spotlight", () => {
   [
     {
-      origin: "/summary",
+      origin: "/blocks",
       selector: 'a[href^="/blocks/"]:not(a[href^="/blocks/account"])',
     },
     {

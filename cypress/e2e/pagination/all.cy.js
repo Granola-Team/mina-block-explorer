@@ -74,13 +74,11 @@ suite(["@CI"], "pagination", () => {
     "/next-stakes",
     "/stakes",
     "/snarks",
-    "/commands/internal-commands",
-    "/commands/user-commands",
-    `/blocks/${DEFAULT_CANONICAL_BLOCK_HASH}/user-commands`,
-    `/blocks/${DEFAULT_CANONICAL_BLOCK_HASH}/internal-commands`,
+    "/commands/internal",
+    "/commands/user",
+    `/blocks/${DEFAULT_CANONICAL_BLOCK_HASH}/commands/user`,
+    `/blocks/${DEFAULT_CANONICAL_BLOCK_HASH}/commands/internal`,
     `/blocks/${DEFAULT_CANONICAL_BLOCK_HASH}/snark-jobs`,
-    "/",
-    "/summary",
     "/blocks",
   ].forEach((page) =>
     it(`works on ${page}`, () => {

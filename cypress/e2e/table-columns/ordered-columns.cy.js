@@ -1,7 +1,7 @@
 import { DEFAULT_ACCOUNT_PK } from "../constants";
 
 suite(["@CI"], "transactions table", () => {
-  let pages = ["/commands/user-commands"];
+  let pages = ["/commands/user"];
   let columns = [
     "Height",
     "Txn Hash",
@@ -23,7 +23,7 @@ suite(["@CI"], "transactions table", () => {
 });
 
 suite(["@CI"], "internal commands table", () => {
-  let pages = ["/commands/internal-commands"];
+  let pages = ["/commands/internal"];
   let columns = ["Recipient", "Fee", "Type", "Age"];
 
   pages.forEach((page) =>
@@ -57,7 +57,7 @@ suite([""], "account transactions table", () => {
 });
 
 suite(["@CI"], "account activity transactions", () => {
-  let pages = [`/summary/accounts/${DEFAULT_ACCOUNT_PK}`];
+  let pages = [`/blocks/accounts/${DEFAULT_ACCOUNT_PK}`];
   let columns = ["Hash", "Direction", "Counterparty", "Amount/Fee"];
 
   pages.forEach((page) =>
@@ -69,7 +69,7 @@ suite(["@CI"], "account activity transactions", () => {
 });
 
 suite(["@CI"], "blocks table", () => {
-  let pages = ["/blocks", "/summary", "/"];
+  let pages = ["/blocks"];
   let columns = [
     "Height",
     "State Hash",
@@ -118,7 +118,7 @@ suite(["@CI"], "block spotlight snarks table", () => {
 
 suite(["@CI"], "internal commands table", () => {
   let pages = [
-    "/blocks/3NKyujsdi2GtWA1XC9KJ6nvXeLAd3DNvYrm1PUGEagj9899s1LMz/internal-commands",
+    "/blocks/3NKyujsdi2GtWA1XC9KJ6nvXeLAd3DNvYrm1PUGEagj9899s1LMz/commands/internal",
   ];
   let columns = ["Recipient", "Fee", "Type"];
 
