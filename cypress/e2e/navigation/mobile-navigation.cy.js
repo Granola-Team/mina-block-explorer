@@ -13,4 +13,10 @@ suite(["@CI"], "mobile menu", () => {
       cy.url().should("contain", url);
     }),
   );
+
+  it.only("has all menu items visible", () => {
+    cy.get("a.nav-link span").each(($el) => {
+      cy.wrap($el).should("be.visible");
+    });
+  });
 });
