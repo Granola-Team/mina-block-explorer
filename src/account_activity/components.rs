@@ -429,8 +429,8 @@ pub fn AccountOverviewBlocksTable(
             .get()
             .get("id")
             .as_ref()
-            .map(|pk| format!("/snarks?account={}", pk))
-            .unwrap_or_else(|| "/snarks".to_string()),
+            .map(|pk| format!("/blocks?account={}", pk))
+            .unwrap_or_else(|| "/blocks".to_string()),
     );
 
     let records_per_page = 5;
