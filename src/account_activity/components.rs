@@ -309,19 +309,17 @@ pub fn AccountTransactionsSection(
                     }}
 
                 </Table>
-                {move || match transactions_sig.get() {
-                    None => ().into_view(),
-                    Some(transactions) => {
-                        let pag = build_pagination(
-                            transactions.len(),
-                            records_per_page,
-                            current_page.get(),
-                            set_current_page,
-                            None,
-                            None,
-                        );
-                        view! { <Pagination pagination=pag/> }
-                    }
+                {move || {
+                    let length = transactions_sig.get().map(|s| s.len()).unwrap_or(0);
+                    let pag = build_pagination(
+                        length,
+                        records_per_page,
+                        current_page.get(),
+                        set_current_page,
+                        None,
+                        None,
+                    );
+                    view! { <Pagination pagination=pag/> }
                 }}
 
             </TableContainer>
@@ -402,7 +400,7 @@ pub fn AccountOverviewSnarkJobTable(
 
             </Table>
             {move || {
-                let length = snarks_sig.get().and_then(|s| Some(s.len())).unwrap_or(0);
+                let length = snarks_sig.get().map(|s| s.len()).unwrap_or(0);
                 let pag = build_pagination(
                     length,
                     records_per_page,
@@ -509,7 +507,7 @@ pub fn AccountOverviewBlocksTable(
 
             </Table>
             {move || {
-                let length = blocks_sig.get().and_then(|s| Some(s.len())).unwrap_or(0);
+                let length = blocks_sig.get().map(|s| s.len()).unwrap_or(0);
                 let pag = build_pagination(
                     length,
                     records_per_page,
