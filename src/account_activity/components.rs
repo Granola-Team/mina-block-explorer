@@ -7,15 +7,11 @@ use super::{
 };
 use crate::{
     account_activity::table_traits::BlockTrait,
-    common::{
-        components::*,
-        functions::*,
-        models::*,
-        table::{EmptyTable, *},
-    },
+    common::{components::*, functions::*, models::*, table::*},
     icons::*,
 };
 use leptos::*;
+use leptos_router::use_params_map;
 
 #[component]
 pub fn AccountDialogSectionContainer(
@@ -335,11 +331,13 @@ pub fn AccountTransactionsSection(
 
 #[component]
 pub fn AccountOverviewSnarkJobTable(
-    snarks: Vec<Option<AccountActivityQuerySnarks>>,
-    #[prop(into)] public_key: Option<String>,
+    snarks_sig: ReadSignal<Option<Vec<Option<AccountActivityQuerySnarks>>>>,
 ) -> impl IntoView {
+    let memo_params_map = use_params_map();
     let (href, _set_href) = create_signal(
-        public_key
+        memo_params_map
+            .get()
+            .get("id")
             .as_ref()
             .map(|pk| format!("/snarks?account={}", pk))
             .unwrap_or_else(|| "/snarks".to_string()),
@@ -348,30 +346,78 @@ pub fn AccountOverviewSnarkJobTable(
     let records_per_page = 5;
     let (current_page, set_current_page) = create_signal(1);
 
+    let table_columns = vec![
+        TableColumn {
+            column: "Height".to_string(),
+            is_searchable: true,
+        },
+        TableColumn {
+            column: "State Hash".to_string(),
+            is_searchable: true,
+        },
+        TableColumn {
+            column: "Age".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "Prover".to_string(),
+            is_searchable: true,
+        },
+        TableColumn {
+            column: "Fee".to_string(),
+            is_searchable: false,
+        },
+    ];
+    let table_cols_length = table_columns.len();
+
     view! {
-        {move || match snarks.len() {
-            0 => {
-                view! { <EmptyTable message="This public key has not completed any SNARK work"/> }
-            }
-            _ => {
+        <TableContainer>
+            <Table>
+                <TableHeader columns=table_columns/>
+                {move || match snarks_sig.get() {
+                    None => {
+                        view! {
+                            <TableRows data=vec![vec![LoadingPlaceholder; table_cols_length]; 10]/>
+                        }
+                    }
+                    Some(snarks) => {
+                        let pag = build_pagination(
+                            snarks.len(),
+                            records_per_page,
+                            current_page.get(),
+                            set_current_page,
+                            None,
+                            None,
+                        );
+                        view! {
+                            <TableRows data=snarks[pag
+                                    .start_index()..std::cmp::min(
+                                    pag.end_index() + 1,
+                                    pag.total_records,
+                                )]
+                                .to_vec()/>
+                        }
+                    }
+                }}
+
+            </Table>
+            {move || {
+                let length = snarks_sig.get().and_then(|s| Some(s.len())).unwrap_or(0);
                 let pag = build_pagination(
-                    snarks.len(),
+                    length,
                     records_per_page,
                     current_page.get(),
                     set_current_page,
                     None,
                     None,
                 );
-                let subset = get_subset(&snarks, records_per_page, current_page.get() - 1);
-                view! {
-                    <DeprecatedTable data=subset pagination=pag/>
-                    <TableLink href=href.get() text="See all snark jobs">
-                        <CheckCircleIcon/>
-                    </TableLink>
-                }
-                    .into_view()
-            }
-        }}
+                view! { <Pagination pagination=pag/> }
+            }}
+
+            <TableLink href=href.get() text="See all snark jobs">
+                <CheckCircleIcon/>
+            </TableLink>
+        </TableContainer>
     }
 }
 
