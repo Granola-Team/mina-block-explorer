@@ -117,7 +117,7 @@ pub fn Header() -> impl IntoView {
 
     let toggle = move |_| set_open.update(|value| *value = !*value);
 
-    let base_class = "md:[all:unset] bg-main-background scale-y-0 transition-transform origin-top w-screen text-left absolute top-full left-0";
+    let base_class = "md:[all:unset] bg-main-background scale-y-0 transition-transform origin-top w-screen text-left absolute top-full left-0 overflow-hidden";
     let open_class = "scale-y-100";
 
     view! {
@@ -146,7 +146,7 @@ pub fn Header() -> impl IntoView {
                                     {match sub_entries {
                                         Some(s_entries) => {
                                             view! {
-                                                <ul class="md:px-2 md:hidden md:absolute md:top-0 md:left-0 md:bg-main-background md:shadow-md md:translate-y-16 group-hover:block -translate-x-1/2">
+                                                <ul class="md:px-2 md:hidden md:absolute md:top-0 md:left-0 md:bg-main-background md:shadow-md md:translate-y-16 md:-translate-x-1/2 group-hover:block">
                                                     {s_entries
                                                         .into_iter()
                                                         .map(|sub_entry| {
