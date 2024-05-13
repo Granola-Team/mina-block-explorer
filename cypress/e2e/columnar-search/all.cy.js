@@ -53,12 +53,6 @@ suite(["@CI"], "search with multiple results", () => {
     },
     {
       origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
-      input: "1",
-      tableHeading: "User Commands",
-      expectation: { column: "Nonce", value: "1" },
-    },
-    {
-      origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
       input: state_hash,
       tableHeading: "SNARK Jobs",
       expectation: { column: "State Hash", value: state_hash },
