@@ -119,7 +119,7 @@ pub fn AccountDialogTransactionSection(
     view! {
         <AccountDialogSectionContainer
             title=String::from("User Commands")
-            showing_message=format!("Showing latest {} transactions", inner_transactions.len())
+            showing_message=format!("{} most recent transactions", inner_transactions.len())
         >
             <Show
                 when=has_transactions
@@ -536,7 +536,7 @@ pub fn AccountDialogBlocksSection(
     view! {
         <AccountDialogSectionContainer
             title=String::from("Block Production")
-            showing_message=format!("Showing latest {} blocks", blocks_inner.len())
+            showing_message=format!("{} most recent blocks", blocks_inner.len())
         >
             <Show
                 when=has_blocks
