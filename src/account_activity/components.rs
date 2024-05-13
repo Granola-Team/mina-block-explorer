@@ -7,15 +7,11 @@ use super::{
 };
 use crate::{
     account_activity::table_traits::BlockTrait,
-    common::{
-        components::*,
-        functions::*,
-        models::*,
-        table::{EmptyTable, *},
-    },
+    common::{components::*, functions::*, models::*, table::*},
     icons::*,
 };
 use leptos::*;
+use leptos_router::use_params_map;
 
 #[component]
 pub fn AccountDialogSectionContainer(
@@ -222,10 +218,46 @@ fn TransactionEntry(
 
 #[component]
 pub fn AccountTransactionsSection(
-    transactions: Vec<Option<AccountActivityQueryDirectionalTransactions>>,
+    transactions_sig: ReadSignal<Option<Vec<Option<AccountActivityQueryDirectionalTransactions>>>>,
 ) -> impl IntoView {
     let records_per_page = 10;
     let (current_page, set_current_page) = create_signal(1);
+
+    let table_columns = vec![
+        TableColumn {
+            column: "Height".to_string(),
+            is_searchable: true,
+        },
+        TableColumn {
+            column: "Txn Hash".to_string(),
+            is_searchable: true,
+        },
+        TableColumn {
+            column: "Nonce".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "Age".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "Type".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "Direction".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "Counterparty".to_string(),
+            is_searchable: true,
+        },
+        TableColumn {
+            column: "Amount/Fee".to_string(),
+            is_searchable: false,
+        },
+    ];
+    let table_cols_length = table_columns.len();
 
     view! {
         <TableSection
@@ -244,30 +276,66 @@ pub fn AccountTransactionsSection(
             }
         >
 
-            {move || {
-                let pag = build_pagination(
-                    transactions.len(),
-                    records_per_page,
-                    current_page.get(),
-                    set_current_page,
-                    None,
-                    None,
-                );
-                let subset = get_subset(&transactions, records_per_page, current_page.get() - 1);
-                view! { <DeprecatedTable data=subset pagination=pag/> }
-            }}
+            <TableContainer>
+                <Table>
+                    <TableHeader columns=table_columns/>
+                    {move || match transactions_sig.get() {
+                        None => {
+                            view! {
+                                <TableRows data=vec![
+                                    vec![LoadingPlaceholder; table_cols_length];
+                                    10
+                                ]/>
+                            }
+                        }
+                        Some(transactions) => {
+                            let pag = build_pagination(
+                                transactions.len(),
+                                records_per_page,
+                                current_page.get(),
+                                set_current_page,
+                                None,
+                                None,
+                            );
+                            view! {
+                                <TableRows data=transactions[pag
+                                        .start_index()..std::cmp::min(
+                                        pag.end_index() + 1,
+                                        pag.total_records,
+                                    )]
+                                    .to_vec()/>
+                            }
+                        }
+                    }}
 
+                </Table>
+                {move || {
+                    let length = transactions_sig.get().map(|s| s.len()).unwrap_or(0);
+                    let pag = build_pagination(
+                        length,
+                        records_per_page,
+                        current_page.get(),
+                        set_current_page,
+                        None,
+                        None,
+                    );
+                    view! { <Pagination pagination=pag/> }
+                }}
+
+            </TableContainer>
         </TableSection>
     }
 }
 
 #[component]
 pub fn AccountOverviewSnarkJobTable(
-    snarks: Vec<Option<AccountActivityQuerySnarks>>,
-    #[prop(into)] public_key: Option<String>,
+    snarks_sig: ReadSignal<Option<Vec<Option<AccountActivityQuerySnarks>>>>,
 ) -> impl IntoView {
+    let memo_params_map = use_params_map();
     let (href, _set_href) = create_signal(
-        public_key
+        memo_params_map
+            .get()
+            .get("id")
             .as_ref()
             .map(|pk| format!("/snarks?account={}", pk))
             .unwrap_or_else(|| "/snarks".to_string()),
@@ -276,40 +344,90 @@ pub fn AccountOverviewSnarkJobTable(
     let records_per_page = 5;
     let (current_page, set_current_page) = create_signal(1);
 
+    let table_columns = vec![
+        TableColumn {
+            column: "Height".to_string(),
+            is_searchable: true,
+        },
+        TableColumn {
+            column: "State Hash".to_string(),
+            is_searchable: true,
+        },
+        TableColumn {
+            column: "Age".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "Prover".to_string(),
+            is_searchable: true,
+        },
+        TableColumn {
+            column: "Fee".to_string(),
+            is_searchable: false,
+        },
+    ];
+    let table_cols_length = table_columns.len();
+
     view! {
-        {move || match snarks.len() {
-            0 => {
-                view! { <EmptyTable message="This public key has not completed any SNARK work"/> }
-            }
-            _ => {
+        <TableContainer>
+            <Table>
+                <TableHeader columns=table_columns/>
+                {move || match snarks_sig.get() {
+                    None => {
+                        view! {
+                            <TableRows data=vec![vec![LoadingPlaceholder; table_cols_length]; 10]/>
+                        }
+                    }
+                    Some(snarks) => {
+                        let pag = build_pagination(
+                            snarks.len(),
+                            records_per_page,
+                            current_page.get(),
+                            set_current_page,
+                            None,
+                            None,
+                        );
+                        view! {
+                            <TableRows data=snarks[pag
+                                    .start_index()..std::cmp::min(
+                                    pag.end_index() + 1,
+                                    pag.total_records,
+                                )]
+                                .to_vec()/>
+                        }
+                    }
+                }}
+
+            </Table>
+            {move || {
+                let length = snarks_sig.get().map(|s| s.len()).unwrap_or(0);
                 let pag = build_pagination(
-                    snarks.len(),
+                    length,
                     records_per_page,
                     current_page.get(),
                     set_current_page,
                     None,
                     None,
                 );
-                let subset = get_subset(&snarks, records_per_page, current_page.get() - 1);
-                view! {
-                    <DeprecatedTable data=subset pagination=pag/>
-                    <TableLink href=href.get() text="See all snark jobs">
-                        <CheckCircleIcon/>
-                    </TableLink>
-                }
-                    .into_view()
-            }
-        }}
+                view! { <Pagination pagination=pag/> }
+            }}
+
+            <TableLink href=href.get() text="See all snark jobs">
+                <CheckCircleIcon/>
+            </TableLink>
+        </TableContainer>
     }
 }
 
 #[component]
 pub fn AccountOverviewBlocksTable(
-    blocks: Vec<Option<AccountActivityQueryBlocks>>,
-    #[prop(into)] public_key: Option<String>,
+    blocks_sig: ReadSignal<Option<Vec<Option<AccountActivityQueryBlocks>>>>,
 ) -> impl IntoView {
+    let memo_params_map = use_params_map();
     let (href, _set_href) = create_signal(
-        public_key
+        memo_params_map
+            .get()
+            .get("id")
             .as_ref()
             .map(|pk| format!("/blocks?account={}", pk))
             .unwrap_or_else(|| "/blocks".to_string()),
@@ -317,36 +435,94 @@ pub fn AccountOverviewBlocksTable(
 
     let records_per_page = 5;
     let (current_page, set_current_page) = create_signal(1);
+
+    let table_columns = vec![
+        TableColumn {
+            column: "Height".to_string(),
+            is_searchable: true,
+        },
+        TableColumn {
+            column: "State Hash".to_string(),
+            is_searchable: true,
+        },
+        TableColumn {
+            column: "Slot".to_string(),
+            is_searchable: true,
+        },
+        TableColumn {
+            column: "Age".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "Block Producer".to_string(),
+            is_searchable: true,
+        },
+        TableColumn {
+            column: "Coinbase".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "User Commands".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "Snarks".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "Coinbase Receiver".to_string(),
+            is_searchable: false,
+        },
+    ];
+    let table_cols_length = table_columns.len();
+
     view! {
-        {move || match blocks.len() {
-            0 => {
-                view! { <EmptyTable message="This public key has no block production"/> }
-            }
-            _ => {
-                {
-                    let pag = build_pagination(
-                        blocks.len(),
-                        records_per_page,
-                        current_page.get(),
-                        set_current_page,
-                        None,
-                        None,
-                    );
-                    let blocks_subset = get_subset(
-                        &blocks,
-                        records_per_page,
-                        current_page.get() - 1,
-                    );
-                    view! {
-                        <DeprecatedTable data=blocks_subset pagination=pag/>
-                        <TableLink href=href.get() text="See all block production">
-                            <BlockIcon/>
-                        </TableLink>
+        <TableContainer>
+            <Table>
+                <TableHeader columns=table_columns/>
+                {move || match blocks_sig.get() {
+                    None => {
+                        view! {
+                            <TableRows data=vec![vec![LoadingPlaceholder; table_cols_length]; 10]/>
+                        }
                     }
-                }
-                    .into_view()
-            }
-        }}
+                    Some(blocks) => {
+                        let pag = build_pagination(
+                            blocks.len(),
+                            records_per_page,
+                            current_page.get(),
+                            set_current_page,
+                            None,
+                            None,
+                        );
+                        let blocks_subset = blocks[pag
+                                .start_index()..std::cmp::min(
+                                pag.end_index() + 1,
+                                pag.total_records,
+                            )]
+                            .to_vec();
+                        view! { <TableRows data=blocks_subset/> }
+                    }
+                }}
+
+            </Table>
+            {move || {
+                let length = blocks_sig.get().map(|s| s.len()).unwrap_or(0);
+                let pag = build_pagination(
+                    length,
+                    records_per_page,
+                    current_page.get(),
+                    set_current_page,
+                    None,
+                    None,
+                );
+                view! { <Pagination pagination=pag/> }
+            }}
+
+            <TableLink href=href.get() text="See all block production">
+                <BlockIcon/>
+            </TableLink>
+        </TableContainer>
     }
 }
 

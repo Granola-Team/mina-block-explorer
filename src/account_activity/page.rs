@@ -220,44 +220,12 @@ pub fn AccountSpotlightPage() -> impl IntoView {
                 }
                 _ => ().into_view(),
             }}
-            {move || match transactions.get() {
-                Some(transactions) => view! { <AccountTransactionsSection transactions/> },
-                None => {
-                    view! {
-                        <TableSection section_heading="User Commands" controls=|| ().into_view()>
-                            <DeprecatedTable data=DeprecatedLoadingPlaceholder {}/>
-                        </TableSection>
-                    }
-                }
-            }}
-            <SubSectionContainer>
+            <AccountTransactionsSection transactions_sig=transactions/> <SubSectionContainer>
                 <AppSubSection heading="SNARK Jobs" position=SubSectionPosition::Left>
-                    {move || match snarks.get() {
-                        Some(snarks) => {
-                            view! {
-                                <AccountOverviewSnarkJobTable
-                                    snarks
-                                    public_key=memo_params_map.get().get("id").cloned()
-                                />
-                            }
-                        }
-                        None => view! { <DeprecatedTable data=DeprecatedLoadingPlaceholder {}/> },
-                    }}
-
+                    <AccountOverviewSnarkJobTable snarks_sig=snarks/>
                 </AppSubSection>
                 <AppSubSection heading="Block Production" position=SubSectionPosition::Right>
-                    {move || match blocks.get() {
-                        Some(blocks) => {
-                            view! {
-                                <AccountOverviewBlocksTable
-                                    blocks
-                                    public_key=memo_params_map.get().get("id").cloned()
-                                />
-                            }
-                        }
-                        None => view! { <DeprecatedTable data=DeprecatedLoadingPlaceholder {}/> },
-                    }}
-
+                    <AccountOverviewBlocksTable blocks_sig=blocks/>
                 </AppSubSection>
             </SubSectionContainer>
         </PageContainer>
