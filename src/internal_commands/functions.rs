@@ -18,14 +18,10 @@ pub async fn load_data(
         limit: Some(limit),
         query: internal_commands_query::FeetransferQueryInput {
             block_height,
-            block_state_hash: if let Some(sh) = state_hash {
-                Some(BlockQueryInput {
+            block_state_hash: state_hash.map(|sh| BlockQueryInput {
                     state_hash: Some(sh),
                     ..Default::default()
-                })
-            } else {
-                None
-            },
+                }),
             recipient,
             canonical: if canonical.is_none() {
                 Some(true)
