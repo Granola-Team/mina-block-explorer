@@ -33,7 +33,7 @@ These two steps will get your environment ready and your server running quickly.
 
 Integration with an Indexer (https://github.com/Granola-Team/mina-indexer) is accomplished through
 GraphQL and REST endpoints. MinaExplorer.com's GraphqlQL and RESTful endpoints are integrated by default.
-To override, you may specify your own environment variables in `build.rs`. This can be done through
+To override, you may specify your own environment variables. This can be done through
 
 - `.env` file
 - Environment variables
