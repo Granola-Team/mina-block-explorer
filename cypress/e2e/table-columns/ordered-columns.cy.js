@@ -24,7 +24,7 @@ suite(["@CI"], "transactions table", () => {
 
 suite(["@CI"], "internal commands table", () => {
   let pages = ["/commands/internal"];
-  let columns = ["Recipient", "Fee", "Type", "Age"];
+  let columns = ["Height", "State Hash", "Recipient", "Fee", "Type", "Age"];
 
   pages.forEach((page) =>
     it(`on ${page} includes correct columns`, () => {
