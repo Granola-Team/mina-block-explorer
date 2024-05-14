@@ -27,7 +27,7 @@ impl TableData for Vec<Option<InternalCommandsQueryFeetransfers>> {
                     ]),
                     convert_to_link(
                         internal_command.get_state_hash(),
-                        format!("/commands/{}", internal_command.get_state_hash()),
+                        format!("/blocks/{}", internal_command.get_state_hash()),
                     ),
                     convert_to_link(
                         internal_command.get_receipient(),
