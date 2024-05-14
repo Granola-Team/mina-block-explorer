@@ -18,10 +18,15 @@ suite(["@CI"], "input", () => {
       input: "253134",
       column: "Height",
     },
+    {
+      origin: "/staking-ledgers",
+      input: "B62",
+      column: "Key",
+    },
   ];
 
   slow_input_searches.forEach(({ origin, input, column }) =>
-    it("remains focused as user types slowly", () => {
+    it.only("remains focused as user types slowly", () => {
       cy.visit(origin);
       cy.wait(1000);
       let cssSelector = "#q-" + kebabCase(column);

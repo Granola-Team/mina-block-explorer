@@ -108,127 +108,120 @@ fn StakesPageContents() -> impl IntoView {
     ];
     let table_cols_length = table_columns.len();
     let table_columns_clone = table_columns.clone();
-    let table_columns_clone_2 = table_columns.clone();
 
-    view! {
-        <Suspense fallback=move || {
+    let get_heading_and_epochs = create_memo(move |_| {
+        summary_resource
+            .get()
+            .and_then(|res| res.ok())
+            .map(|sum_data| {
+                let curr_epoch = sum_data.epoch as i64;
+                let mut section_heading = "Current Staking Ledger".to_string();
+                let mut next_epoch = curr_epoch + 1;
+                let mut prev_epoch = curr_epoch - 1;
+                if let Some(qs_epoch) = epoch_sig.get() {
+                    if qs_epoch != curr_epoch {
+                        section_heading = format!("Epoch {} Staking Ledger", qs_epoch);
+                        next_epoch = qs_epoch + 1;
+                        prev_epoch = qs_epoch - 1;
+                    }
+                }
+                (
+                    section_heading,
+                    curr_epoch,
+                    next_epoch,
+                    prev_epoch,
+                    sum_data.slot,
+                )
+            })
+            .unwrap_or(("".to_string(), 0, 0, 0, 0))
+    });
+
+    {
+        move || {
             let table_columns_clone = table_columns_clone.clone();
+            let (section_heading, curr_epoch, next_epoch, prev_epoch, slot) =
+                get_heading_and_epochs.get();
             view! {
-                <TableSection section_heading="" controls=move || ().into_view()>
+                <TableSection
+                    section_heading=section_heading
+                    controls=move || {
+                        view! {
+                            <EpochButton
+                                disabled=prev_epoch < 1
+                                text="Previous"
+                                style_variant=EpochStyleVariant::Secondary
+                                epoch_target=prev_epoch
+                            />
+                            {if next_epoch - 1 == curr_epoch {
+                                view! {
+                                    <EpochButton
+                                        href="/next-stakes"
+                                        text="Next"
+                                        style_variant=EpochStyleVariant::Primary
+                                    />
+                                }
+                            } else {
+                                view! {
+                                    <EpochButton
+                                        text="Next"
+                                        style_variant=EpochStyleVariant::Primary
+                                        epoch_target=next_epoch
+                                    />
+                                }
+                            }}
+                        }
+                    }
+
+                    additional_info=if next_epoch - 1 == curr_epoch {
+                        format!(
+                            "{:.2}% complete ({}/{} slots filled)",
+                            (slot as f64 / EPOCH_SLOTS as f64) * 100.0,
+                            slot,
+                            EPOCH_SLOTS,
+                        )
+                    } else {
+                        "".to_string()
+                    }
+                >
+
                     <TableContainer>
                         <Table>
-                            <TableHeader columns=table_columns_clone/>
-                            <TableRows data=vec![vec![LoadingPlaceholder; table_cols_length]; 10]/>
+                            <TableHeader columns=table_columns_clone.clone()/>
+                            <Suspense fallback=move || {
+                                view! {
+                                    <TableRows data=vec![
+                                        vec![LoadingPlaceholder; table_cols_length];
+                                        10
+                                    ]/>
+                                }
+                            }>
+                                {move || {
+                                    get_data_and_pagination()
+                                        .map(|(data, pag)| {
+                                            view! {
+                                                <TableRows data=data
+                                                    .stakes[pag
+                                                        .start_index()..std::cmp::min(
+                                                        pag.end_index() + 1,
+                                                        pag.total_records,
+                                                    )]
+                                                    .to_vec()/>
+                                            }
+                                        })
+                                }}
+
+                            </Suspense>
                         </Table>
+                        {move || {
+                            get_data_and_pagination()
+                                .map(|(_, pag)| {
+                                    view! { <Pagination pagination=pag/> }
+                                })
+                        }}
+
                     </TableContainer>
                 </TableSection>
             }
-        }>
-
-            {
-                let table_columns_clone_2 = table_columns_clone_2.clone();
-                move || {
-                    summary_resource
-                        .get()
-                        .and_then(|res| res.ok())
-                        .map(|sum_data| {
-                            let table_columns_clone_2 = table_columns_clone_2.clone();
-                            let curr_epoch = sum_data.epoch as i64;
-                            let mut section_heading = "Current Staking Ledger".to_string();
-                            let mut next_epoch = curr_epoch + 1;
-                            let mut prev_epoch = curr_epoch - 1;
-                            if let Some(qs_epoch) = epoch_sig.get() {
-                                if qs_epoch != curr_epoch {
-                                    section_heading = format!("Epoch {} Staking Ledger", qs_epoch);
-                                    next_epoch = qs_epoch + 1;
-                                    prev_epoch = qs_epoch - 1;
-                                }
-                            }
-                            view! {
-                                <TableSection
-                                    section_heading=section_heading
-                                    controls=move || {
-                                        view! {
-                                            <EpochButton
-                                                disabled=prev_epoch < 1
-                                                text="Previous"
-                                                style_variant=EpochStyleVariant::Secondary
-                                                epoch_target=prev_epoch
-                                            />
-                                            {if next_epoch - 1 == curr_epoch {
-                                                view! {
-                                                    <EpochButton
-                                                        href="/next-stakes"
-                                                        text="Next"
-                                                        style_variant=EpochStyleVariant::Primary
-                                                    />
-                                                }
-                                            } else {
-                                                view! {
-                                                    <EpochButton
-                                                        text="Next"
-                                                        style_variant=EpochStyleVariant::Primary
-                                                        epoch_target=next_epoch
-                                                    />
-                                                }
-                                            }}
-                                        }
-                                    }
-
-                                    additional_info=if next_epoch - 1 == curr_epoch {
-                                        format!(
-                                            "{:.2}% complete ({}/{} slots filled)",
-                                            (sum_data.slot as f64 / EPOCH_SLOTS as f64) * 100.0,
-                                            sum_data.slot,
-                                            EPOCH_SLOTS,
-                                        )
-                                    } else {
-                                        "".to_string()
-                                    }
-                                >
-
-                                    <TableContainer>
-                                        <Table>
-                                            <TableHeader columns=table_columns_clone_2/>
-                                            <Suspense fallback=move || {
-                                                view! {
-                                                    <TableRows data=vec![
-                                                        vec![LoadingPlaceholder; table_cols_length];
-                                                        10
-                                                    ]/>
-                                                }
-                                            }>
-                                                {move || {
-                                                    get_data_and_pagination()
-                                                        .map(|(data, pag)| {
-                                                            view! {
-                                                                <TableRows data=data
-                                                                    .stakes[pag
-                                                                        .start_index()..std::cmp::min(
-                                                                        pag.end_index() + 1,
-                                                                        pag.total_records,
-                                                                    )]
-                                                                    .to_vec()/>
-                                                            }
-                                                        })
-                                                }}
-
-                                            </Suspense>
-                                        </Table>
-                                        {move || {
-                                            get_data_and_pagination()
-                                                .map(|(_, pag)| {
-                                                    view! { <Pagination pagination=pag/> }
-                                                })
-                                        }}
-
-                                    </TableContainer>
-                                </TableSection>
-                            }
-                        })
-                }
-            }
-
-        </Suspense>
+        }
     }
 }
