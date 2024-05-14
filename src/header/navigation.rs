@@ -1,7 +1,4 @@
-use crate::{
-    common::{components::*, models::*},
-    config::BERKELEY_FEATURES_ENABLED,
-};
+use crate::common::{components::*, constants::BERKELEY_FEATURES_ENABLED, models::*};
 use leptos::*;
 
 #[component]
@@ -24,7 +21,7 @@ pub fn Header() -> impl IntoView {
         },
     ]);
 
-    if BERKELEY_FEATURES_ENABLED {
+    if BERKELEY_FEATURES_ENABLED == "true" {
         if let Some(v) = txn_entries.as_mut() {
             v.push(NavEntry {
                 href: "/commands/zk-txn".to_string(),

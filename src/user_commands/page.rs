@@ -1,7 +1,8 @@
 use super::{components::*, functions::*, table_trait::*};
 use crate::{
-    common::{components::*, functions::*, models::*, spotlight::*},
-    config::BERKELEY_FEATURES_ENABLED,
+    common::{
+        components::*, constants::BERKELEY_FEATURES_ENABLED, functions::*, models::*, spotlight::*,
+    },
     icons::*,
 };
 use leptos::*;
@@ -25,7 +26,7 @@ pub fn CommandsTabbedPage() -> impl IntoView {
         },
     ];
 
-    if BERKELEY_FEATURES_ENABLED {
+    if BERKELEY_FEATURES_ENABLED == "true" {
         tabs.push(NavEntry {
             href: "/commands/zk-app".to_string(),
             text: "zkApp Commands".to_string(),

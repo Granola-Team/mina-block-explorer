@@ -11,8 +11,7 @@ use crate::{
         BroadcastDelegationPage, BroadcastFromLedgerPage, BroadcastTransactionPage,
         DelegationTabbedPage,
     },
-    common::search::*,
-    config::BERKELEY_FEATURES_ENABLED,
+    common::{constants::BERKELEY_FEATURES_ENABLED, search::*},
     footer::Footer,
     header::navigation::Header,
     internal_commands::components::InternalCommandsTab,
@@ -46,7 +45,7 @@ pub fn Root() -> impl IntoView {
                         <Route
                             path="/tokens"
                             view=move || {
-                                if BERKELEY_FEATURES_ENABLED {
+                                if BERKELEY_FEATURES_ENABLED == "true" {
                                     view! { <TokensPage/> }
                                 } else {
                                     view!().into_view()
@@ -57,7 +56,7 @@ pub fn Root() -> impl IntoView {
                         <Route
                             path="/zk-apps"
                             view=move || {
-                                if BERKELEY_FEATURES_ENABLED {
+                                if BERKELEY_FEATURES_ENABLED == "true" {
                                     view! { <ZkAppsPage/> }
                                 } else {
                                     view!().into_view()
@@ -88,7 +87,7 @@ pub fn Root() -> impl IntoView {
                         <Route
                             path="/zk-app"
                             view=move || {
-                                if BERKELEY_FEATURES_ENABLED {
+                                if BERKELEY_FEATURES_ENABLED == "true" {
                                     view! { <ZkAppTransactionsPage/> }
                                 } else {
                                     view!().into_view()
@@ -101,7 +100,7 @@ pub fn Root() -> impl IntoView {
                     <Route
                         path="/commands/zk-app/:id"
                         view=move || {
-                            if BERKELEY_FEATURES_ENABLED {
+                            if BERKELEY_FEATURES_ENABLED == "true" {
                                 view! { <ZkAppTransactionSpotlightPage/> }
                             } else {
                                 view!().into_view()

@@ -29,6 +29,20 @@ for varying system configurations or dependency conflicts.
 
 These two steps will get your environment ready and your server running quickly.
 
+## Integration
+
+Integration with an Indexer (https://github.com/Granola-Team/mina-indexer) is accomplished through
+GraphQL and REST endpoints. MinaExplorer.com's GraphqlQL and RESTful endpoints are integrated by default.
+To override, you may specify your own environment variables in `build.rs`. This can be done through
+
+- `.env` file
+- Environment variables
+  See `.env.example`.
+
+Environment variables are bundled into the WASM file at compile time (see `build.rs`).
+With the intended environment variables specified at compile time, the production WASM file
+may be deployed without any further configuration required.
+
 ## License
 
 Copyright 2022-2024 Granola Systems Inc.
