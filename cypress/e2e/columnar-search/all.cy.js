@@ -18,6 +18,11 @@ suite(["@CI"], "input", () => {
       input: "253134",
       column: "Height",
     },
+    {
+      origin: "/staking-ledgers",
+      input: "B62",
+      column: "Key",
+    },
   ];
 
   slow_input_searches.forEach(({ origin, input, column }) =>
