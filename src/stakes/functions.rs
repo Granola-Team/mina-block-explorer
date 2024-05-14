@@ -11,11 +11,13 @@ pub fn get_public_key(stake: &StakingLedgersQueryStakes) -> String {
         .map_or_else(String::new, ToString::to_string)
 }
 
-pub fn get_balance(stake: &StakingLedgersQueryStakes) -> String {
+pub fn get_stake(stake: &StakingLedgersQueryStakes) -> String {
     stake
-        .balance
-        .map(|b| format_mina(b.to_string()))
-        .unwrap_or_default()
+        .delegation_totals
+        .as_ref()
+        .and_then(|delegation_totals| delegation_totals.total_delegated)
+        .map(|stake| format_mina(stake.to_string()))
+        .unwrap_or("0".to_string())
 }
 
 pub fn get_delegate(stake: &StakingLedgersQueryStakes) -> String {
