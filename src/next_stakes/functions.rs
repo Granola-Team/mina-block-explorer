@@ -12,11 +12,13 @@ pub fn get_public_key(nextstakes: &NextStakingLedgersQueryNextstakes) -> String 
         .map_or("".to_string(), |o| o.to_string())
 }
 
-pub fn get_balance(nextstakes: &NextStakingLedgersQueryNextstakes) -> String {
+pub fn get_stake(nextstakes: &NextStakingLedgersQueryNextstakes) -> String {
     nextstakes
-        .balance
-        .map(|b| format_mina(b.to_string()))
-        .unwrap_or_default()
+        .next_delegation_totals
+        .as_ref()
+        .and_then(|delegation_totals| delegation_totals.total_delegated)
+        .map(|stake| format_mina(stake.to_string()))
+        .unwrap_or("0".to_string())
 }
 
 pub fn get_delegate(nextstakes: &NextStakingLedgersQueryNextstakes) -> String {

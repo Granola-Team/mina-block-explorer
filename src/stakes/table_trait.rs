@@ -26,7 +26,7 @@ impl TableData for Vec<Option<StakingLedgersQueryStakes>> {
                         get_public_key(stake),
                         format!("/addresses/accounts/{}", get_public_key(stake)),
                     ),
-                    decorate_with_currency_tag(get_balance(stake), "mina".to_string()),
+                    decorate_with_currency_tag(get_stake(stake), "mina".to_string()),
                     convert_to_link(
                         if get_public_key(stake) == get_delegate(stake) {
                             "Self".to_string()
