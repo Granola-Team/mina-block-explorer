@@ -14,7 +14,6 @@ use crate::{
         spotlight::*,
         table::*,
     },
-    config::BERKELEY_FEATURES_ENABLED,
     icons::*,
 };
 use leptos::*;
@@ -240,7 +239,7 @@ pub fn AddressesTabbedPage() -> impl IntoView {
         icon: NavIcon::Addresses,
         ..Default::default()
     }];
-    if BERKELEY_FEATURES_ENABLED {
+    if BERKELEY_FEATURES_ENABLED == "true" {
         tabs.push(NavEntry {
             href: "/addresses/tokens".to_string(),
             text: "Tokens".to_string(),
