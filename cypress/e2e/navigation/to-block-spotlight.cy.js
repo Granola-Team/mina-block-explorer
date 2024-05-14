@@ -3,6 +3,10 @@ import { DEFAULT_ACCOUNT_PK } from "../constants";
 suite(["@CI"], "block spotlight", () => {
   [
     {
+      origin: `/commands/internal`,
+      selector: 'a[href^="/blocks/"]',
+    },
+    {
       origin: "/blocks",
       selector: 'a[href^="/blocks/"]:not(a[href^="/blocks/account"])',
     },
@@ -13,10 +17,6 @@ suite(["@CI"], "block spotlight", () => {
     {
       origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
       selector: 'a[href^="/blocks/"]:not(a[href^="/blocks/account"])',
-    },
-    {
-      origin: `/commands/internal-commands`,
-      selector: 'a[href^="/blocks/"]',
     },
   ].forEach(({ origin, selector }) =>
     it(`is navigated to from ${origin}`, () => {
