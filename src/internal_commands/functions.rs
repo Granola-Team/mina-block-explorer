@@ -19,9 +19,9 @@ pub async fn load_data(
         query: internal_commands_query::FeetransferQueryInput {
             block_height,
             block_state_hash: state_hash.map(|sh| BlockQueryInput {
-                    state_hash: Some(sh),
-                    ..Default::default()
-                }),
+                state_hash: Some(sh),
+                ..Default::default()
+            }),
             recipient,
             canonical: if canonical.is_none() {
                 Some(true)
