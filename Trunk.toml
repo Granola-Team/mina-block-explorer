@@ -1,6 +1,5 @@
 [watch]
 watch = ["src","assets", "graphql"]
-ignore = ["src/config.rs"]
 
 [tools]
 tailwindcss = "3.4.1"
