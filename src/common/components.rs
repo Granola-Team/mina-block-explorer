@@ -430,6 +430,15 @@ pub fn AnalyticsLgContainer(children: Children) -> impl IntoView {
 }
 
 #[component]
+pub fn AnalyticsXLContainer(children: Children) -> impl IntoView {
+    view! {
+        <AnalyticsContainer span="analytics-lg col-span-1 md:col-span-4">
+            {children()}
+        </AnalyticsContainer>
+    }
+}
+
+#[component]
 pub fn AnalyticsLayout(children: Children) -> impl IntoView {
     view! {
         <Script
