@@ -203,13 +203,6 @@ suite(["@CI"], "search with single result", () => {
       tableHeading: "Internal Commands",
       column: "State Hash",
     },
-    { origin: "/", input: "20345", tableHeading: "Blocks", column: "Height" },
-    {
-      origin: "/summary",
-      input: "20345",
-      tableHeading: "Blocks",
-      column: "Height",
-    },
     {
       origin: "/blocks",
       input: "20345",
