@@ -1,19 +1,33 @@
 use crate::{
     common::{constants::*, models::*},
-    internal_commands::graphql::{internal_commands_query, InternalCommandsQuery},
+    internal_commands::graphql::{
+        internal_commands_query, internal_commands_query::BlockQueryInput, InternalCommandsQuery,
+    },
 };
 use graphql_client::reqwest::post_graphql;
 
 pub async fn load_data(
     limit: i64,
     recipient: Option<String>,
+    block_height: Option<i64>,
+    state_hash: Option<String>,
+    canonical: Option<bool>,
 ) -> Result<internal_commands_query::ResponseData, MyError> {
     let variables = internal_commands_query::Variables {
         sort_by: internal_commands_query::FeetransferSortByInput::BLOCKHEIGHT_DESC,
         limit: Some(limit),
         query: internal_commands_query::FeetransferQueryInput {
+            block_height,
+            block_state_hash: state_hash.map(|sh| BlockQueryInput {
+                state_hash: Some(sh),
+                ..Default::default()
+            }),
             recipient,
-            canonical: Some(true),
+            canonical: if canonical.is_none() {
+                Some(true)
+            } else {
+                canonical
+            },
             ..Default::default()
         },
     };

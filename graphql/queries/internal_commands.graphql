@@ -4,9 +4,14 @@ query InternalCommandsQuery(
   $query: FeetransferQueryInput!
 ) {
   feetransfers(sortBy: $sort_by, limit: $limit, query: $query) {
+    blockHeight
+    blockStateHash {
+      stateHash
+    }
     fee
     recipient
     type
     dateTime
+    canonical
   }
 }

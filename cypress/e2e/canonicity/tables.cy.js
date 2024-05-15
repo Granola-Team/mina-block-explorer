@@ -14,6 +14,10 @@ suite(["@CI"], "table", () => {
       url: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
       section: "SNARK Jobs",
     },
+    {
+      url: "/commands/internal",
+      section: "Internal Commands",
+    },
   ];
 
   pages.forEach(({ url, section }) =>
