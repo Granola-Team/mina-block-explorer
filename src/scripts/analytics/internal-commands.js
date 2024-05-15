@@ -39,15 +39,18 @@ setTimeout(async () => {
     return agg;
   }, {});
 
-  console.log(data);
+  let xAxis = Object.keys(data);
 
   let chartDom = document.getElementById("chart");
+  window.addEventListener("resize", function () {
+    myChart.resize();
+  });
   let myChart = echarts.init(chartDom);
   let option;
 
   option = {
     title: {
-      text: "Fee Transfers",
+      text: "Fee Transfers in the last 24 hours",
       left: "center",
     },
     tooltip: {
@@ -66,10 +69,22 @@ setTimeout(async () => {
           type: "boxplot",
         },
       },
+      {
+        fromDatasetIndex: 1,
+        fromTransformResult: 1,
+      },
     ],
     xAxis: {
       type: "category",
       name: "Hour",
+      axisLabel: {
+        rotate: 45,
+      },
+      axisLabel: {
+        formatter: function (value) {
+          return xAxis[value];
+        },
+      },
     },
     yAxis: {
       type: "value",
@@ -80,6 +95,30 @@ setTimeout(async () => {
         name: "boxplot",
         type: "boxplot",
         datasetIndex: 1,
+        tooltip: {
+          formatter: function (param) {
+            return [
+              "Date: " + xAxis[param.name],
+              "upper: " + param.data[5],
+              "Q3: " + param.data[4],
+              "median: " + param.data[3],
+              "Q1: " + param.data[2],
+              "lower: " + param.data[1],
+            ].join("<br/>");
+          },
+        },
+      },
+      {
+        name: "boxplot",
+        type: "scatter",
+        datasetIndex: 2,
+        tooltip: {
+          formatter: function (param) {
+            return ["Date: " + xAxis[param.name], "Fee: " + param.data[1]].join(
+              "<br/>",
+            );
+          },
+        },
       },
     ],
   };
