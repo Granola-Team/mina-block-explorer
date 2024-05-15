@@ -48,7 +48,7 @@ disallow-unused-cargo-deps:
   cargo machete Cargo.toml
 
 format:
-  pnpm exec prettier --write cypress/
+  pnpm exec prettier --write cypress/ src/scripts/
   cargo fmt --all
   leptosfmt ./src
 
