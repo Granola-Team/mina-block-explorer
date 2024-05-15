@@ -122,20 +122,14 @@ fn NextStakesPageContents() -> impl IntoView {
 
                         </Suspense>
                     </Table>
-                    <Suspense fallback=move || {
-                        view! {
-                            <TableRows data=vec![vec![LoadingPlaceholder; table_cols_length]; 10]/>
-                        }
-                    }>
-                        {move || {
-                            get_data_and_pagination()
-                                .map(|(_, pag)| {
-                                    view! { <Pagination pagination=pag/> }
-                                })
-                        }}
-
-                    </Suspense>
                 </TableContainer>
+                {move || {
+                    get_data_and_pagination()
+                        .map(|(_, pag)| {
+                            view! { <Pagination pagination=pag/> }
+                        })
+                }}
+
             </TableSection>
         </ErrorBoundary>
     }
