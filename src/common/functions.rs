@@ -182,9 +182,19 @@ pub fn decorate_with_currency_tag(
     data: String,
     currency_tag: String,
 ) -> HtmlElement<html::AnyElement> {
+    #![allow(unused_braces)]
     view! {
         <span class="whitespace-nowrap">
-            {data} <span class="ml-1 uppercase font-light text-inherit/50">{currency_tag}</span>
+            {if data != "0" {
+                view! {
+                    {data}
+                    <span class="ml-1 uppercase font-light text-inherit/50">{currency_tag}</span>
+                }
+                    .into_view()
+            } else {
+                view! { {data} }.into_view()
+            }}
+
         </span>
     }
     .into()
