@@ -12,7 +12,7 @@ use crate::{
         BroadcastDelegationPage, BroadcastFromLedgerPage, BroadcastTransactionPage,
         DelegationTabbedPage,
     },
-    common::{constants::BERKELEY_FEATURES_ENABLED, search::*},
+    common::{constants::*, search::*},
     footer::Footer,
     header::navigation::Header,
     internal_commands::components::InternalCommandsTab,
@@ -31,6 +31,9 @@ use leptos_router::*;
 #[component]
 pub fn Root() -> impl IntoView {
     view! {
+        <script>
+            {format!(r#"const config = {{ graphql_endpoint: "{}" }}"#, GRAPHQL_ENDPOINT)}
+        </script>
         <Router>
             <Header/>
             <GlobalSearchBar/>
