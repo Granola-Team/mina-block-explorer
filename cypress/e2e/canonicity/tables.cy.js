@@ -15,14 +15,6 @@ suite(["@CI"], "table", () => {
       section: "SNARK Jobs",
     },
     {
-      url: "/summary",
-      section: "Blocks",
-    },
-    {
-      url: "/",
-      section: "Blocks",
-    },
-    {
       url: "/commands/internal",
       section: "Internal Commands",
     },

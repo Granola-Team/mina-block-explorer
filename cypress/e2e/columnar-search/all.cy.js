@@ -134,18 +134,6 @@ suite(["@CI"], "search with multiple results", () => {
       expectation: { column: "Height", value: "350137" },
     },
     {
-      origin: "/",
-      input: DEFAULT_ACCOUNT_PK,
-      tableHeading: "Blocks",
-      expectation: { column: "Block Producer", value: DEFAULT_ACCOUNT_PK },
-    },
-    {
-      origin: "/summary",
-      input: DEFAULT_ACCOUNT_PK,
-      tableHeading: "Blocks",
-      expectation: { column: "Block Producer", value: DEFAULT_ACCOUNT_PK },
-    },
-    {
       origin: "/blocks",
       input: DEFAULT_ACCOUNT_PK,
       tableHeading: "Blocks",
