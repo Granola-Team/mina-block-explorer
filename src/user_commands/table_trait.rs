@@ -65,8 +65,8 @@ impl TableData for Vec<Option<TransactionsQueryTransactions>> {
                         ),
                     ),
                     convert_to_pill(transaction.get_nonce(), ColorVariant::Grey),
-                    decorate_with_currency_tag(transaction.get_fee(), "mina".to_string()),
-                    decorate_with_currency_tag(transaction.get_amount(), "mina".to_string()),
+                    decorate_with_mina_tag(transaction.get_fee()),
+                    decorate_with_mina_tag(transaction.get_amount()),
                 ],
                 None => vec![],
             })

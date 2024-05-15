@@ -178,6 +178,10 @@ pub fn data_placeholder() -> HtmlElement<html::AnyElement> {
         .into()
 }
 
+pub fn decorate_with_mina_tag(data: String) -> HtmlElement<html::AnyElement> {
+    decorate_with_currency_tag(data, "MINA".to_string())
+}
+
 pub fn decorate_with_currency_tag(
     data: String,
     currency_tag: String,

@@ -204,9 +204,9 @@ fn TransactionEntry(
                 label="Amount/Fee"
                 el=convert_array_to_span(
                     vec![
-                        decorate_with_currency_tag(amount, "MINA".to_string()),
+                        decorate_with_mina_tag(amount),
                         convert_to_span(" / ".to_string()).attr("class", "whitespace-pre"),
-                        decorate_with_currency_tag(fee, "MINA".to_string()),
+                        decorate_with_mina_tag(fee),
                     ],
                 )
             />
