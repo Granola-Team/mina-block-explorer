@@ -11,12 +11,44 @@ pub fn InternalCommandsAnalayticsPage() -> impl IntoView {
             <TableSection section_heading="Internal Commands Analytics" controls=|| ().into_view()>
                 <AnalyticsLayout>
                     <AnalyticsXLContainer>
-                        <span>"hello"</span>
-                        <Script>
-                        r#"
-                        alert('Hello, world!');
+                        <div id="chart" class="w-full h-96"></div>
+                        <script>
+
+                            {
+                                indoc! {
+                                    r#"
+                                    setTimeout(() => {
+
+                                    
+                                        // Initialize a chart
+                                        var myChart = echarts.init(document.getElementById('chart'));
+
+                                        // Specify configurations and data
+                                        var option = {
+                                            title: {
+                                                text: 'ECharts Entry Example'
+                                            },
+                                            tooltip: {},
+                                            xAxis: {
+                                                data: ["Shirt", "Cardigan", "Chiffon shirt", "Pants", "Heels", "Socks"]
+                                            },
+                                            yAxis: {},
+                                            series: [{
+                                                name: 'Sales',
+                                                type: 'bar',
+                                                data: [5, 20, 36, 10, 10, 20]
+                                            }]
+                                        };
+
+                                        // Use specified configurations and data to display the chart
+                                        myChart.setOption(option);
+
+                                    },1000);
                         "#
-                        </Script>
+                                }
+                            }
+
+                        </script>
                     </AnalyticsXLContainer>
                 </AnalyticsLayout>
             </TableSection>
