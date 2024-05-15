@@ -1,5 +1,4 @@
 use crate::common::{components::*, models::*, table::*};
-use indoc::indoc;
 use leptos::*;
 use leptos_meta::*;
 
@@ -12,43 +11,7 @@ pub fn InternalCommandsAnalayticsPage() -> impl IntoView {
                 <AnalyticsLayout>
                     <AnalyticsXLContainer>
                         <div id="chart" class="w-full h-96"></div>
-                        <script>
-
-                            {
-                                indoc! {
-                                    r#"
-                                    setTimeout(() => {
-
-                                    
-                                        // Initialize a chart
-                                        var myChart = echarts.init(document.getElementById('chart'));
-
-                                        // Specify configurations and data
-                                        var option = {
-                                            title: {
-                                                text: 'ECharts Entry Example'
-                                            },
-                                            tooltip: {},
-                                            xAxis: {
-                                                data: ["Shirt", "Cardigan", "Chiffon shirt", "Pants", "Heels", "Socks"]
-                                            },
-                                            yAxis: {},
-                                            series: [{
-                                                name: 'Sales',
-                                                type: 'bar',
-                                                data: [5, 20, 36, 10, 10, 20]
-                                            }]
-                                        };
-
-                                        // Use specified configurations and data to display the chart
-                                        myChart.setOption(option);
-
-                                    },1000);
-                        "#
-                                }
-                            }
-
-                        </script>
+                        <script src="/scripts/analytics/internal-commands.js" defer=true></script>
                     </AnalyticsXLContainer>
                 </AnalyticsLayout>
             </TableSection>
