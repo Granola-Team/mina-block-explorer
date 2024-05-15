@@ -3,6 +3,7 @@ use crate::{
         dialog::AccountDialogView,
         page::{AccountSpotlightPage, AccountsPage, AddressesTabbedPage},
     },
+    analytics::page::{AnalyticsTabbedPage, InternalCommandsAnalayticsPage},
     blocks::page::{
         BlockAnalyticsTab, BlockInternalCommandsTab, BlockSnarkJobsTab, BlockSpotlightTab,
         BlockTabbedPage, BlockUserCommandsTab,
@@ -119,6 +120,13 @@ pub fn Root() -> impl IntoView {
                         <Route path="/transaction" view=BroadcastTransactionPage/>
                         <Route path="/delegation" view=BroadcastDelegationPage/>
                         <Route path="/ledger" view=BroadcastFromLedgerPage/>
+                    </Route>
+                    <Route path="/analytics" view=AnalyticsTabbedPage>
+                        <Route
+                            path="*"
+                            view=move || view! { <Redirect path="commands/internal"/> }
+                        />
+                        <Route path="/commands/internal" view=InternalCommandsAnalayticsPage/>
                     </Route>
                 </Routes>
             </main>
