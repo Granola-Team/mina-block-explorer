@@ -4,6 +4,10 @@ suite(["@CI"], "meta title", () => {
   let txn_hash = "CkpYzvzTZeYEoiAGNn6xquSPqittAb5wrhZHtR14RaLkZfiRYQgT3";
   let pages = [
     {
+      url: `/analytics/commands/internal`,
+      title: `Analytics | Internal Commands`,
+    },
+    {
       url: `/commands/internal`,
       title: `Transactions | Internal Commands`,
     },

@@ -1,9 +1,11 @@
 use crate::common::{components::*, models::*, table::*};
 use leptos::*;
+use leptos_meta::Title;
 
 #[component]
 pub fn InternalCommandsAnalayticsPage() -> impl IntoView {
     view! {
+        <Title text="Analytics | Internal Commands"/>
         <TableSection section_heading="Internal Commands Analytics" controls=|| ().into_view()>
             <AnalyticsLayout>
                 <AnalyticsLgContainer>
