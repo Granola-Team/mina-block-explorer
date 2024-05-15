@@ -1,5 +1,5 @@
 use crate::{
-    common::{components::*, constants::*, functions::*, models::PageDimensions, table::*},
+    common::{components::*, constants::*, functions::*, models::*, table::*},
     internal_commands::functions::load_data,
 };
 use leptos::*;
@@ -11,7 +11,22 @@ pub fn InternalCommandsTab() -> impl IntoView {
     view! {
         <Title text="Transactions | Internal Commands"/>
         <PageContainer>
-            <TableSection section_heading="Internal Commands" controls=|| ().into_view()>
+            <TableSection
+                section_heading="Internal Commands"
+                controls=move || {
+                    view! {
+                        <UrlParamSelectMenu
+                            id="canonical-selection"
+                            query_str_key="canonical"
+                            labels=UrlParamSelectOptions {
+                                is_boolean_option: true,
+                                cases: vec!["Canonical".to_string(), "Non-Canonical".to_string()],
+                            }
+                        />
+                    }
+                }
+            >
+
                 <InternalCommandsTable/>
             </TableSection>
         </PageContainer>
@@ -21,15 +36,42 @@ pub fn InternalCommandsTab() -> impl IntoView {
 #[component]
 pub fn InternalCommandsTable() -> impl IntoView {
     let (recipient, _) = create_query_signal::<String>("q-recipient");
+    let (height_sig, _) = create_query_signal::<i64>("q-height");
+    let (state_hash_sig, _) = create_query_signal::<String>("q-state-hash");
+    let (canonical_sig, _) = create_query_signal::<bool>("canonical");
     let resource = create_resource(
-        move || recipient.get(),
-        |opt_recipient| async move { load_data(TABLE_RECORD_SIZE, opt_recipient).await },
+        move || {
+            (
+                recipient.get(),
+                height_sig.get(),
+                state_hash_sig.get(),
+                canonical_sig.get(),
+            )
+        },
+        |(opt_recipient, height, state_hash, canonical)| async move {
+            load_data(
+                TABLE_RECORD_SIZE,
+                opt_recipient,
+                height,
+                state_hash,
+                canonical,
+            )
+            .await
+        },
     );
     let page_dim = use_context::<ReadSignal<PageDimensions>>()
         .expect("there to be a `PageDimensions` signal provided");
     let (current_page, set_current_page) = create_signal(1);
 
     let table_columns = vec![
+        TableColumn {
+            column: "Height".to_string(),
+            is_searchable: true,
+        },
+        TableColumn {
+            column: "State Hash".to_string(),
+            is_searchable: true,
+        },
         TableColumn {
             column: "Recipient".to_string(),
             is_searchable: true,

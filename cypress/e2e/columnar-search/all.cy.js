@@ -23,6 +23,11 @@ suite(["@CI"], "input", () => {
       input: "B62",
       column: "Key",
     },
+    {
+      origin: "/commands/internal",
+      input: "253134",
+      column: "Height",
+    },
   ];
 
   slow_input_searches.forEach(({ origin, input, column }) =>
@@ -123,6 +128,12 @@ suite(["@CI"], "search with multiple results", () => {
       expectation: { column: "Recipient", value: DEFAULT_ACCOUNT_PK },
     },
     {
+      origin: "/commands/internal",
+      input: "350137",
+      tableHeading: "Internal Commands",
+      expectation: { column: "Height", value: "350137" },
+    },
+    {
       origin: "/blocks",
       input: DEFAULT_ACCOUNT_PK,
       tableHeading: "Blocks",
@@ -184,6 +195,12 @@ suite(["@CI"], "search with single result", () => {
       origin: "/blocks",
       input: block_hash,
       tableHeading: "Blocks",
+      column: "State Hash",
+    },
+    {
+      origin: "/commands/internal",
+      input: block_hash,
+      tableHeading: "Internal Commands",
       column: "State Hash",
     },
     {
