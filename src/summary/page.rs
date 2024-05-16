@@ -1,5 +1,8 @@
 use super::{functions::*, models::*};
-use crate::{blocks::components::BlocksSection, common::components::*};
+use crate::{
+    blocks::components::BlocksSection,
+    common::{components::*, functions::format_mina},
+};
 use leptos::*;
 use leptos_meta::Title;
 
@@ -34,8 +37,16 @@ fn SummaryGrid(summary: Option<BlockchainSummary>) -> impl IntoView {
                 imgsrc="/assets/img/circulating_supply.svg"
                 id="circulatingSupply"
                 label="Circulating Supply"
-                value=summary.as_ref().map(|s| format!("{:.2}", s.circ_supply()))
+                value=summary
+                    .as_ref()
+                    .map(|s| {
+                        format_mina(s.circ_supply().to_string())
+                            .split('.')
+                            .collect::<Vec<_>>()[0]
+                            .to_string()
+                    })
             />
+
             <SummaryItem
                 imgsrc="/assets/img/epoch.svg"
                 id="epoch"
@@ -46,8 +57,16 @@ fn SummaryGrid(summary: Option<BlockchainSummary>) -> impl IntoView {
                 imgsrc="/assets/img/total_currency.svg"
                 id="totalCurrency"
                 label="Total Currency"
-                value=summary.as_ref().map(|s| format!("{:.2}", s.tot_currency()))
+                value=summary
+                    .as_ref()
+                    .map(|s| {
+                        format_mina(s.tot_currency().to_string())
+                            .split('.')
+                            .collect::<Vec<_>>()[0]
+                            .to_string()
+                    })
             />
+
         </section>
     }
 }
