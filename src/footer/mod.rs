@@ -34,24 +34,24 @@ pub fn Footer() -> impl IntoView {
         },
     ];
     view! {
-        <footer class="overflow-x-auto bg-main-background w-full h-14 min-h-14 flex flex-wrap justify-between">
-            <span class="text-white text-sm p-4 whitespace-nowrap">
-                "Powered by "
-                <a
-                    href="https://granola.team"
-                    class="text-granola-orange hover:underline hover:decoration-2"
-                >
-                    "Granola"
-                </a>
-            </span>
-            <div class="flex justify-between sm:justify-end p-4">
+        <footer class="overflow-x-auto bg-main-background w-full h-14 min-h-14 flex flex-wrap justify-end">
+            <div class="w-full flex justify-between sm:justify-end p-4">
+                <span class="flex text-white text-sm whitespace-nowrap items-center justify-start grow">
+                    <span class="hidden sm:block whitespace-pre">"Powered by "</span>
+                    <a
+                        href="https://granola.team"
+                        class="flex items-center text-sm text-granola-orange hover:underline hover:decoration-2"
+                    >
+                        "Granola"
+                    </a>
+                </span>
                 <GAOptOut/>
                 {links
                     .into_iter()
                     .map(|link| {
                         view! {
                             <a
-                                class="ml-1 sm:ml-4 flex items-center text-white text-xs uppercase hover:text-granola-orange hover:underline"
+                                class="ml-1 flex items-center text-white text-xs uppercase hover:text-granola-orange hover:underline"
                                 href=link.href
                             >
                                 {match link.icon {
