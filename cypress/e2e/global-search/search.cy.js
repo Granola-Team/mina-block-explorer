@@ -1,6 +1,14 @@
 import { DEFAULT_ACCOUNT_PK, DEFAULT_CANONICAL_BLOCK_HASH } from "../constants";
 
 suite(["@CI"], "global search", () => {
+  it("has visible placeholder text", () => {
+    cy.viewport("iphone-xr");
+    cy.visit("/");
+    cy.get('input[placeholder="Paste -> Enter -> Explore!"]').should(
+      "be.visible",
+    );
+  });
+
   let state_hash = "CkpYspKDV9mpSyZLczMYG8kr4CZYAXxXPH3VM9txYwRXdyyaCDfzL";
 
   let pages = [
