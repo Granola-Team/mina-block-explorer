@@ -41,7 +41,7 @@ fn SummaryGrid(summary: Option<BlockchainSummary>) -> impl IntoView {
                     .as_ref()
                     .map(|s| {
                         format_mina(s.circ_supply().to_string())
-                            .split(".")
+                            .split('.')
                             .collect::<Vec<_>>()[0]
                             .to_string()
                     })
@@ -61,7 +61,7 @@ fn SummaryGrid(summary: Option<BlockchainSummary>) -> impl IntoView {
                     .as_ref()
                     .map(|s| {
                         format_mina(s.tot_currency().to_string())
-                            .split(".")
+                            .split('.')
                             .collect::<Vec<_>>()[0]
                             .to_string()
                     })
