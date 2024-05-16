@@ -3,10 +3,11 @@ use serde::{Deserialize, Serialize};
 #[derive(Deserialize, Serialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct BlockchainSummary {
-    pub blockchain_length: u64,
+    pub blockchain_length: u32,
     pub circulating_supply: String,
-    pub epoch: u16,
-    pub slot: u16,
+    pub epoch: u32,
+    pub slot: u32,
+    pub staking_epoch_ledger_hash: String,
     pub total_currency: String,
 }
 
@@ -37,6 +38,8 @@ mod float_tests {
             blockchain_length: 314394,
             epoch: 67,
             slot: 4194,
+            staking_epoch_ledger_hash: "jxKCrryFrvzBE4iUURcS9zNTKcRdejiE9K28Bqcu7Us7RQqNfdL"
+                .to_owned(),
             total_currency: "1105297372.840039233".to_owned(),
         };
         assert_eq!(bs.circ_supply(), 2345345.4312431243);
