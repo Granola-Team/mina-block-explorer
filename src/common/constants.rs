@@ -7,6 +7,5 @@ pub const ESTIMATED_ROW_HEIGHT: usize = 48;
 pub const DEFAULT_ESTIMATED_NON_TABLE_SPACE_IN_SECTIONS: usize = 160;
 pub const EPOCH_SLOTS: u16 = 7140;
 pub const DEFAULT_USER_INPUT_DEBOUNCE_INTERNVAL: f64 = 500.0;
-pub const GLOBAL_SEARCH_PLACEHOLDER_TEXT: &str =
-    "Paste -> Enter -> Explore!";
+pub const GLOBAL_SEARCH_PLACEHOLDER_TEXT: &str = "Paste -> Enter -> Explore!";
 pub const LIVE_RELOAD_INTERVAL: u64 = 60000;
