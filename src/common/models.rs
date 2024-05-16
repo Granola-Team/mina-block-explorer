@@ -192,6 +192,7 @@ pub enum NavIcon {
     Addresses,
     FeeTransfers,
     Analytics,
+    More,
 }
 
 #[derive(Clone, Debug)]

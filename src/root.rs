@@ -3,6 +3,7 @@ use crate::{
         dialog::AccountDialogView,
         page::{AccountSpotlightPage, AccountsPage, AddressesTabbedPage},
     },
+    analytics::page::{AnalyticsTabbedPage, InternalCommandsAnalayticsPage},
     blocks::page::{
         BlockAnalyticsTab, BlockInternalCommandsTab, BlockSnarkJobsTab, BlockSpotlightTab,
         BlockTabbedPage, BlockUserCommandsTab,
@@ -11,7 +12,7 @@ use crate::{
         BroadcastDelegationPage, BroadcastFromLedgerPage, BroadcastTransactionPage,
         DelegationTabbedPage,
     },
-    common::{constants::BERKELEY_FEATURES_ENABLED, search::*},
+    common::{constants::*, search::*},
     footer::Footer,
     header::navigation::Header,
     internal_commands::components::InternalCommandsTab,
@@ -30,6 +31,9 @@ use leptos_router::*;
 #[component]
 pub fn Root() -> impl IntoView {
     view! {
+        <script>
+            {format!(r#"const config = {{ graphql_endpoint: "{}" }}"#, GRAPHQL_ENDPOINT)}
+        </script>
         <Router>
             <Header/>
             <GlobalSearchBar/>
@@ -119,6 +123,13 @@ pub fn Root() -> impl IntoView {
                         <Route path="/transaction" view=BroadcastTransactionPage/>
                         <Route path="/delegation" view=BroadcastDelegationPage/>
                         <Route path="/ledger" view=BroadcastFromLedgerPage/>
+                    </Route>
+                    <Route path="/analytics" view=AnalyticsTabbedPage>
+                        <Route
+                            path="*"
+                            view=move || view! { <Redirect path="commands/internal"/> }
+                        />
+                        <Route path="/commands/internal" view=InternalCommandsAnalayticsPage/>
                     </Route>
                 </Routes>
             </main>
