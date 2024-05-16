@@ -265,6 +265,7 @@ where
                 NavIcon::Addresses => view! { <AddressIcon/> },
                 NavIcon::FeeTransfers => view! { <FeeTransferIcon/> },
                 NavIcon::Analytics => view! { <AnalyticsIcon/> },
+                NavIcon::More => view! { <MoreIcon/> },
             }}
 
             <span class="ml-0.5">{nav_entry.text}</span>
@@ -307,6 +308,7 @@ pub fn TabLink(nav_entry: NavEntry) -> impl IntoView {
                 NavIcon::Addresses => view! { <AddressIcon/> },
                 NavIcon::FeeTransfers => view! { <FeeTransferIcon/> },
                 NavIcon::Analytics => view! { <AnalyticsIcon/> },
+                NavIcon::More => view! { <MoreIcon/> },
             }}
 
             <div class="ml-0.5">{nav_entry.text}</div>
@@ -422,6 +424,15 @@ pub fn AnalyticsSmContainer(children: Children) -> impl IntoView {
 pub fn AnalyticsLgContainer(children: Children) -> impl IntoView {
     view! {
         <AnalyticsContainer span="analytics-lg col-span-1 md:col-span-2">
+            {children()}
+        </AnalyticsContainer>
+    }
+}
+
+#[component]
+pub fn AnalyticsXLContainer(children: Children) -> impl IntoView {
+    view! {
+        <AnalyticsContainer span="analytics-lg col-span-1 md:col-span-4">
             {children()}
         </AnalyticsContainer>
     }

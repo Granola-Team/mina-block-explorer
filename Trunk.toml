@@ -5,8 +5,8 @@ watch = ["src","assets", "graphql"]
 tailwindcss = "3.4.1"
 
 [build]
-target = "src/index.html"
+target = "index.html"
 
 [clean]
-dist = "src/dist"
+dist = "dist"
 cargo = true
