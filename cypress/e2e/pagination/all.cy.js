@@ -80,11 +80,21 @@ suite(["@CI"], "pagination", () => {
     `/blocks/${DEFAULT_CANONICAL_BLOCK_HASH}/commands/internal`,
     `/blocks/${DEFAULT_CANONICAL_BLOCK_HASH}/snark-jobs`,
     "/blocks",
-  ].forEach((page) =>
+  ].forEach((page) => {
     it(`works on ${page}`, () => {
       cy.visit(page);
       cy.get(".pagination-controls").as("pag");
       testTablePagination("@pag");
     }),
-  );
+      it(`is visible at all times on ${page}`, () => {
+        cy.viewport("iphone-xr");
+        cy.visit(page);
+        cy.get("table").parent().as("table-container");
+        cy.get(".pagination-controls").as("pag");
+
+        cy.get("@table-container").scrollTo("right");
+        cy.get("@pag").find("button.go_to_first").should("be.visible");
+        cy.get("@pag").find("button.go_to_last").should("be.visible");
+      });
+  });
 });

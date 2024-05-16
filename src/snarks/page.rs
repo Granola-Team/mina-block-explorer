@@ -137,18 +137,18 @@ fn SnarksPageContents() -> impl IntoView {
 
                     </Suspense>
                 </Table>
-                {move || {
-                    {
-                        move || {
-                            get_pagination_and_data()
-                                .map(|(_, pag)| {
-                                    view! { <Pagination pagination=pag/> }
-                                })
-                        }
-                    }
-                }}
-
             </TableContainer>
+            {move || {
+                {
+                    move || {
+                        get_pagination_and_data()
+                            .map(|(_, pag)| {
+                                view! { <Pagination pagination=pag/> }
+                            })
+                    }
+                }
+            }}
+
         </TableSection>
     }
 }

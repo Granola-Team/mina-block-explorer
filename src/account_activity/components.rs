@@ -309,20 +309,20 @@ pub fn AccountTransactionsSection(
                     }}
 
                 </Table>
-                {move || {
-                    let length = transactions_sig.get().map(|s| s.len()).unwrap_or(0);
-                    let pag = build_pagination(
-                        length,
-                        records_per_page,
-                        current_page.get(),
-                        set_current_page,
-                        None,
-                        None,
-                    );
-                    view! { <Pagination pagination=pag/> }
-                }}
-
             </TableContainer>
+            {move || {
+                let length = transactions_sig.get().map(|s| s.len()).unwrap_or(0);
+                let pag = build_pagination(
+                    length,
+                    records_per_page,
+                    current_page.get(),
+                    set_current_page,
+                    None,
+                    None,
+                );
+                view! { <Pagination pagination=pag/> }
+            }}
+
         </TableSection>
     }
 }
@@ -399,23 +399,23 @@ pub fn AccountOverviewSnarkJobTable(
                 }}
 
             </Table>
-            {move || {
-                let length = snarks_sig.get().map(|s| s.len()).unwrap_or(0);
-                let pag = build_pagination(
-                    length,
-                    records_per_page,
-                    current_page.get(),
-                    set_current_page,
-                    None,
-                    None,
-                );
-                view! { <Pagination pagination=pag/> }
-            }}
-
-            <TableLink href=href.get() text="See all snark jobs">
-                <CheckCircleIcon/>
-            </TableLink>
         </TableContainer>
+        {move || {
+            let length = snarks_sig.get().map(|s| s.len()).unwrap_or(0);
+            let pag = build_pagination(
+                length,
+                records_per_page,
+                current_page.get(),
+                set_current_page,
+                None,
+                None,
+            );
+            view! { <Pagination pagination=pag/> }
+        }}
+
+        <TableLink href=href.get() text="See all snark jobs">
+            <CheckCircleIcon/>
+        </TableLink>
     }
 }
 

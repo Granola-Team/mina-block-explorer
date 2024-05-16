@@ -743,27 +743,18 @@ pub fn BlocksSection() -> impl IntoView {
 
                     </Suspense>
                 </Table>
-                <Suspense fallback=|| {
-                    ().into_view()
-                }>
-                    {move || {
-                        resource
-                            .get()
-                            .and_then(|res| res.ok())
-                            .map(|data| {
-                                let pag = build_blocks_pag(
-                                    &data,
-                                    current_page,
-                                    set_current_page,
-                                    page_dim,
-                                );
-                                view! { <Pagination pagination=pag/> }
-                            })
-                            .collect_view()
-                    }}
-
-                </Suspense>
             </TableContainer>
+            {move || {
+                resource
+                    .get()
+                    .and_then(|res| res.ok())
+                    .map(|data| {
+                        let pag = build_blocks_pag(&data, current_page, set_current_page, page_dim);
+                        view! { <Pagination pagination=pag/> }
+                    })
+                    .collect_view()
+            }}
+
         </TableSection>
         <Outlet/>
     }
