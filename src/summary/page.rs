@@ -66,6 +66,7 @@ fn SummaryGrid(summary: Option<BlockchainSummary>) -> impl IntoView {
                             .to_string()
                     })
             />
+
         </section>
     }
 }
