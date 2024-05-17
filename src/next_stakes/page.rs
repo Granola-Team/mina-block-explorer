@@ -49,10 +49,6 @@ fn NextStakesPageContents() -> impl IntoView {
             column: "Delegators".to_string(),
             is_searchable: false,
         },
-        TableColumn {
-            column: "Ledger Hash".to_string(),
-            is_searchable: false,
-        },
     ];
     let table_cols_length = table_columns.len();
 

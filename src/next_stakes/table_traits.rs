@@ -5,7 +5,7 @@ use next_staking_ledgers_query::NextStakingLedgersQueryNextstakes;
 
 impl TableData for Vec<Option<NextStakingLedgersQueryNextstakes>> {
     fn get_columns(&self) -> Vec<String> {
-        ["Key", "Stake", "Delegate", "Delegators", "Ledger Hash"]
+        ["Key", "Stake", "Delegate", "Delegators"]
             .iter()
             .map(ToString::to_string)
             .collect::<Vec<_>>()
@@ -36,7 +36,6 @@ impl TableData for Vec<Option<NextStakingLedgersQueryNextstakes>> {
                         format!("/addresses/accounts/{}", get_delegate(stake)),
                     ),
                     convert_to_pill(get_delegators_count(stake), ColorVariant::Blue),
-                    convert_to_span(get_ledger_hash(stake)),
                 ],
                 None => vec![],
             })
