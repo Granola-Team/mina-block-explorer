@@ -34,9 +34,8 @@ impl TableData for Vec<Option<AllAccountSummary>> {
                         "/addresses/accounts/B62qr9zQ1LKnKM3d7wmFVjv3TzSV6fnXBZ162scK49NTHCA8Xc7PVKq".to_string(),
                     ),
                     convert_to_span(all_account_sum.username.to_string()),
-                        decorate_with_currency_tag(
-                            all_account_sum.balance.to_string(),
-                            "mina".to_string(),
+                        decorate_with_mina_tag(
+                            all_account_sum.balance.to_string()
                         ),
                     convert_to_pill(all_account_sum.nonce.to_string(), ColorVariant::Grey),
                     convert_to_link(
@@ -127,12 +126,9 @@ impl TableData for Vec<Option<AccountActivityQueryDirectionalTransactions>> {
                         format!("/addresses/accounts/{}", transaction.get_counterparty()),
                     ),
                     convert_array_to_span(vec![
-                        decorate_with_currency_tag(transaction.get_amount(), "mina".to_string()),
-                        convert_array_to_span(vec![decorate_with_currency_tag(
-                            transaction.get_fee(),
-                            "mina".to_string(),
-                        )])
-                        .attr("class", "text-xs text-slate-400"),
+                        decorate_with_mina_tag(transaction.get_amount()),
+                        convert_array_to_span(vec![decorate_with_mina_tag(transaction.get_fee())])
+                            .attr("class", "text-xs text-slate-400"),
                     ])
                     .attr("class", "flex flex-col items-start"),
                 ],
@@ -179,7 +175,7 @@ impl TableData for Vec<Option<AccountActivityQuerySnarks>> {
                         snark.get_prover(),
                         format!("/addresses/accounts/{}", snark.get_prover()),
                     ),
-                    decorate_with_currency_tag(snark.get_fee(), "mina".to_string()),
+                    decorate_with_mina_tag(snark.get_fee()),
                 ],
                 None => vec![],
             })
@@ -274,7 +270,7 @@ impl TableData for Vec<Option<AccountActivityQueryBlocks>> {
                         block.get_creator_account(),
                         format!("/blocks/accounts/{}", block.get_creator_account()),
                     ),
-                    decorate_with_currency_tag(block.get_coinbase(), "mina".to_string()),
+                    decorate_with_mina_tag(block.get_coinbase()),
                     convert_to_pill(block.get_transaction_count(), ColorVariant::Blue),
                     convert_to_pill(block.get_snark_job_count(), ColorVariant::Blue),
                     convert_to_link(

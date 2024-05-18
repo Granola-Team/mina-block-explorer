@@ -40,7 +40,7 @@ impl TableData for Vec<Option<SnarksQuerySnarks>> {
                         get_prover(snark),
                         format!("/addresses/accounts/{}", get_prover(snark)),
                     ),
-                    decorate_with_currency_tag(get_fee(snark), "mina".to_string()),
+                    decorate_with_mina_tag(get_fee(snark)),
                 ],
                 None => vec![],
             })

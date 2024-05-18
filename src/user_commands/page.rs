@@ -120,9 +120,8 @@ pub fn CommandSpotlightPage() -> impl IntoView {
                                 SpotlightEntry {
                                     label: "Amount".to_string(),
                                     any_el: {
-                                        let amount_el = decorate_with_currency_tag(
+                                        let amount_el = decorate_with_mina_tag(
                                             transaction.get_amount(),
-                                            "mina".to_string(),
                                         );
                                         Some(
                                             if transaction.get_kind() == "STAKE_DELEGATION" {
@@ -143,12 +142,7 @@ pub fn CommandSpotlightPage() -> impl IntoView {
                                 },
                                 SpotlightEntry {
                                     label: "Fee".to_string(),
-                                    any_el: Some(
-                                        decorate_with_currency_tag(
-                                            transaction.get_fee(),
-                                            "mina".to_string(),
-                                        ),
-                                    ),
+                                    any_el: Some(decorate_with_mina_tag(transaction.get_fee())),
                                     ..Default::default()
                                 },
                                 SpotlightEntry {

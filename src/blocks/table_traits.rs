@@ -62,7 +62,7 @@ impl TableData for Vec<Option<BlocksQueryBlocks>> {
                         get_creator_account(block),
                         format!("/blocks/accounts/{}", get_creator_account(block)),
                     ),
-                    decorate_with_currency_tag(get_coinbase(block), "mina".to_string()),
+                    decorate_with_mina_tag(get_coinbase(block)),
                     convert_to_pill(
                         get_transaction_count(block).map_or_else(String::new, |o| o.to_string()),
                         ColorVariant::Blue,
@@ -112,14 +112,8 @@ impl TableData for Vec<Option<BlocksQueryBlocksTransactionsUserCommands>> {
                         get_user_command_hash(user_command),
                         format!("/commands/{}", get_user_command_hash(user_command)),
                     ),
-                    decorate_with_currency_tag(
-                        get_user_command_fee(user_command),
-                        "mina".to_string(),
-                    ),
-                    decorate_with_currency_tag(
-                        get_user_command_amount(user_command),
-                        "mina".to_string(),
-                    ),
+                    decorate_with_mina_tag(get_user_command_fee(user_command)),
+                    decorate_with_mina_tag(get_user_command_amount(user_command)),
                 ],
                 None => vec![],
             })
@@ -153,7 +147,7 @@ impl TableData for Vec<Option<BlocksQueryBlocksSnarkJobs>> {
                         get_snark_prover(snark),
                         format!("/addresses/accounts/{}", get_snark_prover(snark)),
                     ),
-                    decorate_with_currency_tag(get_snark_fee(snark), "mina".to_string()),
+                    decorate_with_mina_tag(get_snark_fee(snark)),
                 ],
                 None => vec![],
             })
@@ -177,7 +171,7 @@ impl TableData for Vec<Option<BlocksQueryBlocksTransactionsFeeTransfer>> {
                         fee_transfer.get_receipient(),
                         format!("/addresses/accounts/{}", fee_transfer.get_receipient()),
                     ),
-                    decorate_with_currency_tag(fee_transfer.get_fee(), "mina".to_string()),
+                    decorate_with_mina_tag(fee_transfer.get_fee()),
                     convert_to_pill(fee_transfer.get_type(), ColorVariant::Grey),
                 ],
                 None => vec![],
