@@ -92,7 +92,10 @@ fn SnarksPageContents() -> impl IntoView {
                     <TableHeader columns=table_columns/>
                     <Suspense fallback=move || {
                         view! {
-                            <TableRows data=vec![vec![LoadingPlaceholder; table_cols_length]; 10]/>
+                            <TableRows data=vec![
+                                vec![LoadingPlaceholder; table_cols_length];
+                                TABLE_ROW_LIMIT.try_into().unwrap()
+                            ]/>
                         }
                     }>
                         {move || {

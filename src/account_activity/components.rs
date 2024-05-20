@@ -7,7 +7,7 @@ use super::{
 };
 use crate::{
     account_activity::table_traits::BlockTrait,
-    common::{components::*, functions::*, models::*, table::*},
+    common::{components::*, constants::*, functions::*, models::*, table::*},
     icons::*,
 };
 use leptos::*;
@@ -341,7 +341,10 @@ pub fn AccountOverviewSnarkJobTable(
                 {move || match snarks_sig.get() {
                     None => {
                         view! {
-                            <TableRows data=vec![vec![LoadingPlaceholder; table_cols_length]; 10]/>
+                            <TableRows data=vec![
+                                vec![LoadingPlaceholder; table_cols_length];
+                                TABLE_ROW_LIMIT.try_into().unwrap()
+                            ]/>
                         }
                     }
                     Some(snarks) => {
@@ -418,7 +421,10 @@ pub fn AccountOverviewBlocksTable(
                 {move || match blocks_sig.get() {
                     None => {
                         view! {
-                            <TableRows data=vec![vec![LoadingPlaceholder; table_cols_length]; 10]/>
+                            <TableRows data=vec![
+                                vec![LoadingPlaceholder; table_cols_length];
+                                TABLE_ROW_LIMIT.try_into().unwrap()
+                            ]/>
                         }
                     }
                     Some(blocks) => {
