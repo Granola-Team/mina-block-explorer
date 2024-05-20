@@ -14,10 +14,10 @@ suite(["@CI"], "tab count and row count", () => {
       cy.get("@tab-count")
         .invoke("text")
         .then((count) => {
-          let count = Number(count);
-          if (count > 0) {
+          let c = Number(count);
+          if (c > 0) {
             cy.aliasTableRows(tab, "tr");
-            cy.get("@tr").should("have.lenghtOf", count);
+            cy.get("@tr").should("have.lenghtOf", c);
           } else {
             cy.get("table").should("not.exist");
           }
