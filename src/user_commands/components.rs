@@ -109,10 +109,12 @@ pub fn TransactionsSection() -> impl IntoView {
     let get_data = move || resource.get().and_then(|res| res.ok());
 
     create_effect(move |_| {
-        if let Some(data) = get_data() { set_metadata.set(Some(TableMetadata {
+        if let Some(data) = get_data() {
+            set_metadata.set(Some(TableMetadata {
                 total_records: "all".to_string(),
                 displayed_records: data.transactions.len() as i64,
-            })) }
+            }))
+        }
     });
 
     view! {

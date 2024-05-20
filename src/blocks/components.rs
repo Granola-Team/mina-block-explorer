@@ -655,10 +655,12 @@ pub fn BlocksSection() -> impl IntoView {
     let table_cols_length = table_columns.len();
 
     create_effect(move |_| {
-        if let Some(data) = resource.get().and_then(|res| res.ok()) { set_metadata.set(Some(TableMetadata {
+        if let Some(data) = resource.get().and_then(|res| res.ok()) {
+            set_metadata.set(Some(TableMetadata {
                 displayed_records: data.blocks.len() as i64,
                 total_records: "all".to_string(),
-            })) }
+            }))
+        }
     });
 
     view! {
