@@ -1,6 +1,6 @@
 use super::functions::*;
 use crate::{
-    common::{components::*, constants::*, functions::*, models::*, table::*},
+    common::{components::*, constants::*, table::*},
     stakes::{components::EpochButton, models::EpochStyleVariant},
 };
 use leptos::*;
@@ -29,26 +29,7 @@ fn NextStakesPageContents() -> impl IntoView {
         },
     );
 
-    let page_dim = use_context::<ReadSignal<PageDimensions>>()
-        .expect("there to be a `PageDimensions` signal provided");
-    let (current_page, set_current_page) = create_signal(1);
-
-    let get_data_and_pagination = move || {
-        resource.get().and_then(|res| res.ok()).map(|data| {
-            let pag = build_pagination(
-                data.nextstakes.len(),
-                TABLE_DEFAULT_PAGE_SIZE,
-                current_page.get(),
-                set_current_page,
-                page_dim.get().height.map(|h| h as usize),
-                Some(Box::new(|container_height: usize| {
-                    (container_height - DEFAULT_ESTIMATED_NON_TABLE_SPACE_IN_SECTIONS)
-                        / ESTIMATED_ROW_HEIGHT
-                })),
-            );
-            (data, pag)
-        })
-    };
+    let get_data = move || resource.get().and_then(|res| res.ok());
 
     let table_columns = vec![
         TableColumn {
@@ -106,30 +87,15 @@ fn NextStakesPageContents() -> impl IntoView {
                             }
                         }>
                             {move || {
-                                get_data_and_pagination()
-                                    .map(|(data, pag)| {
-                                        view! {
-                                            <TableRows data=data
-                                                .nextstakes[pag
-                                                    .start_index()..std::cmp::min(
-                                                    pag.end_index() + 1,
-                                                    pag.total_records,
-                                                )]
-                                                .to_vec()/>
-                                        }
+                                get_data()
+                                    .map(|data| {
+                                        view! { <TableRows data=data.nextstakes/> }
                                     })
                             }}
 
                         </Suspense>
                     </Table>
                 </TableContainer>
-                {move || {
-                    get_data_and_pagination()
-                        .map(|(_, pag)| {
-                            view! { <Pagination pagination=pag/> }
-                        })
-                }}
-
             </TableSection>
         </ErrorBoundary>
     }

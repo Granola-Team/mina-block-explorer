@@ -1,6 +1,6 @@
 use super::{functions::*, graphql::blocks_query::BlocksQueryBlocks, models::*};
 use crate::{
-    blocks::graphql::blocks_query::{BlocksQueryBlocksTransactionsFeeTransfer, ResponseData},
+    blocks::graphql::blocks_query::BlocksQueryBlocksTransactionsFeeTransfer,
     common::{components::*, constants::*, functions::*, models::*, spotlight::*, table::*},
     icons::*,
 };
@@ -103,34 +103,12 @@ pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
 
 #[component]
 pub fn BlockUserCommands(block: BlocksQueryBlocks) -> impl IntoView {
-    let (current_page, set_current_page) = create_signal(1);
-    let page_dim = use_context::<ReadSignal<PageDimensions>>()
-        .expect("there to be a `PageDimensions` signal provided");
-
     view! {
         <TableSection section_heading="User Commands" controls=|| ().into_view()>
 
             {move || match get_user_commands(&block) {
                 Some(user_commands) => {
-                    let pag = build_pagination(
-                        user_commands.len(),
-                        TABLE_DEFAULT_PAGE_SIZE,
-                        current_page.get(),
-                        set_current_page,
-                        page_dim.get().height.map(|h| h as usize),
-                        Some(
-                            Box::new(|container_height: usize| {
-                                (container_height - DEFAULT_ESTIMATED_NON_TABLE_SPACE_IN_SECTIONS)
-                                    / ESTIMATED_ROW_HEIGHT
-                            }),
-                        ),
-                    );
-                    let subset = get_subset(
-                        &user_commands,
-                        pag.records_per_page,
-                        current_page.get() - 1,
-                    );
-                    view! { <DeprecatedTable data=subset pagination=pag/> }
+                    view! { <DeprecatedTable data=user_commands/> }
                 }
                 None => ().into_view(),
             }}
@@ -159,10 +137,6 @@ pub fn BlockInternalCommands(block: BlocksQueryBlocks) -> impl IntoView {
 
 #[component]
 pub fn BlockInternalCommandsTable(block: BlocksQueryBlocks) -> impl IntoView {
-    let page_dim = use_context::<ReadSignal<PageDimensions>>()
-        .expect("there to be a `PageDimensions` signal provided");
-    let (current_page, set_current_page) = create_signal(1);
-
     view! {
         {move || match (
             block.transactions.clone().and_then(|txn| txn.fee_transfer),
@@ -181,25 +155,7 @@ pub fn BlockInternalCommandsTable(block: BlocksQueryBlocks) -> impl IntoView {
                             recipient: Some(coinbase_receiver),
                         }),
                     );
-                let pag = build_pagination(
-                    feetransfers.len(),
-                    TABLE_DEFAULT_PAGE_SIZE,
-                    current_page.get(),
-                    set_current_page,
-                    page_dim.get().height.map(|h| h as usize),
-                    Some(
-                        Box::new(|container_height: usize| {
-                            (container_height - DEFAULT_ESTIMATED_NON_TABLE_SPACE_IN_SECTIONS)
-                                / ESTIMATED_ROW_HEIGHT
-                        }),
-                    ),
-                );
-                let subset = get_subset(
-                    &feetransfers,
-                    pag.records_per_page,
-                    current_page.get() - 1,
-                );
-                view! { <DeprecatedTable data=subset pagination=pag/> }
+                view! { <DeprecatedTable data=feetransfers/> }
             }
             (_, _, _) => {
                 view! { <EmptyTable message="No internal commands for this block"/> }
@@ -615,10 +571,6 @@ pub fn BlocksSection() -> impl IntoView {
         },
     );
 
-    let page_dim = use_context::<ReadSignal<PageDimensions>>()
-        .expect("there to be a `PageDimensions` signal provided");
-    let (current_page, set_current_page) = create_signal(1);
-
     let table_columns = vec![
         TableColumn {
             column: "Height".to_string(),
@@ -658,22 +610,6 @@ pub fn BlocksSection() -> impl IntoView {
         },
     ];
     let table_cols_length = table_columns.len();
-    let build_blocks_pag = |data: &ResponseData,
-                            current_page: ReadSignal<usize>,
-                            set_current_page: WriteSignal<usize>,
-                            page_dim: ReadSignal<PageDimensions>| {
-        build_pagination(
-            data.blocks.len(),
-            TABLE_DEFAULT_PAGE_SIZE,
-            current_page.get(),
-            set_current_page,
-            page_dim.get().height.map(|f| f as usize),
-            Some(Box::new(|container_height: usize| {
-                (container_height - DEFAULT_ESTIMATED_NON_TABLE_SPACE_IN_SECTIONS)
-                    / ESTIMATED_ROW_HEIGHT
-            })),
-        )
-    };
 
     view! {
         <TableSection
@@ -705,35 +641,13 @@ pub fn BlocksSection() -> impl IntoView {
                                 .get()
                                 .and_then(|res| res.ok())
                                 .map(|data| {
-                                    let pag = build_blocks_pag(
-                                        &data,
-                                        current_page,
-                                        set_current_page,
-                                        page_dim,
-                                    );
-                                    let blocks_subset = get_subset(
-                                        &data.blocks,
-                                        pag.records_per_page,
-                                        current_page.get() - 1,
-                                    );
-                                    view! { <TableRows data=blocks_subset/> }
+                                    view! { <TableRows data=data.blocks/> }
                                 })
                         }}
 
                     </Suspense>
                 </Table>
             </TableContainer>
-            {move || {
-                resource
-                    .get()
-                    .and_then(|res| res.ok())
-                    .map(|data| {
-                        let pag = build_blocks_pag(&data, current_page, set_current_page, page_dim);
-                        view! { <Pagination pagination=pag/> }
-                    })
-                    .collect_view()
-            }}
-
         </TableSection>
         <Outlet/>
     }
@@ -741,10 +655,6 @@ pub fn BlocksSection() -> impl IntoView {
 
 #[component]
 pub fn BlockSpotlightSnarkJobTable(block: BlocksQueryBlocks) -> impl IntoView {
-    let page_dim = use_context::<ReadSignal<PageDimensions>>()
-        .expect("there to be a `PageDimensions` signal provided");
-    let (current_page, set_current_page) = create_signal(1);
-
     view! {
         {move || match block.snark_jobs.clone() {
             Some(snark_jobs) => {
@@ -753,28 +663,7 @@ pub fn BlockSpotlightSnarkJobTable(block: BlocksQueryBlocks) -> impl IntoView {
                         0 => {
                             view! { <EmptyTable message="No SNARK work related to this block"/> }
                         }
-                        _ => {
-                            let pag = build_pagination(
-                                snark_jobs.len(),
-                                TABLE_DEFAULT_PAGE_SIZE,
-                                current_page.get(),
-                                set_current_page,
-                                page_dim.get().height.map(|h| h as usize),
-                                Some(
-                                    Box::new(|container_height: usize| {
-                                        (container_height
-                                            - DEFAULT_ESTIMATED_NON_TABLE_SPACE_IN_SECTIONS)
-                                            / ESTIMATED_ROW_HEIGHT
-                                    }),
-                                ),
-                            );
-                            let subset = get_subset(
-                                &snark_jobs,
-                                pag.records_per_page,
-                                current_page.get() - 1,
-                            );
-                            view! { <DeprecatedTable data=subset pagination=pag/> }
-                        }
+                        _ => view! { <DeprecatedTable data=snark_jobs/> },
                     }}
                 }
             }

@@ -2,7 +2,6 @@ use super::functions::*;
 use crate::common::{
     components::*,
     constants::{TABLE_RECORD_SIZE, *},
-    functions::*,
     models::*,
     table::*,
 };
@@ -51,10 +50,6 @@ fn SnarksPageContents() -> impl IntoView {
         },
     );
 
-    let page_dim = use_context::<ReadSignal<PageDimensions>>()
-        .expect("there to be a `PageDimensions` signal provided");
-    let (current_page, set_current_page) = create_signal(1);
-
     let table_columns = vec![
         TableColumn {
             column: "Height".to_string(),
@@ -79,22 +74,7 @@ fn SnarksPageContents() -> impl IntoView {
     ];
     let table_cols_length = table_columns.len();
 
-    let get_pagination_and_data = move || {
-        resource.get().and_then(|res| res.ok()).map(|data| {
-            let pag = build_pagination(
-                data.snarks.len(),
-                TABLE_DEFAULT_PAGE_SIZE,
-                current_page.get(),
-                set_current_page,
-                page_dim.get().height.map(|h| h as usize),
-                Some(Box::new(|container_height: usize| {
-                    (container_height - DEFAULT_ESTIMATED_NON_TABLE_SPACE_IN_SECTIONS)
-                        / ESTIMATED_ROW_HEIGHT
-                })),
-            );
-            (data, pag)
-        })
-    };
+    let get_data = move || resource.get().and_then(|res| res.ok());
 
     view! {
         <TableSection
@@ -122,33 +102,15 @@ fn SnarksPageContents() -> impl IntoView {
                         }
                     }>
                         {move || {
-                            get_pagination_and_data()
-                                .map(|(data, pag)| {
-                                    let subset = data
-                                        .snarks[pag
-                                            .start_index()..std::cmp::min(
-                                            pag.end_index() + 1,
-                                            pag.total_records,
-                                        )]
-                                        .to_vec();
-                                    view! { <TableRows data=subset/> }
+                            get_data()
+                                .map(|data| {
+                                    view! { <TableRows data=data.snarks/> }
                                 })
                         }}
 
                     </Suspense>
                 </Table>
             </TableContainer>
-            {move || {
-                {
-                    move || {
-                        get_pagination_and_data()
-                            .map(|(_, pag)| {
-                                view! { <Pagination pagination=pag/> }
-                            })
-                    }
-                }
-            }}
-
         </TableSection>
     }
 }

@@ -1,7 +1,7 @@
-use super::{components::*, functions::*, models::*};
+use super::{components::*, functions::*};
 use crate::{common::constants::*, icons::*};
 use heck::ToKebabCase;
-use leptos::{html::*, web_sys::MouseEvent, *};
+use leptos::{html::*, *};
 use leptos_router::*;
 use leptos_use::{use_debounce_fn_with_options, DebounceOptions};
 
@@ -22,11 +22,6 @@ pub struct TableColumn {
 }
 
 const INPUT_CLASS: &str = "w-5/6 mt-1 h-7 text-base text-sm font-normal font-mono p-2 rounded";
-const PAGINATION_BUTTON_SIZE: &str = "h-7 w-7";
-const BUTTON_CLASS_BASE: &str = "font-semibold flex justify-center items-center";
-const PAGE_NUMBER_CLASS: &str = "page text-md m-1 flex justify-center items-center font-semibold";
-const INACTIVE_PAGE_NUMBER_CLASS: &str =
-    "hover:bg-slate-300 bg-transparent rounded-full cursor-pointer";
 const CELL_PADDING_CLASS: &str = "first:pl-8 pl-2 last:pr-4";
 
 #[component]
@@ -44,10 +39,7 @@ pub fn Table(children: Children) -> impl IntoView {
 }
 
 #[component]
-pub fn DeprecatedTable<T>(
-    data: T,
-    #[prop(optional)] pagination: Option<Pagination>,
-) -> impl IntoView
+pub fn DeprecatedTable<T>(data: T) -> impl IntoView
 where
     T: TableData,
 {
@@ -67,9 +59,6 @@ where
                 <TableRows data=data/>
             </table>
         </div>
-        {pagination
-            .map(|pag| view! { <Pagination pagination=pag/> })
-            .unwrap_or_else(|| ().into_view())}
     }
 }
 
@@ -164,131 +153,6 @@ where
                 }
             })
             .collect_view()
-}
-
-#[component]
-pub fn Pagination(pagination: Pagination) -> impl IntoView {
-    let x_pages_around = x_surrounding_pages(pagination.current_page, pagination.total_pages());
-    let create_page_button = |page_num: usize, current_page: usize| {
-        let is_current_page = page_num == current_page;
-        let button_classes = format!(
-            "{} {} {}",
-            PAGINATION_BUTTON_SIZE,
-            PAGE_NUMBER_CLASS,
-            if is_current_page {
-                "current-page text-white rounded-md bg-granola-orange"
-            } else {
-                INACTIVE_PAGE_NUMBER_CLASS
-            }
-        );
-
-        vec![view! {
-                <button
-                    class=button_classes
-                    on:click=move |_| if !is_current_page { pagination.set_current_page.update(|cp| *cp = page_num) }
-                >{page_num}</button>
-            }.into_view()]
-    };
-
-    let pg_clone = pagination.clone();
-
-    view! {
-        <div class="pagination-controls flex flex-col md:grid md:grid-cols-3 min-h-12 bg-table-header-fill">
-            <span class="col-start-1 text-xs flex justify-center md:justify-start items-center font-bold pl-8 my-2">
-                {format!(
-                    "Showing {} to {} of {} records",
-                    std::cmp::min(pagination.start_index() + 1, pagination.total_records),
-                    std::cmp::min(pagination.end_index() + 1, pagination.total_records),
-                    pagination.total_records,
-                )}
-
-            </span>
-            <span class="button-container col-start-2 text-xs font-bold flex items-center justify-center my-2">
-                <PaginationButton
-                    class_id="go_to_first"
-                    on_click=move |_| { pagination.set_current_page.update(|cp| *cp = 1) }
-
-                    disabled=pagination.current_page == 1
-                >
-                    <ChevronDoubleLeft width=16/>
-                </PaginationButton>
-                <PaginationButton
-                    class_id="go_to_prev"
-                    on_click=move |_| {
-                        pagination
-                            .set_current_page
-                            .update(|cp| *cp = pagination.current_page.saturating_sub(1))
-                    }
-
-                    disabled=pagination.current_page == 1
-                >
-                    <ChevronLeft width=16/>
-                </PaginationButton>
-                {x_pages_around[0]
-                    .iter()
-                    .flat_map(|&p| create_page_button(p, pagination.current_page))
-                    .collect::<Vec<_>>()}
-                {create_page_button(pagination.current_page, pagination.current_page)}
-                {x_pages_around[1]
-                    .iter()
-                    .flat_map(|&p| create_page_button(p, pagination.current_page))
-                    .collect::<Vec<_>>()}
-                <PaginationButton
-                    class_id="go_to_next"
-                    on_click=move |_| {
-                        pagination.set_current_page.update(|cp| *cp = pagination.current_page + 1)
-                    }
-
-                    disabled=pagination.current_page == pagination.total_pages()
-                >
-                    <ChevronRight width=16/>
-                </PaginationButton>
-                <PaginationButton
-                    class_id="go_to_last"
-                    on_click=move |_| {
-                        pagination.set_current_page.update(|cp| *cp = pg_clone.total_pages())
-                    }
-
-                    disabled=pagination.current_page == pagination.total_pages()
-                >
-                    <ChevronDoubleRight width=16/>
-                </PaginationButton>
-            </span>
-        </div>
-    }.into_view()
-}
-
-#[component]
-fn PaginationButton(
-    #[prop(into)] class_id: String,
-    children: Children,
-    #[prop(into)] on_click: Callback<MouseEvent>,
-    disabled: bool,
-) -> impl IntoView {
-    let button_class = if disabled {
-        format!(
-            "{} {} text-slate-400 hover:cursor-not-allowed",
-            PAGINATION_BUTTON_SIZE, BUTTON_CLASS_BASE
-        )
-    } else {
-        format!("{} {} hover:cursor-pointer hover:text-granola-orange hover:underline rounded-full bg-transparent hover:bg-slate-300", PAGINATION_BUTTON_SIZE, BUTTON_CLASS_BASE)
-    };
-
-    view! {
-        <button
-            class=class_id + " " + &button_class
-            disabled=disabled
-            type="button"
-            on:click=move |event: MouseEvent| {
-                if !disabled {
-                    on_click.call(event)
-                }
-            }
-        >
-
-            {children()}
-        </button>
-    }
 }
 
 #[component]

@@ -1,5 +1,5 @@
 use crate::{
-    common::{components::*, constants::*, functions::*, models::*, table::*},
+    common::{components::*, constants::*, models::*, table::*},
     internal_commands::functions::load_data,
 };
 use leptos::*;
@@ -59,9 +59,6 @@ pub fn InternalCommandsTable() -> impl IntoView {
             .await
         },
     );
-    let page_dim = use_context::<ReadSignal<PageDimensions>>()
-        .expect("there to be a `PageDimensions` signal provided");
-    let (current_page, set_current_page) = create_signal(1);
 
     let table_columns = vec![
         TableColumn {
@@ -90,22 +87,7 @@ pub fn InternalCommandsTable() -> impl IntoView {
         },
     ];
     let table_cols_length = table_columns.len();
-    let get_data_and_pagination = move || {
-        resource.get().and_then(|res| res.ok()).map(|data| {
-            let pag = build_pagination(
-                data.feetransfers.len(),
-                TABLE_DEFAULT_PAGE_SIZE,
-                current_page.get(),
-                set_current_page,
-                page_dim.get().height.map(|h| h as usize),
-                Some(Box::new(|container_height: usize| {
-                    (container_height - DEFAULT_ESTIMATED_NON_TABLE_SPACE_IN_SECTIONS)
-                        / ESTIMATED_ROW_HEIGHT
-                })),
-            );
-            (data, pag)
-        })
-    };
+    let get_data = move || resource.get().and_then(|res| res.ok());
 
     view! {
         <TableContainer>
@@ -117,33 +99,19 @@ pub fn InternalCommandsTable() -> impl IntoView {
                     }
                 }>
                     {move || {
-                        get_data_and_pagination()
-                            .map(|(data, pag)| {
+                        get_data()
+                            .map(|data| {
                                 if data.feetransfers.is_empty() {
                                     return view! {
                                         <EmptyTable message="No internal commands found"/>
                                     };
                                 }
-                                view! {
-                                    <TableRows data=data
-                                        .feetransfers[pag
-                                            .start_index()..std::cmp::min(
-                                            pag.end_index() + 1,
-                                            pag.total_records,
-                                        )]
-                                        .to_vec()/>
-                                }
+                                view! { <TableRows data=data.feetransfers/> }
                             })
                     }}
 
                 </Suspense>
             </Table>
         </TableContainer>
-        {move || {
-            get_data_and_pagination()
-                .map(|(_, pag)| {
-                    view! { <Pagination pagination=pag/> }
-                })
-        }}
     }
 }

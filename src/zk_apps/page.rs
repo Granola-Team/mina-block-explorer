@@ -10,11 +10,8 @@ use leptos_meta::*;
 
 #[component]
 pub fn ZkAppSpotlight() -> impl IntoView {
-    let records_per_page = 5;
-    let (current_txn_page, set_current_txn_page) = create_signal(1);
-    let (current_fees_page, set_current_fees_page) = create_signal(1);
     let txn = stub_zk_app_txn_data(10);
-    let fees = vec![AccountActivityQueryDirectionalTransactions {
+    let fees = vec![Some(AccountActivityQueryDirectionalTransactions {
         fee: Some(0.01_f64),
         counterparty: Some("B62qmQsEHcsPUs5xdtHKjEmWqqhUPRSF2GNmdguqnNvpEZpKftPC69f".to_string()),
         direction: Some("IN".to_string()),
@@ -27,7 +24,7 @@ pub fn ZkAppSpotlight() -> impl IntoView {
         failure_reason: None,
         memo: None,
         canonical: Some(true),
-    }];
+    })];
     view! {
         <Title text="ZK App Spotlight"/>
         <PageContainer>
@@ -142,47 +139,14 @@ pub fn ZkAppSpotlight() -> impl IntoView {
                     heading="zkApp Commands".to_string()
                     position=SubSectionPosition::Left
                 >
-                    {move || {
-                        let data = txn.clone();
-                        let pag = build_pagination(
-                            data.len(),
-                            records_per_page,
-                            current_txn_page.get(),
-                            set_current_txn_page,
-                            None,
-                            None,
-                        );
-                        let subset = get_subset(
-                            &data.into_iter().map(Some).collect::<Vec<_>>(),
-                            records_per_page,
-                            current_txn_page.get() - 1,
-                        );
-                        view! { <DeprecatedTable data=subset pagination=pag/> }
-                    }}
+                    <DeprecatedTable data=txn/>
 
                 </AppSubSection>
                 <AppSubSection
                     heading="Fee Payments".to_string()
                     position=SubSectionPosition::Right
                 >
-                    {move || {
-                        let data = fees.clone();
-                        let pag = build_pagination(
-                            data.len(),
-                            records_per_page,
-                            current_fees_page.get(),
-                            set_current_fees_page,
-                            None,
-                            None,
-                        );
-                        let subset = get_subset(
-                            &data.into_iter().map(Some).collect::<Vec<_>>(),
-                            records_per_page,
-                            current_fees_page.get() - 1,
-                        );
-                        view! { <DeprecatedTable data=subset pagination=pag/> }
-                    }}
-
+                    <DeprecatedTable data=fees/>
                 </AppSubSection>
             </SubSectionContainer>
         </PageContainer>
@@ -214,32 +178,12 @@ fn ZkAppDetailTh(children: Children) -> impl IntoView {
 
 #[component]
 pub fn ZkAppTransactionsPage() -> impl IntoView {
-    let records_per_page = 10;
-    let (current_page, set_current_page) = create_signal(1);
     let data = stub_zk_app_txn_data(1000);
     view! {
         <Title text="Commands | ZK Apps"/>
         <PageContainer>
             <TableSection section_heading="ZK App Commands" controls=|| ().into_view()>
-
-                {move || {
-                    let data = data.clone();
-                    let pag = build_pagination(
-                        data.len(),
-                        records_per_page,
-                        current_page.get(),
-                        set_current_page,
-                        None,
-                        None,
-                    );
-                    let subset = get_subset(
-                        &data.into_iter().map(Some).collect::<Vec<_>>(),
-                        records_per_page,
-                        current_page.get() - 1,
-                    );
-                    view! { <DeprecatedTable data=subset pagination=pag/> }
-                }}
-
+                <DeprecatedTable data=data/>
             </TableSection>
         </PageContainer>
     }
@@ -247,32 +191,12 @@ pub fn ZkAppTransactionsPage() -> impl IntoView {
 
 #[component]
 pub fn ZkAppsPage() -> impl IntoView {
-    let records_per_page = 10;
-    let (current_page, set_current_page) = create_signal(1);
     let data = stub_zk_apps_data(9000);
     view! {
         <Title text="ZK Apps | Search For ZK Apps"/>
         <PageContainer>
             <TableSection section_heading="ZK Apps" controls=|| ().into_view()>
-
-                {move || {
-                    let data = data.clone();
-                    let pag = build_pagination(
-                        data.len(),
-                        records_per_page,
-                        current_page.get(),
-                        set_current_page,
-                        None,
-                        None,
-                    );
-                    let subset = get_subset(
-                        &data.into_iter().map(Some).collect::<Vec<_>>(),
-                        records_per_page,
-                        current_page.get() - 1,
-                    );
-                    view! { <DeprecatedTable data=subset pagination=pag/> }
-                }}
-
+                <DeprecatedTable data=data/>
             </TableSection>
         </PageContainer>
     }
