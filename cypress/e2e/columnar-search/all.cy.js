@@ -80,6 +80,12 @@ suite(["@CI"], "search with multiple results", () => {
       expectation: { column: "Height", value: "253134" },
     },
     {
+      origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
+      input: "253134",
+      tableHeading: "Block Production",
+      expectation: { column: "Height", value: "253134" },
+    },
+    {
       origin: "/next-stakes",
       input: DEFAULT_ACCOUNT_PK,
       tableHeading: "Next Staking Ledger",
@@ -166,12 +172,6 @@ suite(["@CI"], "search with single result", () => {
       input: state_hash,
       tableHeading: "Block Production",
       column: "State Hash",
-    },
-    {
-      origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
-      input: "253134",
-      tableHeading: "Block Production",
-      column: "Height",
     },
     {
       origin: "/staking-ledgers",
