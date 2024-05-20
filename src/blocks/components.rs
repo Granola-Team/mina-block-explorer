@@ -109,7 +109,13 @@ pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
 
 #[component]
 pub fn BlockUserCommands(block: BlocksQueryBlocks) -> impl IntoView {
-    let (metadata, _) = create_signal(Some(TableMetadata::default()));
+    let (metadata, _) = create_signal(Some(TableMetadata {
+        total_records: "all".to_string(),
+        displayed_records: get_user_commands(&block)
+            .map(|uc| uc.len() as i64)
+            .unwrap_or(0),
+    }));
+
     view! {
         <TableSection metadata section_heading="User Commands" controls=|| ().into_view()>
 
@@ -126,7 +132,12 @@ pub fn BlockUserCommands(block: BlocksQueryBlocks) -> impl IntoView {
 
 #[component]
 pub fn BlockSnarkJobs(block: BlocksQueryBlocks) -> impl IntoView {
-    let (metadata, _) = create_signal(Some(TableMetadata::default()));
+    let (metadata, _) = create_signal(Some(TableMetadata {
+        total_records: "all".to_string(),
+        displayed_records: get_snark_job_count(&block)
+            .map(|sj| sj as i64)
+            .unwrap_or_default(),
+    }));
     view! {
         <TableSection metadata section_heading="SNARK Jobs" controls=|| ().into_view()>
             <BlockSpotlightSnarkJobTable block=block/>
@@ -136,10 +147,27 @@ pub fn BlockSnarkJobs(block: BlocksQueryBlocks) -> impl IntoView {
 
 #[component]
 pub fn BlockInternalCommands(block: BlocksQueryBlocks) -> impl IntoView {
-    let (metadata, _) = create_signal(Some(TableMetadata::default()));
+    let block_clone = block.clone();
+    let (metadata, _) = create_signal(Some(TableMetadata {
+        total_records: "all".to_string(),
+        displayed_records: match (
+            block_clone
+                .transactions
+                .clone()
+                .and_then(|txn| txn.fee_transfer),
+            block_clone
+                .transactions
+                .clone()
+                .and_then(|txn| txn.coinbase_receiver_account.and_then(|ra| ra.public_key)),
+        ) {
+            (Some(feetransfers), Some(_)) => (feetransfers.len() + 1) as i64,
+            (Some(feetransfers), None) => feetransfers.len() as i64,
+            (_, _) => 0 as i64,
+        },
+    }));
     view! {
         <TableSection metadata section_heading="Internal Commands" controls=|| ().into_view()>
-            <BlockInternalCommandsTable block/>
+            <BlockInternalCommandsTable block=block.clone()/>
         </TableSection>
     }
 }
@@ -176,7 +204,7 @@ pub fn BlockInternalCommandsTable(block: BlocksQueryBlocks) -> impl IntoView {
 #[component]
 pub fn BlockAnalytics(block: BlocksQueryBlocks) -> impl IntoView {
     let (block_sig, _) = create_signal(block);
-    let (metadata, _) = create_signal(Some(TableMetadata::default()));
+
     let user_command_amount_total = move || {
         if let Some(user_commands) = get_user_commands(&block_sig.get()) {
             user_commands
@@ -192,6 +220,10 @@ pub fn BlockAnalytics(block: BlocksQueryBlocks) -> impl IntoView {
             0
         }
     };
+    let (metadata, _) = create_signal(Some(TableMetadata {
+        displayed_records: user_command_amount_total() as i64,
+        total_records: "all".to_string(),
+    }));
 
     view! {
         <TableSection metadata section_heading="Analytics" controls=|| ().into_view()>
@@ -548,7 +580,7 @@ fn BlockSpotlightPlaceholder() -> impl IntoView {
 
 #[component]
 pub fn BlocksSection() -> impl IntoView {
-    let (metadata, _) = create_signal(Some(TableMetadata::default()));
+    let (metadata, set_metadata) = create_signal(Some(TableMetadata::default()));
     let query_params_map = use_query_map();
     let (block_height_sig, _) = create_query_signal::<i64>("q-height");
     let (slot_sig, _) = create_query_signal::<i64>("q-slot");
@@ -621,6 +653,15 @@ pub fn BlocksSection() -> impl IntoView {
         },
     ];
     let table_cols_length = table_columns.len();
+
+    create_effect(move |_| {
+        resource.get().and_then(|res| res.ok()).map(|data| {
+            set_metadata.set(Some(TableMetadata {
+                displayed_records: data.blocks.len() as i64,
+                total_records: "all".to_string(),
+            }))
+        });
+    });
 
     view! {
         <TableSection
