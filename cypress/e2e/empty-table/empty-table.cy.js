@@ -14,7 +14,9 @@ suite(["@CI"], "empty table", () => {
   pages.forEach((page) =>
     it(`on ${page} shows as having zero records`, () => {
       cy.visit(page);
-      cy.contains("Showing 0 to 0 of 0 records");
+      cy.wait(500);
+      cy.get(".loading-placeholder").should("not.exist");
+      cy.get("tr:not(:has(th))").should("not.exist");
     }),
   );
 });
