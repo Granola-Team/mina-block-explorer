@@ -36,7 +36,7 @@ pub fn StakesPage() -> impl IntoView {
 
 #[component]
 fn StakesPageContents() -> impl IntoView {
-    let (metadata, _) = create_signal(Some(TableMetadata::default()));
+    let (metadata, set_metadata) = create_signal(Some(TableMetadata::default()));
     let (epoch_sig, _) = create_query_signal::<i64>("epoch");
     let query_params_map = use_query_map();
 
@@ -89,6 +89,15 @@ fn StakesPageContents() -> impl IntoView {
     ];
     let table_cols_length = table_columns.len();
     let table_columns_clone = table_columns.clone();
+
+    create_effect(move |_| {
+        get_data().map(|data| {
+            set_metadata.set(Some(TableMetadata {
+                total_records: "all".to_string(),
+                displayed_records: data.stakes.len() as i64,
+            }))
+        });
+    });
 
     let get_heading_and_epochs = create_memo(move |_| {
         summary_resource
