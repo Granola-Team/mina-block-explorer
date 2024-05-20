@@ -17,7 +17,7 @@ pub fn SnarksPage() -> impl IntoView {
 
 #[component]
 fn SnarksPageContents() -> impl IntoView {
-    let (metadata, _) = create_signal(Some(TableMetadata::default()));
+    let (metadata, set_metadata) = create_signal(Some(TableMetadata::default()));
     let query_params_map = use_query_map();
     let (canonical_qp, _) = create_query_signal::<bool>("canonical");
     let (block_height_sig, _) = create_query_signal::<i64>("q-height");
@@ -70,6 +70,15 @@ fn SnarksPageContents() -> impl IntoView {
     let table_cols_length = table_columns.len();
 
     let get_data = move || resource.get().and_then(|res| res.ok());
+
+    create_effect(move |_| {
+        get_data().map(|data| {
+            set_metadata.set(Some(TableMetadata {
+                total_records: "all".to_string(),
+                displayed_records: data.snarks.len() as i64,
+            }))
+        });
+    });
 
     view! {
         <TableSection
