@@ -1,5 +1,21 @@
+use super::constants::TABLE_ROW_LIMIT;
 use graphql_client::Error;
 use serde::{Deserialize, Serialize};
+
+#[derive(Clone)]
+pub struct TableMetadata {
+    pub total_records: String,
+    pub displayed_records: i64,
+}
+
+impl Default for TableMetadata {
+    fn default() -> Self {
+        TableMetadata {
+            total_records: "all".to_string(),
+            displayed_records: TABLE_ROW_LIMIT,
+        }
+    }
+}
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub enum MyError {

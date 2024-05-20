@@ -1,4 +1,4 @@
-use super::{components::*, functions::*};
+use super::{components::*, functions::*, models::*};
 use crate::{common::constants::*, icons::*};
 use heck::ToKebabCase;
 use leptos::{html::*, *};
@@ -170,27 +170,39 @@ pub fn TableSection<E, F>(
     #[prop(into)] section_heading: String,
     children: Children,
     #[prop(optional, into)] additional_info: String,
+    #[prop(optional)] metadata: TableMetadata,
     controls: F,
 ) -> impl IntoView
 where
     E: IntoView,
     F: Fn() -> E + 'static,
 {
+    let BASE_META_CLASS = "h-16 grow flex justify-start md:justify-center items-center text-slate-400 text-normal text-xs"; 
     view! {
         <AppSection>
             <span class="w-full flex justify-between flex-wrap">
-                <AppHeading heading=section_heading/>
-                {if !additional_info.is_empty() {
-                    view! {
-                        <div class="additional-info pl-8 pr-4 h-16 grow flex justify-start md:justify-center items-center text-slate-400 text-normal text-sm italic font-thin">
-                            {additional_info}
-                        </div>
-                    }
-                        .into_view()
-                } else {
-                    ().into_view()
-                }}
+                <div class="flex justify-start items-baseline flex-wrap">
+                    <AppHeading heading=section_heading/>
+                    <div class="metadata pl-4 ".to_string() + BASE_META_CLASS>
+                        {format!(
+                            "Showing {} of {}",
+                            metadata.displayed_records,
+                            metadata.total_records,
+                        )}
+                    </div>
+                    {if !additional_info.is_empty() {
+                        view! {
+                            <div class="px-4 text-normal text-slate-400">"|"</div>
+                            <div class="additional-info ".to_string() + BASE_META_CLASS>
+                                {additional_info}
+                            </div>
+                        }
+                            .into_view()
+                    } else {
+                        ().into_view()
+                    }}
 
+                </div>
                 <div class="grow md:grow-0 h-16 flex justify-end items-center pr-4">
                     {controls()}
                 </div>
