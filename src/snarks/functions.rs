@@ -16,7 +16,7 @@ pub async fn load_data(
         sort_by: snarks_query::SnarkSortByInput::BLOCKHEIGHT_DESC,
         limit: Some(TABLE_ROW_LIMIT),
         query: snarks_query::SnarkQueryInput {
-            block_height,
+            block_height_lte: block_height,
             prover,
             canonical: if canonical.is_none() {
                 Some(true)

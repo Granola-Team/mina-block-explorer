@@ -233,7 +233,7 @@ pub async fn load_data(
         query: blocks_query::BlockQueryInput {
             canonical,
             state_hash,
-            block_height,
+            block_height_lte: block_height,
             creator_account: Some(blocks_query::BlockCreatorAccountQueryInput {
                 public_key: block_creator_account,
                 ..Default::default()

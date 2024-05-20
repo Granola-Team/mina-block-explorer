@@ -87,7 +87,7 @@ pub async fn load_data(
         snarks_limit: Some(snarks_limit.unwrap_or_default()),
         trans_limit: Some(trans_limit.unwrap_or_default()),
         blocks_query: account_activity_query::BlockQueryInput {
-            block_height,
+            block_height_lte: block_height,
             state_hash: state_hash.clone(),
             creator: block_producer.clone(),
             protocol_state: if slot.is_some() {
@@ -109,7 +109,7 @@ pub async fn load_data(
             ..Default::default()
         },
         snarks_query: account_activity_query::SnarkQueryInput {
-            block_height,
+            block_height_lte: block_height,
             prover,
             block: if block_producer.is_some() || slot.is_some() || state_hash.is_some() {
                 Some(BlockQueryInput {
@@ -139,7 +139,7 @@ pub async fn load_data(
             ..Default::default()
         },
         outgoing_trans_query: account_activity_query::TransactionQueryInput {
-            block_height,
+            block_height_lte: block_height,
             hash: txn_hash.clone(),
             from: public_key.clone(),
             to: counterparty.clone(),
@@ -152,7 +152,7 @@ pub async fn load_data(
             ..Default::default()
         },
         incoming_trans_query: account_activity_query::TransactionQueryInput {
-            block_height,
+            block_height_lte: block_height,
             hash: txn_hash,
             to: public_key,
             from: counterparty,

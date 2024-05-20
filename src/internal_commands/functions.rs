@@ -16,7 +16,7 @@ pub async fn load_data(
         sort_by: internal_commands_query::FeetransferSortByInput::BLOCKHEIGHT_DESC,
         limit: Some(TABLE_ROW_LIMIT),
         query: internal_commands_query::FeetransferQueryInput {
-            block_height,
+            block_height_lte: block_height,
             block_state_hash: state_hash.map(|sh| BlockQueryInput {
                 state_hash: Some(sh),
                 ..Default::default()

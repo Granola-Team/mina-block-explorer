@@ -59,7 +59,7 @@ pub async fn load_data(
             from: from_account,
             to: to_account,
             hash: state_hash,
-            block_height,
+            block_height_lte: block_height,
             canonical: if canonical.is_none() {
                 Some(true)
             } else {
