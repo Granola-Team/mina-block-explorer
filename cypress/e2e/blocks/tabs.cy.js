@@ -17,7 +17,7 @@ suite(["@CI"], "tab count and row count", () => {
           let c = Number(count);
           if (c > 0) {
             cy.aliasTableRows(tab, "tr");
-            cy.get("@tr").should("have.lenghtOf", c);
+            cy.get("@tr").should("have.lengthOf", c);
           } else {
             cy.get("table").should("not.exist");
           }
