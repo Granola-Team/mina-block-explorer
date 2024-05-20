@@ -8,7 +8,7 @@ use leptos_router::create_query_signal;
 
 #[component]
 pub fn InternalCommandsTab() -> impl IntoView {
-    let (metadata, _) = create_signal(Some(TableMetadata::default()));
+    let (metadata, set_metadata) = create_signal(Some(TableMetadata::default()));
     let (recipient, _) = create_query_signal::<String>("q-recipient");
     let (height_sig, _) = create_query_signal::<i64>("q-height");
     let (state_hash_sig, _) = create_query_signal::<String>("q-state-hash");
@@ -55,6 +55,15 @@ pub fn InternalCommandsTab() -> impl IntoView {
     ];
     let table_cols_length = table_columns.len();
     let get_data = move || resource.get().and_then(|res| res.ok());
+
+    create_effect(move |_| {
+        get_data().map(|data| {
+            set_metadata.set(Some(TableMetadata {
+                total_records: "all".to_string(),
+                displayed_records: data.feetransfers.len() as i64,
+            }))
+        });
+    });
     view! {
         <Title text="Transactions | Internal Commands"/>
         <PageContainer>
