@@ -93,7 +93,7 @@ pub async fn load_data(
             protocol_state: if slot.is_some() {
                 Some(BlockProtocolStateQueryInput {
                     consensus_state: Some(BlockProtocolStateConsensusStateQueryInput {
-                        slot,
+                        slot_since_genesis_lte: slot,
                         ..Default::default()
                     }),
                     ..Default::default()
@@ -118,7 +118,7 @@ pub async fn load_data(
                     protocol_state: if slot.is_some() {
                         Some(BlockProtocolStateQueryInput {
                             consensus_state: Some(BlockProtocolStateConsensusStateQueryInput {
-                                slot,
+                                slot_since_genesis_lte: slot,
                                 ..Default::default()
                             }),
                             ..Default::default()

@@ -123,7 +123,8 @@ pub fn get_fee_transfer_count(block: &BlocksQueryBlocks) -> Option<usize> {
 pub fn get_slot(block: &BlocksQueryBlocks) -> String {
     block.protocol_state.as_ref().map_or_else(String::new, |o| {
         o.consensus_state.as_ref().map_or_else(String::new, |o| {
-            o.slot.map_or_else(String::new, |o| o.to_string())
+            o.slot_since_genesis
+                .map_or_else(String::new, |o| o.to_string())
         })
     })
 }
@@ -239,7 +240,7 @@ pub async fn load_data(
             }),
             protocol_state: Some(blocks_query::BlockProtocolStateQueryInput {
                 consensus_state: Some(blocks_query::BlockProtocolStateConsensusStateQueryInput {
-                    slot,
+                    slot_since_genesis_lte: slot,
                     ..Default::default()
                 }),
                 ..Default::default()
