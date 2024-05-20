@@ -1,5 +1,5 @@
 use crate::{
-    common::{components::*, constants::*, models::*, table::*},
+    common::{components::*, models::*, table::*},
     internal_commands::functions::load_data,
 };
 use leptos::*;
@@ -49,14 +49,7 @@ pub fn InternalCommandsTable() -> impl IntoView {
             )
         },
         |(opt_recipient, height, state_hash, canonical)| async move {
-            load_data(
-                TABLE_RECORD_SIZE,
-                opt_recipient,
-                height,
-                state_hash,
-                canonical,
-            )
-            .await
+            load_data(opt_recipient, height, state_hash, canonical).await
         },
     );
 

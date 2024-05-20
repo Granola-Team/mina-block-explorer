@@ -2,7 +2,7 @@ use super::models::*;
 use crate::common::functions::*;
 use rand::Rng;
 
-pub fn stub_zk_apps_data(size: usize) -> Vec<Option<ZkAppData>> {
+pub fn stub_zk_apps_data(size: i64) -> Vec<Option<ZkAppData>> {
     let mut rng = rand::thread_rng();
     (0..size)
         .map(|_| {

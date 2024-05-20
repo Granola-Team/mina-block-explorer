@@ -41,7 +41,7 @@ pub async fn load_account_data(id: &str) -> Result<AccountResponse, MyError> {
     }
 }
 
-pub fn stub_account_summaries(size: usize) -> Vec<Option<AllAccountSummary>> {
+pub fn stub_account_summaries(size: i64) -> Vec<Option<AllAccountSummary>> {
     let mut rng = rand::thread_rng();
     let int_dist = Uniform::from(0..=1000);
 

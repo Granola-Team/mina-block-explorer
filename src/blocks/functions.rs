@@ -5,7 +5,7 @@ use super::graphql::{
     *,
 };
 use crate::common::{
-    constants::GRAPHQL_ENDPOINT,
+    constants::*,
     functions::{nanomina_str_to_mina, nanomina_to_mina},
     models::MyError,
 };

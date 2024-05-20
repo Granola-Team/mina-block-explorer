@@ -1,10 +1,5 @@
 use super::functions::*;
-use crate::common::{
-    components::*,
-    constants::{TABLE_RECORD_SIZE, *},
-    models::*,
-    table::*,
-};
+use crate::common::{components::*, constants::*, models::*, table::*};
 use leptos::*;
 use leptos_meta::Title;
 use leptos_router::{create_query_signal, use_query_map};
@@ -40,7 +35,6 @@ fn SnarksPageContents() -> impl IntoView {
             let prover = value.get("q-prover");
             let block_state_hash = value.get("q-state-hash");
             load_data(
-                TABLE_RECORD_SIZE,
                 prover.cloned(),
                 block_state_hash.cloned(),
                 block_height,

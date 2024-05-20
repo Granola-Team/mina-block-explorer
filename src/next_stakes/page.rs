@@ -1,6 +1,6 @@
 use super::functions::*;
 use crate::{
-    common::{components::*, constants::*, table::*},
+    common::{components::*, table::*},
     stakes::{components::EpochButton, models::EpochStyleVariant},
 };
 use leptos::*;
@@ -25,7 +25,7 @@ fn NextStakesPageContents() -> impl IntoView {
         |params_map| async move {
             let public_key = params_map.get("q-key").cloned();
             let delegate = params_map.get("q-delegate").cloned();
-            load_data(TABLE_RECORD_SIZE, public_key, delegate).await
+            load_data(public_key, delegate).await
         },
     );
 

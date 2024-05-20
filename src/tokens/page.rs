@@ -1,11 +1,11 @@
 use super::functions::*;
-use crate::common::{components::*, table::*};
+use crate::common::{components::*, constants::TABLE_ROW_LIMIT, table::*};
 use leptos::*;
 use leptos_meta::*;
 
 #[component]
 pub fn TokensPage() -> impl IntoView {
-    let data = stub_token_data(9000);
+    let data = stub_token_data(TABLE_ROW_LIMIT);
     view! {
         <Title text="Tokens | Search For Tokens"/>
         <PageContainer>

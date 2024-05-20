@@ -1,11 +1,6 @@
 use super::{components::*, functions::*, models::*};
 use crate::{
-    common::{
-        components::*,
-        constants::{TABLE_RECORD_SIZE, *},
-        models::MyError,
-        table::*,
-    },
+    common::{components::*, constants::*, models::MyError, table::*},
     summary::functions::load_data as load_summary_data,
 };
 use leptos::*;
@@ -53,7 +48,7 @@ fn StakesPageContents() -> impl IntoView {
                 (Some(epoch), None) | (_, Some(epoch)) => {
                     let public_key = params_map.get("q-key").cloned();
                     let delegate = params_map.get("q-delegate").cloned();
-                    load_data(TABLE_RECORD_SIZE, Some(epoch), public_key, delegate).await
+                    load_data(Some(epoch), public_key, delegate).await
                 }
                 _ => Err(MyError::ParseError(String::from(
                     "missing epoch information",

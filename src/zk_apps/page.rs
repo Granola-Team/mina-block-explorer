@@ -1,7 +1,9 @@
 use super::functions::*;
 use crate::{
     account_activity::models::AccountActivityQueryDirectionalTransactions,
-    common::{components::*, functions::*, models::*, spotlight::*, table::*},
+    common::{
+        components::*, constants::TABLE_ROW_LIMIT, functions::*, models::*, spotlight::*, table::*,
+    },
     icons::*,
 };
 use indoc::indoc;
@@ -191,7 +193,7 @@ pub fn ZkAppTransactionsPage() -> impl IntoView {
 
 #[component]
 pub fn ZkAppsPage() -> impl IntoView {
-    let data = stub_zk_apps_data(9000);
+    let data = stub_zk_apps_data(TABLE_ROW_LIMIT);
     view! {
         <Title text="ZK Apps | Search For ZK Apps"/>
         <PageContainer>

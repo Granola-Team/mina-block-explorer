@@ -1,5 +1,5 @@
 use super::{graphql::*, models::PooledUserCommandsResponse};
-use crate::common::{constants::GRAPHQL_ENDPOINT, models::MyError};
+use crate::common::{constants::*, models::MyError};
 use graphql_client::reqwest::post_graphql;
 use std::error::Error;
 

@@ -556,7 +556,7 @@ pub fn BlocksSection() -> impl IntoView {
         },
         |(_, q_map, block_height, slot, canonical)| async move {
             load_data(
-                TABLE_RECORD_SIZE,
+                TABLE_ROW_LIMIT,
                 q_map.get("q-block-producer").cloned(),
                 q_map.get("q-state-hash").cloned(),
                 block_height,

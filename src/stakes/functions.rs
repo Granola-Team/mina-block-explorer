@@ -1,7 +1,11 @@
 use super::graphql::{
     staking_ledgers_query, staking_ledgers_query::StakingLedgersQueryStakes, StakingLedgersQuery,
 };
-use crate::common::{constants::GRAPHQL_ENDPOINT, functions::*, models::*};
+use crate::common::{
+    constants::{GRAPHQL_ENDPOINT, TABLE_ROW_LIMIT},
+    functions::*,
+    models::*,
+};
 use graphql_client::reqwest::post_graphql;
 
 pub fn get_public_key(stake: &StakingLedgersQueryStakes) -> String {
@@ -41,14 +45,13 @@ pub fn get_ledger_hash(stake: &StakingLedgersQueryStakes) -> String {
 }
 
 pub async fn load_data(
-    limit: i64,
     epoch: Option<i64>,
     public_key: Option<String>,
     delegate: Option<String>,
 ) -> Result<staking_ledgers_query::ResponseData, MyError> {
     let variables = staking_ledgers_query::Variables {
         sort_by: staking_ledgers_query::StakeSortByInput::BALANCE_DESC,
-        limit: Some(limit),
+        limit: Some(TABLE_ROW_LIMIT),
         query: staking_ledgers_query::StakeQueryInput {
             public_key,
             delegate,

@@ -1,10 +1,5 @@
 use super::functions::*;
-use crate::common::{
-    components::*,
-    constants::{TABLE_RECORD_SIZE, *},
-    models::*,
-    table::*,
-};
+use crate::common::{components::*, constants::*, models::*, table::*};
 use leptos::*;
 use leptos_router::*;
 use leptos_use::{use_interval, UseIntervalReturn};
@@ -36,7 +31,7 @@ pub fn TransactionsSection() -> impl IntoView {
                 Some(ref txn_type_str) if txn_type_str == "Pending" => load_pending_txn().await,
                 Some(ref txn_type_str) if txn_type_str == "Canonical" => {
                     load_data(
-                        TABLE_RECORD_SIZE,
+                        TABLE_ROW_LIMIT,
                         url_query_map.get(QP_FROM).cloned(),
                         url_query_map.get(QP_TO).cloned(),
                         url_query_map.get(QP_TXN_HASH).cloned(),
@@ -47,7 +42,7 @@ pub fn TransactionsSection() -> impl IntoView {
                 }
                 Some(ref txn_type_str) if txn_type_str == "Non-Canonical" => {
                     load_data(
-                        TABLE_RECORD_SIZE,
+                        TABLE_ROW_LIMIT,
                         url_query_map.get(QP_FROM).cloned(),
                         url_query_map.get(QP_TO).cloned(),
                         url_query_map.get(QP_TXN_HASH).cloned(),
@@ -58,7 +53,7 @@ pub fn TransactionsSection() -> impl IntoView {
                 }
                 Some(_) | None => {
                     load_data(
-                        TABLE_RECORD_SIZE,
+                        TABLE_ROW_LIMIT,
                         url_query_map.get(QP_FROM).cloned(),
                         url_query_map.get(QP_TO).cloned(),
                         url_query_map.get(QP_TXN_HASH).cloned(),

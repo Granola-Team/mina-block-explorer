@@ -31,7 +31,7 @@ pub fn AccountsPage() -> impl IntoView {
 
 #[component]
 fn AccountsPageContents() -> impl IntoView {
-    let data = stub_account_summaries(9000);
+    let data = stub_account_summaries(TABLE_ROW_LIMIT);
     view! {
         <TableSection section_heading="Accounts" controls=|| ().into_view()>
             <DeprecatedTable data=data/>
