@@ -1,6 +1,6 @@
 use super::functions::*;
 use crate::{
-    common::{components::*, table::*},
+    common::{components::*, models::TableMetadata, table::*},
     stakes::{components::EpochButton, models::EpochStyleVariant},
 };
 use leptos::*;
@@ -19,6 +19,7 @@ pub fn NextStakesPage() -> impl IntoView {
 
 #[component]
 fn NextStakesPageContents() -> impl IntoView {
+    let (metadata, _) = create_signal(Some(TableMetadata::default()));
     let query_params_map = use_query_map();
     let resource = create_resource(
         move || query_params_map.get(),
@@ -58,6 +59,7 @@ fn NextStakesPageContents() -> impl IntoView {
     view! {
         <ErrorBoundary fallback=move |_| ().into_view()>
             <TableSection
+                metadata
                 section_heading="Next Staking Ledger"
                 controls=move || {
                     view! {

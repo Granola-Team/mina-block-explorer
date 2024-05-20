@@ -9,7 +9,7 @@ use crate::{
     common::{
         components::*,
         constants::*,
-        models::{MyError, NavEntry, NavIcon},
+        models::{MyError, NavEntry, NavIcon, TableMetadata},
         spotlight::*,
         table::*,
     },
@@ -32,8 +32,9 @@ pub fn AccountsPage() -> impl IntoView {
 #[component]
 fn AccountsPageContents() -> impl IntoView {
     let data = stub_account_summaries(TABLE_ROW_LIMIT);
+    let (metadata, _) = create_signal(Some(TableMetadata::default()));
     view! {
-        <TableSection section_heading="Accounts" controls=|| ().into_view()>
+        <TableSection metadata section_heading="Accounts" controls=|| ().into_view()>
             <DeprecatedTable data=data/>
         </TableSection>
     }

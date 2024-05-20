@@ -17,6 +17,7 @@ pub fn SnarksPage() -> impl IntoView {
 
 #[component]
 fn SnarksPageContents() -> impl IntoView {
+    let (metadata, _) = create_signal(Some(TableMetadata::default()));
     let query_params_map = use_query_map();
     let (canonical_qp, _) = create_query_signal::<bool>("canonical");
     let (block_height_sig, _) = create_query_signal::<i64>("q-height");
@@ -72,6 +73,7 @@ fn SnarksPageContents() -> impl IntoView {
 
     view! {
         <TableSection
+            metadata
             section_heading="SNARKs"
             controls=move || {
                 view! {

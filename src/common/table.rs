@@ -170,7 +170,7 @@ pub fn TableSection<E, F>(
     #[prop(into)] section_heading: String,
     children: Children,
     #[prop(optional, into)] additional_info: String,
-    #[prop(optional)] metadata: Option<TableMetadata>,
+    metadata: ReadSignal<Option<TableMetadata>>,
     controls: F,
 ) -> impl IntoView
 where
@@ -183,7 +183,7 @@ where
             <span class="w-full flex justify-between flex-wrap">
                 <div class="flex justify-start items-baseline flex-wrap">
                     <AppHeading heading=section_heading/>
-                    {move || match metadata.clone() {
+                    {move || match metadata.get() {
                         Some(meta) if meta.displayed_records >= TABLE_ROW_LIMIT => {
                             view! {
                                 <div class="metadata pl-4 ".to_string()

@@ -8,10 +8,12 @@ use leptos_router::create_query_signal;
 
 #[component]
 pub fn InternalCommandsTab() -> impl IntoView {
+    let (metadata, _) = create_signal(Some(TableMetadata::default()));
     view! {
         <Title text="Transactions | Internal Commands"/>
         <PageContainer>
             <TableSection
+                metadata
                 section_heading="Internal Commands"
                 controls=move || {
                     view! {

@@ -21,6 +21,8 @@ pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
 
     let content_for_fallback = content.clone();
 
+    let (placeholder_metadata, _) = create_signal(Some(TableMetadata::default()));
+
     view! {
         <PageContainer>
             <ErrorBoundary fallback=move |_| ().into_view()>
@@ -31,6 +33,7 @@ pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
                         BlockContent::UserCommands => {
                             view! {
                                 <TableSection
+                                    metadata=placeholder_metadata
                                     section_heading="User Commands"
                                     controls=|| ().into_view()
                                 >
@@ -41,6 +44,7 @@ pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
                         BlockContent::SNARKJobs => {
                             view! {
                                 <TableSection
+                                    metadata=placeholder_metadata
                                     section_heading="SNARK Jobs"
                                     controls=|| ().into_view()
                                 >
@@ -51,6 +55,7 @@ pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
                         BlockContent::FeeTransfers => {
                             view! {
                                 <TableSection
+                                    metadata=placeholder_metadata
                                     section_heading="Internal Commands"
                                     controls=|| ().into_view()
                                 >
@@ -61,6 +66,7 @@ pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
                         BlockContent::Analytics => {
                             view! {
                                 <TableSection
+                                    metadata=placeholder_metadata
                                     section_heading="Analytics"
                                     controls=|| ().into_view()
                                 >
@@ -103,8 +109,9 @@ pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
 
 #[component]
 pub fn BlockUserCommands(block: BlocksQueryBlocks) -> impl IntoView {
+    let (metadata, _) = create_signal(Some(TableMetadata::default()));
     view! {
-        <TableSection section_heading="User Commands" controls=|| ().into_view()>
+        <TableSection metadata section_heading="User Commands" controls=|| ().into_view()>
 
             {move || match get_user_commands(&block) {
                 Some(user_commands) => {
@@ -119,8 +126,9 @@ pub fn BlockUserCommands(block: BlocksQueryBlocks) -> impl IntoView {
 
 #[component]
 pub fn BlockSnarkJobs(block: BlocksQueryBlocks) -> impl IntoView {
+    let (metadata, _) = create_signal(Some(TableMetadata::default()));
     view! {
-        <TableSection section_heading="SNARK Jobs" controls=|| ().into_view()>
+        <TableSection metadata section_heading="SNARK Jobs" controls=|| ().into_view()>
             <BlockSpotlightSnarkJobTable block=block/>
         </TableSection>
     }
@@ -128,8 +136,9 @@ pub fn BlockSnarkJobs(block: BlocksQueryBlocks) -> impl IntoView {
 
 #[component]
 pub fn BlockInternalCommands(block: BlocksQueryBlocks) -> impl IntoView {
+    let (metadata, _) = create_signal(Some(TableMetadata::default()));
     view! {
-        <TableSection section_heading="Internal Commands" controls=|| ().into_view()>
+        <TableSection metadata section_heading="Internal Commands" controls=|| ().into_view()>
             <BlockInternalCommandsTable block/>
         </TableSection>
     }
@@ -167,6 +176,7 @@ pub fn BlockInternalCommandsTable(block: BlocksQueryBlocks) -> impl IntoView {
 #[component]
 pub fn BlockAnalytics(block: BlocksQueryBlocks) -> impl IntoView {
     let (block_sig, _) = create_signal(block);
+    let (metadata, _) = create_signal(Some(TableMetadata::default()));
     let user_command_amount_total = move || {
         if let Some(user_commands) = get_user_commands(&block_sig.get()) {
             user_commands
@@ -184,7 +194,7 @@ pub fn BlockAnalytics(block: BlocksQueryBlocks) -> impl IntoView {
     };
 
     view! {
-        <TableSection section_heading="Analytics" controls=|| ().into_view()>
+        <TableSection metadata section_heading="Analytics" controls=|| ().into_view()>
             <AnalyticsLayout>
                 <AnalyticsSmContainer>
                     <AnalyticsSimpleInfo
@@ -538,6 +548,7 @@ fn BlockSpotlightPlaceholder() -> impl IntoView {
 
 #[component]
 pub fn BlocksSection() -> impl IntoView {
+    let (metadata, _) = create_signal(Some(TableMetadata::default()));
     let query_params_map = use_query_map();
     let (block_height_sig, _) = create_query_signal::<i64>("q-height");
     let (slot_sig, _) = create_query_signal::<i64>("q-slot");
@@ -613,6 +624,7 @@ pub fn BlocksSection() -> impl IntoView {
 
     view! {
         <TableSection
+            metadata
             section_heading="Blocks"
             controls=move || {
                 view! {

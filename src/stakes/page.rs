@@ -1,6 +1,11 @@
 use super::{components::*, functions::*, models::*};
 use crate::{
-    common::{components::*, constants::*, models::MyError, table::*},
+    common::{
+        components::*,
+        constants::*,
+        models::{MyError, TableMetadata},
+        table::*,
+    },
     summary::functions::load_data as load_summary_data,
 };
 use leptos::*;
@@ -31,6 +36,7 @@ pub fn StakesPage() -> impl IntoView {
 
 #[component]
 fn StakesPageContents() -> impl IntoView {
+    let (metadata, _) = create_signal(Some(TableMetadata::default()));
     let (epoch_sig, _) = create_query_signal::<i64>("epoch");
     let query_params_map = use_query_map();
 
@@ -118,6 +124,7 @@ fn StakesPageContents() -> impl IntoView {
                 get_heading_and_epochs.get();
             view! {
                 <TableSection
+                    metadata
                     section_heading=section_heading
                     controls=move || {
                         view! {

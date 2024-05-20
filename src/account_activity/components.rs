@@ -220,6 +220,7 @@ fn TransactionEntry(
 pub fn AccountTransactionsSection(
     transactions_sig: ReadSignal<Option<Vec<Option<AccountActivityQueryDirectionalTransactions>>>>,
 ) -> impl IntoView {
+    let (metadata, _) = create_signal(Some(TableMetadata::default()));
     let table_columns = vec![
         TableColumn {
             column: "Height".to_string(),
@@ -258,6 +259,7 @@ pub fn AccountTransactionsSection(
 
     view! {
         <TableSection
+            metadata=metadata
             section_heading="User Commands"
             controls=move || {
                 view! {

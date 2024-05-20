@@ -12,6 +12,7 @@ use leptos_meta::*;
 
 #[component]
 pub fn ZkAppSpotlight() -> impl IntoView {
+    let (metadata, _) = create_signal(Some(TableMetadata::default()));
     let txn = stub_zk_app_txn_data(10);
     let fees = vec![Some(AccountActivityQueryDirectionalTransactions {
         fee: Some(0.01_f64),
@@ -61,7 +62,11 @@ pub fn ZkAppSpotlight() -> impl IntoView {
             >
                 <ZKAppSymbol width=40/>
             </SpotlightSection>
-            <TableSection section_heading="ZK App Details".to_string() controls=|| ().into_view()>
+            <TableSection
+                metadata
+                section_heading="ZK App Details".to_string()
+                controls=|| ().into_view()
+            >
                 <SpotlightTable>
                     <ZkAppDetailTr>
                         <ZkAppDetailTh>"Permissions :"</ZkAppDetailTh>
@@ -180,11 +185,12 @@ fn ZkAppDetailTh(children: Children) -> impl IntoView {
 
 #[component]
 pub fn ZkAppTransactionsPage() -> impl IntoView {
+    let (metadata, _) = create_signal(Some(TableMetadata::default()));
     let data = stub_zk_app_txn_data(1000);
     view! {
         <Title text="Commands | ZK Apps"/>
         <PageContainer>
-            <TableSection section_heading="ZK App Commands" controls=|| ().into_view()>
+            <TableSection metadata section_heading="ZK App Commands" controls=|| ().into_view()>
                 <DeprecatedTable data=data/>
             </TableSection>
         </PageContainer>
@@ -193,11 +199,12 @@ pub fn ZkAppTransactionsPage() -> impl IntoView {
 
 #[component]
 pub fn ZkAppsPage() -> impl IntoView {
+    let (metadata, _) = create_signal(Some(TableMetadata::default()));
     let data = stub_zk_apps_data(TABLE_ROW_LIMIT);
     view! {
         <Title text="ZK Apps | Search For ZK Apps"/>
         <PageContainer>
-            <TableSection section_heading="ZK Apps" controls=|| ().into_view()>
+            <TableSection metadata section_heading="ZK Apps" controls=|| ().into_view()>
                 <DeprecatedTable data=data/>
             </TableSection>
         </PageContainer>
@@ -206,6 +213,7 @@ pub fn ZkAppsPage() -> impl IntoView {
 
 #[component]
 pub fn ZkAppTransactionSpotlightPage() -> impl IntoView {
+    let (metadata, _) = create_signal(Some(TableMetadata::default()));
     let spotlight_items = vec![
         SpotlightEntry {
             label: "Transaction Type".to_string(),
@@ -290,7 +298,7 @@ pub fn ZkAppTransactionSpotlightPage() -> impl IntoView {
             >
                 <ZKAppSymbol width=40/>
             </SpotlightSection>
-            <TableSection section_heading="Account Update #1" controls=|| ().into_view()>
+            <TableSection metadata section_heading="Account Update #1" controls=|| ().into_view()>
                 <SpotlightTable>
                     {account_updates_1
                         .into_iter()
