@@ -12,7 +12,7 @@ const QP_TO: &str = "q-to";
 
 #[component]
 pub fn TransactionsSection() -> impl IntoView {
-    let (metadata, _) = create_signal(Some(TableMetadata::default()));
+    let (metadata, set_metadata) = create_signal(Some(TableMetadata::default()));
     let (txn_type_qp, _) = create_query_signal::<String>(QP_TXN_TYPE);
     let query_params_map = use_query_map();
     let (block_height_sig, _) = create_query_signal::<i64>(QP_HEIGHT);
@@ -107,6 +107,15 @@ pub fn TransactionsSection() -> impl IntoView {
     ];
     let table_cols_length = table_columns.len();
     let get_data = move || resource.get().and_then(|res| res.ok());
+
+    create_effect(move |_| {
+        get_data().map(|data| {
+            set_metadata.set(Some(TableMetadata {
+                total_records: "all".to_string(),
+                displayed_records: data.transactions.len() as i64,
+            }))
+        });
+    });
 
     view! {
         <TableSection
