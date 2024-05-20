@@ -170,32 +170,49 @@ pub fn TableSection<E, F>(
     #[prop(into)] section_heading: String,
     children: Children,
     #[prop(optional, into)] additional_info: String,
-    #[prop(optional)] metadata: TableMetadata,
+    #[prop(optional)] metadata: Option<TableMetadata>,
     controls: F,
 ) -> impl IntoView
 where
     E: IntoView,
     F: Fn() -> E + 'static,
 {
-    let BASE_META_CLASS = "h-16 grow flex justify-start md:justify-center items-center text-slate-400 text-normal text-xs"; 
+    let BASE_META_CLASS = "h-16 grow flex justify-start md:justify-center items-center text-slate-400 text-normal text-xs";
     view! {
         <AppSection>
             <span class="w-full flex justify-between flex-wrap">
                 <div class="flex justify-start items-baseline flex-wrap">
                     <AppHeading heading=section_heading/>
-                    <div class="metadata pl-4 ".to_string() + BASE_META_CLASS>
-                        {format!(
-                            "Showing {} of {}",
-                            metadata.displayed_records,
-                            metadata.total_records,
-                        )}
-                    </div>
+                    {move || match metadata.clone() {
+                        Some(meta) if meta.displayed_records >= TABLE_ROW_LIMIT => {
+                            view! {
+                                <div class="metadata pl-4 ".to_string()
+                                    + BASE_META_CLASS>
+                                    {format!(
+                                        "Showing {} of {}",
+                                        meta.displayed_records,
+                                        meta.total_records,
+                                    )}
+
+                                </div>
+                            }
+                                .into_view()
+                        }
+                        Some(meta) if meta.displayed_records < TABLE_ROW_LIMIT => {
+                            view! {
+                                <div class="metadata pl-4 ".to_string()
+                                    + BASE_META_CLASS>"Showing all"</div>
+                            }
+                                .into_view()
+                        }
+                        _ => ().into_view(),
+                    }}
+
                     {if !additional_info.is_empty() {
                         view! {
                             <div class="px-4 text-normal text-slate-400">"|"</div>
-                            <div class="additional-info ".to_string() + BASE_META_CLASS>
-                                {additional_info}
-                            </div>
+                            <div class="additional-info ".to_string()
+                                + BASE_META_CLASS>{additional_info}</div>
                         }
                             .into_view()
                     } else {
