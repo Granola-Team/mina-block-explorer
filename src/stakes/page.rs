@@ -91,12 +91,10 @@ fn StakesPageContents() -> impl IntoView {
     let table_columns_clone = table_columns.clone();
 
     create_effect(move |_| {
-        get_data().map(|data| {
-            set_metadata.set(Some(TableMetadata {
+        if let Some(data) = get_data() { set_metadata.set(Some(TableMetadata {
                 total_records: "all".to_string(),
                 displayed_records: data.stakes.len() as i64,
-            }))
-        });
+            })) }
     });
 
     let get_heading_and_epochs = create_memo(move |_| {

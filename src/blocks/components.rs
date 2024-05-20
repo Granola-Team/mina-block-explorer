@@ -162,7 +162,7 @@ pub fn BlockInternalCommands(block: BlocksQueryBlocks) -> impl IntoView {
         ) {
             (Some(feetransfers), Some(_)) => (feetransfers.len() + 1) as i64,
             (Some(feetransfers), None) => feetransfers.len() as i64,
-            (_, _) => 0 as i64,
+            (_, _) => 0_i64,
         },
     }));
     view! {
@@ -655,12 +655,10 @@ pub fn BlocksSection() -> impl IntoView {
     let table_cols_length = table_columns.len();
 
     create_effect(move |_| {
-        resource.get().and_then(|res| res.ok()).map(|data| {
-            set_metadata.set(Some(TableMetadata {
+        if let Some(data) = resource.get().and_then(|res| res.ok()) { set_metadata.set(Some(TableMetadata {
                 displayed_records: data.blocks.len() as i64,
                 total_records: "all".to_string(),
-            }))
-        });
+            })) }
     });
 
     view! {
