@@ -19,7 +19,7 @@ pub fn NextStakesPage() -> impl IntoView {
 
 #[component]
 fn NextStakesPageContents() -> impl IntoView {
-    let (metadata, _) = create_signal(Some(TableMetadata::default()));
+    let (metadata, set_metadata) = create_signal(Some(TableMetadata::default()));
     let query_params_map = use_query_map();
     let resource = create_resource(
         move || query_params_map.get(),
@@ -55,6 +55,15 @@ fn NextStakesPageContents() -> impl IntoView {
         },
     ];
     let table_cols_length = table_columns.len();
+
+    create_effect(move |_| {
+        get_data().map(|data| {
+            set_metadata.set(Some(TableMetadata {
+                total_records: "all".to_string(),
+                displayed_records: data.nextstakes.len() as i64,
+            }))
+        });
+    });
 
     view! {
         <ErrorBoundary fallback=move |_| ().into_view()>
