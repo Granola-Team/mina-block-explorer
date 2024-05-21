@@ -1,8 +1,9 @@
 use crate::{
     account_activity::{
         dialog::AccountDialogView,
-        page::{AccountSpotlightPage, AccountsPage, AddressesTabbedPage},
+        page::{AccountSpotlightPage, AddressesTabbedPage},
     },
+    accounts::page::AccountsPage,
     analytics::page::{AnalyticsTabbedPage, InternalCommandsAnalayticsPage},
     blocks::page::{
         BlockAnalyticsTab, BlockInternalCommandsTab, BlockSnarkJobsTab, BlockSpotlightTab,
