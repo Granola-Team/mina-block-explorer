@@ -1,15 +1,79 @@
+use super::models::MyError;
 use crate::{
     common::{components::*, constants::*},
     icons::*,
 };
 use leptos::*;
+use serde::*;
+
+#[derive(Deserialize, Serialize, Debug, Clone)]
+struct EpochData {
+    pub epoch: i64,
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone)]
+struct StakeData {
+    pub stake: EpochData,
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone)]
+struct EpochConversionResponse {
+    pub data: StakeData,
+}
+
+async fn load_epoch_data(
+    ledger_hash_opt: Option<String>,
+) -> Result<EpochConversionResponse, MyError> {
+    match ledger_hash_opt {
+        None => Err(MyError::ParseError("ledger hash not supplied".to_string())),
+        Some(ledger_hash) => {
+            let query_body = format!(
+                r#"{{"query":"query EpochQuery($ledgerHash: String) {{ stake(query: {{ledgerHash: $ledgerHash}}) {{ epoch }}}}", "variables":{{"ledgerHash":"{}"}},"operationName":"EpochQuery"}}"#,
+                ledger_hash
+            );
+            let client = reqwest::Client::new();
+            let response = client
+                .post(GRAPHQL_ENDPOINT)
+                .body(query_body)
+                .send()
+                .await
+                .map_err(|e| MyError::NetworkError(e.to_string()))?;
+
+            if response.status().is_success() {
+                let summary = response
+                    .json::<EpochConversionResponse>()
+                    .await
+                    .map_err(|e| MyError::ParseError(e.to_string()))?;
+                Ok(summary)
+            } else {
+                Err(MyError::NetworkError("Failed to fetch data".into()))
+            }
+        }
+    }
+}
 
 #[component]
 pub fn GlobalSearchBar() -> impl IntoView {
     let input_element: NodeRef<html::Input> = create_node_ref();
     let (value, set_value) = create_signal("".to_string());
+    let (ledger_hash_sig, set_lh) = create_signal(None);
+    let epoch_resource = create_resource(
+        move || ledger_hash_sig.get(),
+        move |_| async move { load_epoch_data(ledger_hash_sig.get()).await },
+    );
 
     let navigate = leptos_router::use_navigate();
+    let navigate_clone = navigate.clone();
+
+    create_effect(move |_| {
+        epoch_resource.get().and_then(|res| res.ok()).map(|resp| {
+            navigate_clone(
+                &format!("/staking-ledgers?epoch={}", resp.data.stake.epoch),
+                Default::default(),
+            );
+            set_value.set("".to_string());
+        })
+    });
 
     let on_submit = move |ev: leptos::ev::SubmitEvent| {
         ev.prevent_default();
@@ -26,6 +90,9 @@ pub fn GlobalSearchBar() -> impl IntoView {
             val if val.starts_with("Ckp") => {
                 navigate(&format!("/commands/{}", val), Default::default());
                 set_value.set("".to_string());
+            }
+            val if val.starts_with('j') => {
+                set_lh.set(Some(val));
             }
             val if val.chars().all(char::is_numeric) => {
                 navigate(

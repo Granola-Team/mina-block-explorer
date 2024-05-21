@@ -13,6 +13,10 @@ suite(["@CI"], "global search", () => {
 
   let pages = [
     {
+      input: "jxvumaCvujr7UzW1qCB87YR2RWu8CqvkwrCmHY8kkwpvN4WbTJn",
+      expectedUrl: "/staking-ledger?epoch=74",
+    },
+    {
       input: DEFAULT_ACCOUNT_PK,
       expectedUrl: "/addresses/accounts/" + DEFAULT_ACCOUNT_PK,
     },
