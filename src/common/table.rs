@@ -207,6 +207,7 @@ where
                                         meta.displayed_records,
                                         meta.displayed_records,
                                     )}
+
                                 </div>
                             }
                                 .into_view()
