@@ -80,6 +80,12 @@ suite(["@CI"], "search with multiple results", () => {
       expectation: { column: "Height", value: "253134" },
     },
     {
+      origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
+      input: "253134",
+      tableHeading: "Block Production",
+      expectation: { column: "Height", value: "253134" },
+    },
+    {
       origin: "/next-stakes",
       input: DEFAULT_ACCOUNT_PK,
       tableHeading: "Next Staking Ledger",
@@ -139,6 +145,12 @@ suite(["@CI"], "search with multiple results", () => {
       tableHeading: "Blocks",
       expectation: { column: "Block Producer", value: DEFAULT_ACCOUNT_PK },
     },
+    {
+      origin: "/blocks",
+      input: "20345",
+      tableHeading: "Blocks",
+      expectation: { column: "Height", value: "20345" },
+    },
   ];
 
   multi_response_searches.forEach(
@@ -166,12 +178,6 @@ suite(["@CI"], "search with single result", () => {
       input: state_hash,
       tableHeading: "Block Production",
       column: "State Hash",
-    },
-    {
-      origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
-      input: "253134",
-      tableHeading: "Block Production",
-      column: "Height",
     },
     {
       origin: "/staking-ledgers",
@@ -203,12 +209,6 @@ suite(["@CI"], "search with single result", () => {
       tableHeading: "Internal Commands",
       column: "State Hash",
     },
-    {
-      origin: "/blocks",
-      input: "20345",
-      tableHeading: "Blocks",
-      column: "Height",
-    },
     // { origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`, input: "5783", tableHeading: "Block Production", column: "Slot" },
     // { origin: "/blocks", input: "20345", tableHeading: "Blocks", column: "Slot" },
   ];
@@ -221,7 +221,8 @@ suite(["@CI"], "search with single result", () => {
       */
       cy.viewport(768, 2000);
       cy.visit(origin);
-      cy.wait(1000);
+      cy.wait(500);
+      cy.get(".loading-placeholder").should("not.exist");
       let key = "q-" + kebabCase(column);
       let cssSelector = "#" + key;
 

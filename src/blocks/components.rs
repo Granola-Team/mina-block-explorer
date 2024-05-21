@@ -1,6 +1,6 @@
 use super::{functions::*, graphql::blocks_query::BlocksQueryBlocks, models::*};
 use crate::{
-    blocks::graphql::blocks_query::{BlocksQueryBlocksTransactionsFeeTransfer, ResponseData},
+    blocks::graphql::blocks_query::BlocksQueryBlocksTransactionsFeeTransfer,
     common::{components::*, constants::*, functions::*, models::*, spotlight::*, table::*},
     icons::*,
 };
@@ -21,6 +21,8 @@ pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
 
     let content_for_fallback = content.clone();
 
+    let (placeholder_metadata, _) = create_signal(Some(TableMetadata::default()));
+
     view! {
         <PageContainer>
             <ErrorBoundary fallback=move |_| ().into_view()>
@@ -31,6 +33,7 @@ pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
                         BlockContent::UserCommands => {
                             view! {
                                 <TableSection
+                                    metadata=placeholder_metadata
                                     section_heading="User Commands"
                                     controls=|| ().into_view()
                                 >
@@ -41,6 +44,7 @@ pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
                         BlockContent::SNARKJobs => {
                             view! {
                                 <TableSection
+                                    metadata=placeholder_metadata
                                     section_heading="SNARK Jobs"
                                     controls=|| ().into_view()
                                 >
@@ -51,6 +55,7 @@ pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
                         BlockContent::FeeTransfers => {
                             view! {
                                 <TableSection
+                                    metadata=placeholder_metadata
                                     section_heading="Internal Commands"
                                     controls=|| ().into_view()
                                 >
@@ -61,6 +66,7 @@ pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
                         BlockContent::Analytics => {
                             view! {
                                 <TableSection
+                                    metadata=placeholder_metadata
                                     section_heading="Analytics"
                                     controls=|| ().into_view()
                                 >
@@ -103,34 +109,19 @@ pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
 
 #[component]
 pub fn BlockUserCommands(block: BlocksQueryBlocks) -> impl IntoView {
-    let (current_page, set_current_page) = create_signal(1);
-    let page_dim = use_context::<ReadSignal<PageDimensions>>()
-        .expect("there to be a `PageDimensions` signal provided");
+    let (metadata, _) = create_signal(Some(TableMetadata {
+        total_records: "all".to_string(),
+        displayed_records: get_user_commands(&block)
+            .map(|uc| uc.len() as i64)
+            .unwrap_or(0),
+    }));
 
     view! {
-        <TableSection section_heading="User Commands" controls=|| ().into_view()>
+        <TableSection metadata section_heading="User Commands" controls=|| ().into_view()>
 
             {move || match get_user_commands(&block) {
                 Some(user_commands) => {
-                    let pag = build_pagination(
-                        user_commands.len(),
-                        TABLE_DEFAULT_PAGE_SIZE,
-                        current_page.get(),
-                        set_current_page,
-                        page_dim.get().height.map(|h| h as usize),
-                        Some(
-                            Box::new(|container_height: usize| {
-                                (container_height - DEFAULT_ESTIMATED_NON_TABLE_SPACE_IN_SECTIONS)
-                                    / ESTIMATED_ROW_HEIGHT
-                            }),
-                        ),
-                    );
-                    let subset = get_subset(
-                        &user_commands,
-                        pag.records_per_page,
-                        current_page.get() - 1,
-                    );
-                    view! { <DeprecatedTable data=subset pagination=pag/> }
+                    view! { <DeprecatedTable data=user_commands/> }
                 }
                 None => ().into_view(),
             }}
@@ -141,8 +132,14 @@ pub fn BlockUserCommands(block: BlocksQueryBlocks) -> impl IntoView {
 
 #[component]
 pub fn BlockSnarkJobs(block: BlocksQueryBlocks) -> impl IntoView {
+    let (metadata, _) = create_signal(Some(TableMetadata {
+        total_records: "all".to_string(),
+        displayed_records: get_snark_job_count(&block)
+            .map(|sj| sj as i64)
+            .unwrap_or_default(),
+    }));
     view! {
-        <TableSection section_heading="SNARK Jobs" controls=|| ().into_view()>
+        <TableSection metadata section_heading="SNARK Jobs" controls=|| ().into_view()>
             <BlockSpotlightSnarkJobTable block=block/>
         </TableSection>
     }
@@ -150,19 +147,33 @@ pub fn BlockSnarkJobs(block: BlocksQueryBlocks) -> impl IntoView {
 
 #[component]
 pub fn BlockInternalCommands(block: BlocksQueryBlocks) -> impl IntoView {
+    let block_clone = block.clone();
+    let (metadata, _) = create_signal(Some(TableMetadata {
+        total_records: "all".to_string(),
+        displayed_records: match (
+            block_clone
+                .transactions
+                .clone()
+                .and_then(|txn| txn.fee_transfer),
+            block_clone
+                .transactions
+                .clone()
+                .and_then(|txn| txn.coinbase_receiver_account.and_then(|ra| ra.public_key)),
+        ) {
+            (Some(feetransfers), Some(_)) => (feetransfers.len() + 1) as i64,
+            (Some(feetransfers), None) => feetransfers.len() as i64,
+            (_, _) => 0_i64,
+        },
+    }));
     view! {
-        <TableSection section_heading="Internal Commands" controls=|| ().into_view()>
-            <BlockInternalCommandsTable block/>
+        <TableSection metadata section_heading="Internal Commands" controls=|| ().into_view()>
+            <BlockInternalCommandsTable block=block.clone()/>
         </TableSection>
     }
 }
 
 #[component]
 pub fn BlockInternalCommandsTable(block: BlocksQueryBlocks) -> impl IntoView {
-    let page_dim = use_context::<ReadSignal<PageDimensions>>()
-        .expect("there to be a `PageDimensions` signal provided");
-    let (current_page, set_current_page) = create_signal(1);
-
     view! {
         {move || match (
             block.transactions.clone().and_then(|txn| txn.fee_transfer),
@@ -181,25 +192,7 @@ pub fn BlockInternalCommandsTable(block: BlocksQueryBlocks) -> impl IntoView {
                             recipient: Some(coinbase_receiver),
                         }),
                     );
-                let pag = build_pagination(
-                    feetransfers.len(),
-                    TABLE_DEFAULT_PAGE_SIZE,
-                    current_page.get(),
-                    set_current_page,
-                    page_dim.get().height.map(|h| h as usize),
-                    Some(
-                        Box::new(|container_height: usize| {
-                            (container_height - DEFAULT_ESTIMATED_NON_TABLE_SPACE_IN_SECTIONS)
-                                / ESTIMATED_ROW_HEIGHT
-                        }),
-                    ),
-                );
-                let subset = get_subset(
-                    &feetransfers,
-                    pag.records_per_page,
-                    current_page.get() - 1,
-                );
-                view! { <DeprecatedTable data=subset pagination=pag/> }
+                view! { <DeprecatedTable data=feetransfers/> }
             }
             (_, _, _) => {
                 view! { <EmptyTable message="No internal commands for this block"/> }
@@ -211,6 +204,7 @@ pub fn BlockInternalCommandsTable(block: BlocksQueryBlocks) -> impl IntoView {
 #[component]
 pub fn BlockAnalytics(block: BlocksQueryBlocks) -> impl IntoView {
     let (block_sig, _) = create_signal(block);
+
     let user_command_amount_total = move || {
         if let Some(user_commands) = get_user_commands(&block_sig.get()) {
             user_commands
@@ -226,9 +220,13 @@ pub fn BlockAnalytics(block: BlocksQueryBlocks) -> impl IntoView {
             0
         }
     };
+    let (metadata, _) = create_signal(Some(TableMetadata {
+        displayed_records: user_command_amount_total() as i64,
+        total_records: "all".to_string(),
+    }));
 
     view! {
-        <TableSection section_heading="Analytics" controls=|| ().into_view()>
+        <TableSection metadata section_heading="Analytics" controls=|| ().into_view()>
             <AnalyticsLayout>
                 <AnalyticsSmContainer>
                     <AnalyticsSimpleInfo
@@ -582,6 +580,7 @@ fn BlockSpotlightPlaceholder() -> impl IntoView {
 
 #[component]
 pub fn BlocksSection() -> impl IntoView {
+    let (metadata, set_metadata) = create_signal(Some(TableMetadata::default()));
     let query_params_map = use_query_map();
     let (block_height_sig, _) = create_query_signal::<i64>("q-height");
     let (slot_sig, _) = create_query_signal::<i64>("q-slot");
@@ -600,7 +599,7 @@ pub fn BlocksSection() -> impl IntoView {
         },
         |(_, q_map, block_height, slot, canonical)| async move {
             load_data(
-                TABLE_RECORD_SIZE,
+                TABLE_ROW_LIMIT,
                 q_map.get("q-block-producer").cloned(),
                 q_map.get("q-state-hash").cloned(),
                 block_height,
@@ -614,10 +613,6 @@ pub fn BlocksSection() -> impl IntoView {
             .await
         },
     );
-
-    let page_dim = use_context::<ReadSignal<PageDimensions>>()
-        .expect("there to be a `PageDimensions` signal provided");
-    let (current_page, set_current_page) = create_signal(1);
 
     let table_columns = vec![
         TableColumn {
@@ -658,25 +653,19 @@ pub fn BlocksSection() -> impl IntoView {
         },
     ];
     let table_cols_length = table_columns.len();
-    let build_blocks_pag = |data: &ResponseData,
-                            current_page: ReadSignal<usize>,
-                            set_current_page: WriteSignal<usize>,
-                            page_dim: ReadSignal<PageDimensions>| {
-        build_pagination(
-            data.blocks.len(),
-            TABLE_DEFAULT_PAGE_SIZE,
-            current_page.get(),
-            set_current_page,
-            page_dim.get().height.map(|f| f as usize),
-            Some(Box::new(|container_height: usize| {
-                (container_height - DEFAULT_ESTIMATED_NON_TABLE_SPACE_IN_SECTIONS)
-                    / ESTIMATED_ROW_HEIGHT
-            })),
-        )
-    };
+
+    create_effect(move |_| {
+        if let Some(data) = resource.get().and_then(|res| res.ok()) {
+            set_metadata.set(Some(TableMetadata {
+                displayed_records: data.blocks.len() as i64,
+                total_records: "all".to_string(),
+            }))
+        }
+    });
 
     view! {
         <TableSection
+            metadata
             section_heading="Blocks"
             controls=move || {
                 view! {
@@ -697,7 +686,10 @@ pub fn BlocksSection() -> impl IntoView {
                     <TableHeader columns=table_columns/>
                     <Suspense fallback=move || {
                         view! {
-                            <TableRows data=vec![vec![LoadingPlaceholder; table_cols_length]; 10]/>
+                            <TableRows data=vec![
+                                vec![LoadingPlaceholder; table_cols_length];
+                                TABLE_ROW_LIMIT.try_into().unwrap()
+                            ]/>
                         }
                     }>
                         {move || {
@@ -705,35 +697,13 @@ pub fn BlocksSection() -> impl IntoView {
                                 .get()
                                 .and_then(|res| res.ok())
                                 .map(|data| {
-                                    let pag = build_blocks_pag(
-                                        &data,
-                                        current_page,
-                                        set_current_page,
-                                        page_dim,
-                                    );
-                                    let blocks_subset = get_subset(
-                                        &data.blocks,
-                                        pag.records_per_page,
-                                        current_page.get() - 1,
-                                    );
-                                    view! { <TableRows data=blocks_subset/> }
+                                    view! { <TableRows data=data.blocks/> }
                                 })
                         }}
 
                     </Suspense>
                 </Table>
             </TableContainer>
-            {move || {
-                resource
-                    .get()
-                    .and_then(|res| res.ok())
-                    .map(|data| {
-                        let pag = build_blocks_pag(&data, current_page, set_current_page, page_dim);
-                        view! { <Pagination pagination=pag/> }
-                    })
-                    .collect_view()
-            }}
-
         </TableSection>
         <Outlet/>
     }
@@ -741,10 +711,6 @@ pub fn BlocksSection() -> impl IntoView {
 
 #[component]
 pub fn BlockSpotlightSnarkJobTable(block: BlocksQueryBlocks) -> impl IntoView {
-    let page_dim = use_context::<ReadSignal<PageDimensions>>()
-        .expect("there to be a `PageDimensions` signal provided");
-    let (current_page, set_current_page) = create_signal(1);
-
     view! {
         {move || match block.snark_jobs.clone() {
             Some(snark_jobs) => {
@@ -753,28 +719,7 @@ pub fn BlockSpotlightSnarkJobTable(block: BlocksQueryBlocks) -> impl IntoView {
                         0 => {
                             view! { <EmptyTable message="No SNARK work related to this block"/> }
                         }
-                        _ => {
-                            let pag = build_pagination(
-                                snark_jobs.len(),
-                                TABLE_DEFAULT_PAGE_SIZE,
-                                current_page.get(),
-                                set_current_page,
-                                page_dim.get().height.map(|h| h as usize),
-                                Some(
-                                    Box::new(|container_height: usize| {
-                                        (container_height
-                                            - DEFAULT_ESTIMATED_NON_TABLE_SPACE_IN_SECTIONS)
-                                            / ESTIMATED_ROW_HEIGHT
-                                    }),
-                                ),
-                            );
-                            let subset = get_subset(
-                                &snark_jobs,
-                                pag.records_per_page,
-                                current_page.get() - 1,
-                            );
-                            view! { <DeprecatedTable data=subset pagination=pag/> }
-                        }
+                        _ => view! { <DeprecatedTable data=snark_jobs/> },
                     }}
                 }
             }

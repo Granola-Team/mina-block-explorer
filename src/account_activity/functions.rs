@@ -41,7 +41,7 @@ pub async fn load_account_data(id: &str) -> Result<AccountResponse, MyError> {
     }
 }
 
-pub fn stub_account_summaries(size: usize) -> Vec<AllAccountSummary> {
+pub fn stub_account_summaries(size: i64) -> Vec<Option<AllAccountSummary>> {
     let mut rng = rand::thread_rng();
     let int_dist = Uniform::from(0..=1000);
 
@@ -49,7 +49,7 @@ pub fn stub_account_summaries(size: usize) -> Vec<AllAccountSummary> {
         .map(|_| {
             let balance = generate_random_mina_price();
 
-            AllAccountSummary {
+            Some(AllAccountSummary {
                 pk: generate_base58_string(44),
                 balance,
                 delegate: generate_base58_string(44),
@@ -58,7 +58,7 @@ pub fn stub_account_summaries(size: usize) -> Vec<AllAccountSummary> {
                 voting_for: generate_base58_string(44),
                 public_key: generate_base58_string(44),
                 username: generate_random_string(10),
-            }
+            })
         })
         .collect()
 }
@@ -87,13 +87,13 @@ pub async fn load_data(
         snarks_limit: Some(snarks_limit.unwrap_or_default()),
         trans_limit: Some(trans_limit.unwrap_or_default()),
         blocks_query: account_activity_query::BlockQueryInput {
-            block_height,
+            block_height_lte: block_height,
             state_hash: state_hash.clone(),
             creator: block_producer.clone(),
             protocol_state: if slot.is_some() {
                 Some(BlockProtocolStateQueryInput {
                     consensus_state: Some(BlockProtocolStateConsensusStateQueryInput {
-                        slot,
+                        slot_since_genesis_lte: slot,
                         ..Default::default()
                     }),
                     ..Default::default()
@@ -109,7 +109,7 @@ pub async fn load_data(
             ..Default::default()
         },
         snarks_query: account_activity_query::SnarkQueryInput {
-            block_height,
+            block_height_lte: block_height,
             prover,
             block: if block_producer.is_some() || slot.is_some() || state_hash.is_some() {
                 Some(BlockQueryInput {
@@ -118,7 +118,7 @@ pub async fn load_data(
                     protocol_state: if slot.is_some() {
                         Some(BlockProtocolStateQueryInput {
                             consensus_state: Some(BlockProtocolStateConsensusStateQueryInput {
-                                slot,
+                                slot_since_genesis_lte: slot,
                                 ..Default::default()
                             }),
                             ..Default::default()
@@ -139,7 +139,7 @@ pub async fn load_data(
             ..Default::default()
         },
         outgoing_trans_query: account_activity_query::TransactionQueryInput {
-            block_height,
+            block_height_lte: block_height,
             hash: txn_hash.clone(),
             from: public_key.clone(),
             to: counterparty.clone(),
@@ -152,7 +152,7 @@ pub async fn load_data(
             ..Default::default()
         },
         incoming_trans_query: account_activity_query::TransactionQueryInput {
-            block_height,
+            block_height_lte: block_height,
             hash: txn_hash,
             to: public_key,
             from: counterparty,

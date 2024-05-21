@@ -1,4 +1,4 @@
-suite(["@CI"], "tab count and pagination count", () => {
+suite(["@CI"], "tab count and row count", () => {
   let tabs = ["SNARK Jobs", "User Commands", "Internal Commands"];
 
   tabs.forEach((tab) =>
@@ -14,9 +14,10 @@ suite(["@CI"], "tab count and pagination count", () => {
       cy.get("@tab-count")
         .invoke("text")
         .then((count) => {
-          if (Number(count) > 0) {
-            cy.scrollTo("bottom", { ensureScrollable: false });
-            cy.get(".pagination-controls").children().first().contains(count);
+          let c = Number(count);
+          if (c > 0) {
+            cy.aliasTableRows(tab, "tr");
+            cy.get("@tr").should("have.lengthOf", c);
           } else {
             cy.get("table").should("not.exist");
           }

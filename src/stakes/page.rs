@@ -2,9 +2,8 @@ use super::{components::*, functions::*, models::*};
 use crate::{
     common::{
         components::*,
-        constants::{TABLE_RECORD_SIZE, *},
-        functions::*,
-        models::{MyError, PageDimensions},
+        constants::*,
+        models::{MyError, TableMetadata},
         table::*,
     },
     summary::functions::load_data as load_summary_data,
@@ -37,6 +36,7 @@ pub fn StakesPage() -> impl IntoView {
 
 #[component]
 fn StakesPageContents() -> impl IntoView {
+    let (metadata, set_metadata) = create_signal(Some(TableMetadata::default()));
     let (epoch_sig, _) = create_query_signal::<i64>("epoch");
     let query_params_map = use_query_map();
 
@@ -54,7 +54,7 @@ fn StakesPageContents() -> impl IntoView {
                 (Some(epoch), None) | (_, Some(epoch)) => {
                     let public_key = params_map.get("q-key").cloned();
                     let delegate = params_map.get("q-delegate").cloned();
-                    load_data(TABLE_RECORD_SIZE, Some(epoch), public_key, delegate).await
+                    load_data(Some(epoch), public_key, delegate).await
                 }
                 _ => Err(MyError::ParseError(String::from(
                     "missing epoch information",
@@ -63,26 +63,7 @@ fn StakesPageContents() -> impl IntoView {
         },
     );
 
-    let page_dim = use_context::<ReadSignal<PageDimensions>>()
-        .expect("there to be a `PageDimensions` signal provided");
-    let (current_page, set_current_page) = create_signal(1);
-
-    let get_data_and_pagination = move || {
-        resource.get().and_then(|res| res.ok()).map(|data| {
-            let pag = build_pagination(
-                data.stakes.len(),
-                TABLE_DEFAULT_PAGE_SIZE,
-                current_page.get(),
-                set_current_page,
-                page_dim.get().height.map(|h| h as usize),
-                Some(Box::new(|container_height: usize| {
-                    (container_height - DEFAULT_ESTIMATED_NON_TABLE_SPACE_IN_SECTIONS)
-                        / ESTIMATED_ROW_HEIGHT
-                })),
-            );
-            (data, pag)
-        })
-    };
+    let get_data = move || resource.get().and_then(|res| res.ok());
 
     let table_columns = vec![
         TableColumn {
@@ -108,6 +89,15 @@ fn StakesPageContents() -> impl IntoView {
     ];
     let table_cols_length = table_columns.len();
     let table_columns_clone = table_columns.clone();
+
+    create_effect(move |_| {
+        if let Some(data) = get_data() {
+            set_metadata.set(Some(TableMetadata {
+                total_records: "all".to_string(),
+                displayed_records: data.stakes.len() as i64,
+            }))
+        }
+    });
 
     let get_heading_and_epochs = create_memo(move |_| {
         summary_resource
@@ -143,6 +133,7 @@ fn StakesPageContents() -> impl IntoView {
                 get_heading_and_epochs.get();
             view! {
                 <TableSection
+                    metadata
                     section_heading=section_heading
                     controls=move || {
                         view! {
@@ -196,29 +187,14 @@ fn StakesPageContents() -> impl IntoView {
                                 }
                             }>
                                 {move || {
-                                    get_data_and_pagination()
-                                        .map(|(data, pag)| {
-                                            view! {
-                                                <TableRows data=data
-                                                    .stakes[pag
-                                                        .start_index()..std::cmp::min(
-                                                        pag.end_index() + 1,
-                                                        pag.total_records,
-                                                    )]
-                                                    .to_vec()/>
-                                            }
+                                    get_data()
+                                        .map(|data| {
+                                            view! { <TableRows data=data.stakes/> }
                                         })
                                 }}
 
                             </Suspense>
                         </Table>
-                        {move || {
-                            get_data_and_pagination()
-                                .map(|(_, pag)| {
-                                    view! { <Pagination pagination=pag/> }
-                                })
-                        }}
-
                     </TableContainer>
                 </TableSection>
             }

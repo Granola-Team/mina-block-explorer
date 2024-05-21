@@ -1,36 +1,17 @@
 use super::functions::*;
-use crate::common::{components::*, functions::*, table::*};
+use crate::common::{components::*, constants::TABLE_ROW_LIMIT, models::TableMetadata, table::*};
 use leptos::*;
 use leptos_meta::*;
 
 #[component]
 pub fn TokensPage() -> impl IntoView {
-    let records_per_page = 10;
-    let (current_page, set_current_page) = create_signal(1);
-    let data = stub_token_data(9000);
+    let data = stub_token_data(TABLE_ROW_LIMIT);
+    let (metadata, _) = create_signal(Some(TableMetadata::default()));
     view! {
         <Title text="Tokens | Search For Tokens"/>
         <PageContainer>
-            <TableSection section_heading="Tokens" controls=|| ().into_view()>
-
-                {move || {
-                    let data = data.clone();
-                    let pag = build_pagination(
-                        data.len(),
-                        records_per_page,
-                        current_page.get(),
-                        set_current_page,
-                        None,
-                        None,
-                    );
-                    let subset = get_subset(
-                        &data.into_iter().map(Some).collect::<Vec<_>>(),
-                        records_per_page,
-                        current_page.get() - 1,
-                    );
-                    view! { <DeprecatedTable data=subset pagination=pag/> }
-                }}
-
+            <TableSection metadata section_heading="Tokens" controls=|| ().into_view()>
+                <DeprecatedTable data=data/>
             </TableSection>
         </PageContainer>
     }

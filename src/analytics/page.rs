@@ -4,10 +4,15 @@ use leptos_meta::*;
 
 #[component]
 pub fn InternalCommandsAnalayticsPage() -> impl IntoView {
+    let (metadata, _) = create_signal(Some(TableMetadata::default()));
     view! {
         <Title text="Analytics | Internal Commands"/>
         <PageContainer>
-            <TableSection section_heading="Internal Commands Analytics" controls=|| ().into_view()>
+            <TableSection
+                metadata
+                section_heading="Internal Commands Analytics"
+                controls=|| ().into_view()
+            >
                 <AnalyticsLayout>
                     <AnalyticsXLContainer>
                         <div id="chart" class="w-full h-96"></div>

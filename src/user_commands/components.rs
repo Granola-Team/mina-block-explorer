@@ -1,11 +1,5 @@
 use super::functions::*;
-use crate::common::{
-    components::*,
-    constants::{TABLE_RECORD_SIZE, *},
-    functions::*,
-    models::*,
-    table::*,
-};
+use crate::common::{components::*, constants::*, models::*, table::*};
 use leptos::*;
 use leptos_router::*;
 use leptos_use::{use_interval, UseIntervalReturn};
@@ -18,12 +12,10 @@ const QP_TO: &str = "q-to";
 
 #[component]
 pub fn TransactionsSection() -> impl IntoView {
+    let (metadata, set_metadata) = create_signal(Some(TableMetadata::default()));
     let (txn_type_qp, _) = create_query_signal::<String>(QP_TXN_TYPE);
     let query_params_map = use_query_map();
     let (block_height_sig, _) = create_query_signal::<i64>(QP_HEIGHT);
-    let (current_page, set_current_page) = create_signal(1);
-    let page_dim = use_context::<ReadSignal<PageDimensions>>()
-        .expect("there to be a `PageDimensions` signal provided");
     let UseIntervalReturn { counter, .. } = use_interval(LIVE_RELOAD_INTERVAL);
 
     let resource = create_resource(
@@ -40,7 +32,7 @@ pub fn TransactionsSection() -> impl IntoView {
                 Some(ref txn_type_str) if txn_type_str == "Pending" => load_pending_txn().await,
                 Some(ref txn_type_str) if txn_type_str == "Canonical" => {
                     load_data(
-                        TABLE_RECORD_SIZE,
+                        TABLE_ROW_LIMIT,
                         url_query_map.get(QP_FROM).cloned(),
                         url_query_map.get(QP_TO).cloned(),
                         url_query_map.get(QP_TXN_HASH).cloned(),
@@ -51,7 +43,7 @@ pub fn TransactionsSection() -> impl IntoView {
                 }
                 Some(ref txn_type_str) if txn_type_str == "Non-Canonical" => {
                     load_data(
-                        TABLE_RECORD_SIZE,
+                        TABLE_ROW_LIMIT,
                         url_query_map.get(QP_FROM).cloned(),
                         url_query_map.get(QP_TO).cloned(),
                         url_query_map.get(QP_TXN_HASH).cloned(),
@@ -62,7 +54,7 @@ pub fn TransactionsSection() -> impl IntoView {
                 }
                 Some(_) | None => {
                     load_data(
-                        TABLE_RECORD_SIZE,
+                        TABLE_ROW_LIMIT,
                         url_query_map.get(QP_FROM).cloned(),
                         url_query_map.get(QP_TO).cloned(),
                         url_query_map.get(QP_TXN_HASH).cloned(),
@@ -114,25 +106,20 @@ pub fn TransactionsSection() -> impl IntoView {
         },
     ];
     let table_cols_length = table_columns.len();
-    let get_data_and_pagination = move || {
-        resource.get().and_then(|res| res.ok()).map(|data| {
-            let pag = build_pagination(
-                data.transactions.len(),
-                TABLE_DEFAULT_PAGE_SIZE,
-                current_page.get(),
-                set_current_page,
-                page_dim.get().height.map(|h| h as usize),
-                Some(Box::new(|container_height: usize| {
-                    (container_height - DEFAULT_ESTIMATED_NON_TABLE_SPACE_IN_SECTIONS)
-                        / ESTIMATED_ROW_HEIGHT
-                })),
-            );
-            (data, pag)
-        })
-    };
+    let get_data = move || resource.get().and_then(|res| res.ok());
+
+    create_effect(move |_| {
+        if let Some(data) = get_data() {
+            set_metadata.set(Some(TableMetadata {
+                total_records: "all".to_string(),
+                displayed_records: data.transactions.len() as i64,
+            }))
+        }
+    });
 
     view! {
         <TableSection
+            metadata
             section_heading="User Commands"
             controls=move || {
                 view! {
@@ -157,34 +144,22 @@ pub fn TransactionsSection() -> impl IntoView {
                     <TableHeader columns=table_columns/>
                     <Suspense fallback=move || {
                         view! {
-                            <TableRows data=vec![vec![LoadingPlaceholder; table_cols_length]; 10]/>
+                            <TableRows data=vec![
+                                vec![LoadingPlaceholder; table_cols_length];
+                                TABLE_ROW_LIMIT.try_into().unwrap()
+                            ]/>
                         }
                     }>
                         {move || {
-                            get_data_and_pagination()
-                                .map(|(data, pag)| {
-                                    view! {
-                                        <TableRows data=data
-                                            .transactions[pag
-                                                .start_index()..std::cmp::min(
-                                                pag.end_index() + 1,
-                                                pag.total_records,
-                                            )]
-                                            .to_vec()/>
-                                    }
+                            get_data()
+                                .map(|data| {
+                                    view! { <TableRows data=data.transactions/> }
                                 })
                         }}
 
                     </Suspense>
                 </Table>
             </TableContainer>
-            {move || {
-                get_data_and_pagination()
-                    .map(|(_, pag)| {
-                        view! { <Pagination pagination=pag/> }
-                    })
-            }}
-
         </TableSection>
     }
 }

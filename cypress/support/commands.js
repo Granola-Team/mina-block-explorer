@@ -24,15 +24,6 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 Cypress.Commands.add(
-  "aliasTablePagination",
-  (tableHeading, alias, tableHeaderEl = "h1") => {
-    cy.contains(`section:has(${tableHeaderEl})`, tableHeading)
-      .find(".pagination-controls")
-      .as(alias);
-  },
-);
-
-Cypress.Commands.add(
   "aliasTableRows",
   (tableHeading, alias, tableHeaderEl = "h1") => {
     cy.contains(`section:has(${tableHeaderEl})`, tableHeading)

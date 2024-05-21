@@ -5,7 +5,7 @@ use super::graphql::{
     *,
 };
 use crate::common::{
-    constants::GRAPHQL_ENDPOINT,
+    constants::*,
     functions::{nanomina_str_to_mina, nanomina_to_mina},
     models::MyError,
 };
@@ -123,7 +123,8 @@ pub fn get_fee_transfer_count(block: &BlocksQueryBlocks) -> Option<usize> {
 pub fn get_slot(block: &BlocksQueryBlocks) -> String {
     block.protocol_state.as_ref().map_or_else(String::new, |o| {
         o.consensus_state.as_ref().map_or_else(String::new, |o| {
-            o.slot.map_or_else(String::new, |o| o.to_string())
+            o.slot_since_genesis
+                .map_or_else(String::new, |o| o.to_string())
         })
     })
 }
@@ -232,14 +233,14 @@ pub async fn load_data(
         query: blocks_query::BlockQueryInput {
             canonical,
             state_hash,
-            block_height,
+            block_height_lte: block_height,
             creator_account: Some(blocks_query::BlockCreatorAccountQueryInput {
                 public_key: block_creator_account,
                 ..Default::default()
             }),
             protocol_state: Some(blocks_query::BlockProtocolStateQueryInput {
                 consensus_state: Some(blocks_query::BlockProtocolStateConsensusStateQueryInput {
-                    slot,
+                    slot_since_genesis_lte: slot,
                     ..Default::default()
                 }),
                 ..Default::default()

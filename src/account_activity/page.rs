@@ -9,8 +9,7 @@ use crate::{
     common::{
         components::*,
         constants::*,
-        functions::*,
-        models::{MyError, NavEntry, NavIcon, PageDimensions},
+        models::{MyError, NavEntry, NavIcon, TableMetadata},
         spotlight::*,
         table::*,
     },
@@ -32,36 +31,11 @@ pub fn AccountsPage() -> impl IntoView {
 
 #[component]
 fn AccountsPageContents() -> impl IntoView {
-    let page_dim = use_context::<ReadSignal<PageDimensions>>()
-        .expect("there to be a `PageDimensions` signal provided");
-    let (current_page, set_current_page) = create_signal(1);
-    let data = stub_account_summaries(9000);
+    let data = stub_account_summaries(TABLE_ROW_LIMIT);
+    let (metadata, _) = create_signal(Some(TableMetadata::default()));
     view! {
-        <TableSection section_heading="Accounts" controls=|| ().into_view()>
-
-            {move || {
-                let data = data.clone();
-                let pag = build_pagination(
-                    data.len(),
-                    TABLE_DEFAULT_PAGE_SIZE,
-                    current_page.get(),
-                    set_current_page,
-                    page_dim.get().height.map(|h| h as usize),
-                    Some(
-                        Box::new(|container_height: usize| {
-                            (container_height - DEFAULT_ESTIMATED_NON_TABLE_SPACE_IN_SECTIONS)
-                                / ESTIMATED_ROW_HEIGHT
-                        }),
-                    ),
-                );
-                let subset = get_subset(
-                    &data.into_iter().map(Some).collect::<Vec<_>>(),
-                    pag.records_per_page,
-                    current_page.get() - 1,
-                );
-                view! { <DeprecatedTable data=subset pagination=pag/> }
-            }}
-
+        <TableSection metadata section_heading="Accounts" controls=|| ().into_view()>
+            <DeprecatedTable data=data/>
         </TableSection>
     }
 }

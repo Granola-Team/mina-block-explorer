@@ -1,6 +1,6 @@
 use super::functions::*;
 use crate::{
-    common::{components::*, constants::*, functions::*, models::*, table::*},
+    common::{components::*, models::TableMetadata, table::*},
     stakes::{components::EpochButton, models::EpochStyleVariant},
 };
 use leptos::*;
@@ -19,36 +19,18 @@ pub fn NextStakesPage() -> impl IntoView {
 
 #[component]
 fn NextStakesPageContents() -> impl IntoView {
+    let (metadata, set_metadata) = create_signal(Some(TableMetadata::default()));
     let query_params_map = use_query_map();
     let resource = create_resource(
         move || query_params_map.get(),
         |params_map| async move {
             let public_key = params_map.get("q-key").cloned();
             let delegate = params_map.get("q-delegate").cloned();
-            load_data(TABLE_RECORD_SIZE, public_key, delegate).await
+            load_data(public_key, delegate).await
         },
     );
 
-    let page_dim = use_context::<ReadSignal<PageDimensions>>()
-        .expect("there to be a `PageDimensions` signal provided");
-    let (current_page, set_current_page) = create_signal(1);
-
-    let get_data_and_pagination = move || {
-        resource.get().and_then(|res| res.ok()).map(|data| {
-            let pag = build_pagination(
-                data.nextstakes.len(),
-                TABLE_DEFAULT_PAGE_SIZE,
-                current_page.get(),
-                set_current_page,
-                page_dim.get().height.map(|h| h as usize),
-                Some(Box::new(|container_height: usize| {
-                    (container_height - DEFAULT_ESTIMATED_NON_TABLE_SPACE_IN_SECTIONS)
-                        / ESTIMATED_ROW_HEIGHT
-                })),
-            );
-            (data, pag)
-        })
-    };
+    let get_data = move || resource.get().and_then(|res| res.ok());
 
     let table_columns = vec![
         TableColumn {
@@ -74,9 +56,19 @@ fn NextStakesPageContents() -> impl IntoView {
     ];
     let table_cols_length = table_columns.len();
 
+    create_effect(move |_| {
+        if let Some(data) = get_data() {
+            set_metadata.set(Some(TableMetadata {
+                total_records: "all".to_string(),
+                displayed_records: data.nextstakes.len() as i64,
+            }))
+        }
+    });
+
     view! {
         <ErrorBoundary fallback=move |_| ().into_view()>
             <TableSection
+                metadata
                 section_heading="Next Staking Ledger"
                 controls=move || {
                     view! {
@@ -106,30 +98,15 @@ fn NextStakesPageContents() -> impl IntoView {
                             }
                         }>
                             {move || {
-                                get_data_and_pagination()
-                                    .map(|(data, pag)| {
-                                        view! {
-                                            <TableRows data=data
-                                                .nextstakes[pag
-                                                    .start_index()..std::cmp::min(
-                                                    pag.end_index() + 1,
-                                                    pag.total_records,
-                                                )]
-                                                .to_vec()/>
-                                        }
+                                get_data()
+                                    .map(|data| {
+                                        view! { <TableRows data=data.nextstakes/> }
                                     })
                             }}
 
                         </Suspense>
                     </Table>
                 </TableContainer>
-                {move || {
-                    get_data_and_pagination()
-                        .map(|(_, pag)| {
-                            view! { <Pagination pagination=pag/> }
-                        })
-                }}
-
             </TableSection>
         </ErrorBoundary>
     }

@@ -1,5 +1,5 @@
 use super::{graphql::*, models::PooledUserCommandsResponse};
-use crate::common::{constants::GRAPHQL_ENDPOINT, models::MyError};
+use crate::common::{constants::*, models::MyError};
 use graphql_client::reqwest::post_graphql;
 use std::error::Error;
 
@@ -59,7 +59,7 @@ pub async fn load_data(
             from: from_account,
             to: to_account,
             hash: state_hash,
-            block_height,
+            block_height_lte: block_height,
             canonical: if canonical.is_none() {
                 Some(true)
             } else {

@@ -7,7 +7,7 @@ use super::{
 };
 use crate::{
     account_activity::table_traits::BlockTrait,
-    common::{components::*, functions::*, models::*, table::*},
+    common::{components::*, constants::*, functions::*, models::*, table::*},
     icons::*,
 };
 use leptos::*;
@@ -220,9 +220,13 @@ fn TransactionEntry(
 pub fn AccountTransactionsSection(
     transactions_sig: ReadSignal<Option<Vec<Option<AccountActivityQueryDirectionalTransactions>>>>,
 ) -> impl IntoView {
-    let records_per_page = 10;
-    let (current_page, set_current_page) = create_signal(1);
-
+    let (metadata, set_metadata) = create_signal(Some(TableMetadata::default()));
+    create_effect(move |_| {
+        set_metadata.set(transactions_sig.get().map(|txn| TableMetadata {
+            total_records: "all".to_string(),
+            displayed_records: txn.len() as i64,
+        }));
+    });
     let table_columns = vec![
         TableColumn {
             column: "Height".to_string(),
@@ -261,6 +265,7 @@ pub fn AccountTransactionsSection(
 
     view! {
         <TableSection
+            metadata
             section_heading="User Commands"
             controls=move || {
                 view! {
@@ -289,40 +294,12 @@ pub fn AccountTransactionsSection(
                             }
                         }
                         Some(transactions) => {
-                            let pag = build_pagination(
-                                transactions.len(),
-                                records_per_page,
-                                current_page.get(),
-                                set_current_page,
-                                None,
-                                None,
-                            );
-                            view! {
-                                <TableRows data=transactions[pag
-                                        .start_index()..std::cmp::min(
-                                        pag.end_index() + 1,
-                                        pag.total_records,
-                                    )]
-                                    .to_vec()/>
-                            }
+                            view! { <TableRows data=transactions/> }
                         }
                     }}
 
                 </Table>
             </TableContainer>
-            {move || {
-                let length = transactions_sig.get().map(|s| s.len()).unwrap_or(0);
-                let pag = build_pagination(
-                    length,
-                    records_per_page,
-                    current_page.get(),
-                    set_current_page,
-                    None,
-                    None,
-                );
-                view! { <Pagination pagination=pag/> }
-            }}
-
         </TableSection>
     }
 }
@@ -340,9 +317,6 @@ pub fn AccountOverviewSnarkJobTable(
             .map(|pk| format!("/snarks?account={}", pk))
             .unwrap_or_else(|| "/snarks".to_string()),
     );
-
-    let records_per_page = 5;
-    let (current_page, set_current_page) = create_signal(1);
 
     let table_columns = vec![
         TableColumn {
@@ -375,44 +349,19 @@ pub fn AccountOverviewSnarkJobTable(
                 {move || match snarks_sig.get() {
                     None => {
                         view! {
-                            <TableRows data=vec![vec![LoadingPlaceholder; table_cols_length]; 10]/>
+                            <TableRows data=vec![
+                                vec![LoadingPlaceholder; table_cols_length];
+                                TABLE_ROW_LIMIT.try_into().unwrap()
+                            ]/>
                         }
                     }
                     Some(snarks) => {
-                        let pag = build_pagination(
-                            snarks.len(),
-                            records_per_page,
-                            current_page.get(),
-                            set_current_page,
-                            None,
-                            None,
-                        );
-                        view! {
-                            <TableRows data=snarks[pag
-                                    .start_index()..std::cmp::min(
-                                    pag.end_index() + 1,
-                                    pag.total_records,
-                                )]
-                                .to_vec()/>
-                        }
+                        view! { <TableRows data=snarks/> }
                     }
                 }}
 
             </Table>
         </TableContainer>
-        {move || {
-            let length = snarks_sig.get().map(|s| s.len()).unwrap_or(0);
-            let pag = build_pagination(
-                length,
-                records_per_page,
-                current_page.get(),
-                set_current_page,
-                None,
-                None,
-            );
-            view! { <Pagination pagination=pag/> }
-        }}
-
         <TableLink href=href.get() text="See all snark jobs">
             <CheckCircleIcon/>
         </TableLink>
@@ -432,9 +381,6 @@ pub fn AccountOverviewBlocksTable(
             .map(|pk| format!("/blocks?account={}", pk))
             .unwrap_or_else(|| "/blocks".to_string()),
     );
-
-    let records_per_page = 5;
-    let (current_page, set_current_page) = create_signal(1);
 
     let table_columns = vec![
         TableColumn {
@@ -483,42 +429,18 @@ pub fn AccountOverviewBlocksTable(
                 {move || match blocks_sig.get() {
                     None => {
                         view! {
-                            <TableRows data=vec![vec![LoadingPlaceholder; table_cols_length]; 10]/>
+                            <TableRows data=vec![
+                                vec![LoadingPlaceholder; table_cols_length];
+                                TABLE_ROW_LIMIT.try_into().unwrap()
+                            ]/>
                         }
                     }
                     Some(blocks) => {
-                        let pag = build_pagination(
-                            blocks.len(),
-                            records_per_page,
-                            current_page.get(),
-                            set_current_page,
-                            None,
-                            None,
-                        );
-                        let blocks_subset = blocks[pag
-                                .start_index()..std::cmp::min(
-                                pag.end_index() + 1,
-                                pag.total_records,
-                            )]
-                            .to_vec();
-                        view! { <TableRows data=blocks_subset/> }
+                        view! { <TableRows data=blocks/> }
                     }
                 }}
 
             </Table>
-            {move || {
-                let length = blocks_sig.get().map(|s| s.len()).unwrap_or(0);
-                let pag = build_pagination(
-                    length,
-                    records_per_page,
-                    current_page.get(),
-                    set_current_page,
-                    None,
-                    None,
-                );
-                view! { <Pagination pagination=pag/> }
-            }}
-
             <TableLink href=href.get() text="See all block production">
                 <BlockIcon/>
             </TableLink>

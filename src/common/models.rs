@@ -1,6 +1,21 @@
+use super::constants::TABLE_ROW_LIMIT;
 use graphql_client::Error;
-use leptos::*;
 use serde::{Deserialize, Serialize};
+
+#[derive(Clone)]
+pub struct TableMetadata {
+    pub total_records: String,
+    pub displayed_records: i64,
+}
+
+impl Default for TableMetadata {
+    fn default() -> Self {
+        TableMetadata {
+            total_records: "all".to_string(),
+            displayed_records: TABLE_ROW_LIMIT,
+        }
+    }
+}
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub enum MyError {
@@ -27,119 +42,6 @@ pub enum Status {
     Pending,
     Complete,
     Unknown,
-}
-
-#[derive(Clone)]
-pub struct Pagination {
-    pub current_page: usize,
-    pub records_per_page: usize,
-    pub total_records: usize,
-    pub set_current_page: WriteSignal<usize>,
-}
-
-impl Pagination {
-    pub fn start_index(&self) -> usize {
-        if self.total_records == 0 {
-            0
-        } else {
-            (self.current_page - 1) * self.records_per_page
-        }
-    }
-
-    pub fn end_index(&self) -> usize {
-        if self.total_records == 0 {
-            0
-        } else {
-            let end_idx = self.current_page * self.records_per_page - 1;
-            std::cmp::min(end_idx, self.total_records - 1)
-        }
-    }
-
-    pub fn total_pages(&self) -> usize {
-        if self.total_records == 0 {
-            0
-        } else {
-            (self.total_records + self.records_per_page - 1) / self.records_per_page
-        }
-    }
-}
-
-#[cfg(test)]
-mod pagination_tests {
-    use super::*;
-
-    #[test]
-    fn test_indexes_zero_records() {
-        let (_, set_page) = create_signal(1);
-        let pd = Pagination {
-            current_page: 1,
-            records_per_page: 15,
-            total_records: 0,
-            set_current_page: set_page,
-        };
-        assert_eq!(pd.start_index(), 0);
-        assert_eq!(pd.end_index(), 0);
-    }
-
-    #[test]
-    fn test_indexes_first_page() {
-        let (_, set_page) = create_signal(1);
-        let pd = Pagination {
-            current_page: 1,
-            records_per_page: 15,
-            total_records: 90,
-            set_current_page: set_page,
-        };
-        assert_eq!(pd.start_index(), 0);
-        assert_eq!(pd.end_index(), 14);
-    }
-
-    #[test]
-    fn test_indexes_second_page() {
-        let (_, set_page) = create_signal(1);
-        let pd = Pagination {
-            current_page: 2,
-            records_per_page: 15,
-            total_records: 90,
-            set_current_page: set_page,
-        };
-        assert_eq!(pd.start_index(), 15);
-        assert_eq!(pd.end_index(), 29);
-    }
-
-    #[test]
-    fn test_total_pages() {
-        let (_, set_page) = create_signal(1);
-        let pd = Pagination {
-            current_page: 2,
-            records_per_page: 15,
-            total_records: 90,
-            set_current_page: set_page,
-        };
-        assert_eq!(pd.total_pages(), 6);
-        let pd = Pagination {
-            current_page: 2,
-            records_per_page: 15,
-            total_records: 91,
-            set_current_page: set_page,
-        };
-        assert_eq!(pd.total_pages(), 7);
-    }
-
-    // Test for total records less than records per page
-    #[test]
-    fn test_fewer_records_than_page_size() {
-        let (_, set_page) = create_signal(1);
-        let pd = Pagination {
-            current_page: 1,
-            records_per_page: 15,
-            total_records: 10,
-            set_current_page: set_page,
-        };
-        assert_eq!(pd.start_index(), 0);
-        assert_eq!(pd.end_index(), 9);
-        assert_eq!(pd.total_pages(), 1);
-    }
 }
 
 pub enum ColorVariant {
@@ -193,10 +95,4 @@ pub enum NavIcon {
     FeeTransfers,
     Analytics,
     More,
-}
-
-#[derive(Clone, Debug)]
-pub struct PageDimensions {
-    pub height: Option<f64>,
-    pub width: Option<f64>,
 }
