@@ -66,17 +66,13 @@ pub fn GlobalSearchBar() -> impl IntoView {
     let navigate_clone = navigate.clone();
 
     create_effect(move |_| {
-        epoch_resource
-            .get()
-            .map(|res| res.ok())
-            .flatten()
-            .map(|resp| {
-                navigate_clone(
-                    &format!("/staking-ledgers?epoch={}", resp.data.stake.epoch),
-                    Default::default(),
-                );
-                set_value.set("".to_string());
-            })
+        epoch_resource.get().and_then(|res| res.ok()).map(|resp| {
+            navigate_clone(
+                &format!("/staking-ledgers?epoch={}", resp.data.stake.epoch),
+                Default::default(),
+            );
+            set_value.set("".to_string());
+        })
     });
 
     let on_submit = move |ev: leptos::ev::SubmitEvent| {
@@ -95,7 +91,7 @@ pub fn GlobalSearchBar() -> impl IntoView {
                 navigate(&format!("/commands/{}", val), Default::default());
                 set_value.set("".to_string());
             }
-            val if val.starts_with("j") => {
+            val if val.starts_with('j') => {
                 set_lh.set(Some(val));
             }
             val if val.chars().all(char::is_numeric) => {
