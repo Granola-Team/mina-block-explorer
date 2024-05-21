@@ -201,7 +201,13 @@ where
                         Some(meta) if meta.displayed_records < TABLE_ROW_LIMIT => {
                             view! {
                                 <div class="metadata pl-4 ".to_string()
-                                    + BASE_META_CLASS>"Showing all"</div>
+                                    + BASE_META_CLASS>
+                                    {format!(
+                                        "Showing {} of {}",
+                                        meta.displayed_records,
+                                        meta.displayed_records,
+                                    )}
+                                </div>
                             }
                                 .into_view()
                         }

@@ -1,6 +1,5 @@
 import { DEFAULT_ACCOUNT_PK } from "../constants";
 
-const SHOWING_ALL = "Showing all";
 const SHOWING_LATEST = "Showing 100 of all";
 suite(["@CI"], "metadata about the table", () => {
   let pages = [
@@ -28,7 +27,7 @@ suite(["@CI"], "metadata about the table", () => {
         cy.get(".metadata")
           .invoke("text")
           .then((text) => {
-            expect(text).to.equal(SHOWING_ALL);
+            expect(text).to.equal("Showing 20 of 20");
           });
       },
     },
@@ -56,7 +55,7 @@ suite(["@CI"], "metadata about the table", () => {
         cy.get(".metadata")
           .invoke("text")
           .then((text) => {
-            expect(text).to.equal(SHOWING_ALL);
+            expect(text).to.equal("Showing 28 of 28");
           });
       },
     },
@@ -84,7 +83,7 @@ suite(["@CI"], "metadata about the table", () => {
         cy.get(".metadata")
           .invoke("text")
           .then((text) => {
-            expect(text).to.equal(SHOWING_ALL);
+            expect(text).to.equal("Showing 16 of 16");
           });
       },
     },
@@ -112,7 +111,7 @@ suite(["@CI"], "metadata about the table", () => {
         cy.get(".metadata")
           .invoke("text")
           .then((text) => {
-            expect(text).to.equal(SHOWING_ALL);
+            expect(text).to.equal("Showing 64 of 64");
           });
       },
     },
@@ -140,7 +139,7 @@ suite(["@CI"], "metadata about the table", () => {
         cy.get(".metadata")
           .invoke("text")
           .then((text) => {
-            expect(text).to.equal(SHOWING_ALL);
+            expect(text).to.equal("Showing 1 of 1");
           });
       },
     },
@@ -168,7 +167,7 @@ suite(["@CI"], "metadata about the table", () => {
         cy.get(".metadata")
           .invoke("text")
           .then((text) => {
-            expect(text).to.equal(SHOWING_ALL);
+            expect(text).to.equal("Showing 1 of 1");
           });
       },
     },
