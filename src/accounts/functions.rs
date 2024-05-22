@@ -1,25 +1,24 @@
-use super::models::*;
-use crate::common::functions::*;
-use rand::{distributions::Uniform, prelude::Distribution};
+use super::graphql::{accounts_query, AccountsQuery};
+use crate::common::{constants::GRAPHQL_ENDPOINT, models::*};
+use graphql_client::reqwest::post_graphql;
 
-pub fn stub_account_summaries(size: i64) -> Vec<Option<AllAccountSummary>> {
-    let mut rng = rand::thread_rng();
-    let int_dist = Uniform::from(0..=1000);
+pub async fn load_data(limit: i64) -> Result<accounts_query::ResponseData, MyError> {
+    let variables = accounts_query::Variables {
+        limit: Some(limit),
+        sort_by: accounts_query::AccountSortByInput::BALANCE_DESC,
+    };
 
-    (0..size)
-        .map(|_| {
-            let balance = generate_random_mina_price();
+    let client = reqwest::Client::new();
 
-            Some(AllAccountSummary {
-                pk: generate_base58_string(44),
-                balance,
-                delegate: generate_base58_string(44),
-                token: int_dist.sample(&mut rng),
-                nonce: int_dist.sample(&mut rng),
-                voting_for: generate_base58_string(44),
-                public_key: generate_base58_string(44),
-                username: generate_random_string(10),
-            })
-        })
-        .collect()
+    let response = post_graphql::<AccountsQuery, _>(&client, GRAPHQL_ENDPOINT, variables)
+        .await
+        .map_err(|e| MyError::NetworkError(e.to_string()))?;
+
+    if let Some(errors) = response.errors {
+        return Err(MyError::GraphQLError(errors));
+    }
+
+    response
+        .data
+        .ok_or(MyError::GraphQLEmpty("No data available".to_string()))
 }
