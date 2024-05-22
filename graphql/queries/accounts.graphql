@@ -1,5 +1,9 @@
-query AccountsQuery($limit: Int = 100, $sortBy: AccountSortByInput!) {
-  accounts(limit: $limit, sortBy: $sortBy) {
+query AccountsQuery(
+  $limit: Int = 100
+  $sortBy: AccountSortByInput!
+  $query: AccountQueryInput
+) {
+  accounts(limit: $limit, query: $query, sortBy: $sortBy) {
     publicKey
     username
     balance

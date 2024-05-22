@@ -2,9 +2,19 @@ use super::graphql::{accounts_query, AccountsQuery};
 use crate::common::{constants::GRAPHQL_ENDPOINT, models::*};
 use graphql_client::reqwest::post_graphql;
 
-pub async fn load_data(limit: i64) -> Result<accounts_query::ResponseData, MyError> {
+pub async fn load_data(
+    limit: i64,
+    public_key: Option<String>,
+) -> Result<accounts_query::ResponseData, MyError> {
     let variables = accounts_query::Variables {
         limit: Some(limit),
+        query: if let Some(pk) = public_key {
+            Some(accounts_query::AccountQueryInput {
+                public_key: Some(pk),
+            })
+        } else {
+            None
+        },
         sort_by: accounts_query::AccountSortByInput::BALANCE_DESC,
     };
 

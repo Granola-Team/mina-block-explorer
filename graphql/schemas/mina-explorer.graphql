@@ -7,8 +7,8 @@ type Account {
   timeLocked: Boolean
 }
 
-type AccountQueryInput {
-  public_key: String
+input AccountQueryInput {
+  publicKey: String
 }
 
 enum AccountSortByInput {
@@ -1480,7 +1480,11 @@ input StakePermissionInsertInput {
 }
 
 type Query {
-  accounts(limit: Int = 100): [Account]!
+  accounts(
+    limit: Int = 100
+    query: AccountQueryInput
+    sortBy: AccountSortByInput
+  ): [Account]!
   block(query: BlockQueryInput): Block
   blocks(
     limit: Int = 100
