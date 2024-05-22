@@ -1,5 +1,24 @@
 import { DEFAULT_ACCOUNT_PK } from "../constants";
 
+suite(["@CI"], "accounts table", () => {
+  let pages = ["/addresses/accounts"];
+  let columns = [
+    "Public Key",
+    "Username",
+    "Balance",
+    "Nonce",
+    "Delegate",
+    "Time Locked",
+  ];
+
+  pages.forEach((page) =>
+    it(`on ${page} includes correct columns`, () => {
+      cy.visit(page);
+      cy.tableHasOrderedColumns("Accounts", columns);
+    }),
+  );
+});
+
 suite(["@CI"], "transactions table", () => {
   let pages = ["/commands/user"];
   let columns = [

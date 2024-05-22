@@ -2,6 +2,7 @@ import { DEFAULT_ACCOUNT_PK } from "../constants";
 
 suite(["@CI"], "empty table", () => {
   let pages = [
+    "/addresses/accounts?q-public-key=B62fake",
     "/blocks?q-state-hash=3Nfake",
     "/commands/user?q-txn-hash=Cpkfake",
     "/commands/internal?q-recipient=B62qfake",
