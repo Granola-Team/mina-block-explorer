@@ -18,7 +18,7 @@ pub fn AccountsPage() -> impl IntoView {
 
 #[component]
 fn AccountsPageContents() -> impl IntoView {
-    let (metadata, _) = create_signal(Some(TableMetadata::default()));
+    let (metadata, set_metadata) = create_signal(Some(TableMetadata::default()));
     let (public_key_sig, _) = create_query_signal::<String>("q-public-key");
     let resource = create_resource(
         move || public_key_sig.get(),
@@ -52,6 +52,16 @@ fn AccountsPageContents() -> impl IntoView {
     ];
     let table_cols_length = table_columns.len();
     let get_data = move || resource.get().and_then(|res| res.ok());
+
+    create_effect(move |_| {
+        if let Some(data) = get_data() {
+            set_metadata.set(Some(TableMetadata {
+                total_records: "all".to_string(),
+                displayed_records: data.accounts.len() as i64,
+            }))
+        }
+    });
+
     view! {
         <TableSection metadata section_heading="Accounts" controls=|| ().into_view()>
             <Table>
