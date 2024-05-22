@@ -1,3 +1,20 @@
+type Account {
+  publicKey: String
+  username: String
+  balance: Int
+  nonce: Int
+  delegate: String
+  timeLocked: Boolean
+}
+
+type AccountQueryInput {
+  public_key: String
+}
+
+enum AccountSortByInput {
+  BALANCE_DESC
+}
+
 input BlockTransactionUserCommandFromAccountInsertInput {
   token: Int
 }
@@ -1463,18 +1480,43 @@ input StakePermissionInsertInput {
 }
 
 type Query {
+  accounts(limit: Int = 100): [Account]!
   block(query: BlockQueryInput): Block
-  blocks(limit: Int = 100, sortBy: BlockSortByInput, query: BlockQueryInput): [Block]!
+  blocks(
+    limit: Int = 100
+    sortBy: BlockSortByInput
+    query: BlockQueryInput
+  ): [Block]!
   feetransfer(query: FeetransferQueryInput): Feetransfer
-  feetransfers(query: FeetransferQueryInput, limit: Int = 100, sortBy: FeetransferSortByInput): [Feetransfer]!
+  feetransfers(
+    query: FeetransferQueryInput
+    limit: Int = 100
+    sortBy: FeetransferSortByInput
+  ): [Feetransfer]!
   nextstake(query: NextstakeQueryInput): Nextstake
-  nextstakes(sortBy: NextstakeSortByInput, query: NextstakeQueryInput, limit: Int = 100): [Nextstake]!
+  nextstakes(
+    sortBy: NextstakeSortByInput
+    query: NextstakeQueryInput
+    limit: Int = 100
+  ): [Nextstake]!
   snark(query: SnarkQueryInput): Snark
-  snarks(query: SnarkQueryInput, limit: Int = 100, sortBy: SnarkSortByInput): [Snark]!
+  snarks(
+    query: SnarkQueryInput
+    limit: Int = 100
+    sortBy: SnarkSortByInput
+  ): [Snark]!
   stake(query: StakeQueryInput): Stake
-  stakes(query: StakeQueryInput, limit: Int = 100, sortBy: StakeSortByInput): [Stake]!
+  stakes(
+    query: StakeQueryInput
+    limit: Int = 100
+    sortBy: StakeSortByInput
+  ): [Stake]!
   transaction(query: TransactionQueryInput): Transaction
-  transactions(query: TransactionQueryInput, limit: Int = 100, sortBy: TransactionSortByInput): [Transaction]!
+  transactions(
+    query: TransactionQueryInput
+    limit: Int = 100
+    sortBy: TransactionSortByInput
+  ): [Transaction]!
 }
 
 scalar Long
@@ -2720,29 +2762,74 @@ type Mutation {
   insertOneStake(data: StakeInsertInput!): Stake
   insertOneTransaction(data: TransactionInsertInput!): Transaction
   replaceOneBlock(query: BlockQueryInput, data: BlockInsertInput!): Block
-  replaceOneFeetransfer(query: FeetransferQueryInput, data: FeetransferInsertInput!): Feetransfer
-  replaceOneNextstake(query: NextstakeQueryInput, data: NextstakeInsertInput!): Nextstake
+  replaceOneFeetransfer(
+    query: FeetransferQueryInput
+    data: FeetransferInsertInput!
+  ): Feetransfer
+  replaceOneNextstake(
+    query: NextstakeQueryInput
+    data: NextstakeInsertInput!
+  ): Nextstake
   replaceOneSnark(query: SnarkQueryInput, data: SnarkInsertInput!): Snark
   replaceOneStake(query: StakeQueryInput, data: StakeInsertInput!): Stake
-  replaceOneTransaction(query: TransactionQueryInput, data: TransactionInsertInput!): Transaction
-  updateManyBlocks(query: BlockQueryInput, set: BlockUpdateInput!): UpdateManyPayload
-  updateManyFeetransfers(set: FeetransferUpdateInput!, query: FeetransferQueryInput): UpdateManyPayload
-  updateManyNextstakes(query: NextstakeQueryInput, set: NextstakeUpdateInput!): UpdateManyPayload
-  updateManySnarks(set: SnarkUpdateInput!, query: SnarkQueryInput): UpdateManyPayload
-  updateManyStakes(query: StakeQueryInput, set: StakeUpdateInput!): UpdateManyPayload
-  updateManyTransactions(query: TransactionQueryInput, set: TransactionUpdateInput!): UpdateManyPayload
+  replaceOneTransaction(
+    query: TransactionQueryInput
+    data: TransactionInsertInput!
+  ): Transaction
+  updateManyBlocks(
+    query: BlockQueryInput
+    set: BlockUpdateInput!
+  ): UpdateManyPayload
+  updateManyFeetransfers(
+    set: FeetransferUpdateInput!
+    query: FeetransferQueryInput
+  ): UpdateManyPayload
+  updateManyNextstakes(
+    query: NextstakeQueryInput
+    set: NextstakeUpdateInput!
+  ): UpdateManyPayload
+  updateManySnarks(
+    set: SnarkUpdateInput!
+    query: SnarkQueryInput
+  ): UpdateManyPayload
+  updateManyStakes(
+    query: StakeQueryInput
+    set: StakeUpdateInput!
+  ): UpdateManyPayload
+  updateManyTransactions(
+    query: TransactionQueryInput
+    set: TransactionUpdateInput!
+  ): UpdateManyPayload
   updateOneBlock(query: BlockQueryInput, set: BlockUpdateInput!): Block
-  updateOneFeetransfer(set: FeetransferUpdateInput!, query: FeetransferQueryInput): Feetransfer
-  updateOneNextstake(query: NextstakeQueryInput, set: NextstakeUpdateInput!): Nextstake
+  updateOneFeetransfer(
+    set: FeetransferUpdateInput!
+    query: FeetransferQueryInput
+  ): Feetransfer
+  updateOneNextstake(
+    query: NextstakeQueryInput
+    set: NextstakeUpdateInput!
+  ): Nextstake
   updateOneSnark(query: SnarkQueryInput, set: SnarkUpdateInput!): Snark
   updateOneStake(query: StakeQueryInput, set: StakeUpdateInput!): Stake
-  updateOneTransaction(query: TransactionQueryInput, set: TransactionUpdateInput!): Transaction
+  updateOneTransaction(
+    query: TransactionQueryInput
+    set: TransactionUpdateInput!
+  ): Transaction
   upsertOneBlock(query: BlockQueryInput, data: BlockInsertInput!): Block
-  upsertOneFeetransfer(query: FeetransferQueryInput, data: FeetransferInsertInput!): Feetransfer
-  upsertOneNextstake(data: NextstakeInsertInput!, query: NextstakeQueryInput): Nextstake
+  upsertOneFeetransfer(
+    query: FeetransferQueryInput
+    data: FeetransferInsertInput!
+  ): Feetransfer
+  upsertOneNextstake(
+    data: NextstakeInsertInput!
+    query: NextstakeQueryInput
+  ): Nextstake
   upsertOneSnark(query: SnarkQueryInput, data: SnarkInsertInput!): Snark
   upsertOneStake(query: StakeQueryInput, data: StakeInsertInput!): Stake
-  upsertOneTransaction(query: TransactionQueryInput, data: TransactionInsertInput!): Transaction
+  upsertOneTransaction(
+    query: TransactionQueryInput
+    data: TransactionInsertInput!
+  ): Transaction
 }
 
 input TransactionFeePayerUpdateInput {
