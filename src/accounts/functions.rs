@@ -8,13 +8,9 @@ pub async fn load_data(
 ) -> Result<accounts_query::ResponseData, MyError> {
     let variables = accounts_query::Variables {
         limit: Some(limit),
-        query: if let Some(pk) = public_key {
-            Some(accounts_query::AccountQueryInput {
-                public_key: Some(pk),
-            })
-        } else {
-            None
-        },
+        query: public_key.map(|pk| accounts_query::AccountQueryInput {
+            public_key: Some(pk),
+        }),
         sort_by: accounts_query::AccountSortByInput::BALANCE_DESC,
     };
 
