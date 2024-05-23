@@ -220,7 +220,7 @@ where
                     {controls()}
                 </div>
             </span>
-            <div class="additional-info hidden md:flex w-full pl-8 pr-4 h-10 grow flex justify-between items-start">
+            <div class="additional-info hidden empty:hidden md:flex w-full pl-8 pr-4 h-10 grow flex justify-between items-start">
                 {additional_info}
             </div>
             {children()}
