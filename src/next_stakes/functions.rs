@@ -40,13 +40,6 @@ pub fn get_delegators_count(nextstakes: &NextStakingLedgersQueryNextstakes) -> S
         .map_or("0".to_string(), |o| o.to_string())
 }
 
-pub fn get_ledger_hash(nextstakes: &NextStakingLedgersQueryNextstakes) -> String {
-    nextstakes
-        .ledger_hash
-        .as_ref()
-        .map_or("".to_string(), |o| o.to_string())
-}
-
 pub async fn load_data(
     public_key: Option<String>,
     delegate: Option<String>,

@@ -37,12 +37,6 @@ pub fn get_delegators_count(stake: &StakingLedgersQueryStakes) -> String {
         .and_then(|o| o.count_delegates)
         .map_or("0".to_string(), |o| o.to_string())
 }
-pub fn get_ledger_hash(stake: &StakingLedgersQueryStakes) -> String {
-    stake
-        .ledger_hash
-        .as_ref()
-        .map_or_else(String::new, ToString::to_string)
-}
 
 pub async fn load_data(
     epoch: Option<i64>,
