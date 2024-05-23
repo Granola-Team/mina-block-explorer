@@ -17,7 +17,7 @@ pub fn stub_zk_apps_data(size: i64) -> Vec<Option<ZkAppData>> {
         .collect()
 }
 
-pub fn stub_zk_app_txn_data(size: usize) -> Vec<Option<ZkAppTransactionData>> {
+pub fn stub_zk_app_txn_data(size: i64) -> Vec<Option<ZkAppTransactionData>> {
     let mut rng = rand::thread_rng();
     (0..size)
         .map(|_| {

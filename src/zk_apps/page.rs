@@ -233,9 +233,7 @@ fn ZkAppDetailTh(children: Children) -> impl IntoView {
 
 #[component]
 pub fn ZkAppTransactionsPage() -> impl IntoView {
-    let (data_sig, _) = create_signal(Some(stub_zk_app_txn_data(
-        (TABLE_ROW_LIMIT as i64).try_into().unwrap(),
-    )));
+    let (data_sig, _) = create_signal(Some(stub_zk_app_txn_data(TABLE_ROW_LIMIT)));
     let (loading_sig, _) = create_signal(false);
     let table_columns = vec![
         TableColumn {
@@ -271,7 +269,7 @@ pub fn ZkAppTransactionsPage() -> impl IntoView {
 
 #[component]
 pub fn ZkAppsPage() -> impl IntoView {
-    let (data_sig, _) = create_signal(Some(stub_zk_apps_data(TABLE_ROW_LIMIT as i64)));
+    let (data_sig, _) = create_signal(Some(stub_zk_apps_data(TABLE_ROW_LIMIT)));
     let (loading_sig, _) = create_signal(false);
     let table_columns = vec![
         TableColumn {

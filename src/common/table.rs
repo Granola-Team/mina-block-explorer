@@ -106,30 +106,6 @@ where
 }
 
 #[component]
-pub fn DeprecatedTable<T>(data: T) -> impl IntoView
-where
-    T: TableData,
-{
-    let columns = data
-        .get_columns()
-        .iter()
-        .map(|c| TableColumn {
-            column: c.to_string(),
-            is_searchable: data.get_exact_search_columns().contains(c),
-        })
-        .collect::<Vec<_>>();
-
-    view! {
-        <div class="@container w-full overflow-auto">
-            <table class="font-mono md:rounded-b-lg w-full @xs:w-[175%] @md:w-[150%] @2xl:w-[125%] @7xl:w-full">
-                <TableHeader columns=columns/>
-                <TableRows data=data/>
-            </table>
-        </div>
-    }
-}
-
-#[component]
 pub fn TableHeader(columns: Vec<TableColumn>) -> impl IntoView {
     view! {
         <tr class="h-12 bg-table-header-fill">
