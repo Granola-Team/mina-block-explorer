@@ -1,0 +1,5 @@
+# https://rustwasm.github.io/docs/wasm-bindgen/web-sys/unstable-apis.html
+# https://developer.mozilla.org/en-US/docs/Web/API/Clipboard#browser_compatibility
+# https://github.com/rust-lang/rust-analyzer/issues/12688
+[build]
+rustflags = ["--cfg=web_sys_unstable_apis"]
