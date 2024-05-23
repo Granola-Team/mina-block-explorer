@@ -78,7 +78,7 @@ pub fn UrlParamSelectMenu(
     let comparison_labels = labels.cases.clone();
     view! {
         <select
-            class="text-xs"
+            class="bg-gray-100 border-2 border-sky-400 focus:outline-none focus:border-sky-400 text-gray-900 text-sm rounded-lg block w-full p-2.5"
             id=id
             on:change=move |ev| {
                 if labels.is_boolean_option {
