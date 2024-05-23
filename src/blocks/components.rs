@@ -580,8 +580,8 @@ fn BlockSpotlightPlaceholder() -> impl IntoView {
 
 #[component]
 pub fn BlocksSection() -> impl IntoView {
-    let (metadata, set_metadata) = create_signal(Some(TableMetadata::default()));
     let query_params_map = use_query_map();
+    let (data_sig, set_data_sig) = create_signal(None);
     let (block_height_sig, _) = create_query_signal::<i64>("q-height");
     let (slot_sig, _) = create_query_signal::<i64>("q-slot");
     let (canonical_sig, _) = create_query_signal::<bool>("canonical");
@@ -652,21 +652,19 @@ pub fn BlocksSection() -> impl IntoView {
             is_searchable: false,
         },
     ];
-    let table_cols_length = table_columns.len();
 
     create_effect(move |_| {
         if let Some(data) = resource.get().and_then(|res| res.ok()) {
-            set_metadata.set(Some(TableMetadata {
-                displayed_records: data.blocks.len() as i64,
-                total_records: "all".to_string(),
-            }))
+            set_data_sig.set(Some(data.blocks));
         }
     });
 
     view! {
-        <TableSection
-            metadata
+        <TableSectionTemplate
+            table_columns
+            data_sig
             section_heading="Blocks"
+            is_loading=resource.loading()
             controls=move || {
                 view! {
                     <UrlParamSelectMenu
@@ -679,32 +677,8 @@ pub fn BlocksSection() -> impl IntoView {
                     />
                 }
             }
-        >
+        />
 
-            <TableContainer>
-                <Table>
-                    <TableHeader columns=table_columns/>
-                    <Suspense fallback=move || {
-                        view! {
-                            <TableRows data=vec![
-                                vec![LoadingPlaceholder; table_cols_length];
-                                TABLE_ROW_LIMIT.try_into().unwrap()
-                            ]/>
-                        }
-                    }>
-                        {move || {
-                            resource
-                                .get()
-                                .and_then(|res| res.ok())
-                                .map(|data| {
-                                    view! { <TableRows data=data.blocks/> }
-                                })
-                        }}
-
-                    </Suspense>
-                </Table>
-            </TableContainer>
-        </TableSection>
         <Outlet/>
     }
 }
@@ -714,14 +688,7 @@ pub fn BlockSpotlightSnarkJobTable(block: BlocksQueryBlocks) -> impl IntoView {
     view! {
         {move || match block.snark_jobs.clone() {
             Some(snark_jobs) => {
-                view! {
-                    {match snark_jobs.len() {
-                        0 => {
-                            view! { <EmptyTable message="No SNARK work related to this block"/> }
-                        }
-                        _ => view! { <DeprecatedTable data=snark_jobs/> },
-                    }}
-                }
+                view! { <DeprecatedTable data=snark_jobs/> }
             }
             _ => ().into_view(),
         }}
