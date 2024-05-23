@@ -83,16 +83,6 @@ impl TableData for Vec<Option<BlocksQueryBlocks>> {
 }
 
 impl TableData for Vec<Option<BlocksQueryBlocksTransactionsUserCommands>> {
-    fn get_columns(&self) -> Vec<String> {
-        vec![
-            String::from("From"),
-            String::from("To"),
-            String::from("Hash"),
-            String::from("Fee"),
-            String::from("Amount"),
-        ]
-    }
-
     fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
         self.iter()
             .map(|opt_user_command| match opt_user_command {
@@ -122,13 +112,6 @@ impl TableData for Vec<Option<BlocksQueryBlocksTransactionsUserCommands>> {
 }
 
 impl TableData for Vec<Option<BlocksQueryBlocksSnarkJobs>> {
-    fn get_columns(&self) -> Vec<String> {
-        ["State Hash", "Age", "Prover", "Fee"]
-            .iter()
-            .map(ToString::to_string)
-            .collect::<Vec<_>>()
-    }
-
     fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
         self.iter()
             .map(|opt_snark| match opt_snark {
@@ -156,13 +139,6 @@ impl TableData for Vec<Option<BlocksQueryBlocksSnarkJobs>> {
 }
 
 impl TableData for Vec<Option<BlocksQueryBlocksTransactionsFeeTransfer>> {
-    fn get_columns(&self) -> Vec<String> {
-        ["Recipient", "Fee", "Type"]
-            .iter()
-            .map(ToString::to_string)
-            .collect::<Vec<_>>()
-    }
-
     fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
         self.iter()
             .map(|opt_fee_transfer| match opt_fee_transfer {

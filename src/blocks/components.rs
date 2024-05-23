@@ -18,186 +18,169 @@ use std::collections::HashMap;
 pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
     let option_block = use_context::<ReadSignal<Option<BlocksQueryBlocks>>>()
         .expect("there to be an optional block signal provided");
-
-    let content_for_fallback = content.clone();
-
-    let (placeholder_metadata, _) = create_signal(Some(TableMetadata::default()));
-
     view! {
         <PageContainer>
-            <ErrorBoundary fallback=move |_| ().into_view()>
-                <Suspense fallback=move || {
-                    let content_clone = content_for_fallback.clone();
-                    match content_clone {
-                        BlockContent::Spotlight => view! { <BlockSpotlightPlaceholder/> },
-                        BlockContent::UserCommands => {
-                            view! {
-                                <TableSection
-                                    metadata=placeholder_metadata
-                                    section_heading="User Commands"
-                                    controls=|| ().into_view()
-                                >
-                                    <DeprecatedTable data=DeprecatedLoadingPlaceholder {}/>
-                                </TableSection>
-                            }
-                        }
-                        BlockContent::SNARKJobs => {
-                            view! {
-                                <TableSection
-                                    metadata=placeholder_metadata
-                                    section_heading="SNARK Jobs"
-                                    controls=|| ().into_view()
-                                >
-                                    <DeprecatedTable data=DeprecatedLoadingPlaceholder {}/>
-                                </TableSection>
-                            }
-                        }
-                        BlockContent::FeeTransfers => {
-                            view! {
-                                <TableSection
-                                    metadata=placeholder_metadata
-                                    section_heading="Internal Commands"
-                                    controls=|| ().into_view()
-                                >
-                                    <DeprecatedTable data=DeprecatedLoadingPlaceholder {}/>
-                                </TableSection>
-                            }
-                        }
-                        BlockContent::Analytics => {
-                            view! {
-                                <TableSection
-                                    metadata=placeholder_metadata
-                                    section_heading="Analytics"
-                                    controls=|| ().into_view()
-                                >
-                                    <span></span>
-                                </TableSection>
-                            }
-                        }
-                    }
-                }>
+            {move || match (option_block.get(), content.clone()) {
+                (Some(block), BlockContent::Spotlight) => {
+                    view! { <BlockSpotlight block=block/> }
+                }
+                (Some(block), BlockContent::UserCommands) => {
+                    view! { <BlockUserCommands block=block/> }
+                }
+                (Some(block), BlockContent::SNARKJobs) => {
+                    view! { <BlockSnarkJobs block=block/> }
+                }
+                (Some(block), BlockContent::FeeTransfers) => {
+                    view! { <BlockInternalCommands block=block/> }
+                }
+                (Some(block), BlockContent::Analytics) => {
+                    view! { <BlockAnalytics block=block/> }
+                }
+                _ => ().into_view(),
+            }}
 
-                    {
-                        let content_clone = content.clone();
-                        move || {
-                            match (option_block.get(), content_clone.clone()) {
-                                (Some(block), BlockContent::Spotlight) => {
-                                    view! { <BlockSpotlight block=block/> }
-                                }
-                                (Some(block), BlockContent::UserCommands) => {
-                                    view! { <BlockUserCommands block=block/> }
-                                }
-                                (Some(block), BlockContent::SNARKJobs) => {
-                                    view! { <BlockSnarkJobs block=block/> }
-                                }
-                                (Some(block), BlockContent::FeeTransfers) => {
-                                    view! { <BlockInternalCommands block=block/> }
-                                }
-                                (Some(block), BlockContent::Analytics) => {
-                                    view! { <BlockAnalytics block=block/> }
-                                }
-                                _ => ().into_view(),
-                            }
-                        }
-                    }
-
-                </Suspense>
-            </ErrorBoundary>
         </PageContainer>
     }
 }
 
 #[component]
 pub fn BlockUserCommands(block: BlocksQueryBlocks) -> impl IntoView {
-    let (metadata, _) = create_signal(Some(TableMetadata {
-        total_records: "all".to_string(),
-        displayed_records: get_user_commands(&block)
-            .map(|uc| uc.len() as i64)
-            .unwrap_or(0),
-    }));
+    let (data_sig, _) = create_signal(get_user_commands(&block));
+    let (loading_sig, _) = create_signal(false);
+
+    let table_columns = vec![
+        TableColumn {
+            column: "From".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "To".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "Hash".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "Fee".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "Amount".to_string(),
+            is_searchable: false,
+        },
+    ];
 
     view! {
-        <TableSection metadata section_heading="User Commands" controls=|| ().into_view()>
-
-            {move || match get_user_commands(&block) {
-                Some(user_commands) => {
-                    view! { <DeprecatedTable data=user_commands/> }
-                }
-                None => ().into_view(),
-            }}
-
-        </TableSection>
+        <TableSectionTemplate
+            table_columns
+            data_sig
+            is_loading=loading_sig.into()
+            section_heading="User Commands"
+            controls=|| ().into_view()
+        />
     }
 }
 
 #[component]
 pub fn BlockSnarkJobs(block: BlocksQueryBlocks) -> impl IntoView {
-    let (metadata, _) = create_signal(Some(TableMetadata {
-        total_records: "all".to_string(),
-        displayed_records: get_snark_job_count(&block)
-            .map(|sj| sj as i64)
-            .unwrap_or_default(),
-    }));
+    let (data_sig, _) = create_signal(block.snark_jobs);
+    let (loading_sig, _) = create_signal(false);
+
+    let table_columns = vec![
+        TableColumn {
+            column: "State Hash".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "Age".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "Prover".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "Fee".to_string(),
+            is_searchable: false,
+        },
+    ];
+
     view! {
-        <TableSection metadata section_heading="SNARK Jobs" controls=|| ().into_view()>
-            <BlockSpotlightSnarkJobTable block=block/>
-        </TableSection>
+        <TableSectionTemplate
+            table_columns
+            data_sig
+            is_loading=loading_sig.into()
+            section_heading="SNARK Jobs"
+            controls=|| ().into_view()
+        />
     }
 }
 
 #[component]
 pub fn BlockInternalCommands(block: BlocksQueryBlocks) -> impl IntoView {
-    let block_clone = block.clone();
-    let (metadata, _) = create_signal(Some(TableMetadata {
-        total_records: "all".to_string(),
-        displayed_records: match (
-            block_clone
-                .transactions
-                .clone()
-                .and_then(|txn| txn.fee_transfer),
-            block_clone
-                .transactions
-                .clone()
-                .and_then(|txn| txn.coinbase_receiver_account.and_then(|ra| ra.public_key)),
-        ) {
-            (Some(feetransfers), Some(_)) => (feetransfers.len() + 1) as i64,
-            (Some(feetransfers), None) => feetransfers.len() as i64,
-            (_, _) => 0_i64,
-        },
-    }));
-    view! {
-        <TableSection metadata section_heading="Internal Commands" controls=|| ().into_view()>
-            <BlockInternalCommandsTable block=block.clone()/>
-        </TableSection>
-    }
-}
+    let (data_sig, set_data) = create_signal(None);
+    let (loading_sig, _) = create_signal(false);
 
-#[component]
-pub fn BlockInternalCommandsTable(block: BlocksQueryBlocks) -> impl IntoView {
+    create_effect(move |_| {
+        let (fee_transfers, coinbase, coinbase_receiver) = {
+            let transactions = &block.transactions;
+
+            (
+                transactions
+                    .as_ref()
+                    .and_then(|txn| txn.fee_transfer.clone()),
+                transactions.as_ref().and_then(|txn| txn.coinbase.clone()),
+                transactions.as_ref().and_then(|txn| {
+                    txn.coinbase_receiver_account
+                        .as_ref()
+                        .and_then(|ra| ra.public_key.clone())
+                }),
+            )
+        };
+
+        if let Some(mut fee_transfers) = fee_transfers {
+            fee_transfers.push(Some(BlocksQueryBlocksTransactionsFeeTransfer {
+                fee: coinbase,
+                type_: Some("Coinbase".to_string()),
+                recipient: coinbase_receiver,
+            }));
+
+            set_data.set(Some(fee_transfers.clone()));
+        } else {
+            let mut new_fee_transfers = Vec::new();
+            new_fee_transfers.push(Some(BlocksQueryBlocksTransactionsFeeTransfer {
+                fee: coinbase,
+                type_: Some("Coinbase".to_string()),
+                recipient: coinbase_receiver,
+            }));
+            set_data.set(Some(new_fee_transfers));
+        }
+    });
+
+    let table_columns = vec![
+        TableColumn {
+            column: "Recipient".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "Fee".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "Type".to_string(),
+            is_searchable: false,
+        },
+    ];
+
     view! {
-        {move || match (
-            block.transactions.clone().and_then(|txn| txn.fee_transfer),
-            block.transactions.clone().and_then(|txn| txn.coinbase),
-            block
-                .transactions
-                .clone()
-                .and_then(|txn| txn.coinbase_receiver_account.and_then(|ra| ra.public_key)),
-        ) {
-            (Some(mut feetransfers), Some(coinbase), Some(coinbase_receiver)) => {
-                feetransfers
-                    .push(
-                        Some(BlocksQueryBlocksTransactionsFeeTransfer {
-                            fee: Some(coinbase),
-                            type_: Some("Coinbase".to_string()),
-                            recipient: Some(coinbase_receiver),
-                        }),
-                    );
-                view! { <DeprecatedTable data=feetransfers/> }
-            }
-            (_, _, _) => {
-                view! { <EmptyTable message="No internal commands for this block"/> }
-            }
-        }}
+        <TableSectionTemplate
+            table_columns
+            data_sig
+            is_loading=loading_sig.into()
+            section_heading="Internal Commands"
+            controls=|| ().into_view()
+        />
     }
 }
 
@@ -680,17 +663,5 @@ pub fn BlocksSection() -> impl IntoView {
         />
 
         <Outlet/>
-    }
-}
-
-#[component]
-pub fn BlockSpotlightSnarkJobTable(block: BlocksQueryBlocks) -> impl IntoView {
-    view! {
-        {move || match block.snark_jobs.clone() {
-            Some(snark_jobs) => {
-                view! { <DeprecatedTable data=snark_jobs/> }
-            }
-            _ => ().into_view(),
-        }}
     }
 }
