@@ -182,7 +182,7 @@ suite(["@CI"], "search with single result", () => {
     {
       origin: "/staking-ledgers",
       input: DEFAULT_ACCOUNT_PK,
-      tableHeading: "Current Staking Ledger",
+      tableHeading: "Staking Ledger",
       column: "Key",
     },
     {

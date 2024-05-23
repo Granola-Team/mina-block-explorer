@@ -1,7 +1,7 @@
 suite(["@CI"], "staking ledger", () => {
   it("shows slot progress message", () => {
     cy.visit("/staking-ledgers");
-    cy.get(".additional-info").as("slot-info");
+    cy.get(".staking-ledger-percent-complete").as("slot-info");
 
     cy.get("@slot-info")
       .invoke("text")
@@ -27,7 +27,7 @@ suite(["@CI"], "staking ledger", () => {
 
   it("only has large positive stakes", () => {
     cy.visit("/staking-ledgers");
-    cy.aliasTableColumnValue("Current Staking Ledger", "Stake", "stake-value");
+    cy.aliasTableColumnValue("Staking Ledger", "Stake", "stake-value");
     cy.get("@stake-value")
       .invoke("text")
       .then((text) => {
@@ -40,12 +40,12 @@ suite(["@CI"], "staking ledger", () => {
 
   it("defaults to current epoch", () => {
     cy.visit("/staking-ledgers");
-    cy.get("section").contains("Current Staking Ledger");
+    cy.get("section").contains("Staking Ledger");
   });
 
   it("displays link to next stakes page", () => {
     cy.visit("/staking-ledgers");
-    cy.get("section").contains("Current Staking Ledger");
+    cy.get("section").contains("Staking Ledger");
     cy.get("section").contains("a", "Next").click();
     cy.wait(500);
     cy.get("section").contains("Next Staking Ledger");
@@ -56,7 +56,7 @@ suite(["@CI"], "staking ledger", () => {
     cy.get("section").contains("Next Staking Ledger");
     cy.get("a").contains("Previous").click();
     cy.wait(500);
-    cy.get("section").contains("Current Staking Ledger");
+    cy.get("section").contains("Staking Ledger");
     cy.get("section").contains("a", "Next").click();
     cy.wait(500);
     cy.get("section").contains("Next Staking Ledger");
@@ -64,12 +64,12 @@ suite(["@CI"], "staking ledger", () => {
 
   it("contains buttons for epoch navigation", () => {
     cy.visit("/staking-ledgers?epoch=67");
-    cy.get("section").contains("Epoch 67 Staking Ledger");
+    cy.get("section").contains("Staking Ledger - Epoch 67");
     cy.get("section").contains("button", "Next").click();
     cy.wait(500);
-    cy.get("section").contains("Epoch 68 Staking Ledger");
+    cy.get("section").contains("Staking Ledger - Epoch 68");
     cy.get("button").contains("Previous").click();
     cy.wait(500);
-    cy.get("section").contains("Epoch 67 Staking Ledger");
+    cy.get("section").contains("Staking Ledger - Epoch 67");
   });
 });
