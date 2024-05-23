@@ -3,13 +3,6 @@ use crate::common::{functions::*, models::*, table::TableData};
 use leptos::{html, HtmlElement};
 
 impl TableData for Vec<Option<ZkAppData>> {
-    fn get_columns(&self) -> Vec<String> {
-        ["Account", "Balance", "Commands", "Delegate"]
-            .iter()
-            .map(ToString::to_string)
-            .collect::<Vec<_>>()
-    }
-
     fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
         self.iter()
             .map(|opt_app| match opt_app {
@@ -26,20 +19,6 @@ impl TableData for Vec<Option<ZkAppData>> {
 }
 
 impl TableData for Vec<Option<ZkAppTransactionData>> {
-    fn get_columns(&self) -> Vec<String> {
-        [
-            "Prover",
-            "txn Hash",
-            "Age",
-            "Account Updates",
-            "Updated Accounts",
-            "Fee",
-        ]
-        .iter()
-        .map(ToString::to_string)
-        .collect::<Vec<_>>()
-    }
-
     fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
         self.iter()
             .map(|opt_txn| match opt_txn {

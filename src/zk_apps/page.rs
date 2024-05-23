@@ -13,21 +13,26 @@ use leptos_meta::*;
 #[component]
 pub fn ZkAppSpotlight() -> impl IntoView {
     let (metadata, _) = create_signal(Some(TableMetadata::default()));
-    let txn = stub_zk_app_txn_data(10);
-    let fees = vec![Some(AccountActivityQueryDirectionalTransactions {
-        fee: Some(0.01_f64),
-        counterparty: Some("B62qmQsEHcsPUs5xdtHKjEmWqqhUPRSF2GNmdguqnNvpEZpKftPC69f".to_string()),
-        direction: Some("IN".to_string()),
-        hash: Some("5JunUf7Niybx1d2CdLLZWL1D9wwtce5dBFM7nXsQ9GtiyopSh1Ee".to_string()),
-        amount: Some(0.01_f64),
-        date_time: Some(chrono::Utc::now()),
-        height: Some(5822_i64),
-        kind: Some("PAYMENT".to_string()),
-        nonce: Some(1),
-        failure_reason: None,
-        memo: None,
-        canonical: Some(true),
-    })];
+    let (txn_sig, _) = create_signal(Some(stub_zk_app_txn_data(10)));
+    let (loading_sig, _) = create_signal(false);
+    let (fees_sig, _) = create_signal(Some(vec![Some(
+        AccountActivityQueryDirectionalTransactions {
+            fee: Some(0.01_f64),
+            counterparty: Some(
+                "B62qmQsEHcsPUs5xdtHKjEmWqqhUPRSF2GNmdguqnNvpEZpKftPC69f".to_string(),
+            ),
+            direction: Some("IN".to_string()),
+            hash: Some("5JunUf7Niybx1d2CdLLZWL1D9wwtce5dBFM7nXsQ9GtiyopSh1Ee".to_string()),
+            amount: Some(0.01_f64),
+            date_time: Some(chrono::Utc::now()),
+            height: Some(5822_i64),
+            kind: Some("PAYMENT".to_string()),
+            nonce: Some(1),
+            failure_reason: None,
+            memo: None,
+            canonical: Some(true),
+        },
+    )]));
     view! {
         <Title text="ZK App Spotlight"/>
         <PageContainer>
@@ -141,21 +146,64 @@ pub fn ZkAppSpotlight() -> impl IntoView {
                     </ZkAppDetailTr>
                 </SpotlightTable>
             </TableSection>
-            <SubSectionContainer>
-                <AppSubSection
-                    heading="zkApp Commands".to_string()
-                    position=SubSectionPosition::Left
-                >
-                    <DeprecatedTable data=txn/>
+            <TableSectionTemplate
+                table_columns=vec![
+                    TableColumn {
+                        column: "Account".to_string(),
+                        is_searchable: false,
+                    },
+                    TableColumn {
+                        column: "Balance".to_string(),
+                        is_searchable: false,
+                    },
+                    TableColumn {
+                        column: "Commands".to_string(),
+                        is_searchable: false,
+                    },
+                    TableColumn {
+                        column: "Delegate".to_string(),
+                        is_searchable: false,
+                    },
+                ]
 
-                </AppSubSection>
-                <AppSubSection
-                    heading="Fee Payments".to_string()
-                    position=SubSectionPosition::Right
-                >
-                    <DeprecatedTable data=fees/>
-                </AppSubSection>
-            </SubSectionContainer>
+                data_sig=txn_sig
+                is_loading=loading_sig.into()
+                section_heading="zkApp Commands"
+                controls=|| ().into_view()
+            />
+            <TableSectionTemplate
+                table_columns=vec![
+                    TableColumn {
+                        column: "Prover".to_string(),
+                        is_searchable: false,
+                    },
+                    TableColumn {
+                        column: "txn Hash".to_string(),
+                        is_searchable: false,
+                    },
+                    TableColumn {
+                        column: "Age".to_string(),
+                        is_searchable: false,
+                    },
+                    TableColumn {
+                        column: "Account Updates".to_string(),
+                        is_searchable: false,
+                    },
+                    TableColumn {
+                        column: "Updated Accounts".to_string(),
+                        is_searchable: false,
+                    },
+                    TableColumn {
+                        column: "Fee".to_string(),
+                        is_searchable: false,
+                    },
+                ]
+
+                data_sig=fees_sig
+                is_loading=loading_sig.into()
+                section_heading="zkApp Internal Commands"
+                controls=|| ().into_view()
+            />
         </PageContainer>
     }
 }
@@ -185,28 +233,74 @@ fn ZkAppDetailTh(children: Children) -> impl IntoView {
 
 #[component]
 pub fn ZkAppTransactionsPage() -> impl IntoView {
-    let (metadata, _) = create_signal(Some(TableMetadata::default()));
-    let data = stub_zk_app_txn_data(1000);
+    let (data_sig, _) = create_signal(Some(stub_zk_app_txn_data(
+        (TABLE_ROW_LIMIT as i64).try_into().unwrap(),
+    )));
+    let (loading_sig, _) = create_signal(false);
+    let table_columns = vec![
+        TableColumn {
+            column: "Account".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "Balance".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "Commands".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "Delegate".to_string(),
+            is_searchable: false,
+        },
+    ];
     view! {
         <Title text="Commands | ZK Apps"/>
         <PageContainer>
-            <TableSection metadata section_heading="ZK App Commands" controls=|| ().into_view()>
-                <DeprecatedTable data=data/>
-            </TableSection>
+            <TableSectionTemplate
+                table_columns
+                data_sig
+                is_loading=loading_sig.into()
+                section_heading="Zk App Commands"
+                controls=|| ().into_view()
+            />
         </PageContainer>
     }
 }
 
 #[component]
 pub fn ZkAppsPage() -> impl IntoView {
-    let (metadata, _) = create_signal(Some(TableMetadata::default()));
-    let data = stub_zk_apps_data(TABLE_ROW_LIMIT);
+    let (data_sig, _) = create_signal(Some(stub_zk_apps_data(TABLE_ROW_LIMIT as i64)));
+    let (loading_sig, _) = create_signal(false);
+    let table_columns = vec![
+        TableColumn {
+            column: "Account".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "Balance".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "Commands".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "Delegate".to_string(),
+            is_searchable: false,
+        },
+    ];
     view! {
         <Title text="ZK Apps | Search For ZK Apps"/>
         <PageContainer>
-            <TableSection metadata section_heading="ZK Apps" controls=|| ().into_view()>
-                <DeprecatedTable data=data/>
-            </TableSection>
+            <TableSectionTemplate
+                table_columns
+                data_sig
+                is_loading=loading_sig.into()
+                section_heading="Zk Apps"
+                controls=|| ().into_view()
+            />
         </PageContainer>
     }
 }
