@@ -148,12 +148,11 @@ pub fn BlockInternalCommands(block: BlocksQueryBlocks) -> impl IntoView {
 
             set_data.set(Some(fee_transfers.clone()));
         } else {
-            let mut new_fee_transfers = Vec::new();
-            new_fee_transfers.push(Some(BlocksQueryBlocksTransactionsFeeTransfer {
+            let new_fee_transfers = vec![Some(BlocksQueryBlocksTransactionsFeeTransfer {
                 fee: coinbase,
                 type_: Some("Coinbase".to_string()),
                 recipient: coinbase_receiver,
-            }));
+            })];
             set_data.set(Some(new_fee_transfers));
         }
     });
