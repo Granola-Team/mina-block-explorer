@@ -193,14 +193,12 @@ pub fn AccountSpotlightPage() -> impl IntoView {
                 }
                 _ => ().into_view(),
             }}
-            <AccountTransactionsSection transactions_sig=transactions/> <SubSectionContainer>
-                <AppSubSection heading="SNARK Jobs" position=SubSectionPosition::Left>
-                    <AccountOverviewSnarkJobTable snarks_sig=snarks/>
-                </AppSubSection>
-                <AppSubSection heading="Block Production" position=SubSectionPosition::Right>
-                    <AccountOverviewBlocksTable blocks_sig=blocks/>
-                </AppSubSection>
-            </SubSectionContainer>
+            <AccountTransactionsSection
+                transactions_sig=transactions
+                is_loading=activity_resource.loading()
+            />
+            <AccountOverviewSnarkJobTable snarks_sig=snarks is_loading=activity_resource.loading()/>
+            <AccountOverviewBlocksTable blocks_sig=blocks is_loading=activity_resource.loading()/>
         </PageContainer>
     }
 }
