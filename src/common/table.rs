@@ -44,6 +44,7 @@ pub fn TableSectionTemplate<T, F, E>(
     data_sig: ReadSignal<Option<T>>,
     is_loading: Signal<bool>,
     #[prop(into)] section_heading: String,
+    #[prop(optional, into)] additional_info: View,
     controls: F,
 ) -> impl IntoView
 where
@@ -64,7 +65,7 @@ where
     });
 
     view! {
-        <TableSection metadata section_heading controls>
+        <TableSection metadata section_heading controls additional_info>
             <TableContainer>
                 <Table>
                     <TableHeader columns=table_columns/>

@@ -1,11 +1,6 @@
 use super::functions::*;
 use crate::{
-    common::{
-        components::*,
-        functions::convert_to_link,
-        models::{MyError},
-        table::*,
-    },
+    common::{components::*, functions::convert_to_link, models::MyError, table::*},
     stakes::{components::EpochButton, models::EpochStyleVariant},
 };
 use leptos::*;
