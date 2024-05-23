@@ -19,7 +19,7 @@ suite(["@CI"], "tab count and row count", () => {
             cy.aliasTableRows(tab, "tr");
             cy.get("@tr").should("have.lengthOf", c);
           } else {
-            cy.get("table").should("not.exist");
+            cy.contains("No data for this view");
           }
         });
     }),
