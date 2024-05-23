@@ -1,11 +1,6 @@
 use super::functions::*;
 use crate::{
-    common::{
-        components::*,
-        functions::convert_to_link,
-        models::{MyError, TableMetadata},
-        table::*,
-    },
+    common::{components::*, functions::convert_to_link, models::MyError, table::*},
     stakes::{components::EpochButton, models::EpochStyleVariant},
 };
 use leptos::*;
@@ -24,7 +19,7 @@ pub fn NextStakesPage() -> impl IntoView {
 
 #[component]
 fn NextStakesPageContents() -> impl IntoView {
-    let (metadata, set_metadata) = create_signal(Some(TableMetadata::default()));
+    let (data_sig, set_data) = create_signal(None);
     let query_params_map = use_query_map();
 
     let (ledger_hash, set_ledger_hash) = create_signal(None::<String>);
@@ -75,74 +70,47 @@ fn NextStakesPageContents() -> impl IntoView {
             is_searchable: false,
         },
     ];
-    let table_cols_length = table_columns.len();
 
     create_effect(move |_| {
         if let Some(data) = get_data() {
-            set_metadata.set(Some(TableMetadata {
-                total_records: "all".to_string(),
-                displayed_records: data.nextstakes.len() as i64,
-            }))
+            set_data.set(Some(data.nextstakes))
         }
     });
 
     view! {
-        <ErrorBoundary fallback=move |_| ().into_view()>
-            <TableSection
-                metadata
-                section_heading="Next Staking Ledger"
-                controls=move || {
-                    view! {
-                        <EpochButton
-                            href="/staking-ledgers"
-                            text="Previous"
-                            style_variant=EpochStyleVariant::Secondary
-                        />
-                        <EpochButton
-                            text="Next"
-                            disabled=true
-                            style_variant=EpochStyleVariant::Primary
-                        />
-                    }
+        <TableSectionTemplate
+            table_columns
+            data_sig
+            is_loading=resource.loading()
+            section_heading="Next Staking Ledger"
+            controls=move || {
+                view! {
+                    <EpochButton
+                        href="/staking-ledgers"
+                        text="Previous"
+                        style_variant=EpochStyleVariant::Secondary
+                    />
+                    <EpochButton
+                        text="Next"
+                        disabled=true
+                        style_variant=EpochStyleVariant::Primary
+                    />
                 }
+            }
 
-                additional_info=view! {
-                    {match ledger_hash.get() {
-                        Some(data) => {
-                            view! {
-                                <div class="text-sm text-slate-500">
-                                    {convert_to_link(data, "#".to_string())}
-                                </div>
-                            }
-                                .into_view()
+            additional_info=view! {
+                {match ledger_hash.get() {
+                    Some(data) => {
+                        view! {
+                            <div class="text-sm text-slate-500">
+                                {convert_to_link(data, "#".to_string())}
+                            </div>
                         }
-                        None => ().into_view(),
-                    }}
-                }
-            >
-
-                <TableContainer>
-                    <Table>
-                        <TableHeader columns=table_columns/>
-                        <Suspense fallback=move || {
-                            view! {
-                                <TableRows data=vec![
-                                    vec![LoadingPlaceholder; table_cols_length];
-                                    10
-                                ]/>
-                            }
-                        }>
-                            {move || {
-                                get_data()
-                                    .map(|data| {
-                                        view! { <TableRows data=data.nextstakes/> }
-                                    })
-                            }}
-
-                        </Suspense>
-                    </Table>
-                </TableContainer>
-            </TableSection>
-        </ErrorBoundary>
+                            .into_view()
+                    }
+                    None => ().into_view(),
+                }}
+            }
+        />
     }
 }

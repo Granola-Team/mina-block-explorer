@@ -17,7 +17,7 @@ pub fn SnarksPage() -> impl IntoView {
 
 #[component]
 fn SnarksPageContents() -> impl IntoView {
-    let (metadata, set_metadata) = create_signal(Some(TableMetadata::default()));
+    let (data_sig, set_data) = create_signal(None);
     let query_params_map = use_query_map();
     let (canonical_qp, _) = create_query_signal::<bool>("canonical");
     let (block_height_sig, _) = create_query_signal::<i64>("q-height");
@@ -67,22 +67,20 @@ fn SnarksPageContents() -> impl IntoView {
             is_searchable: false,
         },
     ];
-    let table_cols_length = table_columns.len();
 
     let get_data = move || resource.get().and_then(|res| res.ok());
 
     create_effect(move |_| {
         if let Some(data) = get_data() {
-            set_metadata.set(Some(TableMetadata {
-                total_records: "all".to_string(),
-                displayed_records: data.snarks.len() as i64,
-            }))
+            set_data.set(Some(data.snarks))
         }
     });
 
     view! {
-        <TableSection
-            metadata
+        <TableSectionTemplate
+            table_columns
+            data_sig
+            is_loading=resource.loading()
             section_heading="SNARKs"
             controls=move || {
                 view! {
@@ -96,29 +94,6 @@ fn SnarksPageContents() -> impl IntoView {
                     />
                 }
             }
-        >
-
-            <TableContainer>
-                <Table>
-                    <TableHeader columns=table_columns/>
-                    <Suspense fallback=move || {
-                        view! {
-                            <TableRows data=vec![
-                                vec![LoadingPlaceholder; table_cols_length];
-                                TABLE_ROW_LIMIT.try_into().unwrap()
-                            ]/>
-                        }
-                    }>
-                        {move || {
-                            get_data()
-                                .map(|data| {
-                                    view! { <TableRows data=data.snarks/> }
-                                })
-                        }}
-
-                    </Suspense>
-                </Table>
-            </TableContainer>
-        </TableSection>
+        />
     }
 }

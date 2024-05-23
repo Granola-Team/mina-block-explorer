@@ -7,7 +7,7 @@ use super::{
 };
 use crate::{
     account_activity::table_traits::BlockTrait,
-    common::{components::*, constants::*, functions::*, models::*, table::*},
+    common::{components::*, functions::*, models::*, table::*},
     icons::*,
 };
 use leptos::*;
@@ -219,14 +219,8 @@ fn TransactionEntry(
 #[component]
 pub fn AccountTransactionsSection(
     transactions_sig: ReadSignal<Option<Vec<Option<AccountActivityQueryDirectionalTransactions>>>>,
+    is_loading: Signal<bool>,
 ) -> impl IntoView {
-    let (metadata, set_metadata) = create_signal(Some(TableMetadata::default()));
-    create_effect(move |_| {
-        set_metadata.set(transactions_sig.get().map(|txn| TableMetadata {
-            total_records: "all".to_string(),
-            displayed_records: txn.len() as i64,
-        }));
-    });
     let table_columns = vec![
         TableColumn {
             column: "Height".to_string(),
@@ -261,12 +255,13 @@ pub fn AccountTransactionsSection(
             is_searchable: false,
         },
     ];
-    let table_cols_length = table_columns.len();
 
     view! {
-        <TableSection
-            metadata
+        <TableSectionTemplate
+            table_columns
+            data_sig=transactions_sig
             section_heading="User Commands"
+            is_loading
             controls=move || {
                 view! {
                     <UrlParamSelectMenu
@@ -279,34 +274,14 @@ pub fn AccountTransactionsSection(
                     />
                 }
             }
-        >
-
-            <TableContainer>
-                <Table>
-                    <TableHeader columns=table_columns/>
-                    {move || match transactions_sig.get() {
-                        None => {
-                            view! {
-                                <TableRows data=vec![
-                                    vec![LoadingPlaceholder; table_cols_length];
-                                    10
-                                ]/>
-                            }
-                        }
-                        Some(transactions) => {
-                            view! { <TableRows data=transactions/> }
-                        }
-                    }}
-
-                </Table>
-            </TableContainer>
-        </TableSection>
+        />
     }
 }
 
 #[component]
 pub fn AccountOverviewSnarkJobTable(
     snarks_sig: ReadSignal<Option<Vec<Option<AccountActivityQuerySnarks>>>>,
+    is_loading: Signal<bool>,
 ) -> impl IntoView {
     let memo_params_map = use_params_map();
     let (href, _set_href) = create_signal(
@@ -340,28 +315,15 @@ pub fn AccountOverviewSnarkJobTable(
             is_searchable: false,
         },
     ];
-    let table_cols_length = table_columns.len();
 
     view! {
-        <TableContainer>
-            <Table>
-                <TableHeader columns=table_columns/>
-                {move || match snarks_sig.get() {
-                    None => {
-                        view! {
-                            <TableRows data=vec![
-                                vec![LoadingPlaceholder; table_cols_length];
-                                TABLE_ROW_LIMIT.try_into().unwrap()
-                            ]/>
-                        }
-                    }
-                    Some(snarks) => {
-                        view! { <TableRows data=snarks/> }
-                    }
-                }}
-
-            </Table>
-        </TableContainer>
+        <TableSectionTemplate
+            table_columns
+            data_sig=snarks_sig
+            section_heading="SNARK Jobs"
+            is_loading
+            controls=|| ().into_view()
+        />
         <TableLink href=href.get() text="See all snark jobs">
             <CheckCircleIcon/>
         </TableLink>
@@ -371,6 +333,7 @@ pub fn AccountOverviewSnarkJobTable(
 #[component]
 pub fn AccountOverviewBlocksTable(
     blocks_sig: ReadSignal<Option<Vec<Option<AccountActivityQueryBlocks>>>>,
+    is_loading: Signal<bool>,
 ) -> impl IntoView {
     let memo_params_map = use_params_map();
     let (href, _set_href) = create_signal(
@@ -420,31 +383,18 @@ pub fn AccountOverviewBlocksTable(
             is_searchable: false,
         },
     ];
-    let table_cols_length = table_columns.len();
 
     view! {
-        <TableContainer>
-            <Table>
-                <TableHeader columns=table_columns/>
-                {move || match blocks_sig.get() {
-                    None => {
-                        view! {
-                            <TableRows data=vec![
-                                vec![LoadingPlaceholder; table_cols_length];
-                                TABLE_ROW_LIMIT.try_into().unwrap()
-                            ]/>
-                        }
-                    }
-                    Some(blocks) => {
-                        view! { <TableRows data=blocks/> }
-                    }
-                }}
-
-            </Table>
-            <TableLink href=href.get() text="See all block production">
-                <BlockIcon/>
-            </TableLink>
-        </TableContainer>
+        <TableSectionTemplate
+            table_columns
+            data_sig=blocks_sig
+            section_heading="Block Production"
+            is_loading
+            controls=|| ().into_view()
+        />
+        <TableLink href=href.get() text="See all block production">
+            <BlockIcon/>
+        </TableLink>
     }
 }
 

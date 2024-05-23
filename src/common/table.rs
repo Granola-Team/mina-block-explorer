@@ -39,26 +39,70 @@ pub fn Table(children: Children) -> impl IntoView {
 }
 
 #[component]
-pub fn DeprecatedTable<T>(data: T) -> impl IntoView
+pub fn TableSectionTemplate<T, F, E>(
+    table_columns: Vec<TableColumn>,
+    data_sig: ReadSignal<Option<T>>,
+    is_loading: Signal<bool>,
+    #[prop(into)] section_heading: String,
+    #[prop(optional, into)] additional_info: View,
+    controls: F,
+) -> impl IntoView
 where
-    T: TableData,
+    E: IntoView,
+    F: Fn() -> E + 'static,
+    T: TableData + Clone + 'static,
 {
-    let columns = data
-        .get_columns()
-        .iter()
-        .map(|c| TableColumn {
-            column: c.to_string(),
-            is_searchable: data.get_exact_search_columns().contains(c),
-        })
-        .collect::<Vec<_>>();
+    let (metadata, set_metadata) = create_signal(Some(TableMetadata::default()));
+    let table_cols_length = table_columns.len();
+
+    create_effect(move |_| {
+        if let Some(data) = data_sig.get() {
+            set_metadata.set(Some(TableMetadata {
+                displayed_records: data.get_rows().len() as i64,
+                total_records: "all".to_string(), // Consider making this dynamic if possible
+            }));
+        }
+    });
 
     view! {
-        <div class="@container w-full overflow-auto">
-            <table class="font-mono md:rounded-b-lg w-full @xs:w-[175%] @md:w-[150%] @2xl:w-[125%] @7xl:w-full">
-                <TableHeader columns=columns/>
-                <TableRows data=data/>
-            </table>
-        </div>
+        <TableSection metadata section_heading controls additional_info>
+            <TableContainer>
+                <Table>
+                    <TableHeader columns=table_columns/>
+
+                    {move || {
+                        if is_loading.get() {
+                            view! {
+                                <TableRows data=vec![
+                                    vec![LoadingPlaceholder; table_cols_length];
+                                    TABLE_ROW_LIMIT.try_into().unwrap_or_default()
+                                ]/>
+                            }
+                        } else {
+                            match data_sig.get() {
+                                Some(data) => {
+                                    view! { <TableRows data=data/> }
+                                }
+                                None => ().into_view(),
+                            }
+                        }
+                    }}
+
+                </Table>
+                {move || {
+                    if let Some(data) = data_sig.get() {
+                        if data.get_rows().is_empty() {
+                            view! { <EmptyTable message="No data for this view"/> }
+                        } else {
+                            ().into_view()
+                        }
+                    } else {
+                        ().into_view()
+                    }
+                }}
+
+            </TableContainer>
+        </TableSection>
     }
 }
 
@@ -158,9 +202,9 @@ where
 #[component]
 pub fn EmptyTable(#[prop(into)] message: String) -> impl IntoView {
     view! {
-        <div class="flex text-base text-slate-400 items-center justify-center p-8">
+        <div class="w-full flex text-base text-slate-400 items-center justify-center p-8">
             <NoIcon/>
-            <span class="text-sm">{message}</span>
+            <span class="pl-4 text-sm">{message}</span>
         </div>
     }
 }
@@ -259,6 +303,7 @@ impl TableData for Vec<Vec<LoadingPlaceholder>> {
     }
 }
 
+#[derive(Clone)]
 pub struct DeprecatedLoadingPlaceholder;
 
 impl TableData for DeprecatedLoadingPlaceholder {

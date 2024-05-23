@@ -3,21 +3,6 @@ use crate::common::{functions::*, models::*, table::TableData};
 use leptos::{html, HtmlElement};
 
 impl TableData for Vec<Option<TokenData>> {
-    fn get_columns(&self) -> Vec<String> {
-        [
-            "Token Name",
-            "Token ID",
-            "Supply",
-            "Token Owner",
-            "Token Holders",
-            "Transaction Count",
-            "Locked",
-        ]
-        .iter()
-        .map(ToString::to_string)
-        .collect::<Vec<_>>()
-    }
-
     fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
         self.iter()
             .map(|opt_token| match opt_token {
