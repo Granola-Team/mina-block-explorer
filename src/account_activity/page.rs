@@ -9,7 +9,7 @@ use crate::{
     common::{
         components::*,
         constants::*,
-        models::{MyError, NavEntry, NavIcon, TableMetadata},
+        models::{MyError, NavEntry, NavIcon},
         spotlight::*,
         table::*,
     },
@@ -31,12 +31,43 @@ pub fn AccountsPage() -> impl IntoView {
 
 #[component]
 fn AccountsPageContents() -> impl IntoView {
-    let data = stub_account_summaries(TABLE_ROW_LIMIT);
-    let (metadata, _) = create_signal(Some(TableMetadata::default()));
+    let (data_sig, _) = create_signal(Some(stub_account_summaries(TABLE_ROW_LIMIT)));
+    let (loading_sig, _) = create_signal(false);
+    let table_columns = vec![
+        TableColumn {
+            column: "Public Key".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "Username".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "Balance".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "Nonce".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "Delegate".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "Time Locked".to_string(),
+            is_searchable: false,
+        },
+    ];
+
     view! {
-        <TableSection metadata section_heading="Accounts" controls=|| ().into_view()>
-            <DeprecatedTable data=data/>
-        </TableSection>
+        <TableSectionTemplate
+            table_columns
+            data_sig
+            is_loading=loading_sig.into()
+            section_heading="Accounts"
+            controls=|| ().into_view()
+        />
     }
 }
 
