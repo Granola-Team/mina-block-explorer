@@ -169,7 +169,7 @@ pub fn EmptyTable(#[prop(into)] message: String) -> impl IntoView {
 pub fn TableSection<E, F>(
     #[prop(into)] section_heading: String,
     children: Children,
-    #[prop(optional, into)] additional_info: String,
+    #[prop(optional, into)] additional_info: View,
     metadata: ReadSignal<Option<TableMetadata>>,
     controls: F,
 ) -> impl IntoView
@@ -215,22 +215,14 @@ where
                         _ => ().into_view(),
                     }}
 
-                    {if !additional_info.is_empty() {
-                        view! {
-                            <div class="px-4 text-normal text-slate-400">"|"</div>
-                            <div class="additional-info ".to_string()
-                                + BASE_META_CLASS>{additional_info}</div>
-                        }
-                            .into_view()
-                    } else {
-                        ().into_view()
-                    }}
-
                 </div>
                 <div class="grow md:grow-0 h-16 flex justify-end items-center pr-4">
                     {controls()}
                 </div>
             </span>
+            <div class="additional-info hidden md:flex w-full pl-8 pr-4 h-10 grow flex justify-between items-start">
+                {additional_info}
+            </div>
             {children()}
         </AppSection>
     }
