@@ -320,7 +320,7 @@ pub fn AccountOverviewSnarkJobTable(
         <TableSectionTemplate
             table_columns
             data_sig=snarks_sig
-            section_heading="Snark Jobs"
+            section_heading="SNARK Jobs"
             is_loading
             controls=|| ().into_view()
         />
