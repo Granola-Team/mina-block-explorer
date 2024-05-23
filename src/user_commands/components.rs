@@ -12,7 +12,7 @@ const QP_TO: &str = "q-to";
 
 #[component]
 pub fn TransactionsSection() -> impl IntoView {
-    let (metadata, set_metadata) = create_signal(Some(TableMetadata::default()));
+    let (data_sig, set_data) = create_signal(None);
     let (txn_type_qp, _) = create_query_signal::<String>(QP_TXN_TYPE);
     let query_params_map = use_query_map();
     let (block_height_sig, _) = create_query_signal::<i64>(QP_HEIGHT);
@@ -105,21 +105,19 @@ pub fn TransactionsSection() -> impl IntoView {
             is_searchable: false,
         },
     ];
-    let table_cols_length = table_columns.len();
     let get_data = move || resource.get().and_then(|res| res.ok());
 
     create_effect(move |_| {
         if let Some(data) = get_data() {
-            set_metadata.set(Some(TableMetadata {
-                total_records: "all".to_string(),
-                displayed_records: data.transactions.len() as i64,
-            }))
+            set_data.set(Some(data.transactions))
         }
     });
 
     view! {
-        <TableSection
-            metadata
+        <TableSectionTemplate
+            table_columns
+            data_sig
+            is_loading=resource.loading()
             section_heading="User Commands"
             controls=move || {
                 view! {
@@ -137,29 +135,6 @@ pub fn TransactionsSection() -> impl IntoView {
                     />
                 }
             }
-        >
-
-            <TableContainer>
-                <Table>
-                    <TableHeader columns=table_columns/>
-                    <Suspense fallback=move || {
-                        view! {
-                            <TableRows data=vec![
-                                vec![LoadingPlaceholder; table_cols_length];
-                                TABLE_ROW_LIMIT.try_into().unwrap()
-                            ]/>
-                        }
-                    }>
-                        {move || {
-                            get_data()
-                                .map(|data| {
-                                    view! { <TableRows data=data.transactions/> }
-                                })
-                        }}
-
-                    </Suspense>
-                </Table>
-            </TableContainer>
-        </TableSection>
+        />
     }
 }
