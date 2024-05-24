@@ -2,7 +2,7 @@ use std::env;
 
 fn main() {
     let graphql_url =
-        env::var("GRAPHQL_URL").unwrap_or_else(|_| "http://mina-indexer.granola.team:8080/graphql".to_string());
+        env::var("GRAPHQL_URL").unwrap_or_else(|_| "https://api.minasearch.com/graphql".to_string());
     let rest_url =
         env::var("REST_URL").unwrap_or_else(|_| "https://api.minasearch.com".to_string());
     let berkeley_feature_flag =
