@@ -1,5 +1,5 @@
 use super::graphql::{accounts_query, AccountsQuery};
-use crate::common::{constants::GRAPHQL_ENDPOINT, models::*};
+use crate::common::{constants::GRAPHQL_ENDPOINT_2, models::*};
 use graphql_client::reqwest::post_graphql;
 
 pub async fn load_data(
@@ -16,7 +16,7 @@ pub async fn load_data(
 
     let client = reqwest::Client::new();
 
-    let response = post_graphql::<AccountsQuery, _>(&client, GRAPHQL_ENDPOINT, variables)
+    let response = post_graphql::<AccountsQuery, _>(&client, GRAPHQL_ENDPOINT_2, variables)
         .await
         .map_err(|e| MyError::NetworkError(e.to_string()))?;
 
