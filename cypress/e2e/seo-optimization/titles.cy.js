@@ -5,7 +5,7 @@ suite(["@CI"], "meta title", () => {
   let pages = [
     {
       url: "/addresses/accounts",
-      title: "Accounts | Search for Mina Accounts",
+      title: "Accounts | Search For Mina Accounts",
     },
     {
       url: `/analytics/commands/internal`,
@@ -15,7 +15,6 @@ suite(["@CI"], "meta title", () => {
       url: `/commands/internal`,
       title: `Transactions | Internal Commands`,
     },
-    { url: `/addresses/accounts`, title: `Accounts | Search For Mina Account` },
     { url: "/blocks", title: "Blocks | Search for Mina Blocks" },
     { url: `/blocks/${block_hash}/`, title: "Block Overview | Spotlight" },
     {
