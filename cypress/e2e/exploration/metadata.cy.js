@@ -4,6 +4,34 @@ const SHOWING_LATEST = "Showing 100 of all";
 suite(["@CI"], "metadata about the table", () => {
   let pages = [
     {
+      page: `/addresses/accounts`,
+      table_heading: "Accounts",
+      column_selector: "input#q-public-key",
+      input: null,
+      assertion: function (target) {
+        target.should("have.lengthOf", 100);
+        cy.get(".metadata")
+          .invoke("text")
+          .then((text) => {
+            expect(text).to.equal(SHOWING_LATEST);
+          });
+      },
+    },
+    {
+      page: `/addresses/accounts`,
+      table_heading: "Accounts",
+      column_selector: "input#q-public-key",
+      input: DEFAULT_ACCOUNT_PK,
+      assertion: function (target) {
+        target.should("have.lengthOf", 1);
+        cy.get(".metadata")
+          .invoke("text")
+          .then((text) => {
+            expect(text).to.equal("Showing 1 of 1");
+          });
+      },
+    },
+    {
       page: "/blocks",
       table_heading: "Blocks",
       column_selector: "input#q-height",

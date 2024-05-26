@@ -1,0 +1,14 @@
+query AccountsQuery(
+  $limit: Int = 100
+  $sortBy: AccountSortByInput!
+  $query: AccountQueryInput
+) {
+  accounts(limit: $limit, query: $query, sortBy: $sortBy) {
+    publicKey
+    username
+    balance
+    delegate
+    nonce
+    timeLocked
+  }
+}

@@ -3,6 +3,11 @@ import { DEFAULT_ACCOUNT_PK } from "../constants";
 suite(["@CI"], "account page", () => {
   let pages = [
     {
+      origin: `/addresses/accounts`,
+      column: "Public Key",
+      tableHeader: "Accounts",
+    },
+    {
       origin:
         "/blocks/accounts/B62qqW8uKTxHZueKJwsoPY8NZcKVeDK4bLEHRkpMM2uKtEmmqLbkiQC",
       column: "Counterparty",

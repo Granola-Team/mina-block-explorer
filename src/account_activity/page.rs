@@ -11,65 +11,12 @@ use crate::{
         constants::*,
         models::{MyError, NavEntry, NavIcon},
         spotlight::*,
-        table::*,
     },
     icons::*,
 };
 use leptos::*;
 use leptos_meta::Title;
 use leptos_router::*;
-
-#[component]
-pub fn AccountsPage() -> impl IntoView {
-    view! {
-        <Title text="Accounts | Search For Mina Account"/>
-        <PageContainer>
-            <AccountsPageContents/>
-        </PageContainer>
-    }
-}
-
-#[component]
-fn AccountsPageContents() -> impl IntoView {
-    let (data_sig, _) = create_signal(Some(stub_account_summaries(TABLE_ROW_LIMIT)));
-    let (loading_sig, _) = create_signal(false);
-    let table_columns = vec![
-        TableColumn {
-            column: "Public Key".to_string(),
-            is_searchable: false,
-        },
-        TableColumn {
-            column: "Username".to_string(),
-            is_searchable: false,
-        },
-        TableColumn {
-            column: "Balance".to_string(),
-            is_searchable: false,
-        },
-        TableColumn {
-            column: "Nonce".to_string(),
-            is_searchable: false,
-        },
-        TableColumn {
-            column: "Delegate".to_string(),
-            is_searchable: false,
-        },
-        TableColumn {
-            column: "Time Locked".to_string(),
-            is_searchable: false,
-        },
-    ];
-
-    view! {
-        <TableSectionTemplate
-            table_columns
-            data_sig
-            is_loading=loading_sig.into()
-            section_heading="Accounts"
-            controls=|| ().into_view()
-        />
-    }
-}
 
 #[component]
 pub fn AccountSpotlightPage() -> impl IntoView {

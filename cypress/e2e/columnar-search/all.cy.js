@@ -14,6 +14,11 @@ let block_producer = "B62qkgy1rQQmSL91aFeFvrYi9ptqavvgVkUiPZHmy5tZacSupTTCGi6";
 suite(["@CI"], "input", () => {
   let slow_input_searches = [
     {
+      origin: "/addresses/accounts",
+      input: "B62",
+      column: "Public Key",
+    },
+    {
       origin: "/blocks",
       input: "253134",
       column: "Height",
@@ -31,7 +36,7 @@ suite(["@CI"], "input", () => {
   ];
 
   slow_input_searches.forEach(({ origin, input, column }) =>
-    it("remains focused as user types slowly", () => {
+    it(`remains focused as user types slowly into ${column} on page ${origin}`, () => {
       cy.visit(origin);
       cy.wait(1000);
       let cssSelector = "#q-" + kebabCase(column);
@@ -173,6 +178,12 @@ suite(["@CI"], "search with single result", () => {
   let block_hash = "3NLqPGGVtxXdsQg2orrp3SFFE3ToeMuqWRerSRWbmAKuSk2tphWy";
 
   let exact_searches = [
+    {
+      origin: `/addresses/accounts`,
+      input: DEFAULT_ACCOUNT_PK,
+      tableHeading: "Accounts",
+      column: "Public Key",
+    },
     {
       origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
       input: state_hash,

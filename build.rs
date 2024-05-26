@@ -1,6 +1,8 @@
 use std::env;
 
 fn main() {
+    let graphql_url_2 = env::var("GRAPHQL_URL_2")
+        .unwrap_or_else(|_| "https://api.minasearch.com/graphql".to_string());
     let graphql_url =
         env::var("GRAPHQL_URL").unwrap_or_else(|_| "https://graphql.minaexplorer.com".to_string());
     let rest_url =
@@ -9,6 +11,7 @@ fn main() {
         env::var("BERKELEY_FEATURES_ENABLED").unwrap_or_else(|_| "false".to_string());
 
     println!("cargo:rustc-env=GRAPHQL_URL={}", graphql_url);
+    println!("cargo:rustc-env=GRAPHQL_URL_2={}", graphql_url_2);
     println!("cargo:rustc-env=REST_URL={}", rest_url);
     println!(
         "cargo:rustc-env=BERKELEY_FEATURES_ENABLED={}",

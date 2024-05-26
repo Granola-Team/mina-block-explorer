@@ -16,7 +16,6 @@ use crate::{
 use graphql_client::reqwest::post_graphql;
 use leptos::*;
 use leptos_router::*;
-use rand::distributions::{Distribution, Uniform};
 
 pub fn get_base_page_path(location: Location) -> String {
     let path = location.pathname.with(|path| path.clone());
@@ -39,28 +38,6 @@ pub async fn load_account_data(id: &str) -> Result<AccountResponse, MyError> {
         },
         Err(_) => Err(MyError::NetworkError(String::from("API error"))),
     }
-}
-
-pub fn stub_account_summaries(size: i64) -> Vec<Option<AllAccountSummary>> {
-    let mut rng = rand::thread_rng();
-    let int_dist = Uniform::from(0..=1000);
-
-    (0..size)
-        .map(|_| {
-            let balance = generate_random_mina_price();
-
-            Some(AllAccountSummary {
-                pk: generate_base58_string(44),
-                balance,
-                delegate: generate_base58_string(44),
-                token: int_dist.sample(&mut rng),
-                nonce: int_dist.sample(&mut rng),
-                voting_for: generate_base58_string(44),
-                public_key: generate_base58_string(44),
-                username: generate_random_string(10),
-            })
-        })
-        .collect()
 }
 
 #[allow(clippy::too_many_arguments)]

@@ -4,6 +4,10 @@ suite(["@CI"], "meta title", () => {
   let txn_hash = "CkpYzvzTZeYEoiAGNn6xquSPqittAb5wrhZHtR14RaLkZfiRYQgT3";
   let pages = [
     {
+      url: "/addresses/accounts",
+      title: "Accounts | Search For Mina Accounts",
+    },
+    {
       url: `/analytics/commands/internal`,
       title: `Analytics | Internal Commands`,
     },
@@ -11,7 +15,6 @@ suite(["@CI"], "meta title", () => {
       url: `/commands/internal`,
       title: `Transactions | Internal Commands`,
     },
-    { url: `/addresses/accounts`, title: `Accounts | Search For Mina Account` },
     { url: "/blocks", title: "Blocks | Search for Mina Blocks" },
     { url: `/blocks/${block_hash}/`, title: "Block Overview | Spotlight" },
     {
