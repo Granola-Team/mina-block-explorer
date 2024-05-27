@@ -26,13 +26,13 @@ const CELL_PADDING_CLASS: &str = "first:pl-8 pl-2 last:pr-4";
 
 #[component]
 pub fn TableContainer(children: Children) -> impl IntoView {
-    view! { <div class="@container w-full overflow-auto">{children()}</div> }
+    view! { <div class="@container w-full overflow-auto xl:overflow-visible">{children()}</div> }
 }
 
 #[component]
 pub fn Table(children: Children) -> impl IntoView {
     view! {
-        <table class="table-fixed font-mono md:rounded-b-lg w-full @xs:w-[400%] @md:w-[300%] @2xl:w-[200%] @7xl:w-full">
+        <table class="table-fixed relative font-mono md:rounded-b-lg w-full @xs:w-[400%] @md:w-[300%] @2xl:w-[200%] xl:w-full">
             {children()}
         </table>
     }
@@ -109,7 +109,7 @@ where
 #[component]
 pub fn TableHeader(columns: Vec<TableColumn>) -> impl IntoView {
     view! {
-        <tr class="h-12 bg-table-header-fill">
+        <tr>
             {columns
                 .iter()
                 .map(|s| {
@@ -144,10 +144,8 @@ fn ColumnHeader(id: String, column: TableColumn) -> impl IntoView {
     );
 
     view! {
-        <th class=format!(
-            "{} text-table-header-text-color font-semibold uppercase text-xs text-left p-2 box-border",
-            CELL_PADDING_CLASS,
-        )>
+        <th class="h-12 bg-table-header-fill lg:sticky lg:top-16 z-20 text-table-header-text-color font-semibold uppercase text-xs text-left p-2 box-border"
+            .to_string() + CELL_PADDING_CLASS>
             <div class="whitespace-nowrap">{column.column.clone()}</div>
             {if column.is_searchable {
                 view! {
