@@ -10,34 +10,6 @@ use rand::{
 use rust_decimal::prelude::*;
 use std::iter;
 
-// Function to calculate and print the time elapsed since the given timestamp
-pub fn print_time_since(timestamp: &str) -> String {
-    // Parse the input timestamp
-    let past_time = match timestamp.parse::<DateTime<Utc>>() {
-        Ok(time) => time,
-        Err(_e) => return String::from("Unknown"),
-    };
-
-    // Get the current time
-    let now = Utc::now();
-
-    // Calculate the duration since the given timestamp
-    let duration_since = now.signed_duration_since(past_time);
-
-    // Format and return the duration
-    format_duration(&duration_since)
-}
-
-fn format_duration(duration: &Duration) -> String {
-    if duration.num_days() > 0 {
-        format!("{} days ago", duration.num_days())
-    } else if duration.num_hours() > 0 {
-        format!("{} hours ago", duration.num_hours())
-    } else {
-        format!("{} minutes ago", duration.num_minutes())
-    }
-}
-
 pub fn get_status(timestamp: &str) -> Status {
     match timestamp.parse::<DateTime<Utc>>() {
         Ok(parsed_timestamp) => {
@@ -53,6 +25,14 @@ pub fn get_status(timestamp: &str) -> Status {
 
 pub fn convert_to_span(data: String) -> HtmlElement<html::AnyElement> {
     html::span().child(data).into()
+}
+
+pub fn convert_to_title(data: String, title: String) -> HtmlElement<html::AnyElement> {
+    html::span()
+        .child(data)
+        .attr("class", "cursor-help")
+        .attr("title", title)
+        .into()
 }
 
 pub fn convert_array_to_span(
@@ -541,33 +521,113 @@ mod split_str_tests {
     }
 }
 
+fn format_duration(duration: &Duration) -> String {
+    let seconds = duration.num_seconds();
+
+    let years = seconds / (365 * 24 * 60 * 60);
+    let months = (seconds % (365 * 24 * 60 * 60)) / (30 * 24 * 60 * 60);
+    let days = (seconds % (30 * 24 * 60 * 60)) / (24 * 60 * 60);
+    let hours = (seconds % (24 * 60 * 60)) / (60 * 60);
+    let minutes = (seconds % (60 * 60)) / 60;
+
+    let parts = [
+        (years, "year"),
+        (months, "month"),
+        (days, "day"),
+        (hours, "hour"),
+        (minutes, "minute"),
+    ];
+
+    let mut result = parts
+        .iter()
+        .filter(|&&(value, _)| value > 0)
+        .map(|&(value, name)| format!("{} {}{}", value, name, if value == 1 { "" } else { "s" }))
+        .collect::<Vec<_>>();
+
+    // Refining the output based on duration magnitude
+    if years > 0 {
+        result.truncate(1); // Only years
+    } else if months > 0 {
+        result.truncate(2); // Up to months
+    } else if days > 0 {
+        result.truncate(3); // Up to days
+    } else if hours > 0 {
+        result.truncate(4); // Up to hours
+    } else {
+        result.truncate(5); // Include all
+    }
+
+    if result.is_empty() {
+        "just now".to_string()
+    } else {
+        result.join(", ") + " ago"
+    }
+}
+
+pub fn print_time_since(timestamp: &str) -> String {
+    let past_time = match timestamp.parse::<DateTime<Utc>>() {
+        Ok(time) => time,
+        Err(_e) => return "Unknown".to_string(),
+    };
+
+    let now = Utc::now();
+    let duration_since = now.signed_duration_since(past_time);
+    format_duration(&duration_since)
+}
+
 #[cfg(test)]
 mod format_duration_tests {
     use super::*;
     use chrono::Duration;
 
     #[test]
-    fn test_format_duration_days() {
-        let duration = Duration::try_days(3);
-        assert_eq!(format_duration(&duration.unwrap()), "3 days ago");
+    fn test_just_now() {
+        assert_eq!(format_duration(&Duration::seconds(30)), "just now");
     }
 
     #[test]
-    fn test_format_duration_hours() {
-        let duration = Duration::try_hours(5);
-        assert_eq!(format_duration(&duration.unwrap()), "5 hours ago");
+    fn test_minutes_ago() {
+        assert_eq!(format_duration(&Duration::seconds(90)), "1 minute ago"); // Close to 2 minutes but still 1 minute
+        assert_eq!(format_duration(&Duration::minutes(20)), "20 minutes ago");
     }
 
     #[test]
-    fn test_format_duration_minutes() {
-        let duration = Duration::try_minutes(45);
-        assert_eq!(format_duration(&duration.unwrap()), "45 minutes ago");
+    fn test_hours_ago() {
+        assert_eq!(format_duration(&Duration::minutes(65)), "1 hour ago"); // 1 hour and 5 minutes, shows only hours
+        assert_eq!(format_duration(&Duration::hours(23)), "23 hours ago");
     }
 
     #[test]
-    fn test_format_duration_mix() {
-        let duration = Duration::try_hours(26);
-        assert_eq!(format_duration(&duration.unwrap()), "1 days ago");
+    fn test_days_ago() {
+        assert_eq!(format_duration(&Duration::hours(25)), "1 day ago"); // 1 day and 1 hour, shows only days
+        assert_eq!(format_duration(&(*&Duration::days(6) + Duration::hours(1))), "6 days ago");
+    }
+
+    #[test]
+    fn test_months_ago() {
+        assert_eq!(format_duration(&Duration::days(30)), "1 month ago"); // Exactly 1 month, simplifies to 1 month
+        assert_eq!(format_duration(&Duration::days(45)), "1 month, 15 days ago"); // More detailed because it's just over a month
+    }
+
+    #[test]
+    fn test_years_ago() {
+        assert_eq!(format_duration(&Duration::days(366)), "1 year ago"); // Just over one year
+        assert_eq!(format_duration(&Duration::days(365 * 2)), "2 years ago");
+    }
+
+    #[test]
+    fn test_complex_duration() {
+        // Tests for durations with mixed units that could be simplified further
+        assert_eq!(format_duration(&Duration::days(30 * 12 + 5)), "1 year ago"); // Simplified to the largest significant unit
+        assert_eq!(format_duration(&Duration::days(30 * 3 + 20)), "3 months, 20 days ago"); // Slightly more than 3 months
+    }
+
+    #[test]
+    fn test_edge_cases() {
+        // Edge cases where minutes, hours, or days barely tick over
+        assert_eq!(format_duration(&Duration::seconds(3601)), "1 hour ago"); // Slightly more than one hour
+        assert_eq!(format_duration(&Duration::seconds(86401)), "1 day ago"); // Slightly more than one day
+        assert_eq!(format_duration(&Duration::seconds(2629746)), "1 month ago"); // Slightly more than one month
     }
 }
 

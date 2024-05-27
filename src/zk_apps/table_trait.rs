@@ -25,12 +25,10 @@ impl TableData for Vec<Option<ZkAppTransactionData>> {
                 Some(txn) => vec![
                     convert_to_link(txn.prover.to_string(), "#".to_string()),
                     convert_to_link(txn.hash.to_string(), "#".to_string()),
-                    convert_array_to_span(vec![
-                        convert_to_span(print_time_since(&txn.date_time.to_string())),
-                        convert_to_span(txn.date_time.to_string())
-                            .attr("class", "block text-xs font-light text-slate-400"),
-                    ])
-                    .attr("class", "block"),
+                    convert_to_title(
+                        print_time_since(&txn.date_time.to_string()),
+                        txn.date_time.to_string(),
+                    ),
                     convert_to_pill(txn.updated_accounts.len().to_string(), ColorVariant::Blue),
                     convert_array_to_span(
                         txn.updated_accounts
