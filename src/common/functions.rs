@@ -600,13 +600,17 @@ mod format_duration_tests {
     #[test]
     fn test_days_ago() {
         assert_eq!(format_duration(&Duration::hours(25)), "1 day ago"); // 1 day and 1 hour, shows only days
-        assert_eq!(format_duration(&(*&Duration::days(6) + Duration::hours(1))), "6 days ago");
+        assert_eq!(
+            format_duration(&(Duration::days(6) + Duration::hours(1))),
+            "6 days ago"
+        );
     }
 
     #[test]
     fn test_months_ago() {
         assert_eq!(format_duration(&Duration::days(30)), "1 month ago"); // Exactly 1 month, simplifies to 1 month
-        assert_eq!(format_duration(&Duration::days(45)), "1 month, 15 days ago"); // More detailed because it's just over a month
+        assert_eq!(format_duration(&Duration::days(45)), "1 month, 15 days ago");
+        // More detailed because it's just over a month
     }
 
     #[test]
@@ -619,7 +623,10 @@ mod format_duration_tests {
     fn test_complex_duration() {
         // Tests for durations with mixed units that could be simplified further
         assert_eq!(format_duration(&Duration::days(30 * 12 + 5)), "1 year ago"); // Simplified to the largest significant unit
-        assert_eq!(format_duration(&Duration::days(30 * 3 + 20)), "3 months, 20 days ago"); // Slightly more than 3 months
+        assert_eq!(
+            format_duration(&Duration::days(30 * 3 + 20)),
+            "3 months, 20 days ago"
+        ); // Slightly more than 3 months
     }
 
     #[test]
@@ -627,7 +634,8 @@ mod format_duration_tests {
         // Edge cases where minutes, hours, or days barely tick over
         assert_eq!(format_duration(&Duration::seconds(3601)), "1 hour ago"); // Slightly more than one hour
         assert_eq!(format_duration(&Duration::seconds(86401)), "1 day ago"); // Slightly more than one day
-        assert_eq!(format_duration(&Duration::seconds(2629746)), "1 month ago"); // Slightly more than one month
+        assert_eq!(format_duration(&Duration::seconds(2629746)), "1 month ago");
+        // Slightly more than one month
     }
 }
 
