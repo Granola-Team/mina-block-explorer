@@ -26,6 +26,9 @@ clean:
   find cypress -name '__diff_output__' -prune -execdir rm -rf {} +
   rm -fr node_modules/
   rm -f pnpm-lock.json
+  rm -fr cypress/snapshots/
+  rm -fr .husky/_
+  rm -fr src/dist
 
 test: build_npm lint test-unit test-e2e
 
@@ -58,8 +61,6 @@ audit:
 dev: build_npm
   trunk serve --port="{{trunk_port}}" --open
 
-publish: clean && build_npm
+publish: clean build_npm
   trunk build --release --filehash true
-  aws cloudfront create-invalidation --distribution-id "$DIST_ID" --paths "/*"
-  aws s3 rm "s3://$BUCKET_NAME" --recursive
-  aws s3 cp dist "s3://$BUCKET_NAME" --recursive
+  pnpm exec -- wrangler pages deploy --project-name minasearch --branch production

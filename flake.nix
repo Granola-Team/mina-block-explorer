@@ -31,7 +31,6 @@
         devShells.default = pkgs.mkShell {
           buildInputs = with pkgs; [
             nightlyToolchain.passthru.availableComponents.rustfmt
-            awscli
             cacert
             cargo-audit
             cargo-machete
