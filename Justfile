@@ -7,7 +7,7 @@ trunk_port := `echo $((5170 + $RANDOM % 10))`
 
 export RUSTFLAGS := "--cfg=web_sys_unstable_apis"
 
-cypress_base_url := 'http://localhost:' + trunk_port
+export CYPRESS_BASE_URL := 'http://localhost:' + trunk_port
 
 default:
   @just --list --justfile {{justfile()}}
@@ -30,18 +30,32 @@ clean:
   rm -fr .husky/_
   rm -fr src/dist
 
-test: build_npm lint test-unit test-e2e
+test: lint test-unit test-e2e
 
 test-e2e: build_npm
-  CYPRESS_BASE_URL="{{cypress_base_url}}" node ./scripts/wait-on-port.js trunk serve --no-autoreload --port="{{trunk_port}}" -- "{{trunk_port}}" -- npx cypress run -r list -q
+  node ./scripts/wait-on-port.js \
+    trunk serve \
+    --no-autoreload \
+    --port="{{trunk_port}}" \
+    -- \
+    "{{trunk_port}}" \
+    -- \
+    pnpm exec cypress run -r list -q
 
 test-e2e-local: build_npm
-  CYPRESS_BASE_URL="{{cypress_base_url}}" node ./scripts/wait-on-port.js trunk serve --port="{{trunk_port}}" -- "{{trunk_port}}" -- npx cypress open
+  node ./scripts/wait-on-port.js \
+    trunk serve \
+    --no-autoreload \
+    --port="{{trunk_port}}" \
+    -- \
+    "{{trunk_port}}" \
+    -- \
+    pnpm exec cypress open
 
 test-unit:
   cargo nextest run
 
-lint: && audit disallow-unused-cargo-deps
+lint: build && audit disallow-unused-cargo-deps
   pnpm exec prettier --check cypress/
   cargo fmt --all --check
   leptosfmt --check ./src
