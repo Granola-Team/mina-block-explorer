@@ -60,6 +60,4 @@ dev: build_npm
 
 publish: clean && build_npm
   trunk build --release --filehash true
-  aws cloudfront create-invalidation --distribution-id "$DIST_ID" --paths "/*"
-  aws s3 rm "s3://$BUCKET_NAME" --recursive
-  aws s3 cp dist "s3://$BUCKET_NAME" --recursive
+  npx wrangler pages deploy deploy dist --project-name=mina-search
