@@ -32,7 +32,7 @@ pub fn TableContainer(children: Children) -> impl IntoView {
 #[component]
 pub fn Table(children: Children) -> impl IntoView {
     view! {
-        <table class="table-fixed relative font-mono md:rounded-b-lg w-full @xs:w-[400%] @md:w-[300%] @2xl:w-[200%] xl:w-full">
+        <table class="table-fixed xl:relative font-mono md:rounded-b-lg w-full @xs:w-[400%] @md:w-[300%] @2xl:w-[200%] xl:w-full">
             {children()}
         </table>
     }
@@ -144,7 +144,7 @@ fn ColumnHeader(id: String, column: TableColumn) -> impl IntoView {
     );
 
     view! {
-        <th class="h-12 bg-table-header-fill lg:sticky lg:top-16 z-20 text-table-header-text-color font-semibold uppercase text-xs text-left p-2 box-border"
+        <th class="h-12 bg-table-header-fill xl:sticky xl:top-16 z-20 text-table-header-text-color font-semibold uppercase text-xs text-left p-2 box-border"
             .to_string() + CELL_PADDING_CLASS>
             <div class="whitespace-nowrap">{column.column.clone()}</div>
             {if column.is_searchable {
