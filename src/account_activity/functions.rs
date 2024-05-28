@@ -161,9 +161,12 @@ pub fn get_spotlight_data(account: &AccountActivityQueryAccounts) -> Vec<Spotlig
     vec![
         SpotlightEntry {
             label: String::from("Balance"),
-            any_el: Some(decorate_with_mina_tag(format_mina(
-                account.balance.map(|b| b.to_string()).unwrap_or_default(),
-            ))),
+            any_el: Some(decorate_with_mina_tag(
+                account
+                    .balance
+                    .map(|b| nanomina_to_mina(b.try_into().unwrap()))
+                    .unwrap_or_default(),
+            )),
             ..Default::default()
         },
         SpotlightEntry {
