@@ -80,4 +80,4 @@ dev: build_npm
 
 publish: clean build_npm
   trunk build --release --filehash true
-  pnpm exec -- wrangler pages deploy --project-name minasearch --branch production
+  pnpm exec -- wrangler pages deploy
