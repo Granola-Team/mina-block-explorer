@@ -80,4 +80,5 @@ dev: build_npm
 
 publish: clean build_npm
   trunk build --release --filehash true
+  @echo "Publishing version {{VERSION}}"
   pnpm exec -- wrangler pages deploy --branch main
