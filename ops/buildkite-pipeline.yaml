@@ -6,6 +6,7 @@ steps:
       nix: true
   - label: "Test"
     key: test
+    if: build.branch != "main"
     depends_on: build
     agents:
       xwindows: true
