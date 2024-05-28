@@ -545,13 +545,12 @@ fn format_duration(duration: &Duration) -> String {
         .collect();
 
     let num_parts = filtered_parts.len();
-    let result = match num_parts {
+
+    match num_parts {
         0 => "just now".to_string(),
         1..=2 => filtered_parts.join(", ") + " ago",
         _ => filtered_parts[..2].join(", ") + " ago",
-    };
-
-    result
+    }
 }
 
 pub fn print_time_since(timestamp: &str) -> String {
