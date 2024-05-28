@@ -34,12 +34,10 @@ impl TableData for Vec<Option<TransactionsQueryTransactions>> {
                         transaction.get_hash(),
                         format!("/commands/{}", transaction.get_hash()),
                     ),
-                    convert_array_to_span(vec![
-                        convert_to_span(print_time_since(&transaction.get_block_datetime())),
-                        convert_to_span(transaction.get_block_datetime())
-                            .attr("class", "block text-xs font-light text-slate-400"),
-                    ])
-                    .attr("class", "block"),
+                    convert_to_title(
+                        print_time_since(&transaction.get_block_datetime()),
+                        transaction.get_block_datetime(),
+                    ),
                     convert_to_pill(transaction.get_kind(), ColorVariant::Grey),
                     if !transaction.get_memo().is_empty() {
                         convert_array_to_span(vec![
