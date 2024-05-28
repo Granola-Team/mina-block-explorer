@@ -16,6 +16,7 @@ steps:
     command: "nix develop --command just test"
   - label: "Deploy to Production"
     key: deploy
+    if: build.branch == "main"
     depends_on: test
     agents:
       nix: true
