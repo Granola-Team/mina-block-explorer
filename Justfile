@@ -30,6 +30,7 @@ clean:
   rm -f pnpm-lock.json
   rm -fr cypress/snapshots/
   rm -fr .husky/_
+  rm -fr .wrangler
   rm -fr src/dist
 
 test: lint test-unit test-e2e
