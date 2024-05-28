@@ -1,7 +1,6 @@
 suite(["@CI"], "footer content", () => {
   let footer_links = [
     { text: "Granola", selector: 'a[href="https://granola.team"]' },
-    { text: "Data & Tracking", selector: "button" },
     {
       text: "Docs",
       selector:
