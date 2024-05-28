@@ -144,7 +144,7 @@ fn ColumnHeader(id: String, column: TableColumn) -> impl IntoView {
     );
 
     view! {
-        <th class="h-12 bg-table-header-fill xl:sticky xl:top-16 z-20 text-table-header-text-color font-semibold uppercase text-xs text-left p-2 box-border"
+        <th class="h-12 bg-table-header-fill xl:sticky xl:top-16 z-20 text-table-header-text-color font-semibold uppercase text-xs text-left p-2 box-border "
             .to_string() + CELL_PADDING_CLASS>
             <div class="whitespace-nowrap">{column.column.clone()}</div>
             {if column.is_searchable {
