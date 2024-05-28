@@ -13,6 +13,7 @@ query NextStakingLedgersQuery(
     token
     voting_for
     nextDelegationTotals {
+      totalStakePercentage
       countDelegates
       totalDelegated
     }

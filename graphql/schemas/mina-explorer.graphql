@@ -82,6 +82,7 @@ type StakeTiming {
 }
 
 type NextDelegationTotal {
+  totalStakePercentage: String
   countDelegates: Int
   totalDelegated: Float
 }
