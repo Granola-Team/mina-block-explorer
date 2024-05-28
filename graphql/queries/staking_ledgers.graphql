@@ -17,7 +17,7 @@ query StakingLedgersQuery(
     delegationTotals {
       totalStakePercentage
       countDelegates
-      totalDelegated
+      totalDelegatedNanomina
     }
   }
 }

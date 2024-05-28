@@ -84,7 +84,7 @@ type StakeTiming {
 type NextDelegationTotal {
   totalStakePercentage: String
   countDelegates: Int
-  totalDelegated: Float
+  totalDelegatedNanomina: Int
 }
 
 input TransactionFromAccountQueryInput {
@@ -562,7 +562,7 @@ input BlockTransactionUserCommandFeePayerUpdateInput {
 type DelegationTotal {
   totalStakePercentage: String
   countDelegates: Int
-  totalDelegated: Float
+  totalDelegatedNanomina: Int
 }
 
 input BlockTransactionQueryInput {
@@ -1390,6 +1390,7 @@ enum NextstakeSortByInput {
   PK_ASC
   PK_DESC
   VOTING_FOR_ASC
+  STAKE_DESC
 }
 
 input FeetransferBlockStateHashRelationInput {
@@ -1787,6 +1788,7 @@ enum StakeSortByInput {
   NONCE_ASC
   PUBLIC_KEY_DESC
   LEDGERHASH_ASC
+  STAKE_DESC
 }
 
 input BlockProtocolStateConsensusStateNextEpochDatumLedgerQueryInput {

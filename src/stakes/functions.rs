@@ -15,8 +15,8 @@ pub fn get_stake(stake: &StakingLedgersQueryStakes) -> String {
     stake
         .delegation_totals
         .as_ref()
-        .and_then(|delegation_totals| delegation_totals.total_delegated)
-        .map(|stake| format_mina(stake.to_string()))
+        .and_then(|delegation_totals| delegation_totals.total_delegated_nanomina)
+        .map(|stake| nanomina_to_mina(stake as u64))
         .unwrap_or("0".to_string())
 }
 
@@ -48,7 +48,7 @@ pub async fn load_data(
     delegate: Option<String>,
 ) -> Result<staking_ledgers_query::ResponseData, MyError> {
     let variables = staking_ledgers_query::Variables {
-        sort_by: staking_ledgers_query::StakeSortByInput::BALANCE_DESC,
+        sort_by: staking_ledgers_query::StakeSortByInput::STAKE_DESC,
         limit: Some(TABLE_ROW_LIMIT),
         query: staking_ledgers_query::StakeQueryInput {
             public_key,

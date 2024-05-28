@@ -15,7 +15,7 @@ query NextStakingLedgersQuery(
     nextDelegationTotals {
       totalStakePercentage
       countDelegates
-      totalDelegated
+      totalDelegatedNanomina
     }
   }
 }
