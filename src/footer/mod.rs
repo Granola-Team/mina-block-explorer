@@ -1,7 +1,5 @@
-use crate::icons::*;
+use crate::{common::constants::*, icons::*};
 use leptos::*;
-mod ga_opt_out;
-use ga_opt_out::GAOptOut;
 
 enum Icon {
     Docs,
@@ -40,18 +38,18 @@ pub fn Footer() -> impl IntoView {
                     <span class="hidden sm:block whitespace-pre">"Powered by "</span>
                     <a
                         href="https://granola.team"
-                        class="flex items-center text-sm text-granola-orange hover:underline hover:decoration-2"
+                        class="flex items-center text-sm ".to_string() + LINK_HOVER_STATE
                     >
                         "Granola"
                     </a>
                 </span>
-                <GAOptOut/>
                 {links
                     .into_iter()
                     .map(|link| {
                         view! {
                             <a
-                                class="ml-1 flex items-center text-white text-xs uppercase hover:text-granola-orange hover:underline"
+                                class="ml-1 flex items-center text-white text-xs uppercase "
+                                    .to_string() + LINK_HOVER_STATE
                                 href=link.href
                             >
                                 {match link.icon {

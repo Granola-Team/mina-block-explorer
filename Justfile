@@ -9,6 +9,8 @@ export RUSTFLAGS := "--cfg=web_sys_unstable_apis"
 
 export CYPRESS_BASE_URL := 'http://localhost:' + trunk_port
 
+export VERSION := `git rev-parse HEAD`
+
 default:
   @just --list --justfile {{justfile()}}
 

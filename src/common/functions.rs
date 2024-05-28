@@ -1,5 +1,8 @@
 use super::models::*;
-use crate::{common::components::CopyToClipboard, icons::HelpIcon};
+use crate::{
+    common::{components::CopyToClipboard, constants::*},
+    icons::HelpIcon,
+};
 use chrono::{DateTime, Duration, LocalResult, TimeZone, Utc};
 use leptos::*;
 use rand::{
@@ -272,7 +275,7 @@ pub fn convert_to_link(data: String, href: String) -> HtmlElement<html::AnyEleme
     view! {
         <span class="w-full text-ellipsis overflow-hidden">
             <CopyToClipboard>
-                <a href=href class="hover:text-granola-orange hover:underline hover:decoration-2">
+                <a href=href class=LINK_HOVER_STATE>
                     {convert_to_ellipsis(data)}
                 </a>
             </CopyToClipboard>

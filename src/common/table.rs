@@ -280,14 +280,16 @@ pub fn TableLink(
         <div class="w-full bg-inherit flex justify-center items-center py-3">
             <a
                 href=href
-                class="font-bold uppercase text-sm flex justify-center align-center hover:underline hover:text-granola-orange"
+                class="font-bold uppercase text-sm flex justify-center align-center ".to_string()
+                    + LINK_HOVER_STATE
             >
                 {children()}
                 <span class="mx-1">{text}</span>
                 <ChevronRight/>
             </a>
         </div>
-    }.into_view()
+    }
+    .into_view()
 }
 
 #[derive(Clone)]
