@@ -30,12 +30,10 @@ impl TableData for Vec<Option<SnarksQuerySnarks>> {
                         get_block_state_hash(snark),
                         format!("/blocks/{}/snark-jobs", get_block_state_hash(snark)),
                     ),
-                    convert_array_to_span(vec![
-                        convert_to_span(print_time_since(&get_date_time(snark))),
-                        convert_to_span(get_date_time(snark))
-                            .attr("class", "block text-xs font-light text-slate-400"),
-                    ])
-                    .attr("class", "block"),
+                    convert_to_title(
+                        print_time_since(&get_date_time(snark)),
+                        get_date_time(snark),
+                    ),
                     convert_to_link(
                         get_prover(snark),
                         format!("/addresses/accounts/{}", get_prover(snark)),

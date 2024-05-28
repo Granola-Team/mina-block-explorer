@@ -52,12 +52,10 @@ impl TableData for Vec<Option<BlocksQueryBlocks>> {
                         format!("/blocks/{}/spotlight", get_state_hash(block)),
                     ),
                     convert_to_pill(get_slot(block), ColorVariant::Grey),
-                    convert_array_to_span(vec![
-                        convert_to_span(print_time_since(&get_date_time(block))),
-                        convert_to_span(get_date_time(block))
-                            .attr("class", "block text-xs font-light text-slate-400"),
-                    ])
-                    .attr("class", "block"),
+                    convert_to_title(
+                        print_time_since(&get_date_time(block)),
+                        get_date_time(block),
+                    ),
                     convert_to_link(
                         get_creator_account(block),
                         format!("/blocks/accounts/{}", get_creator_account(block)),
@@ -120,12 +118,10 @@ impl TableData for Vec<Option<BlocksQueryBlocksSnarkJobs>> {
                         get_snark_block_state_hash(snark),
                         format!("/blocks/{}", get_snark_block_state_hash(snark)),
                     ),
-                    convert_array_to_span(vec![
-                        convert_to_span(print_time_since(&get_snark_date_time(snark))),
-                        convert_to_span(get_snark_date_time(snark))
-                            .attr("class", "block text-xs font-light text-slate-400"),
-                    ])
-                    .attr("class", "block"),
+                    convert_to_title(
+                        print_time_since(&get_snark_date_time(snark)),
+                        get_snark_date_time(snark),
+                    ),
                     convert_to_link(
                         get_snark_prover(snark),
                         format!("/addresses/accounts/{}", get_snark_prover(snark)),
