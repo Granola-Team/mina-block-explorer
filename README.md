@@ -2,46 +2,41 @@
 
 [![Build status](https://badge.buildkite.com/1f8c338cb4ede4e41a4d84de89479fb2eddf9a6f64b72dcf36.svg?branch=main)](https://buildkite.com/granola/mina-block-explorer)
 
-The Mina Block Explorer is a user-friendly website for exploring the
-Mina Blockchain. It offers a straightforward interface to view details
-about blocks, transactions, addresses, and validators, simplifying
-interaction with the network.
+The Mina Block Explorer is a user-friendly website for exploring the Mina
+Blockchain. It offers a straightforward interface to view details about blocks,
+transactions, addresses, and validators.
 
-## Getting Started
+## Development Environment
 
-This project utilizes Nix to ensure consistent and reproducible
-development environment. This choice streamlines our development
-process, allowing us to focus on delivering value with minimal concern
-for varying system configurations or dependency conflicts.
+This project uses Nix to ensure a consistent and reproducible development
+environment. This choice streamlines the development process, allowing focus on
+value delivery with minimal concern for varying system configurations or
+dependency conflicts.
 
-### Installing Nix
+## Quick Start
 
 1. Install [Nix](https://nixos.org/download.html).
 
 2. Enable the [Nix Flakes](https://nixos.wiki/wiki/Flakes) feature.
 
-## Quick Start Guide
+3. Install [Direnv](https://direnv.net/).
 
-1. Setup Environment: Run `nix develop` in your terminal to prepare your
-   development environment.
+4. Start the Server: Execute `just dev` to start the server.
 
-2. Start the Server: Execute `just dev` to start the server.
+## Back-End Integration
 
-These two steps will get your environment ready and your server running quickly.
-
-## Integration
-
-Integration with an Indexer (https://github.com/Granola-Team/mina-indexer) is accomplished through
-GraphQL and REST endpoints. MinaExplorer.com's GraphqlQL and RESTful endpoints are integrated by default.
-To override, you may specify your own environment variables. This can be done through
+Integration with an [Indexer](https://github.com/Granola-Team/mina-indexer) is
+accomplished through GraphQL and REST endpoints. MinaExplorer.com's GraphqlQL
+and RESTful endpoints are used by default. To override, you may specify your
+own environment variables. This can be done through
 
 - `.env` file
-- Environment variables
-  See `.env.example`.
+- Environment variables. See `.env.example`.
 
-Environment variables are bundled into the WASM file at compile time (see `build.rs`).
-With the intended environment variables specified at compile time, the production WASM file
-may be deployed without any further configuration required.
+Environment variables are bundled into the WASM file at compile time (see
+`build.rs`). With the intended environment variables specified at compile time,
+the production WASM file may be deployed without any further configuration
+required.
 
 ## License
 
