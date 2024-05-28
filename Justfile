@@ -7,7 +7,7 @@ trunk_port := `echo $((5170 + $RANDOM % 10))`
 
 export RUSTFLAGS := "--cfg=web_sys_unstable_apis"
 
-cypress_base_url := 'http://localhost:' + trunk_port
+export CYPRESS_BASE_URL := 'http://localhost:' + trunk_port
 
 default:
   @just --list --justfile {{justfile()}}
@@ -26,19 +26,36 @@ clean:
   find cypress -name '__diff_output__' -prune -execdir rm -rf {} +
   rm -fr node_modules/
   rm -f pnpm-lock.json
+  rm -fr cypress/snapshots/
+  rm -fr .husky/_
+  rm -fr src/dist
 
-test: build_npm lint test-unit test-e2e
+test: lint test-unit test-e2e
 
 test-e2e: build_npm
-  CYPRESS_BASE_URL="{{cypress_base_url}}" node ./scripts/wait-on-port.js trunk serve --no-autoreload --port="{{trunk_port}}" -- "{{trunk_port}}" -- npx cypress run -r list -q
+  node ./scripts/wait-on-port.js \
+    trunk serve \
+    --no-autoreload \
+    --port="{{trunk_port}}" \
+    -- \
+    "{{trunk_port}}" \
+    -- \
+    pnpm exec cypress run -r list -q
 
 test-e2e-local: build_npm
-  CYPRESS_BASE_URL="{{cypress_base_url}}" node ./scripts/wait-on-port.js trunk serve --port="{{trunk_port}}" -- "{{trunk_port}}" -- npx cypress open
+  node ./scripts/wait-on-port.js \
+    trunk serve \
+    --no-autoreload \
+    --port="{{trunk_port}}" \
+    -- \
+    "{{trunk_port}}" \
+    -- \
+    pnpm exec cypress open
 
 test-unit:
   cargo nextest run
 
-lint: && audit disallow-unused-cargo-deps
+lint: build && audit disallow-unused-cargo-deps
   pnpm exec prettier --check cypress/
   cargo fmt --all --check
   leptosfmt --check ./src
@@ -58,8 +75,6 @@ audit:
 dev: build_npm
   trunk serve --port="{{trunk_port}}" --open
 
-publish: clean && build_npm
+publish: clean build_npm
   trunk build --release --filehash true
-  aws cloudfront create-invalidation --distribution-id "$DIST_ID" --paths "/*"
-  aws s3 rm "s3://$BUCKET_NAME" --recursive
-  aws s3 cp dist "s3://$BUCKET_NAME" --recursive
+  pnpm exec -- wrangler pages deploy --project-name minasearch --branch production

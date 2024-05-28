@@ -1,26 +1,22 @@
 steps:
-
-- label: "Prereqs"
-  command: |
-    echo HOME=$HOME
-    echo PATH=$PATH
-    nix develop --command just
-  key: prereqs
-
-- label: "Build, Lint, and Audit"
-  command: |
-    nix develop --command just build_npm
-    nix develop --command just lint
-  key: build
-  depends_on: prereqs
-
-- label: "Test"
-  env: 
-    CYPRESS_tags: "@CI"
-    BERKELEY_FEATURES_ENABLED: true
-  command: |
-    nix develop --command just test
-  key: test
-  depends_on: build
-  agents:
-    xwindows: true
+  - label: "Build, Lint, and Audit"
+    key: build
+    command: "nix develop --command just lint"
+    agents:
+      nix: true
+  - label: "Test"
+    key: test
+    depends_on: build
+    agents:
+      xwindows: true
+      nix: true
+    env:
+      CYPRESS_tags: "@CI"
+      BERKELEY_FEATURES_ENABLED: true
+    command: "nix develop --command just test"
+  - label: "Deploy to Production"
+    key: deploy
+    depends_on: test
+    agents:
+      nix: true
+    command: "nix develop --command just publish"
