@@ -1,17 +1,10 @@
-use super::{
-    graphql::{account_activity_query, AccountActivityQuery},
-    models::*,
-};
+use super::graphql::{account_activity_query, AccountActivityQuery};
 use crate::{
     account_activity::graphql::account_activity_query::{
-        BlockProtocolStateConsensusStateQueryInput, BlockProtocolStateQueryInput, BlockQueryInput,
+        AccountActivityQueryAccounts, BlockProtocolStateConsensusStateQueryInput,
+        BlockProtocolStateQueryInput, BlockQueryInput,
     },
-    common::{
-        constants::{GRAPHQL_ENDPOINT, REST_ENDPOINT},
-        functions::*,
-        models::*,
-        spotlight::*,
-    },
+    common::{constants::*, functions::*, models::*, spotlight::*},
 };
 use graphql_client::reqwest::post_graphql;
 use leptos::*;
@@ -23,20 +16,6 @@ pub fn get_base_page_path(location: Location) -> String {
     match path_parts.first() {
         Some(base) => base.to_string(),
         None => "/".to_string(),
-    }
-}
-
-pub async fn load_account_data(id: &str) -> Result<AccountResponse, MyError> {
-    let response = reqwest::get(format!("{}/accounts/{}", REST_ENDPOINT, id)).await;
-
-    match response {
-        Ok(res) => match res.json::<AccountResponse>().await {
-            Ok(account) => Ok(account),
-            Err(_) => Err(MyError::ParseError(String::from(
-                "Error deserializing JSON",
-            ))),
-        },
-        Err(_) => Err(MyError::NetworkError(String::from("API error"))),
     }
 }
 
@@ -63,6 +42,9 @@ pub async fn load_data(
         blocks_limit: Some(blocks_limit.unwrap_or_default()),
         snarks_limit: Some(snarks_limit.unwrap_or_default()),
         trans_limit: Some(trans_limit.unwrap_or_default()),
+        account_query: account_activity_query::AccountQueryInput {
+            public_key: public_key.clone(),
+        },
         blocks_query: account_activity_query::BlockQueryInput {
             block_height_lte: block_height,
             state_hash: state_hash.clone(),
@@ -145,7 +127,7 @@ pub async fn load_data(
 
     let client = reqwest::Client::new();
 
-    let response = post_graphql::<AccountActivityQuery, _>(&client, GRAPHQL_ENDPOINT, variables)
+    let response = post_graphql::<AccountActivityQuery, _>(&client, GRAPHQL_ENDPOINT_2, variables)
         .await
         .map_err(|e| MyError::NetworkError(e.to_string()))?;
 
@@ -175,19 +157,19 @@ pub fn get_spotlight_loading_data() -> Vec<SpotlightEntry> {
     ]
 }
 
-pub fn get_spotlight_data(account: &AccountSummary) -> Vec<SpotlightEntry> {
+pub fn get_spotlight_data(account: &AccountActivityQueryAccounts) -> Vec<SpotlightEntry> {
     vec![
         SpotlightEntry {
             label: String::from("Balance"),
             any_el: Some(decorate_with_mina_tag(format_mina(
-                account.balance.total.clone(),
+                account.balance.map(|b| b.to_string()).unwrap_or_default(),
             ))),
             ..Default::default()
         },
         SpotlightEntry {
             label: String::from("Nonce"),
             any_el: Some(convert_to_pill(
-                account.nonce.to_string(),
+                account.nonce.map(|b| b.to_string()).unwrap_or_default(),
                 ColorVariant::Grey,
             )),
             ..Default::default()
@@ -195,7 +177,11 @@ pub fn get_spotlight_data(account: &AccountSummary) -> Vec<SpotlightEntry> {
         SpotlightEntry {
             label: String::from("Delegate"),
             any_el: Some({
-                let account = account.delegate.to_string();
+                let account = account
+                    .delegate
+                    .clone()
+                    .map(|b| b.to_string())
+                    .unwrap_or_default();
                 convert_to_link(account.clone(), format!("/addresses/accounts/{}", account))
             }),
             copiable: true,
