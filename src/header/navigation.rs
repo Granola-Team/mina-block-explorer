@@ -136,26 +136,15 @@ pub fn Header() -> impl IntoView {
 
     view! {
         <header class="p-4 z-10 bg-main-background flex justify-center md:justify-between items-center fixed top-0 left-0 w-screen h-16">
-            <div class="flex items-stretch justify-start">
-                <a href="/" class="flex items-center justify-start">
-                    <img src="/assets/img/logo.svg" width="45px" height="29px" alt="Minasearch"/>
-                    <span class="md:hidden lg:block sm:block ml-1 text-white font-bold text-xl">
-                        Mina
-                    </span>
-                    <span class="md:hidden lg:block sm:block text-granola-orange font-bold text-xl">
-                        Search
-                    </span>
-                </a>
-                <a
-                    class="flex items-end py-1 pl-4 text-xs text-white ".to_string()
-                        + LINK_HOVER_STATE
-                    href="https://github.com/Granola-Team/mina-block-explorer/commit/".to_string()
-                        + COMMIT_HASH
-                >
-                    v
-                    {&COMMIT_HASH[..7]}
-                </a>
-            </div>
+            <a href="/" class="flex items-center justify-start">
+                <img src="/assets/img/logo.svg" width="45px" height="29px" alt="Minasearch"/>
+                <span class="md:hidden lg:block sm:block ml-1 text-white font-bold text-xl">
+                    Mina
+                </span>
+                <span class="md:hidden lg:block sm:block text-granola-orange font-bold text-xl">
+                    Search
+                </span>
+            </a>
             <input id="nav-toggle" type="checkbox" class="hidden"/>
             <nav class=move || {
                 format!("{} {}", base_class, if open.get() { open_class } else { "" })
