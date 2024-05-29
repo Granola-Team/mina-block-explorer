@@ -46,8 +46,8 @@ pub fn Footer() -> impl IntoView {
                     </a>
                     <a
                         class=FOOTER_LINK_BASE_CLASS.to_string() + LINK_HOVER_STATE
-                        href="https://github.com/Granola-Team/mina-block-explorer/commit/".to_string()
-                            + COMMIT_HASH
+                        href="https://github.com/Granola-Team/mina-block-explorer/commit/"
+                            .to_string() + COMMIT_HASH
                     >
                         {&COMMIT_HASH[..7]}
                     </a>
