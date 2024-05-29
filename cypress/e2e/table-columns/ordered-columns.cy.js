@@ -17,13 +17,13 @@ suite(["@CI"], "next staking ledger table", () => {
 });
 
 suite(["@CI"], "staking ledger table", () => {
-  let pages = ["/staking-ledgers?epoch=0"];
+  let pages = ["/staking-ledgers?epoch=42"];
   let columns = ["Key", "Stake", "Total Stake %", "Delegate", "Delegators"];
 
   pages.forEach((page) =>
     it(`on ${page} includes correct columns`, () => {
       cy.visit(page);
-      cy.tableHasOrderedColumns("Staking Ledger - Epoch 0", columns);
+      cy.tableHasOrderedColumns("Staking Ledger - Epoch 42", columns);
     }),
   );
 });

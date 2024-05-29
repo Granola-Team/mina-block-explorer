@@ -29,8 +29,8 @@ suite(["@CI"], "global search", () => {
       expectedUrl: "/commands/" + state_hash,
     },
     {
-      input: "75",
-      expectedUrl: "/staking-ledgers?epoch=75",
+      input: "42",
+      expectedUrl: "/staking-ledgers?epoch=42",
     },
   ];
 

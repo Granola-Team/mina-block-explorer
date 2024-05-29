@@ -45,7 +45,7 @@ suite(["@CI"], "meta title", () => {
       url: "/staking-ledgers?epoch=42",
       title: "Staking Ledger | Epoch 42",
     },
-    { url: "/staking-ledgers?epoch=71", title: "Staking Ledger | Epoch 71" },
+    { url: "/staking-ledgers?epoch=42", title: "Staking Ledger | Epoch 42" },
     { url: "/snarks", title: "SNARKs | Search For SNARKs" },
     {
       url: `/commands/${FIRST_TXN_HASH}`,
