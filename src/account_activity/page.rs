@@ -137,7 +137,7 @@ pub fn AccountSpotlightPage() -> impl IntoView {
                         view! {
                             <SpotlightSection
                                 header="Account Spotlight"
-                                spotlight_items=get_spotlight_data(&account)
+                                spotlight_items=get_spotlight_data(account)
                                 meta=Some(
                                     format!("Username: {}", username.get().unwrap_or_default()),
                                 )

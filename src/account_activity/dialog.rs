@@ -87,7 +87,7 @@ pub fn AccountDialogView() -> impl IntoView {
                             .and_then(|res| res.ok())
                             .map(|res| {
                                 if let Some(account) = &res.accounts[0] {
-                                    let summary_items = get_spotlight_data(&account);
+                                    let summary_items = get_spotlight_data(account);
                                     view! {
                                         <SpotlightSection
                                             header="Account Spotlight"
