@@ -12,6 +12,8 @@ pub struct Link<'a> {
     icon: Icon,
 }
 
+const FOOTER_LINK_BASE_CLASS: &str = "ml-2 flex items-center text-white text-sm ";
+
 #[component]
 pub fn Footer() -> impl IntoView {
     let links = vec![
@@ -42,14 +44,21 @@ pub fn Footer() -> impl IntoView {
                     >
                         "Granola"
                     </a>
+                    <a
+                        class=FOOTER_LINK_BASE_CLASS.to_string() + LINK_HOVER_STATE
+                        href="https://github.com/Granola-Team/mina-block-explorer/commit/".to_string()
+                            + COMMIT_HASH
+                    >
+                        {&COMMIT_HASH[..7]}
+                    </a>
                 </span>
                 {links
                     .into_iter()
                     .map(|link| {
                         view! {
                             <a
-                                class="ml-1 flex items-center text-white text-xs uppercase "
-                                    .to_string() + LINK_HOVER_STATE
+                                class="uppercase ".to_string() + FOOTER_LINK_BASE_CLASS
+                                    + LINK_HOVER_STATE
                                 href=link.href
                             >
                                 {match link.icon {
