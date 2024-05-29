@@ -97,7 +97,7 @@ where
                             ().into_view()
                         }
                     } else {
-                        ().into_view()
+                        view! { <EmptyTable message="No data for this view"/> }
                     }
                 }}
 
