@@ -75,7 +75,7 @@ setTimeout(async () => {
     ],
     xAxis: {
       type: "category",
-      name: "Hour",
+      name: "Hour (UTC)",
       axisLabel: {
         rotate: 45,
       },
