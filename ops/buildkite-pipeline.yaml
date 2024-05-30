@@ -1,15 +1,18 @@
 steps:
   - label: "Build, Lint, and Audit"
     key: build
+    if: build.branch != "main"
     command: "nix develop --command just lint"
     agents:
       nix: true
+      production: false
   - label: "Test"
     key: test
-    depends_on: build
+    if: build.branch == "main"
     agents:
       xwindows: true
       nix: true
+      production: false
     env:
       CYPRESS_tags: "@CI"
       BERKELEY_FEATURES_ENABLED: true
@@ -20,4 +23,5 @@ steps:
     depends_on: test
     agents:
       nix: true
+      production: true
     command: "nix develop --command just publish"
