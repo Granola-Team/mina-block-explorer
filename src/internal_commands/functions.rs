@@ -33,7 +33,7 @@ pub async fn load_data(
 
     let client = reqwest::Client::new();
 
-    let response = post_graphql::<InternalCommandsQuery, _>(&client, GRAPHQL_ENDPOINT, variables)
+    let response = post_graphql::<InternalCommandsQuery, _>(&client, GRAPHQL_ENDPOINT_2, variables)
         .await
         .map_err(|e| MyError::NetworkError(e.to_string()))?;
 
