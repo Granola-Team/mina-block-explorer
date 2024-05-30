@@ -71,12 +71,12 @@ suite(["@CI"], "account page", () => {
       tableHeader: "User Commands",
     },
     {
-      origin: `/blocks/${GENESIS_BLOCK_BLOCK_HASH}/commands/user`,
+      origin: `/blocks/${FIRST_BLOCK_WITH_SNARK_WORK}/commands/user`,
       column: "From",
       tableHeader: "User Commands",
     },
     {
-      origin: `/blocks/${GENESIS_BLOCK_BLOCK_HASH}/commands/user`,
+      origin: `/blocks/${FIRST_BLOCK_WITH_SNARK_WORK}/commands/user`,
       column: "To",
       tableHeader: "User Commands",
     },
@@ -86,7 +86,7 @@ suite(["@CI"], "account page", () => {
       tableHeader: "SNARK Jobs",
     },
     {
-      origin: `/blocks/${GENESIS_BLOCK_BLOCK_HASH}/commands/internal`,
+      origin: `/blocks/${FIRST_BLOCK_WITH_SNARK_WORK}/commands/internal`,
       column: "Recipient",
       tableHeader: "Internal Commands",
     },
