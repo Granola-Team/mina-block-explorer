@@ -1,8 +1,8 @@
+import { GENESIS_BLOCK_BLOCK_HASH } from "../constants";
+
 suite(["@CI"], "<head>", () => {
   let sample_non_charting_pages = ["/", "/blocks"];
-  let charting_pages = [
-    "/blocks/3NLPqy8gNUkLdP9SAwLr3Mw4WkxzLyEPphQCvKEL4yb7o67CMDMc/analytics",
-  ];
+  let charting_pages = [`/blocks/${GENESIS_BLOCK_BLOCK_HASH}/analytics`];
 
   sample_non_charting_pages.forEach((page) =>
     it(`does not contain charting libraries on non-charting page ${page}`, () => {

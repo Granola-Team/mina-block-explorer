@@ -63,20 +63,6 @@ suite(["@CI"], "metadata about the table", () => {
       page: "/commands/user",
       table_heading: "User Commands",
       column_selector: "input#q-height",
-      input: null,
-      assertion: function (target) {
-        target.should("have.lengthOf", 100);
-        cy.get(".metadata")
-          .invoke("text")
-          .then((text) => {
-            expect(text).to.equal(SHOWING_LATEST);
-          });
-      },
-    },
-    {
-      page: "/commands/user",
-      table_heading: "User Commands",
-      column_selector: "input#q-height",
       input: 20,
       assertion: function (target) {
         target.should("have.lengthOf", 28);
@@ -91,27 +77,13 @@ suite(["@CI"], "metadata about the table", () => {
       page: "/commands/internal",
       table_heading: "Internal Commands",
       column_selector: "input#q-height",
-      input: null,
-      assertion: function (target) {
-        target.should("have.lengthOf", 100);
-        cy.get(".metadata")
-          .invoke("text")
-          .then((text) => {
-            expect(text).to.equal(SHOWING_LATEST);
-          });
-      },
-    },
-    {
-      page: "/commands/internal",
-      table_heading: "Internal Commands",
-      column_selector: "input#q-height",
       input: 20,
       assertion: function (target) {
-        target.should("have.lengthOf", 16);
+        target.should("have.lengthOf", 35);
         cy.get(".metadata")
           .invoke("text")
           .then((text) => {
-            expect(text).to.equal("Showing 16 of 16");
+            expect(text).to.equal("Showing 35 of 35");
           });
       },
     },

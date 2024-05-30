@@ -1,3 +1,5 @@
+import { FIRST_TXN_HASH } from "../constants";
+
 suite(["@CI"], "meta title", () => {
   let public_key = "B62qpge4uMq4Vv5Rvc8Gw9qSquUYd6xoW1pz7HQkMSHm6h1o7pvLPAN";
   let block_hash = "3NLhBh3d4b91DPoJn5hhwRAWmHSAaG8Qz4W5r9FhJBCXLD3WrAt4";
@@ -49,8 +51,8 @@ suite(["@CI"], "meta title", () => {
     { url: "/staking-ledgers?epoch=71", title: "Staking Ledger | Epoch 71" },
     { url: "/snarks", title: "SNARKs | Search For SNARKs" },
     {
-      url: `/commands/${txn_hash}`,
-      title: "Transaction Overview | WeStake.Club payout #72",
+      url: `/commands/${FIRST_TXN_HASH}`,
+      title: "Transaction Overview | No Memo",
     },
     {
       url: `/addresses/accounts/${public_key}`,
