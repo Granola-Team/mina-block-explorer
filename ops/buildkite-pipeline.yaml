@@ -1,14 +1,6 @@
 steps:
-  - label: "Build, Lint, and Audit"
-    key: build
-    if: build.branch != "main"
-    command: "nix develop --command just lint"
-    agents:
-      nix: true
-      production: false
-  - label: "Test"
+  - label: "Build and Test"
     key: test
-    if: build.branch == "main"
     agents:
       xwindows: true
       nix: true
