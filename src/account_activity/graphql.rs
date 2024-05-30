@@ -2,8 +2,8 @@ use self::account_activity_query::{
     AccountActivityQueryBlocks, AccountActivityQueryBlocksTransactions,
     AccountActivityQueryIncomingTransactions, AccountActivityQueryIncomingTransactionsBlock,
     AccountActivityQueryOutgoingTransactions, AccountActivityQueryOutgoingTransactionsBlock,
-    AccountActivityQuerySnarks, AccountActivityQuerySnarksBlock, BlockQueryInput, SnarkQueryInput,
-    TransactionQueryInput, BlockCreatorAccountQueryInput
+    AccountActivityQuerySnarks, AccountActivityQuerySnarksBlock, BlockCreatorAccountQueryInput,
+    BlockQueryInput, SnarkQueryInput, TransactionQueryInput,
 };
 use crate::{
     account_activity::graphql::account_activity_query::{
