@@ -3,7 +3,7 @@ use self::account_activity_query::{
     AccountActivityQueryIncomingTransactions, AccountActivityQueryIncomingTransactionsBlock,
     AccountActivityQueryOutgoingTransactions, AccountActivityQueryOutgoingTransactionsBlock,
     AccountActivityQuerySnarks, AccountActivityQuerySnarksBlock, BlockQueryInput, SnarkQueryInput,
-    TransactionQueryInput,
+    TransactionQueryInput, BlockCreatorAccountQueryInput
 };
 use crate::{
     account_activity::graphql::account_activity_query::{
@@ -310,6 +310,25 @@ impl Default for BlockQueryInput {
             received_time_gt: None,
             snark_jobs_exists: None,
             state_hash_gt: None,
+        }
+    }
+}
+
+#[allow(clippy::derivable_impls)]
+impl Default for BlockCreatorAccountQueryInput {
+    fn default() -> Self {
+        BlockCreatorAccountQueryInput {
+            public_key_exists: None,
+            public_key_ne: None,
+            public_key_lte: None,
+            or: None,
+            public_key_gte: None,
+            public_key_lt: None,
+            public_key_in: None,
+            and: None,
+            public_key: None,
+            public_key_nin: None,
+            public_key_gt: None,
         }
     }
 }

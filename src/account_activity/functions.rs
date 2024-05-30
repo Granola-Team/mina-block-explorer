@@ -5,9 +5,10 @@ use super::{
 use crate::{
     account_activity::graphql::account_activity_query::{
         BlockProtocolStateConsensusStateQueryInput, BlockProtocolStateQueryInput, BlockQueryInput,
+        BlockCreatorAccountQueryInput
     },
     common::{
-        constants::{GRAPHQL_ENDPOINT, REST_ENDPOINT},
+        constants::*,
         functions::*,
         models::*,
         spotlight::*,
@@ -66,7 +67,10 @@ pub async fn load_data(
         blocks_query: account_activity_query::BlockQueryInput {
             block_height_lte: block_height,
             state_hash: state_hash.clone(),
-            creator: block_producer.clone(),
+            creator_account: block_producer.clone().map(|bp| BlockCreatorAccountQueryInput {
+                public_key: Some(bp),
+                ..Default::default()
+            }),
             protocol_state: if slot.is_some() {
                 Some(BlockProtocolStateQueryInput {
                     consensus_state: Some(BlockProtocolStateConsensusStateQueryInput {
@@ -145,7 +149,7 @@ pub async fn load_data(
 
     let client = reqwest::Client::new();
 
-    let response = post_graphql::<AccountActivityQuery, _>(&client, GRAPHQL_ENDPOINT, variables)
+    let response = post_graphql::<AccountActivityQuery, _>(&client, GRAPHQL_ENDPOINT_2, variables)
         .await
         .map_err(|e| MyError::NetworkError(e.to_string()))?;
 
