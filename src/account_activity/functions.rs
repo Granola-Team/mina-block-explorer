@@ -95,7 +95,10 @@ pub async fn load_data(
             block: if block_producer.is_some() || slot.is_some() || state_hash.is_some() {
                 Some(BlockQueryInput {
                     state_hash,
-                    creator: block_producer,
+                    creator_account: block_producer.clone().map(|bp| BlockCreatorAccountQueryInput {
+                        public_key: Some(bp),
+                        ..Default::default()
+                    }),
                     protocol_state: if slot.is_some() {
                         Some(BlockProtocolStateQueryInput {
                             consensus_state: Some(BlockProtocolStateConsensusStateQueryInput {
