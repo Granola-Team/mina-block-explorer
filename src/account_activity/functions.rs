@@ -4,14 +4,10 @@ use super::{
 };
 use crate::{
     account_activity::graphql::account_activity_query::{
-        BlockProtocolStateConsensusStateQueryInput, BlockProtocolStateQueryInput, BlockQueryInput,
+        BlockCreatorAccountQueryInput, BlockProtocolStateConsensusStateQueryInput,
+        BlockProtocolStateQueryInput, BlockQueryInput,
     },
-    common::{
-        constants::{GRAPHQL_ENDPOINT, REST_ENDPOINT},
-        functions::*,
-        models::*,
-        spotlight::*,
-    },
+    common::{constants::*, functions::*, models::*, spotlight::*},
 };
 use graphql_client::reqwest::post_graphql;
 use leptos::*;
@@ -66,7 +62,12 @@ pub async fn load_data(
         blocks_query: account_activity_query::BlockQueryInput {
             block_height_lte: block_height,
             state_hash: state_hash.clone(),
-            creator: block_producer.clone(),
+            creator_account: block_producer
+                .clone()
+                .map(|bp| BlockCreatorAccountQueryInput {
+                    public_key: Some(bp),
+                    ..Default::default()
+                }),
             protocol_state: if slot.is_some() {
                 Some(BlockProtocolStateQueryInput {
                     consensus_state: Some(BlockProtocolStateConsensusStateQueryInput {
@@ -91,7 +92,12 @@ pub async fn load_data(
             block: if block_producer.is_some() || slot.is_some() || state_hash.is_some() {
                 Some(BlockQueryInput {
                     state_hash,
-                    creator: block_producer,
+                    creator_account: block_producer.clone().map(|bp| {
+                        BlockCreatorAccountQueryInput {
+                            public_key: Some(bp),
+                            ..Default::default()
+                        }
+                    }),
                     protocol_state: if slot.is_some() {
                         Some(BlockProtocolStateQueryInput {
                             consensus_state: Some(BlockProtocolStateConsensusStateQueryInput {
