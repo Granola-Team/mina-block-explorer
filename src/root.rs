@@ -38,6 +38,7 @@ pub fn Root() -> impl IntoView {
                 GRAPHQL_ENDPOINT,
                 GRAPHQL_ENDPOINT_2,
             )}
+
         </script>
         <Router>
             <Header/>
