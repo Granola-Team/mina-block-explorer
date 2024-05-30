@@ -1,4 +1,8 @@
-import { DEFAULT_ACCOUNT_PK } from "../constants";
+import {
+  DEFAULT_ACCOUNT_PK,
+  FIRST_BLOCK_WITH_SNARK_WORK,
+  GENESIS_BLOCK_BLOCK_HASH,
+} from "../constants";
 
 suite(["@CI"], "accounts table", () => {
   let pages = ["/addresses/accounts"];
@@ -122,9 +126,7 @@ suite(["@CI"], "snarks table", () => {
 });
 
 suite(["@CI"], "block spotlight snarks table", () => {
-  let pages = [
-    "/blocks/3NKLE73AnqCKVit9h3yEZsPbbJBmVfW5WWKA6pNsUjqh3Nm1mKSK/snark-jobs",
-  ];
+  let pages = [`/blocks/${FIRST_BLOCK_WITH_SNARK_WORK}/snark-jobs`];
   let columns = ["State Hash", "Age", "Prover", "Fee"];
 
   pages.forEach((page) =>
@@ -136,9 +138,7 @@ suite(["@CI"], "block spotlight snarks table", () => {
 });
 
 suite(["@CI"], "internal commands table", () => {
-  let pages = [
-    "/blocks/3NKyujsdi2GtWA1XC9KJ6nvXeLAd3DNvYrm1PUGEagj9899s1LMz/commands/internal",
-  ];
+  let pages = [`/blocks/${GENESIS_BLOCK_BLOCK_HASH}/commands/internal`];
   let columns = ["Recipient", "Fee", "Type"];
 
   pages.forEach((page) =>

@@ -1,4 +1,8 @@
-import { DEFAULT_ACCOUNT_PK } from "../constants";
+import {
+  DEFAULT_ACCOUNT_PK,
+  FIRST_BLOCK_WITH_SNARK_WORK,
+  GENESIS_BLOCK_BLOCK_HASH,
+} from "../constants";
 
 suite(["@CI"], "account page", () => {
   let pages = [
@@ -67,26 +71,22 @@ suite(["@CI"], "account page", () => {
       tableHeader: "User Commands",
     },
     {
-      origin:
-        "/blocks/3NKnLbpRcFaY9WSzLFa4wYxejhnWBQNEPA2cnesvS75wcuNCr8nA/commands/user",
+      origin: `/blocks/${GENESIS_BLOCK_BLOCK_HASH}/commands/user`,
       column: "From",
       tableHeader: "User Commands",
     },
     {
-      origin:
-        "/blocks/3NKnLbpRcFaY9WSzLFa4wYxejhnWBQNEPA2cnesvS75wcuNCr8nA/commands/user",
+      origin: `/blocks/${GENESIS_BLOCK_BLOCK_HASH}/commands/user`,
       column: "To",
       tableHeader: "User Commands",
     },
     {
-      origin:
-        "/blocks/3NKjn8eQiAdwHMeenVuHKmqTVarJzPU7bfPnvSu74XuXTdzhXpj4/snark-jobs",
+      origin: `/blocks/${FIRST_BLOCK_WITH_SNARK_WORK}/snark-jobs`,
       column: "Prover",
       tableHeader: "SNARK Jobs",
     },
     {
-      origin:
-        "/blocks/3NLXaJBYriRYe8LQUNwgSFsUvuikjkL8SDo1MHKRYsfRA4FjCsEv/commands/internal",
+      origin: `/blocks/${GENESIS_BLOCK_BLOCK_HASH}/commands/internal`,
       column: "Recipient",
       tableHeader: "Internal Commands",
     },

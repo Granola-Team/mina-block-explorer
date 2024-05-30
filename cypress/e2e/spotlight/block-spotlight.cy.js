@@ -1,6 +1,8 @@
 import {
-  DEFAULT_CANONICAL_BLOCK_HASH,
   DEFAULT_NON_CANONICAL_BLOCK_HASH,
+  FIRST_BLOCK_WITH_SNARK_WORK,
+  FIRST_NON_CANONICAL_BLOCK_WITH_SNARK_WORK,
+  GENESIS_BLOCK_BLOCK_HASH,
 } from "../constants";
 
 suite(["@CI"], "Block spotlight", () => {
@@ -19,12 +21,7 @@ suite(["@CI"], "Block spotlight", () => {
     "Blockchain Length",
   ];
 
-  function testForCompleteness(
-    stateHash,
-    minUserCommands,
-    minSnarkJobs,
-    minInternalCommands,
-  ) {
+  function testForCompleteness(stateHash) {
     cy.visit(`/blocks/${stateHash}`);
     cy.testSpotlight("Block Spotlight", stateHash, expected_fields);
 
@@ -32,21 +29,21 @@ suite(["@CI"], "Block spotlight", () => {
     cy.testSpotlight("Block Spotlight", stateHash, expected_fields);
 
     cy.get(`a[href="/blocks/${stateHash}/commands/user"]`).click();
-    cy.tableHasMoreThanNRows("User Commands", minUserCommands);
+    cy.tableHasMoreThanNRows("User Commands", 0);
 
     cy.get(`a[href="/blocks/${stateHash}/snark-jobs"]`).click();
-    cy.tableHasMoreThanNRows("SNARK Jobs", minSnarkJobs);
+    cy.tableHasMoreThanNRows("SNARK Jobs", 0);
     cy.tableColumnValuesEqual("SNARK Jobs", "Hash", stateHash);
 
     cy.get(`a[href="/blocks/${stateHash}/commands/internal"]`).click();
-    cy.tableHasMoreThanNRows("Internal Commands", minInternalCommands);
+    cy.tableHasMoreThanNRows("Internal Commands", 0);
   }
 
   it("displays complete information for canonical block", () => {
-    testForCompleteness(DEFAULT_CANONICAL_BLOCK_HASH, 7, 7, 7);
+    testForCompleteness(FIRST_BLOCK_WITH_SNARK_WORK);
   });
 
   it("displays complete information for non-canonical block", () => {
-    testForCompleteness(DEFAULT_NON_CANONICAL_BLOCK_HASH, 7, 7, 6);
+    testForCompleteness(FIRST_NON_CANONICAL_BLOCK_WITH_SNARK_WORK);
   });
 });

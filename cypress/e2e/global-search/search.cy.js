@@ -1,4 +1,4 @@
-import { DEFAULT_ACCOUNT_PK, DEFAULT_CANONICAL_BLOCK_HASH } from "../constants";
+import { DEFAULT_ACCOUNT_PK, GENESIS_BLOCK_BLOCK_HASH } from "../constants";
 
 suite(["@CI"], "global search", () => {
   it("has visible placeholder text", () => {
@@ -21,8 +21,8 @@ suite(["@CI"], "global search", () => {
       expectedUrl: "/addresses/accounts/" + DEFAULT_ACCOUNT_PK,
     },
     {
-      input: DEFAULT_CANONICAL_BLOCK_HASH,
-      expectedUrl: "/blocks/" + DEFAULT_CANONICAL_BLOCK_HASH,
+      input: GENESIS_BLOCK_BLOCK_HASH,
+      expectedUrl: "/blocks/" + GENESIS_BLOCK_BLOCK_HASH,
     },
     {
       input: state_hash,
