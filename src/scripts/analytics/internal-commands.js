@@ -1,22 +1,18 @@
 setTimeout(async () => {
-  let response = await fetch(config.graphql_endpoint, {
+  let blockLimit = 500;
+  let response = await fetch(config.graphql_endpoint_2, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      query: `query MyQuery($date: DateTime!) {
-        feetransfers(query: {canonical: true, dateTime_gte: $date}, sortBy: BLOCKHEIGHT_ASC, limit: 1000000) {
+      query: `query MyQuery() {
+        feetransfers(query: { canonical: true }, sortBy: BLOCKHEIGHT_DESC, limit: ${blockLimit}) {
           fee
           dateTime
         }
       } 
     `,
-      variables: {
-        date: new Date(
-          new Date().getTime() - 24 * 60 * 60 * 1000,
-        ).toISOString(),
-      },
     }),
   });
 
@@ -35,7 +31,10 @@ setTimeout(async () => {
     if (!agg[key]) {
       agg[key] = [];
     }
-    agg[key].push(parseFloat(value / 1e9));
+    let parsedFloat = parseFloat(value / 1e9);
+    if (parsedFloat < 700) {
+      agg[key].push(parsedFloat);
+    }
     return agg;
   }, {});
 
@@ -50,7 +49,7 @@ setTimeout(async () => {
 
   option = {
     title: {
-      text: "Fee Transfers in the last 24 hours",
+      text: `Fee Transfers in the last ${blockLimit} blocks`,
       left: "center",
     },
     tooltip: {
