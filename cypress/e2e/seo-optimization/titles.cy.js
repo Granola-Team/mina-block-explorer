@@ -1,4 +1,4 @@
-import { FIRST_TXN_HASH } from "../constants";
+import { DEFAULT_ACCOUNT_PK, FIRST_TXN_HASH } from "../constants";
 
 suite(["@CI"], "meta title", () => {
   let public_key = "B62qpge4uMq4Vv5Rvc8Gw9qSquUYd6xoW1pz7HQkMSHm6h1o7pvLPAN";
@@ -55,8 +55,8 @@ suite(["@CI"], "meta title", () => {
       title: "Transaction Overview | No Memo",
     },
     {
-      url: `/addresses/accounts/${public_key}`,
-      title: `Account Overview | 'MinaExplorer'`,
+      url: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
+      title: `Account Overview | 'Unknown'`,
     },
   ];
 
