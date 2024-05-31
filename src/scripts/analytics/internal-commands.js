@@ -1,41 +1,41 @@
 setTimeout(async () => {
-  let response = await fetch(config.graphql_endpoint, {
+  const blockLimit = 500;
+  const groupSize = 10;
+  let response = await fetch(config.graphql_endpoint_2, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      query: `query MyQuery($date: DateTime!) {
-        feetransfers(query: {canonical: true, dateTime_gte: $date}, sortBy: BLOCKHEIGHT_ASC, limit: 1000000) {
-          fee
-          dateTime
+      query: `query MyQuery() {
+        feetransfers(query: { canonical: true }, sortBy: BLOCKHEIGHT_DESC, limit: ${blockLimit}) {
+          fee,
+          blockStateHash {
+            protocolState {
+              consensusState {
+                slotSinceGenesis
+              }
+            }
+          }
         }
       } 
     `,
-      variables: {
-        date: new Date(
-          new Date().getTime() - 24 * 60 * 60 * 1000,
-        ).toISOString(),
-      },
     }),
   });
 
   let jsonResp = await response.json();
   let data = jsonResp.data.feetransfers.reduce((agg, record) => {
-    const date = new Date(record.dateTime);
-    const key =
-      date.getUTCFullYear() +
-      "-" +
-      String(date.getUTCMonth() + 1).padStart(2, "0") + // Month is zero-indexed, add one
-      "-" +
-      String(date.getUTCDate()).padStart(2, "0") +
-      " " +
-      String(date.getUTCHours()).padStart(2, "0");
+    let slot =
+      record.blockStateHash.protocolState.consensusState.slotSinceGenesis;
+    let key = slot - (slot % groupSize);
     let value = record.fee;
     if (!agg[key]) {
       agg[key] = [];
     }
-    agg[key].push(parseFloat(value / 1e9));
+    let parsedFloat = parseFloat(value / 1e9);
+    if (parsedFloat < 700) {
+      agg[key].push(parsedFloat);
+    }
     return agg;
   }, {});
 
@@ -50,7 +50,7 @@ setTimeout(async () => {
 
   option = {
     title: {
-      text: "Fee Transfers in the last 24 hours",
+      text: `Fee Transfers in the last ${blockLimit} blocks`,
       left: "center",
     },
     tooltip: {
@@ -76,29 +76,46 @@ setTimeout(async () => {
     ],
     xAxis: {
       type: "category",
-      name: "Hour",
-      axisLabel: {
-        rotate: 45,
-      },
+      name: "Global Slot",
       axisLabel: {
         formatter: function (value) {
           return xAxis[value];
         },
       },
     },
-    yAxis: {
-      type: "value",
-      name: "Fee",
-    },
+    yAxis: [
+      {
+        type: "value",
+        name: "Fee",
+        axisLabel: {
+          formatter: function (value) {
+            return `${value} Mina`;
+          },
+        },
+      },
+      {
+        type: "value",
+        name: "Transfers Count",
+        position: "right",
+        axisLabel: {
+          formatter: function (value) {
+            return `${value}`;
+          },
+        },
+      },
+    ],
     series: [
       {
         name: "boxplot",
         type: "boxplot",
         datasetIndex: 1,
+        yAxisIndex: 0,
         tooltip: {
           formatter: function (param) {
             return [
-              "Date: " + xAxis[param.name],
+              "Slot: " +
+                xAxis[param.name] +
+                `-${+xAxis[param.name] + groupSize - 1}`,
               "upper: " + param.data[5],
               "Q3: " + param.data[4],
               "median: " + param.data[3],
@@ -111,12 +128,29 @@ setTimeout(async () => {
       {
         name: "boxplot",
         type: "scatter",
+        symbolSize: 8,
         datasetIndex: 2,
+        yAxisIndex: 0,
         tooltip: {
           formatter: function (param) {
-            return ["Date: " + xAxis[param.name], "Fee: " + param.data[1]].join(
-              "<br/>",
-            );
+            return [
+              "Slot: " +
+                xAxis[param.name] +
+                `-${+xAxis[param.name] + groupSize - 1}`,
+              "Fee: " + param.data[1],
+            ].join("<br/>");
+          },
+        },
+      },
+      {
+        name: "transfers",
+        type: "scatter",
+        symbolSize: 12,
+        data: Object.values(data).map((fees, i) => ["" + i, fees.length]),
+        yAxisIndex: 1,
+        tooltip: {
+          formatter: function (param) {
+            return `Slot: ${xAxis[param.dataIndex]}-${+xAxis[param.dataIndex] + groupSize - 1}<br/>Transfers: ${param.value[1]}`;
           },
         },
       },

@@ -1,4 +1,4 @@
-import { DEFAULT_ACCOUNT_PK, DEFAULT_CANONICAL_BLOCK_HASH } from "../constants";
+import { DEFAULT_ACCOUNT_PK, GENESIS_BLOCK_BLOCK_HASH } from "../constants";
 
 suite(["@CI"], "global search", () => {
   it("has visible placeholder text", () => {
@@ -13,16 +13,16 @@ suite(["@CI"], "global search", () => {
 
   let pages = [
     {
-      input: "jxvumaCvujr7UzW1qCB87YR2RWu8CqvkwrCmHY8kkwpvN4WbTJn",
-      expectedUrl: "/staking-ledgers?epoch=74",
+      input: "jxYFH645cwMMMDmDe7KnvTuKJ5Ev8zZbWtA73fDFn7Jyh8p6SwH",
+      expectedUrl: "/staking-ledgers?epoch=42",
     },
     {
       input: DEFAULT_ACCOUNT_PK,
       expectedUrl: "/addresses/accounts/" + DEFAULT_ACCOUNT_PK,
     },
     {
-      input: DEFAULT_CANONICAL_BLOCK_HASH,
-      expectedUrl: "/blocks/" + DEFAULT_CANONICAL_BLOCK_HASH,
+      input: GENESIS_BLOCK_BLOCK_HASH,
+      expectedUrl: "/blocks/" + GENESIS_BLOCK_BLOCK_HASH,
     },
     {
       input: state_hash,

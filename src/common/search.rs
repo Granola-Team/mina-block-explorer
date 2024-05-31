@@ -13,7 +13,7 @@ struct EpochData {
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
 struct StakeData {
-    pub stake: EpochData,
+    pub stakes: Vec<EpochData>,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
@@ -28,12 +28,12 @@ async fn load_epoch_data(
         None => Err(MyError::ParseError("ledger hash not supplied".to_string())),
         Some(ledger_hash) => {
             let query_body = format!(
-                r#"{{"query":"query EpochQuery($ledgerHash: String) {{ stake(query: {{ledgerHash: $ledgerHash}}) {{ epoch }}}}", "variables":{{"ledgerHash":"{}"}},"operationName":"EpochQuery"}}"#,
-                ledger_hash
+                r#"{{"query":"query EpochQuery($ledgerHash: String, $limit: Int) {{ stakes(query: {{ledgerHash: $ledgerHash}}, limit: $limit) {{ epoch }}}}", "variables":{{"ledgerHash":"{}", "limit":{}}},"operationName":"EpochQuery"}}"#,
+                ledger_hash, 0
             );
             let client = reqwest::Client::new();
             let response = client
-                .post(GRAPHQL_ENDPOINT)
+                .post(GRAPHQL_ENDPOINT_2)
                 .body(query_body)
                 .send()
                 .await
@@ -67,11 +67,13 @@ pub fn GlobalSearchBar() -> impl IntoView {
 
     create_effect(move |_| {
         epoch_resource.get().and_then(|res| res.ok()).map(|resp| {
-            navigate_clone(
-                &format!("/staking-ledgers?epoch={}", resp.data.stake.epoch),
-                Default::default(),
-            );
-            set_value.set("".to_string());
+            if let Some(stake) = resp.data.stakes.first() {
+                navigate_clone(
+                    &format!("/staking-ledgers?epoch={}", stake.epoch),
+                    Default::default(),
+                );
+                set_value.set("".to_string());
+            }
         })
     });
 
