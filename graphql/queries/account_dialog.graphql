@@ -9,6 +9,7 @@ query AccountActivityQuery(
   $trans_sort_by: TransactionSortByInput!
   $outgoing_trans_query: TransactionQueryInput!
   $incoming_trans_query: TransactionQueryInput!
+  $account_query: AccountQueryInput!
 ) {
   incoming_transactions: transactions(
     sortBy: $trans_sort_by
@@ -85,5 +86,11 @@ query AccountActivityQuery(
         publicKey
       }
     }
+  }
+  accounts(limit: 1, query: $account_query) {
+    balance
+    username
+    nonce
+    delegate
   }
 }

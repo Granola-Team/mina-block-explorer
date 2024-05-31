@@ -31,20 +31,6 @@ pub fn AccountSpotlightPage() -> impl IntoView {
     let (blocks, set_blocks) = create_signal(None);
     let (username, set_username) = create_signal(None);
 
-    let resource = create_resource(
-        move || memo_params_map.get(),
-        |value| async move {
-            if let Some(id) = value.get("id").cloned() {
-                let id_clone = id.clone();
-                load_account_data(&id_clone).await
-            } else {
-                Err(MyError::ParseError(String::from(
-                    "Could not parse id parameter from url",
-                )))
-            }
-        },
-    );
-
     let activity_resource = create_resource(
         move || {
             (
@@ -121,6 +107,15 @@ pub fn AccountSpotlightPage() -> impl IntoView {
             set_transactions.set(Some(transactions));
             set_snarks.set(Some(res.snarks[..end_index].to_vec()));
             set_blocks.set(Some(res.blocks));
+            if let Some(account) = &res.accounts[0] {
+                set_username.set(Some(
+                    account
+                        .username
+                        .clone()
+                        .map(|b| b.to_string())
+                        .unwrap_or_default(),
+                ))
+            }
         };
     });
 
@@ -131,32 +126,32 @@ pub fn AccountSpotlightPage() -> impl IntoView {
         set_blocks.set(None);
     });
 
-    create_effect(move |_| {
-        if let Some(Ok(data)) = resource.get() {
-            logging::log!("Username: {}", data.account.username);
-            set_username.set(Some(data.account.username))
-        };
-    });
-
     view! {
         <Title
             formatter=move |text| format!("Account Overview | '{text}'")
             text=move || username.get().unwrap_or_default()
         />
         <PageContainer>
-            {move || match resource.get() {
+            {move || match activity_resource.get() {
                 Some(Ok(res)) => {
-                    view! {
-                        <SpotlightSection
-                            header="Account Spotlight"
-                            spotlight_items=get_spotlight_data(&res.account)
-                            meta=Some(format!("Username: {}", res.account.username))
-                            id=memo_params_map.get().get("id").cloned()
-                        >
-                            <WalletIcon width=40/>
-                        </SpotlightSection>
+                    if let Some(account) = &res.accounts[0] {
+                        view! {
+                            <SpotlightSection
+                                header="Account Spotlight"
+                                spotlight_items=get_spotlight_data(account)
+                                meta=Some(
+                                    format!("Username: {}", username.get().unwrap_or_default()),
+                                )
+
+                                id=memo_params_map.get().get("id").cloned()
+                            >
+                                <WalletIcon width=40/>
+                            </SpotlightSection>
+                        }
+                            .into_view()
+                    } else {
+                        ().into_view()
                     }
-                        .into_view()
                 }
                 None => {
                     view! {

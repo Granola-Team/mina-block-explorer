@@ -14,20 +14,6 @@ pub fn AccountDialogView() -> impl IntoView {
     let (base, _set_base) = create_signal(get_base_page_path(location));
     let memo_params_map = use_params_map();
 
-    let account_resource = create_resource(
-        move || memo_params_map.get(),
-        |value| async move {
-            if let Some(id) = value.get("id").cloned() {
-                let id_clone = id.clone();
-                load_account_data(&id_clone).await
-            } else {
-                Err(MyError::ParseError(String::from(
-                    "Could not parse id parameter from url",
-                )))
-            }
-        },
-    );
-
     let public_key = move || memo_params_map.with(|p| p.get("id").cloned().unwrap_or_default());
 
     let account_activity_resource = create_resource(
@@ -96,35 +82,49 @@ pub fn AccountDialogView() -> impl IntoView {
                     }
                 }>
                     {move || {
-                        account_resource
+                        account_activity_resource
                             .get()
                             .and_then(|res| res.ok())
                             .map(|res| {
-                                let summary_items = get_spotlight_data(&res.account);
-                                view! {
-                                    <SpotlightSection
-                                        header="Account Spotlight"
-                                        top_right=Some(
-                                            Box::new(move || Fragment::new(
-                                                vec![
-                                                    view! {
-                                                        <button id="closedialog" class="mr-4 cursor-pointer">
-                                                            <a href=base.get()>
-                                                                <CloseIcon/>
-                                                            </a>
-                                                        </button>
-                                                    }
-                                                        .into_view(),
-                                                ],
-                                            )),
-                                        )
+                                if let Some(account) = &res.accounts[0] {
+                                    let summary_items = get_spotlight_data(account);
+                                    view! {
+                                        <SpotlightSection
+                                            header="Account Spotlight"
+                                            top_right=Some(
+                                                Box::new(move || Fragment::new(
+                                                    vec![
+                                                        view! {
+                                                            <button id="closedialog" class="mr-4 cursor-pointer">
+                                                                <a href=base.get()>
+                                                                    <CloseIcon/>
+                                                                </a>
+                                                            </button>
+                                                        }
+                                                            .into_view(),
+                                                    ],
+                                                )),
+                                            )
 
-                                        spotlight_items=summary_items
-                                        id=Some(public_key())
-                                        meta=Some(format!("Username: {}", res.account.username))
-                                    >
-                                        <WalletIcon width=40/>
-                                    </SpotlightSection>
+                                            spotlight_items=summary_items
+                                            id=Some(public_key())
+                                            meta=Some(
+                                                format!(
+                                                    "Username: {}",
+                                                    account
+                                                        .username
+                                                        .clone()
+                                                        .map(|u| u.to_string())
+                                                        .unwrap_or_default(),
+                                                ),
+                                            )
+                                        >
+
+                                            <WalletIcon width=40/>
+                                        </SpotlightSection>
+                                    }
+                                } else {
+                                    ().into_view()
                                 }
                             })
                     }}
