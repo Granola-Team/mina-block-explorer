@@ -8,8 +8,14 @@ setTimeout(async () => {
     body: JSON.stringify({
       query: `query MyQuery() {
         feetransfers(query: { canonical: true }, sortBy: BLOCKHEIGHT_DESC, limit: ${blockLimit}) {
-          fee
-          dateTime
+          fee,
+          blockStateHash {
+            protocolState {
+              consensusState {
+                slotSinceGenesis
+              }
+            }
+          }
         }
       } 
     `,
@@ -18,15 +24,9 @@ setTimeout(async () => {
 
   let jsonResp = await response.json();
   let data = jsonResp.data.feetransfers.reduce((agg, record) => {
-    const date = new Date(record.dateTime);
-    const key =
-      date.getUTCFullYear() +
-      "-" +
-      String(date.getUTCMonth() + 1).padStart(2, "0") + // Month is zero-indexed, add one
-      "-" +
-      String(date.getUTCDate()).padStart(2, "0") +
-      " " +
-      String(date.getUTCHours()).padStart(2, "0");
+    let slot =
+      record.blockStateHash.protocolState.consensusState.slotSinceGenesis;
+    let key = slot - (slot % 10);
     let value = record.fee;
     if (!agg[key]) {
       agg[key] = [];
@@ -75,10 +75,7 @@ setTimeout(async () => {
     ],
     xAxis: {
       type: "category",
-      name: "Hour (UTC)",
-      axisLabel: {
-        rotate: 45,
-      },
+      name: "Global Slot",
       axisLabel: {
         formatter: function (value) {
           return xAxis[value];
@@ -97,7 +94,7 @@ setTimeout(async () => {
         tooltip: {
           formatter: function (param) {
             return [
-              "Date: " + xAxis[param.name],
+              "Slot: " + xAxis[param.name],
               "upper: " + param.data[5],
               "Q3: " + param.data[4],
               "median: " + param.data[3],
@@ -113,7 +110,7 @@ setTimeout(async () => {
         datasetIndex: 2,
         tooltip: {
           formatter: function (param) {
-            return ["Date: " + xAxis[param.name], "Fee: " + param.data[1]].join(
+            return ["Slot: " + xAxis[param.name], "Fee: " + param.data[1]].join(
               "<br/>",
             );
           },
