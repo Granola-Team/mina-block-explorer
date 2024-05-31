@@ -534,11 +534,11 @@ fn format_duration(duration: &Duration) -> String {
     let minutes = (seconds % (60 * 60)) / 60;
 
     let parts = [
-        (years, "year"),
-        (months, "month"),
+        (years, "yr"),
+        (months, "mo"),
         (days, "day"),
-        (hours, "hour"),
-        (minutes, "minute"),
+        (hours, "hr"),
+        (minutes, "min"),
     ];
 
     let filtered_parts: Vec<_> = parts
@@ -580,25 +580,25 @@ mod format_duration_tests {
     #[test]
     fn test_one_minute_ago() {
         let past_time = get_past_time(Duration::minutes(1));
-        assert_eq!(print_time_since(&past_time.to_rfc3339()), "1 minute ago");
+        assert_eq!(print_time_since(&past_time.to_rfc3339()), "1 min ago");
     }
 
     #[test]
     fn test_multiple_minutes_ago() {
         let past_time = get_past_time(Duration::minutes(20));
-        assert_eq!(print_time_since(&past_time.to_rfc3339()), "20 minutes ago");
+        assert_eq!(print_time_since(&past_time.to_rfc3339()), "20 mins ago");
     }
 
     #[test]
     fn test_one_hour_ago() {
         let past_time = get_past_time(Duration::hours(1));
-        assert_eq!(print_time_since(&past_time.to_rfc3339()), "1 hour ago");
+        assert_eq!(print_time_since(&past_time.to_rfc3339()), "1 hr ago");
     }
 
     #[test]
     fn test_multiple_hours_ago() {
         let past_time = get_past_time(Duration::hours(3));
-        assert_eq!(print_time_since(&past_time.to_rfc3339()), "3 hours ago");
+        assert_eq!(print_time_since(&past_time.to_rfc3339()), "3 hrs ago");
     }
 
     #[test]
@@ -628,14 +628,14 @@ mod format_duration_tests {
     #[test]
     fn test_complex_duration() {
         let duration = Duration::days(410) + Duration::hours(25) + Duration::minutes(61);
-        assert_eq!(format_duration(&duration), "1 year, 1 month ago"); // Expecting year and month
+        assert_eq!(format_duration(&duration), "1 yr, 1 mo ago"); // Expecting year and month
     }
 
     #[test]
     fn test_mix_days_hours_minutes() {
         let duration = Duration::days(2) + Duration::hours(3) + Duration::minutes(45);
         // Simplified to days and the next significant unit
-        assert_eq!(format_duration(&duration), "2 days, 3 hours ago");
+        assert_eq!(format_duration(&duration), "2 days, 3 hrs ago");
     }
 }
 
