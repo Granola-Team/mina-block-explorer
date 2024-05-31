@@ -28,12 +28,12 @@ async fn load_epoch_data(
         None => Err(MyError::ParseError("ledger hash not supplied".to_string())),
         Some(ledger_hash) => {
             let query_body = format!(
-                r#"{{"query":"query EpochQuery($ledgerHash: String) {{ stakes(query: {{ledgerHash: $ledgerHash}}) {{ epoch }}}}", "variables":{{"ledgerHash":"{}"}},"operationName":"EpochQuery"}}"#,
-                ledger_hash
+                r#"{{"query":"query EpochQuery($ledgerHash: String, $limit: Int) {{ stakes(query: {{ledgerHash: $ledgerHash}}, limit: $limit) {{ epoch }}}}", "variables":{{"ledgerHash":"{}", "limit":{}}},"operationName":"EpochQuery"}}"#,
+                ledger_hash, 0
             );
             let client = reqwest::Client::new();
             let response = client
-                .post(GRAPHQL_ENDPOINT)
+                .post(GRAPHQL_ENDPOINT_2)
                 .body(query_body)
                 .send()
                 .await
