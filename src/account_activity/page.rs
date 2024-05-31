@@ -103,8 +103,9 @@ pub fn AccountSpotlightPage() -> impl IntoView {
                         (None, None) => std::cmp::Ordering::Equal,
                     }
             });
+            let end_index = res.snarks.len().min(50);
             set_transactions.set(Some(transactions));
-            set_snarks.set(Some(res.snarks));
+            set_snarks.set(Some(res.snarks[..end_index].to_vec()));
             set_blocks.set(Some(res.blocks));
             if let Some(account) = &res.accounts[0] {
                 set_username.set(Some(

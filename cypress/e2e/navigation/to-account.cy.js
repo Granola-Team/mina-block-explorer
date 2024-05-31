@@ -12,8 +12,7 @@ suite(["@CI"], "account page", () => {
       tableHeader: "Accounts",
     },
     {
-      origin:
-        "/blocks/accounts/B62qqW8uKTxHZueKJwsoPY8NZcKVeDK4bLEHRkpMM2uKtEmmqLbkiQC",
+      origin: `/blocks/accounts/${DEFAULT_ACCOUNT_PK}`,
       column: "Counterparty",
       tableHeader: "User Commands",
       tableHeaderEl: "h2",

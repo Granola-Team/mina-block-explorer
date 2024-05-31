@@ -7,7 +7,7 @@ import {
 
 import { kebabCase } from "../helpers";
 
-let state_hash = "3NKypQg4LpXcWW2BPzue3e93eDKPHMpZ5J4jLNptVwuS7xDBDPzX";
+let state_hash = "3NKxUy4mRpuH7MJxFQEobEJbUhPyvDyMEBQywmTRLbWsaHto3nur";
 
 suite(["@CI"], "search with single result", () => {
   let exact_searches = [
