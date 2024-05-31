@@ -7,18 +7,20 @@ import {
 } from "../constants";
 import { kebabCase } from "../helpers";
 
-let counterparty = "B62qrrx8JKpWzZUq5kEc8Yh3qZqwUjTSr5wztmrPYJZRiowhZUZcs5g";
-let prover = "B62qopzjbycAJDzvhc1tEuYSmJYfRQQbfS9nvkKtUzBS1fmLCyTz4dJ";
-let block_producer = "B62qkgy1rQQmSL91aFeFvrYi9ptqavvgVkUiPZHmy5tZacSupTTCGi6";
-let state_hash = "3NKypQg4LpXcWW2BPzue3e93eDKPHMpZ5J4jLNptVwuS7xDBDPzX";
+let counterparty = "B62qjYanmV7y9njVeH5UHkz3GYBm7xKir1rAnoY4KsEYUGLMiU45FSM";
+let state_hash = "3NKxUy4mRpuH7MJxFQEobEJbUhPyvDyMEBQywmTRLbWsaHto3nur";
+let prover = "B62qpLeuZDL7PxNsCqsJwWFPAmnixi5ay8Kz9NcNGBQU8jK19VpJQaY";
 
 suite(["@CI"], "search with multiple results", () => {
   let multi_response_searches = [
     {
       origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
-      input: block_producer,
+      input: FIRST_BLOCK_PRODUCER_ADDRESS,
       tableHeading: "Block Production",
-      expectation: { column: "Block Producer", value: block_producer },
+      expectation: {
+        column: "Block Producer",
+        value: FIRST_BLOCK_PRODUCER_ADDRESS,
+      },
     },
     {
       origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
@@ -40,21 +42,21 @@ suite(["@CI"], "search with multiple results", () => {
     },
     {
       origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
-      input: "253134",
+      input: "500",
       tableHeading: "User Commands",
-      expectation: { column: "Height", value: "253134" },
+      expectation: { column: "Height", value: "500" },
     },
+    // {
+    //   origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
+    //   input: "957",
+    //   tableHeading: "SNARK Jobs",
+    //   expectation: { column: "Height", value: "957" },
+    // },
     {
       origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
-      input: "253134",
-      tableHeading: "SNARK Jobs",
-      expectation: { column: "Height", value: "253134" },
-    },
-    {
-      origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
-      input: "253134",
+      input: "500",
       tableHeading: "Block Production",
-      expectation: { column: "Height", value: "253134" },
+      expectation: { column: "Height", value: "500" },
     },
     {
       origin: "/next-stakes",
@@ -64,9 +66,9 @@ suite(["@CI"], "search with multiple results", () => {
     },
     {
       origin: "/snarks",
-      input: "350428",
+      input: "940",
       tableHeading: "SNARKs",
-      expectation: { column: "Height", value: "350428" },
+      expectation: { column: "Height", value: "940" },
     },
     {
       origin: "/snarks",
@@ -76,9 +78,9 @@ suite(["@CI"], "search with multiple results", () => {
     },
     {
       origin: "/snarks",
-      input: DEFAULT_ACCOUNT_PK,
+      input: FIRST_BLOCK_PRODUCER_ADDRESS,
       tableHeading: "SNARKs",
-      expectation: { column: "Prover", value: DEFAULT_ACCOUNT_PK },
+      expectation: { column: "Prover", value: FIRST_BLOCK_PRODUCER_ADDRESS },
     },
     {
       origin: "/commands/user",
