@@ -80,9 +80,12 @@ suite(["@CI"], "search with multiple results", () => {
     },
     {
       origin: "/snarks",
-      input: FIRST_BLOCK_PRODUCER_ADDRESS,
+      input: "B62qs2Lw5WZNSjd8eHBUZXFYyRjV8oKtrZMFDn1S1Ye62G71xCQJMYM",
       tableHeading: "SNARKs",
-      expectation: { column: "Prover", value: FIRST_BLOCK_PRODUCER_ADDRESS },
+      expectation: {
+        column: "Prover",
+        value: "B62qs2Lw5WZNSjd8eHBUZXFYyRjV8oKtrZMFDn1S1Ye62G71xCQJMYM",
+      },
     },
     {
       origin: "/commands/user",
