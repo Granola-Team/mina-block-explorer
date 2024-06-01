@@ -1,9 +1,7 @@
 import { DEFAULT_ACCOUNT_PK, FIRST_TXN_HASH } from "../constants";
 
 suite(["@CI"], "meta title", () => {
-  let public_key = "B62qpge4uMq4Vv5Rvc8Gw9qSquUYd6xoW1pz7HQkMSHm6h1o7pvLPAN";
   let block_hash = "3NLhBh3d4b91DPoJn5hhwRAWmHSAaG8Qz4W5r9FhJBCXLD3WrAt4";
-  let txn_hash = "CkpYzvzTZeYEoiAGNn6xquSPqittAb5wrhZHtR14RaLkZfiRYQgT3";
   let pages = [
     {
       url: "/addresses/accounts",
@@ -45,8 +43,8 @@ suite(["@CI"], "meta title", () => {
     },
     { url: "/next-stakes", title: "Next Staking Ledger | Search For Stakers" },
     {
-      url: "/staking-ledgers",
-      title: "Staking Ledger | Current",
+      url: "/staking-ledgers?epoch=42",
+      title: "Staking Ledger | Epoch 42",
     },
     { url: "/staking-ledgers?epoch=71", title: "Staking Ledger | Epoch 71" },
     { url: "/snarks", title: "SNARKs | Search For SNARKs" },

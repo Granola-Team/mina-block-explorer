@@ -24,7 +24,7 @@ suite(["@CI"], "search with single result", () => {
       column: "State Hash",
     },
     {
-      origin: "/staking-ledgers",
+      origin: "/staking-ledgers?epoch=42",
       input: DEFAULT_ACCOUNT_PK,
       tableHeading: "Staking Ledger",
       column: "Key",
@@ -73,6 +73,7 @@ suite(["@CI"], "search with single result", () => {
       cy.get("@table-rows").then(($trs) => {
         const initialLength = $trs.length;
 
+        cy.wait(500);
         cy.get(cssSelector).as("searchinput");
         cy.get("@searchinput").type(input, { delay: 0 });
 
