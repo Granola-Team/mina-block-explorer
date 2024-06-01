@@ -536,15 +536,15 @@ fn format_duration(duration: &Duration) -> String {
     let parts = [
         (years, "yr"),
         (months, "mo"),
-        (days, "day"),
-        (hours, "hr"),
+        (days, "d"),
+        (hours, "h"),
         (minutes, "min"),
     ];
 
     let filtered_parts: Vec<_> = parts
         .iter()
         .filter(|&&(value, _)| value > 0)
-        .map(|&(value, name)| format!("{} {}{}", value, name, if value == 1 { "" } else { "s" }))
+        .map(|&(value, name)| format!("{} {}", value, name))
         .collect();
 
     let num_parts = filtered_parts.len();
@@ -572,7 +572,6 @@ mod format_duration_tests {
     use super::*;
     use chrono::{Duration, Utc};
 
-    // Helper function to create a past datetime based on duration in the past
     fn get_past_time(duration: Duration) -> DateTime<Utc> {
         Utc::now() - duration
     }
@@ -586,31 +585,31 @@ mod format_duration_tests {
     #[test]
     fn test_multiple_minutes_ago() {
         let past_time = get_past_time(Duration::minutes(20));
-        assert_eq!(print_time_since(&past_time.to_rfc3339()), "20 mins ago");
+        assert_eq!(print_time_since(&past_time.to_rfc3339()), "20 min ago");
     }
 
     #[test]
     fn test_one_hour_ago() {
         let past_time = get_past_time(Duration::hours(1));
-        assert_eq!(print_time_since(&past_time.to_rfc3339()), "1 hr ago");
+        assert_eq!(print_time_since(&past_time.to_rfc3339()), "1 h ago");
     }
 
     #[test]
     fn test_multiple_hours_ago() {
         let past_time = get_past_time(Duration::hours(3));
-        assert_eq!(print_time_since(&past_time.to_rfc3339()), "3 hrs ago");
+        assert_eq!(print_time_since(&past_time.to_rfc3339()), "3 h ago");
     }
 
     #[test]
     fn test_one_day_ago() {
         let past_time = get_past_time(Duration::days(1));
-        assert_eq!(print_time_since(&past_time.to_rfc3339()), "1 day ago");
+        assert_eq!(print_time_since(&past_time.to_rfc3339()), "1 d ago");
     }
 
     #[test]
     fn test_multiple_days_ago() {
         let past_time = get_past_time(Duration::days(5));
-        assert_eq!(print_time_since(&past_time.to_rfc3339()), "5 days ago");
+        assert_eq!(print_time_since(&past_time.to_rfc3339()), "5 d ago");
     }
 
     #[test]
@@ -619,7 +618,6 @@ mod format_duration_tests {
         assert_eq!(print_time_since(&now.to_rfc3339()), "just now");
     }
 
-    // Test the handling of an invalid timestamp
     #[test]
     fn test_invalid_timestamp() {
         assert_eq!(print_time_since("not a real timestamp"), "Unknown");
@@ -628,14 +626,13 @@ mod format_duration_tests {
     #[test]
     fn test_complex_duration() {
         let duration = Duration::days(410) + Duration::hours(25) + Duration::minutes(61);
-        assert_eq!(format_duration(&duration), "1 yr, 1 mo ago"); // Expecting year and month
+        assert_eq!(format_duration(&duration), "1 yr, 1 mo ago");
     }
 
     #[test]
     fn test_mix_days_hours_minutes() {
         let duration = Duration::days(2) + Duration::hours(3) + Duration::minutes(45);
-        // Simplified to days and the next significant unit
-        assert_eq!(format_duration(&duration), "2 days, 3 hrs ago");
+        assert_eq!(format_duration(&duration), "2 d, 3 h ago");
     }
 }
 
