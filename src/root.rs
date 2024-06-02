@@ -17,7 +17,6 @@ use crate::{
     footer::Footer,
     header::navigation::Header,
     internal_commands::components::InternalCommandsTab,
-    next_stakes::page::NextStakesPage,
     snarks::page::SnarksPage,
     stakes::page::StakesPage,
     summary::page::SummaryPage,
@@ -121,8 +120,6 @@ pub fn Root() -> impl IntoView {
                     <Route path="/snarks" view=SnarksPage/>
 
                     <Route path="/staking-ledgers" view=StakesPage/>
-
-                    <Route path="/next-stakes" view=NextStakesPage/>
 
                     <Route path="/broadcast" view=DelegationTabbedPage>
                         <Route path="/*" view=move || view! { <Redirect path="transaction"/> }/>
