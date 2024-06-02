@@ -163,13 +163,12 @@ fn StakesPageContents() -> impl IntoView {
                                 text="Previous"
                                 style_variant=EpochStyleVariant::Secondary
                                 epoch_target=prev_epoch
-                            />    
+                            />
                             <EpochButton
                                 text="Next"
                                 style_variant=EpochStyleVariant::Primary
                                 epoch_target=next_epoch
                             />
-                                
                         }
                     }
 
