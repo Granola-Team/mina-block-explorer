@@ -126,6 +126,7 @@ fn StakesPageContents() -> impl IntoView {
                 let header_epoch = if let Some(qs_epoch) = epoch_sig.get() {
                     if qs_epoch != curr_epoch {
                         next_epoch = qs_epoch + 1;
+                        next_epoch = next_epoch.clamp(0, curr_epoch + 1);
                         prev_epoch = qs_epoch - 1;
                         qs_epoch
                     } else {
@@ -163,23 +164,11 @@ fn StakesPageContents() -> impl IntoView {
                                 style_variant=EpochStyleVariant::Secondary
                                 epoch_target=prev_epoch
                             />
-                            {if next_epoch - 1 == curr_epoch {
-                                view! {
-                                    <EpochButton
-                                        href="/next-stakes"
-                                        text="Next"
-                                        style_variant=EpochStyleVariant::Primary
-                                    />
-                                }
-                            } else {
-                                view! {
-                                    <EpochButton
-                                        text="Next"
-                                        style_variant=EpochStyleVariant::Primary
-                                        epoch_target=next_epoch
-                                    />
-                                }
-                            }}
+                            <EpochButton
+                                text="Next"
+                                style_variant=EpochStyleVariant::Primary
+                                epoch_target=next_epoch
+                            />
                         }
                     }
 

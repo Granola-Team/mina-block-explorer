@@ -30,12 +30,6 @@ suite(["@CI"], "search with single result", () => {
       column: "Key",
     },
     {
-      origin: "/next-stakes",
-      input: DEFAULT_ACCOUNT_PK,
-      tableHeading: "Next Staking Ledger",
-      column: "Key",
-    },
-    {
       origin: "/commands/user",
       input: FIRST_TXN_HASH,
       tableHeading: "User Commands",

@@ -53,21 +53,6 @@ pub fn Header() -> impl IntoView {
         ])
     }
 
-    let staking_entries = Some(vec![
-        NavEntry {
-            href: "/staking-ledgers".to_string(),
-            text: "Staking Ledgers".to_string(),
-            icon: NavIcon::Staking,
-            ..Default::default()
-        },
-        NavEntry {
-            href: "/next-stakes".to_string(),
-            text: "Next Staking Ledger".to_string(),
-            icon: NavIcon::Staking,
-            ..Default::default()
-        },
-    ]);
-
     let nav_items = vec![
         NavEntry {
             href: "/blocks".to_string(),
@@ -99,7 +84,7 @@ pub fn Header() -> impl IntoView {
             href: "/staking-ledgers".to_string(),
             text: "Staking".to_string(),
             icon: NavIcon::Staking,
-            sub_entries: staking_entries,
+            sub_entries: None,
             ..Default::default()
         },
         NavEntry {

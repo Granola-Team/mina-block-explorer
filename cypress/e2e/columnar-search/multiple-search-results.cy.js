@@ -59,12 +59,6 @@ suite(["@CI"], "search with multiple results", () => {
       tableHeading: "Block Production",
       expectation: { column: "Height", value: "500" },
     },
-    {
-      origin: "/next-stakes",
-      input: DEFAULT_ACCOUNT_PK,
-      tableHeading: "Next Staking Ledger",
-      expectation: { column: "Delegate", value: DEFAULT_ACCOUNT_PK },
-    },
     // TODO: re-enable these tests when searching by block height works on snarks
     // {
     //   origin: "/snarks",
