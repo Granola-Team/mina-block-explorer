@@ -143,34 +143,6 @@ suite(["@CI"], "metadata about the table", () => {
           });
       },
     },
-    {
-      page: "/next-stakes",
-      table_heading: "Next Staking Ledger",
-      column_selector: "input#q-key",
-      input: null,
-      assertion: function (target) {
-        target.should("have.lengthOf", 100);
-        cy.get(".metadata")
-          .invoke("text")
-          .then((text) => {
-            expect(text).to.equal(SHOWING_LATEST);
-          });
-      },
-    },
-    {
-      page: "/next-stakes",
-      table_heading: "Next Staking Ledger",
-      column_selector: "input#q-key",
-      input: DEFAULT_ACCOUNT_PK,
-      assertion: function (target) {
-        target.should("have.lengthOf", 1);
-        cy.get(".metadata")
-          .invoke("text")
-          .then((text) => {
-            expect(text).to.equal("Showing 1 of 1");
-          });
-      },
-    },
   ];
 
   pages.forEach(({ page, column_selector, input, assertion, table_heading }) =>

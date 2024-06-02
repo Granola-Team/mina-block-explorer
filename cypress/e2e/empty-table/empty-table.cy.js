@@ -7,7 +7,6 @@ suite(["@CI"], "empty table", () => {
     "/commands/user?q-txn-hash=Cpkfake",
     "/commands/internal?q-recipient=B62qfake",
     // "/staking-ledgers?q-key=B62qfake",
-    "/next-stakes?q-key=B62qfake",
     "/snarks?q-state-hash=3Nfake",
     `/addresses/accounts/${DEFAULT_ACCOUNT_PK}?q-height=-1`,
   ];

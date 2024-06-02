@@ -41,7 +41,6 @@ suite(["@CI"], "meta title", () => {
       url: "/broadcast/ledger",
       title: "Offline Broadcasting | Broadcast Signed Transaction From Ledger",
     },
-    { url: "/next-stakes", title: "Next Staking Ledger | Search For Stakers" },
     {
       url: "/staking-ledgers?epoch=42",
       title: "Staking Ledger | Epoch 42",

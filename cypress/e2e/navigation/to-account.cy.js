@@ -50,16 +50,6 @@ suite(["@CI"], "account page", () => {
       tableHeader: "Staking Ledger",
     },
     {
-      origin: "/next-stakes",
-      column: "Key",
-      tableHeader: "Next Staking Ledger",
-    },
-    {
-      origin: "/next-stakes",
-      column: "Delegate",
-      tableHeader: "Next Staking Ledger",
-    },
-    {
       origin: "/commands/user",
       column: "From",
       tableHeader: "User Commands",
