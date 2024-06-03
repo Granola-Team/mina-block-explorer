@@ -163,7 +163,15 @@ fn ColumnHeader(id: String, column: TableColumn) -> impl IntoView {
     view! {
         <th class="h-12 bg-table-header-fill xl:sticky xl:top-16 z-20 text-table-header-text-color font-semibold uppercase text-xs text-left p-2 box-border "
             .to_string() + CELL_PADDING_CLASS>
-            <div class="whitespace-nowrap">{column.column.clone()}</div>
+            <div class="whitespace-nowrap flex">
+                <span class="pr-1">{column.column.clone()}</span>
+                {match column.sort_direction {
+                    Some(TableSortDirection::DESC) => view! { <DownArrow width=10/> },
+                    Some(TableSortDirection::ASC) => view! { <UpArrow width=10/> },
+                    None => ().into_view(),
+                }}
+
+            </div>
             {if column.is_searchable {
                 view! {
                     <input
