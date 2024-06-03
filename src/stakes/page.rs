@@ -163,7 +163,7 @@ fn StakesPageContents() -> impl IntoView {
                     controls=move || {
                         view! {
                             <EpochButton
-                                disabled=prev_epoch < 1
+                                disabled=prev_epoch < 0
                                 text="Previous"
                                 style_variant=EpochStyleVariant::Secondary
                                 epoch_target=prev_epoch
