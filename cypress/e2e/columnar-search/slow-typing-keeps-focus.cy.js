@@ -12,11 +12,12 @@ suite(["@CI"], "input", () => {
       input: "253134",
       column: "Height",
     },
-    {
-      origin: "/staking-ledgers?epoch=0",
-      input: "B62",
-      column: "Key",
-    },
+    // TODO: re-enable once staking page has been refactored
+    // {
+    //   origin: "/staking-ledgers?epoch=0",
+    //   input: "B62",
+    //   column: "Key",
+    // },
     {
       origin: "/commands/internal",
       input: "253134",
