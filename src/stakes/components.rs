@@ -1,60 +1,30 @@
 use super::{functions::*, models::*};
-use crate::{
-    common::{
-        constants::*,
-        functions::convert_to_link,
-        models::{MyError, TableMetadata},
-        table::*,
-    },
-    summary::functions::load_data as load_summary_data,
-};
+use crate::common::{constants::*, functions::convert_to_link, models::*, table::*};
 use leptos::*;
 use leptos_router::*;
 
 #[component]
-pub fn StakesPageContents() -> impl IntoView {
+pub fn StakesPageContents(
+    #[prop(into)] current_epoch: i64,
+    #[prop(into)] slot_in_epoch: i64,
+) -> impl IntoView {
     let (metadata, set_metadata) = create_signal(Some(TableMetadata::default()));
     let (epoch_sig, _) = create_query_signal::<i64>("epoch");
     let query_params_map = use_query_map();
 
-    let summary_resource = create_resource(|| (), |_| async move { load_summary_data().await });
-
-    let current_epoch = move || match summary_resource.get() {
-        Some(Ok(data)) => Some(data.epoch as i64),
-        _ => None,
-    };
-
     let (ledger_hash, set_ledger_hash) = create_signal(None::<String>);
 
     let resource = create_resource(
-        move || (epoch_sig.get(), current_epoch(), query_params_map.get()),
-        move |(epoch_opt, c_epoch, params_map)| async move {
-            match (c_epoch, epoch_opt) {
-                (Some(epoch), None) | (_, Some(epoch)) => {
-                    let public_key = params_map.get("q-key").cloned();
-                    let delegate = params_map.get("q-delegate").cloned();
-                    let response = load_data(Some(epoch), public_key, delegate).await;
-                    match &response {
-                        Ok(data) => {
-                            let ledger_hash = data
-                                .stakes
-                                .first()
-                                .and_then(|x| x.as_ref())
-                                .and_then(|x| x.ledger_hash.to_owned());
-                            if ledger_hash.is_some() {
-                                set_ledger_hash.set(ledger_hash);
-                            }
-                            response
-                        }
-                        _ => Err(MyError::ParseError(String::from(
-                            "missing epoch information",
-                        ))),
-                    }
-                }
-                _ => Err(MyError::ParseError(String::from(
-                    "missing epoch information",
-                ))),
-            }
+        move || (epoch_sig.get(), query_params_map.get()),
+        move |(epoch_opt, params_map)| async move {
+            let public_key = params_map.get("q-key").cloned();
+            let delegate = params_map.get("q-delegate").cloned();
+            load_data(
+                Some(epoch_opt.unwrap_or(current_epoch)),
+                public_key,
+                delegate,
+            )
+            .await
         },
     );
 
@@ -94,43 +64,42 @@ pub fn StakesPageContents() -> impl IntoView {
         }
     });
 
+    create_effect(move |_| {
+        get_data().map(|data| {
+            let ledger_hash = data
+                .stakes
+                .first()
+                .and_then(|x| x.as_ref())
+                .and_then(|x| x.ledger_hash.to_owned());
+
+            set_ledger_hash.set(ledger_hash);
+        })
+    });
+
     let get_heading_and_epochs = create_memo(move |_| {
-        summary_resource
-            .get()
-            .and_then(|res| res.ok())
-            .map(|sum_data| {
-                let curr_epoch = sum_data.epoch as i64;
-                let mut section_heading = "Staking Ledger - Epoch ".to_string();
-                let mut next_epoch = curr_epoch + 1;
-                let mut prev_epoch = curr_epoch - 1;
-                let header_epoch = if let Some(qs_epoch) = epoch_sig.get() {
-                    if qs_epoch != curr_epoch {
-                        next_epoch = qs_epoch + 1;
-                        next_epoch = next_epoch.clamp(0, curr_epoch + 1);
-                        prev_epoch = qs_epoch - 1;
-                        qs_epoch
-                    } else {
-                        curr_epoch
-                    }
-                } else {
-                    curr_epoch
-                };
-                section_heading += format!("{}", header_epoch).as_str();
-                (
-                    section_heading,
-                    curr_epoch,
-                    next_epoch,
-                    prev_epoch,
-                    sum_data.slot,
-                )
-            })
-            .unwrap_or(("".to_string(), 0, 0, 0, 0))
+        let mut section_heading = "Staking Ledger - Epoch ".to_string();
+        let mut next_epoch = current_epoch + 1;
+        let mut prev_epoch = current_epoch - 1;
+        let header_epoch = if let Some(qs_epoch) = epoch_sig.get() {
+            if qs_epoch != current_epoch {
+                next_epoch = qs_epoch + 1;
+                next_epoch = next_epoch.clamp(0, current_epoch + 1);
+                prev_epoch = qs_epoch - 1;
+                qs_epoch
+            } else {
+                current_epoch
+            }
+        } else {
+            current_epoch
+        };
+        section_heading += format!("{}", header_epoch).as_str();
+        (section_heading, current_epoch, next_epoch, prev_epoch)
     });
 
     {
         move || {
             let table_columns_clone = table_columns_clone.clone();
-            let (section_heading, curr_epoch, next_epoch, prev_epoch, slot) =
+            let (section_heading, current_epoch, next_epoch, prev_epoch) =
                 get_heading_and_epochs.get();
             view! {
                 <TableSection
@@ -165,13 +134,13 @@ pub fn StakesPageContents() -> impl IntoView {
                             None => ().into_view(),
                         }}
 
-                        {if next_epoch - 1 == curr_epoch {
+                        {if next_epoch - 1 == current_epoch {
                             view! {
                                 <div class="text-sm text-dark-blue staking-ledger-percent-complete">
                                     {format!(
                                         "{:.2}% complete ({}/{} slots filled)",
-                                        ({ slot } as f64 / { EPOCH_SLOTS } as f64) * 100.0,
-                                        { slot },
+                                        ({ slot_in_epoch } as f64 / { EPOCH_SLOTS } as f64) * 100.0,
+                                        { slot_in_epoch },
                                         { EPOCH_SLOTS },
                                     )}
 
