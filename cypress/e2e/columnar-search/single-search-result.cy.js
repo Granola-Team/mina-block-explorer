@@ -23,13 +23,12 @@ suite(["@CI"], "search with single result", () => {
       tableHeading: "Block Production",
       column: "State Hash",
     },
-    // TODO: re-implement when staking ledger table uses template
-    // {
-    //   origin: "/staking-ledgers?epoch=0",
-    //   input: DEFAULT_ACCOUNT_PK,
-    //   tableHeading: "Staking Ledger",
-    //   column: "Key",
-    // },
+    {
+      origin: "/staking-ledgers?epoch=0",
+      input: DEFAULT_ACCOUNT_PK,
+      tableHeading: "Staking Ledger",
+      column: "Key",
+    },
     {
       origin: "/commands/user",
       input: FIRST_TXN_HASH,
