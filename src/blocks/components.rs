@@ -51,23 +51,23 @@ pub fn BlockUserCommands(block: BlocksQueryBlocks) -> impl IntoView {
     let table_columns = vec![
         TableColumn {
             column: "From".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
         TableColumn {
             column: "To".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
         TableColumn {
             column: "Hash".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
         TableColumn {
             column: "Fee".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
         TableColumn {
             column: "Amount".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
     ];
 
@@ -90,19 +90,19 @@ pub fn BlockSnarkJobs(block: BlocksQueryBlocks) -> impl IntoView {
     let table_columns = vec![
         TableColumn {
             column: "State Hash".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
         TableColumn {
             column: "Age".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
         TableColumn {
             column: "Prover".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
         TableColumn {
             column: "Fee".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
     ];
 
@@ -160,15 +160,15 @@ pub fn BlockInternalCommands(block: BlocksQueryBlocks) -> impl IntoView {
     let table_columns = vec![
         TableColumn {
             column: "Recipient".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
         TableColumn {
             column: "Fee".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
         TableColumn {
             column: "Type".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
     ];
 
@@ -600,38 +600,42 @@ pub fn BlocksSection() -> impl IntoView {
         TableColumn {
             column: "Height".to_string(),
             is_searchable: true,
+            ..Default::default()
         },
         TableColumn {
             column: "State Hash".to_string(),
             is_searchable: true,
+            ..Default::default()
         },
         TableColumn {
             column: "Slot".to_string(),
             is_searchable: true,
+            ..Default::default()
         },
         TableColumn {
             column: "Age".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
         TableColumn {
             column: "Block Producer".to_string(),
             is_searchable: true,
+            ..Default::default()
         },
         TableColumn {
             column: "Coinbase".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
         TableColumn {
             column: "User Commands".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
         TableColumn {
             column: "SNARKs".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
         TableColumn {
             column: "Coinbase Receiver".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
     ];
 

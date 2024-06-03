@@ -16,9 +16,26 @@ pub trait TableData {
 }
 
 #[derive(Clone)]
+pub enum TableSortDirection {
+    ASC,
+    DESC,
+}
+
+#[derive(Clone)]
 pub struct TableColumn {
     pub column: String,
     pub is_searchable: bool,
+    pub sort_direction: Option<TableSortDirection>,
+}
+
+impl Default for TableColumn {
+    fn default() -> Self {
+        TableColumn {
+            column: String::new(),
+            is_searchable: false,
+            sort_direction: None,
+        }
+    }
 }
 
 const INPUT_CLASS: &str = "w-5/6 mt-1 h-7 text-base text-sm font-normal font-mono p-2 rounded";

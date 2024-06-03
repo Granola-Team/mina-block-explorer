@@ -150,19 +150,19 @@ pub fn ZkAppSpotlight() -> impl IntoView {
                 table_columns=vec![
                     TableColumn {
                         column: "Account".to_string(),
-                        is_searchable: false,
+                        ..Default::default()
                     },
                     TableColumn {
                         column: "Balance".to_string(),
-                        is_searchable: false,
+                        ..Default::default()
                     },
                     TableColumn {
                         column: "Commands".to_string(),
-                        is_searchable: false,
+                        ..Default::default()
                     },
                     TableColumn {
                         column: "Delegate".to_string(),
-                        is_searchable: false,
+                        ..Default::default()
                     },
                 ]
 
@@ -175,27 +175,27 @@ pub fn ZkAppSpotlight() -> impl IntoView {
                 table_columns=vec![
                     TableColumn {
                         column: "Prover".to_string(),
-                        is_searchable: false,
+                        ..Default::default()
                     },
                     TableColumn {
                         column: "txn Hash".to_string(),
-                        is_searchable: false,
+                        ..Default::default()
                     },
                     TableColumn {
                         column: "Age".to_string(),
-                        is_searchable: false,
+                        ..Default::default()
                     },
                     TableColumn {
                         column: "Account Updates".to_string(),
-                        is_searchable: false,
+                        ..Default::default()
                     },
                     TableColumn {
                         column: "Updated Accounts".to_string(),
-                        is_searchable: false,
+                        ..Default::default()
                     },
                     TableColumn {
                         column: "Fee".to_string(),
-                        is_searchable: false,
+                        ..Default::default()
                     },
                 ]
 
@@ -238,19 +238,19 @@ pub fn ZkAppTransactionsPage() -> impl IntoView {
     let table_columns = vec![
         TableColumn {
             column: "Account".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
         TableColumn {
             column: "Balance".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
         TableColumn {
             column: "Commands".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
         TableColumn {
             column: "Delegate".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
     ];
     view! {
@@ -274,19 +274,19 @@ pub fn ZkAppsPage() -> impl IntoView {
     let table_columns = vec![
         TableColumn {
             column: "Account".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
         TableColumn {
             column: "Balance".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
         TableColumn {
             column: "Commands".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
         TableColumn {
             column: "Delegate".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
     ];
     view! {

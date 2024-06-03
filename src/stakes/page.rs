@@ -23,7 +23,6 @@ pub fn StakesPage() -> impl IntoView {
             formatter=move |text| format!("Staking Ledger | {text}")
         />
         <PageContainer>
-
             {move || {
                 let current_epoch = get_data().map(|data| data.epoch);
                 let slot_in_epoch = get_data().map(|data| data.slot);

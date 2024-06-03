@@ -71,38 +71,42 @@ pub fn TransactionsSection() -> impl IntoView {
         TableColumn {
             column: "Height".to_string(),
             is_searchable: true,
+            ..Default::default()
         },
         TableColumn {
             column: "Txn Hash".to_string(),
             is_searchable: true,
+            ..Default::default()
         },
         TableColumn {
             column: "Age".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
         TableColumn {
             column: "Type".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
         TableColumn {
             column: "From".to_string(),
             is_searchable: true,
+            ..Default::default()
         },
         TableColumn {
             column: "To".to_string(),
             is_searchable: true,
+            ..Default::default()
         },
         TableColumn {
             column: "Nonce".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
         TableColumn {
             column: "Fee".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
         TableColumn {
             column: "Amount".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
     ];
     let get_data = move || resource.get().and_then(|res| res.ok());

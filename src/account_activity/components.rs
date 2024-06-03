@@ -225,34 +225,37 @@ pub fn AccountTransactionsSection(
         TableColumn {
             column: "Height".to_string(),
             is_searchable: true,
+            ..Default::default()
         },
         TableColumn {
             column: "Txn Hash".to_string(),
             is_searchable: true,
+            ..Default::default()
         },
         TableColumn {
             column: "Nonce".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
         TableColumn {
             column: "Age".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
         TableColumn {
             column: "Type".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
         TableColumn {
             column: "Direction".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
         TableColumn {
             column: "Counterparty".to_string(),
             is_searchable: true,
+            ..Default::default()
         },
         TableColumn {
             column: "Amount/Fee".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
     ];
 
@@ -297,22 +300,25 @@ pub fn AccountOverviewSnarkJobTable(
         TableColumn {
             column: "Height".to_string(),
             is_searchable: true,
+            ..Default::default()
         },
         TableColumn {
             column: "State Hash".to_string(),
             is_searchable: true,
+            ..Default::default()
         },
         TableColumn {
             column: "Age".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
         TableColumn {
             column: "Prover".to_string(),
             is_searchable: true,
+            ..Default::default()
         },
         TableColumn {
             column: "Fee".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
     ];
 
@@ -349,38 +355,42 @@ pub fn AccountOverviewBlocksTable(
         TableColumn {
             column: "Height".to_string(),
             is_searchable: true,
+            ..Default::default()
         },
         TableColumn {
             column: "State Hash".to_string(),
             is_searchable: true,
+            ..Default::default()
         },
         TableColumn {
             column: "Slot".to_string(),
             is_searchable: true,
+            ..Default::default()
         },
         TableColumn {
             column: "Age".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
         TableColumn {
             column: "Block Producer".to_string(),
             is_searchable: true,
+            ..Default::default()
         },
         TableColumn {
             column: "Coinbase".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
         TableColumn {
             column: "User Commands".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
         TableColumn {
             column: "Snarks".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
         TableColumn {
             column: "Coinbase Receiver".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
     ];
 
