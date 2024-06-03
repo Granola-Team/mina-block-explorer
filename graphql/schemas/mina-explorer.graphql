@@ -766,6 +766,7 @@ input BlockProtocolStateConsensusStateNextEpochDatumLedgerUpdateInput {
 
 type Stake {
   balance: Float
+  username: String
   chainId: String
   delegate: String
   delegationTotals: DelegationTotal
