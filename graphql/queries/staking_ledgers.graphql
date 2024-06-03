@@ -15,8 +15,9 @@ query StakingLedgersQuery(
     token
     voting_for
     delegationTotals {
+      totalStakePercentage
       countDelegates
-      totalDelegated
+      totalDelegatedNanomina
     }
   }
 }

@@ -94,6 +94,10 @@ fn StakesPageContents() -> impl IntoView {
             is_searchable: false,
         },
         TableColumn {
+            column: "Total Stake %".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
             column: "Delegate".to_string(),
             is_searchable: true,
         },
@@ -159,7 +163,7 @@ fn StakesPageContents() -> impl IntoView {
                     controls=move || {
                         view! {
                             <EpochButton
-                                disabled=prev_epoch < 1
+                                disabled=prev_epoch < 0
                                 text="Previous"
                                 style_variant=EpochStyleVariant::Secondary
                                 epoch_target=prev_epoch

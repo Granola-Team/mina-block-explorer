@@ -4,20 +4,6 @@ use leptos::*;
 use staking_ledgers_query::StakingLedgersQueryStakes;
 
 impl TableData for Vec<Option<StakingLedgersQueryStakes>> {
-    fn get_columns(&self) -> Vec<String> {
-        ["Key", "Stake", "Delegate", "Delegators"]
-            .iter()
-            .map(ToString::to_string)
-            .collect::<Vec<_>>()
-    }
-
-    fn get_exact_search_columns(&self) -> Vec<String> {
-        ["Key", "Delegate"]
-            .iter()
-            .map(ToString::to_string)
-            .collect::<Vec<_>>()
-    }
-
     fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
         self.iter()
             .map(|opt_stake| match opt_stake {
@@ -27,6 +13,7 @@ impl TableData for Vec<Option<StakingLedgersQueryStakes>> {
                         format!("/addresses/accounts/{}", get_public_key(stake)),
                     ),
                     decorate_with_mina_tag(get_stake(stake)),
+                    convert_to_span(get_stake_percentage(stake)),
                     convert_to_link(
                         if get_public_key(stake) == get_delegate(stake) {
                             "Self".to_string()

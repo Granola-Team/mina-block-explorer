@@ -4,6 +4,18 @@ import {
   GENESIS_BLOCK_BLOCK_HASH,
 } from "../constants";
 
+suite(["@CI"], "staking ledger table", () => {
+  let pages = ["/staking-ledgers?epoch=0"];
+  let columns = ["Key", "Stake", "Total Stake %", "Delegate", "Delegators"];
+
+  pages.forEach((page) =>
+    it(`on ${page} includes correct columns`, () => {
+      cy.visit(page);
+      cy.tableHasOrderedColumns("Staking Ledger - Epoch 0", columns);
+    }),
+  );
+});
+
 suite(["@CI"], "accounts table", () => {
   let pages = ["/addresses/accounts"];
   let columns = [

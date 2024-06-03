@@ -42,10 +42,10 @@ suite(["@CI"], "meta title", () => {
       title: "Offline Broadcasting | Broadcast Signed Transaction From Ledger",
     },
     {
-      url: "/staking-ledgers?epoch=42",
-      title: "Staking Ledger | Epoch 42",
+      url: "/staking-ledgers?epoch=0",
+      title: "Staking Ledger | Epoch 0",
     },
-    { url: "/staking-ledgers?epoch=71", title: "Staking Ledger | Epoch 71" },
+    { url: "/staking-ledgers?epoch=0", title: "Staking Ledger | Epoch 0" },
     { url: "/snarks", title: "SNARKs | Search For SNARKs" },
     {
       url: `/commands/${FIRST_TXN_HASH}`,
@@ -53,7 +53,7 @@ suite(["@CI"], "meta title", () => {
     },
     {
       url: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
-      title: `Account Overview | 'Unknown'`,
+      title: `Account Overview | ''`,
     },
   ];
 
