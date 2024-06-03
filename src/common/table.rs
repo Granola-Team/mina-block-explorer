@@ -25,7 +25,7 @@ pub enum TableSortDirection {
 pub struct TableColumn {
     pub column: String,
     pub is_searchable: bool,
-    pub sort_direction: Option<TableSortDirection>,
+    pub sort_direction: Option<TableSortDirection>
 }
 
 const INPUT_CLASS: &str = "w-5/6 mt-1 h-7 text-base text-sm font-normal font-mono p-2 rounded";
