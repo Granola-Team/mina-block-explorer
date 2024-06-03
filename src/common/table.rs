@@ -138,6 +138,8 @@ pub fn TableHeader(columns: Vec<TableColumn>) -> impl IntoView {
     }
 }
 
+const ICON_CLASS: &str = "cursor-pointer pl-1 flex justify-center items-center ";
+
 #[component]
 fn ColumnHeader(id: String, column: TableColumn) -> impl IntoView {
     let id_copy = id.clone();
@@ -166,8 +168,22 @@ fn ColumnHeader(id: String, column: TableColumn) -> impl IntoView {
             <div class="whitespace-nowrap flex">
                 <span class="pr-1">{column.column.clone()}</span>
                 {match column.sort_direction {
-                    Some(TableSortDirection::DESC) => view! { <DownArrow width=10/> },
-                    Some(TableSortDirection::ASC) => view! { <UpArrow width=10/> },
+                    Some(TableSortDirection::DESC) => {
+                        view! {
+                            <span class=ICON_CLASS>
+                                <DownArrow width=12/>
+                            </span>
+                        }
+                            .into_view()
+                    }
+                    Some(TableSortDirection::ASC) => {
+                        view! {
+                            <span class=ICON_CLASS>
+                                <UpArrow width=12/>
+                            </span>
+                        }
+                            .into_view()
+                    }
                     None => ().into_view(),
                 }}
 
