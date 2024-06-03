@@ -22,16 +22,26 @@ pub fn StakesPage() -> impl IntoView {
             formatter=move |text| format!("Staking Ledger | {text}")
         />
         <PageContainer>
-            {move || {
-                summary_resource
-                    .get()
-                    .and_then(|res| res.ok())
-                    .map(|data| {
-                        view! {
-                            <StakesPageContents current_epoch=data.epoch slot_in_epoch=data.slot/>
-                        }
-                    })
-                    .unwrap_or(().into_view())
+            {move || match (summary_resource.get().and_then(|res| res.ok()), epoch_sig.get()) {
+                (Some(data), Some(selected_epoch)) => {
+                    view! {
+                        <StakesPageContents
+                            selected_epoch=Some(selected_epoch)
+                            current_epoch=data.epoch
+                            slot_in_epoch=data.slot
+                        />
+                    }
+                }
+                (Some(data), None) => {
+                    view! {
+                        <StakesPageContents
+                            selected_epoch=None
+                            current_epoch=data.epoch
+                            slot_in_epoch=data.slot
+                        />
+                    }
+                }
+                _ => ().into_view(),
             }}
 
         </PageContainer>
