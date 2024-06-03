@@ -53,7 +53,7 @@ suite(["@CI"], "meta title", () => {
     },
     {
       url: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
-      title: `Account Overview | 'Unknown'`,
+      title: `Account Overview | ''`,
     },
   ];
 
