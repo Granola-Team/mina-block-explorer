@@ -1,5 +1,13 @@
 use super::{functions::*, models::*};
-use crate::common::{constants::*, functions::convert_to_link, table::*};
+use crate::{
+    common::{
+        constants::*,
+        functions::convert_to_link,
+        models::{MyError, TableMetadata},
+        table::*,
+    },
+    summary::functions::load_data as load_summary_data,
+};
 use leptos::*;
 use leptos_router::*;
 
@@ -47,26 +55,29 @@ pub fn StakesPageContents(
         TableColumn {
             column: "Key".to_string(),
             is_searchable: true,
+            ..Default::default()
         },
         TableColumn {
             column: "Username".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
         TableColumn {
             column: "Stake".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
         TableColumn {
             column: "Total Stake %".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
         TableColumn {
             column: "Delegate".to_string(),
             is_searchable: true,
+            ..Default::default()
         },
         TableColumn {
             column: "Delegators".to_string(),
             is_searchable: false,
+            ..Default::default()
         },
     ];
 
