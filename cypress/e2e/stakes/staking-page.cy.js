@@ -46,24 +46,14 @@ suite(["@CI"], "staking ledger", () => {
     cy.get("section").contains("Staking Ledger");
   });
 
-  // TODO: enable when all epochs available
-  // it("displays link to next stakes page", () => {
-  //   cy.visit("/staking-ledgers?epoch=0");
-  //   cy.get("section").contains("Staking Ledger");
-  //   cy.get("section").contains("a", "Next").click();
-  //   cy.wait(500);
-  //   cy.get("section").contains("Next Staking Ledger");
-  // });
-
-  // TODO: enable when page staking ledger working again
-  // it("contains buttons for epoch navigation", () => {
-  //   cy.visit("/staking-ledgers?epoch=67");
-  //   cy.get("section").contains("Staking Ledger - Epoch 67");
-  //   cy.get("section").contains("button", "Next").click();
-  //   cy.wait(500);
-  //   cy.get("section").contains("Staking Ledger - Epoch 68");
-  //   cy.get("button").contains("Previous").click();
-  //   cy.wait(500);
-  //   cy.get("section").contains("Staking Ledger - Epoch 67");
-  // });
+  it("contains buttons for epoch navigation", () => {
+    cy.visit("/staking-ledgers?epoch=0");
+    cy.get("section").contains("Staking Ledger - Epoch 0");
+    cy.get("section").contains("button", "Next").click();
+    cy.wait(500);
+    cy.get("section").contains("Staking Ledger - Epoch 1");
+    cy.get("button").contains("Previous").click();
+    cy.wait(500);
+    cy.get("section").contains("Staking Ledger - Epoch 0");
+  });
 });
