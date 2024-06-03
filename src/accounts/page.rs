@@ -55,6 +55,8 @@ fn AccountsPageContents() -> impl IntoView {
     create_effect(move |_| {
         if let Some(data) = get_data() {
             set_data.set(Some(data.accounts))
+        } else {
+            set_data.set(Some(vec![]))
         }
     });
 
