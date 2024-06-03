@@ -17,8 +17,8 @@ pub trait TableData {
 
 #[derive(Clone)]
 pub enum TableSortDirection {
-    ASC,
-    DESC,
+    // ASC,
+    Desc,
 }
 
 #[derive(Clone, Default)]
@@ -158,18 +158,10 @@ fn ColumnHeader(id: String, column: TableColumn) -> impl IntoView {
             <div class="whitespace-nowrap flex">
                 <span class="pr-1">{column.column.clone()}</span>
                 {match column.sort_direction {
-                    Some(TableSortDirection::DESC) => {
+                    Some(TableSortDirection::Desc) => {
                         view! {
                             <span class=ICON_CLASS>
                                 <DownArrow width=12/>
-                            </span>
-                        }
-                            .into_view()
-                    }
-                    Some(TableSortDirection::ASC) => {
-                        view! {
-                            <span class=ICON_CLASS>
-                                <UpArrow width=12/>
                             </span>
                         }
                             .into_view()

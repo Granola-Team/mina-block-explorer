@@ -67,7 +67,7 @@ pub fn StakesPageContents(
         },
         TableColumn {
             column: "Total Stake %".to_string(),
-            sort_direction: Some(TableSortDirection::DESC),
+            sort_direction: Some(TableSortDirection::Desc),
             ..Default::default()
         },
         TableColumn {
