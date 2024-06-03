@@ -6,7 +6,14 @@ import {
 
 suite(["@CI"], "staking ledger table", () => {
   let pages = ["/staking-ledgers?epoch=0"];
-  let columns = ["Key", "Stake", "Total Stake %", "Delegate", "Delegators"];
+  let columns = [
+    "Key",
+    "Username",
+    "Stake",
+    "Total Stake %",
+    "Delegate",
+    "Delegators",
+  ];
 
   pages.forEach((page) =>
     it(`on ${page} includes correct columns`, () => {
