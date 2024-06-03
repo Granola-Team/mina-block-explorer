@@ -1,5 +1,5 @@
 use super::{functions::*, models::*};
-use crate::common::{constants::*, functions::convert_to_link, models::*, table::*};
+use crate::common::{constants::*, functions::convert_to_link, table::*};
 use leptos::*;
 use leptos_router::*;
 
@@ -8,8 +8,8 @@ pub fn StakesPageContents(
     #[prop(into)] current_epoch: i64,
     #[prop(into)] slot_in_epoch: i64,
 ) -> impl IntoView {
-    let (metadata, set_metadata) = create_signal(Some(TableMetadata::default()));
     let (epoch_sig, _) = create_query_signal::<i64>("epoch");
+    let (data_sig, set_data) = create_signal(None);
     let query_params_map = use_query_map();
 
     let (ledger_hash, set_ledger_hash) = create_signal(None::<String>);
@@ -30,42 +30,9 @@ pub fn StakesPageContents(
 
     let get_data = move || resource.get().and_then(|res| res.ok());
 
-    let table_columns = vec![
-        TableColumn {
-            column: "Key".to_string(),
-            is_searchable: true,
-        },
-        TableColumn {
-            column: "Stake".to_string(),
-            is_searchable: false,
-        },
-        TableColumn {
-            column: "Total Stake %".to_string(),
-            is_searchable: false,
-        },
-        TableColumn {
-            column: "Delegate".to_string(),
-            is_searchable: true,
-        },
-        TableColumn {
-            column: "Delegators".to_string(),
-            is_searchable: false,
-        },
-    ];
-    let table_cols_length = table_columns.len();
-    let table_columns_clone = table_columns.clone();
-
-    create_effect(move |_| {
-        if let Some(data) = get_data() {
-            set_metadata.set(Some(TableMetadata {
-                total_records: "all".to_string(),
-                displayed_records: data.stakes.len() as i64,
-            }))
-        }
-    });
-
     create_effect(move |_| {
         get_data().map(|data| {
+            set_data.set(Some(data.stakes.clone()));
             let ledger_hash = data
                 .stakes
                 .first()
@@ -96,15 +63,41 @@ pub fn StakesPageContents(
         (section_heading, current_epoch, next_epoch, prev_epoch)
     });
 
+    let table_columns = vec![
+        TableColumn {
+            column: "Key".to_string(),
+            is_searchable: true,
+        },
+        TableColumn {
+            column: "Stake".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "Total Stake %".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "Delegate".to_string(),
+            is_searchable: true,
+        },
+        TableColumn {
+            column: "Delegators".to_string(),
+            is_searchable: false,
+        },
+    ];
+
     {
+        let table_columns_clone = table_columns.clone();
         move || {
             let table_columns_clone = table_columns_clone.clone();
             let (section_heading, current_epoch, next_epoch, prev_epoch) =
                 get_heading_and_epochs.get();
             view! {
-                <TableSection
-                    metadata
-                    section_heading=section_heading
+                <TableSectionTemplate
+                    table_columns=table_columns_clone
+                    data_sig
+                    section_heading
+                    is_loading=resource.loading()
                     controls=move || {
                         view! {
                             <EpochButton
@@ -151,30 +144,7 @@ pub fn StakesPageContents(
                             ().into_view()
                         }}
                     }
-                >
-
-                    <TableContainer>
-                        <Table>
-                            <TableHeader columns=table_columns_clone.clone()/>
-                            <Suspense fallback=move || {
-                                view! {
-                                    <TableRows data=vec![
-                                        vec![LoadingPlaceholder; table_cols_length];
-                                        10
-                                    ]/>
-                                }
-                            }>
-                                {move || {
-                                    get_data()
-                                        .map(|data| {
-                                            view! { <TableRows data=data.stakes/> }
-                                        })
-                                }}
-
-                            </Suspense>
-                        </Table>
-                    </TableContainer>
-                </TableSection>
+                />
             }
         }
     }
