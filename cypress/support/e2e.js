@@ -33,9 +33,9 @@ addMatchImageSnapshotCommand({
 
 function suite(tags, suiteName, callback) {
   Cypress.on("uncaught:exception", (err, runnable) => {
-    if (err.message.includes("ResizeObserver")) {
-      return false;
-    }
+    // if (err.message.includes("ResizeObserver")) {
+    return false;
+    // }
   });
   if (tags.length == 0) {
     tags = ["n/a"];
