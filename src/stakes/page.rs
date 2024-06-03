@@ -90,6 +90,10 @@ fn StakesPageContents() -> impl IntoView {
             is_searchable: true,
         },
         TableColumn {
+            column: "Username".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
             column: "Stake".to_string(),
             is_searchable: false,
         },

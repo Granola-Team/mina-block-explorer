@@ -34,6 +34,14 @@ pub fn get_delegate(stake: &StakingLedgersQueryStakes) -> String {
         .as_ref()
         .map_or_else(String::new, ToString::to_string)
 }
+
+pub fn get_username(stake: &StakingLedgersQueryStakes) -> String {
+    stake
+        .username
+        .as_ref()
+        .map_or_else(String::new, ToString::to_string)
+}
+
 pub fn get_delegators_count(stake: &StakingLedgersQueryStakes) -> String {
     stake
         .delegation_totals
