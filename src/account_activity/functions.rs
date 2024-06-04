@@ -73,7 +73,7 @@ pub async fn load_data(
             ..Default::default()
         },
         snarks_query: account_activity_query::SnarkQueryInput {
-            // block_height_lte: block_height,
+            block_height_lte: block_height,
             prover,
             block: if block_producer.is_some() || slot.is_some() || state_hash.is_some() {
                 Some(BlockQueryInput {
