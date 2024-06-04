@@ -156,7 +156,7 @@ pub fn data_placeholder() -> HtmlElement<html::AnyElement> {
     html::span()
         .attr(
             "class",
-            "loading-placeholder block animate-pulse h-7 w-full min-w-40 rounded-full bg-slate-200",
+            "loading-placeholder block animate-pulse h-7 w-full rounded-full bg-slate-200",
         )
         .into()
 }
