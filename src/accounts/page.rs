@@ -1,6 +1,6 @@
 use crate::{
     accounts::functions::*,
-    common::{components::*, constants::TABLE_ROW_LIMIT, table::*},
+    common::{components::*, constants::TABLE_ROW_LIMIT, table::*, constants::*},
 };
 use leptos::*;
 use leptos_meta::*;
@@ -28,26 +28,32 @@ fn AccountsPageContents() -> impl IntoView {
         TableColumn {
             column: "Public Key".to_string(),
             is_searchable: true,
+            width: Some(String::from(TABLE_COL_HASH_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "Username".to_string(),
+            width: Some(String::from(TABLE_COL_SHORT_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "Balance".to_string(),
+            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "Nonce".to_string(),
+            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "Delegate".to_string(),
+            width: Some(String::from(TABLE_COL_HASH_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "Time Locked".to_string(),
+            width: Some(String::from(TABLE_COL_SHORT_WIDTH)),
             ..Default::default()
         },
     ];
