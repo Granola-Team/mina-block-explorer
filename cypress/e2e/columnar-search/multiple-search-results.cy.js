@@ -60,9 +60,9 @@ suite(["@CI"], "search with multiple results", () => {
     },
     {
       origin: "/snarks",
-      input: "940",
+      input: "921",
       tableHeading: "SNARKs",
-      expectation: { column: "Height", value: "940" },
+      expectation: { column: "Height", value: "921" },
     },
     {
       origin: "/snarks",
