@@ -3,10 +3,8 @@ use crate::{
     common::{
         constants::*,
         functions::convert_to_link,
-        models::{MyError, TableMetadata},
         table::*,
     },
-    summary::functions::load_data as load_summary_data,
 };
 use leptos::*;
 use leptos_router::*;
