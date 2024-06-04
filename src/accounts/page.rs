@@ -1,6 +1,10 @@
 use crate::{
     accounts::functions::*,
-    common::{components::*, constants::TABLE_ROW_LIMIT, table::*, constants::*},
+    common::{
+        components::*,
+        constants::{TABLE_ROW_LIMIT, *},
+        table::*,
+    },
 };
 use leptos::*;
 use leptos_meta::*;

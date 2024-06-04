@@ -51,22 +51,27 @@ pub fn BlockUserCommands(block: BlocksQueryBlocks) -> impl IntoView {
     let table_columns = vec![
         TableColumn {
             column: "From".to_string(),
+            width: Some(String::from(TABLE_COL_HASH_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "To".to_string(),
+            width: Some(String::from(TABLE_COL_HASH_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "Hash".to_string(),
+            width: Some(String::from(TABLE_COL_HASH_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "Fee".to_string(),
+            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "Amount".to_string(),
+            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
             ..Default::default()
         },
     ];
@@ -90,18 +95,22 @@ pub fn BlockSnarkJobs(block: BlocksQueryBlocks) -> impl IntoView {
     let table_columns = vec![
         TableColumn {
             column: "State Hash".to_string(),
+            width: Some(String::from(TABLE_COL_HASH_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "Age".to_string(),
+            width: Some(String::from(TABLE_COL_SHORT_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "Prover".to_string(),
+            width: Some(String::from(TABLE_COL_HASH_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "Fee".to_string(),
+            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
             ..Default::default()
         },
     ];
