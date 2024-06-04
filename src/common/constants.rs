@@ -1,5 +1,4 @@
 pub const GRAPHQL_ENDPOINT: &str = env!("GRAPHQL_URL");
-pub const GRAPHQL_ENDPOINT_2: &str = env!("GRAPHQL_URL_2");
 pub const REST_ENDPOINT: &str = env!("REST_URL");
 pub const BERKELEY_FEATURES_ENABLED: &str = env!("BERKELEY_FEATURES_ENABLED");
 pub const EPOCH_SLOTS: u16 = 7140;

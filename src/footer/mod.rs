@@ -30,7 +30,7 @@ async fn load_api_version_data() -> Result<APIVersionResponse, MyError> {
     let query_body = r#"{"query":"query VersionQuery { version }","operationName":"VersionQuery"}"#;
     let client = reqwest::Client::new();
     let response = client
-        .post(GRAPHQL_ENDPOINT_2)
+        .post(GRAPHQL_ENDPOINT)
         .body(query_body)
         .send()
         .await

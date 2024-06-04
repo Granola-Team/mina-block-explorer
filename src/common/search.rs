@@ -33,7 +33,7 @@ async fn load_epoch_data(
             );
             let client = reqwest::Client::new();
             let response = client
-                .post(GRAPHQL_ENDPOINT_2)
+                .post(GRAPHQL_ENDPOINT)
                 .body(query_body)
                 .send()
                 .await
