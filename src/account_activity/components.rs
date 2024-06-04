@@ -7,7 +7,7 @@ use super::{
 };
 use crate::{
     account_activity::table_traits::BlockTrait,
-    common::{components::*, functions::*, models::*, table::*, constants::*},
+    common::{components::*, constants::*, functions::*, models::*, table::*},
     icons::*,
 };
 use leptos::*;
