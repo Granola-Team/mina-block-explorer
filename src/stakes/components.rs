@@ -1,11 +1,5 @@
 use super::{functions::*, models::*};
-use crate::{
-    common::{
-        constants::*,
-        functions::convert_to_link,
-        table::*,
-    },
-};
+use crate::common::{constants::*, functions::convert_to_link, table::*};
 use leptos::*;
 use leptos_router::*;
 
