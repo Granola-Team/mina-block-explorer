@@ -1,7 +1,7 @@
 setTimeout(async () => {
   const blockLimit = 500;
   const groupSize = 10;
-  let response = await fetch(config.graphql_endpoint_2, {
+  let response = await fetch(config.graphql_endpoint, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

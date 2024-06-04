@@ -46,26 +46,24 @@ suite(["@CI"], "search with multiple results", () => {
       tableHeading: "User Commands",
       expectation: { column: "Height", value: "500" },
     },
-    // TODO: re-enable these tests when searching by block height works on snarks
-    // {
-    //   origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
-    //   input: "957",
-    //   tableHeading: "SNARK Jobs",
-    //   expectation: { column: "Height", value: "957" },
-    // },
+    {
+      origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
+      input: "957",
+      tableHeading: "SNARK Jobs",
+      expectation: { column: "Height", value: "957" },
+    },
     {
       origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
       input: "500",
       tableHeading: "Block Production",
       expectation: { column: "Height", value: "500" },
     },
-    // TODO: re-enable these tests when searching by block height works on snarks
-    // {
-    //   origin: "/snarks",
-    //   input: "940",
-    //   tableHeading: "SNARKs",
-    //   expectation: { column: "Height", value: "940" },
-    // },
+    {
+      origin: "/snarks",
+      input: "921",
+      tableHeading: "SNARKs",
+      expectation: { column: "Height", value: "921" },
+    },
     {
       origin: "/snarks",
       input: state_hash,
@@ -74,11 +72,11 @@ suite(["@CI"], "search with multiple results", () => {
     },
     {
       origin: "/snarks",
-      input: "B62qs2Lw5WZNSjd8eHBUZXFYyRjV8oKtrZMFDn1S1Ye62G71xCQJMYM",
+      input: "B62qqSvXBa1cdTsARTVZrnJreCDdEy162q7axsf3QfjWzZCKfrU6JoM",
       tableHeading: "SNARKs",
       expectation: {
         column: "Prover",
-        value: "B62qs2Lw5WZNSjd8eHBUZXFYyRjV8oKtrZMFDn1S1Ye62G71xCQJMYM",
+        value: "B62qqSvXBa1cdTsARTVZrnJreCDdEy162q7axsf3QfjWzZCKfrU6JoM",
       },
     },
     {

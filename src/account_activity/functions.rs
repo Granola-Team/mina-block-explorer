@@ -73,7 +73,7 @@ pub async fn load_data(
             ..Default::default()
         },
         snarks_query: account_activity_query::SnarkQueryInput {
-            // block_height_lte: block_height,
+            block_height_lte: block_height,
             prover,
             block: if block_producer.is_some() || slot.is_some() || state_hash.is_some() {
                 Some(BlockQueryInput {
@@ -137,7 +137,7 @@ pub async fn load_data(
 
     let client = reqwest::Client::new();
 
-    let response = post_graphql::<AccountActivityQuery, _>(&client, GRAPHQL_ENDPOINT_2, variables)
+    let response = post_graphql::<AccountActivityQuery, _>(&client, GRAPHQL_ENDPOINT, variables)
         .await
         .map_err(|e| MyError::NetworkError(e.to_string()))?;
 

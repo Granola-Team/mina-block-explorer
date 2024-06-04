@@ -32,12 +32,7 @@ use leptos_router::*;
 pub fn Root() -> impl IntoView {
     view! {
         <script>
-            {format!(
-                r#"const config = {{ graphql_endpoint: "{}", graphql_endpoint_2: "{}" }}"#,
-                GRAPHQL_ENDPOINT,
-                GRAPHQL_ENDPOINT_2,
-            )}
-
+            {format!(r#"const config = {{ graphql_endpoint: "{}" }}"#, GRAPHQL_ENDPOINT)}
         </script>
         <Router>
             <Header/>
