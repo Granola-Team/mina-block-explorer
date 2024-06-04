@@ -28,6 +28,12 @@ pub fn get_stake_percentage(stake: &StakingLedgersQueryStakes) -> String {
         .unwrap_or("0%".to_string())
 }
 
+pub fn get_block_win_percentage(stake: &StakingLedgersQueryStakes) -> String {
+    let pk_epoch_num_blocks = stake.pk_epoch_num_blocks.as_ref().unwrap_or(&0);
+    let epoch_num_blocks = stake.epoch_num_blocks.as_ref().unwrap_or(&0);
+    format!("{:.1}", pk_epoch_num_blocks / epoch_num_blocks)
+}
+
 pub fn get_delegate(stake: &StakingLedgersQueryStakes) -> String {
     stake
         .delegate

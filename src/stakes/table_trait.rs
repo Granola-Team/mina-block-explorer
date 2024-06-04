@@ -15,6 +15,7 @@ impl TableData for Vec<Option<StakingLedgersQueryStakes>> {
                     convert_to_span(get_username(stake)),
                     decorate_with_mina_tag(get_stake(stake)),
                     convert_to_span(get_stake_percentage(stake)),
+                    convert_to_span(get_block_win_percentage(stake)),
                     convert_to_link(
                         if get_public_key(stake) == get_delegate(stake) {
                             "Self".to_string()

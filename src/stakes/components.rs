@@ -63,6 +63,10 @@ pub fn StakesPageContents(
             ..Default::default()
         },
         TableColumn {
+            column: "Block Win %".to_string(),
+            ..Default::default()
+        },
+        TableColumn {
             column: "Delegate".to_string(),
             is_searchable: true,
             ..Default::default()

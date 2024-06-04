@@ -780,6 +780,8 @@ type Stake {
   timing: StakeTiming
   token: Int
   voting_for: String
+  pk_epoch_num_blocks: Int
+  epoch_num_blocks: Int
 }
 
 input BlockTransactionUserCommandInsertInput {
