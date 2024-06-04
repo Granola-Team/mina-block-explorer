@@ -3,6 +3,28 @@ use leptos::*;
 use leptos_meta::*;
 
 #[component]
+pub fn UserCommandsAnalyticsPage() -> impl IntoView {
+    let (metadata, _) = create_signal(Some(TableMetadata::default()));
+    view! {
+        <Title text="Analytics | User Commands"/>
+        <PageContainer>
+            <TableSection
+                metadata
+                section_heading="User Commands Analytics"
+                controls=|| ().into_view()
+            >
+                <AnalyticsLayout>
+                    <AnalyticsXLContainer>
+                        <div id="chart" class="w-full h-96"></div>
+                        <script src="/scripts/analytics/user-commands-per-day.js" defer=true></script>
+                    </AnalyticsXLContainer>
+                </AnalyticsLayout>
+            </TableSection>
+        </PageContainer>
+    }
+}
+
+#[component]
 pub fn InternalCommandsAnalayticsPage() -> impl IntoView {
     let (metadata, _) = create_signal(Some(TableMetadata::default()));
     view! {
@@ -35,10 +57,9 @@ pub fn AnalyticsTabbedPage() -> impl IntoView {
             ..Default::default()
         },
         NavEntry {
-            href: "/analytics/commands/user-commands".to_string(),
+            href: "/analytics/commands/user".to_string(),
             text: "Transactions".to_string(),
             icon: NavIcon::Analytics,
-            disabled: true,
             ..Default::default()
         },
         NavEntry {

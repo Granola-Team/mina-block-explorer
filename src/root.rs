@@ -4,7 +4,7 @@ use crate::{
         page::{AccountSpotlightPage, AddressesTabbedPage},
     },
     accounts::page::AccountsPage,
-    analytics::page::{AnalyticsTabbedPage, InternalCommandsAnalayticsPage},
+    analytics::page::{AnalyticsTabbedPage, InternalCommandsAnalayticsPage, UserCommandsAnalyticsPage},
     blocks::page::{
         BlockAnalyticsTab, BlockInternalCommandsTab, BlockSnarkJobsTab, BlockSpotlightTab,
         BlockTabbedPage, BlockUserCommandsTab,
@@ -128,6 +128,7 @@ pub fn Root() -> impl IntoView {
                             view=move || view! { <Redirect path="commands/internal"/> }
                         />
                         <Route path="/commands/internal" view=InternalCommandsAnalayticsPage/>
+                        <Route path="/commands/user" view=UserCommandsAnalyticsPage/>
                     </Route>
                 </Routes>
             </main>
