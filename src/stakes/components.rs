@@ -1,6 +1,147 @@
-use super::models::*;
+use super::{functions::*, models::*};
+use crate::common::{constants::*, functions::convert_to_link, table::*};
 use leptos::*;
 use leptos_router::*;
+
+#[component]
+pub fn StakesPageContents(
+    #[prop(into)] current_epoch: i64,
+    #[prop(into)] slot_in_epoch: i64,
+    selected_epoch: Option<i64>,
+) -> impl IntoView {
+    let (data_sig, set_data) = create_signal(None);
+    let query_params_map = use_query_map();
+
+    let (ledger_hash, set_ledger_hash) = create_signal(None::<String>);
+
+    let resource = create_resource(
+        move || (selected_epoch, query_params_map.get()),
+        move |(epoch_opt, params_map)| async move {
+            let public_key = params_map.get("q-key").cloned();
+            let delegate = params_map.get("q-delegate").cloned();
+            load_data(
+                Some(epoch_opt.unwrap_or(current_epoch)),
+                public_key,
+                delegate,
+            )
+            .await
+        },
+    );
+
+    let get_data = move || resource.get().and_then(|res| res.ok());
+
+    create_effect(move |_| {
+        get_data().map(|data| {
+            set_data.set(Some(data.stakes.clone()));
+            let ledger_hash = data
+                .stakes
+                .first()
+                .and_then(|x| x.as_ref())
+                .and_then(|x| x.ledger_hash.to_owned());
+
+            set_ledger_hash.set(ledger_hash);
+        })
+    });
+
+    let table_columns = vec![
+        TableColumn {
+            column: "Key".to_string(),
+            is_searchable: true,
+        },
+        TableColumn {
+            column: "Username".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "Stake".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "Total Stake %".to_string(),
+            is_searchable: false,
+        },
+        TableColumn {
+            column: "Delegate".to_string(),
+            is_searchable: true,
+        },
+        TableColumn {
+            column: "Delegators".to_string(),
+            is_searchable: false,
+        },
+    ];
+
+    let mut section_heading = "Staking Ledger - Epoch ".to_string();
+    let mut next_epoch = current_epoch + 1;
+    let mut prev_epoch = current_epoch - 1;
+    let header_epoch = if let Some(qs_epoch) = selected_epoch {
+        if qs_epoch != current_epoch {
+            next_epoch = qs_epoch + 1;
+            next_epoch = next_epoch.clamp(0, current_epoch + 1);
+            prev_epoch = qs_epoch - 1;
+            qs_epoch
+        } else {
+            current_epoch
+        }
+    } else {
+        current_epoch
+    };
+    section_heading += format!("{}", header_epoch).as_str();
+
+    view! {
+        <TableSectionTemplate
+            table_columns
+            data_sig
+            section_heading
+            is_loading=resource.loading()
+            controls=move || {
+                view! {
+                    <EpochButton
+                        disabled=prev_epoch < 0
+                        text="Previous"
+                        style_variant=EpochStyleVariant::Secondary
+                        epoch_target=prev_epoch
+                    />
+                    <EpochButton
+                        text="Next"
+                        style_variant=EpochStyleVariant::Primary
+                        epoch_target=next_epoch
+                    />
+                }
+            }
+
+            additional_info=view! {
+                {match ledger_hash.get() {
+                    Some(data) => {
+                        view! {
+                            <div class="text-sm text-slate-500">
+                                {convert_to_link(data, "#".to_string())}
+                            </div>
+                        }
+                            .into_view()
+                    }
+                    None => ().into_view(),
+                }}
+
+                {if next_epoch - 1 == current_epoch {
+                    view! {
+                        <div class="text-sm text-dark-blue staking-ledger-percent-complete">
+                            {format!(
+                                "{:.2}% complete ({}/{} slots filled)",
+                                ({ slot_in_epoch } as f64 / { EPOCH_SLOTS } as f64) * 100.0,
+                                { slot_in_epoch },
+                                { EPOCH_SLOTS },
+                            )}
+
+                        </div>
+                    }
+                        .into_view()
+                } else {
+                    ().into_view()
+                }}
+            }
+        />
+    }
+}
 
 #[component]
 pub fn EpochButton(
