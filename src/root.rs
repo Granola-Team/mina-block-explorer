@@ -31,7 +31,8 @@ use leptos_router::*;
 #[component]
 pub fn Root() -> impl IntoView {
     view! {
-        <script>{format!(r#"const config = {{ graphql_endpoint: "{}" }}"#, GRAPHQL_ENDPOINT)}
+        <script>
+            {format!(r#"const config = {{ graphql_endpoint: "{}" }}"#, GRAPHQL_ENDPOINT)}
         </script>
         <Router>
             <Header/>
