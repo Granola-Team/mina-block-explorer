@@ -551,8 +551,8 @@ fn format_duration(duration: &Duration) -> String {
 
     match num_parts {
         0 => "just now".to_string(),
-        1..=2 => filtered_parts.join(", ") + " ago",
-        _ => filtered_parts[..2].join(", ") + " ago",
+        1..=2 => filtered_parts.join(" "),
+        _ => filtered_parts[..2].join(" "),
     }
 }
 
@@ -579,37 +579,37 @@ mod format_duration_tests {
     #[test]
     fn test_one_minute_ago() {
         let past_time = get_past_time(Duration::minutes(1));
-        assert_eq!(print_time_since(&past_time.to_rfc3339()), "1 min ago");
+        assert_eq!(print_time_since(&past_time.to_rfc3339()), "1 min");
     }
 
     #[test]
     fn test_multiple_minutes_ago() {
         let past_time = get_past_time(Duration::minutes(20));
-        assert_eq!(print_time_since(&past_time.to_rfc3339()), "20 min ago");
+        assert_eq!(print_time_since(&past_time.to_rfc3339()), "20 min");
     }
 
     #[test]
     fn test_one_hour_ago() {
         let past_time = get_past_time(Duration::hours(1));
-        assert_eq!(print_time_since(&past_time.to_rfc3339()), "1 h ago");
+        assert_eq!(print_time_since(&past_time.to_rfc3339()), "1 h");
     }
 
     #[test]
     fn test_multiple_hours_ago() {
         let past_time = get_past_time(Duration::hours(3));
-        assert_eq!(print_time_since(&past_time.to_rfc3339()), "3 h ago");
+        assert_eq!(print_time_since(&past_time.to_rfc3339()), "3 h");
     }
 
     #[test]
     fn test_one_day_ago() {
         let past_time = get_past_time(Duration::days(1));
-        assert_eq!(print_time_since(&past_time.to_rfc3339()), "1 d ago");
+        assert_eq!(print_time_since(&past_time.to_rfc3339()), "1 d");
     }
 
     #[test]
     fn test_multiple_days_ago() {
         let past_time = get_past_time(Duration::days(5));
-        assert_eq!(print_time_since(&past_time.to_rfc3339()), "5 d ago");
+        assert_eq!(print_time_since(&past_time.to_rfc3339()), "5 d");
     }
 
     #[test]
@@ -626,13 +626,13 @@ mod format_duration_tests {
     #[test]
     fn test_complex_duration() {
         let duration = Duration::days(410) + Duration::hours(25) + Duration::minutes(61);
-        assert_eq!(format_duration(&duration), "1 yr, 1 mo ago");
+        assert_eq!(format_duration(&duration), "1 yr 1 mo");
     }
 
     #[test]
     fn test_mix_days_hours_minutes() {
         let duration = Duration::days(2) + Duration::hours(3) + Duration::minutes(45);
-        assert_eq!(format_duration(&duration), "2 d, 3 h ago");
+        assert_eq!(format_duration(&duration), "2 d 3 h");
     }
 }
 
