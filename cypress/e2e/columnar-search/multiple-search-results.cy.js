@@ -46,13 +46,12 @@ suite(["@CI"], "search with multiple results", () => {
       tableHeading: "User Commands",
       expectation: { column: "Height", value: "500" },
     },
-    // TODO: re-enable these tests when searching by block height works on snarks
-    // {
-    //   origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
-    //   input: "957",
-    //   tableHeading: "SNARK Jobs",
-    //   expectation: { column: "Height", value: "957" },
-    // },
+    {
+      origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
+      input: "957",
+      tableHeading: "SNARK Jobs",
+      expectation: { column: "Height", value: "957" },
+    },
     {
       origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
       input: "500",
