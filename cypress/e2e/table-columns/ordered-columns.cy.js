@@ -11,6 +11,7 @@ suite(["@CI"], "staking ledger table", () => {
     "Username",
     "Stake",
     "Total Stake %",
+    "Block Win %",
     "Delegate",
     "Delegators",
   ];
