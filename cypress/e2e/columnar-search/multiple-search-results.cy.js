@@ -58,13 +58,12 @@ suite(["@CI"], "search with multiple results", () => {
       tableHeading: "Block Production",
       expectation: { column: "Height", value: "500" },
     },
-    // TODO: re-enable these tests when searching by block height works on snarks
-    // {
-    //   origin: "/snarks",
-    //   input: "940",
-    //   tableHeading: "SNARKs",
-    //   expectation: { column: "Height", value: "940" },
-    // },
+    {
+      origin: "/snarks",
+      input: "940",
+      tableHeading: "SNARKs",
+      expectation: { column: "Height", value: "940" },
+    },
     {
       origin: "/snarks",
       input: state_hash,
