@@ -37,26 +37,29 @@ pub fn InternalCommandsTab() -> impl IntoView {
         TableColumn {
             column: "Height".to_string(),
             is_searchable: true,
+            ..Default::default()
         },
         TableColumn {
             column: "State Hash".to_string(),
             is_searchable: true,
+            ..Default::default()
         },
         TableColumn {
             column: "Recipient".to_string(),
             is_searchable: true,
+            ..Default::default()
         },
         TableColumn {
             column: "Fee".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
         TableColumn {
             column: "Type".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
         TableColumn {
             column: "Age".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
     ];
 

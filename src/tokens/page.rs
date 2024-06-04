@@ -11,31 +11,31 @@ pub fn TokensPage() -> impl IntoView {
     let table_columns = vec![
         TableColumn {
             column: "Token Name".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
         TableColumn {
             column: "Token ID".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
         TableColumn {
             column: "Supply".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
         TableColumn {
             column: "Token Owner".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
         TableColumn {
             column: "Token Holders".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
         TableColumn {
             column: "Transaction Count".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
         TableColumn {
             column: "Locked".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
     ];
 

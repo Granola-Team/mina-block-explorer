@@ -16,9 +16,16 @@ pub trait TableData {
 }
 
 #[derive(Clone)]
+pub enum TableSortDirection {
+    // ASC,
+    Desc,
+}
+
+#[derive(Clone, Default)]
 pub struct TableColumn {
     pub column: String,
     pub is_searchable: bool,
+    pub sort_direction: Option<TableSortDirection>,
 }
 
 const INPUT_CLASS: &str = "w-5/6 mt-1 h-7 text-base text-sm font-normal font-mono p-2 rounded";
@@ -121,6 +128,8 @@ pub fn TableHeader(columns: Vec<TableColumn>) -> impl IntoView {
     }
 }
 
+const ICON_CLASS: &str = "cursor-pointer pl-1 flex justify-center items-center ";
+
 #[component]
 fn ColumnHeader(id: String, column: TableColumn) -> impl IntoView {
     let id_copy = id.clone();
@@ -146,7 +155,21 @@ fn ColumnHeader(id: String, column: TableColumn) -> impl IntoView {
     view! {
         <th class="h-12 bg-table-header-fill xl:sticky xl:top-16 z-20 text-table-header-text-color font-semibold uppercase text-xs text-left p-2 box-border "
             .to_string() + CELL_PADDING_CLASS>
-            <div class="whitespace-nowrap">{column.column.clone()}</div>
+            <div class="whitespace-nowrap flex">
+                <span class="pr-1">{column.column.clone()}</span>
+                {match column.sort_direction {
+                    Some(TableSortDirection::Desc) => {
+                        view! {
+                            <span class=ICON_CLASS>
+                                <DownArrow width=12/>
+                            </span>
+                        }
+                            .into_view()
+                    }
+                    None => ().into_view(),
+                }}
+
+            </div>
             {if column.is_searchable {
                 view! {
                     <input

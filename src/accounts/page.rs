@@ -28,26 +28,27 @@ fn AccountsPageContents() -> impl IntoView {
         TableColumn {
             column: "Public Key".to_string(),
             is_searchable: true,
+            ..Default::default()
         },
         TableColumn {
             column: "Username".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
         TableColumn {
             column: "Balance".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
         TableColumn {
             column: "Nonce".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
         TableColumn {
             column: "Delegate".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
         TableColumn {
             column: "Time Locked".to_string(),
-            is_searchable: false,
+            ..Default::default()
         },
     ];
     let get_data = move || resource.get().and_then(|res| res.ok());
