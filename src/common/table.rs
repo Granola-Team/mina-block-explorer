@@ -26,6 +26,7 @@ pub struct TableColumn {
     pub column: String,
     pub is_searchable: bool,
     pub sort_direction: Option<TableSortDirection>,
+    pub width: Option<String>,
 }
 
 const INPUT_CLASS: &str = "w-5/6 mt-1 h-7 text-base text-sm font-normal font-mono p-2 rounded";
@@ -39,7 +40,7 @@ pub fn TableContainer(children: Children) -> impl IntoView {
 #[component]
 pub fn Table(children: Children) -> impl IntoView {
     view! {
-        <table class="table-fixed xl:relative font-mono md:rounded-b-lg w-full @xs:w-[400%] @md:w-[300%] @2xl:w-[200%] xl:w-full">
+        <table class="xl:relative font-mono md:rounded-b-lg w-full @xs:w-[400%] @md:w-[300%] @2xl:w-[200%] xl:w-full">
             {children()}
         </table>
     }
@@ -75,6 +76,7 @@ where
         <TableSection metadata section_heading controls additional_info>
             <TableContainer>
                 <Table>
+                    <ColGroup columns=table_columns.clone()/>
                     <TableHeader columns=table_columns/>
 
                     {move || {
@@ -110,6 +112,22 @@ where
 
             </TableContainer>
         </TableSection>
+    }
+}
+
+#[component]
+pub fn ColGroup(columns: Vec<TableColumn>) -> impl IntoView {
+    view! {
+        {columns
+            .iter()
+            .map(|c| {
+                c.width
+                    .as_ref()
+                    .map(|w| {
+                        view! { <col width=w/> }
+                    })
+            })
+            .collect_view()}
     }
 }
 

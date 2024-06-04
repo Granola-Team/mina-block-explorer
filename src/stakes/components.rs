@@ -47,19 +47,23 @@ pub fn StakesPageContents(
         TableColumn {
             column: "Key".to_string(),
             is_searchable: true,
+            width: Some(String::from(TABLE_COL_HASH_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "Username".to_string(),
+            width: Some(String::from(TABLE_COL_SHORT_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "Stake".to_string(),
+            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "Total Stake %".to_string(),
             sort_direction: Some(TableSortDirection::Desc),
+            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
             ..Default::default()
         },
         TableColumn {
@@ -69,10 +73,12 @@ pub fn StakesPageContents(
         TableColumn {
             column: "Delegate".to_string(),
             is_searchable: true,
+            width: Some(String::from(TABLE_COL_HASH_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "Delegators".to_string(),
+            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
             ..Default::default()
         },
     ];

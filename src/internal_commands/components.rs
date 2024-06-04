@@ -1,5 +1,5 @@
 use crate::{
-    common::{components::*, models::*, table::*},
+    common::{components::*, constants::*, models::*, table::*},
     internal_commands::functions::load_data,
 };
 use leptos::*;
@@ -37,28 +37,34 @@ pub fn InternalCommandsTab() -> impl IntoView {
         TableColumn {
             column: "Height".to_string(),
             is_searchable: true,
+            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "State Hash".to_string(),
             is_searchable: true,
+            width: Some(String::from(TABLE_COL_HASH_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "Recipient".to_string(),
             is_searchable: true,
+            width: Some(String::from(TABLE_COL_HASH_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "Fee".to_string(),
+            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "Type".to_string(),
+            width: Some(String::from(TABLE_COL_SHORT_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "Age".to_string(),
+            width: Some(String::from(TABLE_COL_SHORT_WIDTH)),
             ..Default::default()
         },
     ];

@@ -7,7 +7,7 @@ use super::{
 };
 use crate::{
     account_activity::table_traits::BlockTrait,
-    common::{components::*, functions::*, models::*, table::*},
+    common::{components::*, constants::*, functions::*, models::*, table::*},
     icons::*,
 };
 use leptos::*;
@@ -225,36 +225,44 @@ pub fn AccountTransactionsSection(
         TableColumn {
             column: "Height".to_string(),
             is_searchable: true,
+            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "Txn Hash".to_string(),
             is_searchable: true,
+            width: Some(String::from(TABLE_COL_HASH_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "Nonce".to_string(),
+            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "Age".to_string(),
+            width: Some(String::from(TABLE_COL_SHORT_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "Type".to_string(),
+            width: Some(String::from(TABLE_COL_SHORT_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "Direction".to_string(),
+            width: Some(String::from(TABLE_COL_SHORT_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "Counterparty".to_string(),
             is_searchable: true,
+            width: Some(String::from(TABLE_COL_HASH_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "Amount/Fee".to_string(),
+            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
             ..Default::default()
         },
     ];
@@ -300,24 +308,29 @@ pub fn AccountOverviewSnarkJobTable(
         TableColumn {
             column: "Height".to_string(),
             is_searchable: true,
+            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "State Hash".to_string(),
             is_searchable: true,
+            width: Some(String::from(TABLE_COL_HASH_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "Age".to_string(),
+            width: Some(String::from(TABLE_COL_SHORT_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "Prover".to_string(),
+            width: Some(String::from(TABLE_COL_HASH_WIDTH)),
             is_searchable: true,
             ..Default::default()
         },
         TableColumn {
             column: "Fee".to_string(),
+            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
             ..Default::default()
         },
     ];
@@ -354,42 +367,51 @@ pub fn AccountOverviewBlocksTable(
     let table_columns = vec![
         TableColumn {
             column: "Height".to_string(),
+            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
             is_searchable: true,
             ..Default::default()
         },
         TableColumn {
             column: "State Hash".to_string(),
             is_searchable: true,
+            width: Some(String::from(TABLE_COL_HASH_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "Slot".to_string(),
             is_searchable: true,
+            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "Age".to_string(),
+            width: Some(String::from(TABLE_COL_SHORT_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "Block Producer".to_string(),
             is_searchable: true,
+            width: Some(String::from(TABLE_COL_HASH_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "Coinbase".to_string(),
+            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "User Commands".to_string(),
+            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "Snarks".to_string(),
+            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "Coinbase Receiver".to_string(),
+            width: Some(String::from(TABLE_COL_HASH_WIDTH)),
             ..Default::default()
         },
     ];
