@@ -7,7 +7,7 @@ use super::{
 };
 use crate::{
     account_activity::table_traits::BlockTrait,
-    common::{components::*, functions::*, models::*, table::*},
+    common::{components::*, functions::*, models::*, table::*, constants::*},
     icons::*,
 };
 use leptos::*;
@@ -225,36 +225,44 @@ pub fn AccountTransactionsSection(
         TableColumn {
             column: "Height".to_string(),
             is_searchable: true,
+            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "Txn Hash".to_string(),
             is_searchable: true,
+            width: Some(String::from(TABLE_COL_HASH_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "Nonce".to_string(),
+            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "Age".to_string(),
+            width: Some(String::from(TABLE_COL_SHORT_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "Type".to_string(),
+            width: Some(String::from(TABLE_COL_SHORT_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "Direction".to_string(),
+            width: Some(String::from(TABLE_COL_SHORT_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "Counterparty".to_string(),
             is_searchable: true,
+            width: Some(String::from(TABLE_COL_HASH_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "Amount/Fee".to_string(),
+            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
             ..Default::default()
         },
     ];

@@ -10,4 +10,5 @@ pub const TABLE_ROW_LIMIT: i64 = 100;
 pub const COMMIT_HASH: &str = env!("COMMIT_HASH");
 pub const LINK_HOVER_STATE: &str = "hover:text-granola-orange hover:underline hover:decoration-2 ";
 pub const TABLE_COL_NUMERIC_WIDTH: &str = "100px";
+pub const TABLE_COL_SHORT_WIDTH: &str = "150px";
 pub const TABLE_COL_HASH_WIDTH: &str = "auto";
