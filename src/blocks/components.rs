@@ -600,41 +600,50 @@ pub fn BlocksSection() -> impl IntoView {
         TableColumn {
             column: "Height".to_string(),
             is_searchable: true,
+            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "State Hash".to_string(),
             is_searchable: true,
+            width: Some(String::from(TABLE_COL_HASH_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "Slot".to_string(),
             is_searchable: true,
+            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "Age".to_string(),
+            width: Some(String::from("125px")),
             ..Default::default()
         },
         TableColumn {
             column: "Block Producer".to_string(),
             is_searchable: true,
+            width: Some(String::from(TABLE_COL_HASH_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "Coinbase".to_string(),
+            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "User Commands".to_string(),
+            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "SNARKs".to_string(),
+            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "Coinbase Receiver".to_string(),
+            width: Some(String::from(TABLE_COL_HASH_WIDTH)),
             ..Default::default()
         },
     ];
