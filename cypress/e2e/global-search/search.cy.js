@@ -29,7 +29,7 @@ suite(["@CI"], "global search", () => {
       expectedUrl: "/commands/" + state_hash,
     },
     {
-      input: "0",
+      input: "1",
       expectedUrl: "/staking-ledgers?epoch=1",
     },
   ];
