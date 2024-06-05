@@ -5,7 +5,7 @@ suite(["@CI"], "meta title", () => {
   let pages = [
     {
       url: "/addresses/accounts",
-      title: "Accounts | Search For Mina Accounts",
+      title: "Accounts | Search for accounts on Mina Blockchain",
     },
     {
       url: `/analytics/commands/internal`,
