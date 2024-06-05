@@ -13,7 +13,7 @@ use leptos_router::create_query_signal;
 #[component]
 pub fn AccountsPage() -> impl IntoView {
     view! {
-        <Title text="Accounts | Search For Mina Accounts"/>
+        <Title text="Accounts | Search For MINA Accounts"/>
         <PageContainer>
             <AccountsPageContents/>
         </PageContainer>
