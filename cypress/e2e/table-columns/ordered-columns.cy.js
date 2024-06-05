@@ -5,7 +5,7 @@ import {
 } from "../constants";
 
 suite(["@CI"], "staking ledger table", () => {
-  let pages = ["/staking-ledgers?epoch=0"];
+  let pages = ["/staking-ledgers?epoch=1"];
   let columns = [
     "Key",
     "Username",
@@ -19,7 +19,7 @@ suite(["@CI"], "staking ledger table", () => {
   pages.forEach((page) =>
     it(`on ${page} includes correct columns`, () => {
       cy.visit(page);
-      cy.tableHasOrderedColumns("Staking Ledger - Epoch 0", columns);
+      cy.tableHasOrderedColumns("Staking Ledger - Epoch 1", columns);
     }),
   );
 });

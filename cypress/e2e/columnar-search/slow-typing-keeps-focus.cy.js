@@ -13,7 +13,7 @@ suite(["@CI"], "input", () => {
       column: "Height",
     },
     {
-      origin: "/staking-ledgers?epoch=0",
+      origin: "/staking-ledgers?epoch=1",
       input: "B62",
       column: "Key",
     },
