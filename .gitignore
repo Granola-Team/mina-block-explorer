@@ -13,3 +13,4 @@ cypress/screenshots
 **/__diff_output__
 .DS_Store
 /.direnv/
+/.cargo/

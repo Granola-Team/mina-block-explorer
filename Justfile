@@ -11,6 +11,8 @@ export CYPRESS_BASE_URL := 'http://localhost:' + trunk_port
 
 export VERSION := `git rev-parse HEAD`
 
+export CARGO_HOME := `pwd` + '.cargo'
+
 default:
   @just --list --justfile {{justfile()}}
 
@@ -56,7 +58,7 @@ test-e2e-local: build_npm
     pnpm exec cypress open
 
 test-unit:
-  cargo nextest run
+  cargo-nextest nextest run
 
 lint: build && audit disallow-unused-cargo-deps
   pnpm exec prettier --check cypress/
@@ -73,7 +75,7 @@ format:
   leptosfmt ./src
 
 audit:
-  cargo audit
+  cargo-audit audit
 
 dev: build_npm
   trunk serve --port="{{trunk_port}}" --open
