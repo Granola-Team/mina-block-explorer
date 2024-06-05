@@ -1,6 +1,19 @@
 setTimeout(async () => {
   const blockLimit = 500;
   const groupSize = 10;
+
+  let chartDom = document.getElementById("chart");
+  window.addEventListener("resize", function () {
+    myChart.resize();
+  });
+  let myChart = echarts.init(chartDom);
+
+  myChart.showLoading({
+    text: "Loading...", // Display text with the spinner
+    color: "#E39844", // Spinner color
+    zlevel: 0,
+  });
+
   let response = await fetch(config.graphql_endpoint, {
     method: "POST",
     headers: {
@@ -40,13 +53,9 @@ setTimeout(async () => {
   }, {});
 
   let xAxis = Object.keys(data);
-
-  let chartDom = document.getElementById("chart");
-  window.addEventListener("resize", function () {
-    myChart.resize();
-  });
-  let myChart = echarts.init(chartDom);
   let option;
+
+  myChart.hideLoading();
 
   option = {
     title: {

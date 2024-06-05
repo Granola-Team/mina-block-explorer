@@ -28,15 +28,15 @@ pub fn InternalCommandsAnalayticsPage() -> impl IntoView {
     view! {
         <Title text="Analytics | Internal Commands"/>
         <PageContainer>
-        <AppSection>
-            <AppHeading heading="Internal Commands Analytics"/>
-            <AnalyticsLayout>
-                <AnalyticsXLContainer>
-                    <div id="chart" class="w-full h-96"></div>
-                    <script src="/scripts/analytics/internal-commands.js" defer=true></script>
-                </AnalyticsXLContainer>
-            </AnalyticsLayout>
-        </AppSection>
+            <AppSection>
+                <AppHeading heading="Internal Commands Analytics"/>
+                <AnalyticsLayout>
+                    <AnalyticsXLContainer>
+                        <div id="chart" class="w-full h-96"></div>
+                        <script src="/scripts/analytics/internal-commands.js" defer=true></script>
+                    </AnalyticsXLContainer>
+                </AnalyticsLayout>
+            </AppSection>
         </PageContainer>
     }
 }
