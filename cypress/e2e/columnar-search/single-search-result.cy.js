@@ -24,7 +24,7 @@ suite(["@CI"], "search with single result", () => {
       column: "State Hash",
     },
     {
-      origin: "/staking-ledgers?epoch=0",
+      origin: "/staking-ledgers?epoch=1",
       input: DEFAULT_ACCOUNT_PK,
       tableHeading: "Staking Ledger",
       column: "Key",

@@ -40,12 +40,12 @@ suite(["@CI"], "account page", () => {
     },
     { origin: "/snarks", column: "Prover", tableHeader: "SNARKs" },
     {
-      origin: "/staking-ledgers?epoch=0",
+      origin: "/staking-ledgers?epoch=1",
       column: "Key",
       tableHeader: "Staking Ledger",
     },
     {
-      origin: "/staking-ledgers?epoch=0",
+      origin: "/staking-ledgers?epoch=1",
       column: "Delegate",
       tableHeader: "Staking Ledger",
     },
