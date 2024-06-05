@@ -60,11 +60,7 @@ pub async fn load_data(
             to: to_account,
             hash: state_hash,
             block_height_lte: block_height,
-            canonical: if canonical.is_none() {
-                Some(true)
-            } else {
-                canonical
-            },
+            canonical,
             ..Default::default()
         },
     };

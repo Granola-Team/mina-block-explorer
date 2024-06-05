@@ -51,13 +51,12 @@ pub fn UserCommandsPage() -> impl IntoView {
 #[component]
 pub fn CommandSpotlightPage() -> impl IntoView {
     let memo_params_map = use_params_map();
-    let (canonical_qp, _) = create_query_signal::<bool>("canonical");
     let (txn_memo, set_txn_memo) = create_signal("No Memo".to_string());
     let resource = create_resource(
-        move || (memo_params_map.get(), canonical_qp.get()),
-        |(value, canonical)| async move {
+        move || memo_params_map.get(),
+        |value| async move {
             let state_hash = value.get("id");
-            load_data(1, None, None, state_hash.cloned(), None, canonical).await
+            load_data(1, None, None, state_hash.cloned(), None, None).await
         },
     );
 
