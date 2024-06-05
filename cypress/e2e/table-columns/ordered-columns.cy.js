@@ -19,7 +19,7 @@ suite(["@CI"], "staking ledger table", () => {
   pages.forEach((page) =>
     it(`on ${page} includes correct columns`, () => {
       cy.visit(page);
-      cy.tableHasOrderedColumns("Staking Ledger - Epoch 0", columns);
+      cy.tableHasOrderedColumns("Staking Ledger - Epoch 1", columns);
     }),
   );
 });
