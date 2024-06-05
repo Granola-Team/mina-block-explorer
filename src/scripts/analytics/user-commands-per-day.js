@@ -1,45 +1,67 @@
 setTimeout(async () => {
-  const blockLimit = 500;
+  const blockLimit = 3000;
   const groupSize = 10;
-  let response = await fetch(config.graphql_endpoint_2, {
+  let response = await fetch(config.graphql_endpoint, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      query: `query MyQuery() {
-          feetransfers(query: { canonical: true }, sortBy: BLOCKHEIGHT_DESC, limit: ${blockLimit}) {
-            fee,
-            blockStateHash {
-              protocolState {
-                consensusState {
-                  slotSinceGenesis
-                }
+      query: `query TransactionsQuery(
+              $limit: Int
+              $sort_by: TransactionSortByInput!
+              $query: TransactionQueryInput!
+          ) {
+              transactions(limit: $limit, sortBy: $sort_by, query: $query) {
+              hash
+              amount
+              kind
+              blockHeight
+              block {
+                  dateTime
               }
-            }
-          }
-        } 
-      `,
+              }
+          }`,
+      variables: {
+        limit: blockLimit,
+        sort_by: "BLOCKHEIGHT_DESC",
+        query: {
+          canonical: true,
+          kind: "PAYMENT",
+        },
+      },
+      operationName: "TransactionsQuery",
     }),
   });
 
   let jsonResp = await response.json();
-  let data = jsonResp.data.feetransfers.reduce((agg, record) => {
-    let slot =
-      record.blockStateHash.protocolState.consensusState.slotSinceGenesis;
-    let key = slot - (slot % groupSize);
-    let value = record.fee;
-    if (!agg[key]) {
-      agg[key] = [];
+  // Use reduce to aggregate transaction count and total amount per day
+  const data = jsonResp.data.transactions.reduce((acc, transaction) => {
+    // Convert dateTime to a Date object and adjust it to the start of the day
+    const date = new Date(transaction.block.dateTime);
+    date.setUTCHours(0, 0, 0, 0);
+
+    // Convert adjusted date to a Unix timestamp (milliseconds since Unix Epoch divided by 1000 for seconds)
+    const unixTimestamp = Math.floor(date.getTime() / 1000);
+
+    // Initialize the date key if not already present
+    if (!acc[unixTimestamp]) {
+      acc[unixTimestamp] = { count: 0, totalAmount: 0 };
     }
-    let parsedFloat = parseFloat(value / 1e9);
-    if (parsedFloat < 700) {
-      agg[key].push(parsedFloat);
-    }
-    return agg;
+
+    // Increment count and add to total amount
+    acc[unixTimestamp].count += 1;
+    acc[unixTimestamp].totalAmount += transaction.amount;
+
+    return acc;
   }, {});
 
-  let xAxis = Object.keys(data);
+  let dates = Object.keys(data).map((key) =>
+    new Date(parseInt(key) * 1000).toISOString().substring(0, 10),
+  ); // Convert back to milliseconds for chart
+  let txnVolume = Object.values(data).map((value) => value.count);
+
+  console.log(data, dates, txnVolume);
 
   let chartDom = document.getElementById("chart");
   window.addEventListener("resize", function () {
@@ -50,112 +72,27 @@ setTimeout(async () => {
 
   option = {
     title: {
-      text: `Fee Transfers in the last ${blockLimit} blocks`,
+      text: `Transaction Volume of Last ${blockLimit} Blocks by Day`,
       left: "center",
     },
-    tooltip: {
-      trigger: "item",
-      axisPointer: {
-        type: "shadow",
-      },
-    },
-    dataset: [
-      {
-        source: Object.entries(data).map(([_, fees]) => [...fees]),
-      },
-      {
-        fromDatasetIndex: 0,
-        transform: {
-          type: "boxplot",
-        },
-      },
-      {
-        fromDatasetIndex: 1,
-        fromTransformResult: 1,
-      },
-    ],
     xAxis: {
       type: "category",
-      name: "Global Slot",
-      axisLabel: {
-        formatter: function (value) {
-          return xAxis[value];
-        },
-      },
+      data: dates,
     },
-    yAxis: [
-      {
-        type: "value",
-        name: "Fee",
-        axisLabel: {
-          formatter: function (value) {
-            return `${value} Mina`;
-          },
-        },
-      },
-      {
-        type: "value",
-        name: "Transfers Count",
-        position: "right",
-        axisLabel: {
-          formatter: function (value) {
-            return `${value}`;
-          },
-        },
-      },
-    ],
+    yAxis: {
+      type: "value",
+      name: "Txn Count",
+    },
     series: [
       {
-        name: "boxplot",
-        type: "boxplot",
-        datasetIndex: 1,
-        yAxisIndex: 0,
-        tooltip: {
-          formatter: function (param) {
-            return [
-              "Slot: " +
-                xAxis[param.name] +
-                `-${+xAxis[param.name] + groupSize - 1}`,
-              "upper: " + param.data[5],
-              "Q3: " + param.data[4],
-              "median: " + param.data[3],
-              "Q1: " + param.data[2],
-              "lower: " + param.data[1],
-            ].join("<br/>");
-          },
-        },
-      },
-      {
-        name: "boxplot",
-        type: "scatter",
-        symbolSize: 8,
-        datasetIndex: 2,
-        yAxisIndex: 0,
-        tooltip: {
-          formatter: function (param) {
-            return [
-              "Slot: " +
-                xAxis[param.name] +
-                `-${+xAxis[param.name] + groupSize - 1}`,
-              "Fee: " + param.data[1],
-            ].join("<br/>");
-          },
-        },
-      },
-      {
-        name: "transfers",
-        type: "scatter",
-        symbolSize: 12,
-        data: Object.values(data).map((fees, i) => ["" + i, fees.length]),
-        yAxisIndex: 1,
-        tooltip: {
-          formatter: function (param) {
-            return `Slot: ${xAxis[param.dataIndex]}-${+xAxis[param.dataIndex] + groupSize - 1}<br/>Transfers: ${param.value[1]}`;
-          },
-        },
+        data: txnVolume,
+        type: "line",
+        areaStyle: {},
       },
     ],
   };
+
+  console.log(option);
 
   option && myChart.setOption(option);
 }, 1000);

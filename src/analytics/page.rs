@@ -16,7 +16,10 @@ pub fn UserCommandsAnalyticsPage() -> impl IntoView {
                 <AnalyticsLayout>
                     <AnalyticsXLContainer>
                         <div id="chart" class="w-full h-96"></div>
-                        <script src="/scripts/analytics/user-commands-per-day.js" defer=true></script>
+                        <script
+                            src="/scripts/analytics/user-commands-per-day.js"
+                            defer=true
+                        ></script>
                     </AnalyticsXLContainer>
                 </AnalyticsLayout>
             </TableSection>

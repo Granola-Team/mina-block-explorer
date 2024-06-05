@@ -4,7 +4,9 @@ use crate::{
         page::{AccountSpotlightPage, AddressesTabbedPage},
     },
     accounts::page::AccountsPage,
-    analytics::page::{AnalyticsTabbedPage, InternalCommandsAnalayticsPage, UserCommandsAnalyticsPage},
+    analytics::page::{
+        AnalyticsTabbedPage, InternalCommandsAnalayticsPage, UserCommandsAnalyticsPage,
+    },
     blocks::page::{
         BlockAnalyticsTab, BlockInternalCommandsTab, BlockSnarkJobsTab, BlockSpotlightTab,
         BlockTabbedPage, BlockUserCommandsTab,
