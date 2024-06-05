@@ -59,7 +59,7 @@ pub fn BlocksAnalyticsPage() -> impl IntoView {
                                     label=convert_to_span("Total Blocks".into())
                                     value=convert_to_span("...".to_string())
 
-                                    variant=ColorVariant::Transparent
+                                    variant=ColorVariant::Blue
                                 />
 
                             </AnalyticsSmContainer>
@@ -68,7 +68,7 @@ pub fn BlocksAnalyticsPage() -> impl IntoView {
                                     label=convert_to_span("Blocks This Epoch".into())
                                     value=convert_to_span("...".to_string())
 
-                                    variant=ColorVariant::Transparent
+                                    variant=ColorVariant::Green
                                 />
 
                             </AnalyticsSmContainer>
