@@ -1,7 +1,7 @@
 suite(["@CI"], "staking ledger", () => {
   // TODO: enable when all epochs available
   // it("shows slot progress message", () => {
-  //   cy.visit("/staking-ledgers?epoch=0");
+  //   cy.visit("/staking-ledgers?epoch=1");
   //   cy.get(".staking-ledger-percent-complete").as("slot-info");
 
   //   cy.get("@slot-info")
@@ -27,7 +27,7 @@ suite(["@CI"], "staking ledger", () => {
   }
 
   it("only has large positive stakes", () => {
-    cy.visit("/staking-ledgers?epoch=0");
+    cy.visit("/staking-ledgers?epoch=1");
     cy.get(".loading-placeholder").should("exist");
     cy.get(".loading-placeholder").should("not.exist");
     cy.aliasTableColumnValue("Staking Ledger", "Stake", "stake-value");
@@ -42,18 +42,18 @@ suite(["@CI"], "staking ledger", () => {
   });
 
   it("defaults to current epoch", () => {
-    cy.visit("/staking-ledgers?epoch=0");
+    cy.visit("/staking-ledgers?epoch=1");
     cy.get("section").contains("Staking Ledger");
   });
 
   it("contains buttons for epoch navigation", () => {
-    cy.visit("/staking-ledgers?epoch=0");
-    cy.get("section").contains("Staking Ledger - Epoch 0");
+    cy.visit("/staking-ledgers?epoch=1");
+    cy.get("section").contains("Staking Ledger - Epoch 1");
     cy.get("section").contains("button", "Next").click();
     cy.wait(500);
-    cy.get("section").contains("Staking Ledger - Epoch 1");
+    cy.get("section").contains("Staking Ledger - Epoch 2");
     cy.get("button").contains("Previous").click();
     cy.wait(500);
-    cy.get("section").contains("Staking Ledger - Epoch 0");
+    cy.get("section").contains("Staking Ledger - Epoch 1");
   });
 });
