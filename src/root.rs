@@ -5,7 +5,8 @@ use crate::{
     },
     accounts::page::AccountsPage,
     analytics::page::{
-        AnalyticsTabbedPage, InternalCommandsAnalayticsPage, UserCommandsAnalyticsPage,
+        AnalyticsTabbedPage, BlocksAnalyticsPage, InternalCommandsAnalayticsPage,
+        UserCommandsAnalyticsPage,
     },
     blocks::page::{
         BlockAnalyticsTab, BlockInternalCommandsTab, BlockSnarkJobsTab, BlockSpotlightTab,
@@ -125,12 +126,10 @@ pub fn Root() -> impl IntoView {
                         <Route path="/ledger" view=BroadcastFromLedgerPage/>
                     </Route>
                     <Route path="/analytics" view=AnalyticsTabbedPage>
-                        <Route
-                            path="*"
-                            view=move || view! { <Redirect path="commands/internal"/> }
-                        />
+                        <Route path="*" view=move || view! { <Redirect path="blocks"/> }/>
                         <Route path="/commands/internal" view=InternalCommandsAnalayticsPage/>
                         <Route path="/commands/user" view=UserCommandsAnalyticsPage/>
+                        <Route path="/blocks" view=BlocksAnalyticsPage/>
                     </Route>
                 </Routes>
             </main>

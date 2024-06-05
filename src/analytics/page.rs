@@ -3,6 +3,24 @@ use leptos::*;
 use leptos_meta::*;
 
 #[component]
+pub fn BlocksAnalyticsPage() -> impl IntoView {
+    view! {
+        <Title text="Analytics | Blocks"/>
+        <PageContainer>
+            <AppSection>
+                <AppHeading heading="Blocks Analytics"/>
+                <AnalyticsLayout>
+                    <AnalyticsXLContainer>
+                        <div id="chart" class="w-full h-96"></div>
+                        <script src="/scripts/analytics/blocks-rewards.js" defer=true></script>
+                    </AnalyticsXLContainer>
+                </AnalyticsLayout>
+            </AppSection>
+        </PageContainer>
+    }
+}
+
+#[component]
 pub fn UserCommandsAnalyticsPage() -> impl IntoView {
     view! {
         <Title text="Analytics | User Commands"/>
@@ -48,7 +66,6 @@ pub fn AnalyticsTabbedPage() -> impl IntoView {
             href: "/analytics/blocks".to_string(),
             text: "Blocks".to_string(),
             icon: NavIcon::Analytics,
-            disabled: true,
             ..Default::default()
         },
         NavEntry {
