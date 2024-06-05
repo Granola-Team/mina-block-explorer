@@ -5,7 +5,7 @@ import {
 } from "../constants";
 
 suite(["@CI"], "staking ledger table", () => {
-  let pages = ["/staking-ledgers?epoch=0"];
+  let pages = ["/staking-ledgers?epoch=1"];
   let columns = [
     "Key",
     "Username",

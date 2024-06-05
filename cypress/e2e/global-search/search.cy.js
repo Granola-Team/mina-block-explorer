@@ -14,7 +14,7 @@ suite(["@CI"], "global search", () => {
   let pages = [
     {
       input: "jx7buQVWFLsXTtzRgSxbYcT8EYLS8KCZbLrfDcJxMtyy4thw2Ee",
-      expectedUrl: "/staking-ledgers?epoch=0",
+      expectedUrl: "/staking-ledgers?epoch=1",
     },
     {
       input: DEFAULT_ACCOUNT_PK,
@@ -30,7 +30,7 @@ suite(["@CI"], "global search", () => {
     },
     {
       input: "0",
-      expectedUrl: "/staking-ledgers?epoch=0",
+      expectedUrl: "/staking-ledgers?epoch=1",
     },
   ];
 

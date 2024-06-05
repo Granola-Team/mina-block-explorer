@@ -116,7 +116,7 @@ suite(["@CI"], "metadata about the table", () => {
       },
     },
     {
-      page: "/staking-ledgers?epoch=0",
+      page: "/staking-ledgers?epoch=1",
       table_heading: "Staking Ledger",
       column_selector: "input#q-key",
       input: null,
@@ -130,7 +130,7 @@ suite(["@CI"], "metadata about the table", () => {
       },
     },
     {
-      page: "/staking-ledgers?epoch=0",
+      page: "/staking-ledgers?epoch=1",
       table_heading: "Staking Ledger",
       column_selector: "input#q-key",
       input: DEFAULT_ACCOUNT_PK,
