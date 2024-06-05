@@ -98,7 +98,7 @@ setTimeout(async () => {
         name: "Txn Amount",
         position: "right",
         axisLabel: {
-          formatter: (value) => `${(value / 1e12).toFixed(2)}k Mina`, // Display values in trillions
+          formatter: (value) => `${(value / 1e12).toFixed(2)}k MINA`, // Display values in trillions
         },
       },
     ],

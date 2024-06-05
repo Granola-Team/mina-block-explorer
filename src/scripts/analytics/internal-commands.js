@@ -98,7 +98,7 @@ setTimeout(async () => {
         name: "Fee",
         axisLabel: {
           formatter: function (value) {
-            return `${value} Mina`;
+            return `${value} MINA`;
           },
         },
       },
