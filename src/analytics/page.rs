@@ -1,18 +1,14 @@
-use crate::common::{components::*, models::*, table::*};
+use crate::common::{components::*, models::*};
 use leptos::*;
 use leptos_meta::*;
 
 #[component]
 pub fn UserCommandsAnalyticsPage() -> impl IntoView {
-    let (metadata, _) = create_signal(Some(TableMetadata::default()));
     view! {
         <Title text="Analytics | User Commands"/>
         <PageContainer>
-            <TableSection
-                metadata
-                section_heading="User Commands Analytics"
-                controls=|| ().into_view()
-            >
+            <AppSection>
+                <AppHeading heading="User Commands Analytics"/>
                 <AnalyticsLayout>
                     <AnalyticsXLContainer>
                         <div id="chart" class="w-full h-96"></div>
@@ -22,29 +18,25 @@ pub fn UserCommandsAnalyticsPage() -> impl IntoView {
                         ></script>
                     </AnalyticsXLContainer>
                 </AnalyticsLayout>
-            </TableSection>
+            </AppSection>
         </PageContainer>
     }
 }
 
 #[component]
 pub fn InternalCommandsAnalayticsPage() -> impl IntoView {
-    let (metadata, _) = create_signal(Some(TableMetadata::default()));
     view! {
         <Title text="Analytics | Internal Commands"/>
         <PageContainer>
-            <TableSection
-                metadata
-                section_heading="Internal Commands Analytics"
-                controls=|| ().into_view()
-            >
-                <AnalyticsLayout>
-                    <AnalyticsXLContainer>
-                        <div id="chart" class="w-full h-96"></div>
-                        <script src="/scripts/analytics/internal-commands.js" defer=true></script>
-                    </AnalyticsXLContainer>
-                </AnalyticsLayout>
-            </TableSection>
+        <AppSection>
+            <AppHeading heading="Internal Commands Analytics"/>
+            <AnalyticsLayout>
+                <AnalyticsXLContainer>
+                    <div id="chart" class="w-full h-96"></div>
+                    <script src="/scripts/analytics/internal-commands.js" defer=true></script>
+                </AnalyticsXLContainer>
+            </AnalyticsLayout>
+        </AppSection>
         </PageContainer>
     }
 }
