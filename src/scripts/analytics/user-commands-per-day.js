@@ -1,6 +1,18 @@
 setTimeout(async () => {
-  const blockLimit = 3000;
-  const groupSize = 10;
+  const blockLimit = 2000;
+
+  let chartDom = document.getElementById("chart");
+  window.addEventListener("resize", function () {
+    myChart.resize();
+  });
+  let myChart = echarts.init(chartDom);
+
+  myChart.showLoading({
+    text: "Loading...", // Display text with the spinner
+    color: "#E39844", // Spinner color
+    zlevel: 0,
+  });
+
   let response = await fetch(config.graphql_endpoint, {
     method: "POST",
     headers: {
@@ -60,15 +72,12 @@ setTimeout(async () => {
     new Date(parseInt(key) * 1000).toISOString().substring(0, 10),
   ); // Convert back to milliseconds for chart
   let txnVolume = Object.values(data).map((value) => value.count);
+  let amounts = Object.values(data).map((value) => value.totalAmount);
 
-  console.log(data, dates, txnVolume);
-
-  let chartDom = document.getElementById("chart");
-  window.addEventListener("resize", function () {
-    myChart.resize();
-  });
-  let myChart = echarts.init(chartDom);
+  console.log(data, dates, txnVolume, amounts);
   let option;
+
+  myChart.hideLoading();
 
   option = {
     title: {
@@ -79,15 +88,32 @@ setTimeout(async () => {
       type: "category",
       data: dates,
     },
-    yAxis: {
-      type: "value",
-      name: "Txn Count",
-    },
+    yAxis: [
+      {
+        type: "value",
+        name: "Txn Count",
+      },
+      {
+        type: "value",
+        name: "Txn Amount",
+        position: "right",
+        axisLabel: {
+          formatter: (value) => `${(value / 1e12).toFixed(2)}k Mina`, // Display values in trillions
+        },
+      },
+    ],
     series: [
       {
         data: txnVolume,
         type: "line",
         areaStyle: {},
+        yAxisIndex: 0,
+      },
+      {
+        data: amounts,
+        type: "bar",
+        yAxisIndex: 1,
+        barMaxWidth: 20,
       },
     ],
   };
