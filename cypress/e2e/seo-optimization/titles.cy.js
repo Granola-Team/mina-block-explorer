@@ -15,7 +15,7 @@ suite(["@CI"], "meta title", () => {
       url: `/commands/internal`,
       title: `Transactions | Internal Commands`,
     },
-    { url: "/blocks", title: "Blocks | Search for Mina Blocks" },
+    { url: "/blocks", title: "Blocks | Search for blocks on Mina Blockchain" },
     { url: `/blocks/${block_hash}/`, title: "Block Overview | Spotlight" },
     {
       url: `/blocks/${block_hash}/commands/user`,
