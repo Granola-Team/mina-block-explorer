@@ -487,6 +487,13 @@ pub fn BlockSpotlight(block: BlocksQueryBlocks) -> impl IntoView {
             any_el: Some(decorate_with_mina_tag(get_total_currency(&block))),
             ..Default::default()
         },
+        SpotlightEntry {
+            label: "Canonical".to_string(),
+            any_el: Some(convert_to_span(
+                get_canonical(&block).unwrap_or_default().to_string(),
+            )),
+            ..Default::default()
+        },
     ];
     view! {
         <SpotlightSection
@@ -554,6 +561,10 @@ fn BlockSpotlightPlaceholder() -> impl IntoView {
         },
         SpotlightEntry {
             label: "Total Currency".to_string(),
+            ..Default::default()
+        },
+        SpotlightEntry {
+            label: "Canonical".to_string(),
             ..Default::default()
         },
     ];
