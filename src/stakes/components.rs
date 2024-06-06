@@ -1,5 +1,5 @@
 use super::{functions::*, models::*};
-use crate::common::{constants::*, functions::convert_to_link, table::*};
+use crate::common::{constants::*, functions::*, table::*};
 use leptos::*;
 use leptos_router::*;
 
@@ -116,6 +116,7 @@ pub fn StakesPageContents(
                         epoch_target=prev_epoch_sig.get().unwrap_or_default()
                     />
                     <EpochButton
+                        disabled=next_epoch_opt.is_none()
                         text="Next"
                         style_variant=EpochStyleVariant::Primary
                         epoch_target=next_epoch_sig.get().unwrap_or_default()
@@ -124,13 +125,16 @@ pub fn StakesPageContents(
             }
 
             additional_info=view! {
-                <div class="text-sm text-slate-500">
+                <div class="h-8 min-w-64 text-sm text-slate-500">
                     {move || {
                         ledger_hash
                             .get()
-                            .map(|lh| { convert_to_link(lh, "#".to_string()).into_view() })
-                            .collect_view()
+                            .map_or_else(
+                                || data_placeholder().into_view(),
+                                |lh| { convert_to_link(lh, "#".to_string()).into_view() },
+                            )
                     }}
+
                 </div>
 
                 {move || {
