@@ -25,30 +25,27 @@ pub fn SummaryPage() -> impl IntoView {
 #[component]
 fn SummaryGrid(summary: Option<BlockchainSummary>) -> impl IntoView {
     view! {
-        <section class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-6 auto-rows-min gap-4 p-4 pt-0">
+        <section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 auto-rows-min gap-4 p-4 pt-0">
             <h1 class="h-0 w-0 overflow-hidden absolute">"Summary"</h1>
-            <SummaryItem
-                id="blockchainLength"
-                label="Block Height"
-                value=summary.as_ref().map(|s| s.blockchain_length.to_string())
-            />
-            <SummaryItem
-                id="circulatingSupply"
-                label="Circulating Supply"
-                value=summary
-                    .as_ref()
-                    .map(|s| {
-                        format_mina(s.circ_supply().to_string())
-                            .split('.')
-                            .collect::<Vec<_>>()[0]
-                            .to_string()
-                    })
-            />
-
             <SummaryItem
                 id="epoch"
                 label="Epoch"
                 value=summary.as_ref().map(|s| s.epoch.to_string())
+            />
+            <SummaryItem
+                id="slotInEpoch"
+                label="Slot within Epoch"
+                value=summary.as_ref().map(|s| s.slot.to_string())
+            />
+            <SummaryItem
+                id="globalSlot"
+                label="Global Slot"
+                value=summary.as_ref().map(|s| s.global_slot.to_string())
+            />
+            <SummaryItem
+                id="blockchainLength"
+                label="Block Height"
+                value=summary.as_ref().map(|s| s.blockchain_length.to_string())
             />
             <SummaryItem
                 id="totalCurrency"
@@ -62,7 +59,38 @@ fn SummaryGrid(summary: Option<BlockchainSummary>) -> impl IntoView {
                             .to_string()
                     })
             />
-
+            <SummaryItem
+                id="circulatingSupply"
+                label="Circulating Supply"
+                value=summary
+                    .as_ref()
+                    .map(|s| {
+                        format_mina(s.circ_supply().to_string())
+                            .split('.')
+                            .collect::<Vec<_>>()[0]
+                            .to_string()
+                    })
+            />
+            <SummaryItem
+                id="totalNumBlocks"
+                label="Total Blocks"
+                value=summary.as_ref().map(|s| s.total_num_blocks.to_string())
+            />
+            <SummaryItem
+                id="totalUserCommands"
+                label="Total User  Txn"
+                value=summary.as_ref().map(|s| s.total_num_user_commands.to_string())
+            />
+            <SummaryItem
+                id="totalIntCommands"
+                label="Total Internal Txn"
+                value=summary.as_ref().map(|s| s.total_num_internal_commands.to_string())
+            />
+            <SummaryItem
+                id="totalSnarks"
+                label="Total SNARKs"
+                value=summary.as_ref().map(|s| s.total_num_snarks.to_string())
+            />
         </section>
     }
 }
