@@ -29,9 +29,20 @@ pub fn get_stake_percentage(stake: &StakingLedgersQueryStakes) -> String {
 }
 
 pub fn get_block_win_percentage(stake: &StakingLedgersQueryStakes) -> String {
-    let pk_epoch_num_blocks = stake.pk_epoch_num_blocks.as_ref().unwrap_or(&0);
-    let epoch_num_blocks = stake.epoch_num_blocks.as_ref().unwrap_or(&0);
-    format!("{:.1}", pk_epoch_num_blocks / epoch_num_blocks)
+    let pk_epoch_num_blocks = stake.pk_epoch_num_blocks.unwrap_or(0) as f64;
+    stake.epoch_num_blocks.map_or_else(
+        || "0".to_string(),
+        |epoch_num_blocks| {
+            if epoch_num_blocks != 0 {
+                format!(
+                    "{:.1}%",
+                    100.0 * pk_epoch_num_blocks / epoch_num_blocks as f64
+                )
+            } else {
+                "0".to_string()
+            }
+        },
+    )
 }
 
 pub fn get_delegate(stake: &StakingLedgersQueryStakes) -> String {

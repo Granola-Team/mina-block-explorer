@@ -42,10 +42,9 @@ suite(["@CI"], "meta title", () => {
       title: "Offline Broadcasting | Broadcast Signed Transaction From Ledger",
     },
     {
-      url: "/staking-ledgers?epoch=0",
-      title: "Staking Ledger | Epoch 0",
+      url: "/staking-ledgers?epoch=1",
+      title: "Staking Ledger | Epoch 1",
     },
-    { url: "/staking-ledgers?epoch=0", title: "Staking Ledger | Epoch 0" },
     { url: "/snarks", title: "SNARKs | Search For SNARKs" },
     {
       url: `/commands/${FIRST_TXN_HASH}`,
