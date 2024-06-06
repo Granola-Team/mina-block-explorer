@@ -26,7 +26,7 @@ pub fn SummaryPage() -> impl IntoView {
 fn SummaryGrid(summary: Option<BlockchainSummary>) -> impl IntoView {
     view! {
         <section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 auto-rows-min gap-4 p-4 pt-0">
-            <h1 class="h-0 w-0 overflow-hidden absolute">"Summary"</h1>
+            <h2 class="h-0 w-0 overflow-hidden absolute">"Summary"</h2>
             <SummaryItem
                 id="epoch"
                 label="Epoch"
