@@ -125,7 +125,7 @@ pub fn StakesPageContents(
             }
 
             additional_info=view! {
-                <div class="h-8 min-w-64 text-sm text-slate-500">
+                <div class="h-8 min-w-64 text-sm text-slate-500 ledger-hash">
                     {move || {
                         ledger_hash
                             .get()
