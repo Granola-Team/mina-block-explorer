@@ -143,7 +143,7 @@ pub fn StakesPageContents(
                         .map_or(false, |next_epoch| current_epoch == next_epoch - 1)
                     {
                         view! {
-                            <div class="text-sm text-dark-blue staking-ledger-percent-complete">
+                            <div class="text-sm text-slate-500 staking-ledger-percent-complete">
                                 {format!(
                                     "{:.2}% complete ({}/{} slots filled)",
                                     (slot_in_epoch as f64 / EPOCH_SLOTS as f64) * 100.0,
