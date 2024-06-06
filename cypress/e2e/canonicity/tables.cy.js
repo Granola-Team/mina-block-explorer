@@ -27,7 +27,7 @@ suite(["@CI"], "table", () => {
       cy.url().should("not.include", "canonical");
 
       // should load canonical by default
-      cy.contains("section", section)
+      cy.contains("section:has(h1)", section)
         .find("table tr:not(:has(th)) span")
         .as("tableRows");
       cy.get("@tableRows").should("not.have.class", "bg-status-failed");
@@ -43,7 +43,7 @@ suite(["@CI"], "table", () => {
       cy.get("@menu").select("Canonical");
       cy.url().should("include", "canonical=true");
       cy.wait(500);
-      cy.contains("section", section)
+      cy.contains("section:has(h1)", section)
         .find("table tr:not(:has(th)) span")
         .as("tableRows");
       cy.get("@tableRows").should("not.have.class", "bg-status-failed");
