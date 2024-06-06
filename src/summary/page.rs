@@ -25,16 +25,14 @@ pub fn SummaryPage() -> impl IntoView {
 #[component]
 fn SummaryGrid(summary: Option<BlockchainSummary>) -> impl IntoView {
     view! {
-        <section class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-4 auto-rows-min gap-4 py-4 pt-0">
+        <section class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-6 auto-rows-min gap-4 p-4 pt-0">
             <h1 class="h-0 w-0 overflow-hidden absolute">"Summary"</h1>
             <SummaryItem
-                imgsrc="/assets/img/blockchain_length.svg"
                 id="blockchainLength"
                 label="Block Height"
                 value=summary.as_ref().map(|s| s.blockchain_length.to_string())
             />
             <SummaryItem
-                imgsrc="/assets/img/circulating_supply.svg"
                 id="circulatingSupply"
                 label="Circulating Supply"
                 value=summary
@@ -48,13 +46,11 @@ fn SummaryGrid(summary: Option<BlockchainSummary>) -> impl IntoView {
             />
 
             <SummaryItem
-                imgsrc="/assets/img/epoch.svg"
                 id="epoch"
                 label="Epoch"
                 value=summary.as_ref().map(|s| s.epoch.to_string())
             />
             <SummaryItem
-                imgsrc="/assets/img/total_currency.svg"
                 id="totalCurrency"
                 label="Total Currency"
                 value=summary
