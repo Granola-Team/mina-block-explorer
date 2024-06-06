@@ -1,6 +1,7 @@
 suite(["@CI"], "chart", () => {
   let analytics_pages = [
     { page: "/analytics/commands/internal", chart_ids: ["#chart"] },
+    { page: "/analytics/commands/user", chart_ids: ["#chart"] },
   ];
 
   analytics_pages.forEach(({ page, chart_ids }) =>
