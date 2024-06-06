@@ -115,17 +115,11 @@ pub fn SummaryItem(
     #[prop(into)] label: String,
     #[prop(into)] value: Option<String>,
     #[prop(into)] id: String,
-    #[prop(optional, into)] imgsrc: String,
+    #[prop(optional, into)] _imgsrc: String,
 ) -> impl IntoView {
     view! {
-        <div class="h-24 w-96 p-4 max-w-full grid gap-2 grid-cols-[minmax(50px,50px)_1fr] bg-white rounded-md">
-            <div class="cols-span-1 row-start-1 row-end-3 bg-light-granola-orange rounded-md flex justify-center items-center">
-                <img src=imgsrc width=25 alt="logo"/>
-            </div>
-            <div
-                class="col-start-2 col-end-3 font-bold text-xl flex justify-start items-end"
-                id=id.clone()
-            >
+        <div class="h-24 w-full p-4 grid gap-2 grid-cols-1 bg-white rounded-md">
+            <div class="font-bold text-xl flex justify-start items-end" id=id.clone()>
 
                 {{
                     match value {
@@ -136,7 +130,7 @@ pub fn SummaryItem(
 
             </div>
             <label
-                class="row-start-2 col-start-2 col-end-3 text-sm text-slate-500 font-semibold flex justify-start items-start"
+                class="row-start-2 text-sm text-slate-500 font-semibold flex justify-start items-start"
                 for=id.clone()
             >
                 {label}
