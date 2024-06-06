@@ -1,18 +1,22 @@
 suite(["@CI"], "staking ledger", () => {
-  // TODO: enable when all epochs available
-  // it("shows slot progress message", () => {
-  //   cy.visit("/staking-ledgers?epoch=1");
-  //   cy.get(".staking-ledger-percent-complete").as("slot-info");
+  it("displays a ledger hash", () => {
+    cy.visit("/staking-ledgers");
+    cy.get(".ledger-hash").should("exist");
+  });
 
-  //   cy.get("@slot-info")
-  //     .invoke("text")
-  //     .then((epochProgressText) => {
-  //       const info = extractEpochProgress(epochProgressText);
-  //       expect(parseFloat(info.percent)).to.equal(
-  //         parseFloat(((info.slot / info.totalSlots) * 100).toFixed(2)),
-  //       );
-  //     });
-  // });
+  it("shows slot progress message", () => {
+    cy.visit("/staking-ledgers");
+    cy.get(".staking-ledger-percent-complete").as("slot-info");
+
+    cy.get("@slot-info")
+      .invoke("text")
+      .then((epochProgressText) => {
+        const info = extractEpochProgress(epochProgressText);
+        expect(parseFloat(info.percent)).to.equal(
+          parseFloat(((info.slot / info.totalSlots) * 100).toFixed(2)),
+        );
+      });
+  });
 
   function extractEpochProgress(input) {
     let regex = /(\d+).(\d+)% complete \((\d+)\/(\d+) slots filled\)/;
