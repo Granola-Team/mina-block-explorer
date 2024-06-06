@@ -1,18 +1,34 @@
 suite(["@CI"], "staking ledger", () => {
-  // TODO: enable when all epochs available
-  // it("shows slot progress message", () => {
-  //   cy.visit("/staking-ledgers?epoch=1");
-  //   cy.get(".staking-ledger-percent-complete").as("slot-info");
+  it("displays a ledger hash", () => {
+    cy.visit("/staking-ledgers");
+    cy.get(".ledger-hash").should("exist");
+  });
 
-  //   cy.get("@slot-info")
-  //     .invoke("text")
-  //     .then((epochProgressText) => {
-  //       const info = extractEpochProgress(epochProgressText);
-  //       expect(parseFloat(info.percent)).to.equal(
-  //         parseFloat(((info.slot / info.totalSlots) * 100).toFixed(2)),
-  //       );
-  //     });
-  // });
+  it("shows slot progress message", () => {
+    cy.visit("/staking-ledgers");
+    cy.get(".staking-ledger-percent-complete").as("slot-info");
+
+    cy.get("@slot-info")
+      .invoke("text")
+      .then((epochProgressText) => {
+        const info = extractEpochProgress(epochProgressText);
+        expect(parseFloat(info.percent)).to.equal(
+          parseFloat(((info.slot / info.totalSlots) * 100).toFixed(2)),
+        );
+      });
+  });
+
+  it("does not show slot progress message", () => {
+    cy.visit("/staking-ledgers");
+    cy.get(".staking-ledger-percent-complete").as("slot-info");
+
+    cy.get("@slot-info").should("exist");
+    cy.get("section").contains("button", "Next").click();
+    cy.get("@slot-info").should("not.exist");
+    cy.get("section").contains("button", "Prev").click();
+    cy.get("section").contains("button", "Prev").click();
+    cy.get("@slot-info").should("not.exist");
+  });
 
   function extractEpochProgress(input) {
     let regex = /(\d+).(\d+)% complete \((\d+)\/(\d+) slots filled\)/;
@@ -55,5 +71,27 @@ suite(["@CI"], "staking ledger", () => {
     cy.get("button").contains("Previous").click();
     cy.wait(500);
     cy.get("section").contains("Staking Ledger - Epoch 1");
+  });
+
+  it("disables 'Previous' button appropriately", () => {
+    cy.visit("/staking-ledgers?epoch=0");
+    cy.get("button.hover\\:cursor-not-allowed")
+      .contains("Previous")
+      .should("exist");
+    cy.get("button.hover\\:cursor-not-allowed")
+      .contains("Next")
+      .should("not.exist");
+  });
+
+  it("disables 'Next' button appropriately", () => {
+    cy.visit("/staking-ledgers");
+    cy.get("section").contains("button", "Next").click();
+
+    cy.get("button.hover\\:cursor-not-allowed")
+      .contains("Previous")
+      .should("not.exist");
+    cy.get("button.hover\\:cursor-not-allowed")
+      .contains("Next")
+      .should("exist");
   });
 });

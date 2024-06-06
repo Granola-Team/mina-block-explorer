@@ -1,5 +1,5 @@
 use super::{functions::*, models::*};
-use crate::common::{constants::*, functions::convert_to_link, table::*};
+use crate::common::{constants::*, functions::*, table::*};
 use leptos::*;
 use leptos_router::*;
 
@@ -9,6 +9,21 @@ pub fn StakesPageContents(
     #[prop(into)] slot_in_epoch: i64,
     selected_epoch: Option<i64>,
 ) -> impl IntoView {
+    let header_epoch = selected_epoch.unwrap_or(current_epoch);
+    let next_epoch = header_epoch + 1;
+    let prev_epoch = header_epoch.saturating_sub(1); // prevents underflow
+
+    let next_epoch_opt = if next_epoch > current_epoch + 1 {
+        None
+    } else {
+        Some(next_epoch)
+    };
+    let prev_epoch_opt = Some(prev_epoch);
+
+    let section_heading = format!("Staking Ledger - Epoch {}", header_epoch);
+    let (section_heading_sig, _) = create_signal(section_heading);
+    let (next_epoch_sig, _) = create_signal(next_epoch_opt);
+    let (prev_epoch_sig, _) = create_signal(prev_epoch_opt);
     let (data_sig, set_data) = create_signal(None);
     let query_params_map = use_query_map();
 
@@ -83,73 +98,65 @@ pub fn StakesPageContents(
         },
     ];
 
-    let mut section_heading = "Staking Ledger - Epoch ".to_string();
-    let mut next_epoch = current_epoch + 1;
-    let mut prev_epoch = current_epoch - 1;
-    let header_epoch = if let Some(qs_epoch) = selected_epoch {
-        if qs_epoch != current_epoch {
-            next_epoch = qs_epoch + 1;
-            next_epoch = next_epoch.clamp(0, current_epoch + 1);
-            prev_epoch = qs_epoch - 1;
-            qs_epoch
-        } else {
-            current_epoch
-        }
-    } else {
-        current_epoch
-    };
-    section_heading += format!("{}", header_epoch).as_str();
-
     view! {
         <TableSectionTemplate
             table_columns
             data_sig
-            section_heading
+            section_heading=section_heading_sig.get()
             is_loading=resource.loading()
             controls=move || {
                 view! {
                     <EpochButton
-                        disabled=prev_epoch < 0
+                        disabled=prev_epoch_sig
+                            .get()
+                            .map(|prev_epoch| prev_epoch < 0)
+                            .unwrap_or_default()
                         text="Previous"
                         style_variant=EpochStyleVariant::Secondary
-                        epoch_target=prev_epoch
+                        epoch_target=prev_epoch_sig.get().unwrap_or_default()
                     />
                     <EpochButton
+                        disabled=next_epoch_opt.is_none()
                         text="Next"
                         style_variant=EpochStyleVariant::Primary
-                        epoch_target=next_epoch
+                        epoch_target=next_epoch_sig.get().unwrap_or_default()
                     />
                 }
             }
 
             additional_info=view! {
-                {match ledger_hash.get() {
-                    Some(data) => {
+                <div class="h-8 min-w-64 text-sm text-slate-500 ledger-hash">
+                    {move || {
+                        ledger_hash
+                            .get()
+                            .map_or_else(
+                                || data_placeholder().into_view(),
+                                |lh| { convert_to_link(lh, "#".to_string()).into_view() },
+                            )
+                    }}
+
+                </div>
+
+                {move || {
+                    if next_epoch_sig
+                        .get()
+                        .map_or(false, |next_epoch| current_epoch == next_epoch - 1)
+                    {
                         view! {
-                            <div class="text-sm text-slate-500">
-                                {convert_to_link(data, "#".to_string())}
+                            <div class="text-sm text-slate-500 staking-ledger-percent-complete">
+                                {format!(
+                                    "{:.2}% complete ({}/{} slots filled)",
+                                    (slot_in_epoch as f64 / EPOCH_SLOTS as f64) * 100.0,
+                                    slot_in_epoch,
+                                    EPOCH_SLOTS,
+                                )}
+
                             </div>
                         }
                             .into_view()
+                    } else {
+                        ().into_view()
                     }
-                    None => ().into_view(),
-                }}
-
-                {if next_epoch - 1 == current_epoch {
-                    view! {
-                        <div class="text-sm text-dark-blue staking-ledger-percent-complete">
-                            {format!(
-                                "{:.2}% complete ({}/{} slots filled)",
-                                ({ slot_in_epoch } as f64 / { EPOCH_SLOTS } as f64) * 100.0,
-                                { slot_in_epoch },
-                                { EPOCH_SLOTS },
-                            )}
-
-                        </div>
-                    }
-                        .into_view()
-                } else {
-                    ().into_view()
                 }}
             }
         />
