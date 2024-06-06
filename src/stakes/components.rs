@@ -125,11 +125,11 @@ pub fn StakesPageContents(
 
             additional_info=view! {
                 <div class="text-sm text-slate-500">
-                    {move || match ledger_hash.get() {
-                        Some(data) => {
-                            convert_to_link(data, "#".to_string()).into_view()
-                        }
-                        None => ().into_view(),
+                    {move || {
+                        ledger_hash
+                            .get()
+                            .map(|lh| { convert_to_link(lh, "#".to_string()).into_view() })
+                            .collect_view()
                     }}
                 </div>
 
