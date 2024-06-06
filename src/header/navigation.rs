@@ -124,7 +124,7 @@ pub fn Header() -> impl IntoView {
             <a href="/" class="flex items-center justify-start">
                 <img src="/assets/img/logo.svg" width="45px" height="29px" alt="Minasearch"/>
                 <span class="md:hidden lg:block sm:block ml-1 text-white font-bold text-xl">
-                    MINA
+                    Mina
                 </span>
                 <span class="md:hidden lg:block sm:block text-granola-orange font-bold text-xl">
                     Search
