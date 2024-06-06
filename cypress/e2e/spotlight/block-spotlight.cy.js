@@ -1,8 +1,6 @@
 import {
-  DEFAULT_NON_CANONICAL_BLOCK_HASH,
   FIRST_BLOCK_WITH_SNARK_WORK,
   FIRST_NON_CANONICAL_BLOCK_WITH_SNARK_WORK,
-  GENESIS_BLOCK_BLOCK_HASH,
 } from "../constants";
 
 suite(["@CI"], "Block spotlight", () => {
@@ -19,6 +17,7 @@ suite(["@CI"], "Block spotlight", () => {
     "Epoch",
     "Transaction Fees",
     "Blockchain Length",
+    "Canonical",
   ];
 
   function testForCompleteness(stateHash) {
