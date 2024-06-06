@@ -1,5 +1,8 @@
 const devices = require("../../devices.json");
-const { FIRST_TXN_HASH } = require("../constants");
+const {
+  FIRST_TXN_HASH,
+  FIRST_NON_CANONICAL_TXN_HASH,
+} = require("../constants");
 
 suite(["@CI"], "transaction spotlight", () => {
   let expected_fields = [
@@ -22,6 +25,15 @@ suite(["@CI"], "transaction spotlight", () => {
     cy.viewport(mobile);
     cy.visit(`/commands/${FIRST_TXN_HASH}`);
     cy.testSpotlight("Command Spotlight", FIRST_TXN_HASH, expected_fields);
+  });
+
+  it("displays non-canonical command", () => {
+    cy.visit(`/commands/${FIRST_NON_CANONICAL_TXN_HASH}`);
+    cy.testSpotlight(
+      "Command Spotlight",
+      FIRST_NON_CANONICAL_TXN_HASH,
+      expected_fields,
+    );
   });
 
   // it("renders the tooltip for stake delegations", () => {
