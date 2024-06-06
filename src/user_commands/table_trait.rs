@@ -1,4 +1,4 @@
-use super::{functions::*, graphql::transactions_query::TransactionsQueryTransactions};
+use super::{graphql::transactions_query::TransactionsQueryTransactions};
 use crate::common::{functions::*, models::ColorVariant, table::*};
 use leptos::*;
 
