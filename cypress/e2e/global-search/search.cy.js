@@ -13,6 +13,10 @@ suite(["@CI"], "global search", () => {
 
   let pages = [
     {
+      input: "      jx7buQVWFLsXTtzRgSxbYcT8EYLS8KCZbLrfDcJxMtyy4thw2Ee     ",
+      expectedUrl: "/staking-ledgers?epoch=1",
+    },
+    {
       input: "jx7buQVWFLsXTtzRgSxbYcT8EYLS8KCZbLrfDcJxMtyy4thw2Ee",
       expectedUrl: "/staking-ledgers?epoch=1",
     },

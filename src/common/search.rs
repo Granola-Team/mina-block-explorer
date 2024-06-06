@@ -80,7 +80,8 @@ pub fn GlobalSearchBar() -> impl IntoView {
     let on_submit = move |ev: leptos::ev::SubmitEvent| {
         ev.prevent_default();
 
-        match value.get() {
+        let trimmed_value = value.get().trim().to_string();
+        match trimmed_value {
             val if val.starts_with("B62q") => {
                 navigate(&format!("/addresses/accounts/{}", val), Default::default());
                 set_value.set("".to_string());
