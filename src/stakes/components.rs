@@ -67,7 +67,7 @@ pub fn StakesPageContents(
         },
         TableColumn {
             column: "Username".to_string(),
-            width: Some(String::from(TABLE_COL_SHORT_WIDTH)),
+            width: Some(String::from(TABLE_COL_USERNAME_WIDTH)),
             ..Default::default()
         },
         TableColumn {
