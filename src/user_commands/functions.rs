@@ -1,24 +1,6 @@
 use super::{graphql::*, models::PooledUserCommandsResponse};
 use crate::common::{constants::*, models::MyError};
 use graphql_client::reqwest::post_graphql;
-use std::error::Error;
-
-/// 0th byte is a tag to distinguish digests from other data
-/// 1st byte is length, always 32 for digests
-/// bytes 2 to 33 are data,
-/// 0-right-padded if length is less than 32
-pub fn decode_memo(encoded: &str) -> Result<String, Box<dyn Error>> {
-    let decoded = bs58::decode(encoded).into_vec()?;
-    if decoded.len() < 3 {
-        return Err(Box::from("Decoded data is too short"));
-    }
-    let length = decoded[2] as usize;
-    if decoded.len() < 3 + length {
-        return Err(Box::from("Invalid length specified"));
-    }
-
-    Ok(String::from_utf8(decoded[3..3 + length].to_vec())?)
-}
 
 pub async fn load_pending_txn() -> Result<transactions_query::ResponseData, MyError> {
     let response = reqwest::get("https://proxy.minaexplorer.com/graphql?query={pooledUserCommands{id hash kind nonce source{publicKey}receiver{publicKey}amount fee memo failureReason feeToken}}")
@@ -78,16 +60,4 @@ pub async fn load_data(
     response
         .data
         .ok_or(MyError::GraphQLEmpty("No data available".to_string()))
-}
-
-#[cfg(test)]
-mod tests {
-    use crate::user_commands::functions::decode_memo;
-
-    #[test]
-    fn test_b58_decoding() {
-        let memo_hash = "E4Yf2t3NSjf3NC3D7MxX2QvXWXt1p8rxKgJxHHQjhCjdsqu795neB";
-        let memo_str = decode_memo(memo_hash).unwrap();
-        assert_eq!("Bon matin", memo_str);
-    }
 }

@@ -11,7 +11,7 @@ use rand::{
     Rng,
 };
 use rust_decimal::prelude::*;
-use std::iter;
+use std::{error::Error, iter};
 
 pub fn get_status(timestamp: &str) -> Status {
     match timestamp.parse::<DateTime<Utc>>() {
@@ -643,5 +643,30 @@ pub fn pill_variant_to_style_str(pill_variant: ColorVariant) -> String {
         ColorVariant::Grey => "bg-slate-400".to_string(),
         ColorVariant::Transparent => "bg-transparent".to_string(),
         ColorVariant::DarkBlue => "bg-dark-blue".to_string(),
+    }
+}
+
+pub fn decode_memo(encoded: &str) -> Result<String, Box<dyn Error>> {
+    let decoded = bs58::decode(encoded).into_vec()?;
+    if decoded.len() < 3 {
+        return Err(Box::from("Decoded data is too short"));
+    }
+    let length = decoded[2] as usize;
+    if decoded.len() < 3 + length {
+        return Err(Box::from("Invalid length specified"));
+    }
+
+    Ok(String::from_utf8(decoded[3..3 + length].to_vec())?)
+}
+
+#[cfg(test)]
+mod decode_memo_tests {
+    use crate::common::functions::decode_memo;
+
+    #[test]
+    fn test_b58_decoding() {
+        let memo_hash = "E4Yf2t3NSjf3NC3D7MxX2QvXWXt1p8rxKgJxHHQjhCjdsqu795neB";
+        let memo_str = decode_memo(memo_hash).unwrap();
+        assert_eq!("Bon matin", memo_str);
     }
 }

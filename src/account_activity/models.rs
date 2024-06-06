@@ -1,7 +1,7 @@
 use super::graphql::account_activity_query::{
     AccountActivityQueryIncomingTransactions, AccountActivityQueryOutgoingTransactions,
 };
-use crate::{common::functions::nanomina_to_mina, Params};
+use crate::{common::functions::*, Params};
 use chrono::{DateTime, Utc};
 use leptos_router::Params;
 use serde::{Deserialize, Serialize};
@@ -183,7 +183,9 @@ impl AccountActivityQueryDirectionalTransactionTrait
     }
 
     fn get_memo(&self) -> String {
-        self.memo.as_ref().map_or(String::new(), |f| f.to_string())
+        self.memo
+            .as_ref()
+            .map_or_else(String::new, |o| decode_memo(o).unwrap_or("".to_string()))
     }
 
     fn get_canonical(&self) -> bool {
