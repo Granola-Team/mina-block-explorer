@@ -59,6 +59,7 @@ fn SummaryGrid(summary: Option<BlockchainSummary>) -> impl IntoView {
                             .to_string()
                     })
             />
+
             <SummaryItem
                 id="circulatingSupply"
                 label="Circulating Supply"
@@ -71,6 +72,7 @@ fn SummaryGrid(summary: Option<BlockchainSummary>) -> impl IntoView {
                             .to_string()
                     })
             />
+
             <SummaryItem
                 id="totalNumBlocks"
                 label="Total Blocks"

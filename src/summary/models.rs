@@ -13,7 +13,7 @@ pub struct BlockchainSummary {
     pub total_num_blocks: i64,
     pub total_num_snarks: i64,
     pub total_num_user_commands: i64,
-    pub total_num_internal_commands: i64
+    pub total_num_internal_commands: i64,
 }
 
 impl BlockchainSummary {

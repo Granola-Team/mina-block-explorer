@@ -119,10 +119,7 @@ pub fn SummaryItem(
 ) -> impl IntoView {
     view! {
         <div class="h-24 w-full p-4 grid gap-2 grid-cols-1 bg-white rounded-md">
-            <div
-                class="font-bold text-xl flex justify-start items-end"
-                id=id.clone()
-            >
+            <div class="font-bold text-xl flex justify-start items-end" id=id.clone()>
 
                 {{
                     match value {
