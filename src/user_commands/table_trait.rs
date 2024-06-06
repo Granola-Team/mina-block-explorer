@@ -3,22 +3,6 @@ use crate::common::{functions::*, models::ColorVariant, table::*};
 use leptos::*;
 
 impl TableData for Vec<Option<TransactionsQueryTransactions>> {
-    fn get_columns(&self) -> Vec<String> {
-        [
-            "Height", "Txn Hash", "Age", "Type", "From", "To", "Nonce", "Fee", "Amount",
-        ]
-        .iter()
-        .map(ToString::to_string)
-        .collect::<Vec<_>>()
-    }
-
-    fn get_exact_search_columns(&self) -> Vec<String> {
-        ["Height", "Txn Hash", "From", "To"]
-            .iter()
-            .map(ToString::to_string)
-            .collect::<Vec<_>>()
-    }
-
     fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
         self.iter()
             .map(|opt_trans| match opt_trans {
@@ -30,20 +14,11 @@ impl TableData for Vec<Option<TransactionsQueryTransactions>> {
                         ),
                         convert_to_span(transaction.get_block_height()),
                     ]),
-                    convert_to_link(
-                        transaction.get_hash(),
-                        format!("/commands/{}", transaction.get_hash()),
-                    ),
-                    convert_to_title(
-                        print_time_since(&transaction.get_block_datetime()),
-                        transaction.get_block_datetime(),
-                    ),
-                    convert_to_pill(transaction.get_kind(), ColorVariant::Grey),
                     if !transaction.get_memo().is_empty() {
                         convert_array_to_span(vec![
                             convert_to_link(
-                                transaction.get_from(),
-                                format!("/addresses/accounts/{}", transaction.get_from()),
+                                transaction.get_hash(),
+                                format!("/commands/{}", transaction.get_hash()),
                             ),
                             convert_to_span(transaction.get_memo())
                                 .attr("class", "block text-xs font-light text-slate-400"),
@@ -51,10 +26,19 @@ impl TableData for Vec<Option<TransactionsQueryTransactions>> {
                         .attr("class", "block")
                     } else {
                         convert_to_link(
-                            transaction.get_from(),
-                            format!("/addresses/accounts/{}", transaction.get_from()),
+                            transaction.get_hash(),
+                            format!("/commands/{}", transaction.get_hash()),
                         )
                     },
+                    convert_to_title(
+                        print_time_since(&transaction.get_block_datetime()),
+                        transaction.get_block_datetime(),
+                    ),
+                    convert_to_pill(transaction.get_kind(), ColorVariant::Grey),
+                    convert_to_link(
+                        transaction.get_from(),
+                        format!("/addresses/accounts/{}", transaction.get_from()),
+                    ),
                     convert_to_link(
                         transaction.get_receiver_public_key(),
                         format!(
