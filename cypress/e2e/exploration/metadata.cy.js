@@ -121,7 +121,6 @@ suite(["@CI"], "metadata about the table", () => {
           });
       },
     },
-    // TODO: uncomment when https://github.com/Granola-Team/mina-indexer/issues/1069 is fixed
     {
       page: "/staking-ledgers?epoch=1",
       table_heading: "Staking Ledger",
