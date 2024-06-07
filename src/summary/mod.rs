@@ -1,4 +1,4 @@
 mod components;
-pub mod functions;
+mod functions;
 pub mod models;
 pub mod page;

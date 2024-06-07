@@ -9,15 +9,13 @@ use leptos_use::{storage::*, utils::JsonCodec};
 
 #[component]
 pub fn SummaryPage() -> impl IntoView {
-    let blockchain_summary_resource = create_resource(|| (), |_| async move { load_data().await });
+    let (summary_sig, _, _) =
+        use_local_storage::<BlockchainSummary, JsonCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
 
     view! {
         <Title text="Blocks | Search for blocks on Mina Blockchain"/>
         <PageContainer>
-            {move || match blockchain_summary_resource.get() {
-                Some(Ok(summary)) => view! { <SummaryGrid summary=Some(summary)/> },
-                _ => view! { <SummaryGrid summary=None/> },
-            }}
+            {move || view! { <SummaryGrid summary=Some(summary_sig.get())/> }}
             <BlocksSection/>
         </PageContainer>
     }
