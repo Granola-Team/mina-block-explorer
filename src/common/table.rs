@@ -51,6 +51,7 @@ pub fn TableSectionTemplate<T, F, E>(
     table_columns: Vec<TableColumn>,
     data_sig: ReadSignal<Option<T>>,
     is_loading: Signal<bool>,
+    #[prop(into,optional,default="all".to_string())] total_records: String,
     #[prop(into)] section_heading: String,
     #[prop(optional, into)] additional_info: View,
     controls: F,
@@ -67,7 +68,7 @@ where
         if let Some(data) = data_sig.get() {
             set_metadata.set(Some(TableMetadata {
                 displayed_records: data.get_rows().len() as i64,
-                total_records: "all".to_string(), // Consider making this dynamic if possible
+                total_records:total_records.clone()
             }));
         }
     });
