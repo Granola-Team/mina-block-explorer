@@ -129,21 +129,20 @@ suite(["@CI"], "metadata about the table", () => {
           });
       },
     },
-    // TODO: uncomment when https://github.com/Granola-Team/mina-indexer/issues/1069 is fixed
-    // {
-    //   page: "/staking-ledgers?epoch=1",
-    //   table_heading: "Staking Ledger",
-    //   column_selector: "input#q-key",
-    //   input: DEFAULT_ACCOUNT_PK,
-    //   assertion: function (target) {
-    //     target.should("have.lengthOf", 1);
-    //     cy.get(".metadata")
-    //       .invoke("text")
-    //       .then((text) => {
-    //         expect(text).to.equal("Showing 1 of 1");
-    //       });
-    //   },
-    // },
+    {
+      page: "/staking-ledgers?epoch=1",
+      table_heading: "Staking Ledger",
+      column_selector: "input#q-key",
+      input: DEFAULT_ACCOUNT_PK,
+      assertion: function (target) {
+        target.should("have.lengthOf", 1);
+        cy.get(".metadata")
+          .invoke("text")
+          .then((text) => {
+            expect(text).to.equal("Showing 1 of 1");
+          });
+      },
+    },
   ];
 
   pages.forEach(({ page, column_selector, input, assertion, table_heading }) =>
