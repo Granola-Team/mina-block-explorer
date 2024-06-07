@@ -5,10 +5,12 @@ use crate::{
         constants::{TABLE_ROW_LIMIT, *},
         table::*,
     },
+    summary::models::BlockchainSummary,
 };
 use leptos::*;
 use leptos_meta::*;
 use leptos_router::create_query_signal;
+use leptos_use::{storage::use_local_storage, utils::JsonCodec};
 
 #[component]
 pub fn AccountsPage() -> impl IntoView {
@@ -22,6 +24,8 @@ pub fn AccountsPage() -> impl IntoView {
 
 #[component]
 fn AccountsPageContents() -> impl IntoView {
+    let (summary_sig, _, _) =
+        use_local_storage::<BlockchainSummary, JsonCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
     let (data_sig, set_data) = create_signal(None);
     let (public_key_sig, _) = create_query_signal::<String>("q-public-key");
     let resource = create_resource(
@@ -75,6 +79,10 @@ fn AccountsPageContents() -> impl IntoView {
         <TableSectionTemplate
             table_columns
             data_sig
+            total_records_sig=Signal::derive(move || {
+                summary_sig.get().total_num_accounts.to_string()
+            })
+
             section_heading="Accounts"
             is_loading=resource.loading()
             controls=|| ().into_view()

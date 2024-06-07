@@ -29,7 +29,8 @@ suite(["@CI"], "metadata about the table", () => {
         cy.get(".metadata")
           .invoke("text")
           .then((text) => {
-            expect(text).to.equal(SHOWING_LATEST);
+            let { records, total_records } = extractMetadata(text);
+            expect(records).to.be.lte(total_records);
           });
       },
     },
