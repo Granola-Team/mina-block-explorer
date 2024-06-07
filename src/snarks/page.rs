@@ -1,9 +1,12 @@
 use super::functions::*;
-use crate::common::{components::*, constants::*, models::*, table::*};
+use crate::{
+    common::{components::*, constants::*, models::*, table::*},
+    summary::models::BlockchainSummary,
+};
 use leptos::*;
 use leptos_meta::Title;
 use leptos_router::{create_query_signal, use_query_map};
-use leptos_use::{use_interval, UseIntervalReturn};
+use leptos_use::{storage::use_local_storage, use_interval, utils::JsonCodec, UseIntervalReturn};
 
 #[component]
 pub fn SnarksPage() -> impl IntoView {
@@ -17,6 +20,8 @@ pub fn SnarksPage() -> impl IntoView {
 
 #[component]
 fn SnarksPageContents() -> impl IntoView {
+    let (summary_sig, _, _) =
+        use_local_storage::<BlockchainSummary, JsonCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
     let (data_sig, set_data) = create_signal(None);
     let query_params_map = use_query_map();
     let (canonical_qp, _) = create_query_signal::<bool>("canonical");
@@ -88,6 +93,7 @@ fn SnarksPageContents() -> impl IntoView {
         <TableSectionTemplate
             table_columns
             data_sig
+            total_records_sig=Signal::derive(move || summary_sig.get().total_num_snarks.to_string())
             is_loading=resource.loading()
             section_heading="SNARKs"
             controls=move || {

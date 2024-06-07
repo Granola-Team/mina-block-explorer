@@ -1,13 +1,17 @@
 use crate::{
     common::{components::*, constants::*, models::*, table::*},
     internal_commands::functions::load_data,
+    summary::models::BlockchainSummary,
 };
 use leptos::*;
 use leptos_meta::Title;
 use leptos_router::create_query_signal;
+use leptos_use::{storage::use_local_storage, utils::JsonCodec};
 
 #[component]
 pub fn InternalCommandsTab() -> impl IntoView {
+    let (summary_sig, _, _) =
+        use_local_storage::<BlockchainSummary, JsonCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
     let (data_sig, set_data) = create_signal(None);
     let (recipient, _) = create_query_signal::<String>("q-recipient");
     let (height_sig, _) = create_query_signal::<i64>("q-height");
@@ -75,6 +79,10 @@ pub fn InternalCommandsTab() -> impl IntoView {
             <TableSectionTemplate
                 table_columns
                 data_sig
+                total_records_sig=Signal::derive(move || {
+                    summary_sig.get().total_num_internal_commands.to_string()
+                })
+
                 is_loading=resource.loading()
                 section_heading="Internal Commands"
                 controls=move || {

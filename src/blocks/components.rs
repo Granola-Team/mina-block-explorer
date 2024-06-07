@@ -3,6 +3,7 @@ use crate::{
     blocks::graphql::blocks_query::BlocksQueryBlocksTransactionsFeeTransfer,
     common::{components::*, constants::*, functions::*, models::*, spotlight::*, table::*},
     icons::*,
+    summary::models::BlockchainSummary,
 };
 use charming::{
     component::{Legend, Title},
@@ -12,7 +13,7 @@ use charming::{
 use gloo_timers::future::TimeoutFuture;
 use leptos::*;
 use leptos_router::*;
-use leptos_use::{use_interval, UseIntervalReturn};
+use leptos_use::{storage::use_local_storage, use_interval, utils::JsonCodec, UseIntervalReturn};
 use std::collections::HashMap;
 #[component]
 pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
@@ -582,6 +583,8 @@ fn BlockSpotlightPlaceholder() -> impl IntoView {
 
 #[component]
 pub fn BlocksSection() -> impl IntoView {
+    let (summary_sig, _, _) =
+        use_local_storage::<BlockchainSummary, JsonCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
     let query_params_map = use_query_map();
     let (data_sig, set_data_sig) = create_signal(None);
     let (block_height_sig, _) = create_query_signal::<i64>("q-height");
@@ -679,6 +682,7 @@ pub fn BlocksSection() -> impl IntoView {
             table_columns
             data_sig
             section_heading="Blocks"
+            total_records_sig=Signal::derive(move || summary_sig.get().total_num_blocks.to_string())
             is_loading=resource.loading()
             controls=move || {
                 view! {

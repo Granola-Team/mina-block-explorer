@@ -64,6 +64,7 @@ suite(["@CI"], "staking ledger", () => {
 
   it("contains buttons for epoch navigation", () => {
     cy.visit("/staking-ledgers?epoch=1");
+    cy.wait(500);
     cy.get("section").contains("Staking Ledger - Epoch 1");
     cy.get("section").contains("button", "Next").click();
     cy.wait(500);

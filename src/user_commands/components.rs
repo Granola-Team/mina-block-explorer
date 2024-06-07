@@ -1,8 +1,11 @@
 use super::functions::*;
-use crate::common::{components::*, constants::*, models::*, table::*};
+use crate::{
+    common::{components::*, constants::*, models::*, table::*},
+    summary::models::BlockchainSummary,
+};
 use leptos::*;
 use leptos_router::*;
-use leptos_use::{use_interval, UseIntervalReturn};
+use leptos_use::{storage::use_local_storage, use_interval, utils::JsonCodec, UseIntervalReturn};
 
 const QP_TXN_HASH: &str = "q-txn-hash";
 const QP_TXN_TYPE: &str = "txn-type";
@@ -12,6 +15,8 @@ const QP_TO: &str = "q-to";
 
 #[component]
 pub fn TransactionsSection() -> impl IntoView {
+    let (summary_sig, _, _) =
+        use_local_storage::<BlockchainSummary, JsonCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
     let (data_sig, set_data) = create_signal(None);
     let (txn_type_qp, _) = create_query_signal::<String>(QP_TXN_TYPE);
     let query_params_map = use_query_map();
@@ -130,6 +135,10 @@ pub fn TransactionsSection() -> impl IntoView {
         <TableSectionTemplate
             table_columns
             data_sig
+            total_records_sig=Signal::derive(move || {
+                summary_sig.get().total_num_user_commands.to_string()
+            })
+
             is_loading=resource.loading()
             section_heading="User Commands"
             controls=move || {

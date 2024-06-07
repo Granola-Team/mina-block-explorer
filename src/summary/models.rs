@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Serialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct BlockchainSummary {
     pub blockchain_length: u32,
@@ -18,16 +18,10 @@ pub struct BlockchainSummary {
 
 impl BlockchainSummary {
     pub fn circ_supply(&self) -> f64 {
-        self.circulating_supply
-            .trim()
-            .parse()
-            .expect("Cannot parse circulating_supply")
+        self.circulating_supply.trim().parse().map_or(0.0, |r| r)
     }
     pub fn tot_currency(&self) -> f64 {
-        self.total_currency
-            .trim()
-            .parse()
-            .expect("Cannot parse total_currency")
+        self.total_currency.trim().parse().map_or(0.0, |r| r)
     }
 }
 
