@@ -68,7 +68,7 @@ where
         if let Some(data) = data_sig.get() {
             set_metadata.set(Some(TableMetadata {
                 displayed_records: data.get_rows().len() as i64,
-                total_records:total_records.clone()
+                total_records: total_records.clone(),
             }));
         }
     });

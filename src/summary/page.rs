@@ -26,7 +26,10 @@ pub fn SummaryLocalStorage() -> impl IntoView {
         use_local_storage::<BlockchainSummary, JsonCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
     let UseIntervalReturn { counter, .. } = use_interval(LIVE_RELOAD_INTERVAL);
 
-    let resource = create_resource(move || (counter.get()), |_| async move { load_data().await });
+    let resource = create_resource(
+        move || (counter.get()),
+        |_| async move { load_data().await },
+    );
 
     create_effect(move |_| {
         resource

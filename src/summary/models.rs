@@ -18,17 +18,10 @@ pub struct BlockchainSummary {
 
 impl BlockchainSummary {
     pub fn circ_supply(&self) -> f64 {
-        self.circulating_supply
-            .trim()
-            .parse()
-            .map_or(0.0, |r| r)
-        
+        self.circulating_supply.trim().parse().map_or(0.0, |r| r)
     }
     pub fn tot_currency(&self) -> f64 {
-        self.total_currency
-            .trim()
-            .parse()
-            .map_or(0.0, |r| r)
+        self.total_currency.trim().parse().map_or(0.0, |r| r)
     }
 }
 
