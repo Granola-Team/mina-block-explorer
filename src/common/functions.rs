@@ -212,6 +212,19 @@ pub fn nanomina_to_mina(num: u64) -> String {
     format_mina(num_str)
 }
 
+pub fn format_number<T: ToPrimitive + std::fmt::Display>(number: T) -> String {
+    let mut num_string = number.to_string();
+    let mut result = String::new();
+
+    while num_string.len() > 3 {
+        let idx = num_string.len() - 3;
+        result = format!(",{}", &num_string[idx..]) + &result;
+        num_string = num_string[..idx].to_string();
+    }
+
+    num_string + &result
+}
+
 pub fn format_mina(num_str: String) -> String {
     let parts: Vec<&str> = num_str.split('.').collect();
     let mut integral_part = parts[0].to_string();
