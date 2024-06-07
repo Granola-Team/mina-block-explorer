@@ -79,7 +79,9 @@ pub fn InternalCommandsTab() -> impl IntoView {
             <TableSectionTemplate
                 table_columns
                 data_sig
-                total_records=summary_sig.get().total_num_internal_commands.to_string()
+                total_records_sig=Signal::derive(move || {
+                    summary_sig.get().total_num_internal_commands.to_string()
+                })
                 is_loading=resource.loading()
                 section_heading="Internal Commands"
                 controls=move || {

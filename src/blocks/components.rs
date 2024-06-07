@@ -682,7 +682,7 @@ pub fn BlocksSection() -> impl IntoView {
             table_columns
             data_sig
             section_heading="Blocks"
-            total_records=summary_sig.get().total_num_blocks.to_string()
+            total_records_sig=Signal::derive(move || summary_sig.get().total_num_blocks.to_string())
             is_loading=resource.loading()
             controls=move || {
                 view! {
