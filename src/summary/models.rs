@@ -21,13 +21,14 @@ impl BlockchainSummary {
         self.circulating_supply
             .trim()
             .parse()
-            .expect("Cannot parse circulating_supply")
+            .map_or(0.0, |r| r)
+        
     }
     pub fn tot_currency(&self) -> f64 {
         self.total_currency
             .trim()
             .parse()
-            .expect("Cannot parse total_currency")
+            .map_or(0.0, |r| r)
     }
 }
 
