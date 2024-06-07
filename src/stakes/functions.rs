@@ -24,8 +24,9 @@ pub fn get_stake_percentage(stake: &StakingLedgersQueryStakes) -> String {
     stake
         .delegation_totals
         .as_ref()
-        .and_then(|delegation_totals| delegation_totals.total_stake_percentage.clone())
-        .unwrap_or("0%".to_string())
+        .and_then(|delegation_totals| delegation_totals.total_stake_percentage.as_ref())
+        .map(|total_stake_percentage| format!("{}%", total_stake_percentage))
+        .unwrap_or("0".to_string())
 }
 
 pub fn get_block_win_percentage(stake: &StakingLedgersQueryStakes) -> String {
@@ -35,7 +36,7 @@ pub fn get_block_win_percentage(stake: &StakingLedgersQueryStakes) -> String {
         |epoch_num_blocks| {
             if epoch_num_blocks != 0 {
                 format!(
-                    "{:.1}%",
+                    "{:.2}%",
                     100.0 * pk_epoch_num_blocks / epoch_num_blocks as f64
                 )
             } else {
