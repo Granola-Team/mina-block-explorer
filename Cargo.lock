@@ -1168,9 +1168,9 @@ dependencies = [
 
 [[package]]
 name = "leptos-use"
-version = "0.10.3"
+version = "0.10.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "66820a54d92b74f2d9613ada9c1c7b6ff2ee38bc6d3ebcf84841b59e539f5426"
+checksum = "3272d90b77cdbb99e9060f90eb6f5738e56128b2f912db57a50efb006a26e262"
 dependencies = [
  "async-trait",
  "cfg-if",
@@ -1183,6 +1183,8 @@ dependencies = [
  "lazy_static",
  "leptos",
  "paste",
+ "serde",
+ "serde_json",
  "thiserror",
  "wasm-bindgen",
  "wasm-bindgen-futures",

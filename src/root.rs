@@ -22,7 +22,7 @@ use crate::{
     internal_commands::components::InternalCommandsTab,
     snarks::page::SnarksPage,
     stakes::page::StakesPage,
-    summary::page::SummaryPage,
+    summary::page::{SummaryLocalStorage, SummaryPage},
     tokens::page::TokensPage,
     user_commands::page::{CommandSpotlightPage, CommandsTabbedPage, UserCommandsPage},
     zk_apps::page::{
@@ -37,6 +37,7 @@ pub fn Root() -> impl IntoView {
         <script>
             {format!(r#"const config = {{ graphql_endpoint: "{}" }}"#, GRAPHQL_ENDPOINT)}
         </script>
+        <SummaryLocalStorage/>
         <Router>
             <Header/>
             <GlobalSearchBar/>

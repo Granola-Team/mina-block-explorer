@@ -12,7 +12,7 @@ leptos_router = { version = "0.6.9", features = ["csr"] }
 chrono = { version = "0.4", features = ["serde"] }
 graphql_client = { version = "0.13.0", features = ["reqwest"] }
 url = "2.5.0"
-leptos-use = "0.10.0"
+leptos-use = { version = "0.10.10", features = ["serde"] }
 bs58 = { version = "0.5.0", features = ["check"] }
 console_error_panic_hook = "0.1.7"
 charming = { version = "0.3.1", features = ["wasm"] }
