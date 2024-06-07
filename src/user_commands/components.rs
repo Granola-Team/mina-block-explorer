@@ -1,5 +1,8 @@
 use super::functions::*;
-use crate::{common::{components::*, constants::*, models::*, table::*}, summary::models::BlockchainSummary};
+use crate::{
+    common::{components::*, constants::*, models::*, table::*},
+    summary::models::BlockchainSummary,
+};
 use leptos::*;
 use leptos_router::*;
 use leptos_use::{storage::use_local_storage, use_interval, utils::JsonCodec, UseIntervalReturn};
