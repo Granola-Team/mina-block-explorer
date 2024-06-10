@@ -1,6 +1,6 @@
 use super::{functions::*, graphql::blocks_query::BlocksQueryBlocks, models::*};
 use crate::{
-    blocks::graphql::blocks_query::BlocksQueryBlocksTransactionsFeeTransfer,
+    blocks::graphql::{blocks_query, blocks_query::BlocksQueryBlocksTransactionsFeeTransfer},
     common::{components::*, constants::*, functions::*, models::*, spotlight::*, table::*},
     icons::*,
     summary::models::BlockchainSummary,
@@ -14,7 +14,42 @@ use gloo_timers::future::TimeoutFuture;
 use leptos::*;
 use leptos_router::*;
 use leptos_use::{storage::use_local_storage, use_interval, utils::JsonCodec, UseIntervalReturn};
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
+
+#[component]
+pub fn UniqueBlocksProducersSummaryItem() -> impl IntoView {
+    let (blocks_sig, _, _) =
+        use_local_storage::<blocks_query::ResponseData, JsonCodec>(BLOCKS_STORAGE_KEY);
+    let (unique_producers_sig, set_up) = create_signal("...".to_string());
+
+    create_effect(move |_| {
+        let mut producers: HashMap<String, bool> = HashMap::new();
+
+        for block_opt in blocks_sig.get().blocks {
+            if let Some(block) = block_opt {
+                producers.entry(get_creator_account(&block)).or_insert(true);
+            }
+        }
+
+        let unique_producers: HashSet<String> = producers.keys().cloned().collect();
+        if unique_producers.len() == 0 {
+            set_up.set("...".to_string());
+        } else {
+            set_up.set(unique_producers.len().to_string());
+        }
+    });
+
+    move || {
+        view! {
+            <SummaryItem
+                label="Blocks Producers in last 1k Blocks"
+                value=unique_producers_sig.get()
+                id="uniqueBlockProducers"
+            />
+        }
+    }
+}
+
 #[component]
 pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
     let option_block = use_context::<ReadSignal<Option<BlocksQueryBlocks>>>()
