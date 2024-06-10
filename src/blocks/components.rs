@@ -25,10 +25,8 @@ pub fn UniqueBlocksProducersSummaryItem() -> impl IntoView {
     create_effect(move |_| {
         let mut producers: HashMap<String, bool> = HashMap::new();
 
-        for block_opt in blocks_sig.get().blocks {
-            if let Some(block) = block_opt {
-                producers.entry(get_creator_account(&block)).or_insert(true);
-            }
+        for block in blocks_sig.get().blocks.into_iter().flatten() {
+            producers.entry(get_creator_account(&block)).or_insert(true);
         }
 
         let unique_producers: HashSet<String> = producers.keys().cloned().collect();
