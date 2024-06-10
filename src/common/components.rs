@@ -53,7 +53,7 @@ pub fn UrlParamSelectMenu(
     let comparison_labels = labels.cases.clone();
     view! {
         <select
-            class="bg-gray-100 border-2 border-sky-400 focus:outline-none focus:border-sky-400 text-gray-900 text-sm rounded-lg block w-full p-2.5"
+            class="ml-5 sm:ml-2 w-full sm:w-fit border-2 border-slate-200 focus:border-granola-orange focus:outline-none focus-visible:border-granola-orange active:border-granola-orange rounded-xl text-xs font-medium text-black p-2"
             id=id
             on:change=move |ev| {
                 if labels.is_boolean_option {
