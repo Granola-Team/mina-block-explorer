@@ -1,7 +1,7 @@
 const pages = require("../../pages.json");
 const devices = require("../../devices.json");
 
-suite(["tier1"], "desktop footer", () => {
+suite(["@tier1"], "desktop footer", () => {
   devices.forEach((device) => {
     pages.forEach((page) => {
       it(`exist on ${page} page on device ${device}`, () => {

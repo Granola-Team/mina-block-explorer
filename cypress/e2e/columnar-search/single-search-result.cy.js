@@ -9,7 +9,7 @@ import { kebabCase } from "../helpers";
 
 let state_hash = "3NKxUy4mRpuH7MJxFQEobEJbUhPyvDyMEBQywmTRLbWsaHto3nur";
 
-suite(["tier1"], "search with single result", () => {
+suite(["@tier1"], "search with single result", () => {
   let exact_searches = [
     {
       origin: `/addresses/accounts`,

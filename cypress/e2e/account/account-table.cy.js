@@ -1,6 +1,6 @@
 import { DEFAULT_ACCOUNT_PK } from "../constants";
 
-suite(["tier1"], "account transaction table", () => {
+suite(["@tier1"], "account transaction table", () => {
   it("correctly references a counterparty", () => {
     cy.visit(`/addresses/accounts/${DEFAULT_ACCOUNT_PK}`);
     cy.get(".loading-placeholder").should("exist");

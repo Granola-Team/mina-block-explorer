@@ -1,4 +1,4 @@
-suite(["tier1"], "account dialog", () => {
+suite(["@tier1"], "account dialog", () => {
   let pages_with_account_dialog = ["/blocks"];
 
   let columns = ["Block Producer", "Coinbase Receiver"];

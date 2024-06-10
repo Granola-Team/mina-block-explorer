@@ -1,4 +1,4 @@
-suite(["tier1"], "staking ledger", () => {
+suite(["@tier1"], "staking ledger", () => {
   it("displays a ledger hash", () => {
     cy.visit("/staking-ledgers");
     cy.get(".ledger-hash").should("exist");
@@ -61,7 +61,7 @@ suite(["tier1"], "staking ledger", () => {
   });
 });
 
-suite(["tier2"], "staking ledger", () => {
+suite(["@tier2"], "staking ledger", () => {
   it("contains buttons for epoch navigation", () => {
     cy.visit("/staking-ledgers?epoch=1");
     cy.wait(500);

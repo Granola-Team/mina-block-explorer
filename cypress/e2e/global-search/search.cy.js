@@ -1,6 +1,6 @@
 import { DEFAULT_ACCOUNT_PK, GENESIS_BLOCK_BLOCK_HASH } from "../constants";
 
-suite(["tier1"], "global search", () => {
+suite(["@tier1"], "global search", () => {
   it("has visible placeholder text", () => {
     cy.viewport("iphone-xr");
     cy.visit("/");

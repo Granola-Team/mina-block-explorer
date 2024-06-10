@@ -1,6 +1,6 @@
 import { DEFAULT_ACCOUNT_PK } from "../constants";
 
-suite(["tier1"], "dialog", () => {
+suite(["@tier1"], "dialog", () => {
   beforeEach(() => {
     cy.visit(`/blocks/accounts/${DEFAULT_ACCOUNT_PK}`);
   });
