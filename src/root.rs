@@ -10,7 +10,7 @@ use crate::{
     },
     blocks::page::{
         BlockAnalyticsTab, BlockInternalCommandsTab, BlockSnarkJobsTab, BlockSpotlightTab,
-        BlockTabbedPage, BlockUserCommandsTab,
+        BlockTabbedPage, BlockUserCommandsTab, BlocksLocalStorage,
     },
     broadcast::page::{
         BroadcastDelegationPage, BroadcastFromLedgerPage, BroadcastTransactionPage,
@@ -38,6 +38,7 @@ pub fn Root() -> impl IntoView {
             {format!(r#"const config = {{ graphql_endpoint: "{}" }}"#, GRAPHQL_ENDPOINT)}
         </script>
         <SummaryLocalStorage/>
+        <BlocksLocalStorage/>
         <Router>
             <Header/>
             <GlobalSearchBar/>

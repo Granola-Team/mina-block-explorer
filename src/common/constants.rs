@@ -13,3 +13,4 @@ pub const TABLE_COL_SHORT_WIDTH: &str = "150px";
 pub const TABLE_COL_HASH_WIDTH: &str = "auto";
 pub const TABLE_COL_USERNAME_WIDTH: &str = "200rem";
 pub const BLOCKCHAIN_SUMMARY_STORAGE_KEY: &str = "blockchain-summary";
+pub const BLOCKS_STORAGE_KEY: &str = "blocks";
