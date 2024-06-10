@@ -9,7 +9,7 @@ use graphql_client::GraphQLQuery;
 #[graphql(
     schema_path = "graphql/schemas/mina-explorer.graphql",
     query_path = "graphql/queries/staking_ledgers.graphql",
-    response_derives = "Serialize,PartialEq,Debug,Clone",
+    response_derives = "Serialize,PartialEq,Debug,Clone,Default",
     skip_serializing_none
 )]
 pub struct StakingLedgersQuery;
