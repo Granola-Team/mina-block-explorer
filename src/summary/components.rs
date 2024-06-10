@@ -1,34 +1,8 @@
-use crate::{common::functions::*, summary::models::*};
+use crate::{
+    common::{components::*, functions::*},
+    summary::models::*,
+};
 use leptos::*;
-
-#[component]
-fn SummaryItem(
-    #[prop(into)] label: String,
-    #[prop(into)] value: Option<String>,
-    #[prop(into)] id: String,
-    #[prop(optional, into)] _imgsrc: String,
-) -> impl IntoView {
-    view! {
-        <div class="h-24 w-full p-4 grid gap-2 grid-cols-1 bg-white rounded-md">
-            <div class="font-bold text-xl flex justify-start items-end" id=id.clone()>
-
-                {{
-                    match value {
-                        Some(str_val) => view! { <span>{str_val}</span> }.into_view(),
-                        None => data_placeholder().into_view(),
-                    }
-                }}
-
-            </div>
-            <label
-                class="row-start-2 text-sm text-slate-500 font-semibold flex justify-start items-start"
-                for=id.clone()
-            >
-                {label}
-            </label>
-        </div>
-    }
-}
 
 #[component]
 pub fn SummaryGrid(summary: Option<BlockchainSummary>) -> impl IntoView {
