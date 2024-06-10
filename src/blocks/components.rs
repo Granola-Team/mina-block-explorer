@@ -32,7 +32,7 @@ pub fn UniqueBlocksProducersSummaryItem() -> impl IntoView {
         }
 
         let unique_producers: HashSet<String> = producers.keys().cloned().collect();
-        if unique_producers.len() == 0 {
+        if unique_producers.is_empty() {
             set_up.set(None);
         } else {
             set_up.set(Some(unique_producers.len().to_string()));
