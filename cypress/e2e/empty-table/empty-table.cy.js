@@ -1,6 +1,6 @@
 import { DEFAULT_ACCOUNT_PK } from "../constants";
 
-suite(["@CI"], "empty table", () => {
+suite(["tier1"], "empty table", () => {
   let pages = [
     "/addresses/accounts?q-public-key=B62fake",
     "/blocks?q-state-hash=3Nfake",

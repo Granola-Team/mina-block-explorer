@@ -1,6 +1,6 @@
 import { DEFAULT_ACCOUNT_PK } from "../constants";
 
-suite(["@CI"], "Account spotlight", () => {
+suite(["tier1"], "Account spotlight", () => {
   let expected_fields = ["Balance", "Delegate"];
 
   it("displays complete information", () => {

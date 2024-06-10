@@ -3,7 +3,7 @@ import {
   FIRST_NON_CANONICAL_BLOCK_WITH_SNARK_WORK,
 } from "../constants";
 
-suite(["@CI"], "Block spotlight", () => {
+suite(["tier1"], "Block spotlight", () => {
   let expected_fields = [
     "State Hash",
     "Previous State Hash",

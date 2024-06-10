@@ -6,7 +6,7 @@ steps:
       nix: true
       production: false
     env:
-      CYPRESS_tags: "@CI"
+      CYPRESS_tags: "@tier1"
       BERKELEY_FEATURES_ENABLED: true
     command: "nix develop --command just test"
   - label: "Deploy to Production"

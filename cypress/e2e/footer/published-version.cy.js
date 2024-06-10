@@ -1,4 +1,4 @@
-suite(["@CI"], "header", () => {
+suite(["tier1"], "header", () => {
   it(`links to deployed version on github.com`, () => {
     cy.visit("/");
     cy.get("footer")

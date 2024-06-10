@@ -4,7 +4,7 @@ import {
   GENESIS_BLOCK_BLOCK_HASH,
 } from "../constants";
 
-suite(["@CI"], "staking ledger table", () => {
+suite(["tier1"], "staking ledger table", () => {
   let pages = ["/staking-ledgers?epoch=1"];
   let columns = [
     "Key",
@@ -24,7 +24,7 @@ suite(["@CI"], "staking ledger table", () => {
   );
 });
 
-suite(["@CI"], "accounts table", () => {
+suite(["tier1"], "accounts table", () => {
   let pages = ["/addresses/accounts"];
   let columns = [
     "Public Key",
@@ -43,7 +43,7 @@ suite(["@CI"], "accounts table", () => {
   );
 });
 
-suite(["@CI"], "transactions table", () => {
+suite(["tier1"], "transactions table", () => {
   let pages = ["/commands/user"];
   let columns = [
     "Height",
@@ -65,7 +65,7 @@ suite(["@CI"], "transactions table", () => {
   );
 });
 
-suite(["@CI"], "internal commands table", () => {
+suite(["tier1"], "internal commands table", () => {
   let pages = ["/commands/internal"];
   let columns = ["Height", "State Hash", "Recipient", "Fee", "Type", "Age"];
 
@@ -99,7 +99,7 @@ suite([""], "account transactions table", () => {
   );
 });
 
-suite(["@CI"], "account activity transactions", () => {
+suite(["tier1"], "account activity transactions", () => {
   let pages = [`/blocks/accounts/${DEFAULT_ACCOUNT_PK}`];
   let columns = ["Hash", "Direction", "Counterparty", "Amount/Fee"];
 
@@ -111,7 +111,7 @@ suite(["@CI"], "account activity transactions", () => {
   );
 });
 
-suite(["@CI"], "blocks table", () => {
+suite(["tier1"], "blocks table", () => {
   let pages = ["/blocks"];
   let columns = [
     "Height",
@@ -133,7 +133,7 @@ suite(["@CI"], "blocks table", () => {
   );
 });
 
-suite(["@CI"], "snarks table", () => {
+suite(["tier1"], "snarks table", () => {
   let pages = ["/snarks"];
   let columns = ["Height", "State Hash", "Age", "Prover", "Fee"];
 
@@ -145,7 +145,7 @@ suite(["@CI"], "snarks table", () => {
   );
 });
 
-suite(["@CI"], "block spotlight snarks table", () => {
+suite(["tier1"], "block spotlight snarks table", () => {
   let pages = [`/blocks/${FIRST_BLOCK_WITH_SNARK_WORK}/snark-jobs`];
   let columns = ["State Hash", "Age", "Prover", "Fee"];
 
@@ -157,7 +157,7 @@ suite(["@CI"], "block spotlight snarks table", () => {
   );
 });
 
-suite(["@CI"], "internal commands table", () => {
+suite(["tier1"], "internal commands table", () => {
   let pages = [`/blocks/${GENESIS_BLOCK_BLOCK_HASH}/commands/internal`];
   let columns = ["Recipient", "Fee", "Type"];
 

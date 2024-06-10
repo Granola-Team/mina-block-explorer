@@ -1,4 +1,4 @@
-suite(["@CI"], "staking ledger", () => {
+suite(["tier1"], "staking ledger", () => {
   it("displays a ledger hash", () => {
     cy.visit("/staking-ledgers");
     cy.get(".ledger-hash").should("exist");

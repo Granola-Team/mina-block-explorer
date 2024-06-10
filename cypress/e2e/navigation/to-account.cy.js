@@ -4,7 +4,7 @@ import {
   GENESIS_BLOCK_BLOCK_HASH,
 } from "../constants";
 
-suite(["@CI"], "account page", () => {
+suite(["tier1"], "account page", () => {
   let pages = [
     {
       origin: `/addresses/accounts`,

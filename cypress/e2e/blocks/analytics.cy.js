@@ -1,6 +1,6 @@
 import { GENESIS_BLOCK_BLOCK_HASH } from "../constants";
 
-suite(["@CI"], "block analytic tab", () => {
+suite(["tier1"], "block analytic tab", () => {
   it("contains the correct elements", () => {
     cy.visit(`/blocks/${GENESIS_BLOCK_BLOCK_HASH}/analytics`);
 
