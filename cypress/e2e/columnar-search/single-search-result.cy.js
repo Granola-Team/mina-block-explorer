@@ -23,13 +23,12 @@ suite(["@CI"], "search with single result", () => {
       tableHeading: "Block Production",
       column: "State Hash",
     },
-    // TODO: uncomment when https://github.com/Granola-Team/mina-indexer/issues/1069 is fixed
-    // {
-    //   origin: "/staking-ledgers?epoch=1",
-    //   input: DEFAULT_ACCOUNT_PK,
-    //   tableHeading: "Staking Ledger",
-    //   column: "Key",
-    // },
+    {
+      origin: "/staking-ledgers?epoch=1",
+      input: DEFAULT_ACCOUNT_PK,
+      tableHeading: "Staking Ledger",
+      column: "Key",
+    },
     {
       origin: "/commands/user",
       input: FIRST_TXN_HASH,
