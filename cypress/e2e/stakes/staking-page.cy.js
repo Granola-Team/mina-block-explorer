@@ -20,6 +20,7 @@ suite(["@CI"], "staking ledger", () => {
 
   it("does not show slot progress message", () => {
     cy.visit("/staking-ledgers");
+    cy.wait(500);
     cy.get(".staking-ledger-percent-complete").as("slot-info");
 
     cy.get("@slot-info").should("exist");
@@ -44,6 +45,7 @@ suite(["@CI"], "staking ledger", () => {
 
   it("only has large positive stakes", () => {
     cy.visit("/staking-ledgers?epoch=1");
+    cy.wait(500);
     cy.get(".loading-placeholder").should("exist");
     cy.get(".loading-placeholder").should("not.exist");
     cy.aliasTableColumnValue("Staking Ledger", "Stake", "stake-value");
@@ -59,6 +61,7 @@ suite(["@CI"], "staking ledger", () => {
 
   it("defaults to current epoch", () => {
     cy.visit("/staking-ledgers?epoch=1");
+    cy.wait(500);
     cy.get("section").contains("Staking Ledger");
   });
 
@@ -76,6 +79,7 @@ suite(["@CI"], "staking ledger", () => {
 
   it("disables 'Previous' button appropriately", () => {
     cy.visit("/staking-ledgers?epoch=0");
+    cy.wait(500);
     cy.get("button.hover\\:cursor-not-allowed")
       .contains("Previous")
       .should("exist");
@@ -86,6 +90,7 @@ suite(["@CI"], "staking ledger", () => {
 
   it("disables 'Next' button appropriately", () => {
     cy.visit("/staking-ledgers");
+    cy.wait(500);
     cy.get("section").contains("button", "Next").click();
 
     cy.get("button.hover\\:cursor-not-allowed")
