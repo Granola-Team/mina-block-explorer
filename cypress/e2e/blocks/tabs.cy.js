@@ -1,4 +1,4 @@
-suite(["@CI"], "tab count and row count", () => {
+suite(["@tier1"], "tab count and row count", () => {
   let tabs = ["SNARK Jobs", "User Commands", "Internal Commands"];
 
   tabs.forEach((tab) =>

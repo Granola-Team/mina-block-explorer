@@ -1,4 +1,4 @@
-suite(["@CI"], "account spotlight", () => {
+suite(["@tier1"], "account spotlight", () => {
   let dialogs = [
     {
       origin:
