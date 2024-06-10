@@ -9,40 +9,10 @@ type Long = i32;
 #[graphql(
     schema_path = "graphql/schemas/mina-explorer.graphql",
     query_path = "graphql/queries/blocks.graphql",
-    response_derives = "Serialize,PartialEq,Debug,Clone",
+    response_derives = "Serialize,PartialEq,Debug,Clone,Default",
     skip_serializing_none
 )]
 pub struct BlocksQuery;
-
-#[allow(clippy::derivable_impls)]
-impl Default for blocks_query::BlocksQueryBlocks {
-    fn default() -> Self {
-        blocks_query::BlocksQueryBlocks {
-            block_height: None,
-            date_time: None,
-            state_hash: None,
-            canonical: None,
-            transactions: None,
-            creator_account: None,
-            snark_jobs: None,
-            protocol_state: None,
-            snark_fees: None,
-            tx_fees: None,
-        }
-    }
-}
-
-#[allow(clippy::derivable_impls)]
-impl Default for blocks_query::BlocksQueryBlocksTransactions {
-    fn default() -> Self {
-        blocks_query::BlocksQueryBlocksTransactions {
-            coinbase: None,
-            coinbase_receiver_account: None,
-            user_commands: None,
-            fee_transfer: None,
-        }
-    }
-}
 
 #[allow(clippy::derivable_impls)]
 impl Default for BlockQueryInput {

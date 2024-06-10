@@ -9,31 +9,10 @@ type Long = i32;
 #[graphql(
     schema_path = "graphql/schemas/mina-explorer.graphql",
     query_path = "graphql/queries/snarks.graphql",
-    response_derives = "Serialize,PartialEq,Debug,Clone",
+    response_derives = "Serialize,PartialEq,Debug,Clone,Default",
     skip_serializing_none
 )]
 pub struct SnarksQuery;
-
-#[allow(clippy::derivable_impls)]
-impl Default for snarks_query::SnarksQuerySnarks {
-    fn default() -> Self {
-        snarks_query::SnarksQuerySnarks {
-            block_height: None,
-            date_time: None,
-            prover: None,
-            block: None,
-            fee: None,
-            canonical: None,
-        }
-    }
-}
-
-#[allow(clippy::derivable_impls)]
-impl Default for snarks_query::SnarksQuerySnarksBlock {
-    fn default() -> Self {
-        snarks_query::SnarksQuerySnarksBlock { state_hash: None }
-    }
-}
 
 #[allow(clippy::derivable_impls)]
 impl Default for snarks_query::BlockQueryInput {
