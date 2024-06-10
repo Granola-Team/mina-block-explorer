@@ -5,7 +5,7 @@ const {
   STAKE_DELEGATION_HASH,
 } = require("../constants");
 
-suite(["@CI"], "transaction spotlight", () => {
+suite(["@tier1"], "transaction spotlight", () => {
   let expected_fields = [
     "Date",
     "Canonical",

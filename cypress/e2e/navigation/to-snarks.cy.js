@@ -1,6 +1,6 @@
 import { DEFAULT_ACCOUNT_PK } from "../constants";
 
-suite(["@CI"], "snarks page", () => {
+suite(["@tier1"], "snarks page", () => {
   [
     {
       origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,

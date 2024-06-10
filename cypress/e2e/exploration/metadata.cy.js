@@ -13,7 +13,7 @@ function extractMetadata(input) {
     : null;
 }
 
-suite(["@CI"], "metadata about the table", () => {
+suite(["@tier1"], "metadata about the table", () => {
   beforeEach(() => {
     cy.clearLocalStorage();
   });
