@@ -24,7 +24,7 @@ type Long = i32;
 #[graphql(
     schema_path = "graphql/schemas/mina-explorer.graphql",
     query_path = "graphql/queries/account_dialog.graphql",
-    response_derives = "Serialize,PartialEq,Debug,Clone",
+    response_derives = "Serialize,PartialEq,Debug,Clone,Default",
     skip_serializing_none
 )]
 pub struct AccountActivityQuery;
