@@ -20,7 +20,7 @@ use std::collections::{HashMap, HashSet};
 pub fn UniqueBlocksProducersSummaryItem() -> impl IntoView {
     let (blocks_sig, _, _) =
         use_local_storage::<blocks_query::ResponseData, JsonCodec>(BLOCKS_STORAGE_KEY);
-    let (unique_producers_sig, set_up) = create_signal("...".to_string());
+    let (unique_producers_sig, set_up) = create_signal(None);
 
     create_effect(move |_| {
         let mut producers: HashMap<String, bool> = HashMap::new();
@@ -33,9 +33,9 @@ pub fn UniqueBlocksProducersSummaryItem() -> impl IntoView {
 
         let unique_producers: HashSet<String> = producers.keys().cloned().collect();
         if unique_producers.len() == 0 {
-            set_up.set("...".to_string());
+            set_up.set(None);
         } else {
-            set_up.set(unique_producers.len().to_string());
+            set_up.set(Some(unique_producers.len().to_string()));
         }
     });
 
