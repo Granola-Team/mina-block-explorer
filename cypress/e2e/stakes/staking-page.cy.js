@@ -32,6 +32,7 @@ suite(["@tier1"], "staking ledger", () => {
 
   it("only has large positive stakes", () => {
     cy.visit("/staking-ledgers?epoch=1");
+    cy.wait(500);
     cy.get(".loading-placeholder").should("exist");
     cy.get(".loading-placeholder").should("not.exist");
     cy.aliasTableColumnValue("Staking Ledger", "Stake", "stake-value");
@@ -47,6 +48,7 @@ suite(["@tier1"], "staking ledger", () => {
 
   it("defaults to current epoch", () => {
     cy.visit("/staking-ledgers?epoch=1");
+    cy.wait(500);
     cy.get("section").contains("Staking Ledger");
   });
 
@@ -88,6 +90,7 @@ suite(["@tier2"], "staking ledger", () => {
 
   it("disables 'Next' button appropriately", () => {
     cy.visit("/staking-ledgers");
+    cy.wait(500);
     cy.get("section").contains("button", "Next").click();
 
     cy.get("button.hover\\:cursor-not-allowed")
