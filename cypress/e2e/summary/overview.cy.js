@@ -6,7 +6,7 @@ suite(["@tier1"], "blockchain overview", () => {
     let summaryItems = [
       {
         id: "#uniqueBlockProducers",
-        label: "Block Producers in last 1000 Blocks",
+        label: "Unique Producers of last 1000 Blocks",
       },
       { id: "#totalUserCommands", label: "Total User Commands" },
       { id: "#totalInternalCommands", label: "Total Internal Commands" },
