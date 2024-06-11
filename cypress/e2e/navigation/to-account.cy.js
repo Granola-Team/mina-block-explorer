@@ -1,8 +1,4 @@
-import {
-  DEFAULT_ACCOUNT_PK,
-  FIRST_BLOCK_WITH_SNARK_WORK,
-  GENESIS_BLOCK_BLOCK_HASH,
-} from "../constants";
+import { DEFAULT_ACCOUNT_PK, FIRST_BLOCK_WITH_SNARK_WORK } from "../constants";
 
 suite(["@tier1"], "account page", () => {
   let pages = [

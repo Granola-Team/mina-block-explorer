@@ -40,7 +40,7 @@ pub fn UniqueBlocksProducersSummaryItem() -> impl IntoView {
     move || {
         view! {
             <SummaryItem
-                label=format!("Block Producers in last {} Blocks", blocks_sig.get().blocks.len())
+                label=format!("Unique Producers of last {} Blocks", blocks_sig.get().blocks.len())
                 value=unique_producers_sig.get()
                 id="uniqueBlockProducers"
             />

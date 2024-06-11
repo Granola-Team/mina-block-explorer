@@ -77,7 +77,7 @@ suite(["@tier1"], "internal commands table", () => {
   );
 });
 
-suite([""], "account transactions table", () => {
+suite(["@tier1"], "account transactions table", () => {
   let pages = [`/addresses/accounts/${DEFAULT_ACCOUNT_PK}`];
   let columns = [
     "Height",
