@@ -1,4 +1,4 @@
-suite(["@CI"], "blockchain overview", () => {
+suite(["@tier1"], "blockchain overview", () => {
   it("displays non-zero metrics", () => {
     cy.visit("/blocks");
     cy.wait(1000);
