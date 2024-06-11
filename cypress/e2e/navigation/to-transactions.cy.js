@@ -1,6 +1,6 @@
 import { DEFAULT_ACCOUNT_PK } from "../constants";
 
-suite([], "transaction spotlight", () => {
+suite(["@tier1"], "transaction spotlight", () => {
   let pages = [
     {
       origin:
