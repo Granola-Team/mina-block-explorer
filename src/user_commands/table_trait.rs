@@ -18,7 +18,11 @@ impl TableData for Vec<Option<TransactionsQueryTransactions>> {
                         convert_array_to_span(vec![
                             convert_to_link(
                                 transaction.get_hash(),
-                                format!("/commands/{}?q-block-height={}", transaction.get_hash(), transaction.get_block_height()),
+                                format!(
+                                    "/commands/{}?q-state-hash={}",
+                                    transaction.get_hash(),
+                                    transaction.get_block_state_hash()
+                                ),
                             ),
                             convert_to_span(transaction.get_memo())
                                 .attr("class", "block text-xs font-light text-slate-400"),
@@ -27,7 +31,11 @@ impl TableData for Vec<Option<TransactionsQueryTransactions>> {
                     } else {
                         convert_to_link(
                             transaction.get_hash(),
-                            format!("/commands/{}?q-block-height={}", transaction.get_hash(), transaction.get_block_height()),
+                            format!(
+                                "/commands/{}?q-state-hash={}",
+                                transaction.get_hash(),
+                                transaction.get_block_state_hash()
+                            ),
                         )
                     },
                     convert_to_title(

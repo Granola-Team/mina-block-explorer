@@ -51,13 +51,13 @@ pub fn UserCommandsPage() -> impl IntoView {
 #[component]
 pub fn CommandSpotlightPage() -> impl IntoView {
     let memo_params_map = use_params_map();
-    let (block_height_sig, _) = create_query_signal::<i64>("q-block-height");
+    let (state_hash_sig, _) = create_query_signal::<String>("q-state-hash");
     let (txn_memo, set_txn_memo) = create_signal("No Memo".to_string());
     let resource = create_resource(
-        move || (memo_params_map.get(), block_height_sig.get()),
-        |(value, block_height)| async move {
-            let state_hash = value.get("id");
-            load_data(1, None, None, state_hash.cloned(), block_height, None).await
+        move || (memo_params_map.get(), state_hash_sig.get()),
+        |(value, state_hash)| async move {
+            let txn_hash = value.get("id");
+            load_data(1, None, None, txn_hash.cloned(), None, state_hash, None).await
         },
     );
 
