@@ -30,8 +30,9 @@ pub async fn load_data(
     limit: i64,
     from_account: Option<String>,
     to_account: Option<String>,
-    state_hash: Option<String>,
+    txn_hash: Option<String>,
     block_height: Option<i64>,
+    state_hash: Option<String>,
     canonical: Option<bool>,
 ) -> Result<transactions_query::ResponseData, MyError> {
     let variables = transactions_query::Variables {
@@ -40,9 +41,13 @@ pub async fn load_data(
         query: transactions_query::TransactionQueryInput {
             from: from_account,
             to: to_account,
-            hash: state_hash,
+            hash: txn_hash,
             block_height_lte: block_height,
             canonical,
+            block: state_hash.map(|sh| transactions_query::BlockQueryInput {
+                state_hash: Some(sh),
+                ..Default::default()
+            }),
             ..Default::default()
         },
     };
