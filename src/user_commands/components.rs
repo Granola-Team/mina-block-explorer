@@ -42,6 +42,7 @@ pub fn TransactionsSection() -> impl IntoView {
                         url_query_map.get(QP_TO).cloned(),
                         url_query_map.get(QP_TXN_HASH).cloned(),
                         block_height,
+                        None,
                         Some(true),
                     )
                     .await
@@ -53,6 +54,7 @@ pub fn TransactionsSection() -> impl IntoView {
                         url_query_map.get(QP_TO).cloned(),
                         url_query_map.get(QP_TXN_HASH).cloned(),
                         block_height,
+                        None,
                         Some(false),
                     )
                     .await
@@ -64,6 +66,7 @@ pub fn TransactionsSection() -> impl IntoView {
                         url_query_map.get(QP_TO).cloned(),
                         url_query_map.get(QP_TXN_HASH).cloned(),
                         block_height,
+                        None,
                         Some(true),
                     )
                     .await
