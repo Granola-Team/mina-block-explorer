@@ -1,4 +1,4 @@
-suite(["@CI"], "tab", () => {
+suite(["@tier1"], "tab", () => {
   let tabs = [
     {
       page: "/commands/internal",

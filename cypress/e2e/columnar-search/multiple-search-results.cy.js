@@ -11,7 +11,7 @@ let counterparty = "B62qjYanmV7y9njVeH5UHkz3GYBm7xKir1rAnoY4KsEYUGLMiU45FSM";
 let state_hash = "3NKxUy4mRpuH7MJxFQEobEJbUhPyvDyMEBQywmTRLbWsaHto3nur";
 let prover = "B62qpLeuZDL7PxNsCqsJwWFPAmnixi5ay8Kz9NcNGBQU8jK19VpJQaY";
 
-suite(["@CI"], "search with multiple results", () => {
+suite(["@tier1"], "search with multiple results", () => {
   let multi_response_searches = [
     {
       origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,

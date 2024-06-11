@@ -1,8 +1,12 @@
 use super::{components::*, functions::*, models::*};
-use crate::common::{components::*, models::*};
+use crate::{
+    blocks::graphql::blocks_query,
+    common::{components::*, constants::*, models::*},
+};
 use leptos::*;
 use leptos_meta::Title;
 use leptos_router::*;
+use leptos_use::{storage::*, use_interval, utils::JsonCodec, UseIntervalReturn};
 
 #[component]
 pub fn BlockSpotlightTab() -> impl IntoView {
@@ -42,6 +46,27 @@ pub fn BlockAnalyticsTab() -> impl IntoView {
         <Title text="Block Overview | Analytics"/>
         <BlockTabContainer content=BlockContent::Analytics/>
     }
+}
+
+#[component]
+pub fn BlocksLocalStorage() -> impl IntoView {
+    let (_, set_blocks, _) =
+        use_local_storage::<blocks_query::ResponseData, JsonCodec>(BLOCKS_STORAGE_KEY);
+    let UseIntervalReturn { counter, .. } = use_interval(LIVE_RELOAD_INTERVAL);
+
+    let resource = create_resource(
+        move || counter.get(),
+        |_| async move { load_data(1000, None, None, None, None, Some(true)).await },
+    );
+
+    create_effect(move |_| {
+        resource
+            .get()
+            .and_then(|res| res.ok())
+            .map(|data| set_blocks.set(data))
+    });
+
+    ().into_view()
 }
 
 #[component]
