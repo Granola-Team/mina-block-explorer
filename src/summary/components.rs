@@ -59,12 +59,12 @@ pub fn SummaryGrid(summary: Option<BlockchainSummary>) -> impl IntoView {
             />
             <SummaryItem
                 id="totalUserCommands"
-                label="Total User  Txn"
+                label="Total User Commands"
                 value=summary.as_ref().map(|s| format_number(s.total_num_user_commands))
             />
             <SummaryItem
-                id="totalIntCommands"
-                label="Total Internal Txn"
+                id="totalInternalCommands"
+                label="Total Internal Commands"
                 value=summary.as_ref().map(|s| format_number(s.total_num_internal_commands))
             />
             <SummaryItem

@@ -8,6 +8,8 @@ suite(["@tier1"], "blockchain overview", () => {
         id: "#uniqueBlockProducers",
         label: "Unique Producers of last 1000 Blocks",
       },
+      { id: "#totalUserCommands", label: "Total User Commands" },
+      { id: "#totalInternalCommands", label: "Total Internal Commands" },
     ];
     summaryItems.forEach(({ id, label }) => {
       cy.get(`${id} .loading-placeholder`).should("not.exist");
