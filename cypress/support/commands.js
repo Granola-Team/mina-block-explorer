@@ -26,7 +26,10 @@
 Cypress.Commands.add(
   "aliasTableRows",
   (tableHeading, alias, tableHeaderEl = "h1") => {
-    cy.contains(`section:has(${tableHeaderEl})`, tableHeading)
+    cy.get(`section:has(${tableHeaderEl})`)
+      .find(tableHeaderEl)
+      .contains(tableHeading)
+      .parents("section")
       .find("table tr:not(:has(th))")
       .as(alias);
   },
@@ -35,7 +38,10 @@ Cypress.Commands.add(
 Cypress.Commands.add(
   "aliasTransposedTableRows",
   (tableHeading, alias, tableHeaderEl = "h1") => {
-    cy.contains(`section:has(${tableHeaderEl})`, tableHeading)
+    cy.get(`section:has(${tableHeaderEl})`)
+      .find(tableHeaderEl)
+      .contains(tableHeading)
+      .parents("section")
       .find("table tr:has(th)")
       .as(alias);
   },
@@ -44,7 +50,10 @@ Cypress.Commands.add(
 Cypress.Commands.add(
   "aliasTableHeaders",
   (tableHeading, alias, tableHeadingEl = "h1") => {
-    cy.contains(`section:has(${tableHeadingEl})`, tableHeading)
+    cy.get(`section:has(${tableHeadingEl})`)
+      .find(tableHeaderEl)
+      .contains(tableHeading)
+      .parents("section")
       .find("table:first th")
       .as(alias);
   },
