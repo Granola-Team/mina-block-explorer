@@ -1,6 +1,6 @@
 const WHISPERIT_TXN_HASH =
   "CkpZhvEYxb9YFZULWEw61khrHAqGZhTktZSiGQ1CKfe6n2TcnxdgD";
-suite(["@tier2"], "user command memo field", () => {
+suite(["@tier1"], "user command memo field", () => {
   it("is present and decoded where appropriate", () => {
     cy.visit(`/commands/user?q-txn-hash=${WHISPERIT_TXN_HASH}`);
     cy.aliasTableRows("User Commands", "table-rows");
