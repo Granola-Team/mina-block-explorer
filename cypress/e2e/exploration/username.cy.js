@@ -25,6 +25,6 @@ suite(["@tier1"], "Username", () => {
     // account spotlight
     cy.visit(`/addresses/accounts/${SNZPOOL_ADDRESS}`);
     cy.wait(500);
-    cy.get(".spotlight-meta").contains("SNZPool");
+    cy.get("#spotlight-meta").should("contain", "SNZPool");
   });
 });
