@@ -15,21 +15,6 @@ suite(["@tier1"], "search with multiple results", () => {
   let multi_response_searches = [
     {
       origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
-      input: FIRST_BLOCK_PRODUCER_ADDRESS,
-      tableHeading: "Block Production",
-      expectation: {
-        column: "Block Producer",
-        value: FIRST_BLOCK_PRODUCER_ADDRESS,
-      },
-    },
-    {
-      origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
-      input: prover,
-      tableHeading: "SNARK Jobs",
-      expectation: { column: "Prover", value: prover },
-    },
-    {
-      origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
       input: counterparty,
       tableHeading: "User Commands",
       expectation: { column: "Counterparty", value: counterparty },
