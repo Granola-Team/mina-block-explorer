@@ -19,7 +19,7 @@ pub fn AccountDialogView() -> impl IntoView {
     let account_activity_resource = create_resource(
         move || memo_params_map.get(),
         |value| async move {
-            if let Some(_) = value.get("id").cloned() {
+            if value.get("id").cloned().is_some() {
                 load_data(
                     value.get("id").cloned(),
                     Some(3),
