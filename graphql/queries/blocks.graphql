@@ -19,6 +19,7 @@ query BlocksQuery(
         hash
         fee
         amount
+        kind
       }
       feeTransfer {
         type

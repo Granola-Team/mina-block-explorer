@@ -86,6 +86,11 @@ impl TableData for Vec<Option<BlocksQueryBlocksTransactionsUserCommands>> {
             .map(|opt_user_command| match opt_user_command {
                 Some(user_command) => vec![
                     convert_to_link(
+                        get_user_command_hash(user_command),
+                        format!("/commands/{}", get_user_command_hash(user_command)),
+                    ),
+                    convert_to_pill(get_kind(user_command), ColorVariant::Grey),
+                    convert_to_link(
                         get_user_command_from(user_command),
                         format!(
                             "/addresses/accounts/{}",
@@ -95,10 +100,6 @@ impl TableData for Vec<Option<BlocksQueryBlocksTransactionsUserCommands>> {
                     convert_to_link(
                         get_user_command_to(user_command),
                         format!("/addresses/accounts/{}", get_user_command_to(user_command)),
-                    ),
-                    convert_to_link(
-                        get_user_command_hash(user_command),
-                        format!("/commands/{}", get_user_command_hash(user_command)),
                     ),
                     decorate_with_mina_tag(get_user_command_fee(user_command)),
                     decorate_with_mina_tag(get_user_command_amount(user_command)),
