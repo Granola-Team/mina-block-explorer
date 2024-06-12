@@ -115,7 +115,7 @@ impl TransactionsTrait for TransactionsQueryTransactions {
     fn get_memo(&self) -> String {
         self.memo
             .as_ref()
-            .map_or_else(String::new, |o| decode_memo(o).unwrap_or("".to_string()))
+            .map_or_else(String::new, ToString::to_string)
     }
 
     fn get_block_state_hash(&self) -> String {
