@@ -59,7 +59,7 @@ suite(["@tier1"], "meta title", () => {
   pages.forEach(({ title, url }) =>
     it(`'${title}' exists in <head> for page ${url}`, () => {
       cy.visit(url);
-      cy.title({ timeout: 20000 }).should("equal", title);
+      cy.title().should("equal", title);
     }),
   );
 });

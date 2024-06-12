@@ -1,6 +1,6 @@
 import { DEFAULT_ACCOUNT_PK } from "../constants";
 
-suite(["@tier1"], "table", () => {
+suite(["@tier2"], "table", () => {
   let pages = [
     {
       url: "/blocks",

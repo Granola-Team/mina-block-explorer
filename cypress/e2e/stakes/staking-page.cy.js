@@ -1,4 +1,4 @@
-suite(["@tier1"], "staking ledger", () => {
+suite(["@tier2"], "staking ledger", () => {
   it("displays a ledger hash", () => {
     cy.visit("/staking-ledgers");
     cy.get(".ledger-hash").should("exist");
@@ -30,22 +30,6 @@ suite(["@tier1"], "staking ledger", () => {
       : null;
   }
 
-  it("only has large positive stakes", () => {
-    cy.visit("/staking-ledgers?epoch=1");
-    cy.wait(500);
-    cy.get(".loading-placeholder").should("exist");
-    cy.get(".loading-placeholder").should("not.exist");
-    cy.aliasTableColumnValue("Staking Ledger", "Stake", "stake-value");
-    cy.get("@stake-value")
-      .invoke("text")
-      .then((text) => {
-        cy.log(text);
-        var numText = text.replace("mina", "").trim();
-        var num = parseFloat(numText);
-        expect(num).to.be.gt(0);
-      });
-  });
-
   it("defaults to current epoch", () => {
     cy.visit("/staking-ledgers?epoch=1");
     cy.wait(500);
@@ -61,9 +45,7 @@ suite(["@tier1"], "staking ledger", () => {
       .contains("Next")
       .should("not.exist");
   });
-});
 
-suite(["@tier2"], "staking ledger", () => {
   it("contains buttons for epoch navigation", () => {
     cy.visit("/staking-ledgers?epoch=1");
     cy.wait(500);

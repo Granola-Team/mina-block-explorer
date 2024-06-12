@@ -128,10 +128,7 @@ impl TableData for Vec<Option<AccountActivityQuerySnarks>> {
                         print_time_since(&snark.get_date_time()),
                         snark.get_date_time(),
                     ),
-                    convert_to_link(
-                        snark.get_prover(),
-                        format!("/addresses/accounts/{}", snark.get_prover()),
-                    ),
+                    convert_to_span(snark.get_prover()),
                     decorate_with_mina_tag(snark.get_fee()),
                 ],
                 None => vec![],
@@ -221,10 +218,7 @@ impl TableData for Vec<Option<AccountActivityQueryBlocks>> {
                         print_time_since(&block.get_date_time()),
                         block.get_date_time(),
                     ),
-                    convert_to_link(
-                        block.get_creator_account(),
-                        format!("/blocks/accounts/{}", block.get_creator_account()),
-                    ),
+                    convert_to_span(block.get_creator_account()),
                     decorate_with_mina_tag(block.get_coinbase()),
                     convert_to_pill(block.get_transaction_count(), ColorVariant::Blue),
                     convert_to_pill(block.get_snark_job_count(), ColorVariant::Blue),

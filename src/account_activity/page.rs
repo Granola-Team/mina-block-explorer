@@ -52,11 +52,11 @@ pub fn AccountSpotlightPage() -> impl IntoView {
                     block_height,
                     qp_map.get("q-txn-hash").cloned(),
                     qp_map.get("q-state-hash").cloned(),
-                    qp_map.get("q-prover").cloned(),
+                    value.get("id").cloned(),
                     nonce,
                     qp_map.get("q-counterparty").cloned(),
                     slot,
-                    qp_map.get("q-block-producer").cloned(),
+                    value.get("id").cloned(),
                     canonical_opt,
                 )
                 .await

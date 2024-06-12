@@ -21,18 +21,8 @@ suite(["@tier1"], "account page", () => {
     },
     {
       origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
-      column: "Block Producer",
-      tableHeader: "Block Production",
-    },
-    {
-      origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
       column: "Coinbase Receiver",
       tableHeader: "Block Production",
-    },
-    {
-      origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
-      column: "Prover",
-      tableHeader: "SNARK Jobs",
     },
     { origin: "/snarks", column: "Prover", tableHeader: "SNARKs" },
     {
