@@ -1,4 +1,5 @@
 import {
+  ADDRESS_WITH_SNARK_AND_BLOCK_PRODUCTION,
   DEFAULT_ACCOUNT_PK,
   FIRST_INTERNAL_TXN_HASH,
   FIRST_TXN_HASH,
@@ -7,9 +8,9 @@ import {
 
 import { kebabCase } from "../helpers";
 
-let state_hash = "3NKxUy4mRpuH7MJxFQEobEJbUhPyvDyMEBQywmTRLbWsaHto3nur";
+let state_hash = "3NKrxKGr3JpYT2CzAFUeUb89ae6MFMsVWFX1QLYqYNJp1ffHR4ej";
 
-suite(["@tier1"], "search with single result", () => {
+suite(["@tier2"], "search with single result", () => {
   let exact_searches = [
     {
       origin: `/addresses/accounts`,
@@ -18,7 +19,7 @@ suite(["@tier1"], "search with single result", () => {
       column: "Public Key",
     },
     {
-      origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
+      origin: `/addresses/accounts/${ADDRESS_WITH_SNARK_AND_BLOCK_PRODUCTION}`,
       input: state_hash,
       tableHeading: "Block Production",
       column: "State Hash",

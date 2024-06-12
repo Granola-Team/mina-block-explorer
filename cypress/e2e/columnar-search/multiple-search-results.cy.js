@@ -1,4 +1,5 @@
 import {
+  ADDRESS_WITH_SNARK_AND_BLOCK_PRODUCTION,
   DEFAULT_ACCOUNT_PK,
   FIRST_BLOCK_PRODUCER_ADDRESS,
   FIRST_FEE_PAYER,
@@ -8,10 +9,9 @@ import {
 import { kebabCase } from "../helpers";
 
 let counterparty = "B62qjYanmV7y9njVeH5UHkz3GYBm7xKir1rAnoY4KsEYUGLMiU45FSM";
-let state_hash = "3NKxUy4mRpuH7MJxFQEobEJbUhPyvDyMEBQywmTRLbWsaHto3nur";
-let prover = "B62qpLeuZDL7PxNsCqsJwWFPAmnixi5ay8Kz9NcNGBQU8jK19VpJQaY";
+let state_hash = "3NKrxKGr3JpYT2CzAFUeUb89ae6MFMsVWFX1QLYqYNJp1ffHR4ej";
 
-suite(["@tier1"], "search with multiple results", () => {
+suite(["@tier2"], "search with multiple results", () => {
   let multi_response_searches = [
     {
       origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
@@ -20,7 +20,7 @@ suite(["@tier1"], "search with multiple results", () => {
       expectation: { column: "Counterparty", value: counterparty },
     },
     {
-      origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
+      origin: `/addresses/accounts/${ADDRESS_WITH_SNARK_AND_BLOCK_PRODUCTION}`,
       input: state_hash,
       tableHeading: "SNARK Jobs",
       expectation: { column: "State Hash", value: state_hash },
@@ -32,16 +32,16 @@ suite(["@tier1"], "search with multiple results", () => {
       expectation: { column: "Height", value: "500" },
     },
     {
-      origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
-      input: "957",
+      origin: `/addresses/accounts/${ADDRESS_WITH_SNARK_AND_BLOCK_PRODUCTION}`,
+      input: "9963",
       tableHeading: "SNARK Jobs",
-      expectation: { column: "Height", value: "957" },
+      expectation: { column: "Height", value: "9963" },
     },
     {
-      origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
-      input: "500",
+      origin: `/addresses/accounts/${ADDRESS_WITH_SNARK_AND_BLOCK_PRODUCTION}`,
+      input: "6165",
       tableHeading: "Block Production",
-      expectation: { column: "Height", value: "500" },
+      expectation: { column: "Height", value: "6165" },
     },
     {
       origin: "/snarks",
