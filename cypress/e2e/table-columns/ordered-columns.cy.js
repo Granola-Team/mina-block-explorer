@@ -4,6 +4,18 @@ import {
   GENESIS_BLOCK_BLOCK_HASH,
 } from "../constants";
 
+suite(["@tier1"], "block spotlight user commands", () => {
+  let pages = [`/blocks/${FIRST_BLOCK_WITH_SNARK_WORK}/commands/user`];
+  let columns = ["Hash", "Type", "From", "To", "Fee", "Amount"];
+
+  pages.forEach((page) =>
+    it(`on ${page} includes correct columns`, () => {
+      cy.visit(page);
+      cy.tableHasOrderedColumns("User Commands", columns);
+    }),
+  );
+});
+
 suite(["@tier1"], "staking ledger table", () => {
   let pages = ["/staking-ledgers?epoch=1"];
   let columns = [

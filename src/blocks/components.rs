@@ -84,17 +84,22 @@ pub fn BlockUserCommands(block: BlocksQueryBlocks) -> impl IntoView {
 
     let table_columns = vec![
         TableColumn {
+            column: "Hash".to_string(),
+            width: Some(String::from(TABLE_COL_HASH_WIDTH)),
+            ..Default::default()
+        },
+        TableColumn {
+            column: "Type".to_string(),
+            width: Some(String::from(TABLE_COL_SHORT_WIDTH)),
+            ..Default::default()
+        },
+        TableColumn {
             column: "From".to_string(),
             width: Some(String::from(TABLE_COL_HASH_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "To".to_string(),
-            width: Some(String::from(TABLE_COL_HASH_WIDTH)),
-            ..Default::default()
-        },
-        TableColumn {
-            column: "Hash".to_string(),
             width: Some(String::from(TABLE_COL_HASH_WIDTH)),
             ..Default::default()
         },
