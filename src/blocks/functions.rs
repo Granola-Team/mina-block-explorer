@@ -54,6 +54,10 @@ pub fn get_user_command_hash(uc: &BlocksQueryBlocksTransactionsUserCommands) -> 
     uc.hash.as_ref().map_or("".to_string(), |o| o.to_string())
 }
 
+pub fn get_kind(uc: &BlocksQueryBlocksTransactionsUserCommands) -> String {
+    uc.kind.as_ref().map_or("".to_string(), |o| o.to_string())
+}
+
 pub fn get_user_command_fee(uc: &BlocksQueryBlocksTransactionsUserCommands) -> String {
     uc.fee
         .map(|f| f.round() as u64)
@@ -123,8 +127,7 @@ pub fn get_fee_transfer_count(block: &BlocksQueryBlocks) -> Option<usize> {
 pub fn get_slot(block: &BlocksQueryBlocks) -> String {
     block.protocol_state.as_ref().map_or_else(String::new, |o| {
         o.consensus_state.as_ref().map_or_else(String::new, |o| {
-            o.slot_since_genesis
-                .map_or_else(String::new, |o| o.to_string())
+            o.slot.map_or_else(String::new, |o| o.to_string())
         })
     })
 }

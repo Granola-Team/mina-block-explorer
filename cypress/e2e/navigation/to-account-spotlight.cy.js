@@ -16,9 +16,9 @@ suite(["@tier1"], "account spotlight", () => {
     it(`is navigated to from ${origin}`, () => {
       cy.visit(origin);
       cy.wait(1000);
-      cy.get(selector, { timeout: 10000 }).first().click({ force: true });
+      cy.get(selector).first().click({ force: true });
       cy.wait(1000);
-      cy.url().should("include", "/accounts/", { timeout: 10000 });
+      cy.url().should("include", "/accounts/");
     }),
   );
 });

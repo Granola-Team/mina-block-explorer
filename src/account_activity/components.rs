@@ -325,7 +325,6 @@ pub fn AccountOverviewSnarkJobTable(
         TableColumn {
             column: "Prover".to_string(),
             width: Some(String::from(TABLE_COL_HASH_WIDTH)),
-            is_searchable: true,
             ..Default::default()
         },
         TableColumn {
@@ -390,7 +389,6 @@ pub fn AccountOverviewBlocksTable(
         },
         TableColumn {
             column: "Block Producer".to_string(),
-            is_searchable: true,
             width: Some(String::from(TABLE_COL_HASH_WIDTH)),
             ..Default::default()
         },
