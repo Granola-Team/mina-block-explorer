@@ -522,7 +522,7 @@ pub fn BlockSpotlight(block: BlocksQueryBlocks) -> impl IntoView {
             ..Default::default()
         },
         SpotlightEntry {
-            label: "Total Currency".to_string(),
+            label: "Total MINA".to_string(),
             any_el: Some(decorate_with_mina_tag(get_total_currency(&block))),
             ..Default::default()
         },
@@ -599,7 +599,7 @@ fn BlockSpotlightPlaceholder() -> impl IntoView {
             ..Default::default()
         },
         SpotlightEntry {
-            label: "Total Currency".to_string(),
+            label: "Total MINA".to_string(),
             ..Default::default()
         },
         SpotlightEntry {
