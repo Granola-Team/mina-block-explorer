@@ -27,8 +27,8 @@ pub fn SummaryGrid(summary: Option<BlockchainSummary>) -> impl IntoView {
                 value=summary.as_ref().map(|s| format_number(s.blockchain_length))
             />
             <SummaryItem
-                id="totalCurrency"
-                label="Total Currency"
+                id="totalMina"
+                label="Total MINA"
                 value=summary
                     .as_ref()
                     .map(|s| {
