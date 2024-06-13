@@ -110,7 +110,7 @@ pub fn GlobalSearchBar() -> impl IntoView {
 
     view! {
         <PreSectionContainer>
-            <div class="mx-2 my-2 md:mx-0 md:w-full -mt-2 relative align-stretch flex items-center">
+            <div class="mx-2 my-2 md:mx-0 md:w-full mt-5 relative align-stretch flex items-center">
                 <form class="flex grow" on:submit=on_submit>
                     <input
                         id="searchbar"
