@@ -88,7 +88,7 @@ pub fn Footer() -> impl IntoView {
                         href="https://github.com/Granola-Team/mina-block-explorer/commit/"
                             .to_string() + COMMIT_HASH
                     >
-                        {&COMMIT_HASH[..7]}
+                        {COMMIT_HASH}
                     </a>
                     {move || match resource.get().and_then(|res| res.ok()) {
                         Some(res) => {
