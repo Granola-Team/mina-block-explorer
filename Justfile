@@ -9,7 +9,7 @@ export RUSTFLAGS := "--cfg=web_sys_unstable_apis"
 
 export CYPRESS_BASE_URL := 'http://localhost:' + trunk_port
 
-export VERSION := `git rev-parse HEAD`
+export VERSION := `git rev-parse --short=8 HEAD`
 
 export CARGO_HOME := `pwd` + '.cargo'
 
