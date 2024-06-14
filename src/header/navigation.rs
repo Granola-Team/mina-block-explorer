@@ -1,6 +1,8 @@
-use crate::common::{components::*, constants::*, models::*};
+use crate::{
+    common::{components::*, constants::*, models::*},
+    icons::*,
+};
 use leptos::*;
-use crate::icons::*;
 
 #[component]
 pub fn Header() -> impl IntoView {
@@ -181,7 +183,7 @@ pub fn Header() -> impl IntoView {
         </header>
         <section class="p-4 bg-white dark:bg-gray-900 flex flex-col justify-center w-full">
             <div class="pb-2 flex justify-center w-full">
-                <Construction />
+                <Construction/>
                 <h1 class="text-2xl font-bold tracking-tight leading-none text-gray-900 dark:text-white">
                     "Early Access"
                 </h1>
