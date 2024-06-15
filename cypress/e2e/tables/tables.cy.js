@@ -2,14 +2,14 @@ import {
   FIRST_BLOCK_PRODUCER_ADDRESS,
   FIRST_RECIPIENT_ADDRESS,
   FIRST_SENDER_ADDRESS,
-  LONG_LIVE_SNZ_HASH,
   GENESIS_BLOCK_BLOCK_HASH,
-  SNZPOOL_ADDRESS,
+  HUMANIZE_FINANCE_ADDRESS,
+  HUMANIZE_FINANCE_TXN_HASH,
 } from "../constants";
 
 let test_suite_data = [
   {
-    tag: "@tier2",
+    tag: "@tier1",
     url: "/blocks",
     table: {
       heading: "Blocks",
@@ -71,7 +71,7 @@ let test_suite_data = [
     tests: [],
   },
   {
-    tag: "@tier2",
+    tag: "@tier1",
     url: "/commands/user",
     table: {
       heading: "User Commands",
@@ -100,13 +100,13 @@ let test_suite_data = [
         },
         {
           column: "Txn Hash",
-          input: LONG_LIVE_SNZ_HASH,
+          input: HUMANIZE_FINANCE_TXN_HASH,
           assertion: function () {
             cy.aliasTableRows("User Commands", "table-rows");
             cy.get("@table-rows").should("have.lengthOf", 1);
             cy.assertForEachColumnValue("User Commands", "Txn Hash", (text) => {
-              expect(text).to.contain(LONG_LIVE_SNZ_HASH);
-              expect(text).to.contain("LONG LIVE SNZ");
+              expect(text).to.contain(HUMANIZE_FINANCE_TXN_HASH);
+              expect(text).to.contain("payout from humanize finance e19");
             });
           },
         },
@@ -134,7 +134,7 @@ let test_suite_data = [
   },
   {
     tag: "@tier2",
-    url: `/addresses/accounts/${SNZPOOL_ADDRESS}`,
+    url: `/addresses/accounts/${HUMANIZE_FINANCE_ADDRESS}`,
     table: {
       heading: "User Commands",
       columns: [
@@ -161,26 +161,26 @@ let test_suite_data = [
         },
         {
           column: "Txn Hash",
-          input: LONG_LIVE_SNZ_HASH,
+          input: HUMANIZE_FINANCE_TXN_HASH,
           assertion: function () {
             cy.aliasTableRows("User Commands", "table-rows");
             cy.get("@table-rows").should("have.lengthOf", 1);
             cy.assertForEachColumnValue("User Commands", "Txn Hash", (text) => {
-              expect(text).to.contain(LONG_LIVE_SNZ_HASH);
-              expect(text).to.contain("LONG LIVE SNZ");
+              expect(text).to.contain(HUMANIZE_FINANCE_TXN_HASH);
+              expect(text).to.contain("payout from humanize finance e19");
             });
           },
         },
         {
           column: "Counterparty",
-          input: "B62qkjRK7EREPshjerdoNiZzdkvbUkmg9VH4QB7vrk5KzpPpyEB333y",
+          input: "B62qqwCPPUFZsHyYZhncvoiWyq4c8FonAL5zvL5qAGReJog6TbAvBev",
           assertion: function () {
             cy.assertForEachColumnValue(
               "User Commands",
               "Counterparty",
               (text) => {
                 expect(text).to.equal(
-                  "B62qkjRK7EREPshjerdoNiZzdkvbUkmg9VH4QB7vrk5KzpPpyEB333y",
+                  "B62qqwCPPUFZsHyYZhncvoiWyq4c8FonAL5zvL5qAGReJog6TbAvBev",
                 );
               },
             );
@@ -193,17 +193,17 @@ let test_suite_data = [
         let expected_fields = ["Balance", "Delegate"];
         cy.testSpotlight(
           "Account Spotlight",
-          "B62qoaMj7u1JzuqXaBByQBL5jzqLguK8e7LHVPdY9LcvvLXK7HPsusD",
+          HUMANIZE_FINANCE_ADDRESS,
           expected_fields,
         );
       },
       () => {
-        cy.get("#spotlight-meta").should("contain", "SNZPool");
+        cy.get("#spotlight-meta").should("contain", "Humanize Finance");
       },
     ],
   },
   {
-    tag: "@tier2",
+    tag: "@tier1",
     url: "/addresses/accounts",
     table: {
       heading: "Accounts",
@@ -219,14 +219,18 @@ let test_suite_data = [
       filter_tests: [
         {
           column: "Public Key",
-          input: SNZPOOL_ADDRESS,
+          input: HUMANIZE_FINANCE_ADDRESS,
           assertion: function () {
             cy.aliasTableRows("Accounts", "table-rows");
             cy.get("@table-rows").should("have.lengthOf", 1);
             cy.assertForEachColumnValue("Accounts", "Public Key", (text) => {
-              expect(text).to.equal(SNZPOOL_ADDRESS);
+              expect(text).to.equal(HUMANIZE_FINANCE_ADDRESS);
             });
-            cy.tableColumnValuesEqual("Accounts", "Username", "SNZPool");
+            cy.tableColumnValuesEqual(
+              "Accounts",
+              "Username",
+              "Humanize Finance",
+            );
           },
         },
       ],
@@ -234,7 +238,7 @@ let test_suite_data = [
     tests: [],
   },
   {
-    tag: "@tier2",
+    tag: "@tier1",
     url: "/staking-ledgers?epoch=20",
     table: {
       columns: [
@@ -251,7 +255,7 @@ let test_suite_data = [
       filter_tests: [
         {
           column: "Key",
-          input: SNZPOOL_ADDRESS,
+          input: HUMANIZE_FINANCE_ADDRESS,
           assertion: function () {
             cy.aliasTableRows("Staking Ledger - Epoch 20", "table-rows");
             cy.get("@table-rows").should("have.lengthOf", 1);
@@ -259,13 +263,13 @@ let test_suite_data = [
               "Staking Ledger - Epoch 20",
               "Key",
               (text) => {
-                expect(text).to.equal(SNZPOOL_ADDRESS);
+                expect(text).to.equal(HUMANIZE_FINANCE_ADDRESS);
               },
             );
             cy.tableColumnValuesEqual(
               "Staking Ledger - Epoch 20",
               "Username",
-              "SNZPool",
+              "Humanize Finance",
             );
           },
         },
@@ -274,7 +278,7 @@ let test_suite_data = [
     tests: [],
   },
   {
-    tag: "@tier2",
+    tag: "@tier1",
     url: "/commands/internal",
     table: {
       heading: "Internal Commands",
@@ -300,7 +304,7 @@ let test_suite_data = [
           input: "3NKP5eG9qvMbJM78thgQMvwnNnjrEkfcAfS31YbNNzeBsa8ADqPR",
           assertion: function () {
             cy.aliasTableRows("Internal Commands", "table-rows");
-            cy.get("@table-rows").should("have.lengthOf", 1);
+            cy.get("@table-rows").should("have.length.greaterThan", 1);
             cy.assertForEachColumnValue(
               "Internal Commands",
               "State Hash",
@@ -332,7 +336,7 @@ let test_suite_data = [
     tests: [],
   },
   {
-    tag: "@tier2",
+    tag: "@tier1",
     url: "/snarks",
     table: {
       heading: "SNARKs",
@@ -354,7 +358,7 @@ let test_suite_data = [
           input: "3NKP5eG9qvMbJM78thgQMvwnNnjrEkfcAfS31YbNNzeBsa8ADqPR",
           assertion: function () {
             cy.aliasTableRows("SNARKs", "table-rows");
-            cy.get("@table-rows").should("have.lengthOf", 1);
+            cy.get("@table-rows").should("have.length.greaterThan", 1);
             cy.assertForEachColumnValue("SNARKs", "State Hash", (text) => {
               expect(text).to.equal(
                 "3NKP5eG9qvMbJM78thgQMvwnNnjrEkfcAfS31YbNNzeBsa8ADqPR",
@@ -391,26 +395,25 @@ test_suite_data.forEach((test_suite_datum) => {
     it("has standard functionality", () => {
       cy.visit(url);
       cy.viewport(768, 2000);
-      cy.wait(1000);
+      cy.intercept("GET", "/summary").as("summaryData");
+      cy.wait("@summaryData").then(() => {
+        cy.tableHasOrderedColumns(heading, columns);
 
-      cy.tableHasOrderedColumns(heading, columns);
+        filter_tests.forEach(({ column, input, assertion }) => {
+          cy.get("th").contains(column).parents("th").find("input").as("input");
+          cy.get("@input").type(input, { delay: 0 });
+          cy.wait(1000);
+          assertion();
+          cy.assertTableRecordsCorrect(heading);
+          cy.get("@input").clear();
+        });
 
-      filter_tests.forEach(({ column, input, assertion }) => {
-        cy.get("th").contains(column).parents("th").find("input").as("input");
+        if (canonical_exists) {
+          canonicalTest(heading);
+        }
 
-        cy.get("@input").type(input, { delay: 0 });
-        cy.wait(1000);
-        assertion();
-        cy.wait(1000);
-        cy.assertTableRecordsCorrect(heading);
-        cy.get("@input").clear();
+        tests.forEach((test) => test());
       });
-
-      if (canonical_exists) {
-        canonicalTest(heading);
-      }
-
-      tests.forEach((test) => test());
     });
   });
 });
@@ -429,12 +432,32 @@ const canonicalTest = (section) => {
   cy.wait(500);
   cy.get("@menu").select("Non-Canonical");
   cy.wait(500);
-  cy.url().should("include", "canonical=false");
+  cy.url().then((url) => {
+    const params = new URLSearchParams(url.split("?")[1]);
+
+    if (params.get("txn-type") != null) {
+      expect(cy.url().should("include", "txn-type=Non-Canonical"));
+    } else if (params.get("canonical") != null) {
+      expect(cy.url().should("include", "canonical=false"));
+    } else {
+      expect(true).to.equal(false);
+    }
+  });
   cy.get("@tableRows").should("not.have.class", "bg-status-success");
   cy.get("@tableRows").should("have.class", "bg-status-failed");
 
   cy.get("@menu").select("Canonical");
-  cy.url().should("include", "canonical=true");
+  cy.url().then((url) => {
+    const params = new URLSearchParams(url.split("?")[1]);
+
+    if (params.get("txn-type") != null) {
+      expect(cy.url().should("include", "txn-type=Canonical"));
+    } else if (params.get("canonical") != null) {
+      expect(cy.url().should("include", "canonical=true"));
+    } else {
+      expect(true).to.equal(false);
+    }
+  });
   cy.wait(500);
   cy.contains("section:has(h1)", section)
     .find("table tr:not(:has(th)) span")
