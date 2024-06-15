@@ -4,6 +4,7 @@ const {
   FIRST_NON_CANONICAL_TXN_HASH,
   STAKE_DELEGATION_HASH,
   LONG_LIVE_SNZ_HASH,
+  HUMANIZE_FINANCE_TXN_HASH,
 } = require("../constants");
 
 suite(["@tier1"], "transaction spotlight", () => {
@@ -39,8 +40,8 @@ suite(["@tier1"], "transaction spotlight", () => {
   });
 
   it("displays memo", () => {
-    cy.visit(`/commands/${LONG_LIVE_SNZ_HASH}`);
-    cy.contains("whisperit#8145").should("exist");
+    cy.visit(`/commands/${HUMANIZE_FINANCE_TXN_HASH}`);
+    cy.contains("payout from humanize finance e19").should("exist");
   });
 
   it("renders the tooltip for stake delegations", () => {
