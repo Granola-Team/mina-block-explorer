@@ -147,7 +147,7 @@ pub fn TransactionsSection() -> impl IntoView {
             controls=move || {
                 view! {
                     <UrlParamSelectMenu
-                        id="transaction-type-selection"
+                        id="canonical-selection"
                         query_str_key="txn-type"
                         labels=UrlParamSelectOptions {
                             is_boolean_option: false,
