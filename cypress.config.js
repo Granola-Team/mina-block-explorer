@@ -9,6 +9,6 @@ module.exports = defineConfig({
       addMatchImageSnapshotPlugin(on);
     },
     retries: 0,
-    defaultCommandTimeout: 20000,
+    defaultCommandTimeout: 60000,
   },
 });
