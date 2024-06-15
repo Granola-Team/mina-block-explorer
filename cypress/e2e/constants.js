@@ -34,3 +34,7 @@ export const WHISPERIT_TXN_HASH =
   "CkpZhvEYxb9YFZULWEw61khrHAqGZhTktZSiGQ1CKfe6n2TcnxdgD";
 export const LONG_LIVE_SNZ_HASH =
   "CkpYebtjxHNdhLt1u88uNBzdRsvDYMqXmeeHGYWmbAKV7wFpwkcFy";
+export const HUMANIZE_FINANCE_ADDRESS =
+  "B62qnR2AHmcnyb7v3cVvuZWriEnArx7yMkXBcnzpFQXCmGxAAv4nJSV";
+export const HUMANIZE_FINANCE_TXN_HASH =
+  "CkpaBh9jR3FiwtgXDmNeyiFJ4HszcpDyehu3adzffABoxY2BerZx3";
