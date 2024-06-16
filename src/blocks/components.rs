@@ -515,7 +515,7 @@ pub fn BlockSpotlight(block: BlocksQueryBlocks) -> impl IntoView {
             label: "Canonical".to_string(),
             any_el: Some(wrap_in_pill(
                 convert_to_span(get_canonical(&block).unwrap_or_default().to_string()),
-                ColorVariant::Grey
+                ColorVariant::Grey,
             )),
             ..Default::default()
         },
