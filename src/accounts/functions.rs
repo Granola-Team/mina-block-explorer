@@ -21,7 +21,7 @@ pub async fn load_data(
 
     let variables = accounts_query::Variables {
         limit: Some(limit),
-        query: query,
+        query,
         sort_by: accounts_query::AccountSortByInput::BALANCE_DESC,
     };
 
