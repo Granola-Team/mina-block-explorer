@@ -7,22 +7,14 @@ suite(["@tier1"], "<head>", () => {
   sample_non_charting_pages.forEach((page) =>
     it(`does not contain charting libraries on non-charting page ${page}`, () => {
       cy.visit(page);
-      cy.wait(2000); //wait for header to update
-      cy.get("head").then((head) => {
-        let headToText = JSON.stringify(head.html());
-        expect(headToText).to.not.contain("echarts");
-      });
+      cy.get('head script[src*="echarts"]').should("not.exist");
     }),
   );
 
   charting_pages.forEach((page) =>
     it(`contains charting libraries on ${page}`, () => {
       cy.visit(page);
-      cy.wait(2000); //wait for header to update
-      cy.get("head").then((head) => {
-        let headToText = JSON.stringify(head.html());
-        expect(headToText).to.contain("echarts");
-      });
+      cy.get('head script[src*="echarts"]').should("exist");
     }),
   );
 });
