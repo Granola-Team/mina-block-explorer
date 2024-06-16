@@ -3,11 +3,29 @@ import {
   FIRST_RECIPIENT_ADDRESS,
   FIRST_SENDER_ADDRESS,
   GENESIS_BLOCK_BLOCK_HASH,
+  HUMANIZE_FINANACE_BLOCK_STATE_HASH,
   HUMANIZE_FINANCE_ADDRESS,
   HUMANIZE_FINANCE_TXN_HASH,
 } from "../constants";
 
 let test_suite_data = [
+  {
+    tag: "@tier1",
+    url: `/blocks/${HUMANIZE_FINANACE_BLOCK_STATE_HASH}/commands/user`,
+    table: {
+      heading: "User Commands",
+      columns: ["Hash", "Type", "From", "To", "Fee", "Amount"],
+      canonical_exists: false,
+      filter_tests: [],
+    },
+    tests: [
+      () => {
+        cy.aliasTableRows("User Commands", "table-rows");
+        cy.get("@table-rows").should("have.lengthOf", 9);
+        cy.contains("payout from humanize finance e19");
+      },
+    ],
+  },
   {
     tag: "@tier2",
     url: "/blocks",
