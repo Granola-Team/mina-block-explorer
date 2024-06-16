@@ -54,6 +54,7 @@ let test_suite_data = [
             cy.assertForEachColumnValue("Blocks", "Slot", (text) => {
               let height = parseInt(text);
               expect(height).to.be.lte(90000);
+              expect(height).to.be.gt(SLOTS_PER_EPOCH);
             });
           },
         },

@@ -38,3 +38,4 @@ export const HUMANIZE_FINANCE_ADDRESS =
   "B62qnR2AHmcnyb7v3cVvuZWriEnArx7yMkXBcnzpFQXCmGxAAv4nJSV";
 export const HUMANIZE_FINANCE_TXN_HASH =
   "CkpaBh9jR3FiwtgXDmNeyiFJ4HszcpDyehu3adzffABoxY2BerZx3";
+export const SLOTS_PER_EPOCH = 7140;
