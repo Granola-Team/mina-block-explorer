@@ -5,6 +5,7 @@ import {
   GENESIS_BLOCK_BLOCK_HASH,
   HUMANIZE_FINANCE_ADDRESS,
   HUMANIZE_FINANCE_TXN_HASH,
+  HUMANIZE_FINANCE_USERNAME,
 } from "../constants";
 
 let test_suite_data = [
@@ -198,7 +199,7 @@ let test_suite_data = [
         );
       },
       () => {
-        cy.get("#spotlight-meta").should("contain", "Humanize Finance");
+        cy.get("#spotlight-meta").should("contain", HUMANIZE_FINANCE_USERNAME);
       },
     ],
   },
@@ -229,7 +230,23 @@ let test_suite_data = [
             cy.tableColumnValuesEqual(
               "Accounts",
               "Username",
-              "Humanize Finance",
+              HUMANIZE_FINANCE_USERNAME,
+            );
+          },
+        },
+        {
+          column: "Username",
+          input: HUMANIZE_FINANCE_USERNAME,
+          assertion: function () {
+            cy.aliasTableRows("Accounts", "table-rows");
+            cy.get("@table-rows").should("have.lengthOf", 1);
+            cy.assertForEachColumnValue("Accounts", "Username", (text) => {
+              expect(text).to.equal(HUMANIZE_FINANCE_USERNAME);
+            });
+            cy.tableColumnValuesEqual(
+              "Accounts",
+              "Username",
+              HUMANIZE_FINANCE_USERNAME,
             );
           },
         },
@@ -269,7 +286,7 @@ let test_suite_data = [
             cy.tableColumnValuesEqual(
               "Staking Ledger - Epoch 20",
               "Username",
-              "Humanize Finance",
+              HUMANIZE_FINANCE_USERNAME,
             );
           },
         },
