@@ -14,28 +14,13 @@ use gloo_timers::future::TimeoutFuture;
 use leptos::*;
 use leptos_router::*;
 use leptos_use::{storage::use_local_storage, use_interval, utils::JsonCodec, UseIntervalReturn};
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
 
 #[component]
 pub fn UniqueBlocksProducersSummaryItem() -> impl IntoView {
     let (blocks_sig, _, _) =
         use_local_storage::<blocks_query::ResponseData, JsonCodec>(BLOCKS_STORAGE_KEY);
-    let (unique_producers_sig, set_up) = create_signal(None);
-
-    create_effect(move |_| {
-        let mut producers: HashMap<String, bool> = HashMap::new();
-
-        for block in blocks_sig.get().blocks.into_iter().flatten() {
-            producers.entry(get_creator_account(&block)).or_insert(true);
-        }
-
-        let unique_producers: HashSet<String> = producers.keys().cloned().collect();
-        if unique_producers.is_empty() {
-            set_up.set(None);
-        } else {
-            set_up.set(Some(unique_producers.len().to_string()));
-        }
-    });
+    let (unique_producers_sig, _set_up) = create_signal(Some("...".to_string()));
 
     move || {
         view! {
