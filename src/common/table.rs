@@ -68,13 +68,11 @@ where
             "all".to_string()
         }
     };
-    let (metadata, set_metadata) = create_signal(Some(TableMetadata {
-        total_records: get_total_records(),
-        displayed_records: 100,
-    }));
+    let (metadata, set_metadata) = create_signal(None);
     let table_cols_length = table_columns.len();
 
     create_effect(move |_| {
+        total_records_sig.map(|sig| sig.get());
         if let Some(data) = data_sig.get() {
             set_metadata.set(Some(TableMetadata {
                 displayed_records: data.get_rows().len() as i64,

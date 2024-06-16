@@ -30,3 +30,11 @@ export const SNZPOOL_ADDRESS =
   "B62qq3tqfdj19hqaVCozJFM2q9gT2WezQMaJMKD6wxyvK3fMpHiP9va";
 export const ADDRESS_WITH_SNARK_AND_BLOCK_PRODUCTION =
   "B62qqSvXBa1cdTsARTVZrnJreCDdEy162q7axsf3QfjWzZCKfrU6JoM";
+export const WHISPERIT_TXN_HASH =
+  "CkpZhvEYxb9YFZULWEw61khrHAqGZhTktZSiGQ1CKfe6n2TcnxdgD";
+export const LONG_LIVE_SNZ_HASH =
+  "CkpYebtjxHNdhLt1u88uNBzdRsvDYMqXmeeHGYWmbAKV7wFpwkcFy";
+export const HUMANIZE_FINANCE_ADDRESS =
+  "B62qnR2AHmcnyb7v3cVvuZWriEnArx7yMkXBcnzpFQXCmGxAAv4nJSV";
+export const HUMANIZE_FINANCE_TXN_HASH =
+  "CkpaBh9jR3FiwtgXDmNeyiFJ4HszcpDyehu3adzffABoxY2BerZx3";

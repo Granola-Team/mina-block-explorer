@@ -72,13 +72,6 @@ Cypress.Commands.add(
   },
 );
 
-Cypress.Commands.add("accountDialogToAccount", () => {
-  cy.get("dialog button#viewmore a").click();
-  cy.get("dialog").should("not.exist");
-
-  cy.url().should("contain", "/addresses/accounts");
-});
-
 Cypress.Commands.add("openMobileMenu", () => {
   cy.get("nav").should("not.be.visible");
   cy.get('label[for="nav-toggle"]').click();
@@ -129,39 +122,6 @@ Cypress.Commands.add(
   },
 );
 
-Cypress.Commands.add("tableHasNRows", (tableHeading, n) => {
-  cy.aliasTableRows(tableHeading, "table-rows");
-  cy.get("@table-rows").should(($tr) => {
-    expect($tr).to.have.length(n);
-  });
-});
-
-Cypress.Commands.add("spotlightData", (label) => {
-  cy.get("table:first tr th").contains(label).siblings("td");
-});
-
-Cypress.Commands.add(
-  "aliasTableValue",
-  (nthRow, columnHeading, tableHeading, alias) => {
-    cy.aliasTableHeaders(tableHeading, "columns");
-    cy.get("@columns")
-      .contains(columnHeading)
-      .parents("th")
-      .invoke("index")
-      .then((columnIndex) => {
-        cy.aliasTableRows(tableHeading, "table-rows");
-        cy.get("@table-rows").eq(nthRow).find("td").eq(columnIndex).as(alias);
-      });
-  },
-);
-
-Cypress.Commands.add("tableHasLessThanNRows", (tableHeading, n) => {
-  cy.aliasTableRows(tableHeading, "table-rows");
-  cy.get(`@table-rows`).should(($tr) => {
-    expect($tr).to.have.length.of.at.most(n);
-  });
-});
-
 Cypress.Commands.add("tableHasMoreThanNRows", (tableHeading, n) => {
   cy.aliasTableRows(tableHeading, "table-rows");
   cy.get(`@table-rows`).should(($tr) => {
@@ -178,6 +138,43 @@ Cypress.Commands.add("testSpotlight", (heading, id, expected_fields) => {
     });
   });
 });
+
+Cypress.Commands.add("assertTableRecordsCorrect", (heading) => {
+  cy.aliasTableRows(heading, "table-rows");
+  cy.get("@table-rows").then(($rows) => {
+    cy.get(".metadata")
+      .invoke("text")
+      .then((text) => {
+        let { records, total_records } = extractMetadata(text);
+        expect(records).to.be.lte(total_records);
+        expect(records).to.be.equal($rows.length);
+      });
+  });
+});
+
+Cypress.Commands.add(
+  "assertForEachColumnValue",
+  (heading, column, assertion, limit = 5) => {
+    cy.aliasTableHeaders(heading, "columns");
+    cy.get("@columns")
+      .contains(column)
+      .parents("th")
+      .invoke("index")
+      .then((columnIndex) => {
+        cy.aliasTableRows(heading, "table-rows");
+        cy.get("@table-rows").find(".loading-placeholder").should("not.exist");
+        cy.get("@table-rows").should("have.length.gte", 1);
+        cy.get("@table-rows").each(($row, index) => {
+          if (index > limit) return;
+          cy.wrap($row)
+            .find("td")
+            .eq(columnIndex)
+            .invoke("text")
+            .then(assertion);
+        });
+      });
+  },
+);
 
 Cypress.Commands.add(
   "aliasTableColumnValue",
@@ -202,11 +199,13 @@ Cypress.Commands.add(
   },
 );
 
-Cypress.Commands.add("prepareSnapshotTest", () => {
-  /**
-   * Make the header static so that it doesn't get in the way.
-   * We are unable to scroll to top and take snapshots without
-   * the header getting in the way.
-   */
-  cy.get("header").invoke("css", "position", "static");
-});
+function extractMetadata(input) {
+  let regex = /Showing (\d+) of (\d+)/;
+  const match = input.match(regex);
+  return match
+    ? {
+        records: +match[1],
+        total_records: +match[2],
+      }
+    : null;
+}

@@ -27,10 +27,12 @@ suite(["@tier1"], "input", () => {
   slow_input_searches.forEach(({ origin, input, column }) =>
     it(`remains focused as user types slowly into ${column} on page ${origin}`, () => {
       cy.visit(origin);
-      cy.wait(1000);
-      let cssSelector = "#q-" + kebabCase(column);
-      cy.get(cssSelector).type(input, { delay: 750 });
-      cy.get(cssSelector).should("have.focus");
+      cy.intercept("GET", "/summary").as("summaryData");
+      cy.wait("@summaryData").then(() => {
+        let cssSelector = "#q-" + kebabCase(column);
+        cy.get(cssSelector).type(input, { delay: 750 });
+        cy.get(cssSelector).should("have.focus");
+      });
     }),
   );
 });
