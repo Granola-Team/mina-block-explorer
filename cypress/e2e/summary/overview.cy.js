@@ -1,4 +1,4 @@
-suite(["@tier1"], "blockchain overview", () => {
+suite(["@tier2"], "blockchain overview", () => {
   it("displays non-zero metrics", () => {
     cy.visit("/blocks");
     cy.intercept("GET", "/summary").as("summaryData");
