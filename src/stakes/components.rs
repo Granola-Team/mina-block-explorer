@@ -72,7 +72,7 @@ pub fn StakesPageContents(
         },
         TableColumn {
             column: "Stake".to_string(),
-            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
+            width: Some(String::from(TABLE_COL_LARGE_BALANCE)),
             ..Default::default()
         },
         TableColumn {
