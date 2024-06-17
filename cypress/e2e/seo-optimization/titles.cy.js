@@ -1,4 +1,9 @@
-import { DEFAULT_ACCOUNT_PK, FIRST_TXN_HASH } from "../constants";
+import {
+  DEFAULT_ACCOUNT_PK,
+  FIRST_TXN_HASH,
+  HUMANIZE_FINANCE_ADDRESS,
+  HUMANIZE_FINANCE_USERNAME,
+} from "../constants";
 
 suite(["@tier1"], "meta title", () => {
   let block_hash = "3NLhBh3d4b91DPoJn5hhwRAWmHSAaG8Qz4W5r9FhJBCXLD3WrAt4";
@@ -51,8 +56,8 @@ suite(["@tier1"], "meta title", () => {
       title: "Transaction Overview | No Memo",
     },
     {
-      url: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
-      title: `Account Overview | ''`,
+      url: `/addresses/accounts/${HUMANIZE_FINANCE_ADDRESS}`,
+      title: `Account Overview | ${HUMANIZE_FINANCE_USERNAME}`,
     },
   ];
 
