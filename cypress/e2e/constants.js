@@ -39,3 +39,4 @@ export const HUMANIZE_FINANCE_ADDRESS =
 export const HUMANIZE_FINANCE_TXN_HASH =
   "CkpaBh9jR3FiwtgXDmNeyiFJ4HszcpDyehu3adzffABoxY2BerZx3";
 export const SLOTS_PER_EPOCH = 7140;
+export const HUMANIZE_FINANCE_USERNAME = "Humanize Finance";
