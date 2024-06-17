@@ -305,7 +305,8 @@ pub fn CommandSpotlightPage() -> impl IntoView {
                                                 txn_opt
                                                     .clone()
                                                     .map(|txn| {
-                                                        txn.get_block_state_hash() != state_hash_sig.get().unwrap_or_default()
+                                                        txn.get_block_state_hash()
+                                                            != state_hash_sig.get().unwrap_or_default()
                                                     })
                                                     .unwrap_or_default()
                                             })
