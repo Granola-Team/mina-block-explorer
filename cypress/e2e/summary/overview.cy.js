@@ -10,6 +10,7 @@ suite(["@tier2"], "blockchain overview", () => {
         // },
         { id: "#totalUserCommands", label: "Total User Commands" },
         { id: "#totalInternalCommands", label: "Total Internal Commands" },
+        { id: "#blockchainLength", label: "Blockchain Length" },
       ];
       summaryItems.forEach(({ id, label }) => {
         cy.get(id)
