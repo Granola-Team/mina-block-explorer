@@ -7,8 +7,10 @@ use leptos::*;
 use serde::*;
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
 struct EpochData {
-    pub epoch: i64,
+    pub epoch: Option<i64>,
+    pub ledger_hash: Option<String>,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
@@ -19,6 +21,35 @@ struct StakeData {
 #[derive(Deserialize, Serialize, Debug, Clone)]
 struct EpochConversionResponse {
     pub data: StakeData,
+}
+
+async fn load_ledger_hash_data(epoch_opt: Option<u64>) -> Result<EpochConversionResponse, MyError> {
+    match epoch_opt {
+        None => Err(MyError::ParseError("epoch not supplied".to_string())),
+        Some(epoch) => {
+            let query_body = format!(
+                r#"{{"query":"query LedgerHashQuery($epoch: Int, $limit: Int) {{ stakes(query: {{epoch: $epoch}}, limit: $limit) {{ ledgerHash }}}}", "variables":{{"epoch":{}, "limit":{}}},"operationName":"LedgerHashQuery"}}"#,
+                epoch, 1
+            );
+            let client = reqwest::Client::new();
+            let response = client
+                .post(GRAPHQL_ENDPOINT)
+                .body(query_body)
+                .send()
+                .await
+                .map_err(|e| MyError::NetworkError(e.to_string()))?;
+
+            if response.status().is_success() {
+                let summary = response
+                    .json::<EpochConversionResponse>()
+                    .await
+                    .map_err(|e| MyError::ParseError(e.to_string()))?;
+                Ok(summary)
+            } else {
+                Err(MyError::NetworkError("Failed to fetch data".into()))
+            }
+        }
+    }
 }
 
 async fn load_epoch_data(
@@ -57,6 +88,11 @@ pub fn GlobalSearchBar() -> impl IntoView {
     let input_element: NodeRef<html::Input> = create_node_ref();
     let (value, set_value) = create_signal("".to_string());
     let (ledger_hash_sig, set_lh) = create_signal(None);
+    let (epoch_sig, set_e) = create_signal(None);
+    let ledger_resource = create_resource(
+        move || epoch_sig.get(),
+        move |_| async move { load_ledger_hash_data(epoch_sig.get()).await },
+    );
     let epoch_resource = create_resource(
         move || ledger_hash_sig.get(),
         move |_| async move { load_epoch_data(ledger_hash_sig.get()).await },
@@ -64,16 +100,39 @@ pub fn GlobalSearchBar() -> impl IntoView {
 
     let navigate = leptos_router::use_navigate();
     let navigate_clone = navigate.clone();
+    let navigate_clone_2 = navigate.clone();
 
     create_effect(move |_| {
         epoch_resource.get().and_then(|res| res.ok()).map(|resp| {
+            logging::log!("{:#?}", resp);
             if let Some(stake) = resp.data.stakes.first() {
                 navigate_clone(
-                    &format!("/staking-ledgers?epoch={}", stake.epoch),
+                    &format!("/staking-ledgers?epoch={}", stake.epoch.unwrap_or_default()),
                     Default::default(),
                 );
+                set_lh.set(None);
                 set_value.set("".to_string());
             }
+        })
+    });
+
+    create_effect(move |_| {
+        ledger_resource.get().and_then(|res| res.ok()).map(|resp| {
+            if let Some(_) = resp.data.stakes.first() {
+                epoch_sig.get().map(|epoch| {
+                    navigate_clone_2(
+                        &format!("/staking-ledgers?epoch={}", epoch),
+                        Default::default(),
+                    )
+                });
+            } else {
+                epoch_sig.get().map(|epoch| {
+                    navigate_clone_2(&format!("/blocks?q-height={}", epoch), Default::default())
+                });
+            }
+
+            set_e.set(None);
+            set_value.set("".to_string());
         })
     });
 
@@ -98,11 +157,9 @@ pub fn GlobalSearchBar() -> impl IntoView {
                 set_lh.set(Some(val));
             }
             val if val.chars().all(char::is_numeric) => {
-                navigate(
-                    &format!("/staking-ledgers?epoch={}", val),
-                    Default::default(),
-                );
-                set_value.set("".to_string());
+                if let Ok(epoch) = val.parse::<u64>() {
+                    set_e.set(Some(epoch));
+                }
             }
             _ => {}
         }
