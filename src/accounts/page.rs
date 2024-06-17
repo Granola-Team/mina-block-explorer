@@ -48,7 +48,7 @@ fn AccountsPageContents() -> impl IntoView {
         },
         TableColumn {
             column: "Balance".to_string(),
-            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
+            width: Some(String::from(TABLE_COL_LARGE_BALANCE)),
             ..Default::default()
         },
         TableColumn {
