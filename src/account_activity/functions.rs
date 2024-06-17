@@ -44,6 +44,7 @@ pub async fn load_data(
         trans_limit: Some(trans_limit.unwrap_or_default()),
         account_query: account_activity_query::AccountQueryInput {
             public_key: public_key.clone(),
+            username: None,
         },
         blocks_query: account_activity_query::BlockQueryInput {
             block_height_lte: block_height,
