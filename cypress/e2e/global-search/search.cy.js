@@ -13,6 +13,10 @@ suite(["@tier1"], "global search", () => {
 
   let pages = [
     {
+      input: 30000,
+      expectedUrl: "/blocks?q-height=30000",
+    },
+    {
       input: "      jx7buQVWFLsXTtzRgSxbYcT8EYLS8KCZbLrfDcJxMtyy4thw2Ee     ",
       expectedUrl: "/staking-ledgers?epoch=1",
     },
