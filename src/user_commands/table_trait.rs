@@ -1,4 +1,6 @@
-use super::graphql::transactions_query::TransactionsQueryTransactions;
+use super::graphql::transactions_query::{
+    TransactionsQueryOtherTransactions, TransactionsQueryTransactions,
+};
 use crate::common::{functions::*, models::ColorVariant, table::*};
 use leptos::*;
 
@@ -161,5 +163,71 @@ impl TransactionsTrait for TransactionsQueryTransactions {
 
     fn get_to(&self) -> String {
         self.to.as_ref().map_or_else(String::new, |o| o.to_string())
+    }
+}
+
+impl TransactionsTrait for TransactionsQueryOtherTransactions {
+    fn get_failure_reason(&self) -> Option<String> {
+        None
+    }
+
+    fn get_block_datetime(&self) -> String {
+        String::new()
+    }
+
+    fn get_block_height(&self) -> String {
+        self.block_height
+            .map_or_else(String::new, |o| o.to_string())
+    }
+
+    fn get_canonical(&self) -> Option<bool> {
+        self.canonical
+    }
+
+    fn get_kind(&self) -> String {
+        String::new()
+    }
+
+    fn get_nonce(&self) -> String {
+        String::new()
+    }
+
+    fn get_memo(&self) -> String {
+        self.memo
+            .as_ref()
+            .map_or_else(String::new, ToString::to_string)
+    }
+
+    fn get_block_state_hash(&self) -> String {
+        self.block
+            .as_ref()
+            .and_then(|b| b.state_hash.as_ref())
+            .map_or_else(String::new, |o1| o1.to_string())
+    }
+
+    fn get_from(&self) -> String {
+        String::new()
+    }
+
+    fn get_receiver_public_key(&self) -> String {
+        String::new()
+    }
+
+    fn get_fee(&self) -> String {
+        String::new()
+    }
+
+    fn get_hash(&self) -> String {
+        self.hash
+            .as_ref()
+            .map_or_else(String::new, |o| o.to_string())
+    }
+
+    fn get_amount(&self) -> String {
+        String::new()
+    }
+
+    fn get_to(&self) -> String {
+        String::new()
     }
 }
