@@ -104,7 +104,6 @@ pub fn GlobalSearchBar() -> impl IntoView {
 
     create_effect(move |_| {
         epoch_resource.get().and_then(|res| res.ok()).map(|resp| {
-            logging::log!("{:#?}", resp);
             if let Some(stake) = resp.data.stakes.first() {
                 navigate_clone(
                     &format!("/staking-ledgers?epoch={}", stake.epoch.unwrap_or_default()),
