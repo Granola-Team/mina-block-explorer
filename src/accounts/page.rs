@@ -28,9 +28,10 @@ fn AccountsPageContents() -> impl IntoView {
         use_local_storage::<BlockchainSummary, JsonCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
     let (data_sig, set_data) = create_signal(None);
     let (public_key_sig, _) = create_query_signal::<String>("q-public-key");
+    let (username_sig, _) = create_query_signal::<String>("q-username");
     let resource = create_resource(
-        move || public_key_sig.get(),
-        |public_key| async move { load_data(TABLE_ROW_LIMIT, public_key).await },
+        move || (public_key_sig.get(), username_sig.get()),
+        |(public_key, username)| async move { load_data(TABLE_ROW_LIMIT, public_key, username).await },
     );
     let table_columns = vec![
         TableColumn {
@@ -42,6 +43,7 @@ fn AccountsPageContents() -> impl IntoView {
         TableColumn {
             column: "Username".to_string(),
             width: Some(String::from(TABLE_COL_USERNAME_WIDTH)),
+            is_searchable: true,
             ..Default::default()
         },
         TableColumn {

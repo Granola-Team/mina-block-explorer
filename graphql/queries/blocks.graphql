@@ -20,6 +20,7 @@ query BlocksQuery(
         fee
         amount
         kind
+        memo
       }
       feeTransfer {
         type

@@ -40,3 +40,6 @@ export const HUMANIZE_FINANCE_ADDRESS =
   "B62qnR2AHmcnyb7v3cVvuZWriEnArx7yMkXBcnzpFQXCmGxAAv4nJSV";
 export const HUMANIZE_FINANCE_TXN_HASH =
   "CkpaBh9jR3FiwtgXDmNeyiFJ4HszcpDyehu3adzffABoxY2BerZx3";
+export const HUMANIZE_FINANACE_BLOCK_STATE_HASH =
+  "3NKLHA1Zf1A2agQ4HFzwY6azUGsXP8cScFLwDgotTuQqMjejjKNj";
+export const HUMANIZE_FINANCE_USERNAME = "Humanize Finance";

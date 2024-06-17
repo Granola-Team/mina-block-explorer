@@ -9,6 +9,7 @@ type Account {
 
 input AccountQueryInput {
   publicKey: String
+  username: String
 }
 
 enum AccountSortByInput {

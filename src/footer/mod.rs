@@ -1,8 +1,6 @@
-use crate::{
-    common::{constants::*, models::*},
-    icons::*,
-};
+use crate::{common::constants::*, icons::*, summary::models::*};
 use leptos::*;
+use leptos_use::{storage::use_local_storage, utils::JsonCodec};
 use serde::{Deserialize, Serialize};
 
 enum Icon {
@@ -26,33 +24,13 @@ struct APIVersionResponse {
     pub data: VersionData,
 }
 
-async fn load_api_version_data() -> Result<APIVersionResponse, MyError> {
-    let query_body = r#"{"query":"query VersionQuery { version }","operationName":"VersionQuery"}"#;
-    let client = reqwest::Client::new();
-    let response = client
-        .post(GRAPHQL_ENDPOINT)
-        .body(query_body)
-        .send()
-        .await
-        .map_err(|e| MyError::NetworkError(e.to_string()))?;
-
-    if response.status().is_success() {
-        let summary = response
-            .json::<APIVersionResponse>()
-            .await
-            .map_err(|e| MyError::ParseError(e.to_string()))?;
-        Ok(summary)
-    } else {
-        Err(MyError::NetworkError("Failed to fetch data".into()))
-    }
-}
-
 const FOOTER_LINK_BASE_CLASS: &str = "ml-2 flex items-center text-white text-sm ";
 const HIDE_ON_MOBILE: &str = "hidden sm:block ";
 
 #[component]
 pub fn Footer() -> impl IntoView {
-    let resource = create_resource(|| (), |_| async move { load_api_version_data().await });
+    let (summary_sig, _, _) =
+        use_local_storage::<BlockchainSummary, JsonCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
 
     let links = vec![
         Link {
@@ -90,28 +68,28 @@ pub fn Footer() -> impl IntoView {
                     >
                         {COMMIT_HASH}
                     </a>
-                    {move || match resource.get().and_then(|res| res.ok()) {
-                        Some(res) => {
-                            let commit = res
-                                .data
-                                .version
-                                .split('-')
-                                .collect::<Vec<_>>()[1]
-                                .to_string();
-                            view! {
-                                <span class="ml-2 ".to_string() + HIDE_ON_MOBILE>"|"</span>
-                                <a
-                                    target="_blank"
-                                    class=FOOTER_LINK_BASE_CLASS.to_string() + LINK_HOVER_STATE
-                                        + HIDE_ON_MOBILE
-                                    href="https://github.com/Granola-Team/mina-indexer/commit/"
-                                        .to_string() + &commit
-                                >
-                                    {res.data.version}
-                                </a>
-                            }
-                        }
-                        _ => ().into_view().into(),
+
+                    {move || {
+                        let version = summary_sig.get().clone().indexer_version.clone();
+                        let commits = version.split('-').map(|s| s.to_owned()).collect::<Vec<_>>();
+                        commits
+                            .last()
+                            .cloned()
+                            .map(|commit| {
+                                view! {
+                                    // Ensure each split result is owned
+                                    <span class="ml-2 ".to_string() + HIDE_ON_MOBILE>{"|"}</span>
+                                    <a
+                                        target="_blank"
+                                        class=FOOTER_LINK_BASE_CLASS.to_string() + LINK_HOVER_STATE
+                                            + HIDE_ON_MOBILE
+                                        href="https://github.com/Granola-Team/mina-indexer/commit/"
+                                            .to_string() + &commit
+                                    >
+                                        {commit}
+                                    </a>
+                                }
+                            })
                     }}
 
                 </span>

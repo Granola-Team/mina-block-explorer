@@ -5,12 +5,23 @@ use graphql_client::reqwest::post_graphql;
 pub async fn load_data(
     limit: i64,
     public_key: Option<String>,
+    username: Option<String>,
 ) -> Result<accounts_query::ResponseData, MyError> {
+    let query = match (public_key, username) {
+        (Some(pk), _) => Some(accounts_query::AccountQueryInput {
+            public_key: Some(pk),
+            username: None,
+        }),
+        (_, Some(un)) => Some(accounts_query::AccountQueryInput {
+            public_key: None,
+            username: Some(un),
+        }),
+        (None, None) => None,
+    };
+
     let variables = accounts_query::Variables {
         limit: Some(limit),
-        query: public_key.map(|pk| accounts_query::AccountQueryInput {
-            public_key: Some(pk),
-        }),
+        query,
         sort_by: accounts_query::AccountSortByInput::BALANCE_DESC,
     };
 
