@@ -12,6 +12,7 @@ export CYPRESS_BASE_URL := 'http://localhost:' + trunk_port
 export VERSION := `git rev-parse --short=8 HEAD`
 
 export CARGO_HOME := `pwd` + '.cargo'
+export BERKELEY_FEATURES_ENABLED := "true"
 
 set dotenv-load := true
 
@@ -51,6 +52,29 @@ dev: pnpm_install
   trunk serve --port="{{trunk_port}}" --open
 
 test-e2e: pnpm_install
+  CYPRESS_tags='' \
+  node ./scripts/wait-on-port.js \
+    trunk serve \
+    --no-autoreload \
+    --port="{{trunk_port}}" \
+    -- \
+    "{{trunk_port}}" \
+    -- \
+    pnpm exec cypress run -r list -q
+
+test-e2e-tier1: pnpm_install
+  CYPRESS_tags="@tier1" \
+  node ./scripts/wait-on-port.js \
+    trunk serve \
+    --no-autoreload \
+    --port="{{trunk_port}}" \
+    -- \
+    "{{trunk_port}}" \
+    -- \
+    pnpm exec cypress run -r list -q
+
+test-e2e-tier2: pnpm_install
+  CYPRESS_tags="@tier2" \
   node ./scripts/wait-on-port.js \
     trunk serve \
     --no-autoreload \
@@ -81,4 +105,6 @@ lint: pnpm_install && audit disallow-unused-cargo-deps
   leptosfmt --check ./src
   cargo clippy --all-targets --all-features -- -D warnings
 
-test: lint test-unit test-e2e
+tier1: lint test-unit && test-e2e-tier1
+
+tier2: lint test-unit && test-e2e-tier2
