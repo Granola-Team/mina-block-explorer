@@ -107,7 +107,7 @@ pub fn AccountSpotlightPage() -> impl IntoView {
             set_transactions.set(Some(transactions));
             set_snarks.set(Some(res.snarks[..end_index].to_vec()));
             set_blocks.set(Some(res.blocks));
-            if let Some(account) = &res.accounts[0] {
+            if let Some(Some(account)) = &res.accounts.first() {
                 set_username.set(Some(
                     account
                         .username
@@ -134,7 +134,7 @@ pub fn AccountSpotlightPage() -> impl IntoView {
         <PageContainer>
             {move || match activity_resource.get() {
                 Some(Ok(res)) => {
-                    if let Some(account) = &res.accounts[0] {
+                    if let Some(Some(account)) = &res.accounts.first() {
                         view! {
                             <SpotlightSection
                                 header="Account Spotlight"
