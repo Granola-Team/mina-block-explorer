@@ -23,7 +23,7 @@ pub fn SummaryGrid(summary: Option<BlockchainSummary>) -> impl IntoView {
             />
             <SummaryItem
                 id="blockchainLength"
-                label="Block Height"
+                label="Blockchain Length"
                 value=summary.as_ref().map(|s| format_number(s.blockchain_length))
             />
             <SummaryItem
