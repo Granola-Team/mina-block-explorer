@@ -69,6 +69,7 @@ query AccountActivityQuery(
     protocolState {
       consensusState {
         slot
+        slotSinceGenesis
       }
     }
     creatorAccount {

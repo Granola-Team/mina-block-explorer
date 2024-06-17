@@ -265,7 +265,8 @@ impl BlockTrait for AccountActivityQueryBlocks {
     fn get_slot(&self) -> String {
         self.protocol_state.as_ref().map_or_else(String::new, |o| {
             o.consensus_state.as_ref().map_or_else(String::new, |o| {
-                o.slot.map_or_else(String::new, |o| o.to_string())
+                o.slot_since_genesis
+                    .map_or_else(String::new, |o| o.to_string())
             })
         })
     }
