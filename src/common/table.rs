@@ -225,26 +225,30 @@ where
     T: TableData,
 {
     data.get_rows()
-            .into_iter()
-            .map(|row| {
-                view! {
-                    <tr class="h-12 bg-table-row-fill">
-                        {row
-                            .into_iter()
-                            .map(|cell| {
-                                let cell_ellipsis_class = "text-ellipsis overflow-hidden";
-                                let cell_class = format!(
-                                    "{} {} text-table-row-text-color font-medium text-sm text-left whitespace-nowrap max-w-40",
-                                    CELL_PADDING_CLASS,
-                                    cell_ellipsis_class,
-                                );
-                                view! { <td class=cell_class>{cell.into_view()}</td> }
-                            })
-                            .collect_view()}
-                    </tr>
-                }
-            })
-            .collect_view()
+        .into_iter()
+        .map(|row| {
+            view! {
+                <tr class="h-12 bg-table-row-fill">
+                    {row
+                        .into_iter()
+                        .map(|cell| {
+                            view! { <TableCell>{cell.into_view()}</TableCell> }
+                        })
+                        .collect_view()}
+                </tr>
+            }
+        })
+        .collect_view()
+}
+
+#[component]
+pub fn TableCell(children: Children) -> impl IntoView {
+    let cell_ellipsis_class = "text-ellipsis overflow-hidden";
+    let cell_class = format!(
+        "{} {} text-table-row-text-color font-medium text-sm text-left whitespace-nowrap max-w-40",
+        CELL_PADDING_CLASS, cell_ellipsis_class,
+    );
+    view! { <td class=cell_class>{children()}</td> }
 }
 
 #[component]

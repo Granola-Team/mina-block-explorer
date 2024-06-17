@@ -5,6 +5,8 @@ const {
   STAKE_DELEGATION_HASH,
   LONG_LIVE_SNZ_HASH,
   HUMANIZE_FINANCE_TXN_HASH,
+  WHISPERIT_TXN_HASH,
+  WHISPERIT_BLOCK_STATE_HASH,
 } = require("../constants");
 
 suite(["@tier1"], "transaction spotlight", () => {
@@ -68,5 +70,14 @@ suite(["@tier1"], "transaction spotlight", () => {
         cy.get("td .tooltip").should("not.exist");
       });
     });
+  });
+
+  it("displays other blocks containing the same txn", () => {
+    cy.visit(
+      `/commands/${WHISPERIT_TXN_HASH}?q-state-hash=${WHISPERIT_BLOCK_STATE_HASH}`,
+    );
+    cy.get("section").contains("In Other Blocks").should("exist");
+    cy.aliasTableRows("In Other Blocks", "table-rows");
+    cy.get("@table-rows").should("have.lengthOf", 3);
   });
 });

@@ -1,9 +1,10 @@
 query TransactionsQuery(
   $limit: Int = 10
   $sort_by: TransactionSortByInput!
-  $query: TransactionQueryInput!
+  $txn_query: TransactionQueryInput!
+  $other_txn_query: TransactionQueryInput
 ) {
-  transactions(limit: $limit, sortBy: $sort_by, query: $query) {
+  transactions(limit: $limit, sortBy: $sort_by, query: $txn_query) {
     blockHeight
     failureReason
     canonical
@@ -21,6 +22,19 @@ query TransactionsQuery(
     }
     receiver {
       publicKey
+    }
+  }
+  other_transactions: transactions(
+    limit: $limit
+    sortBy: $sort_by
+    query: $other_txn_query
+  ) {
+    blockHeight
+    canonical
+    hash
+    memo
+    block {
+      stateHash
     }
   }
 }

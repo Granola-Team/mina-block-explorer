@@ -2,6 +2,7 @@ use super::{components::*, functions::*, table_trait::*};
 use crate::{
     common::{
         components::*, constants::BERKELEY_FEATURES_ENABLED, functions::*, models::*, spotlight::*,
+        table::*,
     },
     icons::*,
 };
@@ -57,7 +58,7 @@ pub fn CommandSpotlightPage() -> impl IntoView {
         move || (memo_params_map.get(), state_hash_sig.get()),
         |(value, state_hash)| async move {
             let txn_hash = value.get("id");
-            load_data(1, None, None, txn_hash.cloned(), None, state_hash, None).await
+            load_data(10, None, None, txn_hash.cloned(), None, state_hash, None).await
         },
     );
 
@@ -68,6 +69,17 @@ pub fn CommandSpotlightPage() -> impl IntoView {
             }
         }
     });
+
+    let table_columns = vec![
+        TableColumn {
+            column: "Height".to_string(),
+            ..Default::default()
+        },
+        TableColumn {
+            column: "Hash".to_string(),
+            ..Default::default()
+        },
+    ];
 
     view! {
         <Title
@@ -274,7 +286,87 @@ pub fn CommandSpotlightPage() -> impl IntoView {
                 }
                 _ => ().into_view(),
             }}
+            <AppSection>
+                <AppHeading heading="In Other Blocks"/>
+                <div class="mx-auto @container w-full lg:w-1/2 flex justify-center">
+                    <Table>
+                        <ColGroup columns=table_columns.clone()/>
+                        <TableHeader columns=table_columns/>
 
+                        <tbody>
+                            {move || {
+                                resource
+                                    .get()
+                                    .and_then(|res| res.ok())
+                                    .map(|data| {
+                                        data.other_transactions
+                                            .into_iter()
+                                            .filter(|txn_opt| {
+                                                txn_opt
+                                                    .clone()
+                                                    .map(|txn| {
+                                                        txn.get_block_state_hash()
+                                                            != state_hash_sig.get().unwrap_or_default()
+                                                    })
+                                                    .unwrap_or_default()
+                                            })
+                                            .map(|txn_opt| {
+                                                txn_opt
+                                                    .map(|transaction| {
+                                                        let transaction_clone = transaction.clone();
+                                                        view! {
+                                                            <tr>
+                                                                <TableCell>
+                                                                    {convert_array_to_span(
+                                                                        vec![
+                                                                            convert_to_status_bubble(transaction.get_canonical(), None),
+                                                                            convert_to_span(transaction.get_block_height()),
+                                                                        ],
+                                                                    )}
+
+                                                                </TableCell>
+                                                                <TableCell>
+                                                                    {if !transaction_clone.get_memo().is_empty() {
+                                                                        convert_array_to_span(
+                                                                                vec![
+                                                                                    convert_to_link(
+                                                                                        transaction_clone.get_hash(),
+                                                                                        format!(
+                                                                                            "/commands/{}?q-state-hash={}",
+                                                                                            transaction_clone.get_hash(),
+                                                                                            transaction_clone.get_block_state_hash(),
+                                                                                        ),
+                                                                                    ),
+                                                                                    convert_to_span(transaction_clone.get_memo())
+                                                                                        .attr("class", "block text-xs font-light text-slate-400"),
+                                                                                ],
+                                                                            )
+                                                                            .attr("class", "block")
+                                                                    } else {
+                                                                        convert_to_link(
+                                                                            transaction_clone.get_hash(),
+                                                                            format!(
+                                                                                "/commands/{}?q-state-hash={}",
+                                                                                transaction_clone.get_hash(),
+                                                                                transaction_clone.get_block_state_hash(),
+                                                                            ),
+                                                                        )
+                                                                    }}
+
+                                                                </TableCell>
+                                                            </tr>
+                                                        }
+                                                    })
+                                            })
+                                            .collect_view()
+                                    })
+                                    .collect_view()
+                            }}
+
+                        </tbody>
+                    </Table>
+                </div>
+            </AppSection>
         </PageContainer>
     }
 }

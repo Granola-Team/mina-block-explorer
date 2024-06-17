@@ -20,7 +20,10 @@ pub async fn load_pending_txn() -> Result<transactions_query::ResponseData, MyEr
             .map(|pt| Some(transactions_query::TransactionsQueryTransactions::from(pt)))
             .collect::<Vec<_>>();
 
-        Ok(transactions_query::ResponseData { transactions: txn })
+        Ok(transactions_query::ResponseData {
+            transactions: txn,
+            other_transactions: vec![],
+        })
     } else {
         Err(MyError::NetworkError("Failed to fetch data".into()))
     }
@@ -38,18 +41,24 @@ pub async fn load_data(
     let variables = transactions_query::Variables {
         sort_by: transactions_query::TransactionSortByInput::BLOCKHEIGHT_DESC,
         limit: Some(limit),
-        query: transactions_query::TransactionQueryInput {
+        txn_query: transactions_query::TransactionQueryInput {
             from: from_account,
             to: to_account,
-            hash: txn_hash,
+            hash: txn_hash.clone(),
             block_height_lte: block_height,
             canonical,
-            block: state_hash.map(|sh| transactions_query::BlockQueryInput {
-                state_hash: Some(sh),
-                ..Default::default()
-            }),
+            block: state_hash
+                .clone()
+                .map(|sh| transactions_query::BlockQueryInput {
+                    state_hash: Some(sh),
+                    ..Default::default()
+                }),
             ..Default::default()
         },
+        other_txn_query: Some(transactions_query::TransactionQueryInput {
+            hash: txn_hash,
+            ..Default::default()
+        }),
     };
 
     let client = reqwest::Client::new();
