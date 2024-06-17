@@ -128,7 +128,7 @@ pub fn AccountSpotlightPage() -> impl IntoView {
 
     view! {
         <Title
-            formatter=move |text| format!("Account Overview | '{text}'")
+            formatter=move |text| format!("Account Overview | {text}")
             text=move || username.get().unwrap_or_default()
         />
         <PageContainer>

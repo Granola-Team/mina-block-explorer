@@ -85,10 +85,22 @@ impl TableData for Vec<Option<BlocksQueryBlocksTransactionsUserCommands>> {
         self.iter()
             .map(|opt_user_command| match opt_user_command {
                 Some(user_command) => vec![
-                    convert_to_link(
-                        get_user_command_hash(user_command),
-                        format!("/commands/{}", get_user_command_hash(user_command)),
-                    ),
+                    if !get_memo(user_command).is_empty() {
+                        convert_array_to_span(vec![
+                            convert_to_link(
+                                get_user_command_hash(user_command),
+                                format!("/commands/{}", get_user_command_hash(user_command)),
+                            ),
+                            convert_to_span(get_memo(user_command))
+                                .attr("class", "block text-xs font-light text-slate-400"),
+                        ])
+                        .attr("class", "block")
+                    } else {
+                        convert_to_link(
+                            get_user_command_hash(user_command),
+                            format!("/commands/{}", get_user_command_hash(user_command)),
+                        )
+                    },
                     convert_to_pill(get_kind(user_command), ColorVariant::Grey),
                     convert_to_link(
                         get_user_command_from(user_command),

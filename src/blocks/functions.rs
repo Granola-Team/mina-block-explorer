@@ -54,6 +54,10 @@ pub fn get_user_command_hash(uc: &BlocksQueryBlocksTransactionsUserCommands) -> 
     uc.hash.as_ref().map_or("".to_string(), |o| o.to_string())
 }
 
+pub fn get_memo(uc: &BlocksQueryBlocksTransactionsUserCommands) -> String {
+    uc.memo.as_ref().map_or("".to_string(), |o| o.to_string())
+}
+
 pub fn get_kind(uc: &BlocksQueryBlocksTransactionsUserCommands) -> String {
     uc.kind.as_ref().map_or("".to_string(), |o| o.to_string())
 }
