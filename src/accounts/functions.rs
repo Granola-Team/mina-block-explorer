@@ -8,11 +8,15 @@ pub async fn load_data(
     username: Option<String>,
     balance: Option<i64>,
 ) -> Result<accounts_query::ResponseData, MyError> {
-    let query = Some(accounts_query::AccountQueryInput {
-        public_key,
-        username,
-        balance_lte: balance,
-    });
+    let query = if public_key.is_none() && username.is_none() && balance.is_none() {
+        None
+    } else {
+        Some(accounts_query::AccountQueryInput {
+            public_key,
+            username,
+            balance_lte: balance,
+        })
+    };
 
     let variables = accounts_query::Variables {
         limit: Some(limit),
