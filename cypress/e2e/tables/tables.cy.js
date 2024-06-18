@@ -92,6 +92,140 @@ let test_suite_data = [
   },
   {
     tag: "@tier1",
+    url: `/addresses/accounts/${HUMANIZE_FINANCE_ADDRESS}`,
+    table: {
+      heading: "User Commands",
+      columns: [
+        "Height",
+        "Txn Hash",
+        "Nonce",
+        "Age",
+        "Type",
+        "Direction",
+        "Counterparty",
+        "Amount/Fee",
+      ],
+      canonical_exists: true,
+      filter_tests: [
+        {
+          column: "Height",
+          input: 50000,
+          assertion: function () {
+            cy.assertForEachColumnValue("User Commands", "Height", (text) => {
+              let height = parseInt(text);
+              expect(height).to.be.lte(50000);
+            });
+          },
+        },
+        {
+          column: "Txn Hash",
+          input: HUMANIZE_FINANCE_TXN_HASH,
+          assertion: function () {
+            cy.aliasTableRows("User Commands", "table-rows");
+            cy.get("@table-rows").should("have.lengthOf", 1);
+            cy.assertForEachColumnValue("User Commands", "Txn Hash", (text) => {
+              expect(text).to.contain(HUMANIZE_FINANCE_TXN_HASH);
+              expect(text).to.contain("payout from humanize finance e19");
+            });
+          },
+        },
+        {
+          column: "Counterparty",
+          input: "B62qqwCPPUFZsHyYZhncvoiWyq4c8FonAL5zvL5qAGReJog6TbAvBev",
+          assertion: function () {
+            cy.assertForEachColumnValue(
+              "User Commands",
+              "Counterparty",
+              (text) => {
+                expect(text).to.equal(
+                  "B62qqwCPPUFZsHyYZhncvoiWyq4c8FonAL5zvL5qAGReJog6TbAvBev",
+                );
+              },
+            );
+          },
+        },
+      ],
+    },
+    tests: [
+      () => {
+        let expected_fields = ["Balance", "Delegate"];
+        cy.testSpotlight(
+          "Account Spotlight",
+          HUMANIZE_FINANCE_ADDRESS,
+          expected_fields,
+        );
+      },
+      () => {
+        cy.get("#spotlight-meta").should("contain", HUMANIZE_FINANCE_USERNAME);
+      },
+    ],
+  },
+  {
+    tag: "@tier2",
+    url: "/addresses/accounts",
+    table: {
+      heading: "Accounts",
+      columns: [
+        "Public Key",
+        "Username",
+        "Balance",
+        "Nonce",
+        "Delegate",
+        "Time Locked",
+      ],
+      canonical_exists: false,
+      filter_tests: [
+        {
+          column: "Balance",
+          input: 5000,
+          assertion: function () {
+            cy.aliasTableRows("Accounts", "table-rows");
+            cy.get("@table-rows").should("have.lengthOf", 100);
+            cy.assertForEachColumnValue("Accounts", "Balance", (text) => {
+              let numString = text.replace(/,/g, "");
+              let balance = parseFloat(numString);
+              expect(balance).to.be.lte(5000);
+            });
+          },
+        },
+        {
+          column: "Public Key",
+          input: HUMANIZE_FINANCE_ADDRESS,
+          assertion: function () {
+            cy.aliasTableRows("Accounts", "table-rows");
+            cy.get("@table-rows").should("have.lengthOf", 1);
+            cy.assertForEachColumnValue("Accounts", "Public Key", (text) => {
+              expect(text).to.equal(HUMANIZE_FINANCE_ADDRESS);
+            });
+            cy.tableColumnValuesEqual(
+              "Accounts",
+              "Username",
+              HUMANIZE_FINANCE_USERNAME,
+            );
+          },
+        },
+        {
+          column: "Username",
+          input: HUMANIZE_FINANCE_USERNAME,
+          assertion: function () {
+            cy.aliasTableRows("Accounts", "table-rows");
+            cy.get("@table-rows").should("have.lengthOf", 1);
+            cy.assertForEachColumnValue("Accounts", "Username", (text) => {
+              expect(text).to.equal(HUMANIZE_FINANCE_USERNAME);
+            });
+            cy.tableColumnValuesEqual(
+              "Accounts",
+              "Username",
+              HUMANIZE_FINANCE_USERNAME,
+            );
+          },
+        },
+      ],
+    },
+    tests: [],
+  },
+  {
+    tag: "@tier2",
     url: "/staking-ledgers?epoch=20",
     table: {
       columns: [
