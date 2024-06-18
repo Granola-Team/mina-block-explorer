@@ -3,7 +3,6 @@
 # Choose a random port on which to run 'trunk', otherwise concurrent runs
 # interfere with each other if they use the same port.
 #
-spec := "cypress/e2e/"
 trunk_port := `echo $((5170 + $RANDOM % 10))`
 
 export RUSTFLAGS := "--cfg=web_sys_unstable_apis"
@@ -66,7 +65,7 @@ test-e2e: pnpm_install
     -- \
     pnpm exec cypress run -r list -q
 
-test-e2e-tier1 spec=spec: pnpm_install
+test-e2e-tier1: pnpm_install
   @echo "--- Performing end-to-end @tier1 tests"
   CYPRESS_tags="@tier1" \
   node ./scripts/wait-on-port.js \
@@ -76,7 +75,7 @@ test-e2e-tier1 spec=spec: pnpm_install
     -- \
     "{{trunk_port}}" \
     -- \
-    pnpm exec cypress run -r list -q --spec {{spec}}
+    pnpm exec cypress run -r list -q
 
 test-e2e-tier2: pnpm_install
   @echo "--- Performing end-to-end @tier2 tests"
@@ -113,6 +112,6 @@ lint: pnpm_install && audit disallow-unused-cargo-deps
   leptosfmt --check ./src
   cargo clippy --all-targets --all-features -- -D warnings
 
-tier1: lint test-unit && (test-e2e-tier1 spec)
+tier1: lint test-unit && test-e2e-tier1
 
 tier2: lint test-unit && test-e2e-tier2
