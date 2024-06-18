@@ -29,9 +29,18 @@ fn AccountsPageContents() -> impl IntoView {
     let (data_sig, set_data) = create_signal(None);
     let (public_key_sig, _) = create_query_signal::<String>("q-public-key");
     let (username_sig, _) = create_query_signal::<String>("q-username");
+    let (balance_sig, _) = create_query_signal::<i64>("q-balance");
     let resource = create_resource(
-        move || (public_key_sig.get(), username_sig.get()),
-        |(public_key, username)| async move { load_data(TABLE_ROW_LIMIT, public_key, username).await },
+        move || (public_key_sig.get(), username_sig.get(), balance_sig.get()),
+        |(public_key, username, balance)| async move {
+            load_data(
+                TABLE_ROW_LIMIT,
+                public_key,
+                username,
+                balance.map(|b| b * 1_000_000_000i64),
+            )
+            .await
+        },
     );
     let table_columns = vec![
         TableColumn {
@@ -49,7 +58,8 @@ fn AccountsPageContents() -> impl IntoView {
         TableColumn {
             column: "Balance".to_string(),
             width: Some(String::from(TABLE_COL_LARGE_BALANCE)),
-            ..Default::default()
+            sort_direction: Some(TableSortDirection::Desc),
+            is_searchable: true,
         },
         TableColumn {
             column: "Nonce".to_string(),

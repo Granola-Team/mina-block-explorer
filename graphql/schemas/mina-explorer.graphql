@@ -10,6 +10,7 @@ type Account {
 input AccountQueryInput {
   publicKey: String
   username: String
+  balance_lte: Int
 }
 
 enum AccountSortByInput {

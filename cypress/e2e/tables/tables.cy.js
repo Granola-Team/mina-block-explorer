@@ -7,6 +7,7 @@ import {
   HUMANIZE_FINANCE_ADDRESS,
   HUMANIZE_FINANCE_TXN_HASH,
   HUMANIZE_FINANCE_USERNAME,
+  SLOTS_PER_EPOCH,
 } from "../constants";
 
 let test_suite_data = [
@@ -237,6 +238,19 @@ let test_suite_data = [
       ],
       canonical_exists: false,
       filter_tests: [
+        {
+          column: "Balance",
+          input: 5000,
+          assertion: function () {
+            cy.aliasTableRows("Accounts", "table-rows");
+            cy.get("@table-rows").should("have.lengthOf", 100);
+            cy.assertForEachColumnValue("Accounts", "Balance", (text) => {
+              let numString = text.replace(/,/g, "");
+              let balance = parseFloat(numString);
+              expect(balance).to.be.lte(5000);
+            });
+          },
+        },
         {
           column: "Public Key",
           input: HUMANIZE_FINANCE_ADDRESS,
