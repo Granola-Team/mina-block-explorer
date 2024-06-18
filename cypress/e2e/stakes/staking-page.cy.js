@@ -1,11 +1,16 @@
-suite(["@tier2"], "staking ledger", () => {
-  it("displays a ledger hash", () => {
+suite(["@tier1"], "staking ledger", () => {
+  beforeEach(() => {
     cy.visit("/staking-ledgers");
+    cy.intercept("GET", "/summary").as("summaryData");
+    cy.wait("@summaryData");
+  });
+
+  it("displays a ledger hash", () => {
     cy.get(".ledger-hash").should("exist");
   });
 
   it("shows slot progress message", () => {
-    cy.visit("/staking-ledgers");
+    cy.wait(500);
     cy.get(".staking-ledger-percent-complete").as("slot-info");
 
     cy.get("@slot-info")
@@ -31,8 +36,6 @@ suite(["@tier2"], "staking ledger", () => {
   }
 
   it("defaults to current epoch", () => {
-    cy.visit("/staking-ledgers?epoch=1");
-    cy.wait(500);
     cy.get("section").contains("Staking Ledger");
   });
 
@@ -48,7 +51,6 @@ suite(["@tier2"], "staking ledger", () => {
 
   it("contains buttons for epoch navigation", () => {
     cy.visit("/staking-ledgers?epoch=1");
-    cy.wait(500);
     cy.get("section").contains("Staking Ledger - Epoch 1");
     cy.get("section").contains("button", "Next").click();
     cy.wait(500);
@@ -59,7 +61,6 @@ suite(["@tier2"], "staking ledger", () => {
   });
 
   it("does not show slot progress message", () => {
-    cy.visit("/staking-ledgers");
     cy.get(".staking-ledger-percent-complete").as("slot-info");
 
     cy.get("@slot-info").should("exist");
@@ -71,7 +72,6 @@ suite(["@tier2"], "staking ledger", () => {
   });
 
   it("disables 'Next' button appropriately", () => {
-    cy.visit("/staking-ledgers");
     cy.wait(500);
     cy.get("section").contains("button", "Next").click();
 
