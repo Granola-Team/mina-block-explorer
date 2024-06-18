@@ -60,7 +60,6 @@ fn AccountsPageContents() -> impl IntoView {
             width: Some(String::from(TABLE_COL_LARGE_BALANCE)),
             sort_direction: Some(TableSortDirection::Desc),
             is_searchable: true,
-            ..Default::default()
         },
         TableColumn {
             column: "Nonce".to_string(),
