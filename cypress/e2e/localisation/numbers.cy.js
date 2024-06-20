@@ -240,6 +240,41 @@ let pages = [
         type: "number",
       },
       {
+        name: "user command nonce column",
+        selector: () => {
+          return cy.get("@uc-table-rows").first().find("td").eq(2);
+        },
+        type: "number",
+      },
+      {
+        name: "user command amount column",
+        selector: () => {
+          return cy
+            .get("@uc-table-rows")
+            .first()
+            .find("td")
+            .last()
+            .children("span")
+            .children("span")
+            .first();
+        },
+        type: "currency",
+      },
+      {
+        name: "user command fee column",
+        selector: () => {
+          return cy
+            .get("@uc-table-rows")
+            .first()
+            .find("td")
+            .last()
+            .children("span")
+            .children("span")
+            .last();
+        },
+        type: "currency",
+      },
+      {
         name: "snark work height column",
         selector: () => {
           return cy.get("@sj-table-rows").first().find("td").first();
@@ -257,6 +292,7 @@ let pages = [
   },
 ];
 
+// [pages[pages.length -1]].forEach(({ tests, page, wait = () => {} }) => {
 pages.forEach(({ tests, page, wait = () => {} }) => {
   suite(["@tier1"], "number or currency", () => {
     it(`on page ${page} is formatted correctly for '${tests.map((t) => t.name).join("', '")}'`, () => {
