@@ -1,3 +1,5 @@
+import { parseFormattedNumber } from "../helpers";
+
 suite(["@tier1"], "blockchain overview", () => {
   it("displays non-zero metrics", async () => {
     cy.visit("/blocks");
@@ -17,7 +19,7 @@ suite(["@tier1"], "blockchain overview", () => {
       cy.get(id)
         .invoke("text")
         .then((text) => {
-          let value = parseInt(text);
+          let value = parseFormattedNumber(text);
           expect(value).to.be.gt(0);
         });
       cy.get(id).siblings("label").should("have.text", label);
