@@ -1,3 +1,5 @@
+import { parseFormattedNumber } from "../helpers";
+
 suite(["@tier1"], "staking ledger", () => {
   beforeEach(() => {
     cy.visit("/staking-ledgers");
@@ -17,18 +19,25 @@ suite(["@tier1"], "staking ledger", () => {
       .invoke("text")
       .then((epochProgressText) => {
         const info = extractEpochProgress(epochProgressText);
-        expect(parseFloat(info.percent)).to.equal(
-          parseFloat(((info.slot / info.totalSlots) * 100).toFixed(2)),
+        expect(parseFormattedNumber(info.percent)).to.equal(
+          parseFloat(
+            (
+              (parseFormattedNumber(info.slot) /
+                parseFormattedNumber(info.totalSlots)) *
+              100
+            ).toFixed(0),
+          ),
         );
       });
   });
 
   function extractEpochProgress(input) {
-    let regex = /(\d+).(\d+)% complete \((\d+)\/(\d+) slots filled\)/;
+    let regex =
+      /(\d{1,3}(?:,\d{3})*|\d+)(?:\.(\d+))?% complete \((\d{1,3}(?:,\d{3})*)\/(\d{1,3}(?:,\d{3})*) slots filled\)/;
     const match = input.match(regex);
     return match
       ? {
-          percent: match[1] + "." + match[2],
+          percent: match[1] + (match[2] ? "." + match[2] : ""), // Append the decimal part if it exists
           slot: match[3],
           totalSlots: match[4],
         }
