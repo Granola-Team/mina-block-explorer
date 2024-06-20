@@ -295,12 +295,26 @@ let pages = [
         },
         type: "number",
       },
+      {
+        name: "block produciton slot column",
+        selector: () => {
+          return cy.get("@bp-table-rows").first().find("td").eq(2);
+        },
+        type: "number",
+      },
+      {
+        name: "block produciton coinbase column",
+        selector: () => {
+          return cy.get("@bp-table-rows").first().find("td").eq(5);
+        },
+        type: "currency",
+      },
     ],
   },
 ];
 
-[pages[pages.length - 1]].forEach(({ tests, page, wait = () => {} }) => {
-  // pages.forEach(({ tests, page, wait = () => {} }) => {
+// [pages[pages.length - 1]].forEach(({ tests, page, wait = () => {} }) => {
+pages.forEach(({ tests, page, wait = () => {} }) => {
   suite(["@tier1"], "number or currency", () => {
     it(`on page ${page} is formatted correctly for '${tests.map((t) => t.name).join("', '")}'`, () => {
       cy.visit(page);
