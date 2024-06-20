@@ -64,6 +64,28 @@ let pages = [
       },
     ],
   },
+  {
+    page: "/commands/internal",
+    wait: () => {
+      cy.aliasTableRows("Internal Commands", "table-rows");
+      cy.wait(100);
+      cy.get("@table-rows").find(".loading-placeholder").should("not.exist");
+    },
+    tests: [
+      {
+        name: "height column",
+        selector: () => {
+          return cy.get("@table-rows").first().find("td").first();
+        },
+      },
+      {
+        name: "fee column",
+        selector: () => {
+          return cy.get("@table-rows").first().find("td").eq(3);
+        },
+      },
+    ],
+  },
 ];
 
 pages.forEach(({ tests, page, wait }) => {
