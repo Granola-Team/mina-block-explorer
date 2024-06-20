@@ -280,28 +280,20 @@ where
                 <div class="flex justify-start items-baseline flex-wrap">
                     <AppHeading heading=section_heading/>
                     {move || match metadata.get() {
-                        Some(meta) if meta.displayed_records >= TABLE_ROW_LIMIT => {
+                        Some(meta) => {
                             view! {
                                 <div class="metadata pl-4 ".to_string()
                                     + BASE_META_CLASS>
                                     {format!(
                                         "Showing {} of {}",
-                                        meta.displayed_records,
-                                        meta.total_records,
-                                    )}
-
-                                </div>
-                            }
-                                .into_view()
-                        }
-                        Some(meta) if meta.displayed_records < TABLE_ROW_LIMIT => {
-                            view! {
-                                <div class="metadata pl-4 ".to_string()
-                                    + BASE_META_CLASS>
-                                    {format!(
-                                        "Showing {} of {}",
-                                        meta.displayed_records,
-                                        meta.displayed_records,
+                                        format_number(meta.displayed_records.to_string()),
+                                        meta
+                                            .total_records
+                                            .parse::<i64>()
+                                            .map_or(
+                                                meta.total_records,
+                                                |r| format_number(r.to_string()),
+                                            ),
                                     )}
 
                                 </div>

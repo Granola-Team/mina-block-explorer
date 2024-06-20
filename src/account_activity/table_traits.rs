@@ -152,7 +152,7 @@ impl SnarkTrait for AccountActivityQuerySnarks {
     }
     fn get_block_height(&self) -> String {
         self.block_height
-            .map_or_else(String::new, |o| o.to_string())
+            .map_or_else(String::new, |o| format_number(o.to_string()))
     }
     fn get_block_state_hash(&self) -> String {
         self.block
@@ -252,7 +252,7 @@ impl BlockTrait for AccountActivityQueryBlocks {
     }
     fn get_block_height(&self) -> String {
         self.block_height
-            .map_or_else(String::new, |o| o.to_string())
+            .map_or_else(String::new, |o| format_number(o.to_string()))
     }
     fn get_state_hash(&self) -> String {
         self.state_hash
@@ -266,7 +266,7 @@ impl BlockTrait for AccountActivityQueryBlocks {
         self.protocol_state.as_ref().map_or_else(String::new, |o| {
             o.consensus_state.as_ref().map_or_else(String::new, |o| {
                 o.slot_since_genesis
-                    .map_or_else(String::new, |o| o.to_string())
+                    .map_or_else(String::new, |o| format_number(o.to_string()))
             })
         })
     }

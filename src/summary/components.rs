@@ -13,18 +13,18 @@ pub fn SummaryGrid(summary: Option<BlockchainSummary>) -> impl IntoView {
             <SummaryItem
                 id="epoch"
                 label="Epoch"
-                value=summary.as_ref().map(|s| format_number(s.epoch))
+                value=summary.as_ref().map(|s| format_number(s.epoch.to_string()))
             />
             <UniqueBlocksProducersSummaryItem/>
             <SummaryItem
                 id="globalSlot"
                 label="Global Slot"
-                value=summary.as_ref().map(|s| format_number(s.global_slot))
+                value=summary.as_ref().map(|s| format_number(s.global_slot.to_string()))
             />
             <SummaryItem
                 id="blockchainLength"
                 label="Blockchain Length"
-                value=summary.as_ref().map(|s| format_number(s.blockchain_length))
+                value=summary.as_ref().map(|s| format_number(s.blockchain_length.to_string()))
             />
             <SummaryItem
                 id="totalMina"
@@ -55,22 +55,24 @@ pub fn SummaryGrid(summary: Option<BlockchainSummary>) -> impl IntoView {
             <SummaryItem
                 id="totalNumBlocks"
                 label="Total Blocks"
-                value=summary.as_ref().map(|s| format_number(s.total_num_blocks))
+                value=summary.as_ref().map(|s| format_number(s.total_num_blocks.to_string()))
             />
             <SummaryItem
                 id="totalUserCommands"
                 label="Total User Commands"
-                value=summary.as_ref().map(|s| format_number(s.total_num_user_commands))
+                value=summary.as_ref().map(|s| format_number(s.total_num_user_commands.to_string()))
             />
             <SummaryItem
                 id="totalInternalCommands"
                 label="Total Internal Commands"
-                value=summary.as_ref().map(|s| format_number(s.total_num_internal_commands))
+                value=summary
+                    .as_ref()
+                    .map(|s| format_number(s.total_num_internal_commands.to_string()))
             />
             <SummaryItem
                 id="totalSnarks"
                 label="Total SNARKs"
-                value=summary.as_ref().map(|s| format_number(s.total_num_snarks))
+                value=summary.as_ref().map(|s| format_number(s.total_num_snarks.to_string()))
             />
         </section>
     }

@@ -139,7 +139,7 @@ impl AccountActivityQueryDirectionalTransactionTrait
         self.fee
             .map(|f| f.round() as u64)
             .map(nanomina_to_mina)
-            .map_or(String::new(), |f| f.to_string())
+            .map_or(String::new(), |f| format_mina(f.to_string()))
     }
     fn get_counterparty(&self) -> String {
         self.counterparty
@@ -165,7 +165,8 @@ impl AccountActivityQueryDirectionalTransactionTrait
     }
 
     fn get_height(&self) -> String {
-        self.height.map_or(String::new(), |f| f.to_string())
+        self.height
+            .map_or(String::new(), |f| format_number(f.to_string()))
     }
 
     fn get_kind(&self) -> String {
@@ -173,7 +174,8 @@ impl AccountActivityQueryDirectionalTransactionTrait
     }
 
     fn get_nonce(&self) -> String {
-        self.nonce.map_or(String::new(), |f| f.to_string())
+        self.nonce
+            .map_or(String::new(), |f| format_number(f.to_string()))
     }
 
     fn get_failure_reason(&self) -> String {

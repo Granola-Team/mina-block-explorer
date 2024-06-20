@@ -57,7 +57,7 @@ pub fn get_snark_date_time(snark: &SnarksQuerySnarks) -> String {
 pub fn get_block_height(snark: &SnarksQuerySnarks) -> String {
     snark
         .block_height
-        .map_or_else(String::new, |height| height.to_string())
+        .map_or_else(String::new, |height| format_number(height.to_string()))
 }
 
 pub fn get_date_time(snark: &SnarksQuerySnarks) -> String {
