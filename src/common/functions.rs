@@ -12,6 +12,61 @@ use rand::{
 };
 use rust_decimal::prelude::*;
 use std::iter;
+use wasm_bindgen::prelude::*;
+use web_sys::js_sys::{Intl::NumberFormat, *};
+
+#[wasm_bindgen]
+extern "C" {
+    #[allow(non_upper_case_globals)]
+    #[wasm_bindgen(js_namespace = navigator)]
+    static language: String;
+}
+
+#[wasm_bindgen]
+pub fn get_browser_locale() -> String {
+    language.clone()
+}
+
+fn format_number_helper(number: &str, max_significant_digits: Option<u32>) -> String {
+    let locale_array = Array::new();
+    locale_array.push(&JsValue::from_str(&get_browser_locale()));
+
+    let options = Object::new();
+    if let Some(digits) = max_significant_digits {
+        // Safely set the maximumSignificantDigits only if within a valid range:
+        // See: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat/NumberFormat
+        if digits >= 1 && digits <= 21 {
+            #[allow(unused_unsafe)]
+            unsafe {
+                Reflect::set(
+                    &options,
+                    &JsValue::from_str("maximumSignificantDigits"),
+                    &JsValue::from_f64(digits as f64),
+                )
+                .unwrap()
+            };
+        }
+    }
+
+    let num_format = NumberFormat::new(&locale_array, &options);
+    let format = num_format.format();
+    let this = JsValue::NULL; // `this` context for the function, not needed here
+
+    match format.call1(&this, &JsValue::from_str(number)) {
+        Ok(result) => result.as_string().unwrap_or_else(|| number.to_string()),
+        Err(_) => number.to_string(),
+    }
+}
+
+#[wasm_bindgen]
+pub fn format_number(number: String) -> String {
+    format_number_helper(&number, None) // No significant digits limit
+}
+
+#[wasm_bindgen]
+pub fn format_mina(number: String) -> String {
+    format_number_helper(&number, Some(9)) // Use 9 significant digits
+}
 
 pub fn get_status(timestamp: &str) -> Status {
     match timestamp.parse::<DateTime<Utc>>() {
@@ -210,45 +265,6 @@ pub fn nanomina_to_mina(num: u64) -> String {
     dec.set_scale(MINA_SCALE).unwrap();
     let num_str = dec.to_string();
     format_mina(num_str)
-}
-
-pub fn format_number<T: ToPrimitive + std::fmt::Display>(number: T) -> String {
-    let mut num_string = number.to_string();
-    let mut result = String::new();
-
-    while num_string.len() > 3 {
-        let idx = num_string.len() - 3;
-        result = format!(",{}", &num_string[idx..]) + &result;
-        num_string = num_string[..idx].to_string();
-    }
-
-    num_string + &result
-}
-
-pub fn format_mina(num_str: String) -> String {
-    let parts: Vec<&str> = num_str.split('.').collect();
-    let mut integral_part = parts[0].to_string();
-    let decimal_part = parts.get(1).unwrap_or(&"").to_string();
-
-    if integral_part.len() > 3 {
-        let mut index = integral_part.len() - 3;
-        while index > 0 {
-            integral_part.insert(index, ',');
-            if index > 3 {
-                index -= 3;
-            } else {
-                break;
-            }
-        }
-    }
-
-    let trimmed_decimal_part = decimal_part.trim_end_matches('0');
-
-    if !trimmed_decimal_part.is_empty() {
-        format!("{}.{}", integral_part, trimmed_decimal_part)
-    } else {
-        integral_part
-    }
 }
 
 #[cfg(test)]
