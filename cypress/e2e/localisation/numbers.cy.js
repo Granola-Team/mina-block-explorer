@@ -1,13 +1,14 @@
-import { DEFAULT_LOCALE } from "../constants";
+import { DEFAULT_LOCALE, GENESIS_BLOCK_BLOCK_HASH } from "../constants";
 import { parseFormattedNumber } from "../helpers";
 
 let pages = [
   {
     page: "/blocks",
-    wait: async () => {
+    wait: () => {
       cy.intercept("GET", "/summary").as("summaryData");
-      await cy.wait("@summaryData");
-      cy.wait(100);
+      cy.wait("@summaryData");
+      cy.aliasTableRows("Blocks", "table-rows");
+      cy.get("@table-rows").find(".loading-placeholder").should("not.exist");
     },
     tests: [
       {
@@ -18,7 +19,6 @@ let pages = [
       {
         name: "height column",
         selector: () => {
-          cy.aliasTableRows("Blocks", "table-rows");
           return cy.get("@table-rows").first().find("td").first();
         },
         type: "number",
@@ -26,10 +26,50 @@ let pages = [
       {
         name: "slot column",
         selector: () => {
-          cy.aliasTableRows("Blocks", "table-rows");
           return cy.get("@table-rows").first().find("td").eq(2);
         },
         type: "number",
+      },
+    ],
+  },
+  {
+    page: `/blocks/${GENESIS_BLOCK_BLOCK_HASH}/spotlight`,
+    tests: [
+      {
+        name: "coinbase",
+        selector: () => {
+          cy.aliasTransposedTableRows("Block Spotlight", "spotlight");
+          return cy
+            .get("@spotlight")
+            .contains("Coinbase")
+            .siblings("td")
+            .first();
+        },
+        type: "currency",
+      },
+      {
+        name: "SNARK Fees",
+        selector: () => {
+          cy.aliasTransposedTableRows("Block Spotlight", "spotlight");
+          return cy
+            .get("@spotlight")
+            .contains("SNARK Fees")
+            .siblings("td")
+            .first();
+        },
+        type: "currency",
+      },
+      {
+        name: "Transaction Fees",
+        selector: () => {
+          cy.aliasTransposedTableRows("Block Spotlight", "spotlight");
+          return cy
+            .get("@spotlight")
+            .contains("Transaction Fees")
+            .siblings("td")
+            .first();
+        },
+        type: "currency",
       },
     ],
   },
@@ -126,7 +166,7 @@ let pages = [
   },
 ];
 
-pages.forEach(({ tests, page, wait }) => {
+pages.forEach(({ tests, page, wait = () => {} }) => {
   suite(["@tier1"], "number or currency", () => {
     it(`on page ${page} is formatted correctly for '${tests.map((t) => t.name).join("', '")}'`, () => {
       cy.visit(page);
