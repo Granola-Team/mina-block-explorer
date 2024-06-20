@@ -34,7 +34,7 @@ fn format_number_helper(number: &str, max_significant_digits: Option<u32>) -> St
     if let Some(digits) = max_significant_digits {
         // Safely set the maximumSignificantDigits only if within a valid range:
         // See: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat/NumberFormat
-        if digits >= 1 && digits <= 21 {
+        if (1..=21).contains(&digits) {
             #[allow(unused_unsafe)]
             unsafe {
                 Reflect::set(
