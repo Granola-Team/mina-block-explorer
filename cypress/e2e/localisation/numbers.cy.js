@@ -30,10 +30,44 @@ let pages = [
       },
     ],
   },
+  {
+    page: "/commands/user",
+    wait: () => {
+      cy.aliasTableRows("User Commands", "table-rows");
+      cy.wait(100);
+      cy.get("@table-rows").find(".loading-placeholder").should("not.exist");
+    },
+    tests: [
+      {
+        name: "height column",
+        selector: () => {
+          return cy.get("@table-rows").first().find("td").first();
+        },
+      },
+      {
+        name: "nonce column",
+        selector: () => {
+          return cy.get("@table-rows").first().find("td").eq(6);
+        },
+      },
+      {
+        name: "fee column",
+        selector: () => {
+          return cy.get("@table-rows").first().find("td").eq(7);
+        },
+      },
+      {
+        name: "amount column",
+        selector: () => {
+          return cy.get("@table-rows").first().find("td").eq(8);
+        },
+      },
+    ],
+  },
 ];
 
 pages.forEach(({ tests, page, wait }) => {
-  suite(["@tier1"], "number", () => {
+  suite(["@tier1"], "number or currency", () => {
     it(`on page ${page} is formatted correctly for '${tests.map((t) => t.name).join("', '")}'`, () => {
       cy.visit(page);
       wait();
@@ -44,7 +78,7 @@ pages.forEach(({ tests, page, wait }) => {
             let number = parseFormattedNumber(text);
             expect(number).to.be.a("number");
             const formatter = new Intl.NumberFormat(DEFAULT_LOCALE, {});
-            expect(text).to.equal(formatter.format(number));
+            expect(text).to.contain(formatter.format(number));
           });
       });
     });
