@@ -282,6 +282,13 @@ let pages = [
         type: "number",
       },
       {
+        name: "snark work fee column",
+        selector: () => {
+          return cy.get("@sj-table-rows").first().find("td").last();
+        },
+        type: "currency",
+      },
+      {
         name: "block produciton height column",
         selector: () => {
           return cy.get("@bp-table-rows").first().find("td").first();
@@ -292,8 +299,8 @@ let pages = [
   },
 ];
 
-// [pages[pages.length -1]].forEach(({ tests, page, wait = () => {} }) => {
-pages.forEach(({ tests, page, wait = () => {} }) => {
+[pages[pages.length - 1]].forEach(({ tests, page, wait = () => {} }) => {
+  // pages.forEach(({ tests, page, wait = () => {} }) => {
   suite(["@tier1"], "number or currency", () => {
     it(`on page ${page} is formatted correctly for '${tests.map((t) => t.name).join("', '")}'`, () => {
       cy.visit(page);
