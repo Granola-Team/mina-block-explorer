@@ -6,7 +6,7 @@ use super::graphql::{
 };
 use crate::common::{
     constants::*,
-    functions::{nanomina_str_to_mina, nanomina_to_mina, format_number},
+    functions::{format_number, nanomina_str_to_mina, nanomina_to_mina},
     models::MyError,
 };
 use graphql_client::reqwest::post_graphql;

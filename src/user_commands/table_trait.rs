@@ -111,7 +111,8 @@ impl TransactionsTrait for TransactionsQueryTransactions {
     }
 
     fn get_nonce(&self) -> String {
-        self.nonce.map_or_else(String::new, |o| format_number(o.to_string()))
+        self.nonce
+            .map_or_else(String::new, |o| format_number(o.to_string()))
     }
 
     fn get_memo(&self) -> String {
