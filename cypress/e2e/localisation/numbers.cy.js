@@ -115,6 +115,22 @@ let pages = [
     ],
   },
   {
+    page: `/blocks/3NLnaFvjcxyFtazWwAPu92vXtR9XcvUDmLkRGEPkSc7W11Vyfhiv/snark-jobs`,
+    wait: () => {
+      cy.aliasTableRows("SNARK Jobs", "table-rows");
+    },
+    tests: [
+      {
+        name: "fee",
+        selector: () => {
+          return cy.get("@table-rows").first().find("td").last(0);
+        },
+        type: "currency",
+      },
+    ],
+  },
+  //
+  {
     page: "/commands/user",
     wait: () => {
       cy.aliasTableRows("User Commands", "table-rows");
