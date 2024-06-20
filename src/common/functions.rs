@@ -17,14 +17,13 @@ use web_sys::js_sys::{Intl::NumberFormat, *};
 
 #[wasm_bindgen]
 extern "C" {
-    #[allow(non_upper_case_globals)]
-    #[wasm_bindgen(js_namespace = navigator)]
-    static language: String;
+    #[wasm_bindgen(js_namespace = navigator, js_name = language)]
+    static LANGUAGE: String;
 }
 
 #[wasm_bindgen]
 pub fn get_browser_locale() -> String {
-    language.clone()
+    LANGUAGE.clone()
 }
 
 fn format_number_helper(number: &str, max_significant_digits: Option<u32>) -> String {
