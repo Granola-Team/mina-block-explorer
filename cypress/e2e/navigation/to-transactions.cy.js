@@ -1,10 +1,9 @@
-import { DEFAULT_ACCOUNT_PK } from "../constants";
+import { SNZPOOL_ADDRESS, WHISPERIT_BLOCK_STATE_HASH } from "../constants";
 
-suite(["@tier2"], "transaction spotlight", () => {
+suite(["@tier1"], "transaction spotlight", () => {
   let pages = [
     {
-      origin:
-        "/blocks/accounts/B62qqW8uKTxHZueKJwsoPY8NZcKVeDK4bLEHRkpMM2uKtEmmqLbkiQC",
+      origin: `/blocks/accounts/${SNZPOOL_ADDRESS}`,
       column: "Hash",
       tableHeader: "User Commands",
       tableHeaderEl: "h2",
@@ -12,13 +11,12 @@ suite(["@tier2"], "transaction spotlight", () => {
     },
     { origin: "/commands", column: "Hash", tableHeader: "User Commands" },
     {
-      origin:
-        "/blocks/3NKnLbpRcFaY9WSzLFa4wYxejhnWBQNEPA2cnesvS75wcuNCr8nA/commands/user",
+      origin: `/blocks/${WHISPERIT_BLOCK_STATE_HASH}/commands/user`,
       column: "Hash",
       tableHeader: "User Commands",
     },
     {
-      origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
+      origin: `/addresses/accounts/${SNZPOOL_ADDRESS}`,
       column: "Txn Hash",
       tableHeader: "User Commands",
     },

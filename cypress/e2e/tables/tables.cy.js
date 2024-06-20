@@ -29,7 +29,213 @@ let test_suite_data = [
     ],
   },
   {
-    tag: "@tier2",
+    tag: "@tier1",
+    url: "/commands/user",
+    table: {
+      heading: "User Commands",
+      columns: [
+        "Height",
+        "Txn Hash",
+        "Age",
+        "Type",
+        "From",
+        "To",
+        "Nonce",
+        "Fee",
+        "Amount",
+      ],
+      canonical_exists: true,
+      filter_tests: [
+        {
+          column: "Height",
+          input: 50000,
+          assertion: function () {
+            cy.assertForEachColumnValue("User Commands", "Height", (text) => {
+              let height = parseInt(text);
+              expect(height).to.be.lte(50000);
+            });
+          },
+        },
+        {
+          column: "Txn Hash",
+          input: HUMANIZE_FINANCE_TXN_HASH,
+          assertion: function () {
+            cy.aliasTableRows("User Commands", "table-rows");
+            cy.get("@table-rows").should("have.lengthOf", 1);
+            cy.assertForEachColumnValue("User Commands", "Txn Hash", (text) => {
+              expect(text).to.contain(HUMANIZE_FINANCE_TXN_HASH);
+              expect(text).to.contain("payout from humanize finance e19");
+            });
+          },
+        },
+        {
+          column: "From",
+          input: FIRST_SENDER_ADDRESS,
+          assertion: function () {
+            cy.assertForEachColumnValue("User Commands", "From", (text) => {
+              expect(text).to.equal(FIRST_SENDER_ADDRESS);
+            });
+          },
+        },
+        {
+          column: "To",
+          input: FIRST_RECIPIENT_ADDRESS,
+          assertion: function () {
+            cy.assertForEachColumnValue("User Commands", "To", (text) => {
+              expect(text).to.equal(FIRST_RECIPIENT_ADDRESS);
+            });
+          },
+        },
+      ],
+    },
+    tests: [],
+  },
+  {
+    tag: "@tier1",
+    url: "/staking-ledgers?epoch=20",
+    table: {
+      columns: [
+        "Key",
+        "Username",
+        "Stake",
+        "Total Stake %",
+        "Block Win %",
+        "Delegate",
+        "Delegators",
+      ],
+      heading: "Staking Ledger - Epoch 20",
+      canonical_exists: false,
+      filter_tests: [
+        {
+          column: "Key",
+          input: HUMANIZE_FINANCE_ADDRESS,
+          assertion: function () {
+            cy.aliasTableRows("Staking Ledger - Epoch 20", "table-rows");
+            cy.get("@table-rows").should("have.lengthOf", 1);
+            cy.assertForEachColumnValue(
+              "Staking Ledger - Epoch 20",
+              "Key",
+              (text) => {
+                expect(text).to.equal(HUMANIZE_FINANCE_ADDRESS);
+              },
+            );
+            cy.tableColumnValuesEqual(
+              "Staking Ledger - Epoch 20",
+              "Username",
+              HUMANIZE_FINANCE_USERNAME,
+            );
+          },
+        },
+      ],
+    },
+    tests: [],
+  },
+  {
+    tag: "@tier1",
+    url: "/commands/internal",
+    table: {
+      heading: "Internal Commands",
+      columns: ["Height", "State Hash", "Recipient", "Fee", "Type", "Age"],
+      canonical_exists: true,
+      filter_tests: [
+        {
+          column: "Height",
+          input: 50000,
+          assertion: function () {
+            cy.assertForEachColumnValue(
+              "Internal Commands",
+              "Height",
+              (text) => {
+                let height = parseInt(text);
+                expect(height).to.be.lte(50000);
+              },
+            );
+          },
+        },
+        {
+          column: "State Hash",
+          input: "3NKP5eG9qvMbJM78thgQMvwnNnjrEkfcAfS31YbNNzeBsa8ADqPR",
+          assertion: function () {
+            cy.aliasTableRows("Internal Commands", "table-rows");
+            cy.get("@table-rows").should("have.length.greaterThan", 1);
+            cy.assertForEachColumnValue(
+              "Internal Commands",
+              "State Hash",
+              (text) => {
+                expect(text).to.equal(
+                  "3NKP5eG9qvMbJM78thgQMvwnNnjrEkfcAfS31YbNNzeBsa8ADqPR",
+                );
+              },
+            );
+          },
+        },
+        {
+          column: "Recipient",
+          input: "B62qnucUMHz7Dw2ReNgWhmR5XCvPeQjJWPReuQ8GwPyY4qj1otGBiKr",
+          assertion: function () {
+            cy.assertForEachColumnValue(
+              "Internal Commands",
+              "Recipient",
+              (text) => {
+                expect(text).to.equal(
+                  "B62qnucUMHz7Dw2ReNgWhmR5XCvPeQjJWPReuQ8GwPyY4qj1otGBiKr",
+                );
+              },
+            );
+          },
+        },
+      ],
+    },
+    tests: [],
+  },
+  {
+    tag: "@tier1",
+    url: "/snarks",
+    table: {
+      heading: "SNARKs",
+      columns: ["Height", "State Hash", "Age", "Prover", "Fee"],
+      canonical_exists: true,
+      filter_tests: [
+        {
+          column: "Height",
+          input: 50000,
+          assertion: function () {
+            cy.assertForEachColumnValue("SNARKs", "Height", (text) => {
+              let height = parseInt(text);
+              expect(height).to.be.lte(50000);
+            });
+          },
+        },
+        {
+          column: "State Hash",
+          input: "3NKP5eG9qvMbJM78thgQMvwnNnjrEkfcAfS31YbNNzeBsa8ADqPR",
+          assertion: function () {
+            cy.aliasTableRows("SNARKs", "table-rows");
+            cy.get("@table-rows").should("have.length.greaterThan", 1);
+            cy.assertForEachColumnValue("SNARKs", "State Hash", (text) => {
+              expect(text).to.equal(
+                "3NKP5eG9qvMbJM78thgQMvwnNnjrEkfcAfS31YbNNzeBsa8ADqPR",
+              );
+            });
+          },
+        },
+        {
+          column: "Prover",
+          input: "B62qrQiw9JhUumq457sMxicgQ94Z1WD9JChzJu19kBE8Szb5T8tcUAC",
+          assertion: function () {
+            cy.assertForEachColumnValue("SNARKs", "Prover", (text) => {
+              expect(text).to.equal(
+                "B62qrQiw9JhUumq457sMxicgQ94Z1WD9JChzJu19kBE8Szb5T8tcUAC",
+              );
+            });
+          },
+        },
+      ],
+    },
+    tests: [],
+  },
+  {
+    tag: "@tier1",
     url: "/blocks",
     table: {
       heading: "Blocks",
@@ -92,61 +298,63 @@ let test_suite_data = [
     tests: [],
   },
   {
-    tag: "@tier2",
-    url: "/commands/user",
+    tag: "@tier1",
+    url: "/addresses/accounts",
     table: {
-      heading: "User Commands",
+      heading: "Accounts",
       columns: [
-        "Height",
-        "Txn Hash",
-        "Age",
-        "Type",
-        "From",
-        "To",
+        "Public Key",
+        "Username",
+        "Balance",
         "Nonce",
-        "Fee",
-        "Amount",
+        "Delegate",
+        "Time Locked",
       ],
-      canonical_exists: true,
+      canonical_exists: false,
       filter_tests: [
         {
-          column: "Height",
-          input: 50000,
+          column: "Balance",
+          input: 5000,
           assertion: function () {
-            cy.assertForEachColumnValue("User Commands", "Height", (text) => {
-              let height = parseInt(text);
-              expect(height).to.be.lte(50000);
+            cy.aliasTableRows("Accounts", "table-rows");
+            cy.get("@table-rows").should("have.lengthOf", 100);
+            cy.assertForEachColumnValue("Accounts", "Balance", (text) => {
+              let numString = text.replace(/,/g, "");
+              let balance = parseFloat(numString);
+              expect(balance).to.be.lte(5000);
             });
           },
         },
         {
-          column: "Txn Hash",
-          input: HUMANIZE_FINANCE_TXN_HASH,
+          column: "Public Key",
+          input: HUMANIZE_FINANCE_ADDRESS,
           assertion: function () {
-            cy.aliasTableRows("User Commands", "table-rows");
+            cy.aliasTableRows("Accounts", "table-rows");
             cy.get("@table-rows").should("have.lengthOf", 1);
-            cy.assertForEachColumnValue("User Commands", "Txn Hash", (text) => {
-              expect(text).to.contain(HUMANIZE_FINANCE_TXN_HASH);
-              expect(text).to.contain("payout from humanize finance e19");
+            cy.assertForEachColumnValue("Accounts", "Public Key", (text) => {
+              expect(text).to.equal(HUMANIZE_FINANCE_ADDRESS);
             });
+            cy.tableColumnValuesEqual(
+              "Accounts",
+              "Username",
+              HUMANIZE_FINANCE_USERNAME,
+            );
           },
         },
         {
-          column: "From",
-          input: FIRST_SENDER_ADDRESS,
+          column: "Username",
+          input: HUMANIZE_FINANCE_USERNAME,
           assertion: function () {
-            cy.assertForEachColumnValue("User Commands", "From", (text) => {
-              expect(text).to.equal(FIRST_SENDER_ADDRESS);
+            cy.aliasTableRows("Accounts", "table-rows");
+            cy.get("@table-rows").should("have.lengthOf", 1);
+            cy.assertForEachColumnValue("Accounts", "Username", (text) => {
+              expect(text).to.equal(HUMANIZE_FINANCE_USERNAME);
             });
-          },
-        },
-        {
-          column: "To",
-          input: FIRST_RECIPIENT_ADDRESS,
-          assertion: function () {
-            cy.assertForEachColumnValue("User Commands", "To", (text) => {
-              expect(text).to.equal(FIRST_RECIPIENT_ADDRESS);
-            });
+            cy.tableColumnValuesEqual(
+              "Accounts",
+              "Username",
+              HUMANIZE_FINANCE_USERNAME,
+            );
           },
         },
       ],
@@ -223,214 +431,6 @@ let test_suite_data = [
       },
     ],
   },
-  {
-    tag: "@tier2",
-    url: "/addresses/accounts",
-    table: {
-      heading: "Accounts",
-      columns: [
-        "Public Key",
-        "Username",
-        "Balance",
-        "Nonce",
-        "Delegate",
-        "Time Locked",
-      ],
-      canonical_exists: false,
-      filter_tests: [
-        {
-          column: "Balance",
-          input: 5000,
-          assertion: function () {
-            cy.aliasTableRows("Accounts", "table-rows");
-            cy.get("@table-rows").should("have.lengthOf", 100);
-            cy.assertForEachColumnValue("Accounts", "Balance", (text) => {
-              let numString = text.replace(/,/g, "");
-              let balance = parseFloat(numString);
-              expect(balance).to.be.lte(5000);
-            });
-          },
-        },
-        {
-          column: "Public Key",
-          input: HUMANIZE_FINANCE_ADDRESS,
-          assertion: function () {
-            cy.aliasTableRows("Accounts", "table-rows");
-            cy.get("@table-rows").should("have.lengthOf", 1);
-            cy.assertForEachColumnValue("Accounts", "Public Key", (text) => {
-              expect(text).to.equal(HUMANIZE_FINANCE_ADDRESS);
-            });
-            cy.tableColumnValuesEqual(
-              "Accounts",
-              "Username",
-              HUMANIZE_FINANCE_USERNAME,
-            );
-          },
-        },
-        {
-          column: "Username",
-          input: HUMANIZE_FINANCE_USERNAME,
-          assertion: function () {
-            cy.aliasTableRows("Accounts", "table-rows");
-            cy.get("@table-rows").should("have.lengthOf", 1);
-            cy.assertForEachColumnValue("Accounts", "Username", (text) => {
-              expect(text).to.equal(HUMANIZE_FINANCE_USERNAME);
-            });
-            cy.tableColumnValuesEqual(
-              "Accounts",
-              "Username",
-              HUMANIZE_FINANCE_USERNAME,
-            );
-          },
-        },
-      ],
-    },
-    tests: [],
-  },
-  {
-    tag: "@tier2",
-    url: "/staking-ledgers?epoch=20",
-    table: {
-      columns: [
-        "Key",
-        "Username",
-        "Stake",
-        "Total Stake %",
-        "Block Win %",
-        "Delegate",
-        "Delegators",
-      ],
-      heading: "Staking Ledger - Epoch 20",
-      canonical_exists: false,
-      filter_tests: [
-        {
-          column: "Key",
-          input: HUMANIZE_FINANCE_ADDRESS,
-          assertion: function () {
-            cy.aliasTableRows("Staking Ledger - Epoch 20", "table-rows");
-            cy.get("@table-rows").should("have.lengthOf", 1);
-            cy.assertForEachColumnValue(
-              "Staking Ledger - Epoch 20",
-              "Key",
-              (text) => {
-                expect(text).to.equal(HUMANIZE_FINANCE_ADDRESS);
-              },
-            );
-            cy.tableColumnValuesEqual(
-              "Staking Ledger - Epoch 20",
-              "Username",
-              HUMANIZE_FINANCE_USERNAME,
-            );
-          },
-        },
-      ],
-    },
-    tests: [],
-  },
-  {
-    tag: "@tier2",
-    url: "/commands/internal",
-    table: {
-      heading: "Internal Commands",
-      columns: ["Height", "State Hash", "Recipient", "Fee", "Type", "Age"],
-      canonical_exists: true,
-      filter_tests: [
-        {
-          column: "Height",
-          input: 50000,
-          assertion: function () {
-            cy.assertForEachColumnValue(
-              "Internal Commands",
-              "Height",
-              (text) => {
-                let height = parseInt(text);
-                expect(height).to.be.lte(50000);
-              },
-            );
-          },
-        },
-        {
-          column: "State Hash",
-          input: "3NKP5eG9qvMbJM78thgQMvwnNnjrEkfcAfS31YbNNzeBsa8ADqPR",
-          assertion: function () {
-            cy.aliasTableRows("Internal Commands", "table-rows");
-            cy.get("@table-rows").should("have.length.greaterThan", 1);
-            cy.assertForEachColumnValue(
-              "Internal Commands",
-              "State Hash",
-              (text) => {
-                expect(text).to.equal(
-                  "3NKP5eG9qvMbJM78thgQMvwnNnjrEkfcAfS31YbNNzeBsa8ADqPR",
-                );
-              },
-            );
-          },
-        },
-        {
-          column: "Recipient",
-          input: "B62qnucUMHz7Dw2ReNgWhmR5XCvPeQjJWPReuQ8GwPyY4qj1otGBiKr",
-          assertion: function () {
-            cy.assertForEachColumnValue(
-              "Internal Commands",
-              "Recipient",
-              (text) => {
-                expect(text).to.equal(
-                  "B62qnucUMHz7Dw2ReNgWhmR5XCvPeQjJWPReuQ8GwPyY4qj1otGBiKr",
-                );
-              },
-            );
-          },
-        },
-      ],
-    },
-    tests: [],
-  },
-  {
-    tag: "@tier2",
-    url: "/snarks",
-    table: {
-      heading: "SNARKs",
-      columns: ["Height", "State Hash", "Age", "Prover", "Fee"],
-      canonical_exists: true,
-      filter_tests: [
-        {
-          column: "Height",
-          input: 50000,
-          assertion: function () {
-            cy.assertForEachColumnValue("SNARKs", "Height", (text) => {
-              let height = parseInt(text);
-              expect(height).to.be.lte(50000);
-            });
-          },
-        },
-        {
-          column: "State Hash",
-          input: "3NKP5eG9qvMbJM78thgQMvwnNnjrEkfcAfS31YbNNzeBsa8ADqPR",
-          assertion: function () {
-            cy.aliasTableRows("SNARKs", "table-rows");
-            cy.get("@table-rows").should("have.length.greaterThan", 1);
-            cy.assertForEachColumnValue("SNARKs", "State Hash", (text) => {
-              expect(text).to.equal(
-                "3NKP5eG9qvMbJM78thgQMvwnNnjrEkfcAfS31YbNNzeBsa8ADqPR",
-              );
-            });
-          },
-        },
-        {
-          column: "Prover",
-          input: "B62qrQiw9JhUumq457sMxicgQ94Z1WD9JChzJu19kBE8Szb5T8tcUAC",
-          assertion: function () {
-            cy.assertForEachColumnValue("SNARKs", "Prover", (text) => {
-              expect(text).to.equal(
-                "B62qrQiw9JhUumq457sMxicgQ94Z1WD9JChzJu19kBE8Szb5T8tcUAC",
-              );
-            });
-          },
-        },
-      ],
-    },
-    tests: [],
-  },
 ];
 
 test_suite_data.forEach((test_suite_datum) => {
@@ -454,6 +454,8 @@ test_suite_data.forEach((test_suite_datum) => {
           cy.get("@input").type(input, { delay: 0 });
           cy.wait(1000);
           assertion();
+          cy.aliasTableRows(heading, "table-rows");
+          cy.get(".metadata").should("not.contain", "100 of 0");
           cy.assertTableRecordsCorrect(heading);
           cy.get("@input").clear();
         });
