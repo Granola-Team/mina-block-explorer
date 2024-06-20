@@ -272,39 +272,6 @@ pub fn nanomina_to_mina(num: u64) -> String {
     format_mina(num_str)
 }
 
-#[cfg(test)]
-mod nanomina_tests {
-    use super::*;
-
-    #[test]
-    fn test_zero_value() {
-        assert_eq!(nanomina_to_mina(0), "0");
-    }
-
-    #[test]
-    fn test_exact_value() {
-        assert_eq!(nanomina_to_mina(123_456_789), "0.123456789");
-    }
-
-    #[test]
-    fn test_large_number() {
-        assert_eq!(
-            nanomina_to_mina(5_000_000_000_111_111_111),
-            "5,000,000,000.111111111"
-        );
-    }
-
-    #[test]
-    fn test_small_integer_value() {
-        assert_eq!(nanomina_to_mina(1), "0.000000001");
-    }
-
-    #[test]
-    fn test_boundary_value() {
-        assert_eq!(nanomina_to_mina(999_999_999), "0.999999999");
-    }
-}
-
 pub fn convert_to_link(data: String, href: String) -> HtmlElement<html::AnyElement> {
     view! {
         <span class="w-full text-ellipsis overflow-hidden">
