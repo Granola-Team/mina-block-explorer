@@ -146,7 +146,10 @@ pub fn StakesPageContents(
                             <div class="text-sm text-slate-500 staking-ledger-percent-complete">
                                 {format!(
                                     "{:.2}% complete ({}/{} slots filled)",
-                                    format_number(((slot_in_epoch as f64 / EPOCH_SLOTS as f64) * 100.0).to_string()),
+                                    format_number(
+                                        ((slot_in_epoch as f64 / EPOCH_SLOTS as f64) * 100.0)
+                                            .to_string(),
+                                    ),
                                     format_number(slot_in_epoch.to_string()),
                                     format_number(EPOCH_SLOTS.to_string()),
                                 )}
