@@ -100,6 +100,21 @@ let pages = [
     ],
   },
   {
+    page: `/blocks/${HUMANIZE_FINANACE_BLOCK_STATE_HASH}/commands/internal`,
+    wait: () => {
+      cy.aliasTableRows("Internal Commands", "table-rows");
+    },
+    tests: [
+      {
+        name: "fee",
+        selector: () => {
+          return cy.get("@table-rows").first().find("td").eq(1);
+        },
+        type: "currency",
+      },
+    ],
+  },
+  {
     page: "/commands/user",
     wait: () => {
       cy.aliasTableRows("User Commands", "table-rows");
