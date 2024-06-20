@@ -58,7 +58,7 @@ pub trait InternalCommandTrait {
 impl InternalCommandTrait for InternalCommandsQueryFeetransfers {
     fn get_height(&self) -> String {
         self.block_height
-            .map_or_else(String::new, |t| t.to_string())
+            .map_or_else(String::new, |t| format_number(t.to_string()))
     }
     fn get_state_hash(&self) -> String {
         self.block_state_hash

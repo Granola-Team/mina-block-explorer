@@ -97,7 +97,7 @@ impl TransactionsTrait for TransactionsQueryTransactions {
 
     fn get_block_height(&self) -> String {
         self.block_height
-            .map_or_else(String::new, |o| o.to_string())
+            .map_or_else(String::new, |o| format_number(o.to_string()))
     }
 
     fn get_canonical(&self) -> Option<bool> {
@@ -111,7 +111,7 @@ impl TransactionsTrait for TransactionsQueryTransactions {
     }
 
     fn get_nonce(&self) -> String {
-        self.nonce.map_or_else(String::new, |o| o.to_string())
+        self.nonce.map_or_else(String::new, |o| format_number(o.to_string()))
     }
 
     fn get_memo(&self) -> String {
@@ -177,7 +177,7 @@ impl TransactionsTrait for TransactionsQueryOtherTransactions {
 
     fn get_block_height(&self) -> String {
         self.block_height
-            .map_or_else(String::new, |o| o.to_string())
+            .map_or_else(String::new, |o| format_number(o.to_string()))
     }
 
     fn get_canonical(&self) -> Option<bool> {

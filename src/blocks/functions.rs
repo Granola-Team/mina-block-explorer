@@ -6,7 +6,7 @@ use super::graphql::{
 };
 use crate::common::{
     constants::*,
-    functions::{nanomina_str_to_mina, nanomina_to_mina},
+    functions::{nanomina_str_to_mina, nanomina_to_mina, format_number},
     models::MyError,
 };
 use graphql_client::reqwest::post_graphql;
@@ -79,7 +79,7 @@ pub fn get_user_command_amount(uc: &BlocksQueryBlocksTransactionsUserCommands) -
 pub fn get_block_height(block: &BlocksQueryBlocks) -> String {
     block
         .block_height
-        .map_or_else(String::new, |o| o.to_string())
+        .map_or_else(String::new, |o| format_number(o.to_string()))
 }
 
 pub fn get_canonical(block: &BlocksQueryBlocks) -> Option<bool> {
@@ -132,7 +132,7 @@ pub fn get_slot(block: &BlocksQueryBlocks) -> String {
     block.protocol_state.as_ref().map_or_else(String::new, |o| {
         o.consensus_state.as_ref().map_or_else(String::new, |o| {
             o.slot_since_genesis
-                .map_or_else(String::new, |o| o.to_string())
+                .map_or_else(String::new, |o| format_number(o.to_string()))
         })
     })
 }
@@ -159,7 +159,7 @@ pub fn get_global_slot(block: &BlocksQueryBlocks) -> String {
         .as_ref()
         .and_then(|o| o.consensus_state.as_ref())
         .and_then(|o| o.slot_since_genesis)
-        .map_or_else(String::new, |o| o.to_string())
+        .map_or_else(String::new, |o| format_number(o.to_string()))
 }
 
 pub fn get_epoch(block: &BlocksQueryBlocks) -> String {

@@ -184,7 +184,7 @@ pub fn get_spotlight_data(account: &AccountActivityQueryAccounts) -> Vec<Spotlig
         SpotlightEntry {
             label: String::from("Nonce"),
             any_el: Some(convert_to_pill(
-                account.nonce.map(|b| b.to_string()).unwrap_or_default(),
+                account.nonce.map(|b| format_number(b.to_string())).unwrap_or_default(),
                 ColorVariant::Grey,
             )),
             ..Default::default()

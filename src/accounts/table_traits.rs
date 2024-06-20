@@ -61,7 +61,7 @@ impl AccountTrait for AccountsQueryAccounts {
             .to_string()
     }
     fn get_nonce(&self) -> String {
-        self.nonce.unwrap_or_default().to_string()
+        format_number(self.nonce.unwrap_or_default().to_string())
     }
     fn get_delegate(&self) -> String {
         self.delegate.as_ref().cloned().unwrap_or_default()
