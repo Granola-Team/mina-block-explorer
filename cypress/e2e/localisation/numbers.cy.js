@@ -311,10 +311,34 @@ let pages = [
       },
     ],
   },
+  {
+    page: "/snarks",
+    wait: () => {
+      cy.aliasTableRows("SNARKs", "table-rows");
+      cy.wait(100);
+      cy.get(".loading-placeholder").should("not.exist");
+    },
+    tests: [
+      {
+        name: "height column",
+        selector: () => {
+          return cy.get("@table-rows").first().find("td").first();
+        },
+        type: "number",
+      },
+      {
+        name: "fee column",
+        selector: () => {
+          return cy.get("@table-rows").first().find("td").last();
+        },
+        type: "currency",
+      },
+    ],
+  },
 ];
 
-// [pages[pages.length - 1]].forEach(({ tests, page, wait = () => {} }) => {
-pages.forEach(({ tests, page, wait = () => {} }) => {
+[pages[pages.length - 1]].forEach(({ tests, page, wait = () => {} }) => {
+  // pages.forEach(({ tests, page, wait = () => {} }) => {
   suite(["@tier1"], "number or currency", () => {
     it(`on page ${page} is formatted correctly for '${tests.map((t) => t.name).join("', '")}'`, () => {
       cy.visit(page);
