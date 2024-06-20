@@ -2,6 +2,7 @@ import {
   DEFAULT_LOCALE,
   GENESIS_BLOCK_BLOCK_HASH,
   HUMANIZE_FINANACE_BLOCK_STATE_HASH,
+  HUMANIZE_FINANCE_ADDRESS,
 } from "../constants";
 import { parseFormattedNumber } from "../helpers";
 
@@ -216,6 +217,39 @@ let pages = [
         name: "nonce column",
         selector: () => {
           return cy.get("@table-rows").first().find("td").eq(3);
+        },
+        type: "number",
+      },
+    ],
+  },
+  {
+    page: `/addresses/accounts/${HUMANIZE_FINANCE_ADDRESS}`,
+    wait: () => {
+      cy.aliasTableRows("User Commands", "uc-table-rows");
+      cy.aliasTableRows("SNARK Jobs", "sj-table-rows");
+      cy.aliasTableRows("Block Production", "bp-table-rows");
+      cy.wait(100);
+      cy.get(".loading-placeholder").should("not.exist");
+    },
+    tests: [
+      {
+        name: "user command height column",
+        selector: () => {
+          return cy.get("@uc-table-rows").first().find("td").first();
+        },
+        type: "number",
+      },
+      {
+        name: "snark work height column",
+        selector: () => {
+          return cy.get("@sj-table-rows").first().find("td").first();
+        },
+        type: "number",
+      },
+      {
+        name: "block produciton height column",
+        selector: () => {
+          return cy.get("@bp-table-rows").first().find("td").first();
         },
         type: "number",
       },
