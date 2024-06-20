@@ -1,4 +1,8 @@
-import { DEFAULT_LOCALE, GENESIS_BLOCK_BLOCK_HASH } from "../constants";
+import {
+  DEFAULT_LOCALE,
+  GENESIS_BLOCK_BLOCK_HASH,
+  HUMANIZE_FINANACE_BLOCK_STATE_HASH,
+} from "../constants";
 import { parseFormattedNumber } from "../helpers";
 
 let pages = [
@@ -68,6 +72,28 @@ let pages = [
             .contains("Transaction Fees")
             .siblings("td")
             .first();
+        },
+        type: "currency",
+      },
+    ],
+  },
+  {
+    page: `/blocks/${HUMANIZE_FINANACE_BLOCK_STATE_HASH}/commands/user`,
+    wait: () => {
+      cy.aliasTableRows("User Commands", "table-rows");
+    },
+    tests: [
+      {
+        name: "fee",
+        selector: () => {
+          return cy.get("@table-rows").first().find("td").eq(4);
+        },
+        type: "currency",
+      },
+      {
+        name: "amount",
+        selector: () => {
+          return cy.get("@table-rows").first().find("td").last();
         },
         type: "currency",
       },
