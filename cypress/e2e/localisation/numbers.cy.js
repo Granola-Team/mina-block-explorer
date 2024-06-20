@@ -4,15 +4,16 @@ import { parseFormattedNumber } from "../helpers";
 let pages = [
   {
     page: "/blocks",
-    wait: () => {
+    wait: async () => {
       cy.intercept("GET", "/summary").as("summaryData");
-      cy.wait("@summaryData");
+      await cy.wait("@summaryData");
       cy.wait(100);
     },
     tests: [
       {
         name: "overview",
         selector: () => cy.get("#blockchainLength"),
+        type: "number",
       },
       {
         name: "height column",
@@ -20,6 +21,7 @@ let pages = [
           cy.aliasTableRows("Blocks", "table-rows");
           return cy.get("@table-rows").first().find("td").first();
         },
+        type: "number",
       },
       {
         name: "slot column",
@@ -27,6 +29,7 @@ let pages = [
           cy.aliasTableRows("Blocks", "table-rows");
           return cy.get("@table-rows").first().find("td").eq(2);
         },
+        type: "number",
       },
     ],
   },
@@ -43,24 +46,28 @@ let pages = [
         selector: () => {
           return cy.get("@table-rows").first().find("td").first();
         },
+        type: "number",
       },
       {
         name: "nonce column",
         selector: () => {
           return cy.get("@table-rows").first().find("td").eq(6);
         },
+        type: "number",
       },
       {
         name: "fee column",
         selector: () => {
           return cy.get("@table-rows").first().find("td").eq(7);
         },
+        type: "currency",
       },
       {
         name: "amount column",
         selector: () => {
           return cy.get("@table-rows").first().find("td").eq(8);
         },
+        type: "currency",
       },
     ],
   },
@@ -77,12 +84,43 @@ let pages = [
         selector: () => {
           return cy.get("@table-rows").first().find("td").first();
         },
+        type: "number",
       },
       {
         name: "fee column",
         selector: () => {
           return cy.get("@table-rows").first().find("td").eq(3);
         },
+        type: "currency",
+      },
+    ],
+  },
+  {
+    page: "/addresses/accounts",
+    wait: () => {
+      cy.aliasTableRows("Accounts", "table-rows");
+      cy.wait(100);
+      cy.get("@table-rows").find(".loading-placeholder").should("not.exist");
+      cy.get("th").contains("Balance").parents("th").find("input").as("input");
+      cy.get("@input").type("4000", { delay: 0 });
+      cy.wait(1000);
+      cy.get("@table-rows").find(".loading-placeholder").should("not.exist");
+      cy.aliasTableRows("Accounts", "table-rows");
+    },
+    tests: [
+      {
+        name: "balance column",
+        selector: () => {
+          return cy.get("@table-rows").first().find("td").eq(2);
+        },
+        type: "currency",
+      },
+      {
+        name: "nonce column",
+        selector: () => {
+          return cy.get("@table-rows").first().find("td").eq(3);
+        },
+        type: "number",
       },
     ],
   },
@@ -93,13 +131,17 @@ pages.forEach(({ tests, page, wait }) => {
     it(`on page ${page} is formatted correctly for '${tests.map((t) => t.name).join("', '")}'`, () => {
       cy.visit(page);
       wait();
-      tests.forEach(({ selector }) => {
+      tests.forEach(({ selector, type }) => {
         selector()
           .invoke("text")
           .then((text) => {
             let number = parseFormattedNumber(text);
             expect(number).to.be.a("number");
-            const formatter = new Intl.NumberFormat(DEFAULT_LOCALE, {});
+            let options =
+              type === "number"
+                ? {}
+                : { minimumFractionDigits: 9, maximumFractionDigits: 9 };
+            const formatter = new Intl.NumberFormat(DEFAULT_LOCALE, options);
             expect(text).to.contain(formatter.format(number));
           });
       });
