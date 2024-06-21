@@ -30,7 +30,7 @@ let test_suite_data = [
     ],
   },
   {
-    tag: "@tier1",
+    tag: "@tier2",
     url: "/blocks",
     table: {
       heading: "Blocks",
@@ -93,7 +93,7 @@ let test_suite_data = [
     tests: [],
   },
   {
-    tag: "@tier1",
+    tag: "@tier2",
     url: "/commands/user",
     table: {
       heading: "User Commands",
@@ -225,7 +225,7 @@ let test_suite_data = [
     ],
   },
   {
-    tag: "@tier1",
+    tag: "@tier2",
     url: "/addresses/accounts",
     table: {
       heading: "Accounts",
@@ -328,7 +328,7 @@ let test_suite_data = [
     tests: [],
   },
   {
-    tag: "@tier1",
+    tag: "@tier2",
     url: "/commands/internal",
     table: {
       heading: "Internal Commands",
@@ -386,7 +386,7 @@ let test_suite_data = [
     tests: [],
   },
   {
-    tag: "@tier1",
+    tag: "@tier2",
     url: "/snarks",
     table: {
       heading: "SNARKs",

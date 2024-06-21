@@ -200,12 +200,12 @@ Cypress.Commands.add(
 );
 
 function extractMetadata(input) {
-  let regex = /Showing (\d+) of (\d+(?:,\d+)*)/;
+  let regex = /Showing (\d+) of (\d+)/;
   const match = input.match(regex);
   return match
     ? {
-        records: parseInt(match[1].replace(/,/g, ""), 10),
-        total_records: parseInt(match[2].replace(/,/g, ""), 10),
+        records: +match[1],
+        total_records: +match[2],
       }
     : null;
 }
