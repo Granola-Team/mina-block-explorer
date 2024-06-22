@@ -44,4 +44,6 @@ export const SLOTS_PER_EPOCH = 7140;
 export const HUMANIZE_FINANACE_BLOCK_STATE_HASH =
   "3NKLHA1Zf1A2agQ4HFzwY6azUGsXP8cScFLwDgotTuQqMjejjKNj";
 export const HUMANIZE_FINANCE_USERNAME = "Humanize Finance";
+export const BLOCK_STATE_HASH_MIXED_USER_COMMANDS =
+  "3NKR3LoD3TLQ4Gotmhg59xUYcuq9hwVMuEujT99QywJhkDTYWwDy";
 export const DEFAULT_LOCALE = "en-US";

@@ -21,6 +21,7 @@ query BlocksQuery(
         amount
         kind
         memo
+        failureReason
       }
       feeTransfer {
         type

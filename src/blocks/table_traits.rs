@@ -99,6 +99,18 @@ impl TableData for Vec<Option<BlocksQueryBlocksTransactionsUserCommands>> {
                         )
                     },
                     convert_to_pill(get_kind(user_command), ColorVariant::Grey),
+                    convert_to_pill(
+                        if get_failure_reason(user_command).is_none() {
+                            "Applied".to_string()
+                        } else {
+                            "Not Applied".to_string()
+                        },
+                        if get_failure_reason(user_command).is_none() {
+                            ColorVariant::Green
+                        } else {
+                            ColorVariant::Orange
+                        },
+                    ),
                     convert_to_link(
                         get_user_command_from(user_command),
                         format!(
