@@ -26,8 +26,6 @@ export const FIRST_BLOCK_WITH_SNARK_WORK =
   "3NL33j16AWm3Jhjj1Ud25E54hu7HpUq4WBQcAiijEKMfXqwFJwzK";
 export const FIRST_NON_CANONICAL_BLOCK_WITH_SNARK_WORK =
   "3NLj4yaEa4kGamq93k8ZMqbiZWuR26USzzndXVGoBupEZRQ6zJjm";
-export const SNZPOOL_ADDRESS =
-  "B62qq3tqfdj19hqaVCozJFM2q9gT2WezQMaJMKD6wxyvK3fMpHiP9va";
 export const ADDRESS_WITH_SNARK_AND_BLOCK_PRODUCTION =
   "B62qqSvXBa1cdTsARTVZrnJreCDdEy162q7axsf3QfjWzZCKfrU6JoM";
 export const WHISPERIT_TXN_HASH =
@@ -36,14 +34,21 @@ export const WHISPERIT_BLOCK_STATE_HASH =
   "3NLjanAoyqjqmPsQHafJcvQiGW2xbvyXANHxEyNwPwan2eUoZBV9";
 export const LONG_LIVE_SNZ_HASH =
   "CkpYebtjxHNdhLt1u88uNBzdRsvDYMqXmeeHGYWmbAKV7wFpwkcFy";
-export const HUMANIZE_FINANCE_ADDRESS =
-  "B62qnR2AHmcnyb7v3cVvuZWriEnArx7yMkXBcnzpFQXCmGxAAv4nJSV";
-export const HUMANIZE_FINANCE_TXN_HASH =
-  "CkpaBh9jR3FiwtgXDmNeyiFJ4HszcpDyehu3adzffABoxY2BerZx3";
-export const SLOTS_PER_EPOCH = 7140;
-export const HUMANIZE_FINANACE_BLOCK_STATE_HASH =
-  "3NKLHA1Zf1A2agQ4HFzwY6azUGsXP8cScFLwDgotTuQqMjejjKNj";
-export const HUMANIZE_FINANCE_USERNAME = "Humanize Finance";
 export const BLOCK_STATE_HASH_MIXED_USER_COMMANDS =
   "3NKR3LoD3TLQ4Gotmhg59xUYcuq9hwVMuEujT99QywJhkDTYWwDy";
 export const DEFAULT_LOCALE = "en-US";
+export const ROMEK_ADDRESS =
+  "B62qpqCBExtxzfHUPkmrrfmYhXZyg3V7pSmwuxHMzTi8E6gBbopauJS";
+export const ROMEK_MINA_NAMING_SERVICE_TXN_HASH =
+  "CkpYyMV4jDtgKfbz6hCUVB6J8jYfJd85A7mvtVw7ydKLuoCK5GS25";
+export const ROMEK_USERNAME = "Romek";
+export const ROMEK_BLOCK_STATE_HASH =
+  "3NLgCqncc6Ct4dcuhaG3ANQbfWwQCxMXu4MJjwGgRKxs6p8vQsZf";
+export const MINA_NAMING_SERVICE_ADDRESS =
+  "B62qjzJvc59DdG9ahht9rwxkEz7GedKuUMsnaVTuXFUeANKqfBeWpRE";
+export const ROMEK_NAMING_MEMO = "Name: Romek";
+export const VETAL_BLOCK_STATE_HASH =
+  "3NKrxKGr3JpYT2CzAFUeUb89ae6MFMsVWFX1QLYqYNJp1ffHR4ej";
+export const COMMAND_SNARK_BLOCK_ACTIVITY_ADDRESS =
+  "B62qrQiw9JhUumq457sMxicgQ94Z1WD9JChzJu19kBE8Szb5T8tcUAC";
+export const SLOTS_PER_EPOCH = 7140;
