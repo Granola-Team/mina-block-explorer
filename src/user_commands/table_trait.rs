@@ -46,7 +46,7 @@ impl TableData for Vec<Option<TransactionsQueryTransactions>> {
                     {
                         convert_to_pill("Applied".to_string(), ColorVariant::Green)
                     } else {
-                        convert_to_pill("Not Applied".to_string(), ColorVariant::Orange)
+                        convert_to_pill("Failed".to_string(), ColorVariant::Orange)
                     },
                     convert_to_link(
                         transaction.get_from(),
