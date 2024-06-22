@@ -104,6 +104,7 @@ let test_suite_data = [
         "Txn Hash",
         "Age",
         "Type",
+        "Status",
         "From",
         "To",
         "Nonce",

@@ -99,6 +99,11 @@ pub fn TransactionsSection() -> impl IntoView {
             ..Default::default()
         },
         TableColumn {
+            column: "Status".to_string(),
+            width: Some(String::from(TABLE_COL_SHORT_WIDTH)),
+            ..Default::default()
+        },
+        TableColumn {
             column: "From".to_string(),
             is_searchable: true,
             width: Some(String::from(TABLE_COL_HASH_WIDTH)),
