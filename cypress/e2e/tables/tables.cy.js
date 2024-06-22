@@ -4,10 +4,13 @@ import {
   FIRST_SENDER_ADDRESS,
   GENESIS_BLOCK_BLOCK_HASH,
   BLOCK_STATE_HASH_MIXED_USER_COMMANDS,
-  HUMANIZE_FINANCE_ADDRESS,
-  HUMANIZE_FINANCE_TXN_HASH,
-  HUMANIZE_FINANCE_USERNAME,
+  ROMEK_ADDRESS,
+  ROMEK_MINA_NAMING_SERVICE_TXN_HASH,
+  ROMEK_USERNAME,
   SLOTS_PER_EPOCH,
+  MINA_NAMING_SERVICE_ADDRESS,
+  ROMEK_BLOCK_STATE_HASH,
+  VETAL_BLOCK_STATE_HASH,
 } from "../constants";
 import { parseFormattedNumber } from "../helpers";
 
@@ -29,7 +32,7 @@ let test_suite_data = [
     ],
   },
   {
-    tag: "@tier2",
+    tag: "@tier1",
     url: "/blocks",
     table: {
       heading: "Blocks",
@@ -91,7 +94,7 @@ let test_suite_data = [
     tests: [],
   },
   {
-    tag: "@tier2",
+    tag: "@tier1",
     url: "/commands/user",
     table: {
       heading: "User Commands",
@@ -119,13 +122,13 @@ let test_suite_data = [
         },
         {
           column: "Txn Hash",
-          input: HUMANIZE_FINANCE_TXN_HASH,
+          input: ROMEK_MINA_NAMING_SERVICE_TXN_HASH,
           assertion: function () {
             cy.aliasTableRows("User Commands", "table-rows");
             cy.get("@table-rows").should("have.lengthOf", 1);
             cy.assertForEachColumnValue("User Commands", "Txn Hash", (text) => {
-              expect(text).to.contain(HUMANIZE_FINANCE_TXN_HASH);
-              expect(text).to.contain("payout from humanize finance e19");
+              expect(text).to.contain(ROMEK_MINA_NAMING_SERVICE_TXN_HASH);
+              expect(text).to.contain("Name: Romek");
             });
           },
         },
@@ -152,8 +155,8 @@ let test_suite_data = [
     tests: [],
   },
   {
-    tag: "@tier2",
-    url: `/addresses/accounts/${HUMANIZE_FINANCE_ADDRESS}`,
+    tag: "@tier1",
+    url: `/addresses/accounts/${ROMEK_ADDRESS}`,
     table: {
       heading: "User Commands",
       columns: [
@@ -179,27 +182,25 @@ let test_suite_data = [
         },
         {
           column: "Txn Hash",
-          input: HUMANIZE_FINANCE_TXN_HASH,
+          input: ROMEK_MINA_NAMING_SERVICE_TXN_HASH,
           assertion: function () {
             cy.aliasTableRows("User Commands", "table-rows");
             cy.get("@table-rows").should("have.lengthOf", 1);
             cy.assertForEachColumnValue("User Commands", "Txn Hash", (text) => {
-              expect(text).to.contain(HUMANIZE_FINANCE_TXN_HASH);
-              expect(text).to.contain("payout from humanize finance e19");
+              expect(text).to.contain(ROMEK_MINA_NAMING_SERVICE_TXN_HASH);
+              expect(text).to.contain("Name: Romek");
             });
           },
         },
         {
           column: "Counterparty",
-          input: "B62qqwCPPUFZsHyYZhncvoiWyq4c8FonAL5zvL5qAGReJog6TbAvBev",
+          input: MINA_NAMING_SERVICE_ADDRESS,
           assertion: function () {
             cy.assertForEachColumnValue(
               "User Commands",
               "Counterparty",
               (text) => {
-                expect(text).to.equal(
-                  "B62qqwCPPUFZsHyYZhncvoiWyq4c8FonAL5zvL5qAGReJog6TbAvBev",
-                );
+                expect(text).to.equal(MINA_NAMING_SERVICE_ADDRESS);
               },
             );
           },
@@ -209,19 +210,15 @@ let test_suite_data = [
     tests: [
       () => {
         let expected_fields = ["Balance", "Delegate"];
-        cy.testSpotlight(
-          "Account Spotlight",
-          HUMANIZE_FINANCE_ADDRESS,
-          expected_fields,
-        );
+        cy.testSpotlight("Account Spotlight", ROMEK_ADDRESS, expected_fields);
       },
       () => {
-        cy.get("#spotlight-meta").should("contain", HUMANIZE_FINANCE_USERNAME);
+        cy.get("#spotlight-meta").should("contain", ROMEK_USERNAME);
       },
     ],
   },
   {
-    tag: "@tier2",
+    tag: "@tier1",
     url: "/addresses/accounts",
     table: {
       heading: "Accounts",
@@ -248,34 +245,26 @@ let test_suite_data = [
         },
         {
           column: "Public Key",
-          input: HUMANIZE_FINANCE_ADDRESS,
+          input: ROMEK_ADDRESS,
           assertion: function () {
             cy.aliasTableRows("Accounts", "table-rows");
             cy.get("@table-rows").should("have.lengthOf", 1);
             cy.assertForEachColumnValue("Accounts", "Public Key", (text) => {
-              expect(text).to.equal(HUMANIZE_FINANCE_ADDRESS);
+              expect(text).to.equal(ROMEK_ADDRESS);
             });
-            cy.tableColumnValuesEqual(
-              "Accounts",
-              "Username",
-              HUMANIZE_FINANCE_USERNAME,
-            );
+            cy.tableColumnValuesEqual("Accounts", "Username", ROMEK_USERNAME);
           },
         },
         {
           column: "Username",
-          input: HUMANIZE_FINANCE_USERNAME,
+          input: ROMEK_USERNAME,
           assertion: function () {
             cy.aliasTableRows("Accounts", "table-rows");
             cy.get("@table-rows").should("have.lengthOf", 1);
             cy.assertForEachColumnValue("Accounts", "Username", (text) => {
-              expect(text).to.equal(HUMANIZE_FINANCE_USERNAME);
+              expect(text).to.equal(ROMEK_USERNAME);
             });
-            cy.tableColumnValuesEqual(
-              "Accounts",
-              "Username",
-              HUMANIZE_FINANCE_USERNAME,
-            );
+            cy.tableColumnValuesEqual("Accounts", "Username", ROMEK_USERNAME);
           },
         },
       ],
@@ -299,7 +288,7 @@ let test_suite_data = [
       filter_tests: [
         {
           column: "Key",
-          input: HUMANIZE_FINANCE_ADDRESS,
+          input: ROMEK_ADDRESS,
           assertion: function () {
             cy.aliasTableRows("Staking Ledger - Epoch 20", "table-rows");
             cy.get("@table-rows").should("have.lengthOf", 1);
@@ -307,13 +296,13 @@ let test_suite_data = [
               "Staking Ledger - Epoch 20",
               "Key",
               (text) => {
-                expect(text).to.equal(HUMANIZE_FINANCE_ADDRESS);
+                expect(text).to.equal(ROMEK_ADDRESS);
               },
             );
             cy.tableColumnValuesEqual(
               "Staking Ledger - Epoch 20",
               "Username",
-              HUMANIZE_FINANCE_USERNAME,
+              ROMEK_USERNAME,
             );
           },
         },
@@ -322,7 +311,7 @@ let test_suite_data = [
     tests: [],
   },
   {
-    tag: "@tier2",
+    tag: "@tier1",
     url: "/commands/internal",
     table: {
       heading: "Internal Commands",
@@ -344,7 +333,7 @@ let test_suite_data = [
         },
         {
           column: "State Hash",
-          input: "3NKP5eG9qvMbJM78thgQMvwnNnjrEkfcAfS31YbNNzeBsa8ADqPR",
+          input: ROMEK_BLOCK_STATE_HASH,
           assertion: function () {
             cy.aliasTableRows("Internal Commands", "table-rows");
             cy.get("@table-rows").should("have.length.greaterThan", 1);
@@ -352,9 +341,7 @@ let test_suite_data = [
               "Internal Commands",
               "State Hash",
               (text) => {
-                expect(text).to.equal(
-                  "3NKP5eG9qvMbJM78thgQMvwnNnjrEkfcAfS31YbNNzeBsa8ADqPR",
-                );
+                expect(text).to.equal(ROMEK_BLOCK_STATE_HASH);
               },
             );
           },
@@ -379,7 +366,7 @@ let test_suite_data = [
     tests: [],
   },
   {
-    tag: "@tier2",
+    tag: "@tier1",
     url: "/snarks",
     table: {
       heading: "SNARKs",
@@ -397,14 +384,12 @@ let test_suite_data = [
         },
         {
           column: "State Hash",
-          input: "3NKP5eG9qvMbJM78thgQMvwnNnjrEkfcAfS31YbNNzeBsa8ADqPR",
+          input: VETAL_BLOCK_STATE_HASH,
           assertion: function () {
             cy.aliasTableRows("SNARKs", "table-rows");
             cy.get("@table-rows").should("have.length.greaterThan", 1);
             cy.assertForEachColumnValue("SNARKs", "State Hash", (text) => {
-              expect(text).to.equal(
-                "3NKP5eG9qvMbJM78thgQMvwnNnjrEkfcAfS31YbNNzeBsa8ADqPR",
-              );
+              expect(text).to.equal(VETAL_BLOCK_STATE_HASH);
             });
           },
         },
@@ -429,7 +414,7 @@ test_suite_data.forEach((test_suite_datum) => {
   const {
     tag,
     url,
-    table: { heading, filter_tests, canonical_exists, columns },
+    table: { heading, filter_tests, columns },
     tests,
   } = test_suite_datum;
 

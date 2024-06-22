@@ -47,3 +47,14 @@ export const HUMANIZE_FINANCE_USERNAME = "Humanize Finance";
 export const BLOCK_STATE_HASH_MIXED_USER_COMMANDS =
   "3NKR3LoD3TLQ4Gotmhg59xUYcuq9hwVMuEujT99QywJhkDTYWwDy";
 export const DEFAULT_LOCALE = "en-US";
+export const ROMEK_ADDRESS =
+  "B62qpqCBExtxzfHUPkmrrfmYhXZyg3V7pSmwuxHMzTi8E6gBbopauJS";
+export const ROMEK_MINA_NAMING_SERVICE_TXN_HASH =
+  "CkpYyMV4jDtgKfbz6hCUVB6J8jYfJd85A7mvtVw7ydKLuoCK5GS25";
+export const ROMEK_USERNAME = "Romek";
+export const ROMEK_BLOCK_STATE_HASH =
+  "3NLgCqncc6Ct4dcuhaG3ANQbfWwQCxMXu4MJjwGgRKxs6p8vQsZf";
+export const MINA_NAMING_SERVICE_ADDRESS =
+  "B62qjzJvc59DdG9ahht9rwxkEz7GedKuUMsnaVTuXFUeANKqfBeWpRE";
+export const VETAL_BLOCK_STATE_HASH =
+  "3NKrxKGr3JpYT2CzAFUeUb89ae6MFMsVWFX1QLYqYNJp1ffHR4ej";
