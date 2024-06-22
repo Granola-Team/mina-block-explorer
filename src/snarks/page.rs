@@ -93,7 +93,17 @@ fn SnarksPageContents() -> impl IntoView {
         <TableSectionTemplate
             table_columns
             data_sig
-            total_records_sig=Signal::derive(move || summary_sig.get().total_num_snarks.to_string())
+            metadata=Signal::derive(move || {
+                Some(TableMetadata {
+                    total_records: u64::try_from(summary_sig.get().total_num_snarks).ok(),
+                    available_records: None,
+                    displayed_records: u64::try_from(
+                            data_sig.get().map(|d| d.len()).unwrap_or_default(),
+                        )
+                        .unwrap_or_default(),
+                })
+            })
+
             is_loading=resource.loading()
             section_heading="SNARKs"
             controls=move || {

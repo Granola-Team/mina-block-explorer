@@ -1,5 +1,5 @@
 use super::{functions::*, models::*};
-use crate::common::{constants::*, functions::*, table::*};
+use crate::common::{constants::*, functions::*, models::TableMetadata, table::*};
 use leptos::*;
 use leptos_router::*;
 
@@ -102,6 +102,17 @@ pub fn StakesPageContents(
         <TableSectionTemplate
             table_columns
             data_sig
+            metadata=Signal::derive(move || {
+                Some(TableMetadata {
+                    total_records: None,
+                    available_records: None,
+                    displayed_records: u64::try_from(
+                            data_sig.get().map(|d| d.len()).unwrap_or_default(),
+                        )
+                        .unwrap_or_default(),
+                })
+            })
+
             section_heading=section_heading_sig.get()
             is_loading=resource.loading()
             controls=move || {

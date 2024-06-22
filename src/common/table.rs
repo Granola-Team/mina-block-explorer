@@ -51,7 +51,7 @@ pub fn TableSectionTemplate<T, F, E>(
     table_columns: Vec<TableColumn>,
     data_sig: ReadSignal<Option<T>>,
     is_loading: Signal<bool>,
-    #[prop(optional)] total_records_sig: Option<Signal<String>>,
+    #[prop(optional)] metadata: Option<Signal<Option<TableMetadata>>>,
     #[prop(into)] section_heading: String,
     #[prop(optional, into)] additional_info: View,
     controls: F,
@@ -61,28 +61,15 @@ where
     F: Fn() -> E + 'static,
     T: TableData + Clone + 'static,
 {
-    let get_total_records = move || {
-        if let Some(sig) = total_records_sig {
-            sig.get()
-        } else {
-            "all".to_string()
-        }
-    };
-    let (metadata, set_metadata) = create_signal(None);
     let table_cols_length = table_columns.len();
 
-    create_effect(move |_| {
-        total_records_sig.map(|sig| sig.get());
-        if let Some(data) = data_sig.get() {
-            set_metadata.set(Some(TableMetadata {
-                displayed_records: data.get_rows().len() as i64,
-                total_records: get_total_records(),
-            }));
-        }
-    });
-
     view! {
-        <TableSection metadata section_heading controls additional_info>
+        <TableSection
+            metadata=metadata.unwrap_or_default()
+            section_heading
+            controls
+            additional_info
+        >
             <TableContainer>
                 <Table>
                     <ColGroup columns=table_columns.clone()/>
@@ -266,7 +253,7 @@ pub fn TableSection<E, F>(
     #[prop(into)] section_heading: String,
     children: Children,
     #[prop(optional, into)] additional_info: View,
-    metadata: ReadSignal<Option<TableMetadata>>,
+    metadata: Signal<Option<TableMetadata>>,
     controls: F,
 ) -> impl IntoView
 where
@@ -274,33 +261,22 @@ where
     F: Fn() -> E + 'static,
 {
     let BASE_META_CLASS = "h-16 grow flex justify-start md:justify-center items-center text-slate-400 text-normal text-xs";
+
     view! {
         <AppSection>
             <span class="w-full flex justify-between flex-wrap">
                 <div class="flex justify-start items-baseline flex-wrap">
                     <AppHeading heading=section_heading/>
-                    {move || match metadata.get() {
-                        Some(meta) => {
-                            view! {
-                                <div class="metadata pl-4 ".to_string()
-                                    + BASE_META_CLASS>
-                                    {format!(
-                                        "Showing {} of {}",
-                                        format_number(meta.displayed_records.to_string()),
-                                        meta
-                                            .total_records
-                                            .parse::<i64>()
-                                            .map_or(
-                                                meta.total_records,
-                                                |r| format_number(r.to_string()),
-                                            ),
-                                    )}
-
-                                </div>
-                            }
-                                .into_view()
-                        }
-                        _ => ().into_view(),
+                    {move || {
+                        metadata
+                            .get()
+                            .map(|m| {
+                                view! {
+                                    <div class="metadata pl-4 ".to_string()
+                                        + BASE_META_CLASS>{format_metadata(&m, format_number)}</div>
+                                }
+                                    .into_view()
+                            })
                     }}
 
                 </div>

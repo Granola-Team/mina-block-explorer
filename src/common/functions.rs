@@ -73,6 +73,86 @@ pub fn format_mina(number: String) -> String {
     format_number_helper(&number, Some(9)) // Use 9 significant digits
 }
 
+pub fn format_metadata<F>(meta: &TableMetadata, format_number: F) -> String
+where
+    F: Fn(String) -> String,
+{
+    let displayed = format_number(meta.displayed_records.to_string());
+    let total = match meta.total_records {
+        Some(records) => format_number(records.to_string()),
+        None => String::from("?"),
+    };
+
+    match meta.available_records {
+        Some(available_records) => {
+            let available = format_number(available_records.to_string());
+            format!("{} of {} of {}", displayed, available, total)
+        }
+        None => {
+            if meta.displayed_records > (TABLE_ROW_LIMIT - 1).try_into().unwrap() {
+                format!("{}+ of {}", displayed, total)
+            } else {
+                format!("{} of {}", displayed, total)
+            }
+        }
+    }
+}
+
+#[cfg(test)]
+mod format_metadata_tests {
+    use super::*;
+
+    #[test]
+    fn test_with_full_data() {
+        let meta = TableMetadata {
+            displayed_records: 50,
+            available_records: Some(100),
+            total_records: Some(200),
+        };
+        assert_eq!(format_metadata(&meta, |a| a), "50 of 100 of 200");
+    }
+
+    #[test]
+    fn test_with_no_available_records_and_display_under_100() {
+        let meta = TableMetadata {
+            displayed_records: 50,
+            available_records: None,
+            total_records: Some(200),
+        };
+        assert_eq!(format_metadata(&meta, |a| a), "50 of 200");
+    }
+
+    #[test]
+    fn test_with_no_available_records_and_display_over_100() {
+        let meta = TableMetadata {
+            displayed_records: 150,
+            available_records: None,
+            total_records: Some(300),
+        };
+        assert_eq!(format_metadata(&meta, |a| a), "150+ of 300");
+    }
+
+    #[test]
+    fn test_with_unknown_total_records() {
+        let meta = TableMetadata {
+            displayed_records: 150,
+            available_records: Some(250),
+            total_records: None,
+        };
+        assert_eq!(format_metadata(&meta, |a| a), "150 of 250 of ?");
+    }
+
+    #[test]
+    fn test_all_unknown() {
+        let meta = TableMetadata {
+            displayed_records: 150,
+            available_records: None,
+            total_records: None,
+        };
+        assert_eq!(format_metadata(&meta, |a| a), "150+ of ?");
+    }
+}
+
 pub fn get_status(timestamp: &str) -> Status {
     match timestamp.parse::<DateTime<Utc>>() {
         Ok(parsed_timestamp) => {
