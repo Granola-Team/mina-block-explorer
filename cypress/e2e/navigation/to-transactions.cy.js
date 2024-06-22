@@ -1,4 +1,8 @@
-import { SNZPOOL_ADDRESS, WHISPERIT_BLOCK_STATE_HASH } from "../constants";
+import {
+  ROMEK_ADDRESS,
+  SNZPOOL_ADDRESS,
+  WHISPERIT_BLOCK_STATE_HASH,
+} from "../constants";
 
 suite(["@tier1"], "transaction spotlight", () => {
   let pages = [
@@ -16,7 +20,7 @@ suite(["@tier1"], "transaction spotlight", () => {
       tableHeader: "User Commands",
     },
     {
-      origin: `/addresses/accounts/${SNZPOOL_ADDRESS}`,
+      origin: `/addresses/accounts/${ROMEK_ADDRESS}`,
       column: "Txn Hash",
       tableHeader: "User Commands",
     },
@@ -26,6 +30,8 @@ suite(["@tier1"], "transaction spotlight", () => {
     ({ origin, column, tableHeader, tableHeaderEl = "h1", transposed }) =>
       it(`is navigated to from ${origin} by clicking link in '${column}'`, () => {
         cy.visit(origin);
+        cy.wait(100);
+        cy.get(".loading-placeholder").should("not.exist");
         if (transposed) {
           cy.clickLinkInTransposedTable(column, tableHeader, tableHeaderEl);
         } else {
