@@ -89,7 +89,7 @@ where
             format!("{} of {} of {}", displayed, available, total)
         }
         None => {
-            if meta.displayed_records > (TABLE_ROW_LIMIT-1).try_into().unwrap() {
+            if meta.displayed_records > (TABLE_ROW_LIMIT - 1).try_into().unwrap() {
                 format!("{}+ of {}", displayed, total)
             } else {
                 format!("{} of {}", displayed, total)
