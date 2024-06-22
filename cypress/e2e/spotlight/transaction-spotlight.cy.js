@@ -6,6 +6,7 @@ const {
   ROMEK_MINA_NAMING_SERVICE_TXN_HASH,
   WHISPERIT_TXN_HASH,
   WHISPERIT_BLOCK_STATE_HASH,
+  ROMEK_NAMING_MEMO,
 } = require("../constants");
 
 suite(["@tier1"], "transaction spotlight", () => {
@@ -42,7 +43,7 @@ suite(["@tier1"], "transaction spotlight", () => {
 
   it("displays memo", () => {
     cy.visit(`/commands/${ROMEK_MINA_NAMING_SERVICE_TXN_HASH}`);
-    cy.contains("Name: Romek").should("exist");
+    cy.contains(ROMEK_NAMING_MEMO).should("exist");
   });
 
   it("renders the tooltip for stake delegations", () => {

@@ -48,6 +48,7 @@ export const ROMEK_BLOCK_STATE_HASH =
   "3NLgCqncc6Ct4dcuhaG3ANQbfWwQCxMXu4MJjwGgRKxs6p8vQsZf";
 export const MINA_NAMING_SERVICE_ADDRESS =
   "B62qjzJvc59DdG9ahht9rwxkEz7GedKuUMsnaVTuXFUeANKqfBeWpRE";
+export const ROMEK_NAMING_MEMO = "Name: Romek";
 export const VETAL_BLOCK_STATE_HASH =
   "3NKrxKGr3JpYT2CzAFUeUb89ae6MFMsVWFX1QLYqYNJp1ffHR4ej";
 export const COMMAND_SNARK_BLOCK_ACTIVITY_ADDRESS =

@@ -11,6 +11,7 @@ import {
   MINA_NAMING_SERVICE_ADDRESS,
   ROMEK_BLOCK_STATE_HASH,
   VETAL_BLOCK_STATE_HASH,
+  ROMEK_NAMING_MEMO,
 } from "../constants";
 import { parseFormattedNumber } from "../helpers";
 
@@ -128,7 +129,7 @@ let test_suite_data = [
             cy.get("@table-rows").should("have.lengthOf", 1);
             cy.assertForEachColumnValue("User Commands", "Txn Hash", (text) => {
               expect(text).to.contain(ROMEK_MINA_NAMING_SERVICE_TXN_HASH);
-              expect(text).to.contain("Name: Romek");
+              expect(text).to.contain(ROMEK_NAMING_MEMO);
             });
           },
         },
@@ -188,7 +189,7 @@ let test_suite_data = [
             cy.get("@table-rows").should("have.lengthOf", 1);
             cy.assertForEachColumnValue("User Commands", "Txn Hash", (text) => {
               expect(text).to.contain(ROMEK_MINA_NAMING_SERVICE_TXN_HASH);
-              expect(text).to.contain("Name: Romek");
+              expect(text).to.contain(ROMEK_NAMING_MEMO);
             });
           },
         },
