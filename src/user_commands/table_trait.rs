@@ -9,13 +9,7 @@ impl TableData for Vec<Option<TransactionsQueryTransactions>> {
         self.iter()
             .map(|opt_trans| match opt_trans {
                 Some(transaction) => vec![
-                    convert_array_to_span(vec![
-                        convert_to_status_bubble(
-                            transaction.get_canonical(),
-                            transaction.get_failure_reason(),
-                        ),
-                        convert_to_span(transaction.get_block_height()),
-                    ]),
+                    convert_to_span(transaction.get_block_height()),
                     if !transaction.get_memo().is_empty() {
                         convert_array_to_span(vec![
                             convert_to_link(

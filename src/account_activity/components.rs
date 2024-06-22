@@ -9,9 +9,11 @@ use crate::{
     account_activity::table_traits::BlockTrait,
     common::{components::*, constants::*, functions::*, models::*, table::*},
     icons::*,
+    summary::models::BlockchainSummary,
 };
 use leptos::*;
 use leptos_router::use_params_map;
+use leptos_use::{storage::use_local_storage, utils::JsonCodec};
 
 #[component]
 pub fn AccountDialogSectionContainer(
@@ -221,6 +223,8 @@ pub fn AccountTransactionsSection(
     transactions_sig: ReadSignal<Option<Vec<Option<AccountActivityQueryDirectionalTransactions>>>>,
     is_loading: Signal<bool>,
 ) -> impl IntoView {
+    let (summary_sig, _, _) =
+        use_local_storage::<BlockchainSummary, JsonCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
     let table_columns = vec![
         TableColumn {
             column: "Height".to_string(),
@@ -271,6 +275,17 @@ pub fn AccountTransactionsSection(
         <TableSectionTemplate
             table_columns
             data_sig=transactions_sig
+            metadata=Signal::derive(move || {
+                Some(TableMetadata {
+                    total_records: u64::try_from(summary_sig.get().total_num_user_commands).ok(),
+                    displayed_records: u64::try_from(
+                            transactions_sig.get().map(|a| a.len()).unwrap_or_default(),
+                        )
+                        .unwrap_or_default(),
+                    available_records: None,
+                })
+            })
+
             section_heading="User Commands"
             is_loading
             controls=move || {
@@ -294,6 +309,8 @@ pub fn AccountOverviewSnarkJobTable(
     snarks_sig: ReadSignal<Option<Vec<Option<AccountActivityQuerySnarks>>>>,
     is_loading: Signal<bool>,
 ) -> impl IntoView {
+    let (summary_sig, _, _) =
+        use_local_storage::<BlockchainSummary, JsonCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
     let memo_params_map = use_params_map();
     let (href, _set_href) = create_signal(
         memo_params_map
@@ -339,6 +356,17 @@ pub fn AccountOverviewSnarkJobTable(
             table_columns
             data_sig=snarks_sig
             section_heading="SNARK Jobs"
+            metadata=Signal::derive(move || {
+                Some(TableMetadata {
+                    total_records: u64::try_from(summary_sig.get().total_num_snarks).ok(),
+                    displayed_records: u64::try_from(
+                            snarks_sig.get().map(|a| a.len()).unwrap_or_default(),
+                        )
+                        .unwrap_or_default(),
+                    available_records: None,
+                })
+            })
+
             is_loading
             controls=|| ().into_view()
         />
@@ -353,6 +381,8 @@ pub fn AccountOverviewBlocksTable(
     blocks_sig: ReadSignal<Option<Vec<Option<AccountActivityQueryBlocks>>>>,
     is_loading: Signal<bool>,
 ) -> impl IntoView {
+    let (summary_sig, _, _) =
+        use_local_storage::<BlockchainSummary, JsonCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
     let memo_params_map = use_params_map();
     let (href, _set_href) = create_signal(
         memo_params_map
@@ -418,6 +448,17 @@ pub fn AccountOverviewBlocksTable(
         <TableSectionTemplate
             table_columns
             data_sig=blocks_sig
+            metadata=Signal::derive(move || {
+                Some(TableMetadata {
+                    total_records: u64::try_from(summary_sig.get().total_num_blocks).ok(),
+                    displayed_records: u64::try_from(
+                            blocks_sig.get().map(|a| a.len()).unwrap_or_default(),
+                        )
+                        .unwrap_or_default(),
+                    available_records: None,
+                })
+            })
+
             section_heading="Block Production"
             is_loading
             controls=|| ().into_view()

@@ -73,6 +73,86 @@ pub fn format_mina(number: String) -> String {
     format_number_helper(&number, Some(9)) // Use 9 significant digits
 }
 
+pub fn format_metadata<F>(meta: &TableMetadata, format_number: F) -> String
+where
+    F: Fn(String) -> String,
+{
+    let displayed = format_number(meta.displayed_records.to_string());
+    let total = match meta.total_records {
+        Some(records) => format_number(records.to_string()),
+        None => String::from("?"),
+    };
+
+    match meta.available_records {
+        Some(available_records) => {
+            let available = format_number(available_records.to_string());
+            format!("{} of {} of {}", displayed, available, total)
+        }
+        None => {
+            if meta.displayed_records > (TABLE_ROW_LIMIT - 1).try_into().unwrap() {
+                format!("{}+ of {}", displayed, total)
+            } else {
+                format!("{} of {}", displayed, total)
+            }
+        }
+    }
+}
+
+#[cfg(test)]
+mod format_metadata_tests {
+    use super::*;
+
+    #[test]
+    fn test_with_full_data() {
+        let meta = TableMetadata {
+            displayed_records: 50,
+            available_records: Some(100),
+            total_records: Some(200),
+        };
+        assert_eq!(format_metadata(&meta, |a| a), "50 of 100 of 200");
+    }
+
+    #[test]
+    fn test_with_no_available_records_and_display_under_100() {
+        let meta = TableMetadata {
+            displayed_records: 50,
+            available_records: None,
+            total_records: Some(200),
+        };
+        assert_eq!(format_metadata(&meta, |a| a), "50 of 200");
+    }
+
+    #[test]
+    fn test_with_no_available_records_and_display_over_100() {
+        let meta = TableMetadata {
+            displayed_records: 150,
+            available_records: None,
+            total_records: Some(300),
+        };
+        assert_eq!(format_metadata(&meta, |a| a), "150+ of 300");
+    }
+
+    #[test]
+    fn test_with_unknown_total_records() {
+        let meta = TableMetadata {
+            displayed_records: 150,
+            available_records: Some(250),
+            total_records: None,
+        };
+        assert_eq!(format_metadata(&meta, |a| a), "150 of 250 of ?");
+    }
+
+    #[test]
+    fn test_all_unknown() {
+        let meta = TableMetadata {
+            displayed_records: 150,
+            available_records: None,
+            total_records: None,
+        };
+        assert_eq!(format_metadata(&meta, |a| a), "150+ of ?");
+    }
+}
+
 pub fn get_status(timestamp: &str) -> Status {
     match timestamp.parse::<DateTime<Utc>>() {
         Ok(parsed_timestamp) => {
@@ -105,92 +185,6 @@ pub fn convert_array_to_span(
         .attr("class", "flex items-center")
         .child(els)
         .into()
-}
-
-pub fn convert_to_status_bubble(
-    canonical_status: Option<bool>,
-    status_msg: Option<String>,
-) -> HtmlElement<html::AnyElement> {
-    let (color, title) = match (canonical_status, status_msg) {
-        (Some(false), Some(s)) => (String::from("bg-status-failed"), s.to_string()),
-        (Some(false), None) => (String::from("bg-status-failed"), "Unknown".to_string()),
-        (Some(true), _) => (String::from("bg-status-success"), String::new()),
-        (None, _) => (
-            String::from("bg-status-unknown"),
-            "Canonical Status Unknown".to_string(),
-        ),
-    };
-    html::span()
-        .attr(
-            "class",
-            format!(
-                "block h-3 w-3 rounded-full mr-1 {} {}",
-                color,
-                if !title.is_empty() {
-                    String::from("cursor-help")
-                } else {
-                    String::new()
-                }
-            ),
-        )
-        .attr("title", split_and_title_case(&title, '_').join(" "))
-        .into()
-}
-
-pub fn to_title_case(s: &str) -> String {
-    s.char_indices()
-        .map(|(i, c)| {
-            if i == 0 || s[i - 1..i].contains(' ') {
-                c.to_uppercase().to_string()
-            } else {
-                c.to_lowercase().to_string()
-            }
-        })
-        .collect()
-}
-
-pub fn split_and_title_case(s: &str, delimiter: char) -> Vec<String> {
-    s.split(delimiter).map(to_title_case).collect()
-}
-
-#[cfg(test)]
-mod titlecase_tests {
-    use super::{split_and_title_case, to_title_case};
-
-    #[test]
-    fn test_to_title_case() {
-        assert_eq!(to_title_case("hello"), "Hello");
-        assert_eq!(to_title_case("hello world"), "Hello World");
-        assert_eq!(to_title_case("hello_world"), "Hello_world");
-        assert_eq!(
-            to_title_case("hello world_from rust"),
-            "Hello World_from Rust"
-        );
-    }
-
-    #[test]
-    fn test_split_and_title_case() {
-        assert_eq!(
-            split_and_title_case("hello_world_from_rust", '_'),
-            vec!["Hello", "World", "From", "Rust"]
-        );
-        assert_eq!(
-            split_and_title_case("one_two_three", '_'),
-            vec!["One", "Two", "Three"]
-        );
-        assert_eq!(split_and_title_case("a-b-c", '-'), vec!["A", "B", "C"]);
-    }
-
-    #[test]
-    fn test_split_and_title_case_with_join() {
-        let input = "hello_world_from_rust";
-        let delimiter = '_';
-        let title_cased = split_and_title_case(input, delimiter);
-
-        // Test the joined string
-        let result = title_cased.join(" ");
-        assert_eq!(result, "Hello World From Rust");
-    }
 }
 
 pub fn convert_to_pill(data: String, pill_variant: ColorVariant) -> HtmlElement<html::AnyElement> {

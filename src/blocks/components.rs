@@ -241,12 +241,17 @@ pub fn BlockAnalytics(block: BlocksQueryBlocks) -> impl IntoView {
         }
     };
     let (metadata, _) = create_signal(Some(TableMetadata {
-        displayed_records: user_command_amount_total() as i64,
-        total_records: "all".to_string(),
+        displayed_records: user_command_amount_total(),
+        available_records: None,
+        total_records: None,
     }));
 
     view! {
-        <TableSection metadata section_heading="Analytics" controls=|| ().into_view()>
+        <TableSection
+            metadata=metadata.into()
+            section_heading="Analytics"
+            controls=|| ().into_view()
+        >
             <AnalyticsLayout>
                 <AnalyticsSmContainer>
                     <AnalyticsSimpleInfo
@@ -711,7 +716,17 @@ pub fn BlocksSection() -> impl IntoView {
             table_columns
             data_sig
             section_heading="Blocks"
-            total_records_sig=Signal::derive(move || summary_sig.get().total_num_blocks.to_string())
+            metadata=Signal::derive(move || {
+                Some(TableMetadata {
+                    displayed_records: u64::try_from(
+                            data_sig.get().map(|d| d.len()).unwrap_or_default(),
+                        )
+                        .unwrap_or_default(),
+                    available_records: None,
+                    total_records: u64::try_from(summary_sig.get().total_num_blocks).ok(),
+                })
+            })
+
             is_loading=resource.loading()
             controls=move || {
                 view! {
