@@ -21,10 +21,7 @@ impl TableData for Vec<Option<InternalCommandsQueryFeetransfers>> {
         self.iter()
             .map(|opt_internal_command| match opt_internal_command {
                 Some(internal_command) => vec![
-                    convert_array_to_span(vec![
-                        convert_to_status_bubble(internal_command.canonical, None),
-                        convert_to_span(internal_command.get_height()),
-                    ]),
+                    convert_to_span(internal_command.get_height()),
                     convert_to_link(
                         internal_command.get_state_hash(),
                         format!("/blocks/{}", internal_command.get_state_hash()),

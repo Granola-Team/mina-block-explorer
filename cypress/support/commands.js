@@ -22,6 +22,9 @@
 //
 //
 // -- This will overwrite an existing command --
+
+import { parseFormattedNumber } from "../e2e/helpers";
+
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 Cypress.Commands.add(
   "aliasTableRows",
@@ -145,9 +148,21 @@ Cypress.Commands.add("assertTableRecordsCorrect", (heading) => {
     cy.get(".metadata")
       .invoke("text")
       .then((text) => {
-        let { records, total_records } = extractMetadata(text);
-        expect(records).to.be.lte(total_records);
-        expect(records).to.be.equal($rows.length);
+        let [displaying, available, total] = text.split(" of ");
+        displaying = displaying.replace(/\+/g, "");
+        if (total == null) {
+          total = available;
+          displaying = parseFormattedNumber(displaying);
+          total = parseFormattedNumber(total);
+          expect(displaying).to.be.lte(total);
+        } else {
+          displaying = parseFormattedNumber(displaying);
+          available = parseFormattedNumber(available);
+          total = parseFormattedNumber(total);
+          expect(displaying).to.be.lte(available);
+          expect(available).to.be.lte(total);
+        }
+        expect(displaying).to.eq($rows.length);
       });
   });
 });
@@ -198,14 +213,3 @@ Cypress.Commands.add(
     cy.get("@table-column-values").should("contain", value);
   },
 );
-
-function extractMetadata(input) {
-  let regex = /Showing (\d+) of (\d+)/;
-  const match = input.match(regex);
-  return match
-    ? {
-        records: +match[1],
-        total_records: +match[2],
-      }
-    : null;
-}
