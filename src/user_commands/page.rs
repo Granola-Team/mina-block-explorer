@@ -317,13 +317,7 @@ pub fn CommandSpotlightPage() -> impl IntoView {
                                                         view! {
                                                             <tr>
                                                                 <TableCell>
-                                                                    {convert_array_to_span(
-                                                                        vec![
-                                                                            convert_to_status_bubble(transaction.get_canonical(), None),
-                                                                            convert_to_span(transaction.get_block_height()),
-                                                                        ],
-                                                                    )}
-
+                                                                    {convert_to_span(transaction.get_block_height())}
                                                                 </TableCell>
                                                                 <TableCell>
                                                                     {if !transaction_clone.get_memo().is_empty() {

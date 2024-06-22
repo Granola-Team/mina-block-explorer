@@ -18,7 +18,6 @@ let test_suite_data = [
     table: {
       heading: "User Commands",
       columns: ["Hash", "Type", "From", "To", "Fee", "Amount"],
-      canonical_exists: false,
       filter_tests: [],
     },
     tests: [
@@ -45,7 +44,6 @@ let test_suite_data = [
         "SNARKs",
         "Coinbase Receiver",
       ],
-      canonical_exists: true,
       filter_tests: [
         {
           column: "Height",
@@ -108,7 +106,6 @@ let test_suite_data = [
         "Fee",
         "Amount",
       ],
-      canonical_exists: true,
       filter_tests: [
         {
           column: "Height",
@@ -169,7 +166,6 @@ let test_suite_data = [
         "Counterparty",
         "Amount/Fee",
       ],
-      canonical_exists: true,
       filter_tests: [
         {
           column: "Height",
@@ -237,7 +233,6 @@ let test_suite_data = [
         "Delegate",
         "Time Locked",
       ],
-      canonical_exists: false,
       filter_tests: [
         {
           column: "Balance",
@@ -301,7 +296,6 @@ let test_suite_data = [
         "Delegators",
       ],
       heading: "Staking Ledger - Epoch 20",
-      canonical_exists: false,
       filter_tests: [
         {
           column: "Key",
@@ -333,7 +327,6 @@ let test_suite_data = [
     table: {
       heading: "Internal Commands",
       columns: ["Height", "State Hash", "Recipient", "Fee", "Type", "Age"],
-      canonical_exists: true,
       filter_tests: [
         {
           column: "Height",
@@ -391,7 +384,6 @@ let test_suite_data = [
     table: {
       heading: "SNARKs",
       columns: ["Height", "State Hash", "Age", "Prover", "Fee"],
-      canonical_exists: true,
       filter_tests: [
         {
           column: "Height",
@@ -458,60 +450,8 @@ test_suite_data.forEach((test_suite_datum) => {
           cy.get("@input").clear();
         });
 
-        if (canonical_exists) {
-          canonicalTest(heading);
-        }
-
         tests.forEach((test) => test());
       });
     });
   });
 });
-
-const canonicalTest = (section) => {
-  cy.get("select#canonical-selection").as("menu");
-  cy.url().should("not.include", "canonical");
-
-  // should load canonical by default
-  cy.contains("section:has(h1)", section)
-    .find("table tr:not(:has(th)) span")
-    .as("tableRows");
-  cy.get("@tableRows").should("not.have.class", "bg-status-failed");
-  cy.get("@tableRows").should("have.class", "bg-status-success");
-
-  cy.wait(500);
-  cy.get("@menu").select("Non-Canonical");
-  cy.wait(500);
-  cy.url().then((url) => {
-    const params = new URLSearchParams(url.split("?")[1]);
-
-    if (params.get("txn-type") != null) {
-      expect(cy.url().should("include", "txn-type=Non-Canonical"));
-    } else if (params.get("canonical") != null) {
-      expect(cy.url().should("include", "canonical=false"));
-    } else {
-      expect(true).to.equal(false);
-    }
-  });
-  cy.get("@tableRows").should("not.have.class", "bg-status-success");
-  cy.get("@tableRows").should("have.class", "bg-status-failed");
-
-  cy.get("@menu").select("Canonical");
-  cy.url().then((url) => {
-    const params = new URLSearchParams(url.split("?")[1]);
-
-    if (params.get("txn-type") != null) {
-      expect(cy.url().should("include", "txn-type=Canonical"));
-    } else if (params.get("canonical") != null) {
-      expect(cy.url().should("include", "canonical=true"));
-    } else {
-      expect(true).to.equal(false);
-    }
-  });
-  cy.wait(500);
-  cy.contains("section:has(h1)", section)
-    .find("table tr:not(:has(th)) span")
-    .as("tableRows");
-  cy.get("@tableRows").should("not.have.class", "bg-status-failed");
-  cy.get("@tableRows").should("have.class", "bg-status-success");
-};

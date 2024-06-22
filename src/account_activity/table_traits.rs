@@ -39,17 +39,7 @@ impl TableData for Vec<Option<AccountActivityQueryDirectionalTransactions>> {
         self.iter()
             .map(|opt_trans| match opt_trans {
                 Some(transaction) => vec![
-                    convert_array_to_span(vec![
-                        convert_to_status_bubble(
-                            Some(transaction.get_canonical()),
-                            if transaction.get_failure_reason().is_empty() {
-                                None
-                            } else {
-                                Some(transaction.get_failure_reason())
-                            },
-                        ),
-                        convert_to_span(transaction.get_height()),
-                    ]),
+                    convert_to_span(transaction.get_height()),
                     if !transaction.get_memo().is_empty() {
                         convert_array_to_span(vec![
                             convert_to_link(
@@ -116,10 +106,7 @@ impl TableData for Vec<Option<AccountActivityQuerySnarks>> {
         self.iter()
             .map(|opt_snark| match opt_snark {
                 Some(snark) => vec![
-                    convert_array_to_span(vec![
-                        convert_to_status_bubble(snark.canonical, None),
-                        convert_to_span(snark.get_block_height()),
-                    ]),
+                    convert_to_span(snark.get_block_height()),
                     convert_to_link(
                         snark.get_block_state_hash(),
                         format!("/blocks/{}/snark-jobs", snark.get_block_state_hash()),
@@ -205,10 +192,7 @@ impl TableData for Vec<Option<AccountActivityQueryBlocks>> {
         self.iter()
             .map(|opt_blocks| match opt_blocks {
                 Some(block) => vec![
-                    convert_array_to_span(vec![
-                        convert_to_status_bubble(block.canonical, None),
-                        convert_to_span(block.get_block_height()),
-                    ]),
+                    convert_to_span(block.get_block_height()),
                     convert_to_link(
                         block.get_state_hash(),
                         format!("/blocks/{}/spotlight", block.get_state_hash()),
