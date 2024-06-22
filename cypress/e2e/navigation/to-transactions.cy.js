@@ -1,13 +1,9 @@
-import {
-  ROMEK_ADDRESS,
-  SNZPOOL_ADDRESS,
-  WHISPERIT_BLOCK_STATE_HASH,
-} from "../constants";
+import { ROMEK_ADDRESS, WHISPERIT_BLOCK_STATE_HASH } from "../constants";
 
 suite(["@tier1"], "transaction spotlight", () => {
   let pages = [
     {
-      origin: `/blocks/accounts/${SNZPOOL_ADDRESS}`,
+      origin: `/blocks/accounts/${ROMEK_ADDRESS}`,
       column: "Hash",
       tableHeader: "User Commands",
       tableHeaderEl: "h2",
