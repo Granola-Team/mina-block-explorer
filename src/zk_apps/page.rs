@@ -68,7 +68,7 @@ pub fn ZkAppSpotlight() -> impl IntoView {
                 <ZKAppSymbol width=40/>
             </SpotlightSection>
             <TableSection
-                metadata
+                metadata=metadata.into()
                 section_heading="ZK App Details".to_string()
                 controls=|| ().into_view()
             >
@@ -390,7 +390,11 @@ pub fn ZkAppTransactionSpotlightPage() -> impl IntoView {
             >
                 <ZKAppSymbol width=40/>
             </SpotlightSection>
-            <TableSection metadata section_heading="Account Update #1" controls=|| ().into_view()>
+            <TableSection
+                metadata=metadata.into()
+                section_heading="Account Update #1"
+                controls=|| ().into_view()
+            >
                 <SpotlightTable>
                     {account_updates_1
                         .into_iter()

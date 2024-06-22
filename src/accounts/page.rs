@@ -3,6 +3,7 @@ use crate::{
     common::{
         components::*,
         constants::{TABLE_ROW_LIMIT, *},
+        models::*,
         table::*,
     },
     summary::models::BlockchainSummary,
@@ -91,8 +92,15 @@ fn AccountsPageContents() -> impl IntoView {
         <TableSectionTemplate
             table_columns
             data_sig
-            total_records_sig=Signal::derive(move || {
-                summary_sig.get().total_num_accounts.to_string()
+            metadata=Signal::derive(move || {
+                Some(TableMetadata {
+                    total_records: u64::try_from(summary_sig.get().total_num_accounts).ok(),
+                    displayed_records: u64::try_from(
+                            data_sig.get().map(|a| a.len()).unwrap_or_default(),
+                        )
+                        .unwrap_or_default(),
+                    available_records: None,
+                })
             })
 
             section_heading="Accounts"
