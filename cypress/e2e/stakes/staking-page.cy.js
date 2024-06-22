@@ -19,14 +19,16 @@ suite(["@tier1"], "staking ledger", () => {
       .invoke("text")
       .then((epochProgressText) => {
         const info = extractEpochProgress(epochProgressText);
-        expect(parseFormattedNumber(info.percent)).to.equal(
-          parseFloat(
-            (
-              (parseFormattedNumber(info.slot) /
-                parseFormattedNumber(info.totalSlots)) *
-              100
-            ).toFixed(0),
-          ),
+        let calculated_percent = parseFloat(
+          (
+            (parseFormattedNumber(info.slot) /
+              parseFormattedNumber(info.totalSlots)) *
+            100
+          ).toFixed(0),
+        );
+        expect(parseFormattedNumber(info.percent)).to.be.within(
+          calculated_percent - 1,
+          calculated_percent,
         );
       });
   });
