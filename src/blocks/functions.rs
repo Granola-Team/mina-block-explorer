@@ -62,6 +62,12 @@ pub fn get_kind(uc: &BlocksQueryBlocksTransactionsUserCommands) -> String {
     uc.kind.as_ref().map_or("".to_string(), |o| o.to_string())
 }
 
+pub fn get_failure_reason(uc: &BlocksQueryBlocksTransactionsUserCommands) -> Option<&String> {
+    uc.failure_reason
+        .as_ref()
+        .and_then(|fr| if fr.is_empty() { None } else { Some(fr) })
+}
+
 pub fn get_user_command_fee(uc: &BlocksQueryBlocksTransactionsUserCommands) -> String {
     uc.fee
         .map(|f| f.round() as u64)

@@ -79,6 +79,11 @@ pub fn BlockUserCommands(block: BlocksQueryBlocks) -> impl IntoView {
             ..Default::default()
         },
         TableColumn {
+            column: "Status".to_string(),
+            width: Some(String::from(TABLE_COL_SHORT_WIDTH)),
+            ..Default::default()
+        },
+        TableColumn {
             column: "From".to_string(),
             width: Some(String::from(TABLE_COL_HASH_WIDTH)),
             ..Default::default()

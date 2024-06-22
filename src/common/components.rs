@@ -432,6 +432,10 @@ pub fn AnalyticsSimpleInfo(
             container_class_str.push_str(" bg-dark-blue/25 ");
             value_class_str.push_str(" text-dark-blue ");
         }
+        ColorVariant::Orange => {
+            container_class_str.push_str(" bg-amber-600/25 ");
+            value_class_str.push_str(" text-inherit ");
+        }
     }
     view! {
         <div class=container_class_str>
