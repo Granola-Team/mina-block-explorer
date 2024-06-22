@@ -39,7 +39,11 @@ impl TableData for Vec<Option<TransactionsQueryTransactions>> {
                         transaction.get_block_datetime(),
                     ),
                     convert_to_pill(transaction.get_kind(), ColorVariant::Grey),
-                    if transaction.get_failure_reason().map(|fr| fr.is_empty()).unwrap_or_default() {
+                    if transaction
+                        .get_failure_reason()
+                        .map(|fr| fr.is_empty())
+                        .unwrap_or_default()
+                    {
                         convert_to_pill("Applied".to_string(), ColorVariant::Green)
                     } else {
                         convert_to_pill("Not Applied".to_string(), ColorVariant::Orange)
