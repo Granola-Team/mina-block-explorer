@@ -1,8 +1,10 @@
 import {
   DEFAULT_LOCALE,
   GENESIS_BLOCK_BLOCK_HASH,
-  HUMANIZE_FINANACE_BLOCK_STATE_HASH,
-  HUMANIZE_FINANCE_ADDRESS,
+  ROMEK_BLOCK_STATE_HASH,
+  ROMEK_ADDRESS,
+  VETAL_BLOCK_STATE_HASH,
+  COMMAND_SNARK_BLOCK_ACTIVITY_ADDRESS,
 } from "../constants";
 import { parseFormattedNumber } from "../helpers";
 
@@ -79,15 +81,17 @@ let pages = [
     ],
   },
   {
-    page: `/blocks/${HUMANIZE_FINANACE_BLOCK_STATE_HASH}/commands/user`,
+    page: `/blocks/${ROMEK_BLOCK_STATE_HASH}/commands/user`,
     wait: () => {
+      cy.intercept("GET", "/summary").as("summaryData");
+      cy.wait("@summaryData");
       cy.aliasTableRows("User Commands", "table-rows");
     },
     tests: [
       {
         name: "fee",
         selector: () => {
-          return cy.get("@table-rows").first().find("td").eq(4);
+          return cy.get("@table-rows").first().find("td").eq(5);
         },
         type: "currency",
       },
@@ -101,7 +105,7 @@ let pages = [
     ],
   },
   {
-    page: `/blocks/${HUMANIZE_FINANACE_BLOCK_STATE_HASH}/commands/internal`,
+    page: `/blocks/${ROMEK_BLOCK_STATE_HASH}/commands/internal`,
     wait: () => {
       cy.aliasTableRows("Internal Commands", "table-rows");
     },
@@ -116,7 +120,7 @@ let pages = [
     ],
   },
   {
-    page: `/blocks/3NLnaFvjcxyFtazWwAPu92vXtR9XcvUDmLkRGEPkSc7W11Vyfhiv/snark-jobs`,
+    page: `/blocks/${VETAL_BLOCK_STATE_HASH}/snark-jobs`,
     wait: () => {
       cy.aliasTableRows("SNARK Jobs", "table-rows");
     },
@@ -223,7 +227,7 @@ let pages = [
     ],
   },
   {
-    page: `/addresses/accounts/${HUMANIZE_FINANCE_ADDRESS}`,
+    page: `/addresses/accounts/${COMMAND_SNARK_BLOCK_ACTIVITY_ADDRESS}`,
     wait: () => {
       cy.aliasTableRows("User Commands", "uc-table-rows");
       cy.aliasTableRows("SNARK Jobs", "sj-table-rows");
@@ -342,7 +346,7 @@ let pages = [
       cy.wait(100);
       cy.get(".loading-placeholder").should("not.exist");
       cy.get("th").contains("Key").parents("th").find("input").as("input");
-      cy.get("@input").type(HUMANIZE_FINANCE_ADDRESS, { delay: 0 });
+      cy.get("@input").type(ROMEK_ADDRESS, { delay: 0 });
       cy.wait(1000);
       cy.get(".loading-placeholder").should("not.exist");
     },

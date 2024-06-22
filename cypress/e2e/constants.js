@@ -36,14 +36,6 @@ export const WHISPERIT_BLOCK_STATE_HASH =
   "3NLjanAoyqjqmPsQHafJcvQiGW2xbvyXANHxEyNwPwan2eUoZBV9";
 export const LONG_LIVE_SNZ_HASH =
   "CkpYebtjxHNdhLt1u88uNBzdRsvDYMqXmeeHGYWmbAKV7wFpwkcFy";
-export const HUMANIZE_FINANCE_ADDRESS =
-  "B62qnR2AHmcnyb7v3cVvuZWriEnArx7yMkXBcnzpFQXCmGxAAv4nJSV";
-export const HUMANIZE_FINANCE_TXN_HASH =
-  "CkpaBh9jR3FiwtgXDmNeyiFJ4HszcpDyehu3adzffABoxY2BerZx3";
-export const SLOTS_PER_EPOCH = 7140;
-export const HUMANIZE_FINANACE_BLOCK_STATE_HASH =
-  "3NKLHA1Zf1A2agQ4HFzwY6azUGsXP8cScFLwDgotTuQqMjejjKNj";
-export const HUMANIZE_FINANCE_USERNAME = "Humanize Finance";
 export const BLOCK_STATE_HASH_MIXED_USER_COMMANDS =
   "3NKR3LoD3TLQ4Gotmhg59xUYcuq9hwVMuEujT99QywJhkDTYWwDy";
 export const DEFAULT_LOCALE = "en-US";
@@ -58,3 +50,5 @@ export const MINA_NAMING_SERVICE_ADDRESS =
   "B62qjzJvc59DdG9ahht9rwxkEz7GedKuUMsnaVTuXFUeANKqfBeWpRE";
 export const VETAL_BLOCK_STATE_HASH =
   "3NKrxKGr3JpYT2CzAFUeUb89ae6MFMsVWFX1QLYqYNJp1ffHR4ej";
+export const COMMAND_SNARK_BLOCK_ACTIVITY_ADDRESS =
+  "B62qrQiw9JhUumq457sMxicgQ94Z1WD9JChzJu19kBE8Szb5T8tcUAC";

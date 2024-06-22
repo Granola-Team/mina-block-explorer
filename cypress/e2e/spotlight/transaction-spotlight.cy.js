@@ -3,8 +3,7 @@ const {
   FIRST_TXN_HASH,
   FIRST_NON_CANONICAL_TXN_HASH,
   STAKE_DELEGATION_HASH,
-  LONG_LIVE_SNZ_HASH,
-  HUMANIZE_FINANCE_TXN_HASH,
+  ROMEK_MINA_NAMING_SERVICE_TXN_HASH,
   WHISPERIT_TXN_HASH,
   WHISPERIT_BLOCK_STATE_HASH,
 } = require("../constants");
@@ -42,8 +41,8 @@ suite(["@tier1"], "transaction spotlight", () => {
   });
 
   it("displays memo", () => {
-    cy.visit(`/commands/${HUMANIZE_FINANCE_TXN_HASH}`);
-    cy.contains("payout from humanize finance e19").should("exist");
+    cy.visit(`/commands/${ROMEK_MINA_NAMING_SERVICE_TXN_HASH}`);
+    cy.contains("Name: Romek").should("exist");
   });
 
   it("renders the tooltip for stake delegations", () => {
