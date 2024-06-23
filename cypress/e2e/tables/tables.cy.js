@@ -28,7 +28,8 @@ let test_suite_data = [
       () => {
         cy.aliasTableRows("User Commands", "table-rows");
         cy.get("@table-rows").should("have.lengthOf", 6);
-        cy.contains("an12345");
+        cy.get("@table-rows").eq(5).should("contain.text", "Failed");
+        cy.get("@table-rows").eq(0).should("contain.text", "Applied");
       },
     ],
   },
@@ -104,6 +105,7 @@ let test_suite_data = [
         "Txn Hash",
         "Age",
         "Type",
+        "Status",
         "From",
         "To",
         "Nonce",
