@@ -398,7 +398,7 @@ pub fn AccountOverviewBlocksTable(
             .get()
             .get("id")
             .as_ref()
-            .map(|pk| format!("/blocks?account={}", pk))
+            .map(|pk| format!("/blocks?q-block-producer={}", pk))
             .unwrap_or_else(|| "/blocks".to_string()),
     );
 
@@ -472,9 +472,18 @@ pub fn AccountOverviewBlocksTable(
             is_loading
             controls=|| ().into_view()
         />
-        <TableLink href=href.get() text="See all block production">
-            <BlockIcon/>
-        </TableLink>
+        {move || {
+            blocks_sig
+                .get()
+                .filter(|d| d.len() > 0)
+                .map(|_| {
+                    view! {
+                        <TableLink href=href.get() text="See all block production">
+                            <CheckCircleIcon/>
+                        </TableLink>
+                    }
+                })
+        }}
     }
 }
 
