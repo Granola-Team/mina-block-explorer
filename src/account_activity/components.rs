@@ -450,7 +450,7 @@ pub fn AccountOverviewBlocksTable(
             data_sig=blocks_sig
             metadata=Signal::derive(move || {
                 Some(TableMetadata {
-                    total_records: u64::try_from(summary_sig.get().total_num_blocks).ok(),
+                    total_records: Some(summary_sig.get().total_num_blocks),
                     displayed_records: u64::try_from(
                             blocks_sig.get().map(|a| a.len()).unwrap_or_default(),
                         )
