@@ -3,6 +3,9 @@
 # Choose a random port on which to run 'trunk', otherwise concurrent runs
 # interfere with each other if they use the same port.
 #
+
+import 'Justfile.dev'
+
 spec := "cypress/e2e/"
 trunk_port := `echo $((5170 + $RANDOM % 10))`
 

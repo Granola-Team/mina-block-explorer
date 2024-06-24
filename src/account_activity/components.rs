@@ -318,7 +318,7 @@ pub fn AccountOverviewSnarkJobTable(
             .get()
             .get("id")
             .as_ref()
-            .map(|pk| format!("/snarks?account={}", pk))
+            .map(|pk| format!("/snarks?q-prover={}", pk))
             .unwrap_or_else(|| "/snarks".to_string()),
     );
 
@@ -372,9 +372,18 @@ pub fn AccountOverviewSnarkJobTable(
             is_loading
             controls=|| ().into_view()
         />
-        <TableLink href=href.get() text="See all snark jobs">
-            <CheckCircleIcon/>
-        </TableLink>
+        {move || {
+            snarks_sig
+                .get()
+                .filter(|d| !d.is_empty())
+                .map(|_| {
+                    view! {
+                        <TableLink href=href.get() text="See all snark jobs">
+                            <CheckCircleIcon/>
+                        </TableLink>
+                    }
+                })
+        }}
     }
 }
 
@@ -391,7 +400,7 @@ pub fn AccountOverviewBlocksTable(
             .get()
             .get("id")
             .as_ref()
-            .map(|pk| format!("/blocks?account={}", pk))
+            .map(|pk| format!("/blocks?q-block-producer={}", pk))
             .unwrap_or_else(|| "/blocks".to_string()),
     );
 
@@ -453,7 +462,7 @@ pub fn AccountOverviewBlocksTable(
             data_sig=blocks_sig
             metadata=Signal::derive(move || {
                 Some(TableMetadata {
-                    total_records: u64::try_from(summary_sig.get().total_num_blocks).ok(),
+                    total_records: Some(summary_sig.get().total_num_blocks),
                     displayed_records: u64::try_from(
                             blocks_sig.get().map(|a| a.len()).unwrap_or_default(),
                         )
@@ -466,9 +475,18 @@ pub fn AccountOverviewBlocksTable(
             is_loading
             controls=|| ().into_view()
         />
-        <TableLink href=href.get() text="See all block production">
-            <BlockIcon/>
-        </TableLink>
+        {move || {
+            blocks_sig
+                .get()
+                .filter(|d| !d.is_empty())
+                .map(|_| {
+                    view! {
+                        <TableLink href=href.get() text="See all block production">
+                            <CheckCircleIcon/>
+                        </TableLink>
+                    }
+                })
+        }}
     }
 }
 
