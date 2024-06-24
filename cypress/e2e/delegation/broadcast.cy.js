@@ -46,5 +46,6 @@ suite(["@tier2"], "broadcast page", () => {
       CI_TEST_ACCOUNT_PUBLIC_KEY,
     );
     cy.tableColumnValuesEqual("User Commands", "Status", "Failed");
+    cy.tableColumnValuesEqual("User Commands", "Type", "PAYMENT");
   });
 });
