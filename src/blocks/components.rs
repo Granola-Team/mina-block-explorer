@@ -722,8 +722,18 @@ pub fn BlocksSection() -> impl IntoView {
                             data_sig.get().map(|d| d.len()).unwrap_or_default(),
                         )
                         .unwrap_or_default(),
-                    available_records: None,
-                    total_records: u64::try_from(summary_sig.get().total_num_blocks).ok(),
+                    available_records: canonical_sig
+                        .get()
+                        .map(|c| {
+                            if c {
+                                summary_sig.get().blockchain_length
+                            } else {
+                                summary_sig.get().total_num_blocks
+                                    - summary_sig.get().blockchain_length
+                            }
+                        })
+                        .or(Some(summary_sig.get().blockchain_length)),
+                    total_records: Some(summary_sig.get().total_num_blocks),
                 })
             })
 
