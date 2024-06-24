@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct BlockchainSummary {
-    pub blockchain_length: u32,
+    pub blockchain_length: i64,
     pub circulating_supply: String,
     pub epoch: u32,
     pub slot: u32,
