@@ -317,7 +317,7 @@ pub fn AccountOverviewSnarkJobTable(
             .get()
             .get("id")
             .as_ref()
-            .map(|pk| format!("/snarks?account={}", pk))
+            .map(|pk| format!("/snarks?q-prover={}", pk))
             .unwrap_or_else(|| "/snarks".to_string()),
     );
 
@@ -370,9 +370,12 @@ pub fn AccountOverviewSnarkJobTable(
             is_loading
             controls=|| ().into_view()
         />
-        <TableLink href=href.get() text="See all snark jobs">
-            <CheckCircleIcon/>
-        </TableLink>
+        {move || snarks_sig.get().filter(|d| d.len() > 0).map(|_| view! {
+            <TableLink href=href.get() text="See all snark jobs">
+                <CheckCircleIcon/>
+            </TableLink>
+        })}
+        
     }
 }
 
