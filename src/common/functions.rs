@@ -40,7 +40,7 @@ fn format_number_helper(number: &str, max_significant_digits: Option<u32>) -> St
                 Reflect::set(
                     &options,
                     &JsValue::from_str("minimumFractionDigits"),
-                    &JsValue::from_f64(digits as f64),
+                    &JsValue::from_f64(0f64),
                 )
                 .unwrap();
                 Reflect::set(
