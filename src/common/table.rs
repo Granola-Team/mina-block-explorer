@@ -21,12 +21,25 @@ pub enum TableSortDirection {
     Desc,
 }
 
-#[derive(Clone, Default)]
+#[derive(Clone)]
 pub struct TableColumn {
     pub column: String,
     pub is_searchable: bool,
     pub sort_direction: Option<TableSortDirection>,
     pub width: Option<String>,
+    pub html_input_type: String,
+}
+
+impl Default for TableColumn {
+    fn default() -> Self {
+        TableColumn {
+            column: String::new(),
+            is_searchable: false,
+            sort_direction: None,
+            width: None,
+            html_input_type: "text".to_string(),
+        }
+    }
 }
 
 const INPUT_CLASS: &str = "w-5/6 mt-1 h-7 text-base text-sm font-normal font-mono p-2 rounded";
@@ -188,6 +201,7 @@ fn ColumnHeader(id: String, column: TableColumn) -> impl IntoView {
                 view! {
                     <input
                         value=value
+                        type=column.html_input_type
                         on:input=move |_| {
                             update_value();
                         }

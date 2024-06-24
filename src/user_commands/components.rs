@@ -78,6 +78,7 @@ pub fn TransactionsSection() -> impl IntoView {
     let table_columns = vec![
         TableColumn {
             column: "Height".to_string(),
+            html_input_type: "number".to_string(),
             width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
             is_searchable: true,
             ..Default::default()
