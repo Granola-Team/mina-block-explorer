@@ -370,12 +370,18 @@ pub fn AccountOverviewSnarkJobTable(
             is_loading
             controls=|| ().into_view()
         />
-        {move || snarks_sig.get().filter(|d| d.len() > 0).map(|_| view! {
-            <TableLink href=href.get() text="See all snark jobs">
-                <CheckCircleIcon/>
-            </TableLink>
-        })}
-        
+        {move || {
+            snarks_sig
+                .get()
+                .filter(|d| d.len() > 0)
+                .map(|_| {
+                    view! {
+                        <TableLink href=href.get() text="See all snark jobs">
+                            <CheckCircleIcon/>
+                        </TableLink>
+                    }
+                })
+        }}
     }
 }
 
