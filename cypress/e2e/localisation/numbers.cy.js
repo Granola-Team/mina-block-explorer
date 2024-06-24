@@ -377,7 +377,7 @@ pages.forEach(({ tests, page, wait = () => {} }) => {
             let options =
               type === "number"
                 ? {}
-                : { minimumFractionDigits: 9, maximumFractionDigits: 9 };
+                : { minimumFractionDigits: 0, maximumFractionDigits: 9 };
             const formatter = new Intl.NumberFormat(DEFAULT_LOCALE, options);
             expect(text).to.contain(formatter.format(number));
           });
