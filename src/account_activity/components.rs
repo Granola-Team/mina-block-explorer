@@ -228,6 +228,7 @@ pub fn AccountTransactionsSection(
     let table_columns = vec![
         TableColumn {
             column: "Height".to_string(),
+            html_input_type: "number".to_string(),
             is_searchable: true,
             width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
             ..Default::default()
@@ -324,6 +325,7 @@ pub fn AccountOverviewSnarkJobTable(
     let table_columns = vec![
         TableColumn {
             column: "Height".to_string(),
+            html_input_type: "number".to_string(),
             is_searchable: true,
             width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
             ..Default::default()
@@ -396,6 +398,7 @@ pub fn AccountOverviewBlocksTable(
     let table_columns = vec![
         TableColumn {
             column: "Height".to_string(),
+            html_input_type: "number".to_string(),
             width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
             is_searchable: true,
             ..Default::default()
