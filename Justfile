@@ -40,8 +40,6 @@ test-unit:
 
 audit:
   cargo-audit audit
-
-disallow-unused-cargo-deps:
   cargo machete Cargo.toml
 
 pnpm_install:
@@ -103,7 +101,7 @@ publish: clean pnpm_install
   @echo "Publishing version {{VERSION}}"
   pnpm exec -- wrangler pages deploy --branch main
 
-lint: pnpm_install && audit disallow-unused-cargo-deps
+lint: pnpm_install && audit
   @echo "--- Linting"
   pnpm exec prettier --check cypress/
   cargo fmt --all --check
