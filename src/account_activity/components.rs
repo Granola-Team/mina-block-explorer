@@ -373,7 +373,7 @@ pub fn AccountOverviewSnarkJobTable(
         {move || {
             snarks_sig
                 .get()
-                .filter(|d| d.len() > 0)
+                .filter(|d| !d.is_empty())
                 .map(|_| {
                     view! {
                         <TableLink href=href.get() text="See all snark jobs">
@@ -475,7 +475,7 @@ pub fn AccountOverviewBlocksTable(
         {move || {
             blocks_sig
                 .get()
-                .filter(|d| d.len() > 0)
+                .filter(|d| !d.is_empty())
                 .map(|_| {
                     view! {
                         <TableLink href=href.get() text="See all block production">
