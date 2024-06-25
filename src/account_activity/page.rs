@@ -46,9 +46,9 @@ pub fn AccountSpotlightPage() -> impl IntoView {
             if value.get("id").is_some() {
                 load_data(
                     value.get("id").cloned(),
-                    Some(50),
-                    Some(50),
-                    Some(50),
+                    Some(TABLE_ROW_LIMIT),
+                    Some(TABLE_ROW_LIMIT),
+                    Some(TABLE_ROW_LIMIT),
                     block_height,
                     qp_map.get("q-txn-hash").cloned(),
                     qp_map.get("q-state-hash").cloned(),

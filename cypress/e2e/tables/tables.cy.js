@@ -239,7 +239,7 @@ let test_suite_data = [
           input: 5000,
           assertion: function () {
             cy.aliasTableRows("Accounts", "table-rows");
-            cy.get("@table-rows").should("have.lengthOf", 100);
+            cy.get("@table-rows").should("have.lengthOf", 25);
             cy.assertForEachColumnValue("Accounts", "Balance", (text) => {
               let balance = parseFormattedNumber(text);
               expect(balance).to.be.lte(5000);

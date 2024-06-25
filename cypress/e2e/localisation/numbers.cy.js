@@ -340,14 +340,10 @@ let pages = [
     ],
   },
   {
-    page: "/staking-ledgers?epoch=20",
+    page: `/staking-ledgers?epoch=20&q-key=${ROMEK_ADDRESS}`,
     wait: () => {
       cy.aliasTableRows("Staking Ledger - Epoch 20", "table-rows");
       cy.wait(100);
-      cy.get(".loading-placeholder").should("not.exist");
-      cy.get("th").contains("Key").parents("th").find("input").as("input");
-      cy.get("@input").type(ROMEK_ADDRESS, { delay: 0 });
-      cy.wait(1000);
       cy.get(".loading-placeholder").should("not.exist");
     },
     tests: [
