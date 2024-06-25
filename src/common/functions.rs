@@ -115,11 +115,14 @@ mod format_metadata_tests {
     #[test]
     fn test_with_no_available_records_and_display_under_limit() {
         let meta = TableMetadata {
-            displayed_records: (TABLE_ROW_LIMIT-1) as u64,
+            displayed_records: (TABLE_ROW_LIMIT - 1) as u64,
             available_records: None,
             total_records: Some(200),
         };
-        assert_eq!(format_metadata(&meta, |a| a), format!("{} of 200",TABLE_ROW_LIMIT-1));
+        assert_eq!(
+            format_metadata(&meta, |a| a),
+            format!("{} of 200", TABLE_ROW_LIMIT - 1)
+        );
     }
 
     #[test]
@@ -129,7 +132,10 @@ mod format_metadata_tests {
             available_records: None,
             total_records: Some(300),
         };
-        assert_eq!(format_metadata(&meta, |a| a), format!("{}+ of 300",TABLE_ROW_LIMIT));
+        assert_eq!(
+            format_metadata(&meta, |a| a),
+            format!("{}+ of 300", TABLE_ROW_LIMIT)
+        );
     }
 
     #[test]
