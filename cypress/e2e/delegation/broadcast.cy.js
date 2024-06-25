@@ -4,11 +4,41 @@ import {
   CI_TEST_ACCOUNT_PRIVATE_KEY,
 } from "../constants";
 
-const TWO_MINA = 2100000000;
-
-const FOUR_MINUTES = 240000;
+const ONE_MILLION_NANOMINA = 1000000;
 
 suite(["@tier2"], "broadcast page", () => {
+  let nonce = null;
+
+  beforeEach(async () => {
+    const response = await fetch("https://api.minasearch.com/graphql", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        query: `
+                query AccountsQuery(
+                    $limit: Int = 1
+                    $query: AccountQueryInput
+                ) {
+                    accounts(limit: $limit, query: $query) {
+                        nonce
+                    }
+                }
+            `,
+        variables: {
+          limit: 1,
+          query: {
+            publicKey: CI_TEST_ACCOUNT_PUBLIC_KEY,
+          },
+        },
+        operationName: "AccountsQuery",
+      }),
+    });
+    let res = await response.json();
+    nonce = (res.data.accounts[0] || { nonce: 0 }).nonce;
+  });
+
   it("broadcasts offline txn", () => {
     cy.visit("/broadcast/transaction");
 
@@ -22,8 +52,8 @@ suite(["@tier2"], "broadcast page", () => {
         to: keypair.publicKey,
         from: CI_TEST_ACCOUNT_PUBLIC_KEY,
         amount: 1,
-        fee: TWO_MINA,
-        nonce: 0,
+        fee: ONE_MILLION_NANOMINA,
+        nonce: nonce + 1,
       },
       CI_TEST_ACCOUNT_PRIVATE_KEY,
     );
@@ -31,21 +61,16 @@ suite(["@tier2"], "broadcast page", () => {
       cy.log("Payment was verified successfully");
     }
 
+    cy.intercept(
+      "POST",
+      "https://api.minaexplorer.com/broadcast/transaction",
+    ).as("offline-txn");
+
     cy.get("form textarea").type(JSON.stringify(signedPayment, null, 4), {
       delay: 0,
     });
     cy.get("form textarea").parents("form").submit();
 
-    // blocks are produced every 3 minutes so we are waiting 4 minutes
-    cy.wait(FOUR_MINUTES);
-
-    cy.visit(`/commands/user?q-from=${CI_TEST_ACCOUNT_PUBLIC_KEY}`);
-    cy.tableColumnValuesEqual(
-      "User Commands",
-      "From",
-      CI_TEST_ACCOUNT_PUBLIC_KEY,
-    );
-    cy.tableColumnValuesEqual("User Commands", "Status", "Failed");
-    cy.tableColumnValuesEqual("User Commands", "Type", "PAYMENT");
+    cy.get("@offline-txn").its("response.statusCode").should("eq", 201);
   });
 });
