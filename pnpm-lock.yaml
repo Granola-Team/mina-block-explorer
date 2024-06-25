@@ -20,6 +20,9 @@ devDependencies:
   lint-staged:
     specifier: ^15.2.7
     version: 15.2.7
+  mina-signer:
+    specifier: ^3.0.7
+    version: 3.0.7
   prettier:
     specifier: ^3.3.2
     version: 3.3.2
@@ -1041,6 +1044,13 @@ packages:
     resolution:
       {
         integrity: sha512-F1+K8EbfOZE49dtoPtmxUQrpXaBIl3ICvasLh+nJta0xkz+9kF/7uet9fLnwKqhDrmj6g+6K3Tw9yQPUg2ka5g==,
+      }
+    dev: true
+
+  /blakejs@1.2.1:
+    resolution:
+      {
+        integrity: sha512-QXUSXI3QVc/gJME0dBpXrag1kbzOqCjCX8/b54ntNyW6sjtoqxqRk3LTmXzaJoh71zMsDCjM+47jS7XiwN/+fQ==,
       }
     dev: true
 
@@ -2479,6 +2489,13 @@ packages:
     hasBin: true
     dev: true
 
+  /js-sha256@0.9.0:
+    resolution:
+      {
+        integrity: sha512-sga3MHh9sgQN2+pJ9VYZ+1LPwXOxuBJBA5nrR5/ofPfuiJBE2hnjsaN8se8JznOmGLN2p49Pe5U/ttafcs/apA==,
+      }
+    dev: true
+
   /js-tokens@4.0.0:
     resolution:
       {
@@ -2758,6 +2775,16 @@ packages:
         integrity: sha512-vqiC06CuhBTUdZH+RYl8sFrL096vA45Ok5ISO6sE/Mr1jRbGH4Csnhi8f3wKVl7x8mO4Au7Ir9D3Oyv1VYMFJw==,
       }
     engines: { node: ">=12" }
+    dev: true
+
+  /mina-signer@3.0.7:
+    resolution:
+      {
+        integrity: sha512-7eYp/6WWj2VzJjvfC8dNeGMud/brdBrzkUsCdysFFXnfV2/FVpVhAGCMfaS6hs0HJtS4+eplmiD2hXfshQS8CQ==,
+      }
+    dependencies:
+      blakejs: 1.2.1
+      js-sha256: 0.9.0
     dev: true
 
   /miniflare@3.20240512.0:
