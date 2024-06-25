@@ -54,7 +54,6 @@ suite(["@tier2"], "broadcast page", () => {
         amount: 1,
         fee: ONE_MILLION_NANOMINA,
         nonce: nonce + 1,
-
       },
       CI_TEST_ACCOUNT_PRIVATE_KEY,
     );
@@ -66,7 +65,6 @@ suite(["@tier2"], "broadcast page", () => {
       "POST",
       "https://api.minaexplorer.com/broadcast/transaction",
     ).as("offline-txn");
-
 
     cy.get("form textarea").type(JSON.stringify(signedPayment, null, 4), {
       delay: 0,
