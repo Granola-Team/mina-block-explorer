@@ -152,7 +152,6 @@ Cypress.Commands.add("assertTableRecordsCorrect", (heading) => {
       .then((text) => {
         let [displaying, available, total] = text.split(" of ");
         displaying = displaying.replace(/\+/g, "");
-        cy.log("Total: ", total, typeof total);
         if (total == null) {
           total = available;
           displaying = parseFormattedNumber(displaying);

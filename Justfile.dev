@@ -1,0 +1,6 @@
+# Justfile.dev
+
+# Justfile for useful development commands
+
+lint-fix:
+    cargo clippy --fix --allow-dirty --allow-staged

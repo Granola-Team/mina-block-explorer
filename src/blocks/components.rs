@@ -656,6 +656,7 @@ pub fn BlocksSection() -> impl IntoView {
     let table_columns = vec![
         TableColumn {
             column: "Height".to_string(),
+            html_input_type: "number".to_string(),
             is_searchable: true,
             width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
             ..Default::default()
@@ -722,8 +723,18 @@ pub fn BlocksSection() -> impl IntoView {
                             data_sig.get().map(|d| d.len()).unwrap_or_default(),
                         )
                         .unwrap_or_default(),
-                    available_records: None,
-                    total_records: u64::try_from(summary_sig.get().total_num_blocks).ok(),
+                    available_records: canonical_sig
+                        .get()
+                        .map(|c| {
+                            if c {
+                                summary_sig.get().blockchain_length
+                            } else {
+                                summary_sig.get().total_num_blocks
+                                    - summary_sig.get().blockchain_length
+                            }
+                        })
+                        .or(Some(summary_sig.get().blockchain_length)),
+                    total_records: Some(summary_sig.get().total_num_blocks),
                 })
             })
 

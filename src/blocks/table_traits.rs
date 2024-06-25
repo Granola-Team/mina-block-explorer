@@ -103,7 +103,7 @@ impl TableData for Vec<Option<BlocksQueryBlocksTransactionsUserCommands>> {
                         if get_failure_reason(user_command).is_none() {
                             "Applied".to_string()
                         } else {
-                            "Not Applied".to_string()
+                            "Failed".to_string()
                         },
                         if get_failure_reason(user_command).is_none() {
                             ColorVariant::Green

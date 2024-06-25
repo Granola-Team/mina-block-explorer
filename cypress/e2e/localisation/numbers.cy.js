@@ -153,21 +153,21 @@ let pages = [
       {
         name: "nonce column",
         selector: () => {
-          return cy.get("@table-rows").first().find("td").eq(6);
+          return cy.get("@table-rows").first().find("td").eq(7);
         },
         type: "number",
       },
       {
         name: "fee column",
         selector: () => {
-          return cy.get("@table-rows").first().find("td").eq(7);
+          return cy.get("@table-rows").first().find("td").eq(8);
         },
         type: "currency",
       },
       {
         name: "amount column",
         selector: () => {
-          return cy.get("@table-rows").first().find("td").eq(8);
+          return cy.get("@table-rows").first().find("td").eq(9);
         },
         type: "currency",
       },
@@ -377,7 +377,7 @@ pages.forEach(({ tests, page, wait = () => {} }) => {
             let options =
               type === "number"
                 ? {}
-                : { minimumFractionDigits: 9, maximumFractionDigits: 9 };
+                : { minimumFractionDigits: 0, maximumFractionDigits: 9 };
             const formatter = new Intl.NumberFormat(DEFAULT_LOCALE, options);
             expect(text).to.contain(formatter.format(number));
           });

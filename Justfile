@@ -3,16 +3,16 @@
 # Choose a random port on which to run 'trunk', otherwise concurrent runs
 # interfere with each other if they use the same port.
 #
+
+import 'Justfile.dev'
+
 spec := "cypress/e2e/"
 trunk_port := `echo $((5170 + $RANDOM % 10))`
 
 export RUSTFLAGS := "--cfg=web_sys_unstable_apis"
-
 export CYPRESS_BASE_URL := 'http://localhost:' + trunk_port
-
 export VERSION := `git rev-parse --short=8 HEAD`
-
-export CARGO_HOME := `pwd` + '.cargo'
+export CARGO_HOME := `pwd` + '/.cargo'
 export BERKELEY_FEATURES_ENABLED := "true"
 
 set dotenv-load := true
@@ -43,8 +43,6 @@ test-unit:
 
 audit:
   cargo-audit audit
-
-disallow-unused-cargo-deps:
   cargo machete Cargo.toml
 
 pnpm_install:
@@ -106,7 +104,7 @@ publish: clean pnpm_install
   @echo "Publishing version {{VERSION}}"
   pnpm exec -- wrangler pages deploy --branch main
 
-lint: pnpm_install && audit disallow-unused-cargo-deps
+lint: pnpm_install && audit
   @echo "--- Linting"
   pnpm exec prettier --check cypress/
   cargo fmt --all --check

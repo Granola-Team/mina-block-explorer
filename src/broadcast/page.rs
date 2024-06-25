@@ -1,5 +1,5 @@
 use super::components::*;
-use crate::common::{components::*, constants::REST_ENDPOINT, models::*};
+use crate::common::{components::*, constants::MINA_EXPLORER_ENDPOINT, models::*};
 use indoc::indoc;
 use leptos::*;
 use leptos_meta::Title;
@@ -14,7 +14,10 @@ pub fn BroadcastTransactionPage() -> impl IntoView {
                 <p class="px-8 text-sm">
                     "Generate a new offline transaction using the Javascript SDK and submit the transaction to the network using the form below."
                 </p>
-                <BroadcastForm endpoint=format!("{}/broadcast/transaction", REST_ENDPOINT)/>
+                <BroadcastForm endpoint=format!(
+                    "{}/broadcast/transaction",
+                    MINA_EXPLORER_ENDPOINT,
+                )/>
             </AppSection>
             <AppSection>
                 <AppHeading heading="Sample Payment"/>
@@ -59,7 +62,7 @@ pub fn BroadcastDelegationPage() -> impl IntoView {
                 <p class="px-8 text-sm">
                     "Generate a new offline delegation using the Javascript SDK and submit the transaction to the network using the form below."
                 </p>
-                <BroadcastForm endpoint=format!("{}/broadcast/delegation", REST_ENDPOINT)/>
+                <BroadcastForm endpoint=format!("{}/broadcast/delegation", MINA_EXPLORER_ENDPOINT)/>
             </AppSection>
             <AppSection>
                 <AppHeading heading="Sample Delegation Transaction"/>
@@ -103,7 +106,10 @@ pub fn BroadcastFromLedgerPage() -> impl IntoView {
                 <p class="px-8 text-sm">
                     "Generate an offline transaction using the Ledger and submit the transaction to the network using the form below. This works for both payment and delegation transaction types."
                 </p>
-                <BroadcastForm endpoint=format!("{}/broadcast/transaction", REST_ENDPOINT)/>
+                <BroadcastForm endpoint=format!(
+                    "{}/broadcast/transaction",
+                    MINA_EXPLORER_ENDPOINT,
+                )/>
             </AppSection>
             <AppSection>
                 <AppHeading heading="Sample Ledger Payment"/>
