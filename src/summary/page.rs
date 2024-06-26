@@ -5,7 +5,10 @@ use crate::{
 };
 use leptos::*;
 use leptos_meta::Title;
-use leptos_use::{storage::*, use_interval, utils::JsonCodec, UseIntervalReturn};
+use leptos_use::{
+    storage::*, use_document_visibility, use_interval, utils::JsonCodec, UseIntervalReturn,
+};
+use web_sys::VisibilityState;
 
 #[component]
 pub fn SummaryPage() -> impl IntoView {
@@ -22,13 +25,21 @@ pub fn SummaryPage() -> impl IntoView {
 
 #[component]
 pub fn SummaryLocalStorage() -> impl IntoView {
-    let (_, set_summary, _) =
+    let (summary_sig, set_summary, _) =
         use_local_storage::<BlockchainSummary, JsonCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
+    let visibility = use_document_visibility();
     let UseIntervalReturn { counter, .. } = use_interval(LIVE_RELOAD_INTERVAL);
 
     let resource = create_resource(
         move || (counter.get()),
-        |_| async move { load_data().await },
+        move |_| async move {
+            if visibility.get() == VisibilityState::Visible {
+                load_data().await
+            } else {
+                logging::log!("Document not visible. Data polling skipped.");
+                Ok(summary_sig.get())
+            }
+        },
     );
 
     create_effect(move |_| {
