@@ -55,7 +55,7 @@ fn SnarksPageContents() -> impl IntoView {
                 )
                 .await
             } else {
-                logging::log!("Document not visible. Data polling skipped.");
+                logging::log!("Document not visible. Data polling skipped snarks query.");
                 Ok(snarks_query::ResponseData {
                     snarks: data_sig.get().unwrap_or_default(),
                 })

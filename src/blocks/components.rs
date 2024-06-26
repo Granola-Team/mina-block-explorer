@@ -657,7 +657,7 @@ pub fn BlocksSection() -> impl IntoView {
                 )
                 .await
             } else {
-                logging::log!("Document not visible. Data polling skipped.");
+                logging::log!("Document not visible. Data polling skipped for blocks query.");
                 Ok(blocks_query::ResponseData {
                     blocks: data_sig.get().unwrap_or_default(),
                 })

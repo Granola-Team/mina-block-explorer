@@ -36,7 +36,7 @@ pub fn SummaryLocalStorage() -> impl IntoView {
             if visibility.get() == VisibilityState::Visible {
                 load_data().await
             } else {
-                logging::log!("Document not visible. Data polling skipped.");
+                logging::log!("Document not visible. Data polling skipped for summary endpoint.");
                 Ok(summary_sig.get())
             }
         },
