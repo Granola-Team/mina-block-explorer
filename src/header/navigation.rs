@@ -1,7 +1,4 @@
-use crate::{
-    common::{components::*, constants::*, models::*},
-    icons::*,
-};
+use crate::common::{components::*, constants::*, models::*};
 use leptos::*;
 
 #[component]
@@ -124,6 +121,7 @@ pub fn Header() -> impl IntoView {
 
     view! {
         <header class="pl-6 pr-6 pt-4 z-10 bg-main-background flex justify-center md:justify-between items-center fixed top-0 left-0 w-screen h-16">
+            <span class="ribbon max-md:hidden">Beta</span>
             <a href="/" class="flex items-center justify-start">
                 <img src="/assets/img/logo.svg" width="45px" height="29px" alt="Minasearch"/>
                 <span class="md:hidden lg:block sm:block ml-1 text-white font-bold text-xl">
@@ -181,16 +179,5 @@ pub fn Header() -> impl IntoView {
                 <span class="relative rounded-lg block bg-white h-0.5 w-4 after:absolute after:rounded-lg after:block after:bg-white after:h-0.5 after:w-4 after:bottom-1 before:absolute before:roudned-sm before:block before:bg-white before:h-0.5 before:w-4 before:top-1"></span>
             </label>
         </header>
-        <section class="p-4 bg-white dark:bg-gray-900 flex flex-col justify-center w-full">
-            <div class="pb-2 flex justify-center w-full">
-                <Construction/>
-                <h1 class="text-2xl font-bold tracking-tight leading-none text-gray-900 dark:text-white">
-                    "Early Access"
-                </h1>
-            </div>
-            <p class="font-light text-gray-500 dark:text-gray-400 w-full flex justify-center">
-                <span>"Explore and join us in refining the experience."</span>
-            </p>
-        </section>
     }
 }
