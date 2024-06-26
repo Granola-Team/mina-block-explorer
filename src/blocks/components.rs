@@ -13,8 +13,12 @@ use charming::{
 use gloo_timers::future::TimeoutFuture;
 use leptos::*;
 use leptos_router::*;
-use leptos_use::{storage::use_local_storage, use_interval, utils::JsonCodec, UseIntervalReturn};
+use leptos_use::{
+    storage::use_local_storage, use_document_visibility, use_interval, utils::JsonCodec,
+    UseIntervalReturn,
+};
 use std::collections::HashMap;
+use web_sys::VisibilityState;
 
 #[component]
 pub fn UniqueBlocksProducersSummaryItem() -> impl IntoView {
@@ -619,6 +623,7 @@ fn BlockSpotlightPlaceholder() -> impl IntoView {
 pub fn BlocksSection() -> impl IntoView {
     let (summary_sig, _, _) =
         use_local_storage::<BlockchainSummary, JsonCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
+    let visibility = use_document_visibility();
     let query_params_map = use_query_map();
     let (data_sig, set_data_sig) = create_signal(None);
     let (block_height_sig, _) = create_query_signal::<i64>("q-height");
@@ -636,20 +641,27 @@ pub fn BlocksSection() -> impl IntoView {
                 canonical_sig.get(),
             )
         },
-        |(_, q_map, block_height, slot, canonical)| async move {
-            load_data(
-                TABLE_ROW_LIMIT,
-                q_map.get("q-block-producer").cloned(),
-                q_map.get("q-state-hash").cloned(),
-                block_height,
-                slot,
-                if canonical.is_some() {
-                    canonical
-                } else {
-                    Some(true)
-                },
-            )
-            .await
+        move |(_, q_map, block_height, slot, canonical)| async move {
+            if visibility.get() == VisibilityState::Visible {
+                load_data(
+                    TABLE_ROW_LIMIT,
+                    q_map.get("q-block-producer").cloned(),
+                    q_map.get("q-state-hash").cloned(),
+                    block_height,
+                    slot,
+                    if canonical.is_some() {
+                        canonical
+                    } else {
+                        Some(true)
+                    },
+                )
+                .await
+            } else {
+                logging::log!("Document not visible. Data polling skipped.");
+                Ok(blocks_query::ResponseData {
+                    blocks: data_sig.get().unwrap_or_default(),
+                })
+            }
         },
     );
 
