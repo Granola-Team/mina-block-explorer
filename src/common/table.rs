@@ -51,8 +51,8 @@ impl Default for TableColumn {
     }
 }
 
-const INPUT_CLASS: &str = "w-5/6 mt-1 h-7 text-base text-sm font-normal font-mono p-2 rounded";
-const CELL_PADDING_CLASS: &str = "first:pl-8 pl-2 last:pr-4";
+const INPUT_CLASS: &str = " block w-full mt-1 h-7 text-base text-sm font-normal font-mono p-2 rounded ";
+const CELL_PADDING_CLASS: &str = "first:pl-8 pl-4 last:pr-4";
 
 #[component]
 pub fn TableContainer(children: Children) -> impl IntoView {
@@ -171,6 +171,12 @@ fn ColumnHeader(id: String, column: TableColumn) -> impl IntoView {
     let id_copy = id.clone();
     let (value, set_value) = create_query_signal::<String>(id);
     let input_element: NodeRef<html::Input> = create_node_ref();
+    let mut th_class = "whitespace-nowrap h-12 bg-table-header-fill xl:sticky xl:top-16 z-20 text-table-header-text-color font-semibold uppercase text-xs text-left py-4 box-border ".to_string();
+    match column.alignment {
+        Some(ColumnTextAlignment::Left) => th_class += " text-left ",
+        Some(ColumnTextAlignment::Right) => th_class += " text-right ",
+        _ => ()
+    }
 
     let update_value = use_debounce_fn_with_options(
         move || {
@@ -189,23 +195,19 @@ fn ColumnHeader(id: String, column: TableColumn) -> impl IntoView {
     );
 
     view! {
-        <th class="h-12 bg-table-header-fill xl:sticky xl:top-16 z-20 text-table-header-text-color font-semibold uppercase text-xs text-left p-2 box-border "
-            .to_string() + CELL_PADDING_CLASS>
-            <div class="whitespace-nowrap flex">
-                <span class="pr-1">{column.column.clone()}</span>
-                {match column.sort_direction {
-                    Some(TableSortDirection::Desc) => {
-                        view! {
-                            <span class=ICON_CLASS>
-                                <DownArrow width=12/>
-                            </span>
-                        }
-                            .into_view()
+        <th class=th_class + CELL_PADDING_CLASS>
+            {column.column.clone()}
+            {match column.sort_direction {
+                Some(TableSortDirection::Desc) => {
+                    view! {
+                        <span class=ICON_CLASS>
+                            <DownArrow width=12/>
+                        </span>
                     }
-                    None => ().into_view(),
-                }}
-
-            </div>
+                        .into_view()
+                }
+                None => ().into_view(),
+            }}
             {if column.is_searchable {
                 view! {
                     <input
@@ -254,17 +256,28 @@ where
 
 #[component]
 pub fn TableCell(children: Children, column_opt: Option<TableColumn>) -> impl IntoView {
-    let mut clss = " text-ellipsis overflow-hidden text-table-row-text-color font-medium text-sm text-left whitespace-nowrap max-w-40 ".to_string();
-    if let Some(column) = column_opt {
-        match column.alignment {
-            Some(ColumnTextAlignment::Left) => clss += " text-left ",
-            Some(ColumnTextAlignment::Right) => clss += " text-right ",
-            Some(ColumnTextAlignment::Center) => clss += " text-center ",
-            None => ()
-        }
+    let clss = " text-ellipsis overflow-hidden text-table-row-text-color font-medium text-sm whitespace-nowrap max-w-40 ".to_string();
+    view! { 
+        <td class=CELL_PADDING_CLASS.to_string() + &clss>
+            {if let Some(column) = column_opt {
+                match column.alignment {
+                    Some(ColumnTextAlignment::Left) => view! {
+                        <div class="flex items-center justify-start">
+                            {children()}
+                        </div>
+                    }.into_view(),
+                    Some(ColumnTextAlignment::Right) => view! {
+                        <div class="flex items-center justify-end">
+                            {children()}
+                        </div>
+                    }.into_view(),
+                    _ => children().into()
+                }
+            } else {
+                children().into()
+            }}
+        </td> 
     }
-    
-    view! { <td class=CELL_PADDING_CLASS.to_string() + &clss>{children()}</td> }
 }
 
 #[component]
