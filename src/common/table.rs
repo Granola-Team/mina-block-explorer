@@ -95,12 +95,12 @@ where
             <TableContainer>
                 <Table>
                     <ColGroup columns=table_columns.clone()/>
-                    <TableHeader columns=table_columns/>
+                    <TableHeader columns=table_columns.clone()/>
 
                     {move || {
                         if is_loading.get() {
                             view! {
-                                <TableRows data=vec![
+                                <TableRows columns=table_columns.clone() data=vec![
                                     vec![LoadingPlaceholder; table_cols_length];
                                     TABLE_ROW_LIMIT.try_into().unwrap_or_default()
                                 ]/>
@@ -108,7 +108,7 @@ where
                         } else {
                             match data_sig.get() {
                                 Some(data) => {
-                                    view! { <TableRows data=data/> }
+                                    view! { <TableRows columns=table_columns.clone() data=data/> }
                                 }
                                 None => ().into_view(),
                             }
@@ -230,7 +230,7 @@ fn ColumnHeader(id: String, column: TableColumn) -> impl IntoView {
 }
 
 #[component]
-pub fn TableRows<T>(data: T) -> impl IntoView
+pub fn TableRows<T>(data: T, columns: Vec<TableColumn>) -> impl IntoView
 where
     T: TableData,
 {
@@ -241,8 +241,9 @@ where
                 <tr class="h-12 bg-table-row-fill">
                     {row
                         .into_iter()
-                        .map(|cell| {
-                            view! { <TableCell>{cell.into_view()}</TableCell> }
+                        .enumerate()
+                        .map(|(index,cell)| {
+                            view! { <TableCell column_opt=columns.get(index).cloned()>{cell.into_view()}</TableCell> }
                         })
                         .collect_view()}
                 </tr>
@@ -252,13 +253,18 @@ where
 }
 
 #[component]
-pub fn TableCell(children: Children) -> impl IntoView {
-    let cell_ellipsis_class = "text-ellipsis overflow-hidden";
-    let cell_class = format!(
-        "{} {} text-table-row-text-color font-medium text-sm text-left whitespace-nowrap max-w-40",
-        CELL_PADDING_CLASS, cell_ellipsis_class,
-    );
-    view! { <td class=cell_class>{children()}</td> }
+pub fn TableCell(children: Children, column_opt: Option<TableColumn>) -> impl IntoView {
+    let mut clss = " text-ellipsis overflow-hidden text-table-row-text-color font-medium text-sm text-left whitespace-nowrap max-w-40 ".to_string();
+    if let Some(column) = column_opt {
+        match column.alignment {
+            Some(ColumnTextAlignment::Left) => clss += " text-left ",
+            Some(ColumnTextAlignment::Right) => clss += " text-right ",
+            Some(ColumnTextAlignment::Center) => clss += " text-center ",
+            None => ()
+        }
+    }
+    
+    view! { <td class=CELL_PADDING_CLASS.to_string() + &clss>{children()}</td> }
 }
 
 #[component]

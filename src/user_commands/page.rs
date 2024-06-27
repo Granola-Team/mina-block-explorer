@@ -317,10 +317,10 @@ pub fn CommandSpotlightPage() -> impl IntoView {
                                                         let transaction_clone = transaction.clone();
                                                         view! {
                                                             <tr>
-                                                                <TableCell>
+                                                                <TableCell column_opt=None>
                                                                     {convert_to_span(transaction.get_block_height())}
                                                                 </TableCell>
-                                                                <TableCell>
+                                                                <TableCell column_opt=None>
                                                                     {if !transaction_clone.get_memo().is_empty() {
                                                                         convert_array_to_span(
                                                                                 vec![
