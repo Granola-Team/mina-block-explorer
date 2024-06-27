@@ -659,6 +659,7 @@ pub fn BlocksSection() -> impl IntoView {
             html_input_type: "number".to_string(),
             is_searchable: true,
             width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
+            alignment: Some(ColumnTextAlignment::Right),
             ..Default::default()
         },
         TableColumn {
@@ -671,6 +672,7 @@ pub fn BlocksSection() -> impl IntoView {
             column: "Slot".to_string(),
             is_searchable: true,
             width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
+            alignment: Some(ColumnTextAlignment::Right),
             ..Default::default()
         },
         TableColumn {
@@ -687,16 +689,19 @@ pub fn BlocksSection() -> impl IntoView {
         TableColumn {
             column: "Coinbase".to_string(),
             width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
+            alignment: Some(ColumnTextAlignment::Right),
             ..Default::default()
         },
         TableColumn {
             column: "User Commands".to_string(),
             width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
+            alignment: Some(ColumnTextAlignment::Right),
             ..Default::default()
         },
         TableColumn {
             column: "SNARKs".to_string(),
             width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
+            alignment: Some(ColumnTextAlignment::Right),
             ..Default::default()
         },
         TableColumn {
