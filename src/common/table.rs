@@ -52,7 +52,7 @@ impl Default for TableColumn {
 }
 
 const INPUT_CLASS: &str = " block w-full mt-1 h-7 text-base text-sm font-normal font-mono p-2 rounded ";
-const CELL_PADDING_CLASS: &str = "first:pl-8 pl-4 last:pr-4";
+const CELL_PADDING_CLASS: &str = " first:pl-8 pl-4 last:pr-4 ";
 
 #[component]
 pub fn TableContainer(children: Children) -> impl IntoView {
@@ -164,17 +164,24 @@ pub fn TableHeader(columns: Vec<TableColumn>) -> impl IntoView {
     }
 }
 
-const ICON_CLASS: &str = "cursor-pointer pl-1 flex justify-center items-center ";
+const ICON_CLASS: &str = " inline-block cursor-pointer pl-1 items-center ";
 
 #[component]
 fn ColumnHeader(id: String, column: TableColumn) -> impl IntoView {
     let id_copy = id.clone();
     let (value, set_value) = create_query_signal::<String>(id);
     let input_element: NodeRef<html::Input> = create_node_ref();
-    let mut th_class = "whitespace-nowrap h-12 bg-table-header-fill xl:sticky xl:top-16 z-20 text-table-header-text-color font-semibold uppercase text-xs text-left py-4 box-border ".to_string();
+    let mut th_class = " whitespace-nowrap h-12 bg-table-header-fill xl:sticky xl:top-16 z-20 text-table-header-text-color font-semibold uppercase text-xs text-left py-4 box-border ".to_string();
+    let mut input_class = "".to_string();
     match column.alignment {
-        Some(ColumnTextAlignment::Left) => th_class += " text-left ",
-        Some(ColumnTextAlignment::Right) => th_class += " text-right ",
+        Some(ColumnTextAlignment::Left) => {
+            th_class += " text-left ";
+            input_class += " text-left ";
+        },
+        Some(ColumnTextAlignment::Right) => {
+            th_class += " text-right ";
+            input_class += " text-right ";
+        },
         _ => ()
     }
 
@@ -218,7 +225,7 @@ fn ColumnHeader(id: String, column: TableColumn) -> impl IntoView {
                         }
 
                         node_ref=input_element
-                        class=INPUT_CLASS
+                        class=INPUT_CLASS.to_string() + &input_class
                         id=id_copy
                     />
                 }
