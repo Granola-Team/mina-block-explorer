@@ -22,12 +22,20 @@ pub enum TableSortDirection {
 }
 
 #[derive(Clone)]
+pub enum ColumnTextAlignment {
+    Left,
+    Right,
+    Center,
+}
+
+#[derive(Clone)]
 pub struct TableColumn {
     pub column: String,
     pub is_searchable: bool,
     pub sort_direction: Option<TableSortDirection>,
     pub width: Option<String>,
     pub html_input_type: String,
+    pub alignment: Option<ColumnTextAlignment>,
 }
 
 impl Default for TableColumn {
@@ -38,6 +46,7 @@ impl Default for TableColumn {
             sort_direction: None,
             width: None,
             html_input_type: "text".to_string(),
+            alignment: None,
         }
     }
 }
