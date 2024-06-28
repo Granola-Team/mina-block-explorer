@@ -51,7 +51,8 @@ impl Default for TableColumn {
     }
 }
 
-const INPUT_CLASS: &str = " block w-full mt-1 h-7 text-base text-sm font-normal font-mono p-2 rounded ";
+const INPUT_CLASS: &str =
+    " block w-full mt-1 h-7 text-base text-sm font-normal font-mono p-2 rounded ";
 const CELL_PADDING_CLASS: &str = " first:pl-8 pl-4 last:pr-4 ";
 
 #[component]
@@ -100,10 +101,13 @@ where
                     {move || {
                         if is_loading.get() {
                             view! {
-                                <TableRows columns=table_columns.clone() data=vec![
-                                    vec![LoadingPlaceholder; table_cols_length];
-                                    TABLE_ROW_LIMIT.try_into().unwrap_or_default()
-                                ]/>
+                                <TableRows
+                                    columns=table_columns.clone()
+                                    data=vec![
+                                        vec![LoadingPlaceholder; table_cols_length];
+                                        TABLE_ROW_LIMIT.try_into().unwrap_or_default()
+                                    ]
+                                />
                             }
                         } else {
                             match data_sig.get() {
@@ -177,12 +181,12 @@ fn ColumnHeader(id: String, column: TableColumn) -> impl IntoView {
         Some(ColumnTextAlignment::Left) => {
             th_class += " text-left ";
             input_class += " text-left ";
-        },
+        }
         Some(ColumnTextAlignment::Right) => {
             th_class += " text-right ";
             input_class += " text-right ";
-        },
-        _ => ()
+        }
+        _ => (),
     }
 
     let update_value = use_debounce_fn_with_options(
@@ -202,7 +206,8 @@ fn ColumnHeader(id: String, column: TableColumn) -> impl IntoView {
     );
 
     view! {
-        <th class=th_class + CELL_PADDING_CLASS>
+        <th class=th_class
+            + CELL_PADDING_CLASS>
             {column.column.clone()}
             {match column.sort_direction {
                 Some(TableSortDirection::Desc) => {
@@ -251,8 +256,12 @@ where
                     {row
                         .into_iter()
                         .enumerate()
-                        .map(|(index,cell)| {
-                            view! { <TableCell column_opt=columns.get(index).cloned()>{cell.into_view()}</TableCell> }
+                        .map(|(index, cell)| {
+                            view! {
+                                <TableCell column_opt=columns
+                                    .get(index)
+                                    .cloned()>{cell.into_view()}</TableCell>
+                            }
                         })
                         .collect_view()}
                 </tr>
@@ -264,26 +273,26 @@ where
 #[component]
 pub fn TableCell(children: Children, column_opt: Option<TableColumn>) -> impl IntoView {
     let clss = " text-ellipsis overflow-hidden text-table-row-text-color font-medium text-sm whitespace-nowrap max-w-40 ".to_string();
-    view! { 
-        <td class=CELL_PADDING_CLASS.to_string() + &clss>
+    view! {
+        <td class=CELL_PADDING_CLASS.to_string()
+            + &clss>
             {if let Some(column) = column_opt {
                 match column.alignment {
-                    Some(ColumnTextAlignment::Left) => view! {
-                        <div class="flex items-center justify-start">
-                            {children()}
-                        </div>
-                    }.into_view(),
-                    Some(ColumnTextAlignment::Right) => view! {
-                        <div class="flex items-center justify-end">
-                            {children()}
-                        </div>
-                    }.into_view(),
-                    _ => children().into()
+                    Some(ColumnTextAlignment::Left) => {
+                        view! { <div class="flex items-center justify-start">{children()}</div> }
+                            .into_view()
+                    }
+                    Some(ColumnTextAlignment::Right) => {
+                        view! { <div class="flex items-center justify-end">{children()}</div> }
+                            .into_view()
+                    }
+                    _ => children().into(),
                 }
             } else {
                 children().into()
             }}
-        </td> 
+
+        </td>
     }
 }
 
