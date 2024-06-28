@@ -10,7 +10,7 @@ use leptos_use::{storage::use_local_storage, utils::JsonCodec};
 
 #[component]
 pub fn StakesPage() -> impl IntoView {
-    let (epoch_sig, _) = create_query_signal::<i64>("epoch");
+    let (epoch_sig, _) = create_query_signal::<u64>("epoch");
     let (summary_sig, _, _) =
         use_local_storage::<BlockchainSummary, JsonCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
 

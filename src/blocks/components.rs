@@ -626,8 +626,8 @@ pub fn BlocksSection() -> impl IntoView {
     let visibility = use_document_visibility();
     let query_params_map = use_query_map();
     let (data_sig, set_data_sig) = create_signal(None);
-    let (block_height_sig, _) = create_query_signal::<i64>("q-height");
-    let (slot_sig, _) = create_query_signal::<i64>("q-slot");
+    let (block_height_sig, _) = create_query_signal::<u64>("q-height");
+    let (slot_sig, _) = create_query_signal::<u64>("q-slot");
     let (canonical_sig, _) = create_query_signal::<bool>("canonical");
     let UseIntervalReturn { counter, .. } = use_interval(LIVE_RELOAD_INTERVAL);
 

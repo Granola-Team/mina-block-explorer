@@ -5,9 +5,9 @@ use leptos_router::*;
 
 #[component]
 pub fn StakesPageContents(
-    #[prop(into)] current_epoch: i64,
-    #[prop(into)] slot_in_epoch: i64,
-    selected_epoch: Option<i64>,
+    #[prop(into)] current_epoch: u64,
+    #[prop(into)] slot_in_epoch: u64,
+    selected_epoch: Option<u64>,
 ) -> impl IntoView {
     let header_epoch = selected_epoch.unwrap_or(current_epoch);
     let next_epoch = header_epoch + 1;
@@ -120,7 +120,7 @@ pub fn StakesPageContents(
                     <EpochButton
                         disabled=prev_epoch_sig
                             .get()
-                            .map(|prev_epoch| prev_epoch < 0)
+                            .map(|prev_epoch| prev_epoch == 0)
                             .unwrap_or_default()
                         text="Previous"
                         style_variant=EpochStyleVariant::Secondary
@@ -180,7 +180,7 @@ pub fn StakesPageContents(
 #[component]
 pub fn EpochButton(
     #[prop(into)] text: String,
-    #[prop(optional)] epoch_target: i64,
+    #[prop(optional)] epoch_target: u64,
     #[prop(default = false)] disabled: bool,
     style_variant: EpochStyleVariant,
     #[prop(default=String::new(), into)] href: String,
