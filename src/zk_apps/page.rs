@@ -2,7 +2,12 @@ use super::functions::*;
 use crate::{
     account_activity::models::AccountActivityQueryDirectionalTransactions,
     common::{
-        components::*, constants::TABLE_ROW_LIMIT, functions::*, models::*, spotlight::*, table::*,
+        components::*,
+        constants::{PAYMENT_TYPE, TABLE_ROW_LIMIT},
+        functions::*,
+        models::*,
+        spotlight::*,
+        table::*,
     },
     icons::*,
 };
@@ -26,7 +31,7 @@ pub fn ZkAppSpotlight() -> impl IntoView {
             amount: Some(0.01_f64),
             date_time: Some(chrono::Utc::now()),
             height: Some(5822_i64),
-            kind: Some("PAYMENT".to_string()),
+            kind: Some(PAYMENT_TYPE.to_string()),
             nonce: Some(1),
             failure_reason: None,
             memo: None,
