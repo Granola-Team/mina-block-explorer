@@ -2,6 +2,7 @@ use super::graphql::transactions_query::{
     TransactionsQueryOtherTransactions, TransactionsQueryTransactions,
 };
 use crate::common::{functions::*, models::ColorVariant, table::*};
+use heck::ToTitleCase;
 use leptos::*;
 
 impl TableData for Vec<Option<TransactionsQueryTransactions>> {
@@ -108,9 +109,9 @@ impl TransactionsTrait for TransactionsQueryTransactions {
     }
 
     fn get_kind(&self) -> String {
-        self.kind
-            .as_ref()
-            .map_or_else(String::new, |o| o.to_string())
+        self.kind.as_ref().map_or_else(String::new, |o| {
+            ToTitleCase::to_title_case(o.as_str()).to_string()
+        })
     }
 
     fn get_nonce(&self) -> String {

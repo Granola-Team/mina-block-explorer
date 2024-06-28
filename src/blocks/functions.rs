@@ -10,6 +10,7 @@ use crate::common::{
     models::MyError,
 };
 use graphql_client::reqwest::post_graphql;
+use heck::ToTitleCase;
 
 pub fn get_snark_block_state_hash(snark: &BlocksQueryBlocksSnarkJobs) -> String {
     snark
@@ -59,7 +60,9 @@ pub fn get_memo(uc: &BlocksQueryBlocksTransactionsUserCommands) -> String {
 }
 
 pub fn get_kind(uc: &BlocksQueryBlocksTransactionsUserCommands) -> String {
-    uc.kind.as_ref().map_or("".to_string(), |o| o.to_string())
+    uc.kind.as_ref().map_or("".to_string(), |o| {
+        ToTitleCase::to_title_case(o.as_str()).to_string()
+    })
 }
 
 pub fn get_failure_reason(uc: &BlocksQueryBlocksTransactionsUserCommands) -> Option<&String> {

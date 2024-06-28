@@ -2,10 +2,15 @@ use super::functions::*;
 use crate::{
     common::{components::*, constants::*, models::*, table::*},
     summary::models::BlockchainSummary,
+    user_commands::graphql::transactions_query,
 };
 use leptos::*;
 use leptos_router::*;
-use leptos_use::{storage::use_local_storage, use_interval, utils::JsonCodec, UseIntervalReturn};
+use leptos_use::{
+    storage::use_local_storage, use_document_visibility, use_interval, utils::JsonCodec,
+    UseIntervalReturn,
+};
+use web_sys::VisibilityState;
 
 const QP_TXN_HASH: &str = "q-txn-hash";
 const QP_TXN_TYPE: &str = "txn-type";
@@ -17,6 +22,7 @@ const QP_TO: &str = "q-to";
 pub fn TransactionsSection() -> impl IntoView {
     let (summary_sig, _, _) =
         use_local_storage::<BlockchainSummary, JsonCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
+    let visibility = use_document_visibility();
     let (data_sig, set_data) = create_signal(None);
     let (txn_type_qp, _) = create_query_signal::<String>(QP_TXN_TYPE);
     let query_params_map = use_query_map();
@@ -33,44 +39,52 @@ pub fn TransactionsSection() -> impl IntoView {
             )
         },
         move |(_, url_query_map, txn_type, block_height)| async move {
-            match txn_type {
-                Some(ref txn_type_str) if txn_type_str == "Pending" => load_pending_txn().await,
-                Some(ref txn_type_str) if txn_type_str == "Canonical" => {
-                    load_data(
-                        TABLE_ROW_LIMIT,
-                        url_query_map.get(QP_FROM).cloned(),
-                        url_query_map.get(QP_TO).cloned(),
-                        url_query_map.get(QP_TXN_HASH).cloned(),
-                        block_height,
-                        None,
-                        Some(true),
-                    )
-                    .await
+            if visibility.get() == VisibilityState::Visible {
+                match txn_type {
+                    Some(ref txn_type_str) if txn_type_str == "Pending" => load_pending_txn().await,
+                    Some(ref txn_type_str) if txn_type_str == "Canonical" => {
+                        load_data(
+                            TABLE_ROW_LIMIT,
+                            url_query_map.get(QP_FROM).cloned(),
+                            url_query_map.get(QP_TO).cloned(),
+                            url_query_map.get(QP_TXN_HASH).cloned(),
+                            block_height,
+                            None,
+                            Some(true),
+                        )
+                        .await
+                    }
+                    Some(ref txn_type_str) if txn_type_str == "Non-Canonical" => {
+                        load_data(
+                            TABLE_ROW_LIMIT,
+                            url_query_map.get(QP_FROM).cloned(),
+                            url_query_map.get(QP_TO).cloned(),
+                            url_query_map.get(QP_TXN_HASH).cloned(),
+                            block_height,
+                            None,
+                            Some(false),
+                        )
+                        .await
+                    }
+                    Some(_) | None => {
+                        load_data(
+                            TABLE_ROW_LIMIT,
+                            url_query_map.get(QP_FROM).cloned(),
+                            url_query_map.get(QP_TO).cloned(),
+                            url_query_map.get(QP_TXN_HASH).cloned(),
+                            block_height,
+                            None,
+                            Some(true),
+                        )
+                        .await
+                    }
                 }
-                Some(ref txn_type_str) if txn_type_str == "Non-Canonical" => {
-                    load_data(
-                        TABLE_ROW_LIMIT,
-                        url_query_map.get(QP_FROM).cloned(),
-                        url_query_map.get(QP_TO).cloned(),
-                        url_query_map.get(QP_TXN_HASH).cloned(),
-                        block_height,
-                        None,
-                        Some(false),
-                    )
-                    .await
-                }
-                Some(_) | None => {
-                    load_data(
-                        TABLE_ROW_LIMIT,
-                        url_query_map.get(QP_FROM).cloned(),
-                        url_query_map.get(QP_TO).cloned(),
-                        url_query_map.get(QP_TXN_HASH).cloned(),
-                        block_height,
-                        None,
-                        Some(true),
-                    )
-                    .await
-                }
+            } else {
+                logging::log!("Document not visible. Data polling skipped for user commands.");
+                Ok(transactions_query::ResponseData {
+                    transactions: data_sig.get().unwrap_or_default(),
+                    other_transactions: vec![],
+                })
             }
         },
     );

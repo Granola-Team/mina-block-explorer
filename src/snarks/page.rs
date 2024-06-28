@@ -1,12 +1,17 @@
 use super::functions::*;
 use crate::{
     common::{components::*, constants::*, models::*, table::*},
+    snarks::graphql::snarks_query,
     summary::models::BlockchainSummary,
 };
 use leptos::*;
 use leptos_meta::Title;
 use leptos_router::{create_query_signal, use_query_map};
-use leptos_use::{storage::use_local_storage, use_interval, utils::JsonCodec, UseIntervalReturn};
+use leptos_use::{
+    storage::use_local_storage, use_document_visibility, use_interval, utils::JsonCodec,
+    UseIntervalReturn,
+};
+use web_sys::VisibilityState;
 
 #[component]
 pub fn SnarksPage() -> impl IntoView {
@@ -22,6 +27,7 @@ pub fn SnarksPage() -> impl IntoView {
 fn SnarksPageContents() -> impl IntoView {
     let (summary_sig, _, _) =
         use_local_storage::<BlockchainSummary, JsonCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
+    let visibility = use_document_visibility();
     let (data_sig, set_data) = create_signal(None);
     let query_params_map = use_query_map();
     let (canonical_qp, _) = create_query_signal::<bool>("canonical");
@@ -37,16 +43,23 @@ fn SnarksPageContents() -> impl IntoView {
                 block_height_sig.get(),
             )
         },
-        |(_, value, canonical, block_height)| async move {
-            let prover = value.get("q-prover");
-            let block_state_hash = value.get("q-state-hash");
-            load_data(
-                prover.cloned(),
-                block_state_hash.cloned(),
-                block_height,
-                canonical,
-            )
-            .await
+        move |(_, value, canonical, block_height)| async move {
+            if visibility.get() == VisibilityState::Visible {
+                let prover = value.get("q-prover");
+                let block_state_hash = value.get("q-state-hash");
+                load_data(
+                    prover.cloned(),
+                    block_state_hash.cloned(),
+                    block_height,
+                    canonical,
+                )
+                .await
+            } else {
+                logging::log!("Document not visible. Data polling skipped snarks query.");
+                Ok(snarks_query::ResponseData {
+                    snarks: data_sig.get().unwrap_or_default(),
+                })
+            }
         },
     );
 

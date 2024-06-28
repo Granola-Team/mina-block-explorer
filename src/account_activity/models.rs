@@ -3,6 +3,7 @@ use super::graphql::account_activity_query::{
 };
 use crate::{common::functions::*, Params};
 use chrono::{DateTime, Utc};
+use heck::ToTitleCase;
 use leptos_router::Params;
 use serde::{Deserialize, Serialize};
 
@@ -170,7 +171,9 @@ impl AccountActivityQueryDirectionalTransactionTrait
     }
 
     fn get_kind(&self) -> String {
-        self.kind.as_ref().map_or(String::new(), |f| f.to_string())
+        self.kind.as_ref().map_or(String::new(), |o| {
+            ToTitleCase::to_title_case(o.as_str()).to_string()
+        })
     }
 
     fn get_nonce(&self) -> String {
