@@ -23,8 +23,10 @@ pub enum TableSortDirection {
 
 #[derive(Clone)]
 pub enum ColumnTextAlignment {
+    #[allow(dead_code)]
     Left,
     Right,
+    #[allow(dead_code)]
     Center,
 }
 
