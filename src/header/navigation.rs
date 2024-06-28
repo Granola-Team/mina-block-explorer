@@ -121,7 +121,7 @@ pub fn Header() -> impl IntoView {
 
     view! {
         <header class="pl-6 pr-6 pt-4 z-10 bg-main-background flex justify-center md:justify-between items-center fixed top-0 left-0 w-screen h-16">
-            <span class="ribbon max-md:hidden">Beta</span>
+            <span class="ribbon hidden md:block">Beta</span>
             <a href="/" class="flex items-center justify-start">
                 <img src="/assets/img/logo.svg" width="45px" height="29px" alt="Minasearch"/>
                 <span class="md:hidden lg:block sm:block ml-1 text-white font-bold text-xl">
