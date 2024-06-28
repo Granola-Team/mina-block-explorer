@@ -23,9 +23,9 @@ pub fn AccountSpotlightPage() -> impl IntoView {
     let memo_params_map = use_params_map();
     let query_params_map = use_query_map();
     let (canonical_sig, _) = create_query_signal::<bool>("canonical");
-    let (block_height_sig, _) = create_query_signal::<i64>("q-height");
-    let (nonce_sig, _) = create_query_signal::<i64>("q-nonce");
-    let (slot_sig, _) = create_query_signal::<i64>("q-slot");
+    let (block_height_sig, _) = create_query_signal::<u64>("q-height");
+    let (nonce_sig, _) = create_query_signal::<u64>("q-nonce");
+    let (slot_sig, _) = create_query_signal::<u64>("q-slot");
     let (transactions, set_transactions) = create_signal(None);
     let (snarks, set_snarks) = create_signal(None);
     let (blocks, set_blocks) = create_signal(None);
