@@ -314,7 +314,7 @@ let test_suite_data = [
     tests: [],
   },
   {
-    tag: "@tier1",
+    tag: "@tier2",
     url: "/commands/internal",
     table: {
       heading: "Internal Commands",
