@@ -1,3 +1,31 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.ribbon {
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+
+  --f: 0.5em;
+  --r: 0.8em;
+
+  position: absolute;
+  top: 5px;
+  left: var(--f);
+  padding-inline: var(--f);
+  line-height: 1.8;
+  background: #2699dc;
+  border-bottom: var(--f) solid #0005;
+  border-right: var(--r) solid #0000;
+  z-index: 20;
+  clip-path: polygon(
+    0 0,
+    0 calc(100% - var(--f)),
+    var(--f) 100%,
+    var(--f) calc(100% - var(--f)),
+    100% calc(100% - var(--f)),
+    calc(100% - var(--r)) calc(50% - var(--f) / 2),
+    100% 0
+  );
+}
