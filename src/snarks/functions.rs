@@ -1,6 +1,6 @@
 use super::graphql::{snarks_query::SnarksQuerySnarks, *};
 use crate::common::{
-    constants::{GRAPHQL_ENDPOINT, TABLE_ROW_LIMIT},
+    constants::{GRAPHQL_ENDPOINT, LHS_MAX_SPACE_FEES, TABLE_ROW_LIMIT},
     functions::*,
     models::*,
 };
@@ -86,5 +86,6 @@ pub fn get_fee(snark: &SnarksQuerySnarks) -> String {
         .fee
         .map(|f| f.round() as u64)
         .map(nanomina_to_mina)
+        .map(|number| format_number_for_html(&number, LHS_MAX_SPACE_FEES))
         .unwrap_or_default()
 }
