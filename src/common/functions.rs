@@ -295,9 +295,7 @@ pub fn format_number_for_html(number: &str, max_digits_before_decimal: usize) ->
             let padded_fractional_part = format!("{:<9}", fractional_part);
             format!("{}{}{}", padded_integer_part, delim, padded_fractional_part)
         }
-        _ => {
-            number.to_string()
-        }
+        _ => number.to_string(),
     }
 }
 
