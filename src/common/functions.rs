@@ -268,7 +268,10 @@ pub fn get_status(timestamp: &str) -> Status {
 }
 
 pub fn convert_to_span(data: String) -> HtmlElement<html::AnyElement> {
-    html::span().child(data).attr("class", "whitespace-pre").into()
+    html::span()
+        .child(data)
+        .attr("class", "whitespace-pre")
+        .into()
 }
 
 pub fn convert_to_title(data: String, title: String) -> HtmlElement<html::AnyElement> {
