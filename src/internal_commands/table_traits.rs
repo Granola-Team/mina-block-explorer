@@ -1,5 +1,5 @@
 use super::graphql::internal_commands_query::InternalCommandsQueryFeetransfers;
-use crate::common::{functions::*, models::ColorVariant, table::*};
+use crate::common::{constants::LHS_MAX_SPACE_FEES, functions::*, models::ColorVariant, table::*};
 use leptos::*;
 
 impl TableData for Vec<Option<InternalCommandsQueryFeetransfers>> {
@@ -30,7 +30,7 @@ impl TableData for Vec<Option<InternalCommandsQueryFeetransfers>> {
                         internal_command.get_receipient(),
                         format!("/addresses/accounts/{}", internal_command.get_receipient()),
                     ),
-                    decorate_with_mina_tag(internal_command.get_fee()),
+                    convert_to_span(internal_command.get_fee()),
                     convert_to_pill(internal_command.get_type(), ColorVariant::Grey),
                     convert_to_title(
                         print_time_since(&internal_command.get_block_datetime()),
@@ -71,6 +71,7 @@ impl InternalCommandTrait for InternalCommandsQueryFeetransfers {
     fn get_fee(&self) -> String {
         self.fee
             .map(|i| nanomina_to_mina(i as u64))
+            .map(|number| format_number_for_html(&number, LHS_MAX_SPACE_FEES))
             .unwrap_or_default()
     }
     fn get_type(&self) -> String {
