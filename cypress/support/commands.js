@@ -174,7 +174,6 @@ Cypress.Commands.add(
     cy.aliasTableHeaders(heading, "columns");
     cy.get("@columns")
       .contains(column)
-      .parents("th")
       .invoke("index")
       .then((columnIndex) => {
         cy.aliasTableRows(heading, "table-rows");

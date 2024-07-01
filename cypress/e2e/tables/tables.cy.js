@@ -430,7 +430,7 @@ test_suite_data.forEach((test_suite_datum) => {
         cy.tableHasOrderedColumns(heading, columns);
 
         filter_tests.forEach(({ column, input, assertion }) => {
-          cy.get("th").contains(column).parents("th").find("input").as("input");
+          cy.get("th").contains(column).find("input").as("input");
           cy.get("@input").type(input, { delay: 0 });
           cy.wait(1000);
           assertion();
