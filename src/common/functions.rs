@@ -242,6 +242,16 @@ mod format_number_for_html_tests {
             " 123.000000001"
         );
     }
+
+    #[test]
+    fn test_large_number() {
+        let number = "9676018.01490734";
+        let max_digits_before_decimal = 9;
+        assert_eq!(
+            format_number_for_html(number, max_digits_before_decimal),
+            "  9676018.01490734 "
+        );
+    }
 }
 
 pub fn get_status(timestamp: &str) -> Status {
@@ -258,7 +268,7 @@ pub fn get_status(timestamp: &str) -> Status {
 }
 
 pub fn convert_to_span(data: String) -> HtmlElement<html::AnyElement> {
-    html::span().child(data).into()
+    html::span().child(data).attr("class", "whitespace-pre").into()
 }
 
 pub fn convert_to_title(data: String, title: String) -> HtmlElement<html::AnyElement> {
