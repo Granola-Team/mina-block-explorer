@@ -303,7 +303,7 @@ pub fn format_number_for_html(number: &str, max_digits_before_decimal: usize) ->
 
 #[cfg(test)]
 mod format_number_for_html_tests {
-    use super::*;
+    use super::format_number_for_html;
 
     #[test]
     fn test_format_number_with_decimal() {
