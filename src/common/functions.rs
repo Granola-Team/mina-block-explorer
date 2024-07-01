@@ -159,6 +159,91 @@ mod format_metadata_tests {
     }
 }
 
+fn split_f64(number: &str) -> Result<(String, String), String> {
+    let parts: Vec<&str> = number.split('.').collect();
+
+    if parts.len() != 2 {
+        return Err("Number does not have a fractional part.".into());
+    }
+
+    let integer_part = parts[0].to_string();
+    let fractional_part = parts[1].trim_end_matches('0').to_string();
+
+    Ok((integer_part, fractional_part))
+}
+
+pub fn format_number_for_html(number: &str, max_digits_before_decimal: usize) -> String {
+    match split_f64(number) {
+        Ok((integer_part, fractional_part)) => {
+            let padded_integer_part = format!(
+                "{:>width$}",
+                integer_part,
+                width = max_digits_before_decimal
+            );
+            let padded_fractional_part = format!("{:<9}", fractional_part);
+            format!("{}.{}", padded_integer_part, padded_fractional_part)
+        }
+        _ => {
+            format!("{}", number)
+        }
+    }
+}
+
+#[cfg(test)]
+mod format_number_for_html_tests {
+    use super::*;
+
+    #[test]
+    fn test_format_number_with_decimal() {
+        let number = "123.456";
+        let max_digits_before_decimal = 4;
+        assert_eq!(
+            format_number_for_html(number, max_digits_before_decimal),
+            " 123.456      "
+        );
+    }
+
+    #[test]
+    fn test_number_shorter_than_padding() {
+        let number = "78.123456789";
+        let max_digits_before_decimal = 5;
+        assert_eq!(
+            format_number_for_html(number, max_digits_before_decimal),
+            "   78.123456789"
+        );
+    }
+
+    #[test]
+    fn test_number_longer_than_padding() {
+        let number = "123456.123";
+        let max_digits_before_decimal = 4;
+        assert_eq!(
+            format_number_for_html(number, max_digits_before_decimal),
+            "123456.123      "
+        );
+    }
+
+    #[test]
+    fn test_negative_number() {
+        let number = "-123.456";
+        let max_digits_before_decimal = 5;
+        assert_eq!(
+            format_number_for_html(number, max_digits_before_decimal),
+            " -123.456      "
+        );
+    }
+
+    #[test]
+    fn test_very_small_fractional() {
+        let number = "123.000000001";
+        let max_digits_before_decimal = 4;
+        assert_eq!(
+            format_number_for_html(number, max_digits_before_decimal),
+            " 123.000000001"
+        );
+    }
+}
+
 pub fn get_status(timestamp: &str) -> Status {
     match timestamp.parse::<DateTime<Utc>>() {
         Ok(parsed_timestamp) => {
