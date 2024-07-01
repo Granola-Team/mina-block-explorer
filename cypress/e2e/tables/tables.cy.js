@@ -275,7 +275,7 @@ let test_suite_data = [
     tests: [],
   },
   {
-    tag: "@tier2",
+    tag: "@tier1",
     url: "/staking-ledgers?epoch=20",
     table: {
       columns: [
