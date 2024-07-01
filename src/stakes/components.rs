@@ -7,8 +7,11 @@ use leptos_router::*;
 pub fn StakesPageContents(
     #[prop(into)] current_epoch: i64,
     #[prop(into)] slot_in_epoch: i64,
+    #[prop(into)] epoch_num_accounts: Option<u64>,
+    #[prop(into)] total_num_accounts: Option<u64>,
     selected_epoch: Option<i64>,
 ) -> impl IntoView {
+    let (metadata_sig, set_metadata) = create_signal(None);
     let header_epoch = selected_epoch.unwrap_or(current_epoch);
     let next_epoch = header_epoch + 1;
     let prev_epoch = header_epoch.saturating_sub(1); // prevents underflow
@@ -56,6 +59,15 @@ pub fn StakesPageContents(
 
             set_ledger_hash.set(ledger_hash);
         })
+    });
+
+    create_effect(move |_| {
+        set_metadata.set(Some(TableMetadata {
+            total_records: total_num_accounts,
+            available_records: epoch_num_accounts,
+            displayed_records: u64::try_from(data_sig.get().map(|d| d.len()).unwrap_or_default())
+                .unwrap_or_default(),
+        }));
     });
 
     let table_columns = vec![
@@ -106,17 +118,7 @@ pub fn StakesPageContents(
         <TableSectionTemplate
             table_columns
             data_sig
-            metadata=Signal::derive(move || {
-                Some(TableMetadata {
-                    total_records: None,
-                    available_records: None,
-                    displayed_records: u64::try_from(
-                            data_sig.get().map(|d| d.len()).unwrap_or_default(),
-                        )
-                        .unwrap_or_default(),
-                })
-            })
-
+            metadata=metadata_sig.into()
             section_heading=section_heading_sig.get()
             is_loading=resource.loading()
             controls=move || {
