@@ -231,6 +231,7 @@ pub fn AccountTransactionsSection(
             html_input_type: "number".to_string(),
             is_searchable: true,
             width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
+            alignment: Some(ColumnTextAlignment::Right),
             ..Default::default()
         },
         TableColumn {
@@ -242,6 +243,7 @@ pub fn AccountTransactionsSection(
         TableColumn {
             column: "Nonce".to_string(),
             width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
+            alignment: Some(ColumnTextAlignment::Right),
             ..Default::default()
         },
         TableColumn {
@@ -328,6 +330,7 @@ pub fn AccountOverviewSnarkJobTable(
             html_input_type: "number".to_string(),
             is_searchable: true,
             width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
+            alignment: Some(ColumnTextAlignment::Right),
             ..Default::default()
         },
         TableColumn {
@@ -409,6 +412,7 @@ pub fn AccountOverviewBlocksTable(
             column: "Height".to_string(),
             html_input_type: "number".to_string(),
             width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
+            alignment: Some(ColumnTextAlignment::Right),
             is_searchable: true,
             ..Default::default()
         },
@@ -422,6 +426,7 @@ pub fn AccountOverviewBlocksTable(
             column: "Slot".to_string(),
             is_searchable: true,
             width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
+            alignment: Some(ColumnTextAlignment::Right),
             ..Default::default()
         },
         TableColumn {
@@ -442,11 +447,13 @@ pub fn AccountOverviewBlocksTable(
         TableColumn {
             column: "User Commands".to_string(),
             width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
+            alignment: Some(ColumnTextAlignment::Right),
             ..Default::default()
         },
         TableColumn {
             column: "Snarks".to_string(),
             width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
+            alignment: Some(ColumnTextAlignment::Right),
             ..Default::default()
         },
         TableColumn {

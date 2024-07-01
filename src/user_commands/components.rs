@@ -94,6 +94,7 @@ pub fn TransactionsSection() -> impl IntoView {
             column: "Height".to_string(),
             html_input_type: "number".to_string(),
             width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
+            alignment: Some(ColumnTextAlignment::Right),
             is_searchable: true,
             ..Default::default()
         },
@@ -133,6 +134,7 @@ pub fn TransactionsSection() -> impl IntoView {
         TableColumn {
             column: "Nonce".to_string(),
             width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
+            alignment: Some(ColumnTextAlignment::Right),
             ..Default::default()
         },
         TableColumn {

@@ -79,10 +79,13 @@ pub fn StakesPageContents(
             column: "Total Stake %".to_string(),
             sort_direction: Some(TableSortDirection::Desc),
             width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
+            alignment: Some(ColumnTextAlignment::Right),
             ..Default::default()
         },
         TableColumn {
             column: "Block Win %".to_string(),
+            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
+            alignment: Some(ColumnTextAlignment::Right),
             ..Default::default()
         },
         TableColumn {
@@ -94,6 +97,7 @@ pub fn StakesPageContents(
         TableColumn {
             column: "Delegators".to_string(),
             width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
+            alignment: Some(ColumnTextAlignment::Right),
             ..Default::default()
         },
     ];

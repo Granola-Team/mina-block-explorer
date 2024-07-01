@@ -66,6 +66,7 @@ fn AccountsPageContents() -> impl IntoView {
         TableColumn {
             column: "Nonce".to_string(),
             width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
+            alignment: Some(ColumnTextAlignment::Right),
             ..Default::default()
         },
         TableColumn {

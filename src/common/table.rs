@@ -22,12 +22,22 @@ pub enum TableSortDirection {
 }
 
 #[derive(Clone)]
+pub enum ColumnTextAlignment {
+    #[allow(dead_code)]
+    Left,
+    Right,
+    #[allow(dead_code)]
+    Center,
+}
+
+#[derive(Clone)]
 pub struct TableColumn {
     pub column: String,
     pub is_searchable: bool,
     pub sort_direction: Option<TableSortDirection>,
     pub width: Option<String>,
     pub html_input_type: String,
+    pub alignment: Option<ColumnTextAlignment>,
 }
 
 impl Default for TableColumn {
@@ -38,12 +48,14 @@ impl Default for TableColumn {
             sort_direction: None,
             width: None,
             html_input_type: "text".to_string(),
+            alignment: None,
         }
     }
 }
 
-const INPUT_CLASS: &str = "w-5/6 mt-1 h-7 text-base text-sm font-normal font-mono p-2 rounded";
-const CELL_PADDING_CLASS: &str = "first:pl-8 pl-2 last:pr-4";
+const INPUT_CLASS: &str =
+    " block w-full mt-1 h-7 text-base text-sm font-normal font-mono p-2 rounded ";
+const CELL_PADDING_CLASS: &str = " first:pl-8 pl-4 last:pr-4 ";
 
 #[component]
 pub fn TableContainer(children: Children) -> impl IntoView {
@@ -86,20 +98,23 @@ where
             <TableContainer>
                 <Table>
                     <ColGroup columns=table_columns.clone()/>
-                    <TableHeader columns=table_columns/>
+                    <TableHeader columns=table_columns.clone()/>
 
                     {move || {
                         if is_loading.get() {
                             view! {
-                                <TableRows data=vec![
-                                    vec![LoadingPlaceholder; table_cols_length];
-                                    TABLE_ROW_LIMIT.try_into().unwrap_or_default()
-                                ]/>
+                                <TableRows
+                                    columns=table_columns.clone()
+                                    data=vec![
+                                        vec![LoadingPlaceholder; table_cols_length];
+                                        TABLE_ROW_LIMIT.try_into().unwrap_or_default()
+                                    ]
+                                />
                             }
                         } else {
                             match data_sig.get() {
                                 Some(data) => {
-                                    view! { <TableRows data=data/> }
+                                    view! { <TableRows columns=table_columns.clone() data=data/> }
                                 }
                                 None => ().into_view(),
                             }
@@ -155,13 +170,26 @@ pub fn TableHeader(columns: Vec<TableColumn>) -> impl IntoView {
     }
 }
 
-const ICON_CLASS: &str = "cursor-pointer pl-1 flex justify-center items-center ";
+const ICON_CLASS: &str = " inline-block cursor-pointer pl-1 items-center ";
 
 #[component]
 fn ColumnHeader(id: String, column: TableColumn) -> impl IntoView {
     let id_copy = id.clone();
     let (value, set_value) = create_query_signal::<String>(id);
     let input_element: NodeRef<html::Input> = create_node_ref();
+    let mut th_class = " whitespace-nowrap h-12 bg-table-header-fill xl:sticky xl:top-16 z-20 text-table-header-text-color font-semibold uppercase text-xs text-left py-4 box-border ".to_string();
+    let mut input_class = "".to_string();
+    match column.alignment {
+        Some(ColumnTextAlignment::Left) => {
+            th_class += " text-left ";
+            input_class += " text-left ";
+        }
+        Some(ColumnTextAlignment::Right) => {
+            th_class += " text-right ";
+            input_class += " text-right ";
+        }
+        _ => (),
+    }
 
     let update_value = use_debounce_fn_with_options(
         move || {
@@ -180,23 +208,20 @@ fn ColumnHeader(id: String, column: TableColumn) -> impl IntoView {
     );
 
     view! {
-        <th class="h-12 bg-table-header-fill xl:sticky xl:top-16 z-20 text-table-header-text-color font-semibold uppercase text-xs text-left p-2 box-border "
-            .to_string() + CELL_PADDING_CLASS>
-            <div class="whitespace-nowrap flex">
-                <span class="pr-1">{column.column.clone()}</span>
-                {match column.sort_direction {
-                    Some(TableSortDirection::Desc) => {
-                        view! {
-                            <span class=ICON_CLASS>
-                                <DownArrow width=12/>
-                            </span>
-                        }
-                            .into_view()
+        <th class=th_class
+            + CELL_PADDING_CLASS>
+            {column.column.clone()}
+            {match column.sort_direction {
+                Some(TableSortDirection::Desc) => {
+                    view! {
+                        <span class=ICON_CLASS>
+                            <DownArrow width=12/>
+                        </span>
                     }
-                    None => ().into_view(),
-                }}
-
-            </div>
+                        .into_view()
+                }
+                None => ().into_view(),
+            }}
             {if column.is_searchable {
                 view! {
                     <input
@@ -207,7 +232,7 @@ fn ColumnHeader(id: String, column: TableColumn) -> impl IntoView {
                         }
 
                         node_ref=input_element
-                        class=INPUT_CLASS
+                        class=INPUT_CLASS.to_string() + &input_class
                         id=id_copy
                     />
                 }
@@ -221,7 +246,7 @@ fn ColumnHeader(id: String, column: TableColumn) -> impl IntoView {
 }
 
 #[component]
-pub fn TableRows<T>(data: T) -> impl IntoView
+pub fn TableRows<T>(data: T, columns: Vec<TableColumn>) -> impl IntoView
 where
     T: TableData,
 {
@@ -232,8 +257,13 @@ where
                 <tr class="h-12 bg-table-row-fill">
                     {row
                         .into_iter()
-                        .map(|cell| {
-                            view! { <TableCell>{cell.into_view()}</TableCell> }
+                        .enumerate()
+                        .map(|(index, cell)| {
+                            view! {
+                                <TableCell column_opt=columns
+                                    .get(index)
+                                    .cloned()>{cell.into_view()}</TableCell>
+                            }
                         })
                         .collect_view()}
                 </tr>
@@ -243,13 +273,29 @@ where
 }
 
 #[component]
-pub fn TableCell(children: Children) -> impl IntoView {
-    let cell_ellipsis_class = "text-ellipsis overflow-hidden";
-    let cell_class = format!(
-        "{} {} text-table-row-text-color font-medium text-sm text-left whitespace-nowrap max-w-40",
-        CELL_PADDING_CLASS, cell_ellipsis_class,
-    );
-    view! { <td class=cell_class>{children()}</td> }
+pub fn TableCell(children: Children, column_opt: Option<TableColumn>) -> impl IntoView {
+    let clss = " text-ellipsis overflow-hidden text-table-row-text-color font-medium text-sm whitespace-nowrap max-w-40 ".to_string();
+    view! {
+        <td class=CELL_PADDING_CLASS.to_string()
+            + &clss>
+            {if let Some(column) = column_opt {
+                match column.alignment {
+                    Some(ColumnTextAlignment::Left) => {
+                        view! { <div class="flex items-center justify-start">{children()}</div> }
+                            .into_view()
+                    }
+                    Some(ColumnTextAlignment::Right) => {
+                        view! { <div class="flex items-center justify-end">{children()}</div> }
+                            .into_view()
+                    }
+                    _ => children().into(),
+                }
+            } else {
+                children().into()
+            }}
+
+        </td>
+    }
 }
 
 #[component]

@@ -111,7 +111,6 @@ Cypress.Commands.add(
     cy.aliasTableHeaders(tableHeading, "columns", tableHeadingEl);
     cy.get("@columns")
       .contains(columnHeading)
-      .parents("th")
       .invoke("index")
       .then((columnIndex) => {
         cy.aliasTableRows(tableHeading, "table-rows", tableHeadingEl);
@@ -175,7 +174,6 @@ Cypress.Commands.add(
     cy.aliasTableHeaders(heading, "columns");
     cy.get("@columns")
       .contains(column)
-      .parents("th")
       .invoke("index")
       .then((columnIndex) => {
         cy.aliasTableRows(heading, "table-rows");
@@ -199,7 +197,6 @@ Cypress.Commands.add(
     cy.aliasTableHeaders(columnHeading, "columns");
     cy.get("@columns")
       .contains(column)
-      .parents("th")
       .invoke("index")
       .then((columnIndex) => {
         cy.aliasTableRows(columnHeading, "table-rows");

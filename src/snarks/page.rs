@@ -69,6 +69,7 @@ fn SnarksPageContents() -> impl IntoView {
             html_input_type: "number".to_string(),
             is_searchable: true,
             width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
+            alignment: Some(ColumnTextAlignment::Right),
             ..Default::default()
         },
         TableColumn {
