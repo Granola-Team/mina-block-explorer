@@ -6,7 +6,6 @@ use serde::{Deserialize, Serialize};
 enum Icon {
     Docs,
     Terms,
-    Support,
 }
 pub struct Link<'a> {
     label: &'a str,
@@ -34,19 +33,14 @@ pub fn Footer() -> impl IntoView {
 
     let links = vec![
         Link {
-            label: "Docs",
-            href: "https://github.com/Granola-Team/mina-block-explorer/blob/main/DOCS/SITE_DOCS.md",
+            label: "Disclaimer",
+            href: "https://gist.github.com/robinbb/05ba138b080ff5a95dcf8bb2d6ae76c5",
             icon: Icon::Docs,
         },
         Link {
             label: "Terms",
-            href: "https://gist.github.com/jhult/0a633e7771a695b0ffa529ab55722523",
+            href: "https://gist.github.com/robinbb/15b67f5d39dd47d37ddb88e3201dc311",
             icon: Icon::Terms,
-        },
-        Link {
-            label: "Support",
-            href: "https://docs.minaexplorer.com/minaexplorer/get-help",
-            icon: Icon::Support,
         },
     ];
     view! {
@@ -105,7 +99,6 @@ pub fn Footer() -> impl IntoView {
                                 {match link.icon {
                                     Icon::Docs => view! { <DocsIcon width=12/> },
                                     Icon::Terms => view! { <TermsIcon width=12/> },
-                                    Icon::Support => view! { <SupportIcon width=12/> },
                                 }}
 
                                 <div class="ml-1">{link.label}</div>
