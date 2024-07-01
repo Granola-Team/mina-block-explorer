@@ -296,7 +296,7 @@ pub fn format_number_for_html(number: &str, max_digits_before_decimal: usize) ->
             format!("{}{}{}", padded_integer_part, delim, padded_fractional_part)
         }
         _ => {
-            format!("{}", number)
+            number.to_string()
         }
     }
 }
