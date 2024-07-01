@@ -1,6 +1,6 @@
 use crate::{
     accounts::graphql::accounts_query::AccountsQueryAccounts,
-    common::{functions::*, models::*, table::TableData},
+    common::{constants::LHS_MAX_DIGIT_PADDING, functions::*, models::*, table::TableData},
 };
 use leptos::*;
 
@@ -14,7 +14,7 @@ impl TableData for Vec<Option<AccountsQueryAccounts>> {
                         format!("/addresses/accounts/{}", account.get_public_key()),
                     ),
                     convert_to_span(account.get_username()),
-                    decorate_with_mina_tag(account.get_balance()),
+                    convert_to_span(account.get_balance()),
                     convert_to_pill(account.get_nonce(), ColorVariant::Grey),
                     convert_to_link(
                         account.get_delegate(),
@@ -57,6 +57,7 @@ impl AccountTrait for AccountsQueryAccounts {
             .as_ref()
             .cloned()
             .map(|b| nanomina_to_mina(b as u64))
+            .map(|number| format_number_for_html(&number, LHS_MAX_DIGIT_PADDING))
             .unwrap_or_default()
             .to_string()
     }
