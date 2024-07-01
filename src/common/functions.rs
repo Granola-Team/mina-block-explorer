@@ -40,7 +40,7 @@ fn format_number_helper(number: &str, max_significant_digits: Option<u32>) -> St
                 Reflect::set(
                     &options,
                     &JsValue::from_str("minimumFractionDigits"),
-                    &JsValue::from_f64(0f64),
+                    &JsValue::from_f64(1f64),
                 )
                 .unwrap();
                 Reflect::set(
@@ -159,6 +159,211 @@ mod format_metadata_tests {
     }
 }
 
+fn split_number(number: &str) -> Result<(char, Vec<&str>), String> {
+    let delim: char;
+    if number.contains('.') && number.contains(',') {
+        if number.rfind('.') > number.rfind(',') {
+            delim = '.';
+        } else {
+            delim = ',';
+        }
+    } else if number.contains('.') {
+        delim = '.';
+    } else if number.contains(',') {
+        delim = ','
+    } else {
+        return Err("Number does not have a valid decimal separator.".into());
+    }
+
+    Ok((delim, number.split(delim).collect()))
+}
+
+#[cfg(test)]
+mod split_number_tests {
+    use super::split_number;
+
+    #[test]
+    fn test_dot_separator() {
+        let number = "123.456"; // English format
+        let result = split_number(number);
+        assert_eq!(result, Ok(('.', vec!["123", "456"])));
+    }
+
+    #[test]
+    fn test_comma_separator() {
+        let number = "123,456"; // French/German format
+        let result = split_number(number);
+        assert_eq!(result, Ok((',', vec!["123", "456"])));
+    }
+
+    #[test]
+    fn test_both_separators_dot_last() {
+        let number = "1,234.56"; // English format with thousands separator
+        let result = split_number(number);
+        assert_eq!(result, Ok(('.', vec!["1,234", "56"])));
+    }
+
+    #[test]
+    fn test_both_separators_comma_last() {
+        let number = "1.234,56"; // German format with thousands separator
+        let result = split_number(number);
+        assert_eq!(result, Ok((',', vec!["1.234", "56"])));
+    }
+
+    #[test]
+    fn test_no_separator() {
+        let number = "123456"; // No decimal separator
+        let result = split_number(number);
+        assert!(result.is_err());
+        assert_eq!(
+            result,
+            Err("Number does not have a valid decimal separator.".into())
+        );
+    }
+
+    #[test]
+    fn test_only_integer_part() {
+        let number = "123."; // Only integer part
+        let result = split_number(number);
+        assert_eq!(result, Ok(('.', vec!["123", ""])));
+    }
+
+    #[test]
+    fn test_only_fractional_part() {
+        let number = ".456"; // Only fractional part
+        let result = split_number(number);
+        assert_eq!(result, Ok(('.', vec!["", "456"])));
+    }
+
+    #[test]
+    fn test_trailing_zeros_dot() {
+        let number = "123.000"; // English format with trailing zeros
+        let result = split_number(number);
+        assert_eq!(result, Ok(('.', vec!["123", "000"])));
+    }
+
+    #[test]
+    fn test_trailing_zeros_comma() {
+        let number = "123,000"; // French/German format with trailing zeros
+        let result = split_number(number);
+        assert_eq!(result, Ok((',', vec!["123", "000"])));
+    }
+
+    #[test]
+    fn test_french_format() {
+        let number = "1 234,56"; // French format with space as thousands separator
+        let result = split_number(number);
+        assert_eq!(result, Ok((',', vec!["1 234", "56"])));
+    }
+
+    #[test]
+    fn test_german_format() {
+        let number = "1.234,56"; // German format with dot as thousands separator
+        let result = split_number(number);
+        assert_eq!(result, Ok((',', vec!["1.234", "56"])));
+    }
+}
+
+fn split_f64(number: &str) -> Result<(char, String, String), String> {
+    if split_number(number).is_err() {
+        return Err("Unable to parse number.".into());
+    }
+
+    let (delim, parts) = split_number(number).unwrap();
+
+    if parts.len() != 2 {
+        return Err("Number does not have a fractional part.".into());
+    }
+
+    let integer_part = parts[0].to_string();
+    let mut fractional_part = parts[1].trim_end_matches('0').to_string();
+    if fractional_part.is_empty() {
+        fractional_part = "0".to_string();
+    }
+
+    Ok((delim, integer_part, fractional_part))
+}
+
+pub fn format_number_for_html(number: &str, max_digits_before_decimal: usize) -> String {
+    match split_f64(number) {
+        Ok((delim, integer_part, fractional_part)) => {
+            let padded_integer_part = format!(
+                "{:>width$}",
+                integer_part,
+                width = max_digits_before_decimal
+            );
+            let padded_fractional_part = format!("{:<9}", fractional_part);
+            format!("{}{}{}", padded_integer_part, delim, padded_fractional_part)
+        }
+        _ => number.to_string(),
+    }
+}
+
+#[cfg(test)]
+mod format_number_for_html_tests {
+    use super::format_number_for_html;
+
+    #[test]
+    fn test_format_number_with_decimal() {
+        let number = "123.456";
+        let max_digits_before_decimal = 4;
+        assert_eq!(
+            format_number_for_html(number, max_digits_before_decimal),
+            " 123.456      "
+        );
+    }
+
+    #[test]
+    fn test_number_shorter_than_padding() {
+        let number = "78.123456789";
+        let max_digits_before_decimal = 5;
+        assert_eq!(
+            format_number_for_html(number, max_digits_before_decimal),
+            "   78.123456789"
+        );
+    }
+
+    #[test]
+    fn test_number_longer_than_padding() {
+        let number = "123456.123";
+        let max_digits_before_decimal = 4;
+        assert_eq!(
+            format_number_for_html(number, max_digits_before_decimal),
+            "123456.123      "
+        );
+    }
+
+    #[test]
+    fn test_negative_number() {
+        let number = "-123.456";
+        let max_digits_before_decimal = 5;
+        assert_eq!(
+            format_number_for_html(number, max_digits_before_decimal),
+            " -123.456      "
+        );
+    }
+
+    #[test]
+    fn test_very_small_fractional() {
+        let number = "123.000000001";
+        let max_digits_before_decimal = 4;
+        assert_eq!(
+            format_number_for_html(number, max_digits_before_decimal),
+            " 123.000000001"
+        );
+    }
+
+    #[test]
+    fn test_large_number() {
+        let number = "9676018.01490734";
+        let max_digits_before_decimal = 9;
+        assert_eq!(
+            format_number_for_html(number, max_digits_before_decimal),
+            "  9676018.01490734 "
+        );
+    }
+}
+
 pub fn get_status(timestamp: &str) -> Status {
     match timestamp.parse::<DateTime<Utc>>() {
         Ok(parsed_timestamp) => {
@@ -173,7 +378,10 @@ pub fn get_status(timestamp: &str) -> Status {
 }
 
 pub fn convert_to_span(data: String) -> HtmlElement<html::AnyElement> {
-    html::span().child(data).into()
+    html::span()
+        .child(data)
+        .attr("class", "whitespace-pre")
+        .into()
 }
 
 pub fn convert_to_title(data: String, title: String) -> HtmlElement<html::AnyElement> {

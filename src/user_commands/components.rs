@@ -144,7 +144,7 @@ pub fn TransactionsSection() -> impl IntoView {
         },
         TableColumn {
             column: "Amount".to_string(),
-            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
+            width: Some(String::from(TABLE_COL_LARGE_BALANCE)),
             ..Default::default()
         },
     ];

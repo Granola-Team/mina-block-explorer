@@ -35,7 +35,7 @@ impl TableData for Vec<Option<SnarksQuerySnarks>> {
                         get_prover(snark),
                         format!("/addresses/accounts/{}", get_prover(snark)),
                     ),
-                    decorate_with_mina_tag(get_fee(snark)),
+                    convert_to_span(get_fee(snark)),
                 ],
                 None => vec![],
             })
