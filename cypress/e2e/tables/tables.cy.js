@@ -313,7 +313,7 @@ let test_suite_data = [
     },
     tests: [
       () => {
-        cy.find(".metadata")
+        cy.get(".metadata")
           .invoke("text")
           .then((text) => {
             expect(text.split(" of ").length).to.equal(3);
@@ -436,9 +436,9 @@ test_suite_data.forEach((test_suite_datum) => {
       cy.intercept("GET", "/summary").as("summaryData");
       cy.wait("@summaryData").then(() => {
         cy.tableHasOrderedColumns(heading, columns);
-
         filter_tests.forEach(({ column, input, assertion }) => {
           cy.get("th").contains(column).find("input").as("input");
+          cy.wait(1000);
           cy.get("@input").type(input, { delay: 0 });
           cy.wait(1000);
           assertion();
