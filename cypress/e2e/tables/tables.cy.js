@@ -311,7 +311,15 @@ let test_suite_data = [
         },
       ],
     },
-    tests: [],
+    tests: [
+      () => {
+        cy.find(".metadata")
+          .invoke("text")
+          .then((text) => {
+            expect(text.split(" of ").length).to.equal(3);
+          });
+      },
+    ],
   },
   {
     tag: "@tier2",

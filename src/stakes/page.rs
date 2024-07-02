@@ -17,7 +17,7 @@ struct EpochSummary {
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq, Default)]
 struct StakesData {
-    pub stakes: Vec<EpochSummary>
+    pub stakes: Vec<EpochSummary>,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq, Default)]
