@@ -784,6 +784,7 @@ type Stake {
   voting_for: String
   pk_epoch_num_blocks: Int
   epoch_num_blocks: Int
+  epoch_num_accounts: Int
 }
 
 input BlockTransactionUserCommandInsertInput {

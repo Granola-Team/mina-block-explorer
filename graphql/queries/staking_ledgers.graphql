@@ -22,5 +22,6 @@ query StakingLedgersQuery(
     }
     pk_epoch_num_blocks
     epoch_num_blocks
+    epoch_num_accounts
   }
 }

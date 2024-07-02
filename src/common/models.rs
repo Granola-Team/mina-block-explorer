@@ -1,7 +1,7 @@
 use graphql_client::Error;
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Default)]
+#[derive(Clone, Default, Debug)]
 pub struct TableMetadata {
     pub total_records: Option<u64>,
     pub displayed_records: u64,

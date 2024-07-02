@@ -28,11 +28,11 @@ suite(["@tier1"], "input", () => {
     it(`remains focused as user types slowly into ${column} on page ${origin}`, () => {
       cy.visit(origin);
       cy.intercept("GET", "/summary").as("summaryData");
-      cy.wait("@summaryData").then(() => {
-        let cssSelector = "#q-" + kebabCase(column);
-        cy.get(cssSelector).type(input, { delay: 750 });
-        cy.get(cssSelector).should("have.focus");
-      });
+      cy.wait("@summaryData");
+      cy.wait(1000);
+      let cssSelector = "#q-" + kebabCase(column);
+      cy.get(cssSelector).type(input, { delay: 750 });
+      cy.get(cssSelector).should("have.focus");
     }),
   );
 });
