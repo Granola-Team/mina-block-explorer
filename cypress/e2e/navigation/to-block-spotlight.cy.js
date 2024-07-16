@@ -1,6 +1,6 @@
 import { DEFAULT_ACCOUNT_PK } from "../constants";
 
-suite(["@tier1"], "block spotlight", () => {
+suite(["@tier2"], "block spotlight", () => {
   [
     {
       origin: `/commands/internal`,

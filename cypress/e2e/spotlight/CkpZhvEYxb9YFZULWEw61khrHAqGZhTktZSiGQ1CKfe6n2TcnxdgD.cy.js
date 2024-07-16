@@ -1,5 +1,5 @@
 suite(
-  ["@tier1"],
+  ["@tier2"],
   "Command CkpZhvEYxb9YFZULWEw61khrHAqGZhTktZSiGQ1CKfe6n2TcnxdgD",
   () => {
     it("is canonical", () => {

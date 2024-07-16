@@ -9,7 +9,7 @@ const {
   ROMEK_NAMING_MEMO,
 } = require("../constants");
 
-suite(["@tier1"], "transaction spotlight", () => {
+suite(["@tier2"], "transaction spotlight", () => {
   let expected_fields = [
     "Date",
     "Canonical",
