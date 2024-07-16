@@ -1,6 +1,6 @@
 import { DEFAULT_ACCOUNT_PK, FIRST_BLOCK_WITH_SNARK_WORK } from "../constants";
 
-suite(["@tier1"], "account page", () => {
+suite(["@tier2"], "account page", () => {
   let pages = [
     {
       origin: `/addresses/accounts`,
