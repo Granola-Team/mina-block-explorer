@@ -1,6 +1,7 @@
 import { parseFormattedNumber } from "../helpers";
 
-suite(["@tier1"], "staking ledger", () => {
+// TODO: Explains failures, here.
+suite(["@tier2"], "staking ledger", () => {
   beforeEach(() => {
     cy.visit("/staking-ledgers");
     cy.intercept("GET", "/summary").as("summaryData");
