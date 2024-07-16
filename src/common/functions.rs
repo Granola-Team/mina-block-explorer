@@ -90,7 +90,7 @@ where
             format!("{} of {} of {}", displayed, available, total)
         }
         None => {
-            if meta.displayed_records > (TABLE_ROW_LIMIT - 1).try_into().unwrap() {
+            if meta.displayed_records > (TABLE_ROW_LIMIT - 1) {
                 format!("{}+ of {}", displayed, total)
             } else {
                 format!("{} of {}", displayed, total)
@@ -116,7 +116,7 @@ mod format_metadata_tests {
     #[test]
     fn test_with_no_available_records_and_display_under_limit() {
         let meta = TableMetadata {
-            displayed_records: (TABLE_ROW_LIMIT - 1) as u64,
+            displayed_records: TABLE_ROW_LIMIT - 1,
             available_records: None,
             total_records: Some(200),
         };
@@ -129,7 +129,7 @@ mod format_metadata_tests {
     #[test]
     fn test_with_no_available_records_and_display_over_limit() {
         let meta = TableMetadata {
-            displayed_records: TABLE_ROW_LIMIT as u64,
+            displayed_records: TABLE_ROW_LIMIT,
             available_records: None,
             total_records: Some(300),
         };

@@ -17,7 +17,7 @@ pub struct PoolUserCommandReceiver {
 pub struct PooledUserCommand {
     pub hash: Option<String>,
     pub kind: Option<String>,
-    pub nonce: Option<i64>,
+    pub nonce: Option<u64>,
     pub source: Option<PooledUserCommandSource>,
     pub receiver: Option<PoolUserCommandReceiver>,
     pub amount: Option<String>,
@@ -69,7 +69,7 @@ impl From<PooledUserCommand> for transactions_query::TransactionsQueryTransactio
                 Some(source) => source.public_key,
                 None => None,
             },
-            nonce: txn.nonce,
+            nonce: txn.nonce.map(|x| x as i64),
             memo: txn.memo,
             hash: txn.hash,
             block: None,

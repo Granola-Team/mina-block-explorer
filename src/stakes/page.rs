@@ -25,7 +25,7 @@ struct EpochSummaryResponse {
     pub data: StakesData,
 }
 
-async fn load_epoch_summary(epoch: Option<i64>) -> Result<EpochSummaryResponse, MyError> {
+async fn load_epoch_summary(epoch: Option<u64>) -> Result<EpochSummaryResponse, MyError> {
     match epoch {
         None => Err(MyError::ParseError("epoch not supplied".to_string())),
         Some(epoch) => {
@@ -56,7 +56,7 @@ async fn load_epoch_summary(epoch: Option<i64>) -> Result<EpochSummaryResponse, 
 
 #[component]
 pub fn StakesPage() -> impl IntoView {
-    let (epoch_sig, _) = create_query_signal::<i64>("epoch");
+    let (epoch_sig, _) = create_query_signal::<u64>("epoch");
     let (summary_sig, _, _) =
         use_local_storage::<BlockchainSummary, JsonCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
 

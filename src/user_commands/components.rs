@@ -26,7 +26,7 @@ pub fn TransactionsSection() -> impl IntoView {
     let (data_sig, set_data) = create_signal(None);
     let (txn_type_qp, _) = create_query_signal::<String>(QP_TXN_TYPE);
     let query_params_map = use_query_map();
-    let (block_height_sig, _) = create_query_signal::<i64>(QP_HEIGHT);
+    let (block_height_sig, _) = create_query_signal::<u64>(QP_HEIGHT);
     let UseIntervalReturn { counter, .. } = use_interval(LIVE_RELOAD_INTERVAL);
 
     let resource = create_resource(

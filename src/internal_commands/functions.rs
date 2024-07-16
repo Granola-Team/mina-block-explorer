@@ -8,15 +8,15 @@ use graphql_client::reqwest::post_graphql;
 
 pub async fn load_data(
     recipient: Option<String>,
-    block_height: Option<i64>,
+    block_height: Option<u64>,
     state_hash: Option<String>,
     canonical: Option<bool>,
 ) -> Result<internal_commands_query::ResponseData, MyError> {
     let variables = internal_commands_query::Variables {
         sort_by: internal_commands_query::FeetransferSortByInput::BLOCKHEIGHT_DESC,
-        limit: Some(TABLE_ROW_LIMIT),
+        limit: Some(TABLE_ROW_LIMIT as i64),
         query: internal_commands_query::FeetransferQueryInput {
-            block_height_lte: block_height,
+            block_height_lte: block_height.map(|x| x as i64),
             block_state_hash: state_hash.map(|sh| BlockQueryInput {
                 state_hash: Some(sh),
                 ..Default::default()

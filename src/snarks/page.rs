@@ -31,7 +31,7 @@ fn SnarksPageContents() -> impl IntoView {
     let (data_sig, set_data) = create_signal(None);
     let query_params_map = use_query_map();
     let (canonical_qp, _) = create_query_signal::<bool>("canonical");
-    let (block_height_sig, _) = create_query_signal::<i64>("q-height");
+    let (block_height_sig, _) = create_query_signal::<u64>("q-height");
     let UseIntervalReturn { counter, .. } = use_interval(LIVE_RELOAD_INTERVAL);
 
     let resource = create_resource(

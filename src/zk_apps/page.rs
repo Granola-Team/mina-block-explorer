@@ -30,7 +30,7 @@ pub fn ZkAppSpotlight() -> impl IntoView {
             hash: Some("5JunUf7Niybx1d2CdLLZWL1D9wwtce5dBFM7nXsQ9GtiyopSh1Ee".to_string()),
             amount: Some(0.01_f64),
             date_time: Some(chrono::Utc::now()),
-            height: Some(5822_i64),
+            height: Some(5822_u64),
             kind: Some(PAYMENT_TYPE.to_string()),
             nonce: Some(1),
             failure_reason: None,

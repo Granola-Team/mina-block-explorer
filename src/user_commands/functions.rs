@@ -30,22 +30,22 @@ pub async fn load_pending_txn() -> Result<transactions_query::ResponseData, MyEr
 }
 
 pub async fn load_data(
-    limit: i64,
+    limit: u64,
     from_account: Option<String>,
     to_account: Option<String>,
     txn_hash: Option<String>,
-    block_height: Option<i64>,
+    block_height: Option<u64>,
     state_hash: Option<String>,
     canonical: Option<bool>,
 ) -> Result<transactions_query::ResponseData, MyError> {
     let variables = transactions_query::Variables {
         sort_by: transactions_query::TransactionSortByInput::BLOCKHEIGHT_DESC,
-        limit: Some(limit),
+        limit: Some(limit as i64),
         txn_query: transactions_query::TransactionQueryInput {
             from: from_account,
             to: to_account,
             hash: txn_hash.clone(),
-            block_height_lte: block_height,
+            block_height_lte: block_height.map(|x| x as i64),
             canonical,
             block: state_hash
                 .clone()

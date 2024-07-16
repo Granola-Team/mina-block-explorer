@@ -5,8 +5,8 @@ use serde::{Deserialize, Serialize};
 pub struct BlockchainSummary {
     pub blockchain_length: u64,
     pub circulating_supply: String,
-    pub epoch: u32,
-    pub slot: u32,
+    pub epoch: u64,
+    pub slot: u64,
     pub global_slot: i64,
     pub staking_epoch_ledger_hash: String,
     pub total_currency: String,

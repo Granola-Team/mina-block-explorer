@@ -22,26 +22,30 @@ pub fn get_base_page_path(location: Location) -> String {
 #[allow(clippy::too_many_arguments)]
 pub async fn load_data(
     public_key: Option<String>,
-    blocks_limit: Option<i64>,
-    snarks_limit: Option<i64>,
-    trans_limit: Option<i64>,
-    block_height: Option<i64>,
+    blocks_limit: Option<u64>,
+    snarks_limit: Option<u64>,
+    trans_limit: Option<u64>,
+    block_height: Option<u64>,
     txn_hash: Option<String>,
     state_hash: Option<String>,
     prover: Option<String>,
-    nonce: Option<i64>,
+    nonce: Option<u64>,
     counterparty: Option<String>,
-    slot: Option<i64>,
+    slot: Option<u64>,
     block_producer: Option<String>,
     canonical: Option<bool>,
 ) -> Result<account_activity_query::ResponseData, MyError> {
+    let block_height = block_height.map(|x| x as i64);
+    let nonce = nonce.map(|x| x as i64);
+    let slot = slot.map(|x| x as i64);
+
     let variables = account_activity_query::Variables {
         blocks_sort_by: account_activity_query::BlockSortByInput::BLOCKHEIGHT_DESC,
         snarks_sort_by: account_activity_query::SnarkSortByInput::BLOCKHEIGHT_DESC,
         trans_sort_by: account_activity_query::TransactionSortByInput::BLOCKHEIGHT_DESC,
-        blocks_limit: Some(blocks_limit.unwrap_or_default()),
-        snarks_limit: Some(snarks_limit.unwrap_or_default()),
-        trans_limit: Some(trans_limit.unwrap_or_default()),
+        blocks_limit: blocks_limit.map(|x| x as i64),
+        snarks_limit: snarks_limit.map(|x| x as i64),
+        trans_limit: trans_limit.map(|x| x as i64),
         account_query: account_activity_query::AccountQueryInput {
             public_key: public_key.clone(),
             username: None,
