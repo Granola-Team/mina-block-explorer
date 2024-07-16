@@ -9,7 +9,7 @@ use serde::*;
 #[derive(Deserialize, Serialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 struct EpochData {
-    pub epoch: Option<i64>,
+    pub epoch: Option<u64>,
     pub ledger_hash: Option<String>,
 }
 

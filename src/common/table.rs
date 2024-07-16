@@ -107,7 +107,7 @@ where
                                     columns=table_columns.clone()
                                     data=vec![
                                         vec![LoadingPlaceholder; table_cols_length];
-                                        TABLE_ROW_LIMIT.try_into().unwrap_or_default()
+                                        TABLE_ROW_LIMIT as usize
                                     ]
                                 />
                             }

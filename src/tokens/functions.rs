@@ -13,7 +13,7 @@ fn generate_random_string(len: usize) -> String {
         .collect()
 }
 
-pub fn stub_token_data(size: i64) -> Vec<Option<TokenData>> {
+pub fn stub_token_data(size: u64) -> Vec<Option<TokenData>> {
     let mut rng = rand::thread_rng();
     (0..size)
         .map(|_| {
