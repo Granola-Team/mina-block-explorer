@@ -332,6 +332,7 @@ pub fn CommandSpotlightPage() -> impl IntoView {
                 section_heading="In Other Blocks"
                 is_loading=resource.loading()
                 controls=|| ().into_view()
+                half_width=true
             />
         </PageContainer>
     }
