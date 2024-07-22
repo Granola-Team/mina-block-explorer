@@ -1,18 +1,22 @@
 use super::{components::AccountDialogTransactionSection, functions::*, models::*};
 use crate::{
     account_activity::components::AccountDialogBlocksSection,
-    common::{models::MyError, spotlight::*},
+    common::{constants::*, models::MyError, spotlight::*},
     icons::*,
     snarks::components::AccountDialogSnarkJobSection,
+    summary::models::BlockchainSummary,
 };
 use leptos::*;
 use leptos_router::*;
+use leptos_use::{storage::use_local_storage, utils::JsonCodec};
 
 #[component]
 pub fn AccountDialogView() -> impl IntoView {
     let location = use_location();
     let (base, _set_base) = create_signal(get_base_page_path(location));
     let memo_params_map = use_params_map();
+    let (summary_sig, _, _) =
+        use_local_storage::<BlockchainSummary, JsonCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
 
     let public_key = move || memo_params_map.with(|p| p.get("id").cloned().unwrap_or_default());
 
@@ -86,7 +90,11 @@ pub fn AccountDialogView() -> impl IntoView {
                             .and_then(|res| res.ok())
                             .map(|res| {
                                 if let Some(Some(account)) = &res.accounts.first() {
-                                    let summary_items = get_spotlight_data(account);
+                                    let summary_items = get_spotlight_data(
+                                        account,
+                                        u64::try_from(summary_sig.get().blockchain_length)
+                                            .unwrap_or_default(),
+                                    );
                                     view! {
                                         <SpotlightSection
                                             header="Account Spotlight"
