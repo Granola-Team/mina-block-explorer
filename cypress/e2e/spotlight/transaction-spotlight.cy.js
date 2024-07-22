@@ -7,10 +7,12 @@ const {
   WHISPERIT_TXN_HASH,
   WHISPERIT_BLOCK_STATE_HASH,
   ROMEK_NAMING_MEMO,
+  FIRST_INTERNAL_TXN_HASH,
 } = require("../constants");
 
 suite(["@tier2"], "transaction spotlight", () => {
   let expected_fields = [
+    "Status",
     "Date",
     "Canonical",
     "Amount",
@@ -25,6 +27,17 @@ suite(["@tier2"], "transaction spotlight", () => {
     "Memo",
   ];
   let mobile = devices[0];
+
+  it("displays proper status", () => {
+    cy.visit(
+      `/commands/${FIRST_TXN_HASH}?q-state-hash=${FIRST_INTERNAL_TXN_HASH}`,
+    );
+    cy.testSpotlightValue("Status", "Failed");
+    cy.visit(
+      `/commands/${WHISPERIT_TXN_HASH}?q-state-hash=${WHISPERIT_BLOCK_STATE_HASH}`,
+    );
+    cy.testSpotlightValue("Status", "Applied");
+  });
 
   it("displays complete information", () => {
     cy.viewport(mobile);
