@@ -91,7 +91,26 @@ pub fn CommandSpotlightPage() -> impl IntoView {
                         Some(Some(transaction)) => {
                             let state_hash = transaction.get_hash();
                             let date_time = transaction.get_block_datetime();
+                            let has_succeeded = transaction
+                                .get_failure_reason()
+                                .map(|fr| fr.is_empty())
+                                .unwrap_or_default();
+                            let status = if has_succeeded {
+                                TXN_STATUS_APPLIED
+                            } else {
+                                TXN_STATUS_FAILED
+                            };
+                            let status_color = if has_succeeded {
+                                ColorVariant::Green
+                            } else {
+                                ColorVariant::Orange
+                            };
                             let spotlight_items = vec![
+                                SpotlightEntry {
+                                    label: "Status".to_string(),
+                                    any_el: Some(convert_to_pill(status.to_string(), status_color)),
+                                    ..Default::default()
+                                },
                                 SpotlightEntry {
                                     label: "Date".to_string(),
                                     any_el: Some(convert_to_span(transaction.get_block_datetime())),
@@ -221,6 +240,10 @@ pub fn CommandSpotlightPage() -> impl IntoView {
                 }
                 None => {
                     let spotlight_items = vec![
+                        SpotlightEntry {
+                            label: "Status".to_string(),
+                            ..Default::default()
+                        },
                         SpotlightEntry {
                             label: "Date".to_string(),
                             ..Default::default()

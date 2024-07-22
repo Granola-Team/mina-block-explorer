@@ -6,7 +6,12 @@ use crate::{
     blocks::graphql::blocks_query::{
         BlocksQueryBlocksSnarkJobs, BlocksQueryBlocksTransactionsFeeTransfer,
     },
-    common::{functions::*, models::*, table::*},
+    common::{
+        constants::{TXN_STATUS_APPLIED, TXN_STATUS_FAILED},
+        functions::*,
+        models::*,
+        table::*,
+    },
 };
 use leptos::*;
 
@@ -101,9 +106,9 @@ impl TableData for Vec<Option<BlocksQueryBlocksTransactionsUserCommands>> {
                     convert_to_pill(get_kind(user_command), ColorVariant::Grey),
                     convert_to_pill(
                         if get_failure_reason(user_command).is_none() {
-                            "Applied".to_string()
+                            TXN_STATUS_APPLIED.to_string()
                         } else {
-                            "Failed".to_string()
+                            TXN_STATUS_FAILED.to_string()
                         },
                         if get_failure_reason(user_command).is_none() {
                             ColorVariant::Green
