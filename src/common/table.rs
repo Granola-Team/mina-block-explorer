@@ -58,11 +58,6 @@ const INPUT_CLASS: &str =
 const CELL_PADDING_CLASS: &str = " first:pl-8 pl-4 last:pr-4 ";
 
 #[component]
-pub fn TableContainer(children: Children) -> impl IntoView {
-    view! { <div class="@container w-full overflow-auto xl:overflow-visible">{children()}</div> }
-}
-
-#[component]
 pub fn Table(children: Children) -> impl IntoView {
     view! {
         <table class="xl:relative font-mono md:rounded-b-lg w-full @xs:w-[400%] @md:w-[300%] @2xl:w-[200%] xl:w-full">
@@ -80,6 +75,7 @@ pub fn TableSectionTemplate<T, F, E>(
     #[prop(into)] section_heading: String,
     #[prop(optional, into)] additional_info: View,
     controls: F,
+    #[prop(default = false)] half_width: bool,
 ) -> impl IntoView
 where
     E: IntoView,
@@ -95,7 +91,11 @@ where
             controls
             additional_info
         >
-            <TableContainer>
+            <div
+                class="@container overflow-auto xl:overflow-visible w-full"
+                class=("md:w-1/2", move || half_width)
+                class=("mx-auto", move || half_width)
+            >
                 <Table>
                     <ColGroup columns=table_columns.clone()/>
                     <TableHeader columns=table_columns.clone()/>
@@ -134,7 +134,7 @@ where
                     }
                 }}
 
-            </TableContainer>
+            </div>
         </TableSection>
     }
 }
