@@ -21,7 +21,16 @@ let test_suite_data = [
     url: `/blocks/${BLOCK_STATE_HASH_MIXED_USER_COMMANDS}/commands/user`,
     table: {
       heading: "User Commands",
-      columns: ["Hash", "Type", "Status", "From", "To", "Fee", "Amount"],
+      columns: [
+        "Hash",
+        "Type",
+        "Status",
+        "From",
+        "To",
+        "Nonce",
+        "Fee",
+        "Amount",
+      ],
       filter_tests: [],
     },
     tests: [

@@ -51,6 +51,10 @@ pub fn get_user_command_to(uc: &BlocksQueryBlocksTransactionsUserCommands) -> St
     uc.to.as_ref().map_or("".to_string(), |o| o.to_string())
 }
 
+pub fn get_user_command_nonce(uc: &BlocksQueryBlocksTransactionsUserCommands) -> String {
+    uc.nonce.map_or_else(|| "".to_string(), |o| o.to_string())
+}
+
 pub fn get_user_command_hash(uc: &BlocksQueryBlocksTransactionsUserCommands) -> String {
     uc.hash.as_ref().map_or("".to_string(), |o| o.to_string())
 }
