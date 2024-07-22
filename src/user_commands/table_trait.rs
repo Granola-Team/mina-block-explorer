@@ -26,7 +26,7 @@ impl TableData for Vec<Option<TransactionsQueryOtherTransactions>> {
                                     transaction.get_block_state_hash()
                                 ),
                             ),
-                            convert_to_span(transaction.get_block_height())
+                            convert_to_span(transaction.get_memo())
                                 .attr("class", "block text-xs font-light text-slate-400"),
                         ])
                         .attr("class", "block")
