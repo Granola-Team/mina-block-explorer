@@ -22,6 +22,7 @@ query BlocksQuery(
         kind
         memo
         failureReason
+        nonce
       }
       feeTransfer {
         type
