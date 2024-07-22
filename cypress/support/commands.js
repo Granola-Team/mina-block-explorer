@@ -141,6 +141,12 @@ Cypress.Commands.add("testSpotlight", (heading, id, expected_fields) => {
   });
 });
 
+Cypress.Commands.add("testSpotlightValue", (key, value) => {
+  cy.get("section#spotlight-section table").within(() => {
+    cy.get("th").contains(key).parents("tr").find("td").contains(value);
+  });
+});
+
 Cypress.Commands.add("assertTableRecordsCorrect", (heading) => {
   cy.aliasTableRows(heading, "table-rows");
   cy.get("@table-rows").then(($rows) => {
