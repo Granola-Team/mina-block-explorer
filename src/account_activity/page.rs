@@ -144,8 +144,7 @@ pub fn AccountSpotlightPage() -> impl IntoView {
                                 header="Account Spotlight"
                                 spotlight_items=get_spotlight_data(
                                     account,
-                                    u64::try_from(summary_sig.get().blockchain_length)
-                                        .unwrap_or_default(),
+                                    summary_sig.get().blockchain_length,
                                 )
 
                                 meta=Some(

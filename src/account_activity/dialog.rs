@@ -92,8 +92,7 @@ pub fn AccountDialogView() -> impl IntoView {
                                 if let Some(Some(account)) = &res.accounts.first() {
                                     let summary_items = get_spotlight_data(
                                         account,
-                                        u64::try_from(summary_sig.get().blockchain_length)
-                                            .unwrap_or_default(),
+                                        summary_sig.get().blockchain_length,
                                     );
                                     view! {
                                         <SpotlightSection
