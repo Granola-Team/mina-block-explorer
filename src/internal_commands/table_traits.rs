@@ -30,7 +30,7 @@ impl TableData for Vec<Option<InternalCommandsQueryFeetransfers>> {
                         internal_command.get_receipient(),
                         format!("/addresses/accounts/{}", internal_command.get_receipient()),
                     ),
-                    convert_to_span(internal_command.get_fee()),
+                    decorate_with_mina_tag(internal_command.get_fee()),
                     convert_to_pill(internal_command.get_type(), ColorVariant::Grey),
                     convert_to_title(
                         print_time_since(&internal_command.get_block_datetime()),
