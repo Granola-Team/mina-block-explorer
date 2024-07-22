@@ -127,6 +127,7 @@ impl TableData for Vec<Option<BlocksQueryBlocksTransactionsUserCommands>> {
                         get_user_command_to(user_command),
                         format!("/addresses/accounts/{}", get_user_command_to(user_command)),
                     ),
+                    convert_to_pill(format_number(get_user_command_nonce(user_command)), ColorVariant::Grey),
                     decorate_with_mina_tag(get_user_command_fee(user_command)),
                     decorate_with_mina_tag(get_user_command_amount(user_command)),
                 ],
