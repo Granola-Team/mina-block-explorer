@@ -20,3 +20,5 @@ pub const PAYMENT_TYPE: &str = "Payment";
 pub const STAKE_DELEGATION_TYPE: &str = "Stake Delegation";
 pub const LHS_MAX_DIGIT_PADDING: usize = 13;
 pub const LHS_MAX_SPACE_FEES: usize = 2;
+pub const TXN_STATUS_APPLIED: &str = "Applied";
+pub const TXN_STATUS_FAILED: &str = "Failed";

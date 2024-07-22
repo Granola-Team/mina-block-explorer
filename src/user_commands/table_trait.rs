@@ -2,7 +2,7 @@ use super::graphql::transactions_query::{
     TransactionsQueryOtherTransactions, TransactionsQueryTransactions,
 };
 use crate::common::{
-    constants::{LHS_MAX_DIGIT_PADDING, LHS_MAX_SPACE_FEES},
+    constants::{LHS_MAX_DIGIT_PADDING, LHS_MAX_SPACE_FEES, TXN_STATUS_APPLIED, TXN_STATUS_FAILED},
     functions::*,
     models::ColorVariant,
     table::*,
@@ -50,9 +50,9 @@ impl TableData for Vec<Option<TransactionsQueryTransactions>> {
                         .map(|fr| fr.is_empty())
                         .unwrap_or_default()
                     {
-                        convert_to_pill("Applied".to_string(), ColorVariant::Green)
+                        convert_to_pill(TXN_STATUS_APPLIED.to_string(), ColorVariant::Green)
                     } else {
-                        convert_to_pill("Failed".to_string(), ColorVariant::Orange)
+                        convert_to_pill(TXN_STATUS_FAILED.to_string(), ColorVariant::Orange)
                     },
                     convert_to_link(
                         transaction.get_from(),

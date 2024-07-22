@@ -11,6 +11,7 @@ const {
 
 suite(["@tier2"], "transaction spotlight", () => {
   let expected_fields = [
+    "Status",
     "Date",
     "Canonical",
     "Amount",
