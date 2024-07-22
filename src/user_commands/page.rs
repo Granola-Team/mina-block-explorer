@@ -58,6 +58,7 @@ pub fn CommandSpotlightPage() -> impl IntoView {
             load_data(10, None, None, txn_hash.cloned(), None, state_hash, None).await
         },
     );
+    let (other_txns, set_other_txns) = create_signal(None);
 
     create_effect(move |_| {
         if let Some(Ok(data)) = resource.get() {
@@ -78,6 +79,24 @@ pub fn CommandSpotlightPage() -> impl IntoView {
             ..Default::default()
         },
     ];
+
+    let get_data = move || resource.get().and_then(|res| res.ok());
+
+    create_effect(move |_| {
+        set_other_txns.set(get_data().map(|data| {
+            data.other_transactions
+                .into_iter()
+                .filter(|txn_opt| {
+                    txn_opt
+                        .clone()
+                        .map(|txn| {
+                            txn.get_block_state_hash() != state_hash_sig.get().unwrap_or_default()
+                        })
+                        .unwrap_or_default()
+                })
+                .collect::<Vec<_>>()
+        }));
+    });
 
     view! {
         <Title
@@ -307,81 +326,13 @@ pub fn CommandSpotlightPage() -> impl IntoView {
                 }
                 _ => ().into_view(),
             }}
-            <AppSection>
-                <AppHeading heading="In Other Blocks"/>
-                <div class="mx-auto @container w-full lg:w-1/2 flex justify-center">
-                    <Table>
-                        <ColGroup columns=table_columns.clone()/>
-                        <TableHeader columns=table_columns/>
-
-                        <tbody>
-                            {move || {
-                                resource
-                                    .get()
-                                    .and_then(|res| res.ok())
-                                    .map(|data| {
-                                        data.other_transactions
-                                            .into_iter()
-                                            .filter(|txn_opt| {
-                                                txn_opt
-                                                    .clone()
-                                                    .map(|txn| {
-                                                        txn.get_block_state_hash()
-                                                            != state_hash_sig.get().unwrap_or_default()
-                                                    })
-                                                    .unwrap_or_default()
-                                            })
-                                            .map(|txn_opt| {
-                                                txn_opt
-                                                    .map(|transaction| {
-                                                        let transaction_clone = transaction.clone();
-                                                        view! {
-                                                            <tr>
-                                                                <TableCell column_opt=None>
-                                                                    {convert_to_span(transaction.get_block_height())}
-                                                                </TableCell>
-                                                                <TableCell column_opt=None>
-                                                                    {if !transaction_clone.get_memo().is_empty() {
-                                                                        convert_array_to_span(
-                                                                                vec![
-                                                                                    convert_to_link(
-                                                                                        transaction_clone.get_hash(),
-                                                                                        format!(
-                                                                                            "/commands/{}?q-state-hash={}",
-                                                                                            transaction_clone.get_hash(),
-                                                                                            transaction_clone.get_block_state_hash(),
-                                                                                        ),
-                                                                                    ),
-                                                                                    convert_to_span(transaction_clone.get_memo())
-                                                                                        .attr("class", "block text-xs font-light text-slate-400"),
-                                                                                ],
-                                                                            )
-                                                                            .attr("class", "block")
-                                                                    } else {
-                                                                        convert_to_link(
-                                                                            transaction_clone.get_hash(),
-                                                                            format!(
-                                                                                "/commands/{}?q-state-hash={}",
-                                                                                transaction_clone.get_hash(),
-                                                                                transaction_clone.get_block_state_hash(),
-                                                                            ),
-                                                                        )
-                                                                    }}
-
-                                                                </TableCell>
-                                                            </tr>
-                                                        }
-                                                    })
-                                            })
-                                            .collect_view()
-                                    })
-                                    .collect_view()
-                            }}
-
-                        </tbody>
-                    </Table>
-                </div>
-            </AppSection>
+            <TableSectionTemplate
+                table_columns
+                data_sig=other_txns
+                section_heading="In Other Blocks"
+                is_loading=resource.loading()
+                controls=|| ().into_view()
+            />
         </PageContainer>
     }
 }

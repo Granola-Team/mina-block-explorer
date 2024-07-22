@@ -10,6 +10,43 @@ use crate::common::{
 use heck::ToTitleCase;
 use leptos::*;
 
+impl TableData for Vec<Option<TransactionsQueryOtherTransactions>> {
+    fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
+        self.iter()
+            .map(|opt_trans| match opt_trans {
+                Some(transaction) => vec![
+                    convert_to_span(transaction.get_block_height()),
+                    if !transaction.get_memo().is_empty() {
+                        convert_array_to_span(vec![
+                            convert_to_link(
+                                transaction.get_hash(),
+                                format!(
+                                    "/commands/{}?q-state-hash={}",
+                                    transaction.get_hash(),
+                                    transaction.get_block_state_hash()
+                                ),
+                            ),
+                            convert_to_span(transaction.get_block_height())
+                                .attr("class", "block text-xs font-light text-slate-400"),
+                        ])
+                        .attr("class", "block")
+                    } else {
+                        convert_to_link(
+                            transaction.get_hash(),
+                            format!(
+                                "/commands/{}?q-state-hash={}",
+                                transaction.get_hash(),
+                                transaction.get_block_state_hash()
+                            ),
+                        )
+                    },
+                ],
+                None => vec![],
+            })
+            .collect::<Vec<_>>()
+    }
+}
+
 impl TableData for Vec<Option<TransactionsQueryTransactions>> {
     fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
         self.iter()
