@@ -173,7 +173,10 @@ pub fn get_spotlight_loading_data() -> Vec<SpotlightEntry> {
     ]
 }
 
-pub fn get_spotlight_data(account: &AccountActivityQueryAccounts) -> Vec<SpotlightEntry> {
+pub fn get_spotlight_data(
+    account: &AccountActivityQueryAccounts,
+    total_num_blocks: u64,
+) -> Vec<SpotlightEntry> {
     vec![
         SpotlightEntry {
             label: String::from("Balance"),
@@ -206,6 +209,14 @@ pub fn get_spotlight_data(account: &AccountActivityQueryAccounts) -> Vec<Spotlig
                     .unwrap_or_default();
                 convert_to_link(account.clone(), format!("/addresses/accounts/{}", account))
             }),
+            copiable: true,
+        },
+        SpotlightEntry {
+            label: String::from("Updated Block #"),
+            any_el: Some(convert_to_pill(
+                format_number(total_num_blocks.to_string()),
+                ColorVariant::Grey,
+            )),
             copiable: true,
         },
     ]

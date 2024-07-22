@@ -13,10 +13,12 @@ use crate::{
         spotlight::*,
     },
     icons::*,
+    summary::models::BlockchainSummary,
 };
 use leptos::*;
 use leptos_meta::Title;
 use leptos_router::*;
+use leptos_use::{storage::use_local_storage, utils::JsonCodec};
 
 #[component]
 pub fn AccountSpotlightPage() -> impl IntoView {
@@ -30,6 +32,8 @@ pub fn AccountSpotlightPage() -> impl IntoView {
     let (snarks, set_snarks) = create_signal(None);
     let (blocks, set_blocks) = create_signal(None);
     let (username, set_username) = create_signal(None);
+    let (summary_sig, _, _) =
+        use_local_storage::<BlockchainSummary, JsonCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
 
     let activity_resource = create_resource(
         move || {
@@ -138,7 +142,11 @@ pub fn AccountSpotlightPage() -> impl IntoView {
                         view! {
                             <SpotlightSection
                                 header="Account Spotlight"
-                                spotlight_items=get_spotlight_data(account)
+                                spotlight_items=get_spotlight_data(
+                                    account,
+                                    summary_sig.get().blockchain_length,
+                                )
+
                                 meta=Some(
                                     format!("Username: {}", username.get().unwrap_or_default()),
                                 )

@@ -212,7 +212,12 @@ let test_suite_data = [
     },
     tests: [
       () => {
-        let expected_fields = ["Balance", "Delegate"];
+        let expected_fields = [
+          "Balance",
+          "Delegate",
+          "Nonce",
+          "Updated Block #",
+        ];
         cy.testSpotlight("Account Spotlight", ROMEK_ADDRESS, expected_fields);
       },
       () => {
