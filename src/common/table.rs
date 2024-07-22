@@ -92,8 +92,8 @@ where
             additional_info
         >
             <div
-                class="@container overflow-auto xl:overflow-visible"
-                class=("w-1/2", move || half_width)
+                class="@container overflow-auto xl:overflow-visible w-full"
+                class=("md:w-1/2", move || half_width)
                 class=("mx-auto", move || half_width)
             >
                 <Table>
