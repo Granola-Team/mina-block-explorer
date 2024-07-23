@@ -16,6 +16,7 @@ pub struct BlockchainSummary {
     pub total_num_internal_commands: i64,
     pub total_num_accounts: u64,
     pub indexer_version: String,
+    pub num_unique_block_producers_last_n_blocks: Option<u64>,
 }
 
 impl BlockchainSummary {
@@ -36,19 +37,8 @@ mod float_tests {
     fn test_parsing_floats() {
         let bs = BlockchainSummary {
             circulating_supply: "2345345.4312431243".to_owned(),
-            blockchain_length: 314394,
-            epoch: 67,
-            slot: 4194,
-            staking_epoch_ledger_hash: "jxKCrryFrvzBE4iUURcS9zNTKcRdejiE9K28Bqcu7Us7RQqNfdL"
-                .to_owned(),
             total_currency: "1105297372.840039233".to_owned(),
-            total_num_blocks: 1000,
-            total_num_snarks: 1000,
-            total_num_user_commands: 1000,
-            total_num_internal_commands: 1000,
-            total_num_accounts: 1000,
-            global_slot: 1,
-            indexer_version: "v1".to_string(),
+            ..Default::default()
         };
         assert_eq!(bs.circ_supply(), 2345345.4312431243);
         assert_eq!(bs.tot_currency(), 1_105_297_372.840_039_3)
