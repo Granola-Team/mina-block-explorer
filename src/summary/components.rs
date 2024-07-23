@@ -15,7 +15,15 @@ pub fn SummaryGrid(summary: Option<BlockchainSummary>) -> impl IntoView {
                 label="Epoch"
                 value=summary.as_ref().map(|s| format_number(s.epoch.to_string()))
             />
-            <UniqueBlocksProducersSummaryItem/>
+            <SummaryItem
+                id="uniqueBlockProducers"
+                label="Unique Producers of last 10000 blocks"
+                value=summary
+                    .as_ref()
+                    .map(|s| format_number(
+                        s.num_unique_block_producers_last_n_blocks.unwrap_or_default().to_string(),
+                    ))
+            />
             <SummaryItem
                 id="globalSlot"
                 label="Global Slot"
