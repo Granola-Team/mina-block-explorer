@@ -5,6 +5,7 @@ type Account {
   nonce: Int
   delegate: String
   timeLocked: Boolean
+  isGenesisAccount: Boolean
 }
 
 input AccountQueryInput {
