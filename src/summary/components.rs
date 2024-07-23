@@ -1,5 +1,4 @@
 use crate::{
-    blocks::components::UniqueBlocksProducersSummaryItem,
     common::{components::*, functions::*},
     summary::models::*,
 };
@@ -24,6 +23,7 @@ pub fn SummaryGrid(summary: Option<BlockchainSummary>) -> impl IntoView {
                         s.num_unique_block_producers_last_n_blocks.unwrap_or_default().to_string(),
                     ))
             />
+
             <SummaryItem
                 id="globalSlot"
                 label="Global Slot"
