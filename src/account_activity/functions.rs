@@ -177,19 +177,25 @@ pub fn get_spotlight_data(
     account: &AccountActivityQueryAccounts,
     total_num_blocks: u64,
 ) -> Vec<SpotlightEntry> {
+    let mut balance_el = decorate_with_mina_tag(
+        account
+            .balance
+            .map(|b| nanomina_to_mina(b.try_into().unwrap()))
+            .unwrap_or_default(),
+    );
+    if let Some(false) = account.is_genesis_account {
+        balance_el = convert_array_to_span(vec![
+            balance_el,
+            convert_to_span("Includes 1 MINA account creation fee".to_string())
+                .attr("class", "block text-xs font-light text-slate-400"),
+        ])
+        .attr("class", "block")
+    }
+
     vec![
         SpotlightEntry {
             label: String::from("Balance"),
-            any_el: Some(convert_array_to_span(vec![
-                decorate_with_mina_tag(
-                    account
-                        .balance
-                        .map(|b| nanomina_to_mina(b.try_into().unwrap()))
-                        .unwrap_or_default(),
-                ),
-                convert_to_span("Includes 1 MINA account creation fee".to_string())
-                    .attr("class", "block text-xs font-light text-slate-400"),
-            ]).attr("class","block")),
+            any_el: Some(balance_el),
             ..Default::default()
         },
         SpotlightEntry {
