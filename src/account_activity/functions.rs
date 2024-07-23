@@ -180,12 +180,16 @@ pub fn get_spotlight_data(
     vec![
         SpotlightEntry {
             label: String::from("Balance"),
-            any_el: Some(decorate_with_mina_tag(
-                account
-                    .balance
-                    .map(|b| nanomina_to_mina(b.try_into().unwrap()))
-                    .unwrap_or_default(),
-            )),
+            any_el: Some(convert_array_to_span(vec![
+                decorate_with_mina_tag(
+                    account
+                        .balance
+                        .map(|b| nanomina_to_mina(b.try_into().unwrap()))
+                        .unwrap_or_default(),
+                ),
+                convert_to_span("Includes 1 MINA account creation fee".to_string())
+                    .attr("class", "block text-xs font-light text-slate-400"),
+            ]).attr("class","block")),
             ..Default::default()
         },
         SpotlightEntry {
