@@ -55,22 +55,20 @@ pub fn SummaryLocalStorage() -> impl IntoView {
     );
 
     create_effect(move |_| {
-        resource
-            .get()
-            .and_then(|res| res.ok())
-            .map(|data| set_summary.set(data))
-    });
-
-    create_effect(move |_| {
-        unique_blocks_producers_resource
-            .get()
-            .and_then(|res| res.ok())
-            .map(|data| {
-                let mut blockchain_summary = summary_sig.get();
-                blockchain_summary.num_unique_block_producers_last_n_blocks =
-                    data.num_unique_block_producers_last_n_blocks;
-                set_summary.set(blockchain_summary);
-            })
+        if let Some(sum) = resource.get().and_then(|res| res.ok()) {
+            let blockchain_summary = if let Some(stat) = unique_blocks_producers_resource
+                .get()
+                .and_then(|res| res.ok())
+            {
+                let mut updated_summary = sum;
+                updated_summary.num_unique_block_producers_last_n_blocks =
+                    stat.num_unique_block_producers_last_n_blocks;
+                updated_summary
+            } else {
+                sum
+            };
+            set_summary.set(blockchain_summary);
+        }
     });
 
     ().into_view()
