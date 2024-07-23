@@ -42,11 +42,35 @@ pub fn SummaryLocalStorage() -> impl IntoView {
         },
     );
 
+    let unique_blocks_producers_resource = create_resource(
+        move || (counter.get()),
+        move |_| async move {
+            if visibility.get() == VisibilityState::Visible {
+                load_block_producers_stat(10000).await
+            } else {
+                logging::log!("Document not visible. Data polling skipped for summary endpoint.");
+                Ok(summary_sig.get())
+            }
+        },
+    );
+
     create_effect(move |_| {
         resource
             .get()
             .and_then(|res| res.ok())
             .map(|data| set_summary.set(data))
+    });
+
+    create_effect(move |_| {
+        unique_blocks_producers_resource
+            .get()
+            .and_then(|res| res.ok())
+            .map(|data| {
+                let mut blockchain_summary = summary_sig.get();
+                blockchain_summary.num_unique_block_producers_last_n_blocks =
+                    data.num_unique_block_producers_last_n_blocks;
+                set_summary.set(blockchain_summary);
+            })
     });
 
     ().into_view()
