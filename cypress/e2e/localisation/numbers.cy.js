@@ -230,8 +230,6 @@ let pages = [
     page: `/addresses/accounts/${COMMAND_SNARK_BLOCK_ACTIVITY_ADDRESS}`,
     wait: () => {
       cy.aliasTableRows("User Commands", "uc-table-rows");
-      cy.aliasTableRows("SNARK Jobs", "sj-table-rows");
-      cy.aliasTableRows("Block Production", "bp-table-rows");
       cy.wait(100);
       cy.get(".loading-placeholder").should("not.exist");
     },
@@ -278,6 +276,16 @@ let pages = [
         },
         type: "currency",
       },
+    ],
+  },
+  {
+    page: `/addresses/accounts/${COMMAND_SNARK_BLOCK_ACTIVITY_ADDRESS}/snark-jobs`,
+    wait: () => {
+      cy.aliasTableRows("SNARK Jobs", "sj-table-rows");
+      cy.wait(100);
+      cy.get(".loading-placeholder").should("not.exist");
+    },
+    tests: [
       {
         name: "snark work height column",
         selector: () => {
@@ -292,6 +300,16 @@ let pages = [
         },
         type: "currency",
       },
+    ],
+  },
+  {
+    page: `/addresses/accounts/${COMMAND_SNARK_BLOCK_ACTIVITY_ADDRESS}/block-production`,
+    wait: () => {
+      cy.aliasTableRows("Block Production", "bp-table-rows");
+      cy.wait(100);
+      cy.get(".loading-placeholder").should("not.exist");
+    },
+    tests: [
       {
         name: "block produciton height column",
         selector: () => {
