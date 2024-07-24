@@ -1,8 +1,10 @@
 use super::functions::*;
 use crate::{
     account_activity::{
-        components::{AccountOverviewSnarkJobTable, AccountTransactionsSection},
-        graphql::account_activity_query::AccountActivityQuerySnarks,
+        components::{
+            AccountOverviewBlocksTable, AccountOverviewSnarkJobTable, AccountTransactionsSection,
+        },
+        graphql::account_activity_query::{AccountActivityQueryBlocks, AccountActivityQuerySnarks},
         models::AccountActivityQueryDirectionalTransactions,
     },
     common::{
@@ -29,7 +31,7 @@ pub fn AccountSpotlightPage() -> impl IntoView {
     let (slot_sig, _) = create_query_signal::<u64>("q-slot");
     let (transactions, set_transactions) = create_signal(None);
     let (snarks, set_snarks) = create_signal(None);
-    let (_blocks, set_blocks) = create_signal(None);
+    let (blocks, set_blocks) = create_signal(None);
     let (username, set_username) = create_signal(None);
     let (summary_sig, _, _) =
         use_local_storage::<BlockchainSummary, JsonCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
@@ -131,6 +133,7 @@ pub fn AccountSpotlightPage() -> impl IntoView {
 
     provide_context(transactions);
     provide_context(snarks);
+    provide_context(blocks);
 
     view! {
         <Title
@@ -179,7 +182,6 @@ pub fn AccountSpotlightPage() -> impl IntoView {
                 _ => ().into_view(),
             }}
             <Outlet/>
-        // <AccountOverviewBlocksTable blocks_sig=blocks is_loading=activity_resource.loading()/>
         </PageContainer>
     }
 }
@@ -201,13 +203,23 @@ pub fn AccountUserCommandsPage() -> impl IntoView {
 #[component]
 pub fn AccountSnarkWorkPage() -> impl IntoView {
     let snarks = use_context::<ReadSignal<Option<Vec<Option<AccountActivityQuerySnarks>>>>>()
-        .expect(
-            "there to be an optional AccountActivityQueryDirectionalTransactions signal provided",
-        );
+        .expect("there to be an optional AccountActivityQuerySnarks signal provided");
     view! {
         <AccountOverviewSnarkJobTable
             snarks_sig=snarks
             is_loading=Signal::derive(move || snarks.get().is_none())
+        />
+    }
+}
+
+#[component]
+pub fn AccountBlockProductionPage() -> impl IntoView {
+    let blocks = use_context::<ReadSignal<Option<Vec<Option<AccountActivityQueryBlocks>>>>>()
+        .expect("there to be an optional AccountActivityQueryBlocks signal provided");
+    view! {
+        <AccountOverviewBlocksTable
+            blocks_sig=blocks
+            is_loading=Signal::derive(move || blocks.get().is_none())
         />
     }
 }

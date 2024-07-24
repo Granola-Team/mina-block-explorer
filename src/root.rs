@@ -1,7 +1,10 @@
 use crate::{
     account_activity::{
         dialog::AccountDialogView,
-        page::{AccountSnarkWorkPage, AccountSpotlightPage, AccountUserCommandsPage},
+        page::{
+            AccountBlockProductionPage, AccountSnarkWorkPage, AccountSpotlightPage,
+            AccountUserCommandsPage,
+        },
     },
     accounts::page::AccountsPage,
     analytics::page::{
@@ -52,7 +55,7 @@ pub fn Root() -> impl IntoView {
                         <Route path="*" view=move || view! { <Redirect path="commands/user"/> }/>
                         <Route path="/commands/user" view=AccountUserCommandsPage/>
                         <Route path="/snark-jobs" view=AccountSnarkWorkPage/>
-                    // <Route path="/block-production" view=AccountBlockProductionPage/>
+                        <Route path="/block-production" view=AccountBlockProductionPage/>
                     </Route>
                     <Route
                         path="/tokens"
