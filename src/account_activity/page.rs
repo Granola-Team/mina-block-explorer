@@ -1,9 +1,8 @@
 use super::functions::*;
 use crate::{
     account_activity::{
-        components::{
-            AccountTransactionsSection,
-        },
+        components::{AccountOverviewSnarkJobTable, AccountTransactionsSection},
+        graphql::account_activity_query::AccountActivityQuerySnarks,
         models::AccountActivityQueryDirectionalTransactions,
     },
     common::{
@@ -29,7 +28,7 @@ pub fn AccountSpotlightPage() -> impl IntoView {
     let (nonce_sig, _) = create_query_signal::<u64>("q-nonce");
     let (slot_sig, _) = create_query_signal::<u64>("q-slot");
     let (transactions, set_transactions) = create_signal(None);
-    let (_snarks, set_snarks) = create_signal(None);
+    let (snarks, set_snarks) = create_signal(None);
     let (_blocks, set_blocks) = create_signal(None);
     let (username, set_username) = create_signal(None);
     let (summary_sig, _, _) =
@@ -131,6 +130,7 @@ pub fn AccountSpotlightPage() -> impl IntoView {
     });
 
     provide_context(transactions);
+    provide_context(snarks);
 
     view! {
         <Title
@@ -179,7 +179,6 @@ pub fn AccountSpotlightPage() -> impl IntoView {
                 _ => ().into_view(),
             }}
             <Outlet/>
-        // <AccountOverviewSnarkJobTable snarks_sig=snarks is_loading=activity_resource.loading()/>
         // <AccountOverviewBlocksTable blocks_sig=blocks is_loading=activity_resource.loading()/>
         </PageContainer>
     }
@@ -195,6 +194,20 @@ pub fn AccountUserCommandsPage() -> impl IntoView {
         <AccountTransactionsSection
             transactions_sig=transactions
             is_loading=Signal::derive(move || transactions.get().is_none())
+        />
+    }
+}
+
+#[component]
+pub fn AccountSnarkWorkPage() -> impl IntoView {
+    let snarks = use_context::<ReadSignal<Option<Vec<Option<AccountActivityQuerySnarks>>>>>()
+        .expect(
+            "there to be an optional AccountActivityQueryDirectionalTransactions signal provided",
+        );
+    view! {
+        <AccountOverviewSnarkJobTable
+            snarks_sig=snarks
+            is_loading=Signal::derive(move || snarks.get().is_none())
         />
     }
 }
