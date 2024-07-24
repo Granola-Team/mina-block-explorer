@@ -1,7 +1,7 @@
 use crate::{
     account_activity::{
         dialog::AccountDialogView,
-        page::{AccountSpotlightPage, AddressesTabbedPage},
+        page::{AccountSpotlightPage, AccountUserCommandsPage},
     },
     accounts::page::AccountsPage,
     analytics::page::{
@@ -47,35 +47,36 @@ pub fn Root() -> impl IntoView {
                 <Routes>
                     // redirect any non-existent URL back to the blocks page
                     <Route path="/*" view=move || view! { <Redirect path="/blocks"/> }/>
-
-                    <Route path="/addresses" view=AddressesTabbedPage>
-                        <Route path="/*" view=move || view! { <Redirect path="accounts"/> }/>
-                        <Route path="/accounts" view=AccountsPage/>
-                        <Route path="/accounts/:id" view=AccountSpotlightPage/>
-                        <Route
-                            path="/tokens"
-                            view=move || {
-                                if BERKELEY_FEATURES_ENABLED == "true" {
-                                    view! { <TokensPage/> }
-                                } else {
-                                    view!().into_view()
-                                }
-                            }
-                        />
-
-                        <Route
-                            path="/zk-apps"
-                            view=move || {
-                                if BERKELEY_FEATURES_ENABLED == "true" {
-                                    view! { <ZkAppsPage/> }
-                                } else {
-                                    view!().into_view()
-                                }
-                            }
-                        />
-
-                        <Route path="/zk-apps/:id" view=ZkAppSpotlight/>
+                    <Route path="/addresses/accounts" view=AccountsPage/>
+                    <Route path="/addresses/accounts/:id" view=AccountSpotlightPage>
+                        <Route path="/*" view=move || view! { <Redirect path="commands/user"/> }/>
+                        <Route path="/commands/user" view=AccountUserCommandsPage/>
+                    // <Route path="/snark-jobs" view=AccountSnarkWorkPage/>
+                    // <Route path="/block-production" view=AccountBlockProductionPage/>
                     </Route>
+                    <Route
+                        path="/tokens"
+                        view=move || {
+                            if BERKELEY_FEATURES_ENABLED == "true" {
+                                view! { <TokensPage/> }
+                            } else {
+                                view!().into_view()
+                            }
+                        }
+                    />
+
+                    <Route
+                        path="/zk-apps"
+                        view=move || {
+                            if BERKELEY_FEATURES_ENABLED == "true" {
+                                view! { <ZkAppsPage/> }
+                            } else {
+                                view!().into_view()
+                            }
+                        }
+                    />
+
+                    <Route path="/zk-apps/:id" view=ZkAppSpotlight/>
 
                     <Route path="/blocks" view=SummaryPage>
                         <Route path="/accounts/:id" view=AccountDialogView/>

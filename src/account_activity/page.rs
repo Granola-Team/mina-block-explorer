@@ -2,7 +2,7 @@ use super::functions::*;
 use crate::{
     account_activity::{
         components::{
-            AccountOverviewBlocksTable, AccountOverviewSnarkJobTable, AccountTransactionsSection,
+            AccountTransactionsSection,
         },
         models::AccountActivityQueryDirectionalTransactions,
     },
@@ -29,8 +29,8 @@ pub fn AccountSpotlightPage() -> impl IntoView {
     let (nonce_sig, _) = create_query_signal::<u64>("q-nonce");
     let (slot_sig, _) = create_query_signal::<u64>("q-slot");
     let (transactions, set_transactions) = create_signal(None);
-    let (snarks, set_snarks) = create_signal(None);
-    let (blocks, set_blocks) = create_signal(None);
+    let (_snarks, set_snarks) = create_signal(None);
+    let (_blocks, set_blocks) = create_signal(None);
     let (username, set_username) = create_signal(None);
     let (summary_sig, _, _) =
         use_local_storage::<BlockchainSummary, JsonCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
@@ -130,11 +130,14 @@ pub fn AccountSpotlightPage() -> impl IntoView {
         set_blocks.set(None);
     });
 
+    provide_context(transactions);
+
     view! {
         <Title
             formatter=move |text| format!("Account Overview | {text}")
             text=move || username.get().unwrap_or_default()
         />
+        <AccountTabs/>
         <PageContainer>
             {move || match activity_resource.get() {
                 Some(Ok(res)) => {
@@ -175,37 +178,51 @@ pub fn AccountSpotlightPage() -> impl IntoView {
                 }
                 _ => ().into_view(),
             }}
-            <AccountTransactionsSection
-                transactions_sig=transactions
-                is_loading=activity_resource.loading()
-            />
-            <AccountOverviewSnarkJobTable snarks_sig=snarks is_loading=activity_resource.loading()/>
-            <AccountOverviewBlocksTable blocks_sig=blocks is_loading=activity_resource.loading()/>
+            <Outlet/>
+        // <AccountOverviewSnarkJobTable snarks_sig=snarks is_loading=activity_resource.loading()/>
+        // <AccountOverviewBlocksTable blocks_sig=blocks is_loading=activity_resource.loading()/>
         </PageContainer>
     }
 }
 
 #[component]
-pub fn AddressesTabbedPage() -> impl IntoView {
-    let mut tabs = vec![NavEntry {
-        href: "/addresses/accounts".to_string(),
-        text: "Accounts".to_string(),
-        icon: NavIcon::Addresses,
-        ..Default::default()
-    }];
-    if BERKELEY_FEATURES_ENABLED == "true" {
-        tabs.push(NavEntry {
-            href: "/addresses/tokens".to_string(),
-            text: "Tokens".to_string(),
-            icon: NavIcon::Tokens,
-            ..Default::default()
-        });
-        tabs.push(NavEntry {
-            href: "/addresses/zk-apps".to_string(),
-            text: "zk-apps".to_string(),
-            icon: NavIcon::ZKApps,
-            ..Default::default()
-        })
+pub fn AccountUserCommandsPage() -> impl IntoView {
+    let transactions = use_context::<
+        ReadSignal<Option<Vec<Option<AccountActivityQueryDirectionalTransactions>>>>,
+    >()
+    .expect("there to be an optional AccountActivityQueryDirectionalTransactions signal provided");
+    view! {
+        <AccountTransactionsSection
+            transactions_sig=transactions
+            is_loading=Signal::derive(move || transactions.get().is_none())
+        />
     }
-    view! { <TabbedPage tabs/> }
+}
+
+#[component]
+fn AccountTabs() -> impl IntoView {
+    let memo_params_map = use_params_map();
+    let id = memo_params_map.get().get("id").cloned().unwrap_or_default();
+
+    let tabs = vec![
+        NavEntry {
+            href: format!("/addresses/accounts/{}/commands/user", id),
+            text: "User Commands".to_string(),
+            icon: NavIcon::Addresses,
+            ..Default::default()
+        },
+        NavEntry {
+            href: format!("/addresses/accounts/{}/snark-jobs", id),
+            text: "SNARK Jobs".to_string(),
+            icon: NavIcon::Addresses,
+            ..Default::default()
+        },
+        NavEntry {
+            href: format!("/addresses/accounts/{}/block-production", id),
+            text: "Block Production".to_string(),
+            icon: NavIcon::Addresses,
+            ..Default::default()
+        },
+    ];
+    view! { <TabbedPage tabs exclude_outlet=true/> }
 }
