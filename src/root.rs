@@ -2,7 +2,7 @@ use crate::{
     account_activity::{
         dialog::AccountDialogView,
         page::{
-            AccountBlockProductionPage, AccountSnarkWorkPage, AccountSpotlightPage,
+            AccountBlockProductionPage, AccountSnarkWorkPage, AccountSpotlightTabbedPage,
             AccountUserCommandsPage,
         },
     },
@@ -51,7 +51,7 @@ pub fn Root() -> impl IntoView {
                     // redirect any non-existent URL back to the blocks page
                     <Route path="/*" view=move || view! { <Redirect path="/blocks"/> }/>
                     <Route path="/addresses/accounts" view=AccountsPage/>
-                    <Route path="/addresses/accounts/:id" view=AccountSpotlightPage>
+                    <Route path="/addresses/accounts/:id" view=AccountSpotlightTabbedPage>
                         <Route path="*" view=move || view! { <Redirect path="commands/user"/> }/>
                         <Route path="/commands/user" view=AccountUserCommandsPage/>
                         <Route path="/snark-jobs" view=AccountSnarkWorkPage/>

@@ -24,26 +24,25 @@ use leptos_router::*;
 use leptos_use::{storage::use_local_storage, utils::JsonCodec};
 
 #[component]
-pub fn AccountSpotlightPage() -> impl IntoView {
+fn AccountSpotlightPage() -> impl IntoView {
     let memo_params_map = use_params_map();
     let (summary_sig, _, _) =
         use_local_storage::<BlockchainSummary, JsonCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
 
-    let account = use_context::<Option<AccountActivityQueryAccounts>>()
+    let account = use_context::<ReadSignal<Option<AccountActivityQueryAccounts>>>()
         .expect("there to be an optional account provided");
 
-    let account_clone = account.clone();
+    let username = move || {
+        account
+            .get()
+            .and_then(|acc| acc.username)
+            .unwrap_or_default()
+    };
 
     view! {
-        <Title
-            formatter=move |text| format!("Account Overview | {text}")
-            text=move || {
-                account_clone.clone().and_then(|acc| acc.username.clone()).unwrap_or_default()
-            }
-        />
-        <AccountTabs/>
+        <Title formatter=move |text| format!("Account Overview | {text}") text=move || username()/>
         <PageContainer>
-            {move || match account.clone() {
+            {move || match account.get() {
                 Some(acc) => {
                     view! {
                         <SpotlightSection
@@ -53,15 +52,7 @@ pub fn AccountSpotlightPage() -> impl IntoView {
                                 summary_sig.get().blockchain_length,
                             )
 
-                            meta=Some(
-                                format!(
-                                    "Username: {}",
-                                    account
-                                        .clone()
-                                        .and_then(|acc| acc.username.clone())
-                                        .unwrap_or_default(),
-                                ),
-                            )
+                            meta=Some(format!("Username: {}", username()))
 
                             id=memo_params_map.get().get("id").cloned()
                         >
@@ -127,7 +118,7 @@ pub fn AccountBlockProductionPage() -> impl IntoView {
 }
 
 #[component]
-fn AccountTabs() -> impl IntoView {
+pub fn AccountSpotlightTabbedPage() -> impl IntoView {
     let memo_params_map = use_params_map();
     let (account, set_account) = create_signal(None);
     let (transactions, set_transactions) = create_signal(None);
@@ -218,7 +209,8 @@ fn AccountTabs() -> impl IntoView {
             set_snarks.set(Some(res.snarks[..end_index].to_vec()));
             set_blocks.set(Some(res.blocks));
             if let Some(Some(account)) = res.accounts.first() {
-                set_account.set(Some(account.clone()));
+                let account_clone: AccountActivityQueryAccounts = account.clone();
+                set_account.set(Some(account_clone));
             }
         };
     });
@@ -240,20 +232,26 @@ fn AccountTabs() -> impl IntoView {
             href: format!("/addresses/accounts/{}/commands/user", id),
             text: "User Commands".to_string(),
             icon: NavIcon::Addresses,
+            number_bubble: Some(transactions.get().map(|t| t.len()).unwrap_or(0)),
             ..Default::default()
         },
         NavEntry {
             href: format!("/addresses/accounts/{}/snark-jobs", id),
             text: "SNARK Jobs".to_string(),
             icon: NavIcon::Addresses,
+            number_bubble: Some(snarks.get().map(|t| t.len()).unwrap_or(0)),
             ..Default::default()
         },
         NavEntry {
             href: format!("/addresses/accounts/{}/block-production", id),
             text: "Block Production".to_string(),
             icon: NavIcon::Addresses,
+            number_bubble: Some(blocks.get().map(|t| t.len()).unwrap_or(0)),
             ..Default::default()
         },
     ];
-    view! { <TabbedPage tabs exclude_outlet=true/> }
+    view! {
+        <TabbedPage tabs exclude_outlet=true/>
+        <AccountSpotlightPage/>
+    }
 }
