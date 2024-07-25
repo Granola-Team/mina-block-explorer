@@ -40,7 +40,7 @@ fn AccountSpotlightPage() -> impl IntoView {
     };
 
     view! {
-        <Title formatter=move |text| format!("Account Overview | {text}") text=move || username()/>
+        <Title formatter=move |text| format!("Account Overview | {text}") text=username/>
         <PageContainer>
             {move || match account.get() {
                 Some(acc) => {
@@ -131,7 +131,7 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
     let (nonce_sig, _) = create_query_signal::<u64>("q-nonce");
     let (slot_sig, _) = create_query_signal::<u64>("q-slot");
 
-    let id = memo_params_map.get().get("id").cloned().unwrap_or_default();
+    let id = move || memo_params_map.get().get("id").cloned().unwrap_or_default();
     let activity_resource = create_resource(
         move || {
             (
@@ -227,31 +227,37 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
     provide_context(blocks);
     provide_context(account);
 
-    let tabs = vec![
-        NavEntry {
-            href: format!("/addresses/accounts/{}/commands/user", id),
-            text: "User Commands".to_string(),
-            icon: NavIcon::Addresses,
-            number_bubble: Some(transactions.get().map(|t| t.len()).unwrap_or(0)),
-            ..Default::default()
-        },
-        NavEntry {
-            href: format!("/addresses/accounts/{}/snark-jobs", id),
-            text: "SNARK Jobs".to_string(),
-            icon: NavIcon::Addresses,
-            number_bubble: Some(snarks.get().map(|t| t.len()).unwrap_or(0)),
-            ..Default::default()
-        },
-        NavEntry {
-            href: format!("/addresses/accounts/{}/block-production", id),
-            text: "Block Production".to_string(),
-            icon: NavIcon::Addresses,
-            number_bubble: Some(blocks.get().map(|t| t.len()).unwrap_or(0)),
-            ..Default::default()
-        },
-    ];
-    view! {
-        <TabbedPage tabs exclude_outlet=true/>
-        <AccountSpotlightPage/>
+    let tabs = move || {
+        vec![
+            NavEntry {
+                href: format!("/addresses/accounts/{}/commands/user", id()),
+                text: "User Commands".to_string(),
+                icon: NavIcon::Addresses,
+                number_bubble: Some(transactions.get().map(|t| t.len()).unwrap_or(0)),
+                ..Default::default()
+            },
+            NavEntry {
+                href: format!("/addresses/accounts/{}/snark-jobs", id()),
+                text: "SNARK Jobs".to_string(),
+                icon: NavIcon::Addresses,
+                number_bubble: Some(snarks.get().map(|t| t.len()).unwrap_or(0)),
+                ..Default::default()
+            },
+            NavEntry {
+                href: format!("/addresses/accounts/{}/block-production", id()),
+                text: "Block Production".to_string(),
+                icon: NavIcon::Addresses,
+                number_bubble: Some(blocks.get().map(|t| t.len()).unwrap_or(0)),
+                ..Default::default()
+            },
+        ]
+    };
+    {
+        move || {
+            view! {
+                <TabbedPage tabs=tabs() exclude_outlet=true/>
+                <AccountSpotlightPage/>
+            }
+        }
     }
 }
