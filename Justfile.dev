@@ -4,3 +4,8 @@
 
 lint-fix:
     cargo clippy --fix --allow-dirty --allow-staged
+
+# builds documention in the home directory
+build-docs:
+    rm -rf $HOME/mina_block_explorer_docs/
+    cargo doc --document-private-items --target-dir $HOME/mina_block_explorer_docs/

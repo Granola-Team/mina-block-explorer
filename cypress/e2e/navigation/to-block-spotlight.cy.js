@@ -15,7 +15,7 @@ suite(["@tier2"], "block spotlight", () => {
       selector: 'a[href^="/blocks/"]:not(a[href^="/blocks/account"])',
     },
     {
-      origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
+      origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}/block-production`,
       selector: 'a[href^="/blocks/"]:not(a[href^="/blocks/account"])',
     },
   ].forEach(({ origin, selector }) =>

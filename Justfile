@@ -1,9 +1,4 @@
 # Justfile
-
-# Choose a random port on which to run 'trunk', otherwise concurrent runs
-# interfere with each other if they use the same port.
-#
-
 import 'Justfile.dev'
 
 spec := "cypress/e2e/"
@@ -21,6 +16,7 @@ default:
   @echo "Topologically sorted recipes:"
   @just --list --unsorted --list-heading '' --justfile {{justfile()}}
 
+# Remove build and test artifacts
 clean:
   trunk clean
   rm -fr cypress/screenshots/
@@ -32,26 +28,32 @@ clean:
   rm -fr .wrangler
   rm -fr src/dist
 
+# Format rust and cypress source code
 format:
   pnpm exec prettier --write cypress/ src/scripts/
   cargo fmt --all
   leptosfmt ./src
 
+# Perform unit tests
 test-unit:
   @echo "--- Performing unit tests"
   cargo-nextest nextest run
 
+# Perform dependency audit
 audit:
   cargo-audit audit
   cargo machete Cargo.toml
 
+# Install cypress dependencies
 pnpm_install:
   @echo "--- Installing NPM dependencies"
   pnpm install
 
+# Serve application on localhost
 dev: pnpm_install
   trunk serve --port="{{trunk_port}}" --open
 
+# Run all application regression tests
 test-e2e: pnpm_install
   @echo "--- Performing end-to-end tests"
   CYPRESS_tags='' \
@@ -64,6 +66,7 @@ test-e2e: pnpm_install
     -- \
     pnpm exec cypress run -r list -q
 
+# Run tier1 application regression tests
 test-e2e-tier1 spec=spec: pnpm_install
   @echo "--- Performing end-to-end @tier1 tests"
   CYPRESS_tags="@tier1" \
@@ -76,6 +79,7 @@ test-e2e-tier1 spec=spec: pnpm_install
     -- \
     pnpm exec cypress run -r list -q --spec {{spec}}
 
+# Run tier2 application regression tests
 test-e2e-tier2: pnpm_install
   @echo "--- Performing end-to-end @tier2 tests"
   CYPRESS_tags="@tier2" \
@@ -88,6 +92,7 @@ test-e2e-tier2: pnpm_install
     -- \
     pnpm exec cypress run -r list -q
 
+# Run regression tests with interactive GUI
 test-e2e-local: pnpm_install
   node ./scripts/wait-on-port.js \
     trunk serve \
@@ -98,12 +103,14 @@ test-e2e-local: pnpm_install
     -- \
     pnpm exec cypress open
 
+# Publish application
 publish: clean pnpm_install
   @echo "--- Publishing"
   trunk build --release --filehash true
   @echo "Publishing version {{VERSION}}"
   pnpm exec -- wrangler pages deploy --branch main
 
+# Lint application source code
 lint: pnpm_install && audit
   @echo "--- Linting"
   pnpm exec prettier --check cypress/
@@ -111,6 +118,8 @@ lint: pnpm_install && audit
   leptosfmt --check ./src
   cargo clippy --all-targets --all-features -- -D warnings
 
+# Run tier1 regression suite in CI
 tier1: lint test-unit && (test-e2e-tier1 spec)
 
+# Run tier2 regression suite in CI
 tier2: lint test-unit && test-e2e-tier2

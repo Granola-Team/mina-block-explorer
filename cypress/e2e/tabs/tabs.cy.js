@@ -1,3 +1,5 @@
+import { DEFAULT_ACCOUNT_PK } from "../constants";
+
 suite(["@tier1"], "tab", () => {
   let tabs = [
     {
@@ -9,6 +11,21 @@ suite(["@tier1"], "tab", () => {
       page: "/commands/user",
       tab: "Internal Commands",
       expectedUrl: "/commands/internal",
+    },
+    {
+      page: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}/snark-jobs`,
+      tab: "User Commands",
+      expectedUrl: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}/commands/user`,
+    },
+    {
+      page: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
+      tab: "SNARK Jobs",
+      expectedUrl: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}/snark-jobs`,
+    },
+    {
+      page: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
+      tab: "Block Production",
+      expectedUrl: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}/block-production`,
     },
   ];
 
