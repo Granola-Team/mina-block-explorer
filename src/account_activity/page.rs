@@ -4,6 +4,9 @@ use crate::{
         components::{
             AccountOverviewBlocksTable, AccountOverviewSnarkJobTable, AccountTransactionsSection,
         },
+        graphql::account_activity_query::{
+            AccountActivityQueryAccounts, AccountActivityQueryBlocks, AccountActivityQuerySnarks,
+        },
         models::AccountActivityQueryDirectionalTransactions,
     },
     common::{
@@ -21,20 +24,114 @@ use leptos_router::*;
 use leptos_use::{storage::use_local_storage, utils::JsonCodec};
 
 #[component]
-pub fn AccountSpotlightPage() -> impl IntoView {
+fn AccountSpotlightPage() -> impl IntoView {
     let memo_params_map = use_params_map();
+    let (summary_sig, _, _) =
+        use_local_storage::<BlockchainSummary, JsonCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
+
+    let account = use_context::<ReadSignal<Option<AccountActivityQueryAccounts>>>()
+        .expect("there to be an optional account provided");
+
+    let username = move || {
+        account
+            .get()
+            .and_then(|acc| acc.username)
+            .unwrap_or_default()
+    };
+
+    view! {
+        <Title formatter=move |text| format!("Account Overview | {text}") text=username/>
+        <PageContainer>
+            {move || match account.get() {
+                Some(acc) => {
+                    view! {
+                        <SpotlightSection
+                            header="Account Spotlight"
+                            spotlight_items=get_spotlight_data(
+                                &acc,
+                                summary_sig.get().blockchain_length,
+                            )
+
+                            meta=Some(format!("Username: {}", username()))
+
+                            id=memo_params_map.get().get("id").cloned()
+                        >
+                            <WalletIcon width=40/>
+                        </SpotlightSection>
+                    }
+                        .into_view()
+                }
+                None => {
+                    view! {
+                        <SpotlightSection
+                            header="Account Spotlight"
+                            spotlight_items=get_spotlight_loading_data()
+                            meta=None
+                            id=None
+                        >
+                            <WalletIcon width=40/>
+                        </SpotlightSection>
+                    }
+                }
+            }}
+            <Outlet/>
+        </PageContainer>
+    }
+}
+
+#[component]
+pub fn AccountUserCommandsPage() -> impl IntoView {
+    let transactions = use_context::<
+        ReadSignal<Option<Vec<Option<AccountActivityQueryDirectionalTransactions>>>>,
+    >()
+    .expect("there to be an optional AccountActivityQueryDirectionalTransactions signal provided");
+    view! {
+        <AccountTransactionsSection
+            transactions_sig=transactions
+            is_loading=Signal::derive(move || transactions.get().is_none())
+        />
+    }
+}
+
+#[component]
+pub fn AccountSnarkWorkPage() -> impl IntoView {
+    let snarks = use_context::<ReadSignal<Option<Vec<Option<AccountActivityQuerySnarks>>>>>()
+        .expect("there to be an optional AccountActivityQuerySnarks signal provided");
+    view! {
+        <AccountOverviewSnarkJobTable
+            snarks_sig=snarks
+            is_loading=Signal::derive(move || snarks.get().is_none())
+        />
+    }
+}
+
+#[component]
+pub fn AccountBlockProductionPage() -> impl IntoView {
+    let blocks = use_context::<ReadSignal<Option<Vec<Option<AccountActivityQueryBlocks>>>>>()
+        .expect("there to be an optional AccountActivityQueryBlocks signal provided");
+    view! {
+        <AccountOverviewBlocksTable
+            blocks_sig=blocks
+            is_loading=Signal::derive(move || blocks.get().is_none())
+        />
+    }
+}
+
+#[component]
+pub fn AccountSpotlightTabbedPage() -> impl IntoView {
+    let memo_params_map = use_params_map();
+    let (account, set_account) = create_signal(None);
+    let (transactions, set_transactions) = create_signal(None);
+    let (snarks, set_snarks) = create_signal(None);
+    let (blocks, set_blocks) = create_signal(None);
+
     let query_params_map = use_query_map();
     let (canonical_sig, _) = create_query_signal::<bool>("canonical");
     let (block_height_sig, _) = create_query_signal::<u64>("q-height");
     let (nonce_sig, _) = create_query_signal::<u64>("q-nonce");
     let (slot_sig, _) = create_query_signal::<u64>("q-slot");
-    let (transactions, set_transactions) = create_signal(None);
-    let (snarks, set_snarks) = create_signal(None);
-    let (blocks, set_blocks) = create_signal(None);
-    let (username, set_username) = create_signal(None);
-    let (summary_sig, _, _) =
-        use_local_storage::<BlockchainSummary, JsonCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
 
+    let id = move || memo_params_map.get().get("id").cloned().unwrap_or_default();
     let activity_resource = create_resource(
         move || {
             (
@@ -111,14 +208,9 @@ pub fn AccountSpotlightPage() -> impl IntoView {
             set_transactions.set(Some(transactions));
             set_snarks.set(Some(res.snarks[..end_index].to_vec()));
             set_blocks.set(Some(res.blocks));
-            if let Some(Some(account)) = &res.accounts.first() {
-                set_username.set(Some(
-                    account
-                        .username
-                        .clone()
-                        .map(|b| b.to_string())
-                        .unwrap_or_default(),
-                ))
+            if let Some(Some(account)) = res.accounts.first() {
+                let account_clone: AccountActivityQueryAccounts = account.clone();
+                set_account.set(Some(account_clone));
             }
         };
     });
@@ -130,82 +222,42 @@ pub fn AccountSpotlightPage() -> impl IntoView {
         set_blocks.set(None);
     });
 
-    view! {
-        <Title
-            formatter=move |text| format!("Account Overview | {text}")
-            text=move || username.get().unwrap_or_default()
-        />
-        <PageContainer>
-            {move || match activity_resource.get() {
-                Some(Ok(res)) => {
-                    if let Some(Some(account)) = &res.accounts.first() {
-                        view! {
-                            <SpotlightSection
-                                header="Account Spotlight"
-                                spotlight_items=get_spotlight_data(
-                                    account,
-                                    summary_sig.get().blockchain_length,
-                                )
+    provide_context(transactions);
+    provide_context(snarks);
+    provide_context(blocks);
+    provide_context(account);
 
-                                meta=Some(
-                                    format!("Username: {}", username.get().unwrap_or_default()),
-                                )
-
-                                id=memo_params_map.get().get("id").cloned()
-                            >
-                                <WalletIcon width=40/>
-                            </SpotlightSection>
-                        }
-                            .into_view()
-                    } else {
-                        ().into_view()
-                    }
-                }
-                None => {
-                    view! {
-                        <SpotlightSection
-                            header="Account Spotlight"
-                            spotlight_items=get_spotlight_loading_data()
-                            meta=None
-                            id=None
-                        >
-                            <WalletIcon width=40/>
-                        </SpotlightSection>
-                    }
-                }
-                _ => ().into_view(),
-            }}
-            <AccountTransactionsSection
-                transactions_sig=transactions
-                is_loading=activity_resource.loading()
-            />
-            <AccountOverviewSnarkJobTable snarks_sig=snarks is_loading=activity_resource.loading()/>
-            <AccountOverviewBlocksTable blocks_sig=blocks is_loading=activity_resource.loading()/>
-        </PageContainer>
+    let tabs = move || {
+        vec![
+            NavEntry {
+                href: format!("/addresses/accounts/{}/commands/user", id()),
+                text: "User Commands".to_string(),
+                icon: NavIcon::Addresses,
+                number_bubble: Some(transactions.get().map(|t| t.len()).unwrap_or(0)),
+                ..Default::default()
+            },
+            NavEntry {
+                href: format!("/addresses/accounts/{}/snark-jobs", id()),
+                text: "SNARK Jobs".to_string(),
+                icon: NavIcon::Addresses,
+                number_bubble: Some(snarks.get().map(|t| t.len()).unwrap_or(0)),
+                ..Default::default()
+            },
+            NavEntry {
+                href: format!("/addresses/accounts/{}/block-production", id()),
+                text: "Block Production".to_string(),
+                icon: NavIcon::Addresses,
+                number_bubble: Some(blocks.get().map(|t| t.len()).unwrap_or(0)),
+                ..Default::default()
+            },
+        ]
+    };
+    {
+        move || {
+            view! {
+                <TabbedPage tabs=tabs() exclude_outlet=true/>
+                <AccountSpotlightPage/>
+            }
+        }
     }
-}
-
-#[component]
-pub fn AddressesTabbedPage() -> impl IntoView {
-    let mut tabs = vec![NavEntry {
-        href: "/addresses/accounts".to_string(),
-        text: "Accounts".to_string(),
-        icon: NavIcon::Addresses,
-        ..Default::default()
-    }];
-    if BERKELEY_FEATURES_ENABLED == "true" {
-        tabs.push(NavEntry {
-            href: "/addresses/tokens".to_string(),
-            text: "Tokens".to_string(),
-            icon: NavIcon::Tokens,
-            ..Default::default()
-        });
-        tabs.push(NavEntry {
-            href: "/addresses/zk-apps".to_string(),
-            text: "zk-apps".to_string(),
-            icon: NavIcon::ZKApps,
-            ..Default::default()
-        })
-    }
-    view! { <TabbedPage tabs/> }
 }
