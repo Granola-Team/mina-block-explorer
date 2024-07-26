@@ -231,6 +231,10 @@ let test_suite_data = [
       },
       () => {
         cy.get("#spotlight-meta").should("contain", ROMEK_USERNAME);
+        cy.testSpotlightValue(
+          "Balance",
+          "Includes 1 MINA account creation fee",
+        );
       },
     ],
   },
