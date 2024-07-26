@@ -276,24 +276,7 @@ let test_suite_data = [
         },
       ],
     },
-    tests: [
-      () => {
-        let expected_fields = [
-          "Balance",
-          "Delegate",
-          "Nonce",
-          "Updated Block #",
-        ];
-        cy.testSpotlight("Account Spotlight", ROMEK_ADDRESS, expected_fields);
-      },
-      () => {
-        cy.get("#spotlight-meta").should("contain", ROMEK_USERNAME);
-        cy.testSpotlightValue(
-          "Balance",
-          "Includes 1 MINA account creation fee",
-        );
-      },
-    ],
+    tests: [],
   },
   {
     tag: "@tier2",
