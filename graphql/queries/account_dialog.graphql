@@ -93,6 +93,6 @@ query AccountActivityQuery(
     username
     nonce
     delegate
-    isGenesisAccount
+    is_genesis_account
   }
 }
