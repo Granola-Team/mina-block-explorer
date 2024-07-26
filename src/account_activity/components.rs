@@ -6,7 +6,9 @@ use super::{
     },
 };
 use crate::{
-    account_activity::table_traits::BlockTrait,
+    account_activity::{
+        graphql::account_activity_query::AccountActivityQueryFeetransfers, table_traits::BlockTrait,
+    },
     common::{components::*, constants::*, functions::*, models::*, table::*},
     icons::*,
     summary::models::BlockchainSummary,
@@ -283,6 +285,79 @@ pub fn AccountTransactionsSection(
                     total_records: u64::try_from(summary_sig.get().total_num_user_commands).ok(),
                     displayed_records: u64::try_from(
                             transactions_sig.get().map(|a| a.len()).unwrap_or_default(),
+                        )
+                        .unwrap_or_default(),
+                    available_records: None,
+                })
+            })
+
+            section_heading="User Commands"
+            is_loading
+            controls=move || {
+                view! {
+                    <UrlParamSelectMenu
+                        id="canonical-selection"
+                        query_str_key="canonical"
+                        labels=UrlParamSelectOptions {
+                            is_boolean_option: true,
+                            cases: vec!["Canonical".to_string(), "Non-Canonical".to_string()],
+                        }
+                    />
+                }
+            }
+        />
+    }
+}
+
+#[component]
+pub fn AccountInternalCommandsSection(
+    txn_sig: ReadSignal<Option<Vec<Option<AccountActivityQueryFeetransfers>>>>,
+    is_loading: Signal<bool>,
+) -> impl IntoView {
+    let (summary_sig, _, _) =
+        use_local_storage::<BlockchainSummary, JsonCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
+    let table_columns = vec![
+        TableColumn {
+            column: "Height".to_string(),
+            html_input_type: "number".to_string(),
+            is_searchable: true,
+            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
+            alignment: Some(ColumnTextAlignment::Right),
+            ..Default::default()
+        },
+        TableColumn {
+            column: "State Hash".to_string(),
+            is_searchable: true,
+            width: Some(String::from(TABLE_COL_HASH_WIDTH)),
+            ..Default::default()
+        },
+        TableColumn {
+            column: "Fee".to_string(),
+            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
+            ..Default::default()
+        },
+        TableColumn {
+            column: "Type".to_string(),
+            width: Some(String::from(TABLE_COL_SHORT_WIDTH)),
+            ..Default::default()
+        },
+        TableColumn {
+            column: "Age".to_string(),
+            width: Some(String::from(TABLE_COL_SHORT_WIDTH)),
+            ..Default::default()
+        },
+    ];
+
+    view! {
+        <TableSectionTemplate
+            table_columns
+            data_sig=txn_sig
+            metadata=Signal::derive(move || {
+                Some(TableMetadata {
+                    total_records: u64::try_from(summary_sig.get().total_num_internal_commands)
+                        .ok(),
+                    displayed_records: u64::try_from(
+                            txn_sig.get().map(|a| a.len()).unwrap_or_default(),
                         )
                         .unwrap_or_default(),
                     available_records: None,
