@@ -86,7 +86,7 @@ pub async fn load_data(
             prover,
             block: if block_producer.is_some() || slot.is_some() || state_hash.is_some() {
                 Some(BlockQueryInput {
-                    state_hash,
+                    state_hash: state_hash.clone(),
                     creator_account: block_producer.clone().map(|bp| {
                         BlockCreatorAccountQueryInput {
                             public_key: Some(bp),
@@ -145,6 +145,10 @@ pub async fn load_data(
         internal_commands_query: account_activity_query::FeetransferQueryInput {
             recipient: public_key,
             block_height_lte: block_height,
+            block_state_hash: state_hash.map(|sh| BlockQueryInput {
+                state_hash: Some(sh),
+                ..Default::default()
+            }),
             canonical: if canonical.is_none() {
                 Some(true)
             } else {
