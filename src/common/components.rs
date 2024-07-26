@@ -276,7 +276,10 @@ pub fn TabLink(nav_entry: NavEntry) -> impl IntoView {
 }
 
 #[component]
-pub fn TabbedPage(tabs: Vec<NavEntry>) -> impl IntoView {
+pub fn TabbedPage(
+    tabs: Vec<NavEntry>,
+    #[prop(default = false)] exclude_outlet: bool,
+) -> impl IntoView {
     view! {
         <PreSectionContainer>
             <menu id="tabs" class="flex w-full overflow-x-auto">
@@ -292,7 +295,11 @@ pub fn TabbedPage(tabs: Vec<NavEntry>) -> impl IntoView {
                     .collect::<Vec<_>>()}
             </menu>
         </PreSectionContainer>
-        <Outlet/>
+        {if !exclude_outlet {
+            view! { <Outlet/> }
+        } else {
+            ().into_view()
+        }}
     }
 }
 
