@@ -27,6 +27,11 @@ suite(["@tier1"], "tab", () => {
       tab: "Block Production",
       expectedUrl: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}/block-production`,
     },
+    {
+      page: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
+      tab: "Internal Commands",
+      expectedUrl: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}/commands/internal`,
+    },
   ];
 
   tabs.forEach(({ page, tab, expectedUrl }) =>
