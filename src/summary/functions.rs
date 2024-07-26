@@ -1,4 +1,4 @@
-use super::models::BlockchainSummary;
+use super::models::{BlockchainStatResponse, BlockchainSummary};
 use crate::common::{
     constants::{GRAPHQL_ENDPOINT, REST_ENDPOINT},
     models::*,
@@ -20,7 +20,9 @@ pub async fn load_data() -> Result<BlockchainSummary, MyError> {
     }
 }
 
-pub async fn load_block_producers_stat(last_n_blocks: u64) -> Result<BlockchainSummary, MyError> {
+pub async fn load_block_producers_stat(
+    last_n_blocks: u64,
+) -> Result<BlockchainStatResponse, MyError> {
     let query_body = format!(
         r#"{{"query":"query BlockProducersStat($limit: Int, $last_n_blocks: Int) {{ blocks(query: {{unique_block_producers_last_n_blocks: $last_n_blocks}}, limit: $limit) {{ num_unique_block_producers_last_n_blocks }}}}", "variables":{{"last_n_blocks":{}, "limit":{}}},"operationName":"BlockProducersStat"}}"#,
         last_n_blocks, 1,
@@ -35,7 +37,7 @@ pub async fn load_block_producers_stat(last_n_blocks: u64) -> Result<BlockchainS
 
     if response.status().is_success() {
         let summary = response
-            .json::<BlockchainSummary>()
+            .json::<BlockchainStatResponse>()
             .await
             .map_err(|e| MyError::ParseError(e.to_string()))?;
         Ok(summary)

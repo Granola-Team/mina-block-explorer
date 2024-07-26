@@ -5,7 +5,10 @@ use crate::{
 use leptos::*;
 
 #[component]
-pub fn SummaryGrid(summary: Option<BlockchainSummary>) -> impl IntoView {
+pub fn SummaryGrid(
+    summary: Option<BlockchainSummary>,
+    stat: Option<BlockchainStat>,
+) -> impl IntoView {
     view! {
         <section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 auto-rows-min gap-4 p-4 pt-0">
             <h2 class="h-0 w-0 overflow-hidden absolute">"Summary"</h2>
@@ -17,11 +20,9 @@ pub fn SummaryGrid(summary: Option<BlockchainSummary>) -> impl IntoView {
             <SummaryItem
                 id="uniqueBlockProducers"
                 label="Unique Producers of last 10000 blocks"
-                value=summary
+                value=stat
                     .as_ref()
-                    .map(|s| format_number(
-                        s.num_unique_block_producers_last_n_blocks.unwrap_or_default().to_string(),
-                    ))
+                    .map(|s| format_number(s.num_unique_block_producers_last_n_blocks.to_string()))
             />
 
             <SummaryItem

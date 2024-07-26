@@ -16,7 +16,21 @@ pub struct BlockchainSummary {
     pub total_num_internal_commands: i64,
     pub total_num_accounts: u64,
     pub indexer_version: String,
-    pub num_unique_block_producers_last_n_blocks: Option<u64>,
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq, Default)]
+pub struct BlockchainStatData {
+    pub blocks: Vec<BlockchainStat>,
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq, Default)]
+pub struct BlockchainStatResponse {
+    pub data: BlockchainStatData,
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq, Default)]
+pub struct BlockchainStat {
+    pub num_unique_block_producers_last_n_blocks: u64,
 }
 
 impl BlockchainSummary {
