@@ -364,7 +364,7 @@ pub fn AccountInternalCommandsSection(
                 })
             })
 
-            section_heading="User Commands"
+            section_heading="Internal Commands"
             is_loading
             controls=move || {
                 view! {
