@@ -10,6 +10,9 @@ query AccountActivityQuery(
   $outgoing_trans_query: TransactionQueryInput!
   $incoming_trans_query: TransactionQueryInput!
   $account_query: AccountQueryInput!
+  $internal_commands_limit: Int = 3
+  $internal_commands_sort_by: FeetransferSortByInput!
+  $internal_commands_query: FeetransferQueryInput!
 ) {
   incoming_transactions: transactions(
     sortBy: $trans_sort_by
@@ -50,6 +53,20 @@ query AccountActivityQuery(
     kind
     failureReason
     memo
+  }
+  feetransfers(
+    sortBy: $internal_commands_sort_by
+    limit: $internal_commands_limit
+    query: $internal_commands_query
+  ) {
+    blockHeight
+    blockStateHash {
+      stateHash
+    }
+    fee
+    type
+    dateTime
+    canonical
   }
   snarks(sortBy: $snarks_sort_by, limit: $snarks_limit, query: $snarks_query) {
     canonical
