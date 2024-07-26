@@ -21,23 +21,6 @@ use std::collections::HashMap;
 use web_sys::VisibilityState;
 
 #[component]
-pub fn UniqueBlocksProducersSummaryItem() -> impl IntoView {
-    let (blocks_sig, _, _) =
-        use_local_storage::<blocks_query::ResponseData, JsonCodec>(BLOCKS_STORAGE_KEY);
-    let (unique_producers_sig, _set_up) = create_signal(Some("...".to_string()));
-
-    move || {
-        view! {
-            <SummaryItem
-                label=format!("Unique Producers of last {} Blocks", blocks_sig.get().blocks.len())
-                value=unique_producers_sig.get()
-                id="uniqueBlockProducers"
-            />
-        }
-    }
-}
-
-#[component]
 pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
     let option_block = use_context::<ReadSignal<Option<BlocksQueryBlocks>>>()
         .expect("there to be an optional block signal provided");

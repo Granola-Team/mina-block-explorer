@@ -6,10 +6,10 @@ suite(["@tier1"], "blockchain overview", () => {
     cy.intercept("GET", "/summary").as("summaryData");
     await cy.wait("@summaryData");
     let summaryItems = [
-      // {
-      //   id: "#uniqueBlockProducers",
-      //   label: "Unique Producers of last 1000 Blocks",
-      // },
+      {
+        id: "#uniqueBlockProducers",
+        label: "Unique Producers of last 10000 Blocks",
+      },
       { id: "#totalUserCommands", label: "Total User Commands" },
       { id: "#totalInternalCommands", label: "Total Internal Commands" },
       { id: "#blockchainLength", label: "Blockchain Length" },
