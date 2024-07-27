@@ -240,6 +240,46 @@ let test_suite_data = [
   },
   {
     tag: "@tier2",
+    url: `/addresses/accounts/${ROMEK_ADDRESS}/commands/internal`,
+    table: {
+      heading: "Internal Commands",
+      columns: ["Height", "State Hash", "Fee", "Type", "Age"],
+      filter_tests: [
+        {
+          column: "Height",
+          input: 3000,
+          assertion: function () {
+            cy.assertForEachColumnValue(
+              "Internal Commands",
+              "Height",
+              (text) => {
+                let height = parseFormattedNumber(text);
+                expect(height).to.be.lte(3000);
+              },
+            );
+          },
+        },
+        {
+          column: "State Hash",
+          input: ROMEK_BLOCK_STATE_HASH,
+          assertion: function () {
+            cy.aliasTableRows("Internal Commands", "table-rows");
+            cy.get("@table-rows").should("have.lengthOf", 2);
+            cy.assertForEachColumnValue(
+              "Internal Commands",
+              "State Hash",
+              (text) => {
+                expect(text).to.contain(ROMEK_BLOCK_STATE_HASH);
+              },
+            );
+          },
+        },
+      ],
+    },
+    tests: [],
+  },
+  {
+    tag: "@tier2",
     url: "/addresses/accounts",
     table: {
       heading: "Accounts",

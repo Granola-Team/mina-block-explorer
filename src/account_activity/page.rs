@@ -2,10 +2,12 @@ use super::functions::*;
 use crate::{
     account_activity::{
         components::{
-            AccountOverviewBlocksTable, AccountOverviewSnarkJobTable, AccountTransactionsSection,
+            AccountInternalCommandsSection, AccountOverviewBlocksTable,
+            AccountOverviewSnarkJobTable, AccountTransactionsSection,
         },
         graphql::account_activity_query::{
-            AccountActivityQueryAccounts, AccountActivityQueryBlocks, AccountActivityQuerySnarks,
+            AccountActivityQueryAccounts, AccountActivityQueryBlocks,
+            AccountActivityQueryFeetransfers, AccountActivityQuerySnarks,
         },
         models::AccountActivityQueryDirectionalTransactions,
     },
@@ -118,10 +120,24 @@ pub fn AccountBlockProductionPage() -> impl IntoView {
 }
 
 #[component]
+pub fn AccountInternalCommandsPage() -> impl IntoView {
+    let txn: ReadSignal<Option<Vec<Option<_>>>> =
+        use_context::<ReadSignal<Option<Vec<Option<AccountActivityQueryFeetransfers>>>>>()
+            .expect("there to be an optional AccountActivityQueryFeetransfers signal provided");
+    view! {
+        <AccountInternalCommandsSection
+            txn_sig=txn
+            is_loading=Signal::derive(move || txn.get().is_none())
+        />
+    }
+}
+
+#[component]
 pub fn AccountSpotlightTabbedPage() -> impl IntoView {
     let memo_params_map = use_params_map();
     let (account, set_account) = create_signal(None);
     let (transactions, set_transactions) = create_signal(None);
+    let (internal_transactions, set_int_txn) = create_signal(None);
     let (snarks, set_snarks) = create_signal(None);
     let (blocks, set_blocks) = create_signal(None);
 
@@ -147,6 +163,7 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
             if value.get("id").is_some() {
                 load_data(
                     value.get("id").cloned(),
+                    Some(TABLE_ROW_LIMIT),
                     Some(TABLE_ROW_LIMIT),
                     Some(TABLE_ROW_LIMIT),
                     Some(TABLE_ROW_LIMIT),
@@ -208,6 +225,7 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
             set_transactions.set(Some(transactions));
             set_snarks.set(Some(res.snarks[..end_index].to_vec()));
             set_blocks.set(Some(res.blocks));
+            set_int_txn.set(Some(res.feetransfers));
             if let Some(Some(account)) = res.accounts.first() {
                 let account_clone: AccountActivityQueryAccounts = account.clone();
                 set_account.set(Some(account_clone));
@@ -220,9 +238,11 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
         set_transactions.set(None);
         set_snarks.set(None);
         set_blocks.set(None);
+        set_int_txn.set(None);
     });
 
     provide_context(transactions);
+    provide_context(internal_transactions);
     provide_context(snarks);
     provide_context(blocks);
     provide_context(account);
@@ -234,6 +254,13 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
                 text: "User Commands".to_string(),
                 icon: NavIcon::Addresses,
                 number_bubble: Some(transactions.get().map(|t| t.len()).unwrap_or(0)),
+                ..Default::default()
+            },
+            NavEntry {
+                href: format!("/addresses/accounts/{}/commands/internal", id()),
+                text: "Internal Commands".to_string(),
+                icon: NavIcon::Addresses,
+                number_bubble: Some(blocks.get().map(|t| t.len()).unwrap_or(0)),
                 ..Default::default()
             },
             NavEntry {
