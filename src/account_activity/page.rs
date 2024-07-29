@@ -279,29 +279,36 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
             NavEntry {
                 href: format!("/addresses/accounts/{}/commands/user", id()),
                 text: "User Commands".to_string(),
-                icon: NavIcon::Addresses,
+                icon: NavIcon::Transactions,
                 number_bubble: Some(transactions.get().map(|t| t.len()).unwrap_or(0)),
                 ..Default::default()
             },
             NavEntry {
                 href: format!("/addresses/accounts/{}/commands/internal", id()),
                 text: "Internal Commands".to_string(),
-                icon: NavIcon::Addresses,
+                icon: NavIcon::Transactions,
                 number_bubble: Some(blocks.get().map(|t| t.len()).unwrap_or(0)),
                 ..Default::default()
             },
             NavEntry {
                 href: format!("/addresses/accounts/{}/snark-jobs", id()),
                 text: "SNARK Jobs".to_string(),
-                icon: NavIcon::Addresses,
+                icon: NavIcon::SNARKs,
                 number_bubble: Some(snarks.get().map(|t| t.len()).unwrap_or(0)),
                 ..Default::default()
             },
             NavEntry {
                 href: format!("/addresses/accounts/{}/block-production", id()),
                 text: "Block Production".to_string(),
-                icon: NavIcon::Addresses,
+                icon: NavIcon::Blocks,
                 number_bubble: Some(blocks.get().map(|t| t.len()).unwrap_or(0)),
+                ..Default::default()
+            },
+            NavEntry {
+                href: format!("/addresses/accounts/{}/delegations", id()),
+                text: "Delegations".to_string(),
+                icon: NavIcon::Delegates,
+                number_bubble: Some(delegations.get().map(|t| t.len()).unwrap_or(0)),
                 ..Default::default()
             },
         ]
