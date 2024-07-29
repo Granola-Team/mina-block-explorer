@@ -1,4 +1,4 @@
-use super::functions::*;
+use super::{functions::*, models::AccountActivityQueryDelegatorExt};
 use crate::{
     account_activity::{
         components::{
@@ -140,6 +140,7 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
     let (internal_transactions, set_int_txn) = create_signal(None);
     let (snarks, set_snarks) = create_signal(None);
     let (blocks, set_blocks) = create_signal(None);
+    let (delegators, set_delegators) = create_signal(None);
 
     let query_params_map = use_query_map();
     let (canonical_sig, _) = create_query_signal::<bool>("canonical");
@@ -231,6 +232,30 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
                 let account_clone: AccountActivityQueryAccounts = account.clone();
                 set_account.set(Some(account_clone));
             }
+            if let Some(Some(delegate)) = res.delegate.first() {
+                let delegators: Vec<Option<AccountActivityQueryDelegatorExt>> = res
+                    .delegators
+                    .into_iter()
+                    .map(|stake_opt| {
+                        stake_opt.map(|stake| AccountActivityQueryDelegatorExt {
+                            username: stake.username,
+                            epoch: stake.epoch,
+                            public_key: stake.public_key,
+                            delegated_balance: stake.balance_nanomina,
+                            percent_of_delegation: delegate.clone().delegation_totals.and_then(
+                                |dt| {
+                                    dt.total_delegated_nanomina.and_then(|delegated_nanomina| {
+                                        stake
+                                            .balance_nanomina
+                                            .map(|balance| (balance / delegated_nanomina) as f64)
+                                    })
+                                },
+                            ),
+                        })
+                    })
+                    .collect::<Vec<_>>();
+                set_delegators.set(Some(delegators));
+            }
         };
     });
 
@@ -247,6 +272,7 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
     provide_context(snarks);
     provide_context(blocks);
     provide_context(account);
+    provide_context(delegators);
 
     let tabs = move || {
         vec![

@@ -313,3 +313,12 @@ impl Default for StakeQueryInput {
         }
     }
 }
+
+#[derive(Clone)]
+pub struct AccountActivityQueryDelegatorExt {
+    pub username: Option<String>,
+    pub epoch: Option<i64>,
+    pub public_key: Option<String>,
+    pub delegated_balance: Option<i64>,
+    pub percent_of_delegation: Option<f64>,
+}
