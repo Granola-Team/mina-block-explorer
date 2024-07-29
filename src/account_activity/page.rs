@@ -167,6 +167,7 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
                     Some(TABLE_ROW_LIMIT),
                     Some(TABLE_ROW_LIMIT),
                     Some(TABLE_ROW_LIMIT),
+                    Some(TABLE_ROW_LIMIT),
                     block_height,
                     qp_map.get("q-txn-hash").cloned(),
                     qp_map.get("q-state-hash").cloned(),

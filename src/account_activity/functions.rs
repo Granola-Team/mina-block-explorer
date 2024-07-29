@@ -25,6 +25,7 @@ pub async fn load_data(
     blocks_limit: Option<u64>,
     snarks_limit: Option<u64>,
     trans_limit: Option<u64>,
+    delegators_limit: Option<u64>,
     internal_commands_limit: Option<u64>,
     block_height: Option<u64>,
     txn_hash: Option<String>,
@@ -45,10 +46,12 @@ pub async fn load_data(
         snarks_sort_by: account_activity_query::SnarkSortByInput::BLOCKHEIGHT_DESC,
         trans_sort_by: account_activity_query::TransactionSortByInput::BLOCKHEIGHT_DESC,
         internal_commands_sort_by: account_activity_query::FeetransferSortByInput::BLOCKHEIGHT_DESC,
+        delegators_sort_by: account_activity_query::StakeSortByInput::BALANCE_DESC,
         blocks_limit: blocks_limit.map(|x| x as i64),
         snarks_limit: snarks_limit.map(|x| x as i64),
         trans_limit: trans_limit.map(|x| x as i64),
         internal_commands_limit: internal_commands_limit.map(|x| x as i64),
+        delegators_limit: delegators_limit.map(|x| x as i64),
         account_query: account_activity_query::AccountQueryInput {
             public_key: public_key.clone(),
             username: None,
@@ -143,7 +146,7 @@ pub async fn load_data(
             ..Default::default()
         },
         internal_commands_query: account_activity_query::FeetransferQueryInput {
-            recipient: public_key,
+            recipient: public_key.clone(),
             block_height_lte: block_height,
             block_state_hash: state_hash.map(|sh| BlockQueryInput {
                 state_hash: Some(sh),
@@ -154,6 +157,14 @@ pub async fn load_data(
             } else {
                 canonical
             },
+            ..Default::default()
+        },
+        delegate_query: account_activity_query::StakeQueryInput {
+            public_key: public_key.clone(),
+            ..Default::default()
+        },
+        delegators_query: account_activity_query::StakeQueryInput {
+            delegate: public_key,
             ..Default::default()
         },
     };
