@@ -773,6 +773,7 @@ type Stake {
   chainId: String
   delegate: String
   delegationTotals: DelegationTotal
+  balanceNanomina: Int
   epoch: Int
   ledgerHash: String
   nonce: Int
