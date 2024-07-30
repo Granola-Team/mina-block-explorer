@@ -362,7 +362,7 @@ impl StakeTrait for AccountActivityQueryDelegatorExt {
         self.delegated_balance
             .unwrap_or(0)
             .try_into()
-            .map(|num| nanomina_to_mina(num))
+            .map(nanomina_to_mina)
             .map(|number| format_number_for_html(&number, LHS_MAX_DIGIT_PADDING))
             .unwrap_or_default()
     }

@@ -258,7 +258,7 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
                     .delegators
                     .into_iter()
                     .map(|stake_opt| {
-                        stake_opt.map(|delegator| extend_delegator_info(&delegator, &delegate))
+                        stake_opt.map(|delegator| extend_delegator_info(&delegator, delegate))
                     })
                     .collect::<Vec<_>>();
                 set_delegators.set(Some(delegators));
