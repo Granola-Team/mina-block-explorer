@@ -386,6 +386,7 @@ pub fn AccountInternalCommandsSection(
 #[component]
 pub fn AccountDelegationsSection(
     delegations_sig: ReadSignal<Option<Vec<Option<AccountActivityQueryDelegatorExt>>>>,
+    delegator_count: Option<i64>,
     is_loading: Signal<bool>,
 ) -> impl IntoView {
     let table_columns = vec![
@@ -417,7 +418,7 @@ pub fn AccountDelegationsSection(
             data_sig=delegations_sig
             metadata=Signal::derive(move || {
                 Some(TableMetadata {
-                    total_records: None,
+                    total_records: delegator_count.and_then(|n| n.try_into().ok()),
                     displayed_records: u64::try_from(
                             delegations_sig.get().map(|a| a.len()).unwrap_or_default(),
                         )

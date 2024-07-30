@@ -137,11 +137,18 @@ pub fn AccountDelegationsPage() -> impl IntoView {
     let delegations_sig: ReadSignal<Option<Vec<Option<AccountActivityQueryDelegatorExt>>>> =
         use_context::<ReadSignal<Option<Vec<Option<AccountActivityQueryDelegatorExt>>>>>()
             .expect("there to be an optional AccountActivityQueryFeetransfers signal provided");
-    view! {
-        <AccountDelegationsSection
-            delegations_sig=delegations_sig
-            is_loading=Signal::derive(move || delegations_sig.get().is_none())
-        />
+    let delegator_count: ReadSignal<Option<i64>> = use_context::<ReadSignal<Option<i64>>>()
+        .expect("there to be an optional delegator count signal provided");
+    {
+        move || {
+            view! {
+                <AccountDelegationsSection
+                    delegations_sig=delegations_sig
+                    delegator_count=delegator_count.get()
+                    is_loading=Signal::derive(move || delegations_sig.get().is_none())
+                />
+            }
+        }
     }
 }
 
@@ -279,6 +286,7 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
     provide_context(blocks);
     provide_context(account);
     provide_context(delegators);
+    provide_context(delegators_count);
 
     let tabs = move || {
         vec![
