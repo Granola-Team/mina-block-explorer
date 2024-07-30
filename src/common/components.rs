@@ -177,7 +177,6 @@ where
     let get_link_class = create_memo(move |_| {
         let pathname = location.pathname.get();
         let tmp_class = if n_entry.is_match(&pathname) {
-            logging::log!("{},{}", n_entry.href, pathname);
             format!(
                 "{} {} {}",
                 base_link_class, LINK_HOVER_STATE, "text-granola-orange"
