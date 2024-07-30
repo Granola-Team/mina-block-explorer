@@ -13,6 +13,10 @@ query AccountActivityQuery(
   $internal_commands_limit: Int = 3
   $internal_commands_sort_by: FeetransferSortByInput!
   $internal_commands_query: FeetransferQueryInput!
+  $delegators_limit: Int = 3
+  $delegators_sort_by: StakeSortByInput!
+  $delegators_query: StakeQueryInput!
+  $delegate_query: StakeQueryInput!
 ) {
   incoming_transactions: transactions(
     sortBy: $trans_sort_by
@@ -67,6 +71,22 @@ query AccountActivityQuery(
     type
     dateTime
     canonical
+  }
+  delegators: stakes(
+    limit: $delegators_limit
+    sortBy: $delegators_sort_by
+    query: $delegators_query
+  ) {
+    username
+    balanceNanomina
+    epoch
+    public_key
+  }
+  delegate: stakes(limit: 1, query: $delegate_query) {
+    delegationTotals {
+      totalDelegatedNanomina
+      countDelegates
+    }
   }
   snarks(sortBy: $snarks_sort_by, limit: $snarks_limit, query: $snarks_query) {
     canonical

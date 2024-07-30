@@ -7,7 +7,8 @@ use super::{
 };
 use crate::{
     account_activity::{
-        graphql::account_activity_query::AccountActivityQueryFeetransfers, table_traits::BlockTrait,
+        graphql::account_activity_query::AccountActivityQueryFeetransfers,
+        models::AccountActivityQueryDelegatorExt, table_traits::BlockTrait,
     },
     common::{components::*, constants::*, functions::*, models::*, table::*},
     icons::*,
@@ -378,6 +379,58 @@ pub fn AccountInternalCommandsSection(
                     />
                 }
             }
+        />
+    }
+}
+
+#[component]
+pub fn AccountDelegationsSection(
+    delegations_sig: ReadSignal<Option<Vec<Option<AccountActivityQueryDelegatorExt>>>>,
+    delegator_count: Option<i64>,
+    is_loading: Signal<bool>,
+) -> impl IntoView {
+    let table_columns = vec![
+        TableColumn {
+            column: "Public Key".to_string(),
+            width: Some(String::from(TABLE_COL_HASH_WIDTH)),
+            ..Default::default()
+        },
+        TableColumn {
+            column: "Username".to_string(),
+            width: Some(String::from(TABLE_COL_USERNAME_WIDTH)),
+            ..Default::default()
+        },
+        TableColumn {
+            column: "Delegated Balance".to_string(),
+            width: Some(String::from(TABLE_COL_LARGE_BALANCE)),
+            sort_direction: Some(TableSortDirection::Desc),
+            ..Default::default()
+        },
+        TableColumn {
+            column: "% of Delegation".to_string(),
+            width: Some(String::from(TABLE_COL_SHORT_WIDTH)),
+            ..Default::default()
+        },
+    ];
+
+    view! {
+        <TableSectionTemplate
+            table_columns
+            data_sig=delegations_sig
+            metadata=Signal::derive(move || {
+                Some(TableMetadata {
+                    total_records: delegator_count.and_then(|n| n.try_into().ok()),
+                    displayed_records: u64::try_from(
+                            delegations_sig.get().map(|a| a.len()).unwrap_or_default(),
+                        )
+                        .unwrap_or_default(),
+                    available_records: None,
+                })
+            })
+
+            section_heading="Delegations"
+            is_loading
+            controls=|| ().into_view()
         />
     }
 }

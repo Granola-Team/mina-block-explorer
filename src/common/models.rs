@@ -87,4 +87,5 @@ pub enum NavIcon {
     FeeTransfers,
     Analytics,
     More,
+    Delegates,
 }

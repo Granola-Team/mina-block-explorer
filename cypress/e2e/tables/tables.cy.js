@@ -280,6 +280,21 @@ let test_suite_data = [
   },
   {
     tag: "@tier2",
+    url: `/addresses/accounts/${MINA_NAMING_SERVICE_ADDRESS}/delegations`,
+    table: {
+      heading: "Delegations",
+      columns: [
+        "Public Key",
+        "Username",
+        "Delegated Balance",
+        "% of Delegation",
+      ],
+      filter_tests: [],
+    },
+    tests: [],
+  },
+  {
+    tag: "@tier2",
     url: "/addresses/accounts",
     table: {
       heading: "Accounts",

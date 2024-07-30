@@ -1,8 +1,13 @@
 use super::graphql::{account_activity_query, AccountActivityQuery};
 use crate::{
-    account_activity::graphql::account_activity_query::{
-        AccountActivityQueryAccounts, BlockCreatorAccountQueryInput,
-        BlockProtocolStateConsensusStateQueryInput, BlockProtocolStateQueryInput, BlockQueryInput,
+    account_activity::{
+        graphql::account_activity_query::{
+            AccountActivityQueryAccounts, AccountActivityQueryDelegate,
+            AccountActivityQueryDelegators, BlockCreatorAccountQueryInput,
+            BlockProtocolStateConsensusStateQueryInput, BlockProtocolStateQueryInput,
+            BlockQueryInput,
+        },
+        models::AccountActivityQueryDelegatorExt,
     },
     common::{constants::*, functions::*, models::*, spotlight::*},
 };
@@ -25,6 +30,7 @@ pub async fn load_data(
     blocks_limit: Option<u64>,
     snarks_limit: Option<u64>,
     trans_limit: Option<u64>,
+    delegators_limit: Option<u64>,
     internal_commands_limit: Option<u64>,
     block_height: Option<u64>,
     txn_hash: Option<String>,
@@ -34,21 +40,26 @@ pub async fn load_data(
     counterparty: Option<String>,
     slot: Option<u64>,
     block_producer: Option<String>,
+    current_epoch_staking_ledger: Option<u64>,
     canonical: Option<bool>,
 ) -> Result<account_activity_query::ResponseData, MyError> {
     let block_height = block_height.map(|x| x as i64);
     let nonce = nonce.map(|x| x as i64);
     let slot = slot.map(|x| x as i64);
+    let get_current_epoch_staking_ledger =
+        move || current_epoch_staking_ledger.and_then(|e| e.try_into().ok());
 
     let variables = account_activity_query::Variables {
         blocks_sort_by: account_activity_query::BlockSortByInput::BLOCKHEIGHT_DESC,
         snarks_sort_by: account_activity_query::SnarkSortByInput::BLOCKHEIGHT_DESC,
         trans_sort_by: account_activity_query::TransactionSortByInput::BLOCKHEIGHT_DESC,
         internal_commands_sort_by: account_activity_query::FeetransferSortByInput::BLOCKHEIGHT_DESC,
+        delegators_sort_by: account_activity_query::StakeSortByInput::BALANCE_DESC,
         blocks_limit: blocks_limit.map(|x| x as i64),
         snarks_limit: snarks_limit.map(|x| x as i64),
         trans_limit: trans_limit.map(|x| x as i64),
         internal_commands_limit: internal_commands_limit.map(|x| x as i64),
+        delegators_limit: delegators_limit.map(|x| x as i64),
         account_query: account_activity_query::AccountQueryInput {
             public_key: public_key.clone(),
             username: None,
@@ -143,7 +154,7 @@ pub async fn load_data(
             ..Default::default()
         },
         internal_commands_query: account_activity_query::FeetransferQueryInput {
-            recipient: public_key,
+            recipient: public_key.clone(),
             block_height_lte: block_height,
             block_state_hash: state_hash.map(|sh| BlockQueryInput {
                 state_hash: Some(sh),
@@ -154,6 +165,16 @@ pub async fn load_data(
             } else {
                 canonical
             },
+            ..Default::default()
+        },
+        delegate_query: account_activity_query::StakeQueryInput {
+            public_key: public_key.clone(),
+            epoch: get_current_epoch_staking_ledger(),
+            ..Default::default()
+        },
+        delegators_query: account_activity_query::StakeQueryInput {
+            delegate: public_key,
+            epoch: get_current_epoch_staking_ledger(),
             ..Default::default()
         },
     };
@@ -247,4 +268,155 @@ pub fn get_spotlight_data(
             copiable: true,
         },
     ]
+}
+
+pub fn extend_delegator_info(
+    delegator: &AccountActivityQueryDelegators,
+    delegate: &AccountActivityQueryDelegate,
+) -> AccountActivityQueryDelegatorExt {
+    let total_delegated_nanomina = delegate
+        .delegation_totals
+        .as_ref()
+        .and_then(|totals| totals.total_delegated_nanomina);
+
+    let delegated_balance = delegator.balance_nanomina;
+
+    let percent_of_delegation = match (delegator.balance_nanomina, total_delegated_nanomina) {
+        (Some(balance), Some(total)) if total != 0 => Some((balance as f64 / total as f64) * 100.0),
+        _ => None,
+    };
+
+    AccountActivityQueryDelegatorExt {
+        username: delegator.username.clone(),
+        epoch: delegator.epoch,
+        public_key: delegator.public_key.clone(),
+        delegated_balance,
+        percent_of_delegation,
+    }
+}
+
+#[cfg(test)]
+mod extend_delegator_info_tests {
+    use super::*;
+    use crate::account_activity::graphql::account_activity_query::AccountActivityQueryDelegateDelegationTotals;
+
+    #[test]
+    fn test_extend_delegator_info() {
+        let delegator = AccountActivityQueryDelegators {
+            username: Some("user1".to_string()),
+            balance_nanomina: Some(500),
+            epoch: Some(42),
+            public_key: Some("pub_key_123".to_string()),
+        };
+
+        let delegate_totals = AccountActivityQueryDelegateDelegationTotals {
+            total_delegated_nanomina: Some(1000),
+            count_delegates: Some(1),
+        };
+
+        let delegate = AccountActivityQueryDelegate {
+            delegation_totals: Some(delegate_totals),
+        };
+
+        let extended_delegator_info = extend_delegator_info(&delegator, &delegate);
+
+        assert_eq!(extended_delegator_info.username, Some("user1".to_string()));
+        assert_eq!(extended_delegator_info.epoch, Some(42));
+        assert_eq!(
+            extended_delegator_info.public_key,
+            Some("pub_key_123".to_string())
+        );
+        assert_eq!(extended_delegator_info.delegated_balance, Some(500));
+        assert_eq!(extended_delegator_info.percent_of_delegation, Some(50.0));
+    }
+
+    #[test]
+    fn test_extend_delegator_info_no_balance() {
+        let delegator = AccountActivityQueryDelegators {
+            username: Some("user1".to_string()),
+            balance_nanomina: None,
+            epoch: Some(42),
+            public_key: Some("pub_key_123".to_string()),
+        };
+
+        let delegate_totals = AccountActivityQueryDelegateDelegationTotals {
+            total_delegated_nanomina: Some(1000),
+            count_delegates: Some(1),
+        };
+
+        let delegate = AccountActivityQueryDelegate {
+            delegation_totals: Some(delegate_totals),
+        };
+
+        let extended_delegator_info = extend_delegator_info(&delegator, &delegate);
+
+        assert_eq!(extended_delegator_info.username, Some("user1".to_string()));
+        assert_eq!(extended_delegator_info.epoch, Some(42));
+        assert_eq!(
+            extended_delegator_info.public_key,
+            Some("pub_key_123".to_string())
+        );
+        assert_eq!(extended_delegator_info.delegated_balance, None);
+        assert_eq!(extended_delegator_info.percent_of_delegation, None);
+    }
+
+    #[test]
+    fn test_extend_delegator_info_no_total_delegated() {
+        let delegator = AccountActivityQueryDelegators {
+            username: Some("user1".to_string()),
+            balance_nanomina: Some(500),
+            epoch: Some(42),
+            public_key: Some("pub_key_123".to_string()),
+        };
+
+        let delegate_totals = AccountActivityQueryDelegateDelegationTotals {
+            total_delegated_nanomina: None,
+            count_delegates: Some(1),
+        };
+
+        let delegate = AccountActivityQueryDelegate {
+            delegation_totals: Some(delegate_totals),
+        };
+
+        let extended_delegator_info = extend_delegator_info(&delegator, &delegate);
+
+        assert_eq!(extended_delegator_info.username, Some("user1".to_string()));
+        assert_eq!(extended_delegator_info.epoch, Some(42));
+        assert_eq!(
+            extended_delegator_info.public_key,
+            Some("pub_key_123".to_string())
+        );
+        assert_eq!(extended_delegator_info.delegated_balance, Some(500));
+        assert_eq!(extended_delegator_info.percent_of_delegation, None);
+    }
+
+    #[test]
+    fn test_extend_delegator_info_zero_total_delegated() {
+        let delegator = AccountActivityQueryDelegators {
+            username: Some("user1".to_string()),
+            balance_nanomina: Some(500),
+            epoch: Some(42),
+            public_key: Some("pub_key_123".to_string()),
+        };
+
+        let delegate_totals = AccountActivityQueryDelegateDelegationTotals {
+            total_delegated_nanomina: Some(0),
+            count_delegates: Some(1),
+        };
+
+        let delegate = AccountActivityQueryDelegate {
+            delegation_totals: Some(delegate_totals),
+        };
+
+        let extended_delegator_info = extend_delegator_info(&delegator, &delegate);
+
+        assert_eq!(extended_delegator_info.username, Some("user1".to_string()));
+        assert_eq!(extended_delegator_info.epoch, Some(42));
+        assert_eq!(
+            extended_delegator_info.public_key,
+            Some("pub_key_123".to_string())
+        );
+        assert_eq!(extended_delegator_info.delegated_balance, Some(500));
+        assert_eq!(extended_delegator_info.percent_of_delegation, None);
+    }
 }

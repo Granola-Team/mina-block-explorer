@@ -1,4 +1,7 @@
-use super::graphql::account_activity_query::AccountActivityQuerySnarks;
+use super::{
+    graphql::account_activity_query::AccountActivityQuerySnarks,
+    models::AccountActivityQueryDelegatorExt,
+};
 use crate::{
     account_activity::{
         graphql::account_activity_query::{
@@ -9,7 +12,12 @@ use crate::{
             AccountActivityQueryDirectionalTransactions,
         },
     },
-    common::{constants::LHS_MAX_SPACE_FEES, functions::*, models::*, table::TableData},
+    common::{
+        constants::{LHS_MAX_DIGIT_PADDING, LHS_MAX_SPACE_FEES},
+        functions::*,
+        models::*,
+        table::TableData,
+    },
 };
 use leptos::*;
 
@@ -295,6 +303,22 @@ impl BlockTrait for AccountActivityQueryBlocks {
     }
 }
 
+impl TableData for Vec<Option<AccountActivityQueryDelegatorExt>> {
+    fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
+        self.iter()
+            .map(|opt_stake| match opt_stake {
+                Some(stake) => vec![
+                    convert_to_span(stake.get_public_key()),
+                    convert_to_span(stake.get_username()),
+                    convert_to_span(stake.get_delegated_balance()),
+                    convert_to_span(stake.get_percent_of_delegation()),
+                ],
+                None => vec![],
+            })
+            .collect::<Vec<_>>()
+    }
+}
+
 impl TableData for Vec<Option<AccountActivityQueryFeetransfers>> {
     fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
         self.iter()
@@ -315,6 +339,36 @@ impl TableData for Vec<Option<AccountActivityQueryFeetransfers>> {
                 None => vec![],
             })
             .collect::<Vec<_>>()
+    }
+}
+
+pub trait StakeTrait {
+    fn get_public_key(&self) -> String;
+    fn get_username(&self) -> String;
+    fn get_delegated_balance(&self) -> String;
+    fn get_percent_of_delegation(&self) -> String;
+}
+
+impl StakeTrait for AccountActivityQueryDelegatorExt {
+    fn get_public_key(&self) -> String {
+        self.public_key.clone().unwrap_or_default()
+    }
+
+    fn get_username(&self) -> String {
+        self.username.clone().unwrap_or_default()
+    }
+
+    fn get_delegated_balance(&self) -> String {
+        self.delegated_balance
+            .unwrap_or(0)
+            .try_into()
+            .map(nanomina_to_mina)
+            .map(|number| format_number_for_html(&number, LHS_MAX_DIGIT_PADDING))
+            .unwrap_or_default()
+    }
+
+    fn get_percent_of_delegation(&self) -> String {
+        format!("{:.2}", self.percent_of_delegation.unwrap_or(0.0))
     }
 }
 

@@ -1,8 +1,8 @@
-use super::functions::*;
+use super::{functions::*, models::AccountActivityQueryDelegatorExt};
 use crate::{
     account_activity::{
         components::{
-            AccountInternalCommandsSection, AccountOverviewBlocksTable,
+            AccountDelegationsSection, AccountInternalCommandsSection, AccountOverviewBlocksTable,
             AccountOverviewSnarkJobTable, AccountTransactionsSection,
         },
         graphql::account_activity_query::{
@@ -133,6 +133,26 @@ pub fn AccountInternalCommandsPage() -> impl IntoView {
 }
 
 #[component]
+pub fn AccountDelegationsPage() -> impl IntoView {
+    let delegations_sig: ReadSignal<Option<Vec<Option<AccountActivityQueryDelegatorExt>>>> =
+        use_context::<ReadSignal<Option<Vec<Option<AccountActivityQueryDelegatorExt>>>>>()
+            .expect("there to be an optional AccountActivityQueryFeetransfers signal provided");
+    let delegator_count: ReadSignal<Option<i64>> = use_context::<ReadSignal<Option<i64>>>()
+        .expect("there to be an optional delegator count signal provided");
+    {
+        move || {
+            view! {
+                <AccountDelegationsSection
+                    delegations_sig=delegations_sig
+                    delegator_count=delegator_count.get()
+                    is_loading=Signal::derive(move || delegations_sig.get().is_none())
+                />
+            }
+        }
+    }
+}
+
+#[component]
 pub fn AccountSpotlightTabbedPage() -> impl IntoView {
     let memo_params_map = use_params_map();
     let (account, set_account) = create_signal(None);
@@ -140,6 +160,8 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
     let (internal_transactions, set_int_txn) = create_signal(None);
     let (snarks, set_snarks) = create_signal(None);
     let (blocks, set_blocks) = create_signal(None);
+    let (delegators, set_delegators) = create_signal(None);
+    let (delegators_count, set_delegators_counts) = create_signal(None);
 
     let query_params_map = use_query_map();
     let (canonical_sig, _) = create_query_signal::<bool>("canonical");
@@ -147,7 +169,11 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
     let (nonce_sig, _) = create_query_signal::<u64>("q-nonce");
     let (slot_sig, _) = create_query_signal::<u64>("q-slot");
 
+    let (summary_sig, _, _) =
+        use_local_storage::<BlockchainSummary, JsonCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
+
     let id = move || memo_params_map.get().get("id").cloned().unwrap_or_default();
+    let current_epoch_staking_ledger = move || Some(summary_sig.get().epoch);
     let activity_resource = create_resource(
         move || {
             (
@@ -157,12 +183,22 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
                 block_height_sig.get(),
                 nonce_sig.get(),
                 slot_sig.get(),
+                current_epoch_staking_ledger(),
             )
         },
-        |(value, canonical_opt, qp_map, block_height, nonce, slot)| async move {
+        |(
+            value,
+            canonical_opt,
+            qp_map,
+            block_height,
+            nonce,
+            slot,
+            current_epoch_staking_ledger,
+        )| async move {
             if value.get("id").is_some() {
                 load_data(
                     value.get("id").cloned(),
+                    Some(TABLE_ROW_LIMIT),
                     Some(TABLE_ROW_LIMIT),
                     Some(TABLE_ROW_LIMIT),
                     Some(TABLE_ROW_LIMIT),
@@ -175,6 +211,7 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
                     qp_map.get("q-counterparty").cloned(),
                     slot,
                     value.get("id").cloned(),
+                    current_epoch_staking_ledger,
                     canonical_opt,
                 )
                 .await
@@ -230,6 +267,22 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
                 let account_clone: AccountActivityQueryAccounts = account.clone();
                 set_account.set(Some(account_clone));
             }
+            if let Some(Some(delegate)) = res.delegate.first() {
+                let delegators: Vec<Option<AccountActivityQueryDelegatorExt>> = res
+                    .delegators
+                    .into_iter()
+                    .map(|stake_opt| {
+                        stake_opt.map(|delegator| extend_delegator_info(&delegator, delegate))
+                    })
+                    .collect::<Vec<_>>();
+                set_delegators.set(Some(delegators));
+                set_delegators_counts.set(
+                    delegate
+                        .delegation_totals
+                        .as_ref()
+                        .and_then(|totals| totals.count_delegates),
+                )
+            }
         };
     });
 
@@ -246,35 +299,47 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
     provide_context(snarks);
     provide_context(blocks);
     provide_context(account);
+    provide_context(delegators);
+    provide_context(delegators_count);
 
     let tabs = move || {
         vec![
             NavEntry {
                 href: format!("/addresses/accounts/{}/commands/user", id()),
                 text: "User Commands".to_string(),
-                icon: NavIcon::Addresses,
+                icon: NavIcon::Transactions,
                 number_bubble: Some(transactions.get().map(|t| t.len()).unwrap_or(0)),
                 ..Default::default()
             },
             NavEntry {
                 href: format!("/addresses/accounts/{}/commands/internal", id()),
                 text: "Internal Commands".to_string(),
-                icon: NavIcon::Addresses,
+                icon: NavIcon::Transactions,
                 number_bubble: Some(blocks.get().map(|t| t.len()).unwrap_or(0)),
                 ..Default::default()
             },
             NavEntry {
                 href: format!("/addresses/accounts/{}/snark-jobs", id()),
                 text: "SNARK Jobs".to_string(),
-                icon: NavIcon::Addresses,
+                icon: NavIcon::SNARKs,
                 number_bubble: Some(snarks.get().map(|t| t.len()).unwrap_or(0)),
                 ..Default::default()
             },
             NavEntry {
                 href: format!("/addresses/accounts/{}/block-production", id()),
                 text: "Block Production".to_string(),
-                icon: NavIcon::Addresses,
+                icon: NavIcon::Blocks,
                 number_bubble: Some(blocks.get().map(|t| t.len()).unwrap_or(0)),
+                ..Default::default()
+            },
+            NavEntry {
+                href: format!("/addresses/accounts/{}/delegations", id()),
+                text: "Delegations".to_string(),
+                icon: NavIcon::Delegates,
+                number_bubble: delegators_count
+                    .get()
+                    .and_then(|n| n.try_into().ok())
+                    .or(Some(0)),
                 ..Default::default()
             },
         ]
