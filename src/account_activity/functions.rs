@@ -40,11 +40,14 @@ pub async fn load_data(
     counterparty: Option<String>,
     slot: Option<u64>,
     block_producer: Option<String>,
+    current_epoch_staking_ledger: Option<u64>,
     canonical: Option<bool>,
 ) -> Result<account_activity_query::ResponseData, MyError> {
     let block_height = block_height.map(|x| x as i64);
     let nonce = nonce.map(|x| x as i64);
     let slot = slot.map(|x| x as i64);
+    let get_current_epoch_staking_ledger =
+        move || current_epoch_staking_ledger.and_then(|e| e.try_into().ok());
 
     let variables = account_activity_query::Variables {
         blocks_sort_by: account_activity_query::BlockSortByInput::BLOCKHEIGHT_DESC,
@@ -166,10 +169,12 @@ pub async fn load_data(
         },
         delegate_query: account_activity_query::StakeQueryInput {
             public_key: public_key.clone(),
+            epoch: get_current_epoch_staking_ledger(),
             ..Default::default()
         },
         delegators_query: account_activity_query::StakeQueryInput {
             delegate: public_key,
+            epoch: get_current_epoch_staking_ledger(),
             ..Default::default()
         },
     };

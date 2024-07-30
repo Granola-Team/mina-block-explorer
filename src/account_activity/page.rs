@@ -169,7 +169,11 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
     let (nonce_sig, _) = create_query_signal::<u64>("q-nonce");
     let (slot_sig, _) = create_query_signal::<u64>("q-slot");
 
+    let (summary_sig, _, _) =
+        use_local_storage::<BlockchainSummary, JsonCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
+
     let id = move || memo_params_map.get().get("id").cloned().unwrap_or_default();
+    let current_epoch_staking_ledger = move || Some(summary_sig.get().epoch);
     let activity_resource = create_resource(
         move || {
             (
@@ -179,9 +183,18 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
                 block_height_sig.get(),
                 nonce_sig.get(),
                 slot_sig.get(),
+                current_epoch_staking_ledger(),
             )
         },
-        |(value, canonical_opt, qp_map, block_height, nonce, slot)| async move {
+        |(
+            value,
+            canonical_opt,
+            qp_map,
+            block_height,
+            nonce,
+            slot,
+            current_epoch_staking_ledger,
+        )| async move {
             if value.get("id").is_some() {
                 load_data(
                     value.get("id").cloned(),
@@ -198,6 +211,7 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
                     qp_map.get("q-counterparty").cloned(),
                     slot,
                     value.get("id").cloned(),
+                    current_epoch_staking_ledger,
                     canonical_opt,
                 )
                 .await
