@@ -78,7 +78,7 @@ impl Default for NavEntry {
 impl NavEntry {
     pub fn is_match(&self, pathname: &str) -> bool {
         self.match_type.as_ref().map_or(false, |mt| match mt {
-            NavMatchType::Exact => &self.href == pathname,
+            NavMatchType::Exact => self.href == pathname,
             NavMatchType::Prefix => pathname.starts_with(&self.href),
         })
     }
