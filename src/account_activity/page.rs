@@ -2,7 +2,7 @@ use super::{functions::*, models::AccountActivityQueryDelegatorExt};
 use crate::{
     account_activity::{
         components::{
-            AccountInternalCommandsSection, AccountOverviewBlocksTable,
+            AccountDelegationsSection, AccountInternalCommandsSection, AccountOverviewBlocksTable,
             AccountOverviewSnarkJobTable, AccountTransactionsSection,
         },
         graphql::account_activity_query::{
@@ -133,6 +133,19 @@ pub fn AccountInternalCommandsPage() -> impl IntoView {
 }
 
 #[component]
+pub fn AccountDelegationsPage() -> impl IntoView {
+    let delegations_sig: ReadSignal<Option<Vec<Option<AccountActivityQueryDelegatorExt>>>> =
+        use_context::<ReadSignal<Option<Vec<Option<AccountActivityQueryDelegatorExt>>>>>()
+            .expect("there to be an optional AccountActivityQueryFeetransfers signal provided");
+    view! {
+        <AccountDelegationsSection
+            delegations_sig=delegations_sig
+            is_loading=Signal::derive(move || delegations_sig.get().is_none())
+        />
+    }
+}
+
+#[component]
 pub fn AccountSpotlightTabbedPage() -> impl IntoView {
     let memo_params_map = use_params_map();
     let (account, set_account) = create_signal(None);
@@ -237,21 +250,7 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
                     .delegators
                     .into_iter()
                     .map(|stake_opt| {
-                        stake_opt.map(|stake| AccountActivityQueryDelegatorExt {
-                            username: stake.username,
-                            epoch: stake.epoch,
-                            public_key: stake.public_key,
-                            delegated_balance: stake.balance_nanomina,
-                            percent_of_delegation: delegate.clone().delegation_totals.and_then(
-                                |dt| {
-                                    dt.total_delegated_nanomina.and_then(|delegated_nanomina| {
-                                        stake
-                                            .balance_nanomina
-                                            .map(|balance| (balance / delegated_nanomina) as f64)
-                                    })
-                                },
-                            ),
-                        })
+                        stake_opt.map(|delegator| extend_delegator_info(&delegator, &delegate))
                     })
                     .collect::<Vec<_>>();
                 set_delegators.set(Some(delegators));
@@ -308,7 +307,7 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
                 href: format!("/addresses/accounts/{}/delegations", id()),
                 text: "Delegations".to_string(),
                 icon: NavIcon::Delegates,
-                number_bubble: Some(delegations.get().map(|t| t.len()).unwrap_or(0)),
+                number_bubble: Some(delegators.get().map(|t| t.len()).unwrap_or(0)),
                 ..Default::default()
             },
         ]
