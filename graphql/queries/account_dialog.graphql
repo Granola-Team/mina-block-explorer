@@ -85,6 +85,7 @@ query AccountActivityQuery(
   delegate: stakes(limit: 1, query: $delegate_query) {
     delegationTotals {
       totalDelegatedNanomina
+      countDelegates
     }
   }
   snarks(sortBy: $snarks_sort_by, limit: $snarks_limit, query: $snarks_query) {

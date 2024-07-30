@@ -154,6 +154,7 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
     let (snarks, set_snarks) = create_signal(None);
     let (blocks, set_blocks) = create_signal(None);
     let (delegators, set_delegators) = create_signal(None);
+    let (delegators_count, set_delegators_counts) = create_signal(None);
 
     let query_params_map = use_query_map();
     let (canonical_sig, _) = create_query_signal::<bool>("canonical");
@@ -254,6 +255,12 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
                     })
                     .collect::<Vec<_>>();
                 set_delegators.set(Some(delegators));
+                set_delegators_counts.set(
+                    delegate
+                        .delegation_totals
+                        .as_ref()
+                        .and_then(|totals| totals.count_delegates),
+                )
             }
         };
     });
@@ -307,7 +314,10 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
                 href: format!("/addresses/accounts/{}/delegations", id()),
                 text: "Delegations".to_string(),
                 icon: NavIcon::Delegates,
-                number_bubble: Some(delegators.get().map(|t| t.len()).unwrap_or(0)),
+                number_bubble: delegators_count
+                    .get()
+                    .and_then(|n| n.try_into().ok())
+                    .or(Some(0)),
                 ..Default::default()
             },
         ]

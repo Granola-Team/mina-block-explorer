@@ -388,8 +388,6 @@ pub fn AccountDelegationsSection(
     delegations_sig: ReadSignal<Option<Vec<Option<AccountActivityQueryDelegatorExt>>>>,
     is_loading: Signal<bool>,
 ) -> impl IntoView {
-    let (summary_sig, _, _) =
-        use_local_storage::<BlockchainSummary, JsonCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
     let table_columns = vec![
         TableColumn {
             column: "Public Key".to_string(),

@@ -306,6 +306,7 @@ mod extend_delegator_info_tests {
 
         let delegate_totals = AccountActivityQueryDelegateDelegationTotals {
             total_delegated_nanomina: Some(1000),
+            count_delegates: Some(1),
         };
 
         let delegate = AccountActivityQueryDelegate {
@@ -335,6 +336,7 @@ mod extend_delegator_info_tests {
 
         let delegate_totals = AccountActivityQueryDelegateDelegationTotals {
             total_delegated_nanomina: Some(1000),
+            count_delegates: Some(1),
         };
 
         let delegate = AccountActivityQueryDelegate {
@@ -364,6 +366,7 @@ mod extend_delegator_info_tests {
 
         let delegate_totals = AccountActivityQueryDelegateDelegationTotals {
             total_delegated_nanomina: None,
+            count_delegates: Some(1),
         };
 
         let delegate = AccountActivityQueryDelegate {
@@ -393,6 +396,7 @@ mod extend_delegator_info_tests {
 
         let delegate_totals = AccountActivityQueryDelegateDelegationTotals {
             total_delegated_nanomina: Some(0),
+            count_delegates: Some(1),
         };
 
         let delegate = AccountActivityQueryDelegate {
