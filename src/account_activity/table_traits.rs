@@ -1,6 +1,6 @@
 use super::{
     graphql::account_activity_query::AccountActivityQuerySnarks,
-    models::AccountActivityQueryDelegatedBalance,
+    models::AccountActivityQueryDelegatorExt,
 };
 use crate::{
     account_activity::{
@@ -298,7 +298,7 @@ impl BlockTrait for AccountActivityQueryBlocks {
     }
 }
 
-impl TableData for Vec<Option<AccountActivityQueryDelegatedBalance>> {
+impl TableData for Vec<Option<AccountActivityQueryDelegatorExt>> {
     fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
         self.iter()
             .map(|opt_stake| match opt_stake {
@@ -344,7 +344,7 @@ pub trait StakeTrait {
     fn get_percent_of_delegation(&self) -> String;
 }
 
-impl StakeTrait for AccountActivityQueryDelegatedBalance {
+impl StakeTrait for AccountActivityQueryDelegatorExt {
     fn get_public_key(&self) -> String {
         self.public_key.clone().unwrap_or_default()
     }
@@ -354,7 +354,7 @@ impl StakeTrait for AccountActivityQueryDelegatedBalance {
     }
 
     fn get_delegated_balance(&self) -> String {
-        self.delegated_balance.unwrap_or(0.0).to_string()
+        self.delegated_balance.unwrap_or(0).to_string()
     }
 
     fn get_percent_of_delegation(&self) -> String {
