@@ -172,12 +172,18 @@ where
     F: Fn(MouseEvent) + 'static,
 {
     let location = use_location();
-    let href = nav_entry.href.clone();
     let base_link_class = "nav-link whitespace-nowrap md:mx-1.5 my-6 mx-4 flex font-bold text-sm uppercase sm:tracking-normal md:tracking-tighter lg:tracking-normal sm:text-sm md:text-xs lg:text-sm items-center text-white";
     let n_entry = nav_entry.clone();
     let get_link_class = create_memo(move |_| {
         let pathname = location.pathname.get();
-        let tmp_class = format!("{} {} {}", base_link_class, LINK_HOVER_STATE, "text-white");
+        let tmp_class = if n_entry.is_match(&pathname) {
+            format!(
+                "{} {} {}",
+                base_link_class, LINK_HOVER_STATE, "text-granola-orange"
+            )
+        } else {
+            format!("{} {} {}", base_link_class, LINK_HOVER_STATE, "text-white")
+        };
         if n_entry.disabled {
             format!(
                 "{} {}",
