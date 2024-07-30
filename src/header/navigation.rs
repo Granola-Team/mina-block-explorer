@@ -58,6 +58,7 @@ pub fn Header() -> impl IntoView {
             href: "/blocks".to_string(),
             text: "Blocks".to_string(),
             icon: NavIcon::Blocks,
+            match_type: Some(NavMatchType::Prefix),
             ..Default::default()
         },
         NavEntry {
@@ -65,6 +66,7 @@ pub fn Header() -> impl IntoView {
             text: "Transactions".to_string(),
             icon: NavIcon::Transactions,
             sub_entries: txn_entries,
+            match_type: Some(NavMatchType::Prefix),
             ..Default::default()
         },
         NavEntry {
@@ -72,6 +74,7 @@ pub fn Header() -> impl IntoView {
             text: "Addresses".to_string(),
             icon: NavIcon::Addresses,
             sub_entries: addr_entries,
+            match_type: Some(NavMatchType::Prefix),
             ..Default::default()
         },
         NavEntry {

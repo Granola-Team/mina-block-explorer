@@ -1,5 +1,4 @@
 use graphql_client::Error;
-use regex::Regex;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug)]
@@ -48,7 +47,7 @@ pub enum ColorVariant {
 #[derive(Clone)]
 pub enum NavMatchType {
     Exact,
-    Regex(String),
+    Prefix,
 }
 
 #[derive(Clone)]
@@ -80,10 +79,7 @@ impl NavEntry {
     pub fn is_match(&self, pathname: &str) -> bool {
         self.match_type.as_ref().map_or(false, |mt| match mt {
             NavMatchType::Exact => &self.href == pathname,
-            NavMatchType::Regex(pattern) => {
-                let regex = Regex::new(&pattern).unwrap();
-                regex.is_match(pathname)
-            }
+            NavMatchType::Prefix => pathname.starts_with(&self.href),
         })
     }
 }
