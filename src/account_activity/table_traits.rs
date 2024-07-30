@@ -12,7 +12,12 @@ use crate::{
             AccountActivityQueryDirectionalTransactions,
         },
     },
-    common::{constants::LHS_MAX_SPACE_FEES, functions::*, models::*, table::TableData},
+    common::{
+        constants::{LHS_MAX_DIGIT_PADDING, LHS_MAX_SPACE_FEES},
+        functions::*,
+        models::*,
+        table::TableData,
+    },
 };
 use leptos::*;
 
@@ -354,11 +359,16 @@ impl StakeTrait for AccountActivityQueryDelegatorExt {
     }
 
     fn get_delegated_balance(&self) -> String {
-        self.delegated_balance.unwrap_or(0).to_string()
+        self.delegated_balance
+            .unwrap_or(0)
+            .try_into()
+            .map(|num| nanomina_to_mina(num))
+            .map(|number| format_number_for_html(&number, LHS_MAX_DIGIT_PADDING))
+            .unwrap_or_default()
     }
 
     fn get_percent_of_delegation(&self) -> String {
-        self.percent_of_delegation.unwrap_or(0.0).to_string()
+        format!("{:.2}", self.percent_of_delegation.unwrap_or(0.0))
     }
 }
 
