@@ -1,4 +1,5 @@
 use graphql_client::Error;
+use regex::Regex;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug)]
@@ -45,6 +46,12 @@ pub enum ColorVariant {
 }
 
 #[derive(Clone)]
+pub enum NavMatchType {
+    Exact,
+    Regex(String),
+}
+
+#[derive(Clone)]
 pub struct NavEntry {
     pub href: String,
     pub text: String,
@@ -52,6 +59,7 @@ pub struct NavEntry {
     pub sub_entries: Option<Vec<NavEntry>>,
     pub disabled: bool,
     pub number_bubble: Option<usize>,
+    pub match_type: Option<NavMatchType>,
 }
 
 impl Default for NavEntry {
@@ -63,7 +71,20 @@ impl Default for NavEntry {
             href: String::new(),
             text: String::new(),
             icon: NavIcon::Accounts,
+            match_type: Some(NavMatchType::Exact),
         }
+    }
+}
+
+impl NavEntry {
+    pub fn is_match(&self, pathname: &str) -> bool {
+        self.match_type.as_ref().map_or(false, |mt| match mt {
+            NavMatchType::Exact => &self.href == pathname,
+            NavMatchType::Regex(pattern) => {
+                let regex = Regex::new(&pattern).unwrap();
+                regex.is_match(pathname)
+            }
+        })
     }
 }
 
