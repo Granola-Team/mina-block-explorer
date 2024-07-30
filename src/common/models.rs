@@ -84,6 +84,45 @@ impl NavEntry {
     }
 }
 
+#[cfg(test)]
+mod nav_entry_tests {
+    use super::*;
+
+    #[test]
+    fn test_exact_match() {
+        let nav_entry = NavEntry {
+            href: "/home".to_string(),
+            match_type: Some(NavMatchType::Exact),
+            ..Default::default()
+        };
+        assert!(nav_entry.is_match("/home"));
+        assert!(!nav_entry.is_match("/home/about"));
+    }
+
+    #[test]
+    fn test_prefix_match() {
+        let nav_entry = NavEntry {
+            href: "/home".to_string(),
+            match_type: Some(NavMatchType::Prefix),
+            ..Default::default()
+        };
+        assert!(nav_entry.is_match("/home"));
+        assert!(nav_entry.is_match("/home/about"));
+        assert!(!nav_entry.is_match("/about/home"));
+    }
+
+    #[test]
+    fn test_no_match_type() {
+        let nav_entry = NavEntry {
+            href: "/home".to_string(),
+            match_type: None,
+            ..Default::default()
+        };
+        assert!(!nav_entry.is_match("/home"));
+        assert!(!nav_entry.is_match("/home/about"));
+    }
+}
+
 #[derive(Clone)]
 pub struct UrlParamSelectOptions {
     pub is_boolean_option: bool,
