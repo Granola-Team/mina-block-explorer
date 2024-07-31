@@ -9,6 +9,7 @@ export CYPRESS_BASE_URL := 'http://localhost:' + trunk_port
 export VERSION := `git rev-parse --short=8 HEAD`
 export CARGO_HOME := `pwd` + '/.cargo'
 export BERKELEY_FEATURES_ENABLED := "true"
+export INDEXER_SRC_DIR := `echo $VOLUMES_DIR` + '/mina-indexer-prod/explorer-' + `git rev-parse --short=8 HEAD`
 
 set dotenv-load := true
 
@@ -53,6 +54,13 @@ pnpm_install:
 dev: pnpm_install
   trunk serve --port="{{trunk_port}}" --open
 
+# Downloads latest source code for indexer and runs
+start-indexer:
+  @echo "--- Starting Indexer"
+  rm -rf $INDEXER_SRC_DIR
+  git clone https://github.com/Granola-Team/mina-indexer.git $INDEXER_SRC_DIR
+  cd $INDEXER_SRC_DIR && nix develop --command just deploy-local-prod 10000
+
 # Run all application regression tests
 test-e2e: pnpm_install
   @echo "--- Performing end-to-end tests"
@@ -70,6 +78,8 @@ test-e2e: pnpm_install
 test-e2e-tier1 spec=spec: pnpm_install
   @echo "--- Performing end-to-end @tier1 tests"
   CYPRESS_tags="@tier1" \
+  GRAPHQL_URL="http://localhost:8080/graphql" \
+  REST_URL="http://localhost:8080" \
   node ./scripts/wait-on-port.js \
     trunk serve \
     --no-autoreload \
@@ -83,6 +93,8 @@ test-e2e-tier1 spec=spec: pnpm_install
 test-e2e-tier2: pnpm_install
   @echo "--- Performing end-to-end @tier2 tests"
   CYPRESS_tags="@tier2" \
+  GRAPHQL_URL="http://localhost:8080/graphql" \
+  REST_URL="http://localhost:8080" \
   node ./scripts/wait-on-port.js \
     trunk serve \
     --no-autoreload \
@@ -119,7 +131,7 @@ lint: pnpm_install && audit
   cargo clippy --all-targets --all-features -- -D warnings
 
 # Run tier1 regression suite in CI
-tier1: lint test-unit && (test-e2e-tier1 spec)
+tier1: start-indexer lint test-unit && (test-e2e-tier1 spec)
 
 # Run tier2 regression suite in CI
-tier2: lint test-unit && test-e2e-tier2
+tier2: start-indexer lint test-unit && test-e2e-tier2
