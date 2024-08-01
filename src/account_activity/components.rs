@@ -231,10 +231,10 @@ pub fn AccountTransactionsSection(
     let table_columns = vec![
         TableColumn {
             column: "Height".to_string(),
-            html_input_type: "number".to_string(),
             is_searchable: true,
-            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
+            html_input_type: "number".to_string(),
             alignment: Some(ColumnTextAlignment::Right),
+            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
             ..Default::default()
         },
         TableColumn {
@@ -320,10 +320,10 @@ pub fn AccountInternalCommandsSection(
     let table_columns = vec![
         TableColumn {
             column: "Height".to_string(),
-            html_input_type: "number".to_string(),
             is_searchable: true,
-            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
+            html_input_type: "number".to_string(),
             alignment: Some(ColumnTextAlignment::Right),
+            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
             ..Default::default()
         },
         TableColumn {
@@ -455,10 +455,10 @@ pub fn AccountOverviewSnarkJobTable(
     let table_columns = vec![
         TableColumn {
             column: "Height".to_string(),
-            html_input_type: "number".to_string(),
             is_searchable: true,
-            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
+            html_input_type: "number".to_string(),
             alignment: Some(ColumnTextAlignment::Right),
+            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
             ..Default::default()
         },
         TableColumn {
@@ -538,10 +538,10 @@ pub fn AccountOverviewBlocksTable(
     let table_columns = vec![
         TableColumn {
             column: "Height".to_string(),
-            html_input_type: "number".to_string(),
-            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
-            alignment: Some(ColumnTextAlignment::Right),
             is_searchable: true,
+            html_input_type: "number".to_string(),
+            alignment: Some(ColumnTextAlignment::Right),
+            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
             ..Default::default()
         },
         TableColumn {
@@ -553,8 +553,9 @@ pub fn AccountOverviewBlocksTable(
         TableColumn {
             column: "Slot".to_string(),
             is_searchable: true,
-            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
+            html_input_type: "number".to_string(),
             alignment: Some(ColumnTextAlignment::Right),
+            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
             ..Default::default()
         },
         TableColumn {

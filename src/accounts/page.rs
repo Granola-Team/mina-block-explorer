@@ -61,6 +61,8 @@ fn AccountsPageContents() -> impl IntoView {
             width: Some(String::from(TABLE_COL_LARGE_BALANCE)),
             sort_direction: Some(TableSortDirection::Desc),
             is_searchable: true,
+            html_input_type: "number".to_string(),
+            alignment: Some(ColumnTextAlignment::Right),
             ..Default::default()
         },
         TableColumn {
