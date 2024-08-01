@@ -91,7 +91,7 @@ let pages = [
       {
         name: "fee",
         selector: () => {
-          return cy.get("@table-rows").first().find("td").eq(5);
+          return cy.get("@table-rows").first().find("td").eq(6);
         },
         type: "currency",
       },

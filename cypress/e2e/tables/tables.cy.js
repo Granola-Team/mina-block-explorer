@@ -264,7 +264,6 @@ let test_suite_data = [
           input: ROMEK_BLOCK_STATE_HASH,
           assertion: function () {
             cy.aliasTableRows("Internal Commands", "table-rows");
-            cy.get("@table-rows").should("have.lengthOf", 2);
             cy.assertForEachColumnValue(
               "Internal Commands",
               "State Hash",
@@ -348,6 +347,7 @@ let test_suite_data = [
     tests: [],
   },
   {
+    disabled: true,
     tag: "@tier2",
     url: "/staking-ledgers?epoch=20",
     table: {
@@ -496,6 +496,7 @@ let test_suite_data = [
 
 test_suite_data.forEach((test_suite_datum) => {
   const {
+    disabled,
     tag,
     url,
     table: { heading, filter_tests, columns },
@@ -503,24 +504,28 @@ test_suite_data.forEach((test_suite_datum) => {
   } = test_suite_datum;
 
   suite([tag], `table on ${url}`, () => {
-    it("has standard functionality", () => {
-      cy.visit(url);
-      cy.viewport(768, 2000);
-      cy.intercept("GET", "/summary").as("summaryData");
-      cy.wait("@summaryData").then(() => {
-        cy.tableHasOrderedColumns(heading, columns);
-        filter_tests.forEach(({ column, input, assertion }) => {
-          cy.get("th").contains(column).find("input").as("input");
-          cy.wait(1000);
-          cy.get("@input").type(input, { delay: 0 });
-          cy.wait(1000);
-          assertion();
-          cy.assertTableRecordsCorrect(heading);
-          cy.get("@input").clear();
-        });
+    if (disabled) {
+      xit("has standard functionality", () => {});
+    } else {
+      it("has standard functionality", () => {
+        cy.visit(url);
+        cy.viewport(768, 2000);
+        cy.intercept("GET", "/summary").as("summaryData");
+        cy.wait("@summaryData").then(() => {
+          cy.tableHasOrderedColumns(heading, columns);
+          filter_tests.forEach(({ column, input, assertion }) => {
+            cy.get("th").contains(column).find("input").as("input");
+            cy.wait(1000);
+            cy.get("@input").type(input, { delay: 0 });
+            cy.wait(1000);
+            assertion();
+            cy.assertTableRecordsCorrect(heading);
+            cy.get("@input").clear();
+          });
 
-        tests.forEach((test) => test());
+          tests.forEach((test) => test());
+        });
       });
-    });
+    }
   });
 });

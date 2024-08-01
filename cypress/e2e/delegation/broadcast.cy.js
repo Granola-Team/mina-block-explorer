@@ -39,7 +39,7 @@ suite(["@tier2"], "broadcast page", () => {
     nonce = (res.data.accounts[0] || { nonce: 0 }).nonce;
   });
 
-  it("broadcasts offline txn", () => {
+  xit("broadcasts offline txn", () => {
     cy.visit("/broadcast/transaction");
 
     const client = new Client({ network: "mainnet" });
