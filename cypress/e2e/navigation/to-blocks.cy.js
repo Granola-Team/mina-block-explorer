@@ -3,7 +3,7 @@ import { ADDRESS_WITH_SNARK_AND_BLOCK_PRODUCTION } from "../constants";
 suite(["@tier2"], "block page", () => {
   [
     {
-      origin: `/addresses/accounts/${ADDRESS_WITH_SNARK_AND_BLOCK_PRODUCTION}`,
+      origin: `/addresses/accounts/${ADDRESS_WITH_SNARK_AND_BLOCK_PRODUCTION}/block-production`,
       dest: "blocks",
       href: `/blocks?q-block-producer=${ADDRESS_WITH_SNARK_AND_BLOCK_PRODUCTION}`,
     },
