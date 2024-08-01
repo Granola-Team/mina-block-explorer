@@ -65,18 +65,6 @@ pub fn CommandSpotlightPage() -> impl IntoView {
         }
     });
 
-    let table_columns = vec![
-        TableColumn {
-            column: "Height".to_string(),
-            html_input_type: "number".to_string(),
-            ..Default::default()
-        },
-        TableColumn {
-            column: "Hash".to_string(),
-            ..Default::default()
-        },
-    ];
-
     let get_data = move || resource.get().and_then(|res| res.ok());
 
     create_effect(move |_| {
@@ -232,6 +220,17 @@ pub fn CommandSpotlightPage() -> impl IntoView {
                                     ..Default::default()
                                 },
                             ];
+                            let table_columns = vec![
+                                TableColumn {
+                                    column: "Height".to_string(),
+                                    html_input_type: "number".to_string(),
+                                    ..Default::default()
+                                },
+                                TableColumn {
+                                    column: "Hash".to_string(),
+                                    ..Default::default()
+                                },
+                            ];
                             view! {
                                 <SpotlightSection
                                     header="Command Spotlight"
@@ -244,6 +243,14 @@ pub fn CommandSpotlightPage() -> impl IntoView {
 
                                     <TransactionIcon width=40/>
                                 </SpotlightSection>
+                                <TableSectionTemplate
+                                    table_columns
+                                    data_sig=other_txns
+                                    section_heading="In Other Blocks"
+                                    is_loading=resource.loading()
+                                    controls=|| ().into_view()
+                                    half_width=true
+                                />
                             }
                                 .into_view()
                         }
@@ -253,6 +260,9 @@ pub fn CommandSpotlightPage() -> impl IntoView {
                             }
                         }
                     }
+                }
+                Some(Err(_)) => {
+                    view! { <NotFound message=Some("Transaction Not Found :(".to_string())/> }
                 }
                 None => {
                     let spotlight_items = vec![
@@ -321,16 +331,8 @@ pub fn CommandSpotlightPage() -> impl IntoView {
                     }
                         .into_view()
                 }
-                _ => ().into_view(),
             }}
-            <TableSectionTemplate
-                table_columns
-                data_sig=other_txns
-                section_heading="In Other Blocks"
-                is_loading=resource.loading()
-                controls=|| ().into_view()
-                half_width=true
-            />
+
         </PageContainer>
     }
 }

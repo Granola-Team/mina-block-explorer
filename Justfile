@@ -65,19 +65,6 @@ test-e2e: pnpm_install
     -- \
     pnpm exec cypress run -r list -q
 
-# Run tier1 application regression tests
-test-e2e-tier1 spec=spec: pnpm_install
-  @echo "--- Performing end-to-end @tier1 tests"
-  CYPRESS_tags="@tier1" \
-  node ./scripts/wait-on-port.js \
-    trunk serve \
-    --no-autoreload \
-    --port="{{trunk_port}}" \
-    -- \
-    "{{trunk_port}}" \
-    -- \
-    pnpm exec cypress run -r list -q --spec {{spec}}
-
 # Run tier2 application regression tests
 test-e2e-tier2: pnpm_install
   @echo "--- Performing end-to-end @tier2 tests"
@@ -117,8 +104,8 @@ lint: pnpm_install && audit
   leptosfmt --check ./src
   cargo clippy --all-targets --all-features -- -D warnings
 
-# Run tier1 regression suite in CI
-tier1: lint test-unit && (test-e2e-tier1 spec)
+# Run tier1 tests
+tier1: lint test-unit
 
 # Run tier2 regression suite in CI
 tier2: lint test-unit && test-e2e-tier2

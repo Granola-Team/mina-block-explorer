@@ -1,6 +1,6 @@
 const pages = require("../../pages.json");
 
-suite(["@tier1"], "mobile menu", () => {
+suite(["@tier2"], "mobile menu", () => {
   beforeEach(() => {
     cy.viewport("iphone-xr");
     cy.visit("/");
