@@ -1,6 +1,6 @@
 import { DEFAULT_ACCOUNT_PK } from "../constants";
 
-suite(["@tier1"], "tab", () => {
+suite(["@tier2"], "tab", () => {
   let tabs = [
     {
       page: "/commands/internal",
