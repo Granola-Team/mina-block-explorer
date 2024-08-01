@@ -20,7 +20,7 @@ suite(["@tier2"], "account page", () => {
       tableHeader: "User Commands",
     },
     {
-      origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
+      origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}/block-production`,
       column: "Coinbase Receiver",
       tableHeader: "Block Production",
     },
