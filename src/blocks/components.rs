@@ -1,6 +1,6 @@
 use super::{functions::*, graphql::blocks_query::BlocksQueryBlocks, models::*};
 use crate::{
-    blocks::graphql::{blocks_query, blocks_query::BlocksQueryBlocksTransactionsFeeTransfer},
+    blocks::graphql::blocks_query,
     common::{components::*, constants::*, functions::*, models::*, spotlight::*, table::*},
     icons::*,
     summary::models::BlockchainSummary,
@@ -153,38 +153,12 @@ pub fn BlockInternalCommands(block: BlocksQueryBlocks) -> impl IntoView {
     let (loading_sig, _) = create_signal(false);
 
     create_effect(move |_| {
-        let (fee_transfers, coinbase, coinbase_receiver) = {
-            let transactions = &block.transactions;
-
-            (
-                transactions
-                    .as_ref()
-                    .and_then(|txn| txn.fee_transfer.clone()),
-                transactions.as_ref().and_then(|txn| txn.coinbase.clone()),
-                transactions.as_ref().and_then(|txn| {
-                    txn.coinbase_receiver_account
-                        .as_ref()
-                        .and_then(|ra| ra.public_key.clone())
-                }),
-            )
-        };
-
-        if let Some(mut fee_transfers) = fee_transfers {
-            fee_transfers.push(Some(BlocksQueryBlocksTransactionsFeeTransfer {
-                fee: coinbase,
-                type_: Some("Coinbase".to_string()),
-                recipient: coinbase_receiver,
-            }));
-
-            set_data.set(Some(fee_transfers.clone()));
-        } else {
-            let new_fee_transfers = vec![Some(BlocksQueryBlocksTransactionsFeeTransfer {
-                fee: coinbase,
-                type_: Some("Coinbase".to_string()),
-                recipient: coinbase_receiver,
-            })];
-            set_data.set(Some(new_fee_transfers));
-        }
+        set_data.set(
+            block
+                .transactions
+                .as_ref()
+                .and_then(|txn| txn.fee_transfer.clone()),
+        );
     });
 
     let table_columns = vec![
