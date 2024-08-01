@@ -100,8 +100,6 @@ pub fn BlockTabbedPage() -> impl IntoView {
                 href: format!("/blocks/{}/spotlight", id()),
                 text: "Block Spotlight".to_string(),
                 icon: NavIcon::Blocks,
-                sub_entries: None,
-                disabled: false,
                 ..Default::default()
             },
             NavEntry {
@@ -109,16 +107,14 @@ pub fn BlockTabbedPage() -> impl IntoView {
                 text: "User Commands".to_string(),
                 icon: NavIcon::Transactions,
                 number_bubble: option_block.get().as_ref().and_then(get_transaction_count),
-                sub_entries: None,
-                disabled: false,
+                ..Default::default()
             },
             NavEntry {
                 href: format!("/blocks/{}/snark-jobs", id()),
                 text: "SNARK Jobs".to_string(),
                 icon: NavIcon::SNARKs,
                 number_bubble: option_block.get().as_ref().and_then(get_snark_job_count),
-                sub_entries: None,
-                disabled: false,
+                ..Default::default()
             },
             NavEntry {
                 href: format!("/blocks/{}/commands/internal", id()),
@@ -132,9 +128,7 @@ pub fn BlockTabbedPage() -> impl IntoView {
                 href: format!("/blocks/{}/analytics", id()),
                 text: "Analytics".to_string(),
                 icon: NavIcon::Analytics,
-                number_bubble: None,
-                sub_entries: None,
-                disabled: false,
+                ..Default::default()
             },
         ]
     };

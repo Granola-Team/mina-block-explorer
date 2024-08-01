@@ -172,12 +172,11 @@ where
     F: Fn(MouseEvent) + 'static,
 {
     let location = use_location();
-    let href = nav_entry.href.clone();
-    let base_link_class = "nav-link whitespace-nowrap md:mx-1.5 my-6 mx-4 flex font-bold text-sm uppercase sm:tracking-normal md:tracking-tighter lg:tracking-normal sm:text-sm md:text-xs lg:text-sm items-center";
+    let base_link_class = "nav-link whitespace-nowrap md:mx-1.5 my-6 mx-4 flex font-bold text-sm uppercase sm:tracking-normal md:tracking-tighter lg:tracking-normal sm:text-sm md:text-xs lg:text-sm items-center ";
     let n_entry = nav_entry.clone();
     let get_link_class = create_memo(move |_| {
         let pathname = location.pathname.get();
-        let tmp_class = if pathname.contains(&href) {
+        let tmp_class = if n_entry.is_match(&pathname) {
             format!(
                 "{} {} {}",
                 base_link_class, LINK_HOVER_STATE, "text-granola-orange"
@@ -225,20 +224,20 @@ where
 pub fn TabLink(nav_entry: NavEntry) -> impl IntoView {
     let location = use_location();
     let pathname = move || location.pathname.get();
-    let href = nav_entry.href.clone();
     let base_link_class = "tab mx-1 p-2 flex font-bold text-sm uppercase border-b border-b-2 whitespace-nowrap box-border";
     let disabled_link_class =
         "text-white border-transparent opacity-50 cursor-not-allowed pointer-events-none";
     let active_state = "active text-granola-orange border-granola-orange";
     let inactive_state = "inactive text-white border-transparent hover:border-white";
+    let n_entry = nav_entry.clone();
     view! {
         <a
             class=move || {
                 format!(
                     "{} {} {}",
                     base_link_class,
-                    if pathname().ends_with(&href) { active_state } else { inactive_state },
-                    if nav_entry.disabled { disabled_link_class } else { "" },
+                    if n_entry.is_match(&pathname()) { active_state } else { inactive_state },
+                    if n_entry.disabled { disabled_link_class } else { "" },
                 )
             }
 

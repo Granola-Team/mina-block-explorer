@@ -45,6 +45,12 @@ pub enum ColorVariant {
 }
 
 #[derive(Clone)]
+pub enum NavMatchType {
+    Exact,
+    Prefix,
+}
+
+#[derive(Clone)]
 pub struct NavEntry {
     pub href: String,
     pub text: String,
@@ -52,6 +58,7 @@ pub struct NavEntry {
     pub sub_entries: Option<Vec<NavEntry>>,
     pub disabled: bool,
     pub number_bubble: Option<usize>,
+    pub match_type: Option<NavMatchType>,
 }
 
 impl Default for NavEntry {
@@ -63,7 +70,56 @@ impl Default for NavEntry {
             href: String::new(),
             text: String::new(),
             icon: NavIcon::Accounts,
+            match_type: Some(NavMatchType::Exact),
         }
+    }
+}
+
+impl NavEntry {
+    pub fn is_match(&self, pathname: &str) -> bool {
+        self.match_type.as_ref().map_or(false, |mt| match mt {
+            NavMatchType::Exact => self.href == pathname,
+            NavMatchType::Prefix => pathname.starts_with(&self.href),
+        })
+    }
+}
+
+#[cfg(test)]
+mod nav_entry_tests {
+    use super::*;
+
+    #[test]
+    fn test_exact_match() {
+        let nav_entry = NavEntry {
+            href: "/home".to_string(),
+            match_type: Some(NavMatchType::Exact),
+            ..Default::default()
+        };
+        assert!(nav_entry.is_match("/home"));
+        assert!(!nav_entry.is_match("/home/about"));
+    }
+
+    #[test]
+    fn test_prefix_match() {
+        let nav_entry = NavEntry {
+            href: "/home".to_string(),
+            match_type: Some(NavMatchType::Prefix),
+            ..Default::default()
+        };
+        assert!(nav_entry.is_match("/home"));
+        assert!(nav_entry.is_match("/home/about"));
+        assert!(!nav_entry.is_match("/about/home"));
+    }
+
+    #[test]
+    fn test_no_match_type() {
+        let nav_entry = NavEntry {
+            href: "/home".to_string(),
+            match_type: None,
+            ..Default::default()
+        };
+        assert!(!nav_entry.is_match("/home"));
+        assert!(!nav_entry.is_match("/home/about"));
     }
 }
 
