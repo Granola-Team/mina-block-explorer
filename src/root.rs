@@ -59,28 +59,8 @@ pub fn Root() -> impl IntoView {
                         <Route path="/block-production" view=AccountBlockProductionPage/>
                         <Route path="/delegations" view=AccountDelegationsPage/>
                     </Route>
-                    <Route
-                        path="/tokens"
-                        view=move || {
-                            if BERKELEY_FEATURES_ENABLED == "true" {
-                                view! { <TokensPage/> }
-                            } else {
-                                view!().into_view()
-                            }
-                        }
-                    />
-
-                    <Route
-                        path="/zk-apps"
-                        view=move || {
-                            if BERKELEY_FEATURES_ENABLED == "true" {
-                                view! { <ZkAppsPage/> }
-                            } else {
-                                view!().into_view()
-                            }
-                        }
-                    />
-
+                    <Route path="/tokens" view=TokensPage/>
+                    <Route path="/zk-apps" view=ZkAppsPage/>
                     <Route path="/zk-apps/:id" view=ZkAppSpotlight/>
 
                     <Route path="/blocks" view=SummaryPage>
@@ -100,30 +80,10 @@ pub fn Root() -> impl IntoView {
                         <Route path="*" view=move || view! { <Redirect path="user"/> }/>
                         <Route path="/user" view=UserCommandsPage/>
                         <Route path="/internal" view=InternalCommandsTab/>
-                        <Route
-                            path="/zk-app"
-                            view=move || {
-                                if BERKELEY_FEATURES_ENABLED == "true" {
-                                    view! { <ZkAppTransactionsPage/> }
-                                } else {
-                                    view!().into_view()
-                                }
-                            }
-                        />
-
+                        <Route path="/zk-app" view=ZkAppTransactionsPage/>
                     </Route>
                     <Route path="/commands/:id" view=CommandSpotlightPage/>
-                    <Route
-                        path="/commands/zk-app/:id"
-                        view=move || {
-                            if BERKELEY_FEATURES_ENABLED == "true" {
-                                view! { <ZkAppTransactionSpotlightPage/> }
-                            } else {
-                                view!().into_view()
-                            }
-                        }
-                    />
-
+                    <Route path="/commands/zk-app/:id" view=ZkAppTransactionSpotlightPage/>
                     <Route path="/snarks" view=SnarksPage/>
 
                     <Route path="/staking-ledgers" view=StakesPage/>

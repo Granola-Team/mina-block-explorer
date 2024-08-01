@@ -9,7 +9,7 @@ use leptos_router::*;
 
 #[component]
 pub fn CommandsTabbedPage() -> impl IntoView {
-    let mut tabs = vec![
+    let tabs = vec![
         NavEntry {
             href: "/commands/user".to_string(),
             text: "User Commands".to_string(),
@@ -22,16 +22,13 @@ pub fn CommandsTabbedPage() -> impl IntoView {
             icon: NavIcon::Transactions,
             ..Default::default()
         },
-    ];
-
-    if BERKELEY_FEATURES_ENABLED == "true" {
-        tabs.push(NavEntry {
+        NavEntry {
             href: "/commands/zk-app".to_string(),
             text: "zkApp Commands".to_string(),
             icon: NavIcon::ZKApps,
             ..Default::default()
-        });
-    }
+        },
+    ];
 
     view! { <TabbedPage tabs=tabs/> }
 }
