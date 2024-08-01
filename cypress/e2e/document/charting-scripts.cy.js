@@ -1,6 +1,6 @@
 import { GENESIS_BLOCK_BLOCK_HASH } from "../constants";
 
-suite(["@tier1"], "<head>", () => {
+suite(["@tier2"], "<head>", () => {
   let sample_non_charting_pages = ["/", "/blocks"];
   let charting_pages = [`/blocks/${GENESIS_BLOCK_BLOCK_HASH}/analytics`];
 
