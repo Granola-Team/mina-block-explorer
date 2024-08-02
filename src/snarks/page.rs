@@ -66,10 +66,10 @@ fn SnarksPageContents() -> impl IntoView {
     let table_columns = vec![
         TableColumn {
             column: "Height".to_string(),
-            html_input_type: "number".to_string(),
             is_searchable: true,
-            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
+            html_input_type: "number".to_string(),
             alignment: Some(ColumnTextAlignment::Right),
+            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
             ..Default::default()
         },
         TableColumn {
