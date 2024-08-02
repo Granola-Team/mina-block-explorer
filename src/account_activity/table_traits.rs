@@ -218,7 +218,7 @@ impl TableData for Vec<Option<AccountActivityQueryBlocks>> {
                     convert_to_pill(block.get_snark_job_count(), ColorVariant::Blue),
                     convert_to_link(
                         block.get_coinbase_receiver(),
-                        format!("/blocks/accounts/{}", block.get_coinbase_receiver()),
+                        format!("/addresses/accounts/{}", block.get_coinbase_receiver()),
                     ),
                 ],
                 None => vec![],
