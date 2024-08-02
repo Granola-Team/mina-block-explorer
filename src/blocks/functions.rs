@@ -1,8 +1,9 @@
-use super::graphql::{
-    blocks_query::{
-        BlocksQueryBlocks, BlocksQueryBlocksSnarkJobs, BlocksQueryBlocksTransactionsUserCommands,
+use super::{
+    graphql::{
+        blocks_query::{BlocksQueryBlocks, BlocksQueryBlocksSnarkJobs},
+        *,
     },
-    *,
+    models::BlocksQueryBlocksTransactionsUserCommandsExt,
 };
 use crate::common::{
     constants::*,
@@ -10,7 +11,6 @@ use crate::common::{
     models::MyError,
 };
 use graphql_client::reqwest::post_graphql;
-use heck::ToTitleCase;
 
 pub fn get_snark_block_state_hash(snark: &BlocksQueryBlocksSnarkJobs) -> String {
     snark
@@ -36,57 +36,30 @@ pub fn get_snark_fee(snark: &BlocksQueryBlocksSnarkJobs) -> String {
 
 pub fn get_user_commands(
     block: &BlocksQueryBlocks,
-) -> Option<Vec<Option<BlocksQueryBlocksTransactionsUserCommands>>> {
-    block
-        .transactions
-        .as_ref()
-        .and_then(|t| t.user_commands.clone())
-}
-
-pub fn get_user_command_from(uc: &BlocksQueryBlocksTransactionsUserCommands) -> String {
-    uc.from.as_ref().map_or("".to_string(), |o| o.to_string())
-}
-
-pub fn get_user_command_to(uc: &BlocksQueryBlocksTransactionsUserCommands) -> String {
-    uc.to.as_ref().map_or("".to_string(), |o| o.to_string())
-}
-
-pub fn get_user_command_nonce(uc: &BlocksQueryBlocksTransactionsUserCommands) -> String {
-    uc.nonce.map_or_else(|| "".to_string(), |o| o.to_string())
-}
-
-pub fn get_user_command_hash(uc: &BlocksQueryBlocksTransactionsUserCommands) -> String {
-    uc.hash.as_ref().map_or("".to_string(), |o| o.to_string())
-}
-
-pub fn get_memo(uc: &BlocksQueryBlocksTransactionsUserCommands) -> String {
-    uc.memo.as_ref().map_or("".to_string(), |o| o.to_string())
-}
-
-pub fn get_kind(uc: &BlocksQueryBlocksTransactionsUserCommands) -> String {
-    uc.kind.as_ref().map_or("".to_string(), |o| {
-        ToTitleCase::to_title_case(o.as_str()).to_string()
+) -> Option<Vec<Option<BlocksQueryBlocksTransactionsUserCommandsExt>>> {
+    let block_state_hash = block.state_hash.clone();
+    block.transactions.as_ref().and_then(|txn| {
+        txn.user_commands.as_ref().map(|uc| {
+            uc.into_iter()
+                .filter(|uc| uc.is_some())
+                .map(|uc| uc.clone().unwrap())
+                .map(|t| {
+                    Some(BlocksQueryBlocksTransactionsUserCommandsExt {
+                        from: t.from,
+                        to: t.to,
+                        hash: t.hash,
+                        fee: t.fee,
+                        amount: t.amount,
+                        kind: t.kind,
+                        memo: t.memo,
+                        failure_reason: t.failure_reason,
+                        nonce: t.nonce,
+                        block_state_hash: block_state_hash.clone(),
+                    })
+                })
+                .collect::<Vec<_>>()
+        })
     })
-}
-
-pub fn get_failure_reason(uc: &BlocksQueryBlocksTransactionsUserCommands) -> Option<&String> {
-    uc.failure_reason
-        .as_ref()
-        .and_then(|fr| if fr.is_empty() { None } else { Some(fr) })
-}
-
-pub fn get_user_command_fee(uc: &BlocksQueryBlocksTransactionsUserCommands) -> String {
-    uc.fee
-        .map(|f| f.round() as u64)
-        .map(nanomina_to_mina)
-        .unwrap_or_default()
-}
-
-pub fn get_user_command_amount(uc: &BlocksQueryBlocksTransactionsUserCommands) -> String {
-    uc.amount
-        .map(|f| f.round() as u64)
-        .map(nanomina_to_mina)
-        .unwrap_or_default()
 }
 
 pub fn get_block_height(block: &BlocksQueryBlocks) -> String {
