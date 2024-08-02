@@ -1,10 +1,7 @@
 use crate::{
-    account_activity::{
-        dialog::AccountDialogView,
-        page::{
-            AccountBlockProductionPage, AccountDelegationsPage, AccountInternalCommandsPage,
-            AccountSnarkWorkPage, AccountSpotlightTabbedPage, AccountUserCommandsPage,
-        },
+    account_activity::page::{
+        AccountBlockProductionPage, AccountDelegationsPage, AccountInternalCommandsPage,
+        AccountSnarkWorkPage, AccountSpotlightTabbedPage, AccountUserCommandsPage,
     },
     accounts::page::AccountsPage,
     analytics::page::{
@@ -63,10 +60,7 @@ pub fn Root() -> impl IntoView {
                     <Route path="/zk-apps" view=ZkAppsPage/>
                     <Route path="/zk-apps/:id" view=ZkAppSpotlight/>
 
-                    <Route path="/blocks" view=SummaryPage>
-                        <Route path="/accounts/:id" view=AccountDialogView/>
-                        <Route path="/*" view=|| ().into_view()/>
-                    </Route>
+                    <Route path="/blocks" view=SummaryPage/>
                     <Route path="/blocks/:id" view=BlockTabbedPage>
                         <Route path="/*" view=move || view! { <Redirect path="spotlight"/> }/>
                         <Route path="/spotlight" view=BlockSpotlightTab/>
