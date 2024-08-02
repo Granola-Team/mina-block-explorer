@@ -60,7 +60,7 @@ impl TableData for Vec<Option<BlocksQueryBlocks>> {
                     ),
                     convert_to_link(
                         get_creator_account(block),
-                        format!("/blocks/accounts/{}", get_creator_account(block)),
+                        format!("/addresses/accounts/{}", get_creator_account(block)),
                     ),
                     decorate_with_mina_tag(get_coinbase(block)),
                     convert_to_pill(
@@ -73,7 +73,7 @@ impl TableData for Vec<Option<BlocksQueryBlocks>> {
                     ),
                     convert_to_link(
                         get_coinbase_receiver(block),
-                        format!("/blocks/accounts/{}", get_coinbase_receiver(block)),
+                        format!("/addresses/accounts/{}", get_coinbase_receiver(block)),
                     ),
                 ],
                 None => vec![],

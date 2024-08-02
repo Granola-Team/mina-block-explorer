@@ -8,13 +8,6 @@ suite(["@tier2"], "account page", () => {
       tableHeader: "Accounts",
     },
     {
-      origin: `/blocks/accounts/${DEFAULT_ACCOUNT_PK}`,
-      column: "Counterparty",
-      tableHeader: "User Commands",
-      tableHeaderEl: "h2",
-      transposed: true,
-    },
-    {
       origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
       column: "Counterparty",
       tableHeader: "User Commands",
