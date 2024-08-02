@@ -12,17 +12,6 @@ use crate::{
     common::{constants::*, functions::*, models::*, spotlight::*},
 };
 use graphql_client::reqwest::post_graphql;
-use leptos::*;
-use leptos_router::*;
-
-pub fn get_base_page_path(location: Location) -> String {
-    let path = location.pathname.with(|path| path.clone());
-    let path_parts: Vec<&str> = path.split("/accounts").collect();
-    match path_parts.first() {
-        Some(base) => base.to_string(),
-        None => "/".to_string(),
-    }
-}
 
 #[allow(clippy::too_many_arguments)]
 pub async fn load_data(
