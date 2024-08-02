@@ -40,9 +40,8 @@ pub fn get_user_commands(
     let block_state_hash = block.state_hash.clone();
     block.transactions.as_ref().and_then(|txn| {
         txn.user_commands.as_ref().map(|uc| {
-            uc.into_iter()
-                .filter(|uc| uc.is_some())
-                .map(|uc| uc.clone().unwrap())
+            uc.iter()
+                .filter_map(|uc| uc.clone())
                 .map(|t| {
                     Some(BlocksQueryBlocksTransactionsUserCommandsExt {
                         from: t.from,
