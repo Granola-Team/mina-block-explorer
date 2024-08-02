@@ -54,6 +54,7 @@ pnpm_install:
 dev: pnpm_install
   trunk serve --port="{{trunk_port}}" --open
 
+# Starts the Indexer
 start-indexer:
   mkdir -p $VOLUMES_DIR/mina-indexer-ci
   cd mina-indexer && nix develop --command just deploy-local-ci 10000 8091
