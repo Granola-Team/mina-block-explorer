@@ -23,17 +23,17 @@ dependency conflicts.
 
 4. Start the Server: Execute `just dev` to start the server.
 
-## Back-End Integration
+## Indexer Integration
 
-Integration with an [Indexer](https://github.com/Granola-Team/mina-indexer) is
-accomplished through GraphQL and REST endpoints. MinaExplorer.com's GraphqlQL
-and RESTful endpoints are used by default. To override, you may specify your
-own environment variables. This can be done through
-
+By default, the [Granola-Team/mina-indexer](https://github.com/Granola-Team/mina-indexer) is 
+integrated for development and regression testing, with the first 10k blocks downloaded, and 
+with Granola's production indexer once deployed. Integration with an indexer is accomplished 
+through GraphQL and REST endpoints. If you wish to target another compatible indexer, 
+you may specify your own environment variables. This can be done using:
 - `.env` file
 - Environment variables. See `.env.example`.
 
-Environment variables are bundled into the WASM file at compile time (see
+**Note:** Environment variables are bundled into the WASM file at compile time (see
 `build.rs`). With the intended environment variables specified at compile time,
 the production WASM file may be deployed without any further configuration
 required.

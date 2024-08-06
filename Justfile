@@ -8,8 +8,12 @@ export RUSTFLAGS := "--cfg=web_sys_unstable_apis"
 export CYPRESS_BASE_URL := 'http://localhost:' + trunk_port
 export VERSION := `git rev-parse --short=8 HEAD`
 export CARGO_HOME := `pwd` + '/.cargo'
+export GRAPHQL_URL := 'http://localhost:8091/graphql'
+export REST_URL := 'http://localhost:8091'
 
 set dotenv-load := true
+
+export VOLUMES_DIR := env_var_or_default('VOLUMES_DIR', '/mnt')
 
 default:
   @echo "Topologically sorted recipes:"
@@ -52,8 +56,13 @@ pnpm_install:
 dev: pnpm_install
   trunk serve --port="{{trunk_port}}" --open
 
+# Starts the Indexer
+start-indexer:
+  mkdir -p $VOLUMES_DIR/mina-indexer-ci
+  cd mina-indexer && nix develop --command just deploy-local-ci 10000 8091
+
 # Run all application regression tests
-test-e2e: pnpm_install
+test-e2e: pnpm_install start-indexer
   @echo "--- Performing end-to-end tests"
   CYPRESS_tags='' \
   node ./scripts/wait-on-port.js \
@@ -66,7 +75,7 @@ test-e2e: pnpm_install
     pnpm exec cypress run -r list -q
 
 # Run tier2 application regression tests
-test-e2e-tier2: pnpm_install
+test-e2e-tier2: pnpm_install start-indexer
   @echo "--- Performing end-to-end @tier2 tests"
   CYPRESS_tags="@tier2" \
   node ./scripts/wait-on-port.js \
@@ -79,7 +88,7 @@ test-e2e-tier2: pnpm_install
     pnpm exec cypress run -r list -q
 
 # Run regression tests with interactive GUI
-test-e2e-local: pnpm_install
+test-e2e-local: pnpm_install start-indexer
   node ./scripts/wait-on-port.js \
     trunk serve \
     --no-autoreload \
@@ -105,7 +114,7 @@ lint: pnpm_install && audit
   cargo clippy --all-targets --all-features -- -D warnings
 
 # Run tier1 tests
-tier1: lint test-unit
+tier1: lint test-unit && test-e2e-tier2
 
 # Run tier2 regression suite in CI
 tier2: lint test-unit && test-e2e-tier2
