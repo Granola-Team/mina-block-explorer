@@ -112,7 +112,7 @@ lint: pnpm_install && audit
   cargo clippy --all-targets --all-features -- -D warnings
 
 # Run tier1 tests
-tier1: lint test-unit
+tier1: lint test-unit && test-e2e-tier2
 
 # Run tier2 regression suite in CI
 tier2: lint test-unit && test-e2e-tier2
