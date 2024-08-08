@@ -21,13 +21,13 @@ pub struct SnarkFeeData {
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct SnarkStatsContainer {
-    all: SnarkStats,
-    non_zero: SnarkStats,
+    pub all: SnarkStats,
+    pub non_zero: SnarkStats,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct SnarkStats {
-    count: usize,
+    pub count: usize,
 }
 
 impl SnarkStats {

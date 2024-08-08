@@ -1,5 +1,10 @@
 use super::{functions::*, models::*};
-use crate::common::{components::*, functions::*, models::*};
+use crate::common::{
+    components::*,
+    functions::*,
+    models::*,
+    table::{TableColumn, TableSectionTemplate},
+};
 use leptos::*;
 use leptos_meta::*;
 
@@ -92,28 +97,42 @@ pub fn BlocksAnalyticsPage() -> impl IntoView {
 #[component]
 pub fn SnarksAnalyticsPage() -> impl IntoView {
     let resource = create_resource(|| (), move |_| async move { load_snark_fees(100).await });
+    let (data_sig, set_data) = create_signal(None);
+
+    let table_columns = vec![
+        TableColumn {
+            column: "Metric".to_string(),
+            ..Default::default()
+        },
+        TableColumn {
+            column: "All SNARKs".to_string(),
+            ..Default::default()
+        },
+        TableColumn {
+            column: "SNARKs with non-zero fees".to_string(),
+            ..Default::default()
+        },
+    ];
+
+    create_effect(move |_| {
+        set_data.set(Some(
+            resource
+                .get()
+                .and_then(|res| res.ok())
+                .map(|data| SnarkStatsContainer::from(data.data.blocks)),
+        ));
+    });
+
     view! {
         <Title text="Analytics | SNARKs"/>
         <PageContainer>
-            <AppSection>
-                <AppHeading heading="SNARKs Analytics"/>
-                <AnalyticsLayout>
-
-                    <Suspense fallback=|| {
-                        ().into_view()
-                    }>
-                        {resource
-                            .get()
-                            .and_then(|res| res.ok())
-                            .map(|data| SnarkStatsContainer::from(data.data.blocks))
-                            .map(|stats| {
-                                logging::log!("{:#?}", stats);
-                                view! { <span>"render test"</span> }
-                            })}
-
-                    </Suspense>
-                </AnalyticsLayout>
-            </AppSection>
+            <TableSectionTemplate
+                table_columns
+                data_sig
+                is_loading=resource.loading()
+                section_heading="User Commands"
+                controls=|| ().into_view()
+            />
         </PageContainer>
     }
 }
