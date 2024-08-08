@@ -28,12 +28,20 @@ pub struct SnarkStatsContainer {
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct SnarkStats {
     pub count: usize,
+    pub sum: usize,
 }
 
 impl SnarkStats {
     pub fn new(data: Vec<SnarkFeeData>) -> Self {
         Self {
             count: data.iter().fold(0, |count, d| count + d.snark_jobs.len()),
+            sum: data.iter().fold(0, |count, d| {
+                d.snark_fees
+                    .parse::<usize>()
+                    .ok()
+                    .map(|fees| count + fees)
+                    .unwrap_or(count)
+            }),
         }
     }
 }
