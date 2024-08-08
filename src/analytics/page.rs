@@ -127,6 +127,22 @@ pub fn BlocksAnalyticsPage() -> impl IntoView {
 }
 
 #[component]
+pub fn SnarksAnalyticsPage() -> impl IntoView {
+    view! {
+        <Title text="Analytics | SNARKs"/>
+        <PageContainer>
+            <AppSection>
+                <AppHeading heading="SNARKs Analytics"/>
+                <AnalyticsLayout>
+
+                    <span>"hello world"</span>
+                </AnalyticsLayout>
+            </AppSection>
+        </PageContainer>
+    }
+}
+
+#[component]
 pub fn UserCommandsAnalyticsPage() -> impl IntoView {
     view! {
         <Title text="Analytics | User Commands"/>
