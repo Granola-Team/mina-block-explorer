@@ -1,5 +1,8 @@
 use super::models::{SnarkStats, SnarkStatsContainer};
-use crate::common::{functions::convert_to_span, table::TableData};
+use crate::common::{
+    functions::*,
+    table::TableData,
+};
 use leptos::*;
 
 impl TableData for Option<SnarkStatsContainer> {
@@ -16,6 +19,11 @@ impl TableData for Option<SnarkStatsContainer> {
                     convert_to_span(stats_cont.all.get_sum()),
                     convert_to_span(stats_cont.non_zero.get_sum()),
                 ],
+                vec![
+                    convert_to_span("Mean".to_string()),
+                    convert_to_span(stats_cont.all.get_mean()),
+                    convert_to_span(stats_cont.non_zero.get_mean()),
+                ],
             ]
         })
     }
@@ -24,6 +32,7 @@ impl TableData for Option<SnarkStatsContainer> {
 pub trait SnarkTableData {
     fn get_count(&self) -> String;
     fn get_sum(&self) -> String;
+    fn get_mean(&self) -> String;
 }
 
 impl SnarkTableData for SnarkStats {
@@ -32,5 +41,8 @@ impl SnarkTableData for SnarkStats {
     }
     fn get_sum(&self) -> String {
         self.sum.to_string()
+    }
+    fn get_mean(&self) -> String {
+        self.mean.map_or("-".to_string(), |mean| mean.to_string())
     }
 }

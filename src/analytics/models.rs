@@ -29,19 +29,27 @@ pub struct SnarkStatsContainer {
 pub struct SnarkStats {
     pub count: usize,
     pub sum: usize,
+    pub mean: Option<f64>,
 }
 
 impl SnarkStats {
     pub fn new(data: Vec<SnarkFeeData>) -> Self {
+        let count = data.iter().fold(0, |count, d| count + d.snark_jobs.len());
+        let sum = data.iter().fold(0, |count, d| {
+            d.snark_fees
+                .parse::<usize>()
+                .ok()
+                .map(|fees| count + fees)
+                .unwrap_or(count)
+        });
         Self {
-            count: data.iter().fold(0, |count, d| count + d.snark_jobs.len()),
-            sum: data.iter().fold(0, |count, d| {
-                d.snark_fees
-                    .parse::<usize>()
-                    .ok()
-                    .map(|fees| count + fees)
-                    .unwrap_or(count)
-            }),
+            count,
+            sum,
+            mean: if count == 0 {
+                None // Return None if division by zero
+            } else {
+                Some((sum as f64) / (count as f64))
+            },
         }
     }
 }
