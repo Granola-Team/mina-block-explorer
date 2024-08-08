@@ -7,6 +7,7 @@ use crate::common::{
 };
 use leptos::*;
 use leptos_meta::*;
+use leptos_router::create_query_signal;
 
 #[component]
 pub fn BlocksAnalyticsPage() -> impl IntoView {
@@ -96,7 +97,11 @@ pub fn BlocksAnalyticsPage() -> impl IntoView {
 
 #[component]
 pub fn SnarksAnalyticsPage() -> impl IntoView {
-    let resource = create_resource(|| (), move |_| async move { load_snark_fees(100).await });
+    let (limit_sig, set_limit) = create_query_signal::<u64>("limit");
+    let resource = create_resource(
+        move || limit_sig.get(),
+        move |limit| async move { load_snark_fees(limit).await },
+    );
     let (data_sig, set_data) = create_signal(None);
 
     let table_columns = vec![
@@ -130,9 +135,33 @@ pub fn SnarksAnalyticsPage() -> impl IntoView {
                 table_columns
                 data_sig
                 is_loading=resource.loading()
-                section_heading="SNARK Fees in last 100 blocks"
-                controls=|| ().into_view()
+                section_heading="SNARK Fees of latest blocks"
+                controls=move || {
+                    view! {
+                        <input
+                            type="number"
+                            on:input=move |ev| {
+                                set_limit.set(event_target_value(&ev).parse::<u64>().ok())
+                            }
+
+                            disabled=resource.loading()
+                            name="block-selection"
+                            step=200
+                            value=limit_sig.get()
+                            max=5000
+                            min=200
+                            class="block h-8 text-base text-sm font-normal font-mono p-2 text-right border rounded-sm border-slate-400 focus:border-granola-orange"
+                        />
+                        <label
+                            for="block-selection"
+                            class="flex items-center h-8 text-base text-sm font-normal font-mono p-2 whitespace-nowrap"
+                        >
+                            "latest blocks"
+                        </label>
+                    }
+                }
             />
+
         </PageContainer>
     }
 }
