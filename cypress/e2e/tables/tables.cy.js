@@ -18,6 +18,16 @@ import { parseFormattedNumber } from "../helpers";
 let test_suite_data = [
   {
     tag: "@tier2",
+    url: `/analytics/snarks`,
+    table: {
+      heading: "SNARK Fees in latest blocks",
+      columns: ["Metric", "All SNARKs", "SNARKs with non-zero fees"],
+      filter_tests: [],
+    },
+    tests: [],
+  },
+  {
+    tag: "@tier2",
     url: `/blocks/${BLOCK_STATE_HASH_MIXED_USER_COMMANDS}/commands/user`,
     table: {
       heading: "User Commands",

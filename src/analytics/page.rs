@@ -135,10 +135,11 @@ pub fn SnarksAnalyticsPage() -> impl IntoView {
                 table_columns
                 data_sig
                 is_loading=resource.loading()
-                section_heading="SNARK Fees of latest blocks"
+                section_heading="SNARK Fees in latest blocks"
                 controls=move || {
                     view! {
                         <input
+                            id="block-selection"
                             type="number"
                             on:input=move |ev| {
                                 set_limit.set(event_target_value(&ev).parse::<u64>().ok())

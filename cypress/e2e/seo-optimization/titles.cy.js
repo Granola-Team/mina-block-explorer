@@ -12,6 +12,18 @@ suite(["@tier2"], "meta title", () => {
       title: `Analytics | Internal Commands`,
     },
     {
+      url: `/analytics/commands/user`,
+      title: `Analytics | User Commands`,
+    },
+    {
+      url: `/analytics/blocks`,
+      title: `Analytics | Blocks`,
+    },
+    {
+      url: `/analytics/snarks`,
+      title: `Analytics | SNARKs`,
+    },
+    {
       url: `/commands/internal`,
       title: `Transactions | Internal Commands`,
     },
