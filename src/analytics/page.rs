@@ -1,84 +1,7 @@
-use crate::common::{components::*, constants::*, functions::*, models::*};
+use super::functions::*;
+use crate::common::{components::*, functions::*, models::*};
 use leptos::*;
 use leptos_meta::*;
-use serde::*;
-
-#[derive(Deserialize, Serialize, Debug, Clone)]
-struct BlockAnalyticsData {
-    pub epoch_num_blocks: i64,
-    pub total_num_blocks: i64,
-}
-
-#[derive(Deserialize, Serialize, Debug, Clone)]
-#[serde(rename_all = "camelCase")]
-struct SnarkFeeData {
-    pub block_height: i64,
-    pub snark_fees: String,
-}
-
-#[derive(Deserialize, Serialize, Debug, Clone)]
-struct BlocksAnalyticsData {
-    pub blocks: Vec<BlockAnalyticsData>,
-}
-
-#[derive(Deserialize, Serialize, Debug, Clone)]
-struct SnarkFeesData {
-    pub blocks: Vec<SnarkFeeData>,
-}
-
-#[derive(Deserialize, Serialize, Debug, Clone)]
-struct BlocksAnalyticsResponse {
-    pub data: BlocksAnalyticsData,
-}
-
-#[derive(Deserialize, Serialize, Debug, Clone)]
-struct SnarkFeesResponse {
-    pub data: SnarkFeesData,
-}
-
-async fn load_snark_fees(limit: u64) -> Result<SnarkFeesResponse, MyError> {
-    let query_body = format!(
-        r#"{{"query":"query SnarkFeesQuery(\n  $limit: Int = 100\n) {{\n  blocks(limit: $limit) {{\n    blockHeight\n    snarkFees\n  }}\n}}\n","variables":{{"limit": {}}},"operationName":"SnarkFeesQuery"}}"#,
-        limit
-    );
-    let client = reqwest::Client::new();
-    let response = client
-        .post(GRAPHQL_ENDPOINT)
-        .body(query_body)
-        .send()
-        .await
-        .map_err(|e| MyError::NetworkError(e.to_string()))?;
-
-    if response.status().is_success() {
-        Ok(response
-            .json::<SnarkFeesResponse>()
-            .await
-            .map_err(|e| MyError::ParseError(e.to_string()))?)
-    } else {
-        Err(MyError::NetworkError("Failed to fetch data".into()))
-    }
-}
-
-async fn load_block_summary_data() -> Result<BlocksAnalyticsResponse, MyError> {
-    let query_body = r#"{"query":"query BlocksQuery(\n  $limit: Int = 1\n) {\n  blocks(limit: $limit) {\n    epoch_num_blocks\n    total_num_blocks\n  }\n}\n","variables":{"limit":1},"operationName":"BlocksQuery"}"#;
-    let client = reqwest::Client::new();
-    let response = client
-        .post(GRAPHQL_ENDPOINT)
-        .body(query_body)
-        .send()
-        .await
-        .map_err(|e| MyError::NetworkError(e.to_string()))?;
-
-    if response.status().is_success() {
-        let summary = response
-            .json::<BlocksAnalyticsResponse>()
-            .await
-            .map_err(|e| MyError::ParseError(e.to_string()))?;
-        Ok(summary)
-    } else {
-        Err(MyError::NetworkError("Failed to fetch data".into()))
-    }
-}
 
 #[component]
 pub fn BlocksAnalyticsPage() -> impl IntoView {
@@ -168,10 +91,7 @@ pub fn BlocksAnalyticsPage() -> impl IntoView {
 
 #[component]
 pub fn SnarksAnalyticsPage() -> impl IntoView {
-    let resource = create_resource(
-        || (),
-        move |_| async move { load_snark_fees(100).await },
-    );
+    let resource = create_resource(|| (), move |_| async move { load_snark_fees(100).await });
     view! {
         <Title text="Analytics | SNARKs"/>
         <PageContainer>
@@ -179,18 +99,9 @@ pub fn SnarksAnalyticsPage() -> impl IntoView {
                 <AppHeading heading="SNARKs Analytics"/>
                 <AnalyticsLayout>
 
-                <Suspense fallback=||().into_view()>
-                    {resource
-                        .get()
-                        .and_then(|res| res.ok())
-                        .map(|data| {
-                            // let data_clone = data.clone();
-                            view! {
-                                <span>"render test"</span>
-                            }
-                        })}
-
-                </Suspense>
+                    <Suspense fallback=|| {
+                        ().into_view()
+                    }>{resource.get().and_then(|res| res.ok()).map(|data| {})}</Suspense>
                 </AnalyticsLayout>
             </AppSection>
         </PageContainer>
