@@ -1,8 +1,5 @@
 use super::models::{SnarkStats, SnarkStatsContainer};
-use crate::common::{
-    functions::*,
-    table::TableData,
-};
+use crate::common::{functions::*, table::TableData};
 use leptos::*;
 
 impl TableData for Option<SnarkStatsContainer> {

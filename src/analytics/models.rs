@@ -1,4 +1,5 @@
 use serde::*;
+use statrs::statistics::{Data, Distribution};
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct BlockAnalyticsData {
@@ -28,28 +29,20 @@ pub struct SnarkStatsContainer {
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct SnarkStats {
     pub count: usize,
-    pub sum: usize,
+    pub sum: f64,
     pub mean: Option<f64>,
 }
 
 impl SnarkStats {
     pub fn new(data: Vec<SnarkFeeData>) -> Self {
-        let count = data.iter().fold(0, |count, d| count + d.snark_jobs.len());
-        let sum = data.iter().fold(0, |count, d| {
-            d.snark_fees
-                .parse::<usize>()
-                .ok()
-                .map(|fees| count + fees)
-                .unwrap_or(count)
-        });
+        let snark_jobs: Vec<f64> = data.iter()
+            .flat_map(|snark_data| snark_data.snark_jobs.iter().map(|j| j.fee as f64))
+            .collect::<Vec<_>>();
+        let snark_jobs_data = Data::new(snark_jobs.clone());
         Self {
-            count,
-            sum,
-            mean: if count == 0 {
-                None // Return None if division by zero
-            } else {
-                Some((sum as f64) / (count as f64))
-            },
+            count: snark_jobs.len(),
+            sum: snark_jobs.iter().sum(),
+            mean: snark_jobs_data.mean(),
         }
     }
 }
