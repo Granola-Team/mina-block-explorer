@@ -1,4 +1,4 @@
-use super::functions::*;
+use super::{functions::*, models::*};
 use crate::common::{components::*, functions::*, models::*};
 use leptos::*;
 use leptos_meta::*;
@@ -101,7 +101,17 @@ pub fn SnarksAnalyticsPage() -> impl IntoView {
 
                     <Suspense fallback=|| {
                         ().into_view()
-                    }>{resource.get().and_then(|res| res.ok()).map(|data| {})}</Suspense>
+                    }>
+                        {resource
+                            .get()
+                            .and_then(|res| res.ok())
+                            .map(|data| SnarkStatsContainer::from(data.data.blocks))
+                            .map(|stats| {
+                                logging::log!("{:#?}", stats);
+                                view! { <span>"render test"</span> }
+                            })}
+
+                    </Suspense>
                 </AnalyticsLayout>
             </AppSection>
         </PageContainer>

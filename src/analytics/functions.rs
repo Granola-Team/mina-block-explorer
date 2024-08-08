@@ -3,7 +3,7 @@ use crate::common::{constants::*, models::MyError};
 
 pub async fn load_snark_fees(limit: u64) -> Result<SnarkFeesResponse, MyError> {
     let query_body = format!(
-        r#"{{"query":"query SnarkFeesQuery(\n  $limit: Int = 100\n) {{\n  blocks(limit: $limit) {{\n    blockHeight\n    snarkFees\n  }}\n}}\n","variables":{{"limit": {}}},"operationName":"SnarkFeesQuery"}}"#,
+        r#"{{"query":"query SnarkFeesQuery(\n  $limit: Int = 100\n) {{\n  blocks(limit: $limit) {{\n    blockHeight\n    snarkFees\n    snarkJobs{{\n fee }}\n}}\n}}\n","variables":{{"limit": {}}},"operationName":"SnarkFeesQuery"}}"#,
         limit
     );
     let client = reqwest::Client::new();

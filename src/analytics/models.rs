@@ -7,10 +7,57 @@ pub struct BlockAnalyticsData {
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
+pub struct SnarkJob {
+    fee: u64,
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct SnarkFeeData {
     pub block_height: i64,
     pub snark_fees: String,
+    pub snark_jobs: Vec<SnarkJob>,
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone)]
+pub struct SnarkStatsContainer {
+    all: SnarkStats,
+    non_zero: SnarkStats,
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone)]
+pub struct SnarkStats {
+    count: usize,
+}
+
+impl SnarkStats {
+    pub fn new(data: Vec<SnarkFeeData>) -> Self {
+        Self {
+            count: data.iter().fold(0, |count, d| count + d.snark_jobs.len()),
+        }
+    }
+}
+
+impl From<Vec<SnarkFeeData>> for SnarkStatsContainer {
+    fn from(data: Vec<SnarkFeeData>) -> Self {
+        let filtered_data = data
+            .iter()
+            .map(|snark_fee_data| SnarkFeeData {
+                block_height: snark_fee_data.block_height,
+                snark_fees: snark_fee_data.snark_fees.clone(),
+                snark_jobs: snark_fee_data
+                    .snark_jobs
+                    .clone()
+                    .into_iter()
+                    .filter(|snark_job| snark_job.fee > 0)
+                    .collect::<Vec<_>>(),
+            })
+            .collect::<Vec<_>>();
+        SnarkStatsContainer {
+            all: SnarkStats::new(data),
+            non_zero: SnarkStats::new(filtered_data),
+        }
+    }
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
