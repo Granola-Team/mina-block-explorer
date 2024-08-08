@@ -20,6 +20,7 @@ leptos_meta = { version = "0.6.9", features = ["csr"] }
 rand = "0.8.5"
 indoc = "2"
 heck = "0.5.0"
+statrs = "0.17.1"
 
 [dependencies.web-sys]
 version = "0.3"
