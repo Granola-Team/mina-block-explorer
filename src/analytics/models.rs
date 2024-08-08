@@ -1,5 +1,5 @@
 use serde::*;
-use statrs::statistics::{Data, Distribution};
+use statrs::statistics::{Data, Distribution, OrderStatistics};
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct BlockAnalyticsData {
@@ -31,11 +31,18 @@ pub struct SnarkStats {
     pub count: usize,
     pub sum: f64,
     pub mean: Option<f64>,
+    pub median: f64,
+    pub std_dev: Option<f64>,
+    pub min: Option<f64>,
+    pub max: Option<f64>,
+    pub lower_quartile: f64,
+    pub upper_quartile: f64,
 }
 
 impl SnarkStats {
     pub fn new(data: Vec<SnarkFeeData>) -> Self {
-        let snark_jobs: Vec<f64> = data.iter()
+        let snark_jobs: Vec<f64> = data
+            .iter()
             .flat_map(|snark_data| snark_data.snark_jobs.iter().map(|j| j.fee as f64))
             .collect::<Vec<_>>();
         let snark_jobs_data = Data::new(snark_jobs.clone());
@@ -43,6 +50,17 @@ impl SnarkStats {
             count: snark_jobs.len(),
             sum: snark_jobs.iter().sum(),
             mean: snark_jobs_data.mean(),
+            median: snark_jobs_data.clone().median(),
+            std_dev: snark_jobs_data.std_dev(),
+            min: snark_jobs
+                .clone()
+                .into_iter()
+                .reduce(|arg0, arg1| f32::min(arg0 as f32, arg1 as f32).into()),
+            max: snark_jobs
+                .into_iter()
+                .reduce(|arg0, arg1| f32::max(arg0 as f32, arg1 as f32).into()),
+            lower_quartile: snark_jobs_data.clone().lower_quartile(),
+            upper_quartile: snark_jobs_data.clone().upper_quartile(),
         }
     }
 }
