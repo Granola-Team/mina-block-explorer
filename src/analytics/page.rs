@@ -130,7 +130,7 @@ pub fn SnarksAnalyticsPage() -> impl IntoView {
                 table_columns
                 data_sig
                 is_loading=resource.loading()
-                section_heading="User Commands"
+                section_heading="SNARK Fees in last 100 blocks"
                 controls=|| ().into_view()
             />
         </PageContainer>
