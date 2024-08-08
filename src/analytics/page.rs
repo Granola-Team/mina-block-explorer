@@ -182,19 +182,25 @@ pub fn AnalyticsTabbedPage() -> impl IntoView {
         NavEntry {
             href: "/analytics/blocks".to_string(),
             text: "Blocks".to_string(),
-            icon: NavIcon::Analytics,
+            icon: NavIcon::Blocks,
             ..Default::default()
         },
         NavEntry {
             href: "/analytics/commands/user".to_string(),
             text: "Transactions".to_string(),
-            icon: NavIcon::Analytics,
+            icon: NavIcon::Transactions,
             ..Default::default()
         },
         NavEntry {
             href: "/analytics/commands/internal".to_string(),
             text: "Internal Commands".to_string(),
-            icon: NavIcon::Analytics,
+            icon: NavIcon::Transactions,
+            ..Default::default()
+        },
+        NavEntry {
+            href: "/analytics/snarks".to_string(),
+            text: "SNARKs".to_string(),
+            icon: NavIcon::SNARKs,
             ..Default::default()
         },
     ];

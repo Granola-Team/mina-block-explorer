@@ -41,7 +41,6 @@ impl TableData for Option<SnarkStatsContainer> {
                     convert_to_span(stats_cont.all.get_lower_quartile()),
                     convert_to_span(stats_cont.non_zero.get_lower_quartile()),
                 ],
-
                 vec![
                     convert_to_span("75%".to_string()),
                     convert_to_span(stats_cont.all.get_upper_quartile()),
@@ -77,10 +76,10 @@ impl SnarkTableData for SnarkStats {
         self.median.to_string()
     }
     fn get_min(&self) -> String {
-        self.min.map_or("-".to_string(),|min| min.to_string())
+        self.min.map_or("-".to_string(), |min| min.to_string())
     }
     fn get_max(&self) -> String {
-        self.max.map_or("-".to_string(),|max| max.to_string())
+        self.max.map_or("-".to_string(), |max| max.to_string())
     }
     fn get_lower_quartile(&self) -> String {
         self.lower_quartile.to_string()
