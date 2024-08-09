@@ -89,7 +89,7 @@ pub fn Root() -> impl IntoView {
                         <Route path="/ledger" view=BroadcastFromLedgerPage/>
                     </Route>
                     <Route path="/analytics" view=AnalyticsTabbedPage>
-                        // <Route path="*" view=move || view! { <Redirect path="blocks"/> }/>
+                        <Route path="*" view=move || view! { <Redirect path="blocks"/> }/>
                         <Route path="/commands/internal" view=InternalCommandsAnalayticsPage/>
                         <Route path="/commands/user" view=UserCommandsAnalyticsPage/>
                         <Route path="/blocks" view=BlocksAnalyticsPage/>
