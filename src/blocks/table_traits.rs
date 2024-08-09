@@ -1,6 +1,6 @@
 use super::{
-    functions::*,
-    graphql::blocks_query::{BlocksQueryBlocks, BlocksQueryBlocksTransactionsUserCommands},
+    functions::*, graphql::blocks_query::BlocksQueryBlocks,
+    models::BlocksQueryBlocksTransactionsUserCommandsExt,
 };
 use crate::{
     blocks::graphql::blocks_query::{
@@ -13,6 +13,7 @@ use crate::{
         table::*,
     },
 };
+use heck::ToTitleCase;
 use leptos::*;
 
 fn shared_get_columns() -> Vec<String> {
@@ -82,61 +83,129 @@ impl TableData for Vec<Option<BlocksQueryBlocks>> {
     }
 }
 
-impl TableData for Vec<Option<BlocksQueryBlocksTransactionsUserCommands>> {
+impl TableData for Vec<Option<BlocksQueryBlocksTransactionsUserCommandsExt>> {
     fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
         self.iter()
             .map(|opt_user_command| match opt_user_command {
                 Some(user_command) => vec![
-                    if !get_memo(user_command).is_empty() {
+                    if !user_command.get_memo().is_empty() {
                         convert_array_to_span(vec![
                             convert_to_link(
-                                get_user_command_hash(user_command),
-                                format!("/commands/{}", get_user_command_hash(user_command)),
+                                user_command.get_txn_hash(),
+                                format!(
+                                    "/commands/{}?q-state-hash={}",
+                                    user_command.get_txn_hash(),
+                                    user_command.get_block_state_hash()
+                                ),
                             ),
-                            convert_to_span(get_memo(user_command))
+                            convert_to_span(user_command.get_memo())
                                 .attr("class", "block text-xs font-light text-slate-400"),
                         ])
                         .attr("class", "block")
                     } else {
                         convert_to_link(
-                            get_user_command_hash(user_command),
-                            format!("/commands/{}", get_user_command_hash(user_command)),
+                            user_command.get_txn_hash(),
+                            format!(
+                                "/commands/{}?q-state-hash={}",
+                                user_command.get_txn_hash(),
+                                user_command.get_block_state_hash()
+                            ),
                         )
                     },
-                    convert_to_pill(get_kind(user_command), ColorVariant::Grey),
+                    convert_to_pill(user_command.get_kind(), ColorVariant::Grey),
                     convert_to_pill(
-                        if get_failure_reason(user_command).is_none() {
+                        if user_command.get_failure_reason().is_none() {
                             TXN_STATUS_APPLIED.to_string()
                         } else {
                             TXN_STATUS_FAILED.to_string()
                         },
-                        if get_failure_reason(user_command).is_none() {
+                        if user_command.get_failure_reason().is_none() {
                             ColorVariant::Green
                         } else {
                             ColorVariant::Orange
                         },
                     ),
                     convert_to_link(
-                        get_user_command_from(user_command),
-                        format!(
-                            "/addresses/accounts/{}",
-                            get_user_command_from(user_command)
-                        ),
+                        user_command.get_from(),
+                        format!("/addresses/accounts/{}", user_command.get_from()),
                     ),
                     convert_to_link(
-                        get_user_command_to(user_command),
-                        format!("/addresses/accounts/{}", get_user_command_to(user_command)),
+                        user_command.get_to(),
+                        format!("/addresses/accounts/{}", user_command.get_to()),
                     ),
-                    convert_to_pill(
-                        format_number(get_user_command_nonce(user_command)),
-                        ColorVariant::Grey,
-                    ),
-                    decorate_with_mina_tag(get_user_command_fee(user_command)),
-                    decorate_with_mina_tag(get_user_command_amount(user_command)),
+                    convert_to_pill(format_number(user_command.get_nonce()), ColorVariant::Grey),
+                    decorate_with_mina_tag(user_command.get_fee()),
+                    decorate_with_mina_tag(user_command.get_amount()),
                 ],
                 None => vec![],
             })
             .collect()
+    }
+}
+
+pub trait UserCommandTrait {
+    fn get_txn_hash(&self) -> String;
+    fn get_block_state_hash(&self) -> String;
+    fn get_memo(&self) -> String;
+    fn get_kind(&self) -> String;
+    fn get_failure_reason(&self) -> Option<String>;
+    fn get_from(&self) -> String;
+    fn get_to(&self) -> String;
+    fn get_nonce(&self) -> String;
+    fn get_fee(&self) -> String;
+    fn get_amount(&self) -> String;
+}
+
+impl UserCommandTrait for BlocksQueryBlocksTransactionsUserCommandsExt {
+    fn get_txn_hash(&self) -> String {
+        self.hash
+            .as_ref()
+            .map_or_else(|| "".to_string(), |o| o.to_string())
+    }
+
+    fn get_block_state_hash(&self) -> String {
+        self.block_state_hash
+            .as_ref()
+            .map_or_else(|| "".to_string(), |o| o.to_string())
+    }
+
+    fn get_memo(&self) -> String {
+        self.memo.as_ref().map_or("".to_string(), |o| o.to_string())
+    }
+
+    fn get_kind(&self) -> String {
+        self.kind.as_ref().map_or("".to_string(), |o| {
+            ToTitleCase::to_title_case(o.as_str()).to_string()
+        })
+    }
+
+    fn get_failure_reason(&self) -> Option<String> {
+        self.failure_reason.clone()
+    }
+
+    fn get_from(&self) -> String {
+        self.from
+            .as_ref()
+            .map_or_else(|| "".to_string(), |o| o.to_string())
+    }
+
+    fn get_to(&self) -> String {
+        self.to
+            .as_ref()
+            .map_or_else(|| "".to_string(), |o| o.to_string())
+    }
+
+    fn get_nonce(&self) -> String {
+        self.nonce.map_or_else(|| "".to_string(), |o| o.to_string())
+    }
+
+    fn get_fee(&self) -> String {
+        self.fee.map_or_else(|| "".to_string(), |o| o.to_string())
+    }
+
+    fn get_amount(&self) -> String {
+        self.amount
+            .map_or_else(|| "".to_string(), |o| o.to_string())
     }
 }
 
