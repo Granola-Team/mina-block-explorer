@@ -1,44 +1,7 @@
-use crate::common::{components::*, constants::*, functions::*, models::*};
+use super::{components::*, functions::*};
+use crate::common::{components::*, functions::*, models::*};
 use leptos::*;
 use leptos_meta::*;
-use serde::*;
-
-#[derive(Deserialize, Serialize, Debug, Clone)]
-struct BlockAnalyticsData {
-    pub epoch_num_blocks: i64,
-    pub total_num_blocks: i64,
-}
-
-#[derive(Deserialize, Serialize, Debug, Clone)]
-struct BlocksAnalyticsData {
-    pub blocks: Vec<BlockAnalyticsData>,
-}
-
-#[derive(Deserialize, Serialize, Debug, Clone)]
-struct BlocksAnalyticsResponse {
-    pub data: BlocksAnalyticsData,
-}
-
-async fn load_block_summary_data() -> Result<BlocksAnalyticsResponse, MyError> {
-    let query_body = r#"{"query":"query BlocksQuery(\n  $limit: Int = 1\n) {\n  blocks(limit: $limit) {\n    epoch_num_blocks\n    total_num_blocks\n  }\n}\n","variables":{"limit":1},"operationName":"BlocksQuery"}"#;
-    let client = reqwest::Client::new();
-    let response = client
-        .post(GRAPHQL_ENDPOINT)
-        .body(query_body)
-        .send()
-        .await
-        .map_err(|e| MyError::NetworkError(e.to_string()))?;
-
-    if response.status().is_success() {
-        let summary = response
-            .json::<BlocksAnalyticsResponse>()
-            .await
-            .map_err(|e| MyError::ParseError(e.to_string()))?;
-        Ok(summary)
-    } else {
-        Err(MyError::NetworkError("Failed to fetch data".into()))
-    }
-}
 
 #[component]
 pub fn BlocksAnalyticsPage() -> impl IntoView {
@@ -127,6 +90,16 @@ pub fn BlocksAnalyticsPage() -> impl IntoView {
 }
 
 #[component]
+pub fn SnarksAnalyticsPage() -> impl IntoView {
+    view! {
+        <Title text="Analytics | SNARKs"/>
+        <PageContainer>
+            <SnarkFees/>
+        </PageContainer>
+    }
+}
+
+#[component]
 pub fn UserCommandsAnalyticsPage() -> impl IntoView {
     view! {
         <Title text="Analytics | User Commands"/>
@@ -171,19 +144,25 @@ pub fn AnalyticsTabbedPage() -> impl IntoView {
         NavEntry {
             href: "/analytics/blocks".to_string(),
             text: "Blocks".to_string(),
-            icon: NavIcon::Analytics,
+            icon: NavIcon::Blocks,
             ..Default::default()
         },
         NavEntry {
             href: "/analytics/commands/user".to_string(),
             text: "Transactions".to_string(),
-            icon: NavIcon::Analytics,
+            icon: NavIcon::Transactions,
             ..Default::default()
         },
         NavEntry {
             href: "/analytics/commands/internal".to_string(),
             text: "Internal Commands".to_string(),
-            icon: NavIcon::Analytics,
+            icon: NavIcon::Transactions,
+            ..Default::default()
+        },
+        NavEntry {
+            href: "/analytics/snarks".to_string(),
+            text: "SNARKs".to_string(),
+            icon: NavIcon::SNARKs,
             ..Default::default()
         },
     ];
