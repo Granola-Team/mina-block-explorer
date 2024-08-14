@@ -232,6 +232,7 @@ pub fn AccountTransactionsSection(
         TableColumn {
             column: "Height".to_string(),
             is_searchable: true,
+            is_disabled: true,
             html_input_type: "number".to_string(),
             alignment: Some(ColumnTextAlignment::Right),
             width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
@@ -240,6 +241,7 @@ pub fn AccountTransactionsSection(
         TableColumn {
             column: "Txn Hash".to_string(),
             is_searchable: true,
+            is_disabled: true,
             width: Some(String::from(TABLE_COL_HASH_WIDTH)),
             ..Default::default()
         },
@@ -267,6 +269,7 @@ pub fn AccountTransactionsSection(
         TableColumn {
             column: "Counterparty".to_string(),
             is_searchable: true,
+            is_disabled: true,
             width: Some(String::from(TABLE_COL_HASH_WIDTH)),
             ..Default::default()
         },
@@ -321,6 +324,7 @@ pub fn AccountInternalCommandsSection(
         TableColumn {
             column: "Height".to_string(),
             is_searchable: true,
+            is_disabled: true,
             html_input_type: "number".to_string(),
             alignment: Some(ColumnTextAlignment::Right),
             width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
@@ -329,6 +333,7 @@ pub fn AccountInternalCommandsSection(
         TableColumn {
             column: "State Hash".to_string(),
             is_searchable: true,
+            is_disabled: true,
             width: Some(String::from(TABLE_COL_HASH_WIDTH)),
             ..Default::default()
         },
@@ -456,6 +461,7 @@ pub fn AccountOverviewSnarkJobTable(
         TableColumn {
             column: "Height".to_string(),
             is_searchable: true,
+            is_disabled: true,
             html_input_type: "number".to_string(),
             alignment: Some(ColumnTextAlignment::Right),
             width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
@@ -464,6 +470,7 @@ pub fn AccountOverviewSnarkJobTable(
         TableColumn {
             column: "State Hash".to_string(),
             is_searchable: true,
+            is_disabled: true,
             width: Some(String::from(TABLE_COL_HASH_WIDTH)),
             ..Default::default()
         },
@@ -539,6 +546,7 @@ pub fn AccountOverviewBlocksTable(
         TableColumn {
             column: "Height".to_string(),
             is_searchable: true,
+            is_disabled: true,
             html_input_type: "number".to_string(),
             alignment: Some(ColumnTextAlignment::Right),
             width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
@@ -547,12 +555,14 @@ pub fn AccountOverviewBlocksTable(
         TableColumn {
             column: "State Hash".to_string(),
             is_searchable: true,
+            is_disabled: true,
             width: Some(String::from(TABLE_COL_HASH_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "Slot".to_string(),
             is_searchable: true,
+            is_disabled: true,
             html_input_type: "number".to_string(),
             alignment: Some(ColumnTextAlignment::Right),
             width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
