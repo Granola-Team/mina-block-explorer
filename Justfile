@@ -13,8 +13,6 @@ export REST_URL := 'http://localhost:8091'
 
 set dotenv-load := true
 
-export VOLUMES_DIR := env_var_or_default('VOLUMES_DIR', '/mnt')
-
 default:
   @echo "Topologically sorted recipes:"
   @just --list --unsorted --list-heading '' --justfile {{justfile()}}
