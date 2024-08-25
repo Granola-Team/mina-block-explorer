@@ -58,8 +58,7 @@ dev: pnpm_install
 
 # Starts the Indexer
 start-indexer:
-  mkdir -p $VOLUMES_DIR/mina-indexer-ci
-  cd mina-indexer && nix develop --command just deploy-local-ci 10000 8091
+  cd mina-indexer && nix develop --command just deploy-local-prod 10000 8091
 
 # Run all application regression tests
 test-e2e: pnpm_install start-indexer
