@@ -16,6 +16,6 @@
     "wrangler": "3.57.1"
   },
   "lint-staged": {
-    "**/*": "prettier --write --ignore-unknown"
+    "**/*.js": "prettier --write --ignore-unknown"
   }
 }
