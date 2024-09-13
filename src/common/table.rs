@@ -34,7 +34,6 @@ pub enum ColumnTextAlignment {
 pub struct TableColumn {
     pub column: String,
     pub is_searchable: bool,
-    pub is_disabled: bool,
     pub sort_direction: Option<TableSortDirection>,
     pub width: Option<String>,
     pub html_input_type: String,
@@ -46,7 +45,6 @@ impl Default for TableColumn {
         TableColumn {
             column: String::new(),
             is_searchable: false,
-            is_disabled: false,
             sort_direction: None,
             width: None,
             html_input_type: "text".to_string(),
@@ -56,7 +54,7 @@ impl Default for TableColumn {
 }
 
 const INPUT_CLASS: &str =
-    " block w-full mt-1 h-7 text-base text-sm font-normal font-mono p-2 rounded disabled:bg-white disabled:cursor-not-allowed ";
+    " block w-full mt-1 h-7 text-base text-sm font-normal font-mono p-2 rounded ";
 const CELL_PADDING_CLASS: &str = " first:pl-8 pl-4 last:pr-4 ";
 
 #[component]
@@ -233,7 +231,6 @@ fn ColumnHeader(id: String, column: TableColumn) -> impl IntoView {
                             update_value();
                         }
 
-                        disabled=column.is_disabled
                         node_ref=input_element
                         class=INPUT_CLASS.to_string() + &input_class
                         id=id_copy
