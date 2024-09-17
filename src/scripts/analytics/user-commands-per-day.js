@@ -1,5 +1,5 @@
 setTimeout(async () => {
-  const blockLimit = 2000;
+  const blockLimit = 20000;
 
   let chartDom = document.getElementById("chart");
   window.addEventListener("resize", function () {
