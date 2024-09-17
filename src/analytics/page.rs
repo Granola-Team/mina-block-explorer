@@ -94,6 +94,18 @@ pub fn SnarksAnalyticsPage() -> impl IntoView {
     view! {
         <Title text="Analytics | SNARKs"/>
         <PageContainer>
+            <AppSection>
+                <AppHeading heading="Average SNARK fee per block in latest 10000 blocks"/>
+                <AnalyticsLayout>
+                    <AnalyticsXLContainer>
+                        <div id="avg-snark-fee" class="w-full h-96"></div>
+                        <script
+                            src="/scripts/analytics/avg-snark-fee-per-block.js"
+                            defer=true
+                        ></script>
+                    </AnalyticsXLContainer>
+                </AnalyticsLayout>
+            </AppSection>
             <SnarkFees/>
         </PageContainer>
     }
