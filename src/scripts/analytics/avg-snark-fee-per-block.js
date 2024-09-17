@@ -1,5 +1,7 @@
 setTimeout(async () => {
-  const blockLimit = 359604 - 500;
+  const currentBlockHeight = 359604;
+  const blockLimit = 1000;
+  const blockOffset = currentBlockHeight - blockLimit;
 
   let chartDom = document.getElementById("avg-snark-fee");
   window.addEventListener("resize", function () {
@@ -26,11 +28,11 @@ setTimeout(async () => {
         }
       }`,
       variables: {
-        limit: 100000000, // very large limit to make block height the effective limit
+        limit: 1e9, // very large limit to make block height the effective limit
         sort_by: "BLOCKHEIGHT_DESC",
         query: {
           canonical: true,
-          blockHeight_gte: blockLimit,
+          blockHeight_gte: blockOffset,
         },
       },
       operationName: "SnarkFees",
@@ -71,7 +73,7 @@ setTimeout(async () => {
       position: "top",
     },
     title: {
-      text: `Avg fee by block, in last ${blockLimit} blocks`,
+      text: `Fees by block with averages (last ${blockLimit} blocks)`,
       left: "center",
     },
     xAxis: {
@@ -95,9 +97,8 @@ setTimeout(async () => {
     series: [
       {
         data: avgFees,
-        type: "scatter",
+        type: "line",
         yAxisIndex: 0,
-        barMaxWidth: 20,
         tooltip: {
           valueFormatter: (value) => `${value.toFixed(5)} MINA`,
         },
