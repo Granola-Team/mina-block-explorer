@@ -1,16 +1,14 @@
 use super::{functions::*, models::*};
 use crate::common::{
-    constants::DEFAULT_USER_INPUT_DEBOUNCE_INTERNVAL,
+    components::*,
     table::{TableColumn, TableSectionTemplate},
 };
 use leptos::*;
 use leptos_router::create_query_signal;
-use leptos_use::{use_debounce_fn_with_options, DebounceOptions};
 
 #[component]
 pub fn SnarkFees() -> impl IntoView {
     let default_block_limit = 1000;
-    let input_element: NodeRef<html::Input> = create_node_ref();
     let (limit_sig, set_limit) = create_query_signal::<u64>("limit");
     let resource = create_resource(
         move || limit_sig.get(),
@@ -32,18 +30,6 @@ pub fn SnarkFees() -> impl IntoView {
             set_limit.set(Some(default_block_limit));
         }
     });
-
-    let (handle_limit_sig, _) = create_signal(use_debounce_fn_with_options(
-        move || {
-            let v = input_element
-                .get()
-                .expect("<input/> should be mounted")
-                .value();
-            set_limit.set(v.parse::<u64>().ok());
-        },
-        DEFAULT_USER_INPUT_DEBOUNCE_INTERNVAL,
-        DebounceOptions::default(),
-    ));
 
     {
         move || {
@@ -73,26 +59,19 @@ pub fn SnarkFees() -> impl IntoView {
 
                     controls=move || {
                         view! {
-                            <input
+                            <ControlledInput
                                 id="block-selection"
-                                type="number"
-                                on:keypress=move |ev| {
-                                    ev.prevent_default();
-                                }
-
-                                on:input=move |_| {
-                                    let handle_limit = handle_limit_sig.get_untracked();
-                                    handle_limit();
-                                }
-
-                                disabled=resource.loading()
+                                input_type="number"
                                 name="block-selection"
-                                step=1000
-                                value=limit_sig.get()
-                                max=5000
-                                min=1000
-                                class="block h-8 text-base text-sm font-normal font-mono p-2 text-right border rounded-sm border-slate-400 focus:border-granola-orange"
-                                node_ref=input_element
+                                disabled_sig=resource.loading()
+                                value=limit_sig.get().map(|s| s.to_string()).unwrap_or_default()
+                                setter_sig=SignalSetter::map(move |opt_str: Option<String>| {
+                                    set_limit
+                                        .set(
+                                            opt_str
+                                                .map(|v_str| v_str.parse::<u64>().ok().unwrap_or_default()),
+                                        )
+                                })
                             />
                         }
                     }

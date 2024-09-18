@@ -21,3 +21,4 @@ pub const LHS_MAX_DIGIT_PADDING: usize = 13;
 pub const LHS_MAX_SPACE_FEES: usize = 2;
 pub const TXN_STATUS_APPLIED: &str = "Applied";
 pub const TXN_STATUS_FAILED: &str = "Failed";
+pub const DEFAULT_INPUT_STYLES: &str = "block h-8 text-base text-sm font-normal font-mono p-2 text-right border rounded-sm border-slate-400 focus:border-granola-orange";

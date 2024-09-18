@@ -1,12 +1,62 @@
 use super::models::*;
 use crate::{
-    common::{constants::LINK_HOVER_STATE, functions::*},
+    common::{constants::*, functions::*},
     icons::*,
 };
 use leptos::{html::Div, *};
 use leptos_meta::Script;
-use leptos_router::*;
+use leptos_router::{create_query_signal, *};
+use leptos_use::{use_debounce_fn_with_options, DebounceOptions};
 use web_sys::{window, Event, MouseEvent};
+
+#[component]
+pub fn ControlledInput(
+    #[prop(into, default = "controlled-input-id".to_string())] id: String,
+    #[prop(into, default = "controlled-input-name".to_string())] name: String,
+    #[prop(into)] input_type: String,
+    #[prop(into)] disabled_sig: Signal<bool>,
+    #[prop(into)] value: String,
+    #[prop(into)] setter_sig: SignalSetter<Option<String>>,
+    #[prop(optional)] input_class: Option<String>,
+) -> impl IntoView {
+    let unwrapped_input_class = input_class.unwrap_or(DEFAULT_INPUT_STYLES.to_string());
+    let input_element: NodeRef<html::Input> = create_node_ref();
+    let (handle_input_sig, _) = create_signal(use_debounce_fn_with_options(
+        move || {
+            let v = input_element
+                .get()
+                .expect("<input/> should be mounted")
+                .value();
+            setter_sig.set(Some(v));
+        },
+        DEFAULT_USER_INPUT_DEBOUNCE_INTERNVAL,
+        DebounceOptions::default(),
+    ));
+
+    view! {
+        <input
+            id=id
+            type=input_type
+            on:keypress=move |ev| {
+                ev.prevent_default();
+            }
+
+            on:input=move |_| {
+                let handle = handle_input_sig.get_untracked();
+                handle();
+            }
+
+            disabled=move || disabled_sig.get()
+            name=name
+            value=value
+            step=1000
+            max=5000
+            min=1000
+            class=unwrapped_input_class
+            node_ref=input_element
+        />
+    }
+}
 
 #[component]
 pub fn SummaryItem(
