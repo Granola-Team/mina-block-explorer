@@ -2,6 +2,7 @@ use super::{components::*, functions::*};
 use crate::common::{components::*, functions::*, models::*};
 use leptos::*;
 use leptos_meta::*;
+use leptos_router::create_query_signal;
 
 #[component]
 pub fn BlocksAnalyticsPage() -> impl IntoView {
@@ -91,6 +92,7 @@ pub fn BlocksAnalyticsPage() -> impl IntoView {
 
 #[component]
 pub fn SnarksAnalyticsPage() -> impl IntoView {
+    let (limit_sig, _) = create_query_signal::<u64>("limit");
     view! {
         <Title text="Analytics | SNARKs"/>
         <PageContainer>
@@ -100,13 +102,21 @@ pub fn SnarksAnalyticsPage() -> impl IntoView {
             </AppSection>
             <AppSection>
                 <AnalyticsLayout>
-                    <AnalyticsXLContainer>
-                        <div id="avg-snark-fee" class="w-full h-96"></div>
-                        <script
-                            src="/scripts/analytics/avg-snark-fee-per-block.js"
-                            defer=true
-                        ></script>
-                    </AnalyticsXLContainer>
+                    {move || {
+                        limit_sig.get();
+                        view! {
+                            // redraw
+
+                            <AnalyticsXLContainer>
+                                <div id="avg-snark-fee" class="w-full h-96"></div>
+                                <script
+                                    src="/scripts/analytics/avg-snark-fee-per-block.js"
+                                    defer=true
+                                ></script>
+                            </AnalyticsXLContainer>
+                        }
+                    }}
+
                 </AnalyticsLayout>
             </AppSection>
             <SnarkFees/>

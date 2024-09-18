@@ -14,7 +14,9 @@ pub fn AnalayticsFilters() -> impl IntoView {
     view! {
         <div class="w-full flex justify-start items-center p-2 pl-8 md:p-8 md:py-2">
             <div class="flex justify-start items-baseline mr-2 md:mr-4">
-                <label for="block-limit" class="mr-2">"Block limit:"</label>
+                <label for="block-limit" class="mr-2">
+                    "Block limit:"
+                </label>
                 <ControlledInput
                     id="block-limit"
                     input_type="number"
@@ -25,6 +27,7 @@ pub fn AnalayticsFilters() -> impl IntoView {
                         set_limit
                             .set(opt_str.map(|v_str| v_str.parse::<u64>().ok().unwrap_or_default()))
                     })
+
                     number_props=HashMap::from([
                         ("step".to_string(), "1000".to_string()),
                         ("min".to_string(), "1000".to_string()),
@@ -40,7 +43,6 @@ pub fn AnalayticsFilters() -> impl IntoView {
 
 #[component]
 pub fn SnarkFees() -> impl IntoView {
-    let default_block_limit = 1000;
     let (limit_sig, _) = create_query_signal::<u64>("limit");
     let resource = create_resource(
         move || limit_sig.get(),
@@ -78,11 +80,7 @@ pub fn SnarkFees() -> impl IntoView {
                     table_columns
                     data_sig
                     is_loading=resource.loading()
-                    section_heading=format!(
-                        "SNARK Fees in latest {} blocks",
-                        limit_sig.get().unwrap_or(default_block_limit),
-                    )
-
+                    section_heading="SNARK Fees Overview"
                     controls=|| ().into_view()
                 />
             }

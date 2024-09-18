@@ -1,6 +1,8 @@
 setTimeout(async () => {
   const currentBlockHeight = 359604;
-  const blockLimit = 1000;
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const blockLimit = urlParams.get("limit") || 1000;
   const blockOffset = currentBlockHeight - blockLimit;
 
   let chartDom = document.getElementById("avg-snark-fee");
@@ -73,7 +75,7 @@ setTimeout(async () => {
       position: "top",
     },
     title: {
-      text: `Fees by block with averages (last ${blockLimit} blocks)`,
+      text: `Fees by block with averages`,
       left: "center",
     },
     xAxis: {
