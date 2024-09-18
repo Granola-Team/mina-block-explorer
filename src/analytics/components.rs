@@ -6,13 +6,42 @@ use crate::common::{
 use leptos::*;
 use leptos_router::create_query_signal;
 use std::collections::HashMap;
-// #[component]
-// pub fn AnalayticsFilters() -> impl IntoView {}
+
+#[component]
+pub fn AnalayticsFilters() -> impl IntoView {
+    let (limit_sig, set_limit) = create_query_signal::<u64>("limit");
+
+    view! {
+        <div class="w-full flex justify-start items-center p-2 pl-8 md:p-8 md:py-2">
+            <div class="flex justify-start items-baseline mr-2 md:mr-4">
+                <label for="block-limit" class="mr-2">"Block limit:"</label>
+                <ControlledInput
+                    id="block-limit"
+                    input_type="number"
+                    name="block-limit"
+                    disabled_sig=Signal::from(|| false)
+                    value=limit_sig.get().map(|s| s.to_string()).unwrap_or_default()
+                    setter_sig=SignalSetter::map(move |opt_str: Option<String>| {
+                        set_limit
+                            .set(opt_str.map(|v_str| v_str.parse::<u64>().ok().unwrap_or_default()))
+                    })
+                    number_props=HashMap::from([
+                        ("step".to_string(), "1000".to_string()),
+                        ("min".to_string(), "1000".to_string()),
+                        ("max".to_string(), "5000".to_string()),
+                    ])
+                />
+
+            </div>
+
+        </div>
+    }
+}
 
 #[component]
 pub fn SnarkFees() -> impl IntoView {
     let default_block_limit = 1000;
-    let (limit_sig, set_limit) = create_query_signal::<u64>("limit");
+    let (limit_sig, _) = create_query_signal::<u64>("limit");
     let resource = create_resource(
         move || limit_sig.get(),
         move |limit| async move { load_snark_fees(limit).await },
@@ -54,30 +83,7 @@ pub fn SnarkFees() -> impl IntoView {
                         limit_sig.get().unwrap_or(default_block_limit),
                     )
 
-                    controls=move || {
-                        view! {
-                            <ControlledInput
-                                id="block-selection"
-                                input_type="number"
-                                name="block-selection"
-                                disabled_sig=resource.loading()
-                                value=limit_sig.get().map(|s| s.to_string()).unwrap_or_default()
-                                setter_sig=SignalSetter::map(move |opt_str: Option<String>| {
-                                    set_limit
-                                        .set(
-                                            opt_str
-                                                .map(|v_str| v_str.parse::<u64>().ok().unwrap_or_default()),
-                                        )
-                                })
-
-                                number_props=HashMap::from([
-                                    ("step".to_string(), "1000".to_string()),
-                                    ("min".to_string(), "1000".to_string()),
-                                    ("max".to_string(), "5000".to_string()),
-                                ])
-                            />
-                        }
-                    }
+                    controls=|| ().into_view()
                 />
             }
         }

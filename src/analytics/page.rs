@@ -95,6 +95,10 @@ pub fn SnarksAnalyticsPage() -> impl IntoView {
         <Title text="Analytics | SNARKs"/>
         <PageContainer>
             <AppSection>
+                <AppHeading heading="Filters"/>
+                <AnalayticsFilters/>
+            </AppSection>
+            <AppSection>
                 <AnalyticsLayout>
                     <AnalyticsXLContainer>
                         <div id="avg-snark-fee" class="w-full h-96"></div>
