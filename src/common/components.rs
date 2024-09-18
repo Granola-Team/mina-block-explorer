@@ -7,6 +7,7 @@ use leptos::{html::Div, *};
 use leptos_meta::Script;
 use leptos_router::{create_query_signal, *};
 use leptos_use::{use_debounce_fn_with_options, DebounceOptions};
+use std::collections::HashMap;
 use web_sys::{window, Event, MouseEvent};
 
 #[component]
@@ -18,6 +19,7 @@ pub fn ControlledInput(
     #[prop(into)] value: String,
     #[prop(into)] setter_sig: SignalSetter<Option<String>>,
     #[prop(optional)] input_class: Option<String>,
+    #[prop(optional)] number_props: Option<HashMap<String, String>>,
 ) -> impl IntoView {
     let unwrapped_input_class = input_class.unwrap_or(DEFAULT_INPUT_STYLES.to_string());
     let input_element: NodeRef<html::Input> = create_node_ref();
@@ -49,9 +51,12 @@ pub fn ControlledInput(
             disabled=move || disabled_sig.get()
             name=name
             value=value
-            step=1000
-            max=5000
-            min=1000
+            step=number_props
+                .clone()
+                .and_then(|props| props.get("step").cloned())
+                .unwrap_or_default()
+            max=number_props.clone().and_then(|props| props.get("max").cloned()).unwrap_or_default()
+            min=number_props.and_then(|props| props.get("min").cloned()).unwrap_or_default()
             class=unwrapped_input_class
             node_ref=input_element
         />

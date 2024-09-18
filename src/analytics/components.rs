@@ -5,6 +5,9 @@ use crate::common::{
 };
 use leptos::*;
 use leptos_router::create_query_signal;
+use std::collections::HashMap;
+// #[component]
+// pub fn AnalayticsFilters() -> impl IntoView {}
 
 #[component]
 pub fn SnarkFees() -> impl IntoView {
@@ -23,12 +26,6 @@ pub fn SnarkFees() -> impl IntoView {
                 .and_then(|res| res.ok())
                 .map(|data| SnarkStatsContainer::from(data.data.blocks)),
         ));
-    });
-
-    create_effect(move |_| {
-        if limit_sig.get().is_none() {
-            set_limit.set(Some(default_block_limit));
-        }
     });
 
     {
@@ -72,6 +69,12 @@ pub fn SnarkFees() -> impl IntoView {
                                                 .map(|v_str| v_str.parse::<u64>().ok().unwrap_or_default()),
                                         )
                                 })
+
+                                number_props=HashMap::from([
+                                    ("step".to_string(), "1000".to_string()),
+                                    ("min".to_string(), "1000".to_string()),
+                                    ("max".to_string(), "5000".to_string()),
+                                ])
                             />
                         }
                     }
