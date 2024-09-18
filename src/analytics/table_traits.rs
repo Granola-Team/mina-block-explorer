@@ -4,7 +4,6 @@ use leptos::*;
 
 impl TableData for Option<SnarkStatsContainer> {
     fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
-
         self.clone().map_or(vec![], |stats_cont| {
             vec![
                 vec![
@@ -14,38 +13,111 @@ impl TableData for Option<SnarkStatsContainer> {
                 ],
                 vec![
                     convert_to_span("Sum".to_string()),
-                    convert_to_span(nanomina_to_mina(stats_cont.all.get_sum().parse::<u64>().ok().unwrap_or(0))),
-                    convert_to_span(nanomina_to_mina(stats_cont.non_zero.get_sum().parse::<u64>().ok().unwrap_or(0))),
+                    convert_to_span(nanomina_to_mina(
+                        stats_cont.all.get_sum().parse::<u64>().ok().unwrap_or(0),
+                    )),
+                    convert_to_span(nanomina_to_mina(
+                        stats_cont
+                            .non_zero
+                            .get_sum()
+                            .parse::<u64>()
+                            .ok()
+                            .unwrap_or(0),
+                    )),
                 ],
                 vec![
                     convert_to_span("Mean".to_string()),
-                    convert_to_span(nanomina_to_mina(stats_cont.all.get_mean().parse::<u64>().ok().unwrap_or(0))),
-                    convert_to_span(nanomina_to_mina(stats_cont.non_zero.get_mean().parse::<u64>().ok().unwrap_or(0))),
+                    convert_to_span(nanomina_to_mina(
+                        stats_cont.all.get_mean().parse::<u64>().ok().unwrap_or(0),
+                    )),
+                    convert_to_span(nanomina_to_mina(
+                        stats_cont
+                            .non_zero
+                            .get_mean()
+                            .parse::<u64>()
+                            .ok()
+                            .unwrap_or(0),
+                    )),
                 ],
                 vec![
                     convert_to_span("Median".to_string()),
-                    convert_to_span(nanomina_to_mina(stats_cont.all.get_median().parse::<u64>().ok().unwrap_or(0))),
-                    convert_to_span(nanomina_to_mina(stats_cont.non_zero.get_median().parse::<u64>().ok().unwrap_or(0))),
+                    convert_to_span(nanomina_to_mina(
+                        stats_cont.all.get_median().parse::<u64>().ok().unwrap_or(0),
+                    )),
+                    convert_to_span(nanomina_to_mina(
+                        stats_cont
+                            .non_zero
+                            .get_median()
+                            .parse::<u64>()
+                            .ok()
+                            .unwrap_or(0),
+                    )),
                 ],
                 vec![
                     convert_to_span("Min".to_string()),
-                    convert_to_span(nanomina_to_mina(stats_cont.all.get_min().parse::<u64>().ok().unwrap_or(0))),
-                    convert_to_span(nanomina_to_mina(stats_cont.non_zero.get_min().parse::<u64>().ok().unwrap_or(0))),
+                    convert_to_span(nanomina_to_mina(
+                        stats_cont.all.get_min().parse::<u64>().ok().unwrap_or(0),
+                    )),
+                    convert_to_span(nanomina_to_mina(
+                        stats_cont
+                            .non_zero
+                            .get_min()
+                            .parse::<u64>()
+                            .ok()
+                            .unwrap_or(0),
+                    )),
                 ],
                 vec![
                     convert_to_span("Max".to_string()),
-                    convert_to_span(nanomina_to_mina(stats_cont.all.get_max().parse::<u64>().ok().unwrap_or(0))),
-                    convert_to_span(nanomina_to_mina(stats_cont.non_zero.get_max().parse::<u64>().ok().unwrap_or(0))),
+                    convert_to_span(nanomina_to_mina(
+                        stats_cont.all.get_max().parse::<u64>().ok().unwrap_or(0),
+                    )),
+                    convert_to_span(nanomina_to_mina(
+                        stats_cont
+                            .non_zero
+                            .get_max()
+                            .parse::<u64>()
+                            .ok()
+                            .unwrap_or(0),
+                    )),
                 ],
                 vec![
                     convert_to_span("25%".to_string()),
-                    convert_to_span(nanomina_to_mina(stats_cont.all.get_lower_quartile().parse::<u64>().ok().unwrap_or(0))),
-                    convert_to_span(nanomina_to_mina(stats_cont.non_zero.get_lower_quartile().parse::<u64>().ok().unwrap_or(0))),
+                    convert_to_span(nanomina_to_mina(
+                        stats_cont
+                            .all
+                            .get_lower_quartile()
+                            .parse::<u64>()
+                            .ok()
+                            .unwrap_or(0),
+                    )),
+                    convert_to_span(nanomina_to_mina(
+                        stats_cont
+                            .non_zero
+                            .get_lower_quartile()
+                            .parse::<u64>()
+                            .ok()
+                            .unwrap_or(0),
+                    )),
                 ],
                 vec![
                     convert_to_span("75%".to_string()),
-                    convert_to_span(nanomina_to_mina(stats_cont.all.get_upper_quartile().parse::<u64>().ok().unwrap_or(0))),
-                    convert_to_span(nanomina_to_mina(stats_cont.non_zero.get_upper_quartile().parse::<u64>().ok().unwrap_or(0))),
+                    convert_to_span(nanomina_to_mina(
+                        stats_cont
+                            .all
+                            .get_upper_quartile()
+                            .parse::<u64>()
+                            .ok()
+                            .unwrap_or(0),
+                    )),
+                    convert_to_span(nanomina_to_mina(
+                        stats_cont
+                            .non_zero
+                            .get_upper_quartile()
+                            .parse::<u64>()
+                            .ok()
+                            .unwrap_or(0),
+                    )),
                 ],
             ]
         })
