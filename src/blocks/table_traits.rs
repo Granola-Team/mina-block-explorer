@@ -116,7 +116,7 @@ impl TableData for Vec<Option<BlocksQueryBlocksTransactionsUserCommandsExt>> {
                     convert_to_pill(
                         if user_command
                             .get_failure_reason()
-                            .map_or(true, |failure_reason| failure_reason.len() == 0)
+                            .map_or(true, |failure_reason| failure_reason.is_empty())
                         {
                             TXN_STATUS_FAILED.to_string()
                         } else {
@@ -124,7 +124,7 @@ impl TableData for Vec<Option<BlocksQueryBlocksTransactionsUserCommandsExt>> {
                         },
                         if user_command
                             .get_failure_reason()
-                            .map_or(true, |failure_reason| failure_reason.len() == 0)
+                            .map_or(true, |failure_reason| failure_reason.is_empty())
                         {
                             ColorVariant::Orange
                         } else {
