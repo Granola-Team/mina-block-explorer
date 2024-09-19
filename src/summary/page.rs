@@ -4,18 +4,17 @@ use crate::{
     common::{components::*, constants::*},
     summary::models::{BlockchainStat, BlockchainStatData, BlockchainStatResponse},
 };
+use codee::string::JsonSerdeCodec;
 use leptos::*;
 use leptos_meta::Title;
-use leptos_use::{
-    storage::*, use_document_visibility, use_interval, utils::JsonCodec, UseIntervalReturn,
-};
+use leptos_use::{storage::*, use_document_visibility, use_interval, UseIntervalReturn};
 use web_sys::VisibilityState;
 
 #[component]
 pub fn SummaryPage() -> impl IntoView {
     let (summary_sig, _, _) =
-        use_local_storage::<BlockchainSummary, JsonCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
-    let (stat_sig, _, _) = use_local_storage::<BlockchainStat, JsonCodec>("blockchain-stat");
+        use_local_storage::<BlockchainSummary, JsonSerdeCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
+    let (stat_sig, _, _) = use_local_storage::<BlockchainStat, JsonSerdeCodec>("blockchain-stat");
 
     view! {
         <Title text="Blocks | Search for blocks on Mina Blockchain" />
@@ -30,8 +29,8 @@ pub fn SummaryPage() -> impl IntoView {
 #[component]
 pub fn SummaryLocalStorage() -> impl IntoView {
     let (summary_sig, set_summary, _) =
-        use_local_storage::<BlockchainSummary, JsonCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
-    let (_, set_stat, _) = use_local_storage::<BlockchainStat, JsonCodec>("blockchain-stat");
+        use_local_storage::<BlockchainSummary, JsonSerdeCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
+    let (_, set_stat, _) = use_local_storage::<BlockchainStat, JsonSerdeCodec>("blockchain-stat");
     let visibility = use_document_visibility();
     let UseIntervalReturn { counter, .. } = use_interval(LIVE_RELOAD_INTERVAL);
 

@@ -14,9 +14,10 @@ use crate::{
     icons::*,
     summary::models::BlockchainSummary,
 };
+use codee::string::JsonSerdeCodec;
 use leptos::*;
 use leptos_router::use_params_map;
-use leptos_use::{storage::use_local_storage, utils::JsonCodec};
+use leptos_use::storage::use_local_storage;
 
 #[component]
 pub fn AccountDialogSectionContainer(
@@ -227,7 +228,7 @@ pub fn AccountTransactionsSection(
     is_loading: Signal<bool>,
 ) -> impl IntoView {
     let (summary_sig, _, _) =
-        use_local_storage::<BlockchainSummary, JsonCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
+        use_local_storage::<BlockchainSummary, JsonSerdeCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
     let table_columns = vec![
         TableColumn {
             column: "Height".to_string(),
@@ -316,7 +317,7 @@ pub fn AccountInternalCommandsSection(
     is_loading: Signal<bool>,
 ) -> impl IntoView {
     let (summary_sig, _, _) =
-        use_local_storage::<BlockchainSummary, JsonCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
+        use_local_storage::<BlockchainSummary, JsonSerdeCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
     let table_columns = vec![
         TableColumn {
             column: "Height".to_string(),
@@ -441,7 +442,7 @@ pub fn AccountOverviewSnarkJobTable(
     is_loading: Signal<bool>,
 ) -> impl IntoView {
     let (summary_sig, _, _) =
-        use_local_storage::<BlockchainSummary, JsonCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
+        use_local_storage::<BlockchainSummary, JsonSerdeCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
     let memo_params_map = use_params_map();
     let (href, _set_href) = create_signal(
         memo_params_map
@@ -524,7 +525,7 @@ pub fn AccountOverviewBlocksTable(
     is_loading: Signal<bool>,
 ) -> impl IntoView {
     let (summary_sig, _, _) =
-        use_local_storage::<BlockchainSummary, JsonCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
+        use_local_storage::<BlockchainSummary, JsonSerdeCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
     let memo_params_map = use_params_map();
     let (href, _set_href) = create_signal(
         memo_params_map

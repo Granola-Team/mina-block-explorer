@@ -379,10 +379,7 @@ pub fn CopyToClipboard(children: Children) -> impl IntoView {
                     let mut value = element.get().expect("<div> element").inner_text();
                     value.retain(|c| !c.is_whitespace());
                     let window = window().expect("no global `window` exists");
-                    let clipboard = window
-                        .navigator()
-                        .clipboard()
-                        .expect("Could not get clipboard object");
+                    let clipboard = window.navigator().clipboard();
                     let _ = clipboard.write_text(&value);
                     set_copied.set(true);
                     logging::log!("copied value '{}'", value);

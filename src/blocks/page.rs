@@ -3,10 +3,11 @@ use crate::{
     blocks::graphql::blocks_query,
     common::{components::*, constants::*, models::*},
 };
+use codee::string::JsonSerdeCodec;
 use leptos::*;
 use leptos_meta::Title;
 use leptos_router::*;
-use leptos_use::{storage::*, use_interval, utils::JsonCodec, UseIntervalReturn};
+use leptos_use::{storage::*, use_interval, UseIntervalReturn};
 
 #[component]
 pub fn BlockSpotlightTab() -> impl IntoView {
@@ -51,7 +52,7 @@ pub fn BlockAnalyticsTab() -> impl IntoView {
 #[component]
 pub fn BlocksLocalStorage() -> impl IntoView {
     let (_, set_blocks, _) =
-        use_local_storage::<blocks_query::ResponseData, JsonCodec>(BLOCKS_STORAGE_KEY);
+        use_local_storage::<blocks_query::ResponseData, JsonSerdeCodec>(BLOCKS_STORAGE_KEY);
     let UseIntervalReturn { counter, .. } = use_interval(LIVE_RELOAD_INTERVAL);
 
     let resource = create_resource(

@@ -10,12 +10,12 @@ use charming::{
     series::*,
     Chart, WasmRenderer,
 };
+use codee::string::JsonSerdeCodec;
 use gloo_timers::future::TimeoutFuture;
 use leptos::*;
 use leptos_router::*;
 use leptos_use::{
-    storage::use_local_storage, use_document_visibility, use_interval, utils::JsonCodec,
-    UseIntervalReturn,
+    storage::use_local_storage, use_document_visibility, use_interval, UseIntervalReturn,
 };
 use std::collections::HashMap;
 use web_sys::VisibilityState;
@@ -584,7 +584,7 @@ fn BlockSpotlightPlaceholder() -> impl IntoView {
 #[component]
 pub fn BlocksSection() -> impl IntoView {
     let (summary_sig, _, _) =
-        use_local_storage::<BlockchainSummary, JsonCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
+        use_local_storage::<BlockchainSummary, JsonSerdeCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
     let visibility = use_document_visibility();
     let query_params_map = use_query_map();
     let (data_sig, set_data_sig) = create_signal(None);

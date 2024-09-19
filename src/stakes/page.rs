@@ -3,10 +3,11 @@ use crate::{
     common::{components::*, constants::*, models::MyError},
     summary::models::BlockchainSummary,
 };
+use codee::string::JsonSerdeCodec;
 use leptos::*;
 use leptos_meta::Title;
 use leptos_router::*;
-use leptos_use::{storage::use_local_storage, utils::JsonCodec};
+use leptos_use::storage::use_local_storage;
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq, Default)]
@@ -58,7 +59,7 @@ async fn load_epoch_summary(epoch: Option<u64>) -> Result<EpochSummaryResponse, 
 pub fn StakesPage() -> impl IntoView {
     let (epoch_sig, _) = create_query_signal::<u64>("epoch");
     let (summary_sig, _, _) =
-        use_local_storage::<BlockchainSummary, JsonCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
+        use_local_storage::<BlockchainSummary, JsonSerdeCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
 
     let resource = create_resource(
         move || epoch_sig.get(),
