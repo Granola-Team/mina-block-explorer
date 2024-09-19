@@ -6,10 +6,12 @@ use leptos_router::*;
 use leptos_use::{use_debounce_fn_with_options, DebounceOptions};
 
 pub trait TableData {
+    #[allow(dead_code)]
     fn get_columns(&self) -> Vec<String> {
         Vec::new()
     }
     fn get_rows(&self) -> Vec<Vec<HtmlElement<AnyElement>>>;
+    #[allow(dead_code)]
     fn get_exact_search_columns(&self) -> Vec<String> {
         Vec::new()
     }

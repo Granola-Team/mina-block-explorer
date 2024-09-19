@@ -135,6 +135,7 @@ impl TableData for Vec<Option<AccountActivityQuerySnarks>> {
 }
 
 pub trait SnarkTrait {
+    #[allow(dead_code)]
     fn get_canonical(&self) -> String;
     fn get_block_height(&self) -> String;
     fn get_block_state_hash(&self) -> String;
@@ -228,6 +229,7 @@ impl TableData for Vec<Option<AccountActivityQueryBlocks>> {
 }
 
 pub trait BlockTrait {
+    #[allow(dead_code)]
     fn get_canonical(&self) -> String;
     fn get_block_height(&self) -> String;
     fn get_state_hash(&self) -> String;

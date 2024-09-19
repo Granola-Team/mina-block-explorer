@@ -16,6 +16,7 @@ use wasm_bindgen::prelude::*;
 use web_sys::js_sys::{Intl::NumberFormat, *};
 
 #[wasm_bindgen]
+#[allow(non_snake_case)]
 extern "C" {
     #[wasm_bindgen(js_namespace = navigator, js_name = language)]
     #[wasm_bindgen(thread_local)]
