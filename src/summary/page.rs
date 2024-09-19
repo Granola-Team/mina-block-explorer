@@ -18,11 +18,11 @@ pub fn SummaryPage() -> impl IntoView {
     let (stat_sig, _, _) = use_local_storage::<BlockchainStat, JsonCodec>("blockchain-stat");
 
     view! {
-        <Title text="Blocks | Search for blocks on Mina Blockchain"/>
+        <Title text="Blocks | Search for blocks on Mina Blockchain" />
         <PageContainer>
             {move || {
-                view! { <SummaryGrid summary=Some(summary_sig.get()) stat=Some(stat_sig.get())/> }
-            }} <BlocksSection/>
+                view! { <SummaryGrid summary=Some(summary_sig.get()) stat=Some(stat_sig.get()) /> }
+            }} <BlocksSection />
         </PageContainer>
     }
 }

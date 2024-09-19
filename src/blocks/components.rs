@@ -28,19 +28,19 @@ pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
         <PageContainer>
             {move || match (option_block.get(), content.clone()) {
                 (Some(block), BlockContent::Spotlight) => {
-                    view! { <BlockSpotlight block=block/> }
+                    view! { <BlockSpotlight block=block /> }
                 }
                 (Some(block), BlockContent::UserCommands) => {
-                    view! { <BlockUserCommands block=block/> }
+                    view! { <BlockUserCommands block=block /> }
                 }
                 (Some(block), BlockContent::SNARKJobs) => {
-                    view! { <BlockSnarkJobs block=block/> }
+                    view! { <BlockSnarkJobs block=block /> }
                 }
                 (Some(block), BlockContent::FeeTransfers) => {
-                    view! { <BlockInternalCommands block=block/> }
+                    view! { <BlockInternalCommands block=block /> }
                 }
                 (Some(block), BlockContent::Analytics) => {
-                    view! { <BlockAnalytics block=block/> }
+                    view! { <BlockAnalytics block=block /> }
                 }
                 _ => ().into_view(),
             }}
@@ -251,10 +251,10 @@ pub fn BlockAnalytics(block: BlocksQueryBlocks) -> impl IntoView {
                     <span></span>
                 </AnalyticsSmContainer>
                 <AnalyticsLgContainer>
-                    <BlockSpotlightFeeTransferAnalytics block=block_sig.get()/>
+                    <BlockSpotlightFeeTransferAnalytics block=block_sig.get() />
                 </AnalyticsLgContainer>
                 <AnalyticsLgContainer>
-                    <BlockSpotlightUserCommandAnalytics block=block_sig.get()/>
+                    <BlockSpotlightUserCommandAnalytics block=block_sig.get() />
                 </AnalyticsLgContainer>
             </AnalyticsLayout>
         </TableSection>
@@ -504,7 +504,7 @@ pub fn BlockSpotlight(block: BlocksQueryBlocks) -> impl IntoView {
             meta=Some(format!("{} ({})", date_time, print_time_since(&date_time)))
         >
 
-            <BlockIcon width=40/>
+            <BlockIcon width=40 />
         </SpotlightSection>
     }
 }
@@ -576,7 +576,7 @@ fn BlockSpotlightPlaceholder() -> impl IntoView {
             id=None
             meta=None
         >
-            <BlockIcon width=40/>
+            <BlockIcon width=40 />
         </SpotlightSection>
     }
 }
@@ -733,6 +733,6 @@ pub fn BlocksSection() -> impl IntoView {
             }
         />
 
-        <Outlet/>
+        <Outlet />
     }
 }

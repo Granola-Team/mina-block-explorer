@@ -11,10 +11,10 @@ pub fn BlocksAnalyticsPage() -> impl IntoView {
         move |_| async move { load_block_summary_data().await },
     );
     view! {
-        <Title text="Analytics | Blocks"/>
+        <Title text="Analytics | Blocks" />
         <PageContainer>
             <AppSection>
-                <AppHeading heading="Blocks Analytics"/>
+                <AppHeading heading="Blocks Analytics" />
                 <AnalyticsLayout>
                     <Suspense fallback=move || {
                         view! {
@@ -94,11 +94,11 @@ pub fn BlocksAnalyticsPage() -> impl IntoView {
 pub fn SnarksAnalyticsPage() -> impl IntoView {
     let (limit_sig, _) = create_query_signal::<u64>("limit");
     view! {
-        <Title text="Analytics | SNARKs"/>
+        <Title text="Analytics | SNARKs" />
         <PageContainer>
             <AppSection>
-                <AppHeading heading="Filters"/>
-                <AnalayticsFilters/>
+                <AppHeading heading="Filters" />
+                <AnalayticsFilters />
             </AppSection>
             <AppSection>
                 <AnalyticsLayout>
@@ -119,7 +119,7 @@ pub fn SnarksAnalyticsPage() -> impl IntoView {
 
                 </AnalyticsLayout>
             </AppSection>
-            <SnarkFees/>
+            <SnarkFees />
         </PageContainer>
     }
 }
@@ -127,10 +127,10 @@ pub fn SnarksAnalyticsPage() -> impl IntoView {
 #[component]
 pub fn UserCommandsAnalyticsPage() -> impl IntoView {
     view! {
-        <Title text="Analytics | User Commands"/>
+        <Title text="Analytics | User Commands" />
         <PageContainer>
             <AppSection>
-                <AppHeading heading="User Commands Analytics"/>
+                <AppHeading heading="User Commands Analytics" />
                 <AnalyticsLayout>
                     <AnalyticsXLContainer>
                         <div id="chart" class="w-full h-96"></div>
@@ -148,10 +148,10 @@ pub fn UserCommandsAnalyticsPage() -> impl IntoView {
 #[component]
 pub fn InternalCommandsAnalayticsPage() -> impl IntoView {
     view! {
-        <Title text="Analytics | Internal Commands"/>
+        <Title text="Analytics | Internal Commands" />
         <PageContainer>
             <AppSection>
-                <AppHeading heading="Internal Commands Analytics"/>
+                <AppHeading heading="Internal Commands Analytics" />
                 <AnalyticsLayout>
                     <AnalyticsXLContainer>
                         <div id="chart" class="w-full h-96"></div>
@@ -191,5 +191,5 @@ pub fn AnalyticsTabbedPage() -> impl IntoView {
             ..Default::default()
         },
     ];
-    view! { <TabbedPage tabs/> }
+    view! { <TabbedPage tabs /> }
 }

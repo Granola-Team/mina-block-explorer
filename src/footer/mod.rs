@@ -97,8 +97,8 @@ pub fn Footer() -> impl IntoView {
                                 href=link.href
                             >
                                 {match link.icon {
-                                    Icon::Docs => view! { <DocsIcon width=12/> },
-                                    Icon::Terms => view! { <TermsIcon width=12/> },
+                                    Icon::Docs => view! { <DocsIcon width=12 /> },
+                                    Icon::Terms => view! { <TermsIcon width=12 /> },
                                 }}
 
                                 <div class="ml-1">{link.label}</div>

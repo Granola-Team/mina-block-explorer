@@ -39,7 +39,7 @@ pub fn ZkAppSpotlight() -> impl IntoView {
         },
     )]));
     view! {
-        <Title text="ZK App Spotlight"/>
+        <Title text="ZK App Spotlight" />
         <PageContainer>
             <SpotlightSection
                 header="ZK App Spotlight".to_string()
@@ -70,7 +70,7 @@ pub fn ZkAppSpotlight() -> impl IntoView {
 
                 id=Some(generate_base58_string(44))
             >
-                <ZKAppSymbol width=40/>
+                <ZKAppSymbol width=40 />
             </SpotlightSection>
             <TableSection
                 metadata=metadata.into()
@@ -259,7 +259,7 @@ pub fn ZkAppTransactionsPage() -> impl IntoView {
         },
     ];
     view! {
-        <Title text="Commands | ZK Apps"/>
+        <Title text="Commands | ZK Apps" />
         <PageContainer>
             <TableSectionTemplate
                 table_columns
@@ -295,7 +295,7 @@ pub fn ZkAppsPage() -> impl IntoView {
         },
     ];
     view! {
-        <Title text="ZK Apps | Search For ZK Apps"/>
+        <Title text="ZK Apps | Search For ZK Apps" />
         <PageContainer>
             <TableSectionTemplate
                 table_columns
@@ -393,7 +393,7 @@ pub fn ZkAppTransactionSpotlightPage() -> impl IntoView {
                 id=Some("3NK8nzfotTNSUopF4oEzJUHJ2EeLATBDnMRRgaqaTfR3zpfHK2yo".to_string())
                 meta=Some("2024-02-28 20:45:00 UTC (8 minutes ago)".to_string())
             >
-                <ZKAppSymbol width=40/>
+                <ZKAppSymbol width=40 />
             </SpotlightSection>
             <TableSection
                 metadata=metadata.into()

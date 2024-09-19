@@ -42,7 +42,7 @@ fn AccountSpotlightPage() -> impl IntoView {
     };
 
     view! {
-        <Title formatter=move |text| format!("Account Overview | {text}") text=username/>
+        <Title formatter=move |text| format!("Account Overview | {text}") text=username />
         <PageContainer>
             {move || match account.get() {
                 Some(acc) => {
@@ -58,7 +58,7 @@ fn AccountSpotlightPage() -> impl IntoView {
 
                             id=memo_params_map.get().get("id").cloned()
                         >
-                            <WalletIcon width=40/>
+                            <WalletIcon width=40 />
                         </SpotlightSection>
                     }
                         .into_view()
@@ -71,12 +71,11 @@ fn AccountSpotlightPage() -> impl IntoView {
                             meta=None
                             id=None
                         >
-                            <WalletIcon width=40/>
+                            <WalletIcon width=40 />
                         </SpotlightSection>
                     }
                 }
-            }}
-            <Outlet/>
+            }} <Outlet />
         </PageContainer>
     }
 }
@@ -347,8 +346,8 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
     {
         move || {
             view! {
-                <TabbedPage tabs=tabs() exclude_outlet=true/>
-                <AccountSpotlightPage/>
+                <TabbedPage tabs=tabs() exclude_outlet=true />
+                <AccountSpotlightPage />
             }
         }
     }
