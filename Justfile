@@ -10,6 +10,7 @@ export CYPRESS_BASE_URL := 'http://localhost:' + trunk_port
 export VERSION := `git rev-parse --short=8 HEAD`
 export INDEXER_VERSION := `cd lib/mina-indexer && git rev-parse --short=8 HEAD`
 export CARGO_HOME := `pwd` + '/.cargo'
+export VOLUMES_DIR := x'${VOLUMES_DIR:-/mnt}'
 
 set dotenv-load := true
 
