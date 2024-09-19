@@ -134,8 +134,12 @@ impl TableData for Vec<Option<BlocksQueryBlocksTransactionsUserCommandsExt>> {
                         format!("/addresses/accounts/{}", user_command.get_to()),
                     ),
                     convert_to_pill(format_number(user_command.get_nonce()), ColorVariant::Grey),
-                    decorate_with_mina_tag(user_command.get_fee()),
-                    decorate_with_mina_tag(user_command.get_amount()),
+                    decorate_with_mina_tag(nanomina_to_mina(
+                        user_command.get_fee().parse::<u64>().ok().unwrap_or(0),
+                    )),
+                    decorate_with_mina_tag(nanomina_to_mina(
+                        user_command.get_amount().parse::<u64>().ok().unwrap_or(0),
+                    )),
                 ],
                 None => vec![],
             })
