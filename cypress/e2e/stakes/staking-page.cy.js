@@ -1,6 +1,5 @@
 import { parseFormattedNumber } from "../helpers";
 
-// TODO: Explains failures, here.
 suite(["@tier2"], "staking ledger", () => {
   beforeEach(() => {
     cy.visit("/staking-ledgers");

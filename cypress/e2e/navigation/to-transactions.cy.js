@@ -1,6 +1,5 @@
 import { ROMEK_ADDRESS, WHISPERIT_BLOCK_STATE_HASH } from "../constants";
 
-// TODO: unexplained errors in tier1; moving to tier2.
 suite(["@tier2"], "transaction spotlight", () => {
   let pages = [
     { origin: "/commands", column: "Hash", tableHeader: "User Commands" },
