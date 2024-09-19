@@ -21,7 +21,7 @@ default:
 deploy-mina-indexer:
   @echo "--- Deploying mina-indexer at {{INDEXER_VERSION}}"
   @echo "VOLUMES_DIR: {{VOLUMES_DIR}}"
-  cd lib/mina-indexer && nix develop --command just deploy-local-prod 10000 {{indexer_port}}
+  cd lib/mina-indexer && VOLUMES_DIR={{VOLUMES_DIR}} nix develop --command just deploy-local-prod 10000 {{indexer_port}}
 
 shutdown-mina-indexer:
   @echo "--- Shutting down mina-indexer"
