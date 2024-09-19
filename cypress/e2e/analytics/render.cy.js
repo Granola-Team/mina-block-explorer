@@ -3,7 +3,7 @@ suite(["@tier2"], "chart", () => {
     { page: "/analytics/commands/internal", chart_ids: ["#chart"] },
     { page: "/analytics/commands/user", chart_ids: ["#chart"] },
     { page: "/analytics/blocks", chart_ids: ["#chart"] },
-    { page: "/analytics/snarks", chart_ids: ["#chart"] },
+    { page: "/analytics/snarks", chart_ids: ["#avg-snark-fee"] },
   ];
 
   analytics_pages.forEach(({ page, chart_ids }) =>
