@@ -38,6 +38,11 @@ Environment variables are bundled into the WASM file at compile time (see
 the production WASM file may be deployed without any further configuration
 required.
 
+Note that the `mina-indexer` is a git submodule and is integrated at a specific version
+for tier2 tests. Tier2 tests are coded to work against the first 10000 blocks in the
+Mina Blockchain. Running `just tier2` the first time will incur a one-time penalty as the
+indexer will be setup on the device upon which tier2 tests are run.
+
 ## License
 
 Copyright 2022-2024 Granola Systems Inc.
