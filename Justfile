@@ -3,32 +3,17 @@ import 'Justfile.dev'
 
 spec := "cypress/e2e/"
 trunk_port := `echo $((5170 + $RANDOM % 10))`
-indexer_port := "8081"
 
 export RUSTFLAGS := "--cfg=web_sys_unstable_apis"
 export CYPRESS_BASE_URL := 'http://localhost:' + trunk_port
 export VERSION := `git rev-parse --short=8 HEAD`
-export INDEXER_VERSION := `cd lib/mina-indexer && git rev-parse --short=8 HEAD`
 export CARGO_HOME := `pwd` + '/.cargo'
-export REST_URL := 'http://localhost:' + indexer_port
-export GRAPHQL_URL := 'http://localhost:' + indexer_port + '/graphql'
 
 set dotenv-load := true
 
 default:
   @echo "Topologically sorted recipes:"
   @just --list --unsorted --list-heading '' --justfile {{justfile()}}
-
-deploy-mina-indexer:
-  @echo "--- Deploying mina-indexer at {{INDEXER_VERSION}}"
-  cd lib/mina-indexer && nix develop --command just deploy-local-prod 10000 {{indexer_port}}
-
-shutdown-mina-indexer:
-  @echo "--- Shutting down mina-indexer"
-  $VOLUMES_DIR/mina-indexer-prod/bin/mina-indexer-{{INDEXER_VERSION}} \
-    --socket $VOLUMES_DIR/mina-indexer-prod/mina-indexer-{{INDEXER_VERSION}}.sock \
-    server \
-    shutdown
 
 # Remove build and test artifacts
 clean:
@@ -68,7 +53,7 @@ dev: pnpm_install
   trunk serve --port="{{trunk_port}}" --open
 
 # Run all application regression tests
-test-e2e: pnpm_install deploy-mina-indexer && shutdown-mina-indexer
+test-e2e: pnpm_install
   @echo "--- Performing end-to-end tests"
   CYPRESS_tags='' \
   node ./scripts/wait-on-port.js \
@@ -81,7 +66,7 @@ test-e2e: pnpm_install deploy-mina-indexer && shutdown-mina-indexer
     pnpm exec cypress run -r list -q
 
 # Run tier2 application regression tests
-test-e2e-tier2: pnpm_install deploy-mina-indexer && shutdown-mina-indexer
+test-e2e-tier2: pnpm_install
   @echo "--- Performing end-to-end @tier2 tests"
   CYPRESS_tags="@tier2" \
   node ./scripts/wait-on-port.js \
@@ -94,7 +79,7 @@ test-e2e-tier2: pnpm_install deploy-mina-indexer && shutdown-mina-indexer
     pnpm exec cypress run -r list -q
 
 # Run regression tests with interactive GUI
-test-e2e-local: pnpm_install deploy-mina-indexer
+test-e2e-local: pnpm_install
   node ./scripts/wait-on-port.js \
     trunk serve \
     --no-autoreload \

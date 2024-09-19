@@ -1,3 +1,0 @@
-[submodule "lib/mina-indexer"]
-	path = lib/mina-indexer
-	url = git@github.com:Granola-Team/mina-indexer.git
