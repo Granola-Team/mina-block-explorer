@@ -20,7 +20,7 @@ let test_suite_data = [
     tag: "@tier2",
     url: `/analytics/snarks`,
     table: {
-      heading: "SNARK Fees in latest blocks",
+      heading: "SNARK Fees Overview",
       columns: ["Metric", "All SNARKs", "SNARKs with non-zero fees"],
       filter_tests: [],
     },
