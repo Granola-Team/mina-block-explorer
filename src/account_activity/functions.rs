@@ -21,7 +21,7 @@ pub async fn load_data(
     trans_limit: Option<u64>,
     delegators_limit: Option<u64>,
     internal_commands_limit: Option<u64>,
-    block_height: Option<u64>,
+    block_height: Option<i64>,
     txn_hash: Option<String>,
     state_hash: Option<String>,
     prover: Option<String>,
@@ -32,7 +32,7 @@ pub async fn load_data(
     current_epoch_staking_ledger: Option<u64>,
     canonical: Option<bool>,
 ) -> Result<account_activity_query::ResponseData, MyError> {
-    let block_height = block_height.map(|x| x as i64);
+    let block_height = block_height.map(|x| std::cmp::max(0i64, x));
     let nonce = nonce.map(|x| x as i64);
     let slot = slot.map(|x| x as i64);
     let get_current_epoch_staking_ledger =

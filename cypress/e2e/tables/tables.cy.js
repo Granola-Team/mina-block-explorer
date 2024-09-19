@@ -20,7 +20,7 @@ let test_suite_data = [
     tag: "@tier2",
     url: `/analytics/snarks`,
     table: {
-      heading: "SNARK Fees in latest blocks",
+      heading: "SNARK Fees Overview",
       columns: ["Metric", "All SNARKs", "SNARKs with non-zero fees"],
       filter_tests: [],
     },
@@ -194,11 +194,11 @@ let test_suite_data = [
       filter_tests: [
         {
           column: "Height",
-          input: 50000,
+          input: 2500,
           assertion: function () {
             cy.assertForEachColumnValue("User Commands", "Height", (text) => {
               let height = parseFormattedNumber(text);
-              expect(height).to.be.lte(50000);
+              expect(height).to.be.lte(2500);
             });
           },
         },
@@ -250,35 +250,38 @@ let test_suite_data = [
   },
   {
     tag: "@tier2",
-    url: `/addresses/accounts/${ROMEK_ADDRESS}/commands/internal`,
+    url: `/addresses/accounts/B62qiVr4Wy6yKhxNV49Npnpr2XF5AhsFejFWWQpWKARQpTYsb9snNZY/commands/internal`,
     table: {
       heading: "Internal Commands",
       columns: ["Height", "State Hash", "Fee", "Type", "Age"],
       filter_tests: [
         {
           column: "Height",
-          input: 3000,
+          input: 5200,
           assertion: function () {
+            cy.wait(1000);
             cy.assertForEachColumnValue(
               "Internal Commands",
               "Height",
               (text) => {
                 let height = parseFormattedNumber(text);
-                expect(height).to.be.lte(3000);
+                expect(height).to.be.lte(5200);
               },
             );
           },
         },
         {
           column: "State Hash",
-          input: ROMEK_BLOCK_STATE_HASH,
+          input: "3NKq6mHhx31ikA9Gax1JcRuzTMp3tMudKfcwt3VxMDnvAeMYZGPA",
           assertion: function () {
             cy.aliasTableRows("Internal Commands", "table-rows");
             cy.assertForEachColumnValue(
               "Internal Commands",
               "State Hash",
               (text) => {
-                expect(text).to.contain(ROMEK_BLOCK_STATE_HASH);
+                expect(text).to.contain(
+                  "3NKq6mHhx31ikA9Gax1JcRuzTMp3tMudKfcwt3VxMDnvAeMYZGPA",
+                );
               },
             );
           },

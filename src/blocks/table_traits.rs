@@ -114,15 +114,21 @@ impl TableData for Vec<Option<BlocksQueryBlocksTransactionsUserCommandsExt>> {
                     },
                     convert_to_pill(user_command.get_kind(), ColorVariant::Grey),
                     convert_to_pill(
-                        if user_command.get_failure_reason().is_none() {
-                            TXN_STATUS_APPLIED.to_string()
-                        } else {
+                        if user_command
+                            .get_failure_reason()
+                            .map_or(true, |failure_reason| failure_reason.is_empty())
+                        {
                             TXN_STATUS_FAILED.to_string()
-                        },
-                        if user_command.get_failure_reason().is_none() {
-                            ColorVariant::Green
                         } else {
+                            TXN_STATUS_APPLIED.to_string()
+                        },
+                        if user_command
+                            .get_failure_reason()
+                            .map_or(true, |failure_reason| failure_reason.is_empty())
+                        {
                             ColorVariant::Orange
+                        } else {
+                            ColorVariant::Green
                         },
                     ),
                     convert_to_link(
@@ -134,8 +140,12 @@ impl TableData for Vec<Option<BlocksQueryBlocksTransactionsUserCommandsExt>> {
                         format!("/addresses/accounts/{}", user_command.get_to()),
                     ),
                     convert_to_pill(format_number(user_command.get_nonce()), ColorVariant::Grey),
-                    decorate_with_mina_tag(user_command.get_fee()),
-                    decorate_with_mina_tag(user_command.get_amount()),
+                    decorate_with_mina_tag(nanomina_to_mina(
+                        user_command.get_fee().parse::<u64>().ok().unwrap_or(0),
+                    )),
+                    decorate_with_mina_tag(nanomina_to_mina(
+                        user_command.get_amount().parse::<u64>().ok().unwrap_or(0),
+                    )),
                 ],
                 None => vec![],
             })

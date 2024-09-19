@@ -67,7 +67,7 @@ suite(["@tier2"], "account page", () => {
         if (transposed) {
           cy.clickLinkInTransposedTable(column, tableHeader, tableHeaderEl);
         } else {
-          cy.clickLinkInTable(1, column, tableHeader, tableHeaderEl);
+          cy.clickLinkInTable(0, column, tableHeader, tableHeaderEl);
         }
 
         cy.url().should("include", "/accounts/");

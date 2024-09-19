@@ -1,4 +1,3 @@
-// TODO: moved to tier2 due to unexplained failures in tier1
 suite(["@tier2"], "tab count and row count", () => {
   let tabs = ["SNARK Jobs", "User Commands", "Internal Commands"];
 
