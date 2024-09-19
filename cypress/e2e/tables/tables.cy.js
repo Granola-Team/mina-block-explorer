@@ -194,11 +194,11 @@ let test_suite_data = [
       filter_tests: [
         {
           column: "Height",
-          input: 50000,
+          input: 2000,
           assertion: function () {
             cy.assertForEachColumnValue("User Commands", "Height", (text) => {
               let height = parseFormattedNumber(text);
-              expect(height).to.be.lte(50000);
+              expect(height).to.be.lte(2000);
             });
           },
         },
@@ -250,7 +250,7 @@ let test_suite_data = [
   },
   {
     tag: "@tier2",
-    url: `/addresses/accounts/${ROMEK_ADDRESS}/commands/internal`,
+    url: `/addresses/accounts/B62qiVr4Wy6yKhxNV49Npnpr2XF5AhsFejFWWQpWKARQpTYsb9snNZY/commands/internal`,
     table: {
       heading: "Internal Commands",
       columns: ["Height", "State Hash", "Fee", "Type", "Age"],
