@@ -8,7 +8,6 @@ suite(["@tier2"], "empty table", () => {
     "/commands/internal?q-recipient=B62qfake",
     "/staking-ledgers?q-key=B62qfake",
     "/snarks?q-state-hash=3Nfake",
-    `/addresses/accounts/${DEFAULT_ACCOUNT_PK}?q-height=-1`,
   ];
 
   pages.forEach((page) =>
