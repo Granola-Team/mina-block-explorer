@@ -73,7 +73,7 @@ dev: pnpm_install
 test-e2e-tier2: pnpm_install deploy-mina-indexer && shutdown-mina-indexer
   @echo "--- Performing end-to-end @tier2 tests"
   CYPRESS_tags="@tier2" \
-  node ./scripts/wait-on-port.js \
+  node ./ops/wait-on-port.js \
     trunk serve \
     --no-autoreload \
     --port="{{trunk_port}}" \
@@ -84,7 +84,7 @@ test-e2e-tier2: pnpm_install deploy-mina-indexer && shutdown-mina-indexer
 
 # Run regression tests with interactive GUI
 test-e2e-local: pnpm_install deploy-mina-indexer
-  node ./scripts/wait-on-port.js \
+  node ./ops/wait-on-port.js \
     trunk serve \
     --no-autoreload \
     --port="{{trunk_port}}" \
