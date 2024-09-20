@@ -30,7 +30,10 @@ pub fn AnalayticsFilters() -> impl IntoView {
                             value=limit_sig.get().map(|s| s.to_string()).unwrap_or_default()
                             setter_sig=SignalSetter::map(move |opt_str: Option<String>| {
                                 set_limit
-                                    .set(opt_str.map(|v_str| v_str.parse::<u64>().ok().unwrap_or_default()))
+                                    .set(
+                                        opt_str
+                                            .map(|v_str| v_str.parse::<u64>().ok().unwrap_or_default()),
+                                    )
                             })
 
                             number_props=HashMap::from([
