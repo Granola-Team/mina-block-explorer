@@ -75,14 +75,10 @@ test-e2e-tier2: pnpm_install deploy-mina-indexer && shutdown-mina-indexer
   CYPRESS_tags="@tier2" \
   GRAPHQL_URL="$GRAPHQL_URL" \
   REST_URL="$REST_URL" \
-  node ./ops/wait-on-port.js \
-    trunk serve \
-    --no-autoreload \
-    --port="{{trunk_port}}" \
-    -- \
-    "{{trunk_port}}" \
-    -- \
-    pnpm exec cypress run -r list -q
+  ruby ./ops/manage-processes.rb \
+    --port={{trunk_port}} \
+    --first-cmd="trunk serve --no-autoreload --port={{trunk_port}}" \
+    --second-cmd="pnpm exec cypress run -r list -q"
 
 # Run regression tests with interactive GUI
 test-e2e-local: pnpm_install deploy-mina-indexer
