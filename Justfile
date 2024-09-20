@@ -3,7 +3,6 @@ import 'Justfile.dev'
 
 spec := "cypress/e2e/"
 trunk_port := `echo $((5170 + $RANDOM % 10))`
-indexer_port := "8081"
 
 export RUSTFLAGS := "--cfg=web_sys_unstable_apis"
 export CYPRESS_BASE_URL := 'http://localhost:' + trunk_port
@@ -11,6 +10,7 @@ export VERSION := `git rev-parse --short=8 HEAD`
 export INDEXER_VERSION := `cd lib/mina-indexer && git rev-parse --short=8 HEAD`
 export CARGO_HOME := `pwd` + '/.cargo'
 export VOLUMES_DIR := x'${VOLUMES_DIR:-/mnt}'
+export INDEXER_PORT := x'${INDEXER_PORT:-8081}'
 
 set dotenv-load := true
 
@@ -21,7 +21,7 @@ default:
 deploy-mina-indexer:
   @echo "--- Deploying mina-indexer at {{INDEXER_VERSION}}"
   mkdir -p $VOLUMES_DIR/mina-indexer-prod
-  cd lib/mina-indexer && VOLUMES_DIR=$VOLUMES_DIR nix develop --command just deploy-local-prod 10000 {{indexer_port}}
+  cd lib/mina-indexer && VOLUMES_DIR=$VOLUMES_DIR nix develop --command just deploy-local-prod 10000 {{INDEXER_PORT}}
 
 shutdown-mina-indexer:
   @echo "--- Shutting down mina-indexer"
@@ -68,11 +68,9 @@ dev: pnpm_install
   trunk serve --port="{{trunk_port}}" --open
 
 # Run tier2 application regression tests
-test-e2e-tier2: clean pnpm_install deploy-mina-indexer && shutdown-mina-indexer
+test-e2e-tier2: pnpm_install deploy-mina-indexer && shutdown-mina-indexer
   @echo "--- Performing end-to-end @tier2 tests"
   CYPRESS_tags="@tier2" \
-  REST_URL="http://localhost:{{indexer_port}}" \
-  GRAPHQL_URL="http://localhost:{{indexer_port}}/graphql" \
   node ./scripts/wait-on-port.js \
     trunk serve \
     --no-autoreload \
@@ -83,9 +81,7 @@ test-e2e-tier2: clean pnpm_install deploy-mina-indexer && shutdown-mina-indexer
     pnpm exec cypress run -r list -q
 
 # Run regression tests with interactive GUI
-test-e2e-local: clean pnpm_install deploy-mina-indexer
-  REST_URL="http://localhost:{{indexer_port}}" \
-  GRAPHQL_URL="http://localhost:{{indexer_port}}/graphql" \
+test-e2e-local: pnpm_install deploy-mina-indexer
   node ./scripts/wait-on-port.js \
     trunk serve \
     --no-autoreload \
