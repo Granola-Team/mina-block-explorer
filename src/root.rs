@@ -35,7 +35,11 @@ use leptos_router::*;
 pub fn Root() -> impl IntoView {
     view! {
         <script>
-            {format!(r#"const config = {{ graphql_endpoint: "{}" }}"#, GRAPHQL_ENDPOINT)}
+            {format!(
+                r#"const config = {{ graphql_endpoint: "{}", rest_endpoint: "{}" }}"#,
+                GRAPHQL_ENDPOINT,
+                REST_ENDPOINT,
+            )}
         </script>
         <SummaryLocalStorage />
         // TODO: loading 1000 blocks is too expensive for now

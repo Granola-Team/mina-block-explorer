@@ -1,9 +1,15 @@
 setTimeout(async () => {
-  const currentBlockHeight = 359604;
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   const blockLimit = urlParams.get("limit") || 1000;
-  const blockOffset = currentBlockHeight - blockLimit;
+  let summary_response = await fetch(config.rest_endpoint + "/summary", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  let { blockchainLength } = await summary_response.json();
+  const blockOffset = blockchainLength - blockLimit;
 
   let chartDom = document.getElementById("avg-snark-fee");
   window.addEventListener("resize", function () {
