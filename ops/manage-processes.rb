@@ -35,7 +35,7 @@ def kill_process(pid)
   Process.wait(pid)
 end
 
-# Option parser for named arguments
+# Set up OptionParser for handling command-line arguments
 options = {}
 OptionParser.new do |opts|
   opts.banner = "Usage: manage_processes.rb [options]"
@@ -48,7 +48,7 @@ OptionParser.new do |opts|
     options[:first_cmd] = v
   end
 
-  opts.on("--second-cmd COMMAND", "Second command to run") do |v|
+  opts.on("--second-cmd COMMAND", "Second command to run after port is available") do |v|
     options[:second_cmd] = v
   end
 
@@ -59,8 +59,8 @@ OptionParser.new do |opts|
 end.parse!
 
 # Validate input
-unless options[:port] && options[:port].between?(0, 65535)
-  puts "Invalid or missing port"
+if options[:port].nil? || options[:port] < 0 || options[:port] > 65535
+  puts "Invalid or missing port number"
   exit 1
 end
 
@@ -69,20 +69,33 @@ if options[:first_cmd].nil? || options[:second_cmd].nil?
   exit 1
 end
 
-# Start the first process
-first_pid = start_process(options[:first_cmd])
+# Track child process PIDs to ensure they can be killed later
+first_process_pid = nil
+second_process_pid = nil
 
-# Wait for the port to open
+# Set up signal handling to ensure children are killed on SIGINT
+trap("INT") do
+  puts "\nReceived SIGINT, terminating child processes..."
+  kill_process(first_process_pid) if first_process_pid
+  kill_process(second_process_pid) if second_process_pid
+  exit 1
+end
+
+# Step 1: Start the first process
+first_process_pid = start_process(options[:first_cmd])
+
+# Step 2: Wait for the port to be available
 wait_for_port(options[:port])
 
-# Start the second process
-second_pid = start_process(options[:second_cmd])
+# Step 3: Start the second process
+second_process_pid = start_process(options[:second_cmd])
 
-# Wait for the second process to finish
-_, second_status = Process.wait2(second_pid)
+# Step 4: Wait for the second process to finish
+_, second_status = Process.wait2(second_process_pid)
+puts "Second process finished with status: #{second_status.exitstatus}"
 
-# Kill the first process
-kill_process(first_pid)
+# Step 5: Kill the first process after the second finishes
+kill_process(first_process_pid)
 
-# Exit with the second process's status code
+# Step 6: Propagate the exit status of the second process
 exit second_status.exitstatus
