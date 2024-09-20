@@ -10,6 +10,9 @@ use std::collections::HashMap;
 #[component]
 pub fn AnalayticsFilters() -> impl IntoView {
     let (limit_sig, set_limit) = create_query_signal::<u64>("limit");
+    if limit_sig.get_untracked().is_none() {
+        set_limit.set(Some(1000u64));
+    }
 
     view! {
         <div class="w-full flex justify-start items-center p-2 pl-8 md:p-8 md:py-2">
