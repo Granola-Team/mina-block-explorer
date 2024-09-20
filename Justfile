@@ -73,6 +73,8 @@ test-e2e-tier2: pnpm_install deploy-mina-indexer && shutdown-mina-indexer
   @echo "--- Performing end-to-end @tier2 tests"
   ruby ops/validate-env.rb GRAPHQL_URL REST_URL
   CYPRESS_tags="@tier2" \
+  GRAPHQL_URL="$GRAPHQL_URL" \
+  REST_URL="$REST_URL" \
   node ./ops/wait-on-port.js \
     trunk serve \
     --no-autoreload \
