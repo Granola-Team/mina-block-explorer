@@ -65,7 +65,7 @@ pnpm_install:
   pnpm install
 
 # Serve application on localhost
-dev: pnpm_install
+dev: pnpm_install deploy-mina-indexer
   trunk serve --port="{{trunk_port}}" --open
 
 # Run tier2 application regression tests
