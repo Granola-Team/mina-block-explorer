@@ -67,27 +67,12 @@ pnpm_install:
 dev: pnpm_install
   trunk serve --port="{{trunk_port}}" --open
 
-# Run all application regression tests
-test-e2e: pnpm_install deploy-mina-indexer && shutdown-mina-indexer
-  export REST_URL="http://localhost:{{indexer_port}}"
-  export GRAPHQL_URL="http://localhost:{{indexer_port}}/graphql"
-  @echo "--- Performing end-to-end tests"
-  CYPRESS_tags='' \
-  node ./scripts/wait-on-port.js \
-    trunk serve \
-    --no-autoreload \
-    --port="{{trunk_port}}" \
-    -- \
-    "{{trunk_port}}" \
-    -- \
-    pnpm exec cypress run -r list -q
-
 # Run tier2 application regression tests
-test-e2e-tier2: pnpm_install deploy-mina-indexer && shutdown-mina-indexer
-  export REST_URL="http://localhost:{{indexer_port}}"
-  export GRAPHQL_URL="http://localhost:{{indexer_port}}/graphql"
+test-e2e-tier2: clean pnpm_install deploy-mina-indexer && shutdown-mina-indexer
   @echo "--- Performing end-to-end @tier2 tests"
   CYPRESS_tags="@tier2" \
+  REST_URL="http://localhost:{{indexer_port}}" \
+  GRAPHQL_URL="http://localhost:{{indexer_port}}/graphql" \
   node ./scripts/wait-on-port.js \
     trunk serve \
     --no-autoreload \
@@ -98,9 +83,9 @@ test-e2e-tier2: pnpm_install deploy-mina-indexer && shutdown-mina-indexer
     pnpm exec cypress run -r list -q
 
 # Run regression tests with interactive GUI
-test-e2e-local: pnpm_install deploy-mina-indexer
-  export REST_URL="http://localhost:{{indexer_port}}"
-  export GRAPHQL_URL="http://localhost:{{indexer_port}}/graphql"
+test-e2e-local: clean pnpm_install deploy-mina-indexer
+  REST_URL="http://localhost:{{indexer_port}}" \
+  GRAPHQL_URL="http://localhost:{{indexer_port}}/graphql" \
   node ./scripts/wait-on-port.js \
     trunk serve \
     --no-autoreload \
