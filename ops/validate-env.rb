@@ -1,6 +1,6 @@
 # Check if arguments are provided
 if ARGV.empty?
-  puts "Usage: ruby check_env_vars.rb ENV_VAR1 ENV_VAR2 ..."
+  puts "Usage: ruby ops/validate-env.rb ENV_VAR1 ENV_VAR2 ..."
   exit 1
 end
 

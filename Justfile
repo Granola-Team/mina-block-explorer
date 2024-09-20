@@ -9,20 +9,22 @@ export CYPRESS_BASE_URL := 'http://localhost:' + trunk_port
 export VERSION := `git rev-parse --short=8 HEAD`
 export INDEXER_VERSION := `cd lib/mina-indexer && git rev-parse --short=8 HEAD`
 export CARGO_HOME := `pwd` + '/.cargo'
-export INDEXER_PORT := x'${INDEXER_PORT:-8081}'
 
 set dotenv-load := true
-
-export VOLUMES_DIR := x'${VOLUMES_DIR:-/mnt}'
 
 default:
   @echo "Topologically sorted recipes:"
   @just --list --unsorted --list-heading '' --justfile {{justfile()}}
 
+env-check:
+  @echo "--- Validating required environment variables"
+  ruby ops/validate-env.rb VOLUMES_DIR GRAPHQL_URL REST_URL
+
 deploy-mina-indexer:
   @echo "--- Deploying mina-indexer at {{INDEXER_VERSION}}"
+  ruby ops/validate-env.rs INDEXER_PORT
   mkdir -p $VOLUMES_DIR/mina-indexer-prod
-  cd lib/mina-indexer && VOLUMES_DIR=$VOLUMES_DIR nix develop --command just deploy-local-prod 10000 {{INDEXER_PORT}}
+  cd lib/mina-indexer && VOLUMES_DIR=$VOLUMES_DIR nix develop --command just deploy-local-prod 10000 $INDEXER_PORT
 
 shutdown-mina-indexer:
   @echo "--- Shutting down mina-indexer"
@@ -66,11 +68,11 @@ pnpm_install:
   pnpm install
 
 # Serve application on localhost
-dev: pnpm_install
+dev: env-check pnpm_install
   trunk serve --port="{{trunk_port}}" --open
 
 # Run tier2 application regression tests
-test-e2e-tier2: pnpm_install deploy-mina-indexer && shutdown-mina-indexer
+test-e2e-tier2: env-check pnpm_install deploy-mina-indexer && shutdown-mina-indexer
   @echo "--- Performing end-to-end @tier2 tests"
   CYPRESS_tags="@tier2" \
   node ./ops/wait-on-port.js \
@@ -83,7 +85,7 @@ test-e2e-tier2: pnpm_install deploy-mina-indexer && shutdown-mina-indexer
     pnpm exec cypress run -r list -q
 
 # Run regression tests with interactive GUI
-test-e2e-local: pnpm_install deploy-mina-indexer
+test-e2e-local: env-check pnpm_install deploy-mina-indexer
   node ./ops/wait-on-port.js \
     trunk serve \
     --no-autoreload \
@@ -94,7 +96,7 @@ test-e2e-local: pnpm_install deploy-mina-indexer
     pnpm exec cypress open
 
 # Publish application
-publish: clean pnpm_install
+publish: env-check clean pnpm_install
   @echo "--- Publishing"
   trunk build --release --filehash true
   @echo "Publishing version {{VERSION}}"
