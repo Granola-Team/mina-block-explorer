@@ -9,11 +9,8 @@ export CYPRESS_BASE_URL := 'http://localhost:' + trunk_port
 export VERSION := `git rev-parse --short=8 HEAD`
 export INDEXER_VERSION := `cd lib/mina-indexer && git rev-parse --short=8 HEAD`
 export CARGO_HOME := `pwd` + '/.cargo'
-export INDEXER_PORT := x'${INDEXER_PORT:-8081}'
 
 set dotenv-load := true
-
-export VOLUMES_DIR := x'${VOLUMES_DIR:-/mnt}'
 
 default:
   @echo "Topologically sorted recipes:"
@@ -21,11 +18,13 @@ default:
 
 deploy-mina-indexer:
   @echo "--- Deploying mina-indexer at {{INDEXER_VERSION}}"
+  ruby ops/validate-env.rb VOLUMES_DIR INDEXER_PORT
   mkdir -p $VOLUMES_DIR/mina-indexer-prod
-  cd lib/mina-indexer && VOLUMES_DIR=$VOLUMES_DIR nix develop --command just deploy-local-prod 10000 {{INDEXER_PORT}}
+  cd lib/mina-indexer && VOLUMES_DIR=$VOLUMES_DIR nix develop --command just deploy-local-prod 10000 $INDEXER_PORT
 
 shutdown-mina-indexer:
   @echo "--- Shutting down mina-indexer"
+  ruby ops/validate-env.rb VOLUMES_DIR
   $VOLUMES_DIR/mina-indexer-prod/bin/mina-indexer-{{INDEXER_VERSION}} \
     --socket $VOLUMES_DIR/mina-indexer-prod/mina-indexer-{{INDEXER_VERSION}}.sock \
     server \
@@ -72,8 +71,9 @@ dev: pnpm_install
 # Run tier2 application regression tests
 test-e2e-tier2: pnpm_install deploy-mina-indexer && shutdown-mina-indexer
   @echo "--- Performing end-to-end @tier2 tests"
+  ruby ops/validate-env.rb GRAPHQL_URL REST_URL
   CYPRESS_tags="@tier2" \
-  node ./scripts/wait-on-port.js \
+  node ./ops/wait-on-port.js \
     trunk serve \
     --no-autoreload \
     --port="{{trunk_port}}" \
@@ -84,7 +84,8 @@ test-e2e-tier2: pnpm_install deploy-mina-indexer && shutdown-mina-indexer
 
 # Run regression tests with interactive GUI
 test-e2e-local: pnpm_install deploy-mina-indexer
-  node ./scripts/wait-on-port.js \
+  ruby ops/validate-env.rb GRAPHQL_URL REST_URL
+  node ./ops/wait-on-port.js \
     trunk serve \
     --no-autoreload \
     --port="{{trunk_port}}" \
@@ -95,6 +96,7 @@ test-e2e-local: pnpm_install deploy-mina-indexer
 
 # Publish application
 publish: clean pnpm_install
+  ruby ops/validate-env.rb GRAPHQL_URL REST_URL
   @echo "--- Publishing"
   trunk build --release --filehash true
   @echo "Publishing version {{VERSION}}"

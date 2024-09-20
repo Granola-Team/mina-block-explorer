@@ -44,6 +44,7 @@
             openssl
             pkg-config
             rsync
+            ruby
             rust-analyzer
             toolchain
             trunk

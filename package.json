@@ -16,6 +16,6 @@
     "wrangler": "3.57.1"
   },
   "lint-staged": {
-    "src/*,scripts/*,cypress/*": "prettier --write --ignore-unknown"
+    "src/*,ops/*,cypress/*": "prettier --write --ignore-unknown"
   }
 }
