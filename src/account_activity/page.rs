@@ -20,16 +20,17 @@ use crate::{
     icons::*,
     summary::models::BlockchainSummary,
 };
+use codee::string::JsonSerdeCodec;
 use leptos::*;
 use leptos_meta::Title;
 use leptos_router::*;
-use leptos_use::{storage::use_local_storage, utils::JsonCodec};
+use leptos_use::storage::use_local_storage;
 
 #[component]
 fn AccountSpotlightPage() -> impl IntoView {
     let memo_params_map = use_params_map();
     let (summary_sig, _, _) =
-        use_local_storage::<BlockchainSummary, JsonCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
+        use_local_storage::<BlockchainSummary, JsonSerdeCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
 
     let account = use_context::<ReadSignal<Option<AccountActivityQueryAccounts>>>()
         .expect("there to be an optional account provided");
@@ -42,7 +43,7 @@ fn AccountSpotlightPage() -> impl IntoView {
     };
 
     view! {
-        <Title formatter=move |text| format!("Account Overview | {text}") text=username/>
+        <Title formatter=move |text| format!("Account Overview | {text}") text=username />
         <PageContainer>
             {move || match account.get() {
                 Some(acc) => {
@@ -58,7 +59,7 @@ fn AccountSpotlightPage() -> impl IntoView {
 
                             id=memo_params_map.get().get("id").cloned()
                         >
-                            <WalletIcon width=40/>
+                            <WalletIcon width=40 />
                         </SpotlightSection>
                     }
                         .into_view()
@@ -71,12 +72,11 @@ fn AccountSpotlightPage() -> impl IntoView {
                             meta=None
                             id=None
                         >
-                            <WalletIcon width=40/>
+                            <WalletIcon width=40 />
                         </SpotlightSection>
                     }
                 }
-            }}
-            <Outlet/>
+            }} <Outlet />
         </PageContainer>
     }
 }
@@ -170,7 +170,7 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
     let (slot_sig, _) = create_query_signal::<u64>("q-slot");
 
     let (summary_sig, _, _) =
-        use_local_storage::<BlockchainSummary, JsonCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
+        use_local_storage::<BlockchainSummary, JsonSerdeCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
 
     let id = move || memo_params_map.get().get("id").cloned().unwrap_or_default();
     let current_epoch_staking_ledger = move || Some(summary_sig.get().epoch);
@@ -347,8 +347,8 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
     {
         move || {
             view! {
-                <TabbedPage tabs=tabs() exclude_outlet=true/>
-                <AccountSpotlightPage/>
+                <TabbedPage tabs=tabs() exclude_outlet=true />
+                <AccountSpotlightPage />
             }
         }
     }

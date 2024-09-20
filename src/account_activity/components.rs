@@ -14,9 +14,10 @@ use crate::{
     icons::*,
     summary::models::BlockchainSummary,
 };
+use codee::string::JsonSerdeCodec;
 use leptos::*;
 use leptos_router::use_params_map;
-use leptos_use::{storage::use_local_storage, utils::JsonCodec};
+use leptos_use::storage::use_local_storage;
 
 #[component]
 pub fn AccountDialogSectionContainer(
@@ -54,7 +55,7 @@ pub fn AccountDialogSubsectionRow(
                 view! {
                     <tr class="my-2 flex whitespace-nowrap">
                         <th class="text-xs text-slate-400 w-1/4 flex justify-start font-normal">
-                            {label} :
+                            {label}:
                         </th>
                         <td class="text-xs overflow-hidden text-ellipsis w-[60%] flex justify-start">
                             {el}
@@ -95,7 +96,7 @@ pub fn AccountDialogSectionEntryHeader(
     view! {
         <div class="font-mono flex justify-between w-full">
             <div class="flex items-center">
-                <img src=img_attr.src alt=img_attr.alt class="mr-2"/>
+                <img src=img_attr.src alt=img_attr.alt class="mr-2" />
                 {move || match status {
                     Status::Complete => {
                         view! { <span class="text-sm">{date.clone()}</span> }.into_view()
@@ -129,7 +130,7 @@ pub fn AccountDialogTransactionSection(
             <Show
                 when=has_transactions
                 fallback=move || {
-                    view! { <EmptyTable message="This public key has no transactions"/> }
+                    view! { <EmptyTable message="This public key has no transactions" /> }
                 }
             >
 
@@ -179,7 +180,7 @@ fn TransactionEntry(
     let (direction_sig, _) = create_signal(direction);
     let (counterparty_sig, _) = create_signal(counterparty);
     view! {
-        <AccountDialogSectionEntryHeader date=date status=status moments_ago=moments_ago/>
+        <AccountDialogSectionEntryHeader date=date status=status moments_ago=moments_ago />
         <AccountDialogSubsectionTable>
             <AccountDialogSubsectionRow
                 label="Hash"
@@ -217,7 +218,7 @@ fn TransactionEntry(
             />
 
         </AccountDialogSubsectionTable>
-        <AccountDialogEntryDivider/>
+        <AccountDialogEntryDivider />
     }
 }
 
@@ -227,7 +228,7 @@ pub fn AccountTransactionsSection(
     is_loading: Signal<bool>,
 ) -> impl IntoView {
     let (summary_sig, _, _) =
-        use_local_storage::<BlockchainSummary, JsonCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
+        use_local_storage::<BlockchainSummary, JsonSerdeCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
     let table_columns = vec![
         TableColumn {
             column: "Height".to_string(),
@@ -316,7 +317,7 @@ pub fn AccountInternalCommandsSection(
     is_loading: Signal<bool>,
 ) -> impl IntoView {
     let (summary_sig, _, _) =
-        use_local_storage::<BlockchainSummary, JsonCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
+        use_local_storage::<BlockchainSummary, JsonSerdeCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
     let table_columns = vec![
         TableColumn {
             column: "Height".to_string(),
@@ -441,7 +442,7 @@ pub fn AccountOverviewSnarkJobTable(
     is_loading: Signal<bool>,
 ) -> impl IntoView {
     let (summary_sig, _, _) =
-        use_local_storage::<BlockchainSummary, JsonCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
+        use_local_storage::<BlockchainSummary, JsonSerdeCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
     let memo_params_map = use_params_map();
     let (href, _set_href) = create_signal(
         memo_params_map
@@ -510,7 +511,7 @@ pub fn AccountOverviewSnarkJobTable(
                 .map(|_| {
                     view! {
                         <TableLink href=href.get() text="See all snark jobs">
-                            <CheckCircleIcon/>
+                            <CheckCircleIcon />
                         </TableLink>
                     }
                 })
@@ -524,7 +525,7 @@ pub fn AccountOverviewBlocksTable(
     is_loading: Signal<bool>,
 ) -> impl IntoView {
     let (summary_sig, _, _) =
-        use_local_storage::<BlockchainSummary, JsonCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
+        use_local_storage::<BlockchainSummary, JsonSerdeCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
     let memo_params_map = use_params_map();
     let (href, _set_href) = create_signal(
         memo_params_map
@@ -618,7 +619,7 @@ pub fn AccountOverviewBlocksTable(
                 .map(|_| {
                     view! {
                         <TableLink href=href.get() text="See all block production">
-                            <CheckCircleIcon/>
+                            <CheckCircleIcon />
                         </TableLink>
                     }
                 })
@@ -641,7 +642,7 @@ pub fn AccountDialogBlocksSection(
             <Show
                 when=has_blocks
                 fallback=move || {
-                    view! { <EmptyTable message="This public key has no block production"/> }
+                    view! { <EmptyTable message="This public key has no block production" /> }
                 }
             >
 
@@ -666,8 +667,8 @@ pub fn AccountDialogBlocksSection(
                                             date=date_time
                                             moments_ago=moments_ago
                                         />
-                                        <AccountDialogBlockEntry block=block.clone()/>
-                                        <AccountDialogEntryDivider/>
+                                        <AccountDialogBlockEntry block=block.clone() />
+                                        <AccountDialogEntryDivider />
                                     }
                                         .into_view()
                                 }

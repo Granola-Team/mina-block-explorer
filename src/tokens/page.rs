@@ -40,7 +40,7 @@ pub fn TokensPage() -> impl IntoView {
     ];
 
     view! {
-        <Title text="Tokens | Search For Tokens"/>
+        <Title text="Tokens | Search For Tokens" />
         <PageContainer>
             <TableSectionTemplate
                 table_columns

@@ -1,6 +1,7 @@
 use crate::{common::constants::*, icons::*, summary::models::*};
+use codee::string::JsonSerdeCodec;
 use leptos::*;
-use leptos_use::{storage::use_local_storage, utils::JsonCodec};
+use leptos_use::storage::use_local_storage;
 use serde::{Deserialize, Serialize};
 
 enum Icon {
@@ -29,7 +30,7 @@ const HIDE_ON_MOBILE: &str = "hidden sm:block ";
 #[component]
 pub fn Footer() -> impl IntoView {
     let (summary_sig, _, _) =
-        use_local_storage::<BlockchainSummary, JsonCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
+        use_local_storage::<BlockchainSummary, JsonSerdeCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
 
     let links = vec![
         Link {
@@ -97,8 +98,8 @@ pub fn Footer() -> impl IntoView {
                                 href=link.href
                             >
                                 {match link.icon {
-                                    Icon::Docs => view! { <DocsIcon width=12/> },
-                                    Icon::Terms => view! { <TermsIcon width=12/> },
+                                    Icon::Docs => view! { <DocsIcon width=12 /> },
+                                    Icon::Terms => view! { <TermsIcon width=12 /> },
                                 }}
 
                                 <div class="ml-1">{link.label}</div>

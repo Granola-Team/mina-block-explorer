@@ -8,17 +8,18 @@ use crate::{
     },
     summary::models::BlockchainSummary,
 };
+use codee::string::JsonSerdeCodec;
 use leptos::*;
 use leptos_meta::*;
 use leptos_router::create_query_signal;
-use leptos_use::{storage::use_local_storage, utils::JsonCodec};
+use leptos_use::storage::use_local_storage;
 
 #[component]
 pub fn AccountsPage() -> impl IntoView {
     view! {
-        <Title text="Accounts | Search for accounts on Mina Blockchain"/>
+        <Title text="Accounts | Search for accounts on Mina Blockchain" />
         <PageContainer>
-            <AccountsPageContents/>
+            <AccountsPageContents />
         </PageContainer>
     }
 }
@@ -26,7 +27,7 @@ pub fn AccountsPage() -> impl IntoView {
 #[component]
 fn AccountsPageContents() -> impl IntoView {
     let (summary_sig, _, _) =
-        use_local_storage::<BlockchainSummary, JsonCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
+        use_local_storage::<BlockchainSummary, JsonSerdeCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
     let (data_sig, set_data) = create_signal(None);
     let (public_key_sig, _) = create_query_signal::<String>("q-public-key");
     let (username_sig, _) = create_query_signal::<String>("q-username");

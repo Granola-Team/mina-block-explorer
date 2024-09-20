@@ -7,20 +7,20 @@ use leptos_meta::Title;
 #[component]
 pub fn BroadcastTransactionPage() -> impl IntoView {
     view! {
-        <Title text="Offline Broadcasting | Broadcast Signed Transaction"/>
+        <Title text="Offline Broadcasting | Broadcast Signed Transaction" />
         <PageContainer>
             <AppSection>
-                <AppHeading heading="Broadcast Signed Transaction"/>
+                <AppHeading heading="Broadcast Signed Transaction" />
                 <p class="px-8 text-sm">
                     "Generate a new offline transaction using the Javascript SDK and submit the transaction to the network using the form below."
                 </p>
                 <BroadcastForm endpoint=format!(
                     "{}/broadcast/transaction",
                     MINA_EXPLORER_ENDPOINT,
-                )/>
+                ) />
             </AppSection>
             <AppSection>
-                <AppHeading heading="Sample Payment"/>
+                <AppHeading heading="Sample Payment" />
                 <div class="m-8">
                     <CodeBlock>
 
@@ -55,17 +55,20 @@ pub fn BroadcastTransactionPage() -> impl IntoView {
 #[component]
 pub fn BroadcastDelegationPage() -> impl IntoView {
     view! {
-        <Title text="Offline Broadcasting | Broadcast Signed Delegation"/>
+        <Title text="Offline Broadcasting | Broadcast Signed Delegation" />
         <PageContainer>
             <AppSection>
-                <AppHeading heading="Broadcast Signed Delegation"/>
+                <AppHeading heading="Broadcast Signed Delegation" />
                 <p class="px-8 text-sm">
                     "Generate a new offline delegation using the Javascript SDK and submit the transaction to the network using the form below."
                 </p>
-                <BroadcastForm endpoint=format!("{}/broadcast/delegation", MINA_EXPLORER_ENDPOINT)/>
+                <BroadcastForm endpoint=format!(
+                    "{}/broadcast/delegation",
+                    MINA_EXPLORER_ENDPOINT,
+                ) />
             </AppSection>
             <AppSection>
-                <AppHeading heading="Sample Delegation Transaction"/>
+                <AppHeading heading="Sample Delegation Transaction" />
                 <div class="m-8">
                     <CodeBlock>
 
@@ -99,20 +102,20 @@ pub fn BroadcastDelegationPage() -> impl IntoView {
 #[component]
 pub fn BroadcastFromLedgerPage() -> impl IntoView {
     view! {
-        <Title text="Offline Broadcasting | Broadcast Signed Transaction From Ledger"/>
+        <Title text="Offline Broadcasting | Broadcast Signed Transaction From Ledger" />
         <PageContainer>
             <AppSection>
-                <AppHeading heading="Broadcast Signed Transaction From Ledger"/>
+                <AppHeading heading="Broadcast Signed Transaction From Ledger" />
                 <p class="px-8 text-sm">
                     "Generate an offline transaction using the Ledger and submit the transaction to the network using the form below. This works for both payment and delegation transaction types."
                 </p>
                 <BroadcastForm endpoint=format!(
                     "{}/broadcast/transaction",
                     MINA_EXPLORER_ENDPOINT,
-                )/>
+                ) />
             </AppSection>
             <AppSection>
-                <AppHeading heading="Sample Ledger Payment"/>
+                <AppHeading heading="Sample Ledger Payment" />
                 <div class="m-8">
                     <CodeBlock>
 
@@ -167,5 +170,5 @@ pub fn DelegationTabbedPage() -> impl IntoView {
             ..Default::default()
         },
     ];
-    view! { <TabbedPage tabs/> }
+    view! { <TabbedPage tabs /> }
 }

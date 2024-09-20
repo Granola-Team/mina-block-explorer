@@ -4,21 +4,21 @@ use crate::{
     snarks::graphql::snarks_query,
     summary::models::BlockchainSummary,
 };
+use codee::string::JsonSerdeCodec;
 use leptos::*;
 use leptos_meta::Title;
 use leptos_router::{create_query_signal, use_query_map};
 use leptos_use::{
-    storage::use_local_storage, use_document_visibility, use_interval, utils::JsonCodec,
-    UseIntervalReturn,
+    storage::use_local_storage, use_document_visibility, use_interval, UseIntervalReturn,
 };
 use web_sys::VisibilityState;
 
 #[component]
 pub fn SnarksPage() -> impl IntoView {
     view! {
-        <Title text="SNARKs | Search For SNARKs"/>
+        <Title text="SNARKs | Search For SNARKs" />
         <PageContainer>
-            <SnarksPageContents/>
+            <SnarksPageContents />
         </PageContainer>
     }
 }
@@ -26,7 +26,7 @@ pub fn SnarksPage() -> impl IntoView {
 #[component]
 fn SnarksPageContents() -> impl IntoView {
     let (summary_sig, _, _) =
-        use_local_storage::<BlockchainSummary, JsonCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
+        use_local_storage::<BlockchainSummary, JsonSerdeCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
     let visibility = use_document_visibility();
     let (data_sig, set_data) = create_signal(None);
     let query_params_map = use_query_map();
