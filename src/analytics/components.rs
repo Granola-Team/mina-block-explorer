@@ -39,7 +39,7 @@ pub fn AnalayticsFilters() -> impl IntoView {
                             number_props=HashMap::from([
                                 ("step".to_string(), "1000".to_string()),
                                 ("min".to_string(), "1000".to_string()),
-                                ("max".to_string(), "5000".to_string()),
+                                ("max".to_string(), "50000".to_string()),
                             ])
                         />
 
