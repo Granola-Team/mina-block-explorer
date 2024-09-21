@@ -141,7 +141,7 @@ pub fn UserCommandsAnalyticsPage() -> impl IntoView {
                         limit_sig.get();
                         view! {
                             <AnalyticsXLContainer>
-                                <div id="chart" class="w-full h-96"></div>
+                                <div id="user-commands-volume" class="w-full h-96"></div>
                                 <script
                                     src="/scripts/analytics/user-commands-per-day.js"
                                     defer=true

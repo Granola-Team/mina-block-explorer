@@ -1,7 +1,7 @@
 suite(["@tier2"], "chart", () => {
   let analytics_pages = [
     { page: "/analytics/commands/internal", chart_ids: ["#chart"] },
-    { page: "/analytics/commands/user", chart_ids: ["#chart"] },
+    { page: "/analytics/commands/user", chart_ids: ["#user-commands-volume"] },
     { page: "/analytics/blocks", chart_ids: ["#chart"] },
     { page: "/analytics/snarks", chart_ids: ["#avg-snark-fee"] },
   ];

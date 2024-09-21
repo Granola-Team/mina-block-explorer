@@ -2,7 +2,7 @@ setTimeout(async () => {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   const blockLimit = parseInt(urlParams.get("limit")) || 1000;
-  let chartDom = document.getElementById("chart");
+  let chartDom = document.getElementById("user-commands-volume");
   window.addEventListener("resize", function () {
     myChart.resize();
   });
