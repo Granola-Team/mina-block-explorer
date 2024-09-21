@@ -1,6 +1,7 @@
 setTimeout(async () => {
-  const blockLimit = 20000;
-
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const blockLimit = parseInt(urlParams.get("limit")) || 1000;
   let chartDom = document.getElementById("chart");
   window.addEventListener("resize", function () {
     myChart.resize();
@@ -80,8 +81,11 @@ setTimeout(async () => {
   myChart.hideLoading();
 
   option = {
+    tooltip: {
+      position: "top",
+    },
     title: {
-      text: `Transaction Volume of Last ${blockLimit} Blocks by Day`,
+      text: `Transaction volume by day`,
       left: "center",
     },
     xAxis: {
@@ -95,10 +99,10 @@ setTimeout(async () => {
       },
       {
         type: "value",
-        name: "Txn Amount",
+        name: "Txn Amount (millions of MINA)",
         position: "right",
         axisLabel: {
-          formatter: (value) => `${(value / 1e12).toFixed(2)}k MINA`, // Display values in trillions
+          formatter: (value) => `${(value / 1e15).toFixed(2)}`,
         },
       },
     ],
@@ -106,19 +110,24 @@ setTimeout(async () => {
       {
         data: txnVolume,
         type: "line",
-        areaStyle: {},
         yAxisIndex: 0,
+        smooth: true,
+        tooltip: {
+          valueFormatter: (value) => `${value} txn`,
+        },
       },
       {
         data: amounts,
         type: "bar",
         yAxisIndex: 1,
         barMaxWidth: 20,
+        tooltip: {
+          valueFormatter: (value) =>
+            `${(value / 1e15).toFixed(2)} million MINA`,
+        },
       },
     ],
   };
-
-  console.log(option);
 
   option && myChart.setOption(option);
 }, 1000);
