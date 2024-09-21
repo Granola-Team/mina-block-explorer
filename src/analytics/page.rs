@@ -130,6 +130,10 @@ pub fn UserCommandsAnalyticsPage() -> impl IntoView {
         <Title text="Analytics | User Commands" />
         <PageContainer>
             <AppSection>
+                <AppHeading heading="Filters" />
+                <AnalayticsFilters />
+            </AppSection>
+            <AppSection>
                 <AppHeading heading="User Commands Analytics" />
                 <AnalyticsLayout>
                     <AnalyticsXLContainer>
