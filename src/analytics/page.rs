@@ -126,6 +126,7 @@ pub fn SnarksAnalyticsPage() -> impl IntoView {
 
 #[component]
 pub fn UserCommandsAnalyticsPage() -> impl IntoView {
+    let (limit_sig, _) = create_query_signal::<u64>("limit");
     view! {
         <Title text="Analytics | User Commands" />
         <PageContainer>
@@ -136,13 +137,18 @@ pub fn UserCommandsAnalyticsPage() -> impl IntoView {
             <AppSection>
                 <AppHeading heading="User Commands Analytics" />
                 <AnalyticsLayout>
-                    <AnalyticsXLContainer>
-                        <div id="chart" class="w-full h-96"></div>
-                        <script
-                            src="/scripts/analytics/user-commands-per-day.js"
-                            defer=true
-                        ></script>
-                    </AnalyticsXLContainer>
+                    {move || {
+                        limit_sig.get();
+                        view! {
+                            <AnalyticsXLContainer>
+                                <div id="chart" class="w-full h-96"></div>
+                                <script
+                                    src="/scripts/analytics/user-commands-per-day.js"
+                                    defer=true
+                                ></script>
+                            </AnalyticsXLContainer>
+                        }
+                    }}
                 </AnalyticsLayout>
             </AppSection>
         </PageContainer>
