@@ -140,10 +140,7 @@ pub fn UserCommandsAnalyticsPage() -> impl IntoView {
                     {move || {
                         limit_sig.get();
                         view! {
-                            <script
-                                src="/scripts/analytics/user-commands.js"
-                                defer=true
-                            ></script>
+                            <script src="/scripts/analytics/user-commands.js" defer=true></script>
                             <AnalyticsSmContainer>
                                 <AnalyticsSimpleInfo
                                     label=convert_to_span("Total Transferred".into())
@@ -187,8 +184,8 @@ pub fn UserCommandsAnalyticsPage() -> impl IntoView {
                                 <div id="user-commands-top-recipients" class="w-full h-96"></div>
                             </AnalyticsLgContainer>
                             <AnalyticsLgContainer>
-                                <span>//todo
-                                </span>
+                                // todo
+                                <span></span>
                             </AnalyticsLgContainer>
                         }
                     }}
