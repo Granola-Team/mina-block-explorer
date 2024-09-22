@@ -4,11 +4,11 @@ use crate::{
     summary::models::BlockchainSummary,
     user_commands::graphql::transactions_query,
 };
-use codee::string::JsonSerdeCodec;
 use leptos::*;
 use leptos_router::*;
 use leptos_use::{
-    storage::use_local_storage, use_document_visibility, use_interval, UseIntervalReturn,
+    storage::use_local_storage, use_document_visibility, use_interval, utils::JsonCodec,
+    UseIntervalReturn,
 };
 use web_sys::VisibilityState;
 
@@ -21,7 +21,7 @@ const QP_TO: &str = "q-to";
 #[component]
 pub fn TransactionsSection() -> impl IntoView {
     let (summary_sig, _, _) =
-        use_local_storage::<BlockchainSummary, JsonSerdeCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
+        use_local_storage::<BlockchainSummary, JsonCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
     let visibility = use_document_visibility();
     let (data_sig, set_data) = create_signal(None);
     let (txn_type_qp, _) = create_query_signal::<String>(QP_TXN_TYPE);

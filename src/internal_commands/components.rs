@@ -3,16 +3,15 @@ use crate::{
     internal_commands::functions::load_data,
     summary::models::BlockchainSummary,
 };
-use codee::string::JsonSerdeCodec;
 use leptos::*;
 use leptos_meta::Title;
 use leptos_router::create_query_signal;
-use leptos_use::storage::use_local_storage;
+use leptos_use::{storage::use_local_storage, utils::JsonCodec};
 
 #[component]
 pub fn InternalCommandsTab() -> impl IntoView {
     let (summary_sig, _, _) =
-        use_local_storage::<BlockchainSummary, JsonSerdeCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
+        use_local_storage::<BlockchainSummary, JsonCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
     let (data_sig, set_data) = create_signal(None);
     let (recipient, _) = create_query_signal::<String>("q-recipient");
     let (height_sig, _) = create_query_signal::<u64>("q-height");
@@ -77,7 +76,7 @@ pub fn InternalCommandsTab() -> impl IntoView {
     ];
 
     view! {
-        <Title text="Transactions | Internal Commands" />
+        <Title text="Transactions | Internal Commands"/>
         <PageContainer>
             <TableSectionTemplate
                 table_columns

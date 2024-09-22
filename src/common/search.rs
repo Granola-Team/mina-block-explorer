@@ -180,7 +180,7 @@ pub fn GlobalSearchBar() -> impl IntoView {
                     />
                 </form>
                 <span class="text-white absolute top-0 left-0 translate-x-3/4 translate-y-3/4">
-                    <SearchIcon width=22 />
+                    <SearchIcon width=22/>
                 </span>
             </div>
         </PreSectionContainer>

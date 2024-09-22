@@ -20,7 +20,7 @@ pub fn AccountDialogSnarkJobSection(snarks: Vec<Option<SnarksQuerySnarks>>) -> i
                 when=has_snarks
                 fallback=move || {
                     view! {
-                        <EmptyTable message="This public key has not completed any SNARK work" />
+                        <EmptyTable message="This public key has not completed any SNARK work"/>
                     }
                 }
             >
@@ -48,8 +48,8 @@ pub fn AccountDialogSnarkJobSection(snarks: Vec<Option<SnarksQuerySnarks>>) -> i
                                             date=date_time
                                             moments_ago=moments_ago
                                         />
-                                        <AccountDialogSnarkJobEntry snark=snark.clone() />
-                                        <AccountDialogEntryDivider />
+                                        <AccountDialogSnarkJobEntry snark=snark.clone()/>
+                                        <AccountDialogEntryDivider/>
                                     }
                                 }
 

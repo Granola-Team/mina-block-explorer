@@ -1,6 +1,6 @@
 #[derive(Clone)]
 pub struct ZkAppData {
-    pub _validator_name: String,
+    pub validator_name: String,
     pub validator_pk: String,
     pub balance: usize,
     pub nonce: usize,
@@ -11,7 +11,7 @@ pub struct ZkAppData {
 pub struct ZkAppTransactionData {
     pub hash: String,
     pub prover: String,
-    pub _updates: usize,
+    pub updates: usize,
     pub updated_accounts: Vec<String>,
     pub fee: f64,
     pub date_time: chrono::DateTime<chrono::Utc>,

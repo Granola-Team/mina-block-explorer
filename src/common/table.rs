@@ -6,12 +6,10 @@ use leptos_router::*;
 use leptos_use::{use_debounce_fn_with_options, DebounceOptions};
 
 pub trait TableData {
-    #[allow(dead_code)]
     fn get_columns(&self) -> Vec<String> {
         Vec::new()
     }
     fn get_rows(&self) -> Vec<Vec<HtmlElement<AnyElement>>>;
-    #[allow(dead_code)]
     fn get_exact_search_columns(&self) -> Vec<String> {
         Vec::new()
     }
@@ -99,8 +97,8 @@ where
                 class=("mx-auto", move || half_width)
             >
                 <Table>
-                    <ColGroup columns=table_columns.clone() />
-                    <TableHeader columns=table_columns.clone() />
+                    <ColGroup columns=table_columns.clone()/>
+                    <TableHeader columns=table_columns.clone()/>
 
                     {move || {
                         if is_loading.get() {
@@ -116,7 +114,7 @@ where
                         } else {
                             match data_sig.get() {
                                 Some(data) => {
-                                    view! { <TableRows columns=table_columns.clone() data=data /> }
+                                    view! { <TableRows columns=table_columns.clone() data=data/> }
                                 }
                                 None => ().into_view(),
                             }
@@ -127,12 +125,12 @@ where
                 {move || {
                     if let Some(data) = data_sig.get() {
                         if data.get_rows().is_empty() {
-                            view! { <EmptyTable message="No data for this view" /> }
+                            view! { <EmptyTable message="No data for this view"/> }
                         } else {
                             ().into_view()
                         }
                     } else {
-                        view! { <EmptyTable message="No data for this view" /> }
+                        view! { <EmptyTable message="No data for this view"/> }
                     }
                 }}
 
@@ -150,7 +148,7 @@ pub fn ColGroup(columns: Vec<TableColumn>) -> impl IntoView {
                 c.width
                     .as_ref()
                     .map(|w| {
-                        view! { <col width=w /> }
+                        view! { <col width=w/> }
                     })
             })
             .collect_view()}
@@ -165,7 +163,7 @@ pub fn TableHeader(columns: Vec<TableColumn>) -> impl IntoView {
                 .iter()
                 .map(|s| {
                     let id = "q-".to_string() + &s.column.as_str().to_kebab_case();
-                    view! { <ColumnHeader id=id column=s.clone() /> }
+                    view! { <ColumnHeader id=id column=s.clone()/> }
                 })
                 .collect::<Vec<_>>()}
         </tr>
@@ -217,7 +215,7 @@ fn ColumnHeader(id: String, column: TableColumn) -> impl IntoView {
                 Some(TableSortDirection::Desc) => {
                     view! {
                         <span class=ICON_CLASS>
-                            <DownArrow width=12 />
+                            <DownArrow width=12/>
                         </span>
                     }
                         .into_view()
@@ -304,7 +302,7 @@ pub fn TableCell(children: Children, column_opt: Option<TableColumn>) -> impl In
 pub fn EmptyTable(#[prop(into)] message: String) -> impl IntoView {
     view! {
         <div class="w-full flex text-base text-slate-400 items-center justify-center p-8">
-            <NoIcon />
+            <NoIcon/>
             <span class="pl-4 text-sm">{message}</span>
         </div>
     }
@@ -328,7 +326,7 @@ where
         <AppSection>
             <span class="w-full flex justify-between flex-wrap">
                 <div class="flex justify-start items-baseline flex-wrap">
-                    <AppHeading heading=section_heading />
+                    <AppHeading heading=section_heading/>
                     {move || {
                         metadata
                             .get()
@@ -369,7 +367,7 @@ pub fn TableLink(
             >
                 {children()}
                 <span class="mx-1">{text}</span>
-                <ChevronRight />
+                <ChevronRight/>
             </a>
         </div>
     }

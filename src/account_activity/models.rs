@@ -131,9 +131,9 @@ pub trait AccountActivityQueryDirectionalTransactionTrait {
     fn get_height(&self) -> String;
     fn get_kind(&self) -> String;
     fn get_nonce(&self) -> String;
-    fn _get_failure_reason(&self) -> String;
+    fn get_failure_reason(&self) -> String;
     fn get_memo(&self) -> String;
-    fn _get_canonical(&self) -> bool;
+    fn get_canonical(&self) -> bool;
 }
 
 impl AccountActivityQueryDirectionalTransactionTrait
@@ -184,7 +184,7 @@ impl AccountActivityQueryDirectionalTransactionTrait
             .map_or(String::new(), |f| format_number(f.to_string()))
     }
 
-    fn _get_failure_reason(&self) -> String {
+    fn get_failure_reason(&self) -> String {
         self.failure_reason
             .as_ref()
             .map_or(String::new(), |f| f.to_string())
@@ -196,7 +196,7 @@ impl AccountActivityQueryDirectionalTransactionTrait
             .map_or_else(String::new, ToString::to_string)
     }
 
-    fn _get_canonical(&self) -> bool {
+    fn get_canonical(&self) -> bool {
         self.canonical.unwrap_or_default()
     }
 }
@@ -317,7 +317,6 @@ impl Default for StakeQueryInput {
 #[derive(Clone)]
 pub struct AccountActivityQueryDelegatorExt {
     pub username: Option<String>,
-    #[allow(dead_code)]
     pub epoch: Option<i64>,
     pub public_key: Option<String>,
     pub delegated_balance: Option<i64>,

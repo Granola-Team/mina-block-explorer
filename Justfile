@@ -47,7 +47,6 @@ format:
   pnpm exec prettier --write cypress/ src/scripts/
   cargo fmt --all
   leptosfmt ./src
-  alejandra flake.nix
 
 # Perform unit tests
 test-unit:
@@ -106,14 +105,11 @@ publish: clean pnpm_install
 
 # Lint application source code
 lint: pnpm_install && audit
-  @echo "--- Linting JS/TS"
+  @echo "--- Linting"
   pnpm exec prettier --check cypress/
-  @echo "--- Linting Rust code"
   cargo fmt --all --check
   leptosfmt --check ./src
   cargo clippy --all-targets --all-features -- -D warnings
-  @echo "--- Linting Nix configs"
-  alejandra --check flake.nix
 
 # Run tier1 tests
 tier1: lint test-unit
