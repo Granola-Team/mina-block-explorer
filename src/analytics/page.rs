@@ -178,8 +178,9 @@ pub fn UserCommandsAnalyticsPage() -> impl IntoView {
                             </AnalyticsSmContainer>
                             <AnalyticsXLContainer>
                                 <div id="user-commands-volume" class="w-full h-96"></div>
+                                <div id="user-commands-top-recipients" class="w-full h-96"></div>
                                 <script
-                                    src="/scripts/analytics/user-commands-per-day.js"
+                                    src="/scripts/analytics/user-commands.js"
                                     defer=true
                                 ></script>
                             </AnalyticsXLContainer>
