@@ -41,67 +41,67 @@ pub fn Root() -> impl IntoView {
                 REST_ENDPOINT,
             )}
         </script>
-        <SummaryLocalStorage/>
+        <SummaryLocalStorage />
         // TODO: loading 1000 blocks is too expensive for now
         // <BlocksLocalStorage/>
         <Router>
-            <Header/>
-            <GlobalSearchBar/>
+            <Header />
+            <GlobalSearchBar />
             <main>
                 <Routes>
                     // redirect any non-existent URL back to the blocks page
-                    <Route path="/*" view=move || view! { <Redirect path="/blocks"/> }/>
-                    <Route path="/addresses/accounts" view=AccountsPage/>
+                    <Route path="/*" view=move || view! { <Redirect path="/blocks" /> } />
+                    <Route path="/addresses/accounts" view=AccountsPage />
                     <Route path="/addresses/accounts/:id" view=AccountSpotlightTabbedPage>
-                        <Route path="*" view=move || view! { <Redirect path="commands/user"/> }/>
-                        <Route path="/commands/user" view=AccountUserCommandsPage/>
-                        <Route path="/commands/internal" view=AccountInternalCommandsPage/>
-                        <Route path="/snark-jobs" view=AccountSnarkWorkPage/>
-                        <Route path="/block-production" view=AccountBlockProductionPage/>
-                        <Route path="/delegations" view=AccountDelegationsPage/>
+                        <Route path="*" view=move || view! { <Redirect path="commands/user" /> } />
+                        <Route path="/commands/user" view=AccountUserCommandsPage />
+                        <Route path="/commands/internal" view=AccountInternalCommandsPage />
+                        <Route path="/snark-jobs" view=AccountSnarkWorkPage />
+                        <Route path="/block-production" view=AccountBlockProductionPage />
+                        <Route path="/delegations" view=AccountDelegationsPage />
                     </Route>
-                    <Route path="/tokens" view=TokensPage/>
-                    <Route path="/zk-apps" view=ZkAppsPage/>
-                    <Route path="/zk-apps/:id" view=ZkAppSpotlight/>
+                    <Route path="/tokens" view=TokensPage />
+                    <Route path="/zk-apps" view=ZkAppsPage />
+                    <Route path="/zk-apps/:id" view=ZkAppSpotlight />
 
-                    <Route path="/blocks" view=SummaryPage/>
+                    <Route path="/blocks" view=SummaryPage />
                     <Route path="/blocks/:id" view=BlockTabbedPage>
-                        <Route path="/*" view=move || view! { <Redirect path="spotlight"/> }/>
-                        <Route path="/spotlight" view=BlockSpotlightTab/>
-                        <Route path="/snark-jobs" view=BlockSnarkJobsTab/>
-                        <Route path="/commands/user" view=BlockUserCommandsTab/>
-                        <Route path="/commands/internal" view=BlockInternalCommandsTab/>
-                        <Route path="/analytics" view=BlockAnalyticsTab/>
+                        <Route path="/*" view=move || view! { <Redirect path="spotlight" /> } />
+                        <Route path="/spotlight" view=BlockSpotlightTab />
+                        <Route path="/snark-jobs" view=BlockSnarkJobsTab />
+                        <Route path="/commands/user" view=BlockUserCommandsTab />
+                        <Route path="/commands/internal" view=BlockInternalCommandsTab />
+                        <Route path="/analytics" view=BlockAnalyticsTab />
                     </Route>
 
                     <Route path="/commands" view=CommandsTabbedPage>
-                        <Route path="*" view=move || view! { <Redirect path="user"/> }/>
-                        <Route path="/user" view=UserCommandsPage/>
-                        <Route path="/internal" view=InternalCommandsTab/>
-                        <Route path="/zk-app" view=ZkAppTransactionsPage/>
+                        <Route path="*" view=move || view! { <Redirect path="user" /> } />
+                        <Route path="/user" view=UserCommandsPage />
+                        <Route path="/internal" view=InternalCommandsTab />
+                        <Route path="/zk-app" view=ZkAppTransactionsPage />
                     </Route>
-                    <Route path="/commands/:id" view=CommandSpotlightPage/>
-                    <Route path="/commands/zk-app/:id" view=ZkAppTransactionSpotlightPage/>
-                    <Route path="/snarks" view=SnarksPage/>
+                    <Route path="/commands/:id" view=CommandSpotlightPage />
+                    <Route path="/commands/zk-app/:id" view=ZkAppTransactionSpotlightPage />
+                    <Route path="/snarks" view=SnarksPage />
 
-                    <Route path="/staking-ledgers" view=StakesPage/>
+                    <Route path="/staking-ledgers" view=StakesPage />
 
                     <Route path="/broadcast" view=DelegationTabbedPage>
-                        <Route path="/*" view=move || view! { <Redirect path="transaction"/> }/>
-                        <Route path="/transaction" view=BroadcastTransactionPage/>
-                        <Route path="/delegation" view=BroadcastDelegationPage/>
-                        <Route path="/ledger" view=BroadcastFromLedgerPage/>
+                        <Route path="/*" view=move || view! { <Redirect path="transaction" /> } />
+                        <Route path="/transaction" view=BroadcastTransactionPage />
+                        <Route path="/delegation" view=BroadcastDelegationPage />
+                        <Route path="/ledger" view=BroadcastFromLedgerPage />
                     </Route>
                     <Route path="/analytics" view=AnalyticsTabbedPage>
-                        <Route path="*" view=move || view! { <Redirect path="blocks"/> }/>
-                        <Route path="/commands/internal" view=InternalCommandsAnalayticsPage/>
-                        <Route path="/commands/user" view=UserCommandsAnalyticsPage/>
-                        <Route path="/blocks" view=BlocksAnalyticsPage/>
-                        <Route path="/snarks" view=SnarksAnalyticsPage/>
+                        <Route path="*" view=move || view! { <Redirect path="blocks" /> } />
+                        <Route path="/commands/internal" view=InternalCommandsAnalayticsPage />
+                        <Route path="/commands/user" view=UserCommandsAnalyticsPage />
+                        <Route path="/blocks" view=BlocksAnalyticsPage />
+                        <Route path="/snarks" view=SnarksAnalyticsPage />
                     </Route>
                 </Routes>
             </main>
-            <Footer/>
+            <Footer />
         </Router>
     }
 }

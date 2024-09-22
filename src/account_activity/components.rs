@@ -54,7 +54,7 @@ pub fn AccountDialogSubsectionRow(
                 view! {
                     <tr class="my-2 flex whitespace-nowrap">
                         <th class="text-xs text-slate-400 w-1/4 flex justify-start font-normal">
-                            {label} :
+                            {label}:
                         </th>
                         <td class="text-xs overflow-hidden text-ellipsis w-[60%] flex justify-start">
                             {el}
@@ -95,7 +95,7 @@ pub fn AccountDialogSectionEntryHeader(
     view! {
         <div class="font-mono flex justify-between w-full">
             <div class="flex items-center">
-                <img src=img_attr.src alt=img_attr.alt class="mr-2"/>
+                <img src=img_attr.src alt=img_attr.alt class="mr-2" />
                 {move || match status {
                     Status::Complete => {
                         view! { <span class="text-sm">{date.clone()}</span> }.into_view()
@@ -129,7 +129,7 @@ pub fn AccountDialogTransactionSection(
             <Show
                 when=has_transactions
                 fallback=move || {
-                    view! { <EmptyTable message="This public key has no transactions"/> }
+                    view! { <EmptyTable message="This public key has no transactions" /> }
                 }
             >
 
@@ -179,7 +179,7 @@ fn TransactionEntry(
     let (direction_sig, _) = create_signal(direction);
     let (counterparty_sig, _) = create_signal(counterparty);
     view! {
-        <AccountDialogSectionEntryHeader date=date status=status moments_ago=moments_ago/>
+        <AccountDialogSectionEntryHeader date=date status=status moments_ago=moments_ago />
         <AccountDialogSubsectionTable>
             <AccountDialogSubsectionRow
                 label="Hash"
@@ -217,7 +217,7 @@ fn TransactionEntry(
             />
 
         </AccountDialogSubsectionTable>
-        <AccountDialogEntryDivider/>
+        <AccountDialogEntryDivider />
     }
 }
 
@@ -510,7 +510,7 @@ pub fn AccountOverviewSnarkJobTable(
                 .map(|_| {
                     view! {
                         <TableLink href=href.get() text="See all snark jobs">
-                            <CheckCircleIcon/>
+                            <CheckCircleIcon />
                         </TableLink>
                     }
                 })
@@ -618,7 +618,7 @@ pub fn AccountOverviewBlocksTable(
                 .map(|_| {
                     view! {
                         <TableLink href=href.get() text="See all block production">
-                            <CheckCircleIcon/>
+                            <CheckCircleIcon />
                         </TableLink>
                     }
                 })
@@ -641,7 +641,7 @@ pub fn AccountDialogBlocksSection(
             <Show
                 when=has_blocks
                 fallback=move || {
-                    view! { <EmptyTable message="This public key has no block production"/> }
+                    view! { <EmptyTable message="This public key has no block production" /> }
                 }
             >
 
@@ -666,8 +666,8 @@ pub fn AccountDialogBlocksSection(
                                             date=date_time
                                             moments_ago=moments_ago
                                         />
-                                        <AccountDialogBlockEntry block=block.clone()/>
-                                        <AccountDialogEntryDivider/>
+                                        <AccountDialogBlockEntry block=block.clone() />
+                                        <AccountDialogEntryDivider />
                                     }
                                         .into_view()
                                 }

@@ -16,9 +16,9 @@ use leptos_use::{storage::use_local_storage, utils::JsonCodec};
 #[component]
 pub fn AccountsPage() -> impl IntoView {
     view! {
-        <Title text="Accounts | Search for accounts on Mina Blockchain"/>
+        <Title text="Accounts | Search for accounts on Mina Blockchain" />
         <PageContainer>
-            <AccountsPageContents/>
+            <AccountsPageContents />
         </PageContainer>
     }
 }

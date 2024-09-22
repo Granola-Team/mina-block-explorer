@@ -30,15 +30,15 @@ pub fn CommandsTabbedPage() -> impl IntoView {
         },
     ];
 
-    view! { <TabbedPage tabs=tabs/> }
+    view! { <TabbedPage tabs=tabs /> }
 }
 
 #[component]
 pub fn UserCommandsPage() -> impl IntoView {
     view! {
-        <Title text="Commands | Search For Commands"/>
+        <Title text="Commands | Search For Commands" />
         <PageContainer>
-            <TransactionsSection/>
+            <TransactionsSection />
         </PageContainer>
     }
 }
@@ -241,7 +241,7 @@ pub fn CommandSpotlightPage() -> impl IntoView {
                                     )
                                 >
 
-                                    <TransactionIcon width=40/>
+                                    <TransactionIcon width=40 />
                                 </SpotlightSection>
                                 <TableSectionTemplate
                                     table_columns
@@ -256,13 +256,13 @@ pub fn CommandSpotlightPage() -> impl IntoView {
                         }
                         _ => {
                             view! {
-                                <NotFound message=Some("Transaction Not Found :(".to_string())/>
+                                <NotFound message=Some("Transaction Not Found :(".to_string()) />
                             }
                         }
                     }
                 }
                 Some(Err(_)) => {
-                    view! { <NotFound message=Some("Transaction Not Found :(".to_string())/> }
+                    view! { <NotFound message=Some("Transaction Not Found :(".to_string()) /> }
                 }
                 None => {
                     let spotlight_items = vec![
@@ -326,7 +326,7 @@ pub fn CommandSpotlightPage() -> impl IntoView {
                             id=None
                             meta=None
                         >
-                            <TransactionIcon width=40/>
+                            <TransactionIcon width=40 />
                         </SpotlightSection>
                     }
                         .into_view()

@@ -84,7 +84,7 @@ fn Spotlight(
                 .map(|entry| {
                     view! {
                         <SpotlighTableRow>
-                            <SpotlightRow entry=entry/>
+                            <SpotlightRow entry=entry />
                         </SpotlighTableRow>
                     }
                 })
@@ -117,7 +117,7 @@ fn SpotlightRow(entry: SpotlightEntry) -> impl IntoView {
             "{} {}",
             th_td_class_base,
             "w-36 md:w-40 min-w-36 md:min-w-40 font-normal text-slate-400",
-        )>{entry.label} :</th>
+        )>{entry.label}:</th>
         <td class=format!(
             "{} {}",
             th_td_class_base,

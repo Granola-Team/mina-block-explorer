@@ -16,9 +16,9 @@ use web_sys::VisibilityState;
 #[component]
 pub fn SnarksPage() -> impl IntoView {
     view! {
-        <Title text="SNARKs | Search For SNARKs"/>
+        <Title text="SNARKs | Search For SNARKs" />
         <PageContainer>
-            <SnarksPageContents/>
+            <SnarksPageContents />
         </PageContainer>
     }
 }

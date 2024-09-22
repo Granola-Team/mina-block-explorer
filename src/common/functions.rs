@@ -462,7 +462,7 @@ pub fn convert_to_tooltip(tooltip: String) -> HtmlElement<html::AnyElement> {
             title=tooltip
             class="tooltip text-slate-600 font-sans text-xs m-0.5 p-1 hover:bg-slate-200 rounded-full cursor-help"
         >
-            <HelpIcon width=15/>
+            <HelpIcon width=15 />
         </span>
     }.into()
 }
