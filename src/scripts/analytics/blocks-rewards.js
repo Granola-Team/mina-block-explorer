@@ -1,3 +1,44 @@
+function renderCoinbaseRewardsChart(data, myChart) {
+  let option;
+
+  myChart.hideLoading();
+
+  option = {
+    tooltip: {
+      position: "top",
+    },
+    title: {
+      text: `Coinbase Rewards`,
+      left: "center",
+    },
+    xAxis: {
+      type: "category",
+      name: "Global Slot",
+      data: Object.keys(data),
+    },
+    yAxis: {
+      type: "value",
+      name: "Coinbase Rewards",
+      axisLabel: {
+        formatter: (value) => `${(value / 1e12).toFixed(0)}k MINA`, // Display values in trillions
+      },
+    },
+    series: [
+      {
+        data: Object.values(data),
+        type: "line",
+        smooth: true,
+        yAxisIndex: 0,
+        tooltip: {
+          valueFormatter: (value) => `${(value / 1e12).toFixed(0)}k MINA`,
+        },
+      },
+    ],
+  };
+
+  option && myChart.setOption(option);
+}
+
 setTimeout(async () => {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
@@ -70,42 +111,5 @@ setTimeout(async () => {
     return agg;
   }, {});
 
-  let option;
-
-  myChart.hideLoading();
-
-  option = {
-    tooltip: {
-      position: "top",
-    },
-    title: {
-      text: `Coinbase Rewards`,
-      left: "center",
-    },
-    xAxis: {
-      type: "category",
-      name: "Global Slot",
-      data: Object.keys(data),
-    },
-    yAxis: {
-      type: "value",
-      name: "Coinbase Rewards",
-      axisLabel: {
-        formatter: (value) => `${(value / 1e12).toFixed(0)}k MINA`, // Display values in trillions
-      },
-    },
-    series: [
-      {
-        data: Object.values(data),
-        type: "line",
-        smooth: true,
-        yAxisIndex: 0,
-        tooltip: {
-          valueFormatter: (value) => `${(value / 1e12).toFixed(0)}k MINA`,
-        },
-      },
-    ],
-  };
-
-  option && myChart.setOption(option);
+  renderCoinbaseRewardsChart(data, myChart);
 }, 1000);
