@@ -2,6 +2,14 @@ setTimeout(async () => {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   const blockLimit = parseInt(urlParams.get("limit")) || 1000;
+  let summary_response = await fetch(config.rest_endpoint + "/summary", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  let { blockchainLength } = await summary_response.json();
+  const blockOffset = blockchainLength - blockLimit;
   let chartDom = document.getElementById("user-commands-volume");
   window.addEventListener("resize", function () {
     myChart.resize();
@@ -24,28 +32,38 @@ setTimeout(async () => {
               $limit: Int
               $sort_by: TransactionSortByInput!
               $query: TransactionQueryInput!
-          ) {
-              transactions(limit: $limit, sortBy: $sort_by, query: $query) {
-              hash
-              amount
-              kind
-              blockHeight
-              block {
-                  dateTime
-              }
-              }
-          }`,
+      ) {
+        transactions(limit: $limit, sortBy: $sort_by, query: $query) {
+          hash
+          amount
+          kind
+          fee
+          blockHeight
+          failureReason
+          block {
+            dateTime
+          }
+        }
+      }`,
       variables: {
-        limit: blockLimit,
+        limit: 1e9,
         sort_by: "BLOCKHEIGHT_DESC",
         query: {
           canonical: true,
           kind: "PAYMENT",
+          blockHeight_gte: blockOffset,
         },
       },
       operationName: "TransactionsQuery",
     }),
   });
+
+  let stats = {
+    total_transferred: 0,
+    total_fees: 0,
+    total_number_of_transactions: 0,
+    total_failed_account_creations: 0,
+  };
 
   let jsonResp = await response.json();
   // Use reduce to aggregate transaction count and total amount per day
@@ -66,8 +84,28 @@ setTimeout(async () => {
     acc[unixTimestamp].count += 1;
     acc[unixTimestamp].totalAmount += transaction.amount;
 
+    stats.total_transferred += transaction.amount;
+    stats.total_number_of_transactions += 1;
+    stats.total_fees += transaction.fee;
+    if (transaction.failureReason === "Amount_insufficient_to_create_account") {
+      stats.total_failed_account_creations += 1;
+    }
+
     return acc;
   }, {});
+
+  document.getElementById("total-transferred").innerHTML =
+    new Intl.NumberFormat().format(stats.total_transferred / 1e15, {
+      style: "currency",
+    }) + " million MINA";
+  document.getElementById("total-fees").innerHTML =
+    new Intl.NumberFormat().format(stats.total_fees / 1e9, {
+      style: "currency",
+    }) + " MINA";
+  document.getElementById("total-number-of-transactions").innerHTML =
+    new Intl.NumberFormat().format(stats.total_number_of_transactions);
+  document.getElementById("total-failed-account-creations").innerHTML =
+    new Intl.NumberFormat().format(stats.total_failed_account_creations);
 
   let dates = Object.keys(data).map((key) =>
     new Date(parseInt(key) * 1000).toISOString().substring(0, 10),
@@ -75,7 +113,6 @@ setTimeout(async () => {
   let txnVolume = Object.values(data).map((value) => value.count);
   let amounts = Object.values(data).map((value) => value.totalAmount);
 
-  console.log(data, dates, txnVolume, amounts);
   let option;
 
   myChart.hideLoading();

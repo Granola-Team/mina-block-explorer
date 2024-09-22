@@ -140,6 +140,42 @@ pub fn UserCommandsAnalyticsPage() -> impl IntoView {
                     {move || {
                         limit_sig.get();
                         view! {
+                            <AnalyticsSmContainer>
+                                <AnalyticsSimpleInfo
+                                    label=convert_to_span("Total Transferred".into())
+                                    value=convert_to_span("...".to_string())
+                                    id="total-transferred"
+                                    variant=ColorVariant::Blue
+                                />
+
+                            </AnalyticsSmContainer>
+                            <AnalyticsSmContainer>
+                                <AnalyticsSimpleInfo
+                                    label=convert_to_span("Total Fees".into())
+                                    value=convert_to_span("...".to_string())
+                                    id="total-fees"
+                                    variant=ColorVariant::Green
+                                />
+
+                            </AnalyticsSmContainer>
+                            <AnalyticsSmContainer>
+                                <AnalyticsSimpleInfo
+                                    label=convert_to_span("Total Number Of Transactions".into())
+                                    value=convert_to_span("...".to_string())
+                                    id="total-number-of-transactions"
+                                    variant=ColorVariant::Orange
+                                />
+
+                            </AnalyticsSmContainer>
+                            <AnalyticsSmContainer>
+                                <AnalyticsSimpleInfo
+                                    label=convert_to_span("Total Failed Account Creations".into())
+                                    value=convert_to_span("...".to_string())
+                                    id="total-failed-account-creations"
+                                    variant=ColorVariant::DarkBlue
+                                />
+
+                            </AnalyticsSmContainer>
                             <AnalyticsXLContainer>
                                 <div id="user-commands-volume" class="w-full h-96"></div>
                                 <script
