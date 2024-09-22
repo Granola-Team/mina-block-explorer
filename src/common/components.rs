@@ -255,19 +255,19 @@ where
     view! {
         <a on:click=on_click class=move || link_class.get() href=nav_entry.href>
             {match nav_entry.icon {
-                NavIcon::Blocks => view! { <BlockIcon /> },
-                NavIcon::Transactions => view! { <TransactionIcon /> },
-                NavIcon::Send => view! { <SendIcon /> },
-                NavIcon::SNARKs => view! { <CheckCircleIcon /> },
-                NavIcon::Staking => view! { <StakingIcon /> },
-                NavIcon::Accounts => view! { <AccountIcon /> },
-                NavIcon::ZKApps => view! { <ZKAppSymbol /> },
-                NavIcon::Tokens => view! { <TokenSymbol /> },
-                NavIcon::Addresses => view! { <AddressIcon /> },
-                NavIcon::FeeTransfers => view! { <FeeTransferIcon /> },
-                NavIcon::Analytics => view! { <AnalyticsIcon /> },
-                NavIcon::More => view! { <MoreIcon /> },
-                NavIcon::Delegates => view! { <DelegateIcon /> },
+                NavIcon::Blocks => view! { <BlockIcon/> },
+                NavIcon::Transactions => view! { <TransactionIcon/> },
+                NavIcon::Send => view! { <SendIcon/> },
+                NavIcon::SNARKs => view! { <CheckCircleIcon/> },
+                NavIcon::Staking => view! { <StakingIcon/> },
+                NavIcon::Accounts => view! { <AccountIcon/> },
+                NavIcon::ZKApps => view! { <ZKAppSymbol/> },
+                NavIcon::Tokens => view! { <TokenSymbol/> },
+                NavIcon::Addresses => view! { <AddressIcon/> },
+                NavIcon::FeeTransfers => view! { <FeeTransferIcon/> },
+                NavIcon::Analytics => view! { <AnalyticsIcon/> },
+                NavIcon::More => view! { <MoreIcon/> },
+                NavIcon::Delegates => view! { <DelegateIcon/> },
             }}
 
             <span class="ml-0.5">{nav_entry.text}</span>
@@ -299,19 +299,19 @@ pub fn TabLink(nav_entry: NavEntry) -> impl IntoView {
             href=nav_entry.href
         >
             {match nav_entry.icon {
-                NavIcon::Blocks => view! { <BlockIcon /> },
-                NavIcon::Transactions => view! { <TransactionIcon /> },
-                NavIcon::Send => view! { <SendIcon /> },
-                NavIcon::SNARKs => view! { <CheckCircleIcon /> },
-                NavIcon::Staking => view! { <StakingIcon /> },
-                NavIcon::Accounts => view! { <AccountIcon /> },
-                NavIcon::ZKApps => view! { <ZKAppSymbol /> },
-                NavIcon::Tokens => view! { <TokenSymbol /> },
-                NavIcon::Addresses => view! { <AddressIcon /> },
-                NavIcon::FeeTransfers => view! { <FeeTransferIcon /> },
-                NavIcon::Analytics => view! { <AnalyticsIcon /> },
-                NavIcon::More => view! { <MoreIcon /> },
-                NavIcon::Delegates => view! { <DelegateIcon /> },
+                NavIcon::Blocks => view! { <BlockIcon/> },
+                NavIcon::Transactions => view! { <TransactionIcon/> },
+                NavIcon::Send => view! { <SendIcon/> },
+                NavIcon::SNARKs => view! { <CheckCircleIcon/> },
+                NavIcon::Staking => view! { <StakingIcon/> },
+                NavIcon::Accounts => view! { <AccountIcon/> },
+                NavIcon::ZKApps => view! { <ZKAppSymbol/> },
+                NavIcon::Tokens => view! { <TokenSymbol/> },
+                NavIcon::Addresses => view! { <AddressIcon/> },
+                NavIcon::FeeTransfers => view! { <FeeTransferIcon/> },
+                NavIcon::Analytics => view! { <AnalyticsIcon/> },
+                NavIcon::More => view! { <MoreIcon/> },
+                NavIcon::Delegates => view! { <DelegateIcon/> },
             }}
 
             <div class="ml-0.5">{nav_entry.text}</div>
@@ -344,7 +344,7 @@ pub fn TabbedPage(
                     .map(|t| {
                         view! {
                             <li>
-                                <TabLink nav_entry=t />
+                                <TabLink nav_entry=t/>
                             </li>
                         }
                     })
@@ -352,7 +352,7 @@ pub fn TabbedPage(
             </menu>
         </PreSectionContainer>
         {if !exclude_outlet {
-            view! { <Outlet /> }
+            view! { <Outlet/> }
         } else {
             ().into_view()
         }}
@@ -402,8 +402,8 @@ pub fn CopyToClipboard(children: Children) -> impl IntoView {
             >
 
                 {move || match copied.get() {
-                    true => view! { <CopiedIcon width=18 /> },
-                    false => view! { <ClipboardIcon width=18 /> },
+                    true => view! { <CopiedIcon width=18/> },
+                    false => view! { <ClipboardIcon width=18/> },
                 }}
 
             </span>

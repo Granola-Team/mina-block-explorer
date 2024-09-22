@@ -11,40 +11,40 @@ use leptos_use::{storage::*, use_interval, utils::JsonCodec, UseIntervalReturn};
 #[component]
 pub fn BlockSpotlightTab() -> impl IntoView {
     view! {
-        <Title text="Block Overview | Spotlight" />
-        <BlockTabContainer content=BlockContent::Spotlight />
+        <Title text="Block Overview | Spotlight"/>
+        <BlockTabContainer content=BlockContent::Spotlight/>
     }
 }
 
 #[component]
 pub fn BlockUserCommandsTab() -> impl IntoView {
     view! {
-        <Title text="Block Overview | User Commands" />
-        <BlockTabContainer content=BlockContent::UserCommands />
+        <Title text="Block Overview | User Commands"/>
+        <BlockTabContainer content=BlockContent::UserCommands/>
     }
 }
 
 #[component]
 pub fn BlockSnarkJobsTab() -> impl IntoView {
     view! {
-        <Title text="Block Overview | SNARK Jobs" />
-        <BlockTabContainer content=BlockContent::SNARKJobs />
+        <Title text="Block Overview | SNARK Jobs"/>
+        <BlockTabContainer content=BlockContent::SNARKJobs/>
     }
 }
 
 #[component]
 pub fn BlockInternalCommandsTab() -> impl IntoView {
     view! {
-        <Title text="Block Overview | Internal Commands" />
-        <BlockTabContainer content=BlockContent::FeeTransfers />
+        <Title text="Block Overview | Internal Commands"/>
+        <BlockTabContainer content=BlockContent::FeeTransfers/>
     }
 }
 
 #[component]
 pub fn BlockAnalyticsTab() -> impl IntoView {
     view! {
-        <Title text="Block Overview | Analytics" />
-        <BlockTabContainer content=BlockContent::Analytics />
+        <Title text="Block Overview | Analytics"/>
+        <BlockTabContainer content=BlockContent::Analytics/>
     }
 }
 
@@ -131,5 +131,5 @@ pub fn BlockTabbedPage() -> impl IntoView {
             },
         ]
     };
-    move || view! { <TabbedPage tabs=tabs() /> }
+    move || view! { <TabbedPage tabs=tabs()/> }
 }

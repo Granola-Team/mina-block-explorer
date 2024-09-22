@@ -76,7 +76,7 @@ pub fn InternalCommandsTab() -> impl IntoView {
     ];
 
     view! {
-        <Title text="Transactions | Internal Commands" />
+        <Title text="Transactions | Internal Commands"/>
         <PageContainer>
             <TableSectionTemplate
                 table_columns

@@ -120,7 +120,7 @@ pub fn Header() -> impl IntoView {
         <header class="pl-6 pr-6 pt-4 z-10 bg-main-background flex justify-center md:justify-between items-center fixed top-0 left-0 w-screen h-16">
             <span class="ribbon hidden md:block">Beta</span>
             <a href="/" class="flex items-center justify-start">
-                <img src="/assets/img/logo.svg" width="45px" height="29px" alt="Minasearch" />
+                <img src="/assets/img/logo.svg" width="45px" height="29px" alt="Minasearch"/>
                 <span class="md:hidden lg:block sm:block ml-1 text-white font-bold text-xl">
                     Mina
                 </span>
@@ -128,7 +128,7 @@ pub fn Header() -> impl IntoView {
                     Search
                 </span>
             </a>
-            <input id="nav-toggle" type="checkbox" class="hidden" />
+            <input id="nav-toggle" type="checkbox" class="hidden"/>
             <nav class=move || {
                 format!("{} {}", base_class, if open.get() { open_class } else { "" })
             }>
@@ -139,7 +139,7 @@ pub fn Header() -> impl IntoView {
                             let sub_entries = nav_entry.sub_entries.clone();
                             view! {
                                 <li class="group relative">
-                                    <NavLink nav_entry=nav_entry on_click=toggle />
+                                    <NavLink nav_entry=nav_entry on_click=toggle/>
                                     {match sub_entries {
                                         Some(s_entries) => {
                                             view! {
@@ -149,7 +149,7 @@ pub fn Header() -> impl IntoView {
                                                         .map(|sub_entry| {
                                                             view! {
                                                                 <li class="ml-4">
-                                                                    <NavLink nav_entry=sub_entry on_click=toggle />
+                                                                    <NavLink nav_entry=sub_entry on_click=toggle/>
                                                                 </li>
                                                             }
                                                         })
