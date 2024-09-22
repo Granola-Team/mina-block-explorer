@@ -21,7 +21,7 @@ pub fn BlocksAnalyticsPage() -> impl IntoView {
                         <AnalyticsSimpleInfo
                             label=convert_to_span("Canonical Blocks".into())
                             value=convert_to_span("...".to_string())
-
+                            id="canonical-blocks-count"
                             variant=ColorVariant::Blue
                         />
 
@@ -30,7 +30,7 @@ pub fn BlocksAnalyticsPage() -> impl IntoView {
                         <AnalyticsSimpleInfo
                             label=convert_to_span("Non-Canonical Blocks".into())
                             value=convert_to_span("...".to_string())
-
+                            id="-non-canonical-blocks-count"
                             variant=ColorVariant::Green
                         />
 
