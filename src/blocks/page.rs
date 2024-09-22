@@ -3,55 +3,56 @@ use crate::{
     blocks::graphql::blocks_query,
     common::{components::*, constants::*, models::*},
 };
+use codee::string::JsonSerdeCodec;
 use leptos::*;
 use leptos_meta::Title;
 use leptos_router::*;
-use leptos_use::{storage::*, use_interval, utils::JsonCodec, UseIntervalReturn};
+use leptos_use::{storage::*, use_interval, UseIntervalReturn};
 
 #[component]
 pub fn BlockSpotlightTab() -> impl IntoView {
     view! {
-        <Title text="Block Overview | Spotlight"/>
-        <BlockTabContainer content=BlockContent::Spotlight/>
+        <Title text="Block Overview | Spotlight" />
+        <BlockTabContainer content=BlockContent::Spotlight />
     }
 }
 
 #[component]
 pub fn BlockUserCommandsTab() -> impl IntoView {
     view! {
-        <Title text="Block Overview | User Commands"/>
-        <BlockTabContainer content=BlockContent::UserCommands/>
+        <Title text="Block Overview | User Commands" />
+        <BlockTabContainer content=BlockContent::UserCommands />
     }
 }
 
 #[component]
 pub fn BlockSnarkJobsTab() -> impl IntoView {
     view! {
-        <Title text="Block Overview | SNARK Jobs"/>
-        <BlockTabContainer content=BlockContent::SNARKJobs/>
+        <Title text="Block Overview | SNARK Jobs" />
+        <BlockTabContainer content=BlockContent::SNARKJobs />
     }
 }
 
 #[component]
 pub fn BlockInternalCommandsTab() -> impl IntoView {
     view! {
-        <Title text="Block Overview | Internal Commands"/>
-        <BlockTabContainer content=BlockContent::FeeTransfers/>
+        <Title text="Block Overview | Internal Commands" />
+        <BlockTabContainer content=BlockContent::FeeTransfers />
     }
 }
 
 #[component]
 pub fn BlockAnalyticsTab() -> impl IntoView {
     view! {
-        <Title text="Block Overview | Analytics"/>
-        <BlockTabContainer content=BlockContent::Analytics/>
+        <Title text="Block Overview | Analytics" />
+        <BlockTabContainer content=BlockContent::Analytics />
     }
 }
 
 #[component]
 pub fn BlocksLocalStorage() -> impl IntoView {
     let (_, set_blocks, _) =
-        use_local_storage::<blocks_query::ResponseData, JsonCodec>(BLOCKS_STORAGE_KEY);
+        use_local_storage::<blocks_query::ResponseData, JsonSerdeCodec>(BLOCKS_STORAGE_KEY);
     let UseIntervalReturn { counter, .. } = use_interval(LIVE_RELOAD_INTERVAL);
 
     let resource = create_resource(
@@ -131,5 +132,5 @@ pub fn BlockTabbedPage() -> impl IntoView {
             },
         ]
     };
-    move || view! { <TabbedPage tabs=tabs()/> }
+    move || view! { <TabbedPage tabs=tabs() /> }
 }

@@ -16,14 +16,16 @@ use wasm_bindgen::prelude::*;
 use web_sys::js_sys::{Intl::NumberFormat, *};
 
 #[wasm_bindgen]
+#[allow(non_snake_case)]
 extern "C" {
     #[wasm_bindgen(js_namespace = navigator, js_name = language)]
+    #[wasm_bindgen(thread_local)]
     static LANGUAGE: String;
 }
 
 #[wasm_bindgen]
 pub fn get_browser_locale() -> String {
-    LANGUAGE.clone()
+    LANGUAGE.with(String::clone)
 }
 
 fn format_number_helper(number: &str, max_significant_digits: Option<u32>) -> String {
@@ -462,7 +464,7 @@ pub fn convert_to_tooltip(tooltip: String) -> HtmlElement<html::AnyElement> {
             title=tooltip
             class="tooltip text-slate-600 font-sans text-xs m-0.5 p-1 hover:bg-slate-200 rounded-full cursor-help"
         >
-            <HelpIcon width=15/>
+            <HelpIcon width=15 />
         </span>
     }.into()
 }
