@@ -8,16 +8,20 @@ use leptos_router::create_query_signal;
 use std::collections::HashMap;
 
 #[component]
-pub fn AnalayticsFilters() -> impl IntoView {
+pub fn AnalayticsFilters(
+    #[prop(optional)] epoch: bool,
+    #[prop(optional, default = true)] block_limit: bool,
+) -> impl IntoView {
     let (limit_sig, set_limit) = create_query_signal::<u64>("limit");
+    let (epoch_sig, set_epoch) = create_query_signal::<u64>("epoch");
     if limit_sig.get_untracked().is_none() {
         set_limit.set(Some(1000u64));
     }
 
-    {
-        move || {
-            view! {
-                <div class="w-full flex justify-start items-center p-2 pl-8 md:p-8 md:py-2">
+    view! {
+        <div class="w-full flex justify-start items-center p-2 pl-8 md:p-8 md:py-2">
+            {move || match block_limit {
+                true => view! {
                     <div class="flex justify-start items-baseline mr-2 md:mr-4">
                         <label for="block-limit" class="mr-2">
                             "Block limit:"
@@ -44,10 +48,42 @@ pub fn AnalayticsFilters() -> impl IntoView {
                         />
 
                     </div>
+                }.into_view(),
+                false => ().into_view()
+            }}
+            {move || match epoch {
+                true => view! {
+                    <div class="flex justify-start items-baseline mr-2 md:mr-4">
+                        <label for="block-limit" class="mr-2">
+                            "Epoch:"
+                        </label>
+                        <ControlledInput
+                            id="epoch"
+                            input_type="number"
+                            name="epoch"
+                            disabled_sig=Signal::from(|| false)
+                            value=epoch_sig.get().map(|s| s.to_string()).unwrap_or_default()
+                            setter_sig=SignalSetter::map(move |opt_str: Option<String>| {
+                                set_epoch
+                                    .set(
+                                        opt_str
+                                            .map(|v_str| v_str.parse::<u64>().ok().unwrap_or_default()),
+                                    )
+                            })
 
-                </div>
-            }
-        }
+                            number_props=HashMap::from([
+                                ("step".to_string(), "1".to_string()),
+                                ("min".to_string(), "1000".to_string()),
+                                // ("max".to_string(), "5000".to_string()),
+                            ])
+                        />
+
+                    </div>
+                }.into_view(),
+                false => ().into_view()
+            }}
+
+        </div>
     }
 }
 

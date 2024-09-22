@@ -1,4 +1,4 @@
-use super::{components::*, functions::*};
+use super::components::*;
 use crate::common::{components::*, functions::*, models::*};
 use leptos::*;
 use leptos_meta::*;
@@ -6,86 +6,35 @@ use leptos_router::create_query_signal;
 
 #[component]
 pub fn BlocksAnalyticsPage() -> impl IntoView {
-    let resource = create_resource(
-        || (),
-        move |_| async move { load_block_summary_data().await },
-    );
-
     let (limit_sig, _) = create_query_signal::<u64>("limit");
     view! {
         <Title text="Analytics | Blocks" />
         <PageContainer>
             <AppSection>
                 <AppHeading heading="Filters" />
-                <AnalayticsFilters />
+                <AnalayticsFilters block_limit=false epoch=true/>
             </AppSection>
             <AppSection>
                 <AppHeading heading="Blocks Analytics" />
                 <AnalyticsLayout>
-                    <Suspense fallback=move || {
-                        view! {
-                            <AnalyticsSmContainer>
-                                <AnalyticsSimpleInfo
-                                    label=convert_to_span("Total Blocks".into())
-                                    value=convert_to_span("...".to_string())
+                    <AnalyticsSmContainer>
+                        <AnalyticsSimpleInfo
+                            label=convert_to_span("Total Blocks".into())
+                            value=convert_to_span("...".to_string())
 
-                                    variant=ColorVariant::Blue
-                                />
+                            variant=ColorVariant::Blue
+                        />
 
-                            </AnalyticsSmContainer>
-                            <AnalyticsSmContainer>
-                                <AnalyticsSimpleInfo
-                                    label=convert_to_span("Blocks This Epoch".into())
-                                    value=convert_to_span("...".to_string())
+                    </AnalyticsSmContainer>
+                    <AnalyticsSmContainer>
+                        <AnalyticsSimpleInfo
+                            label=convert_to_span("Blocks This Epoch".into())
+                            value=convert_to_span("...".to_string())
 
-                                    variant=ColorVariant::Green
-                                />
+                            variant=ColorVariant::Green
+                        />
 
-                            </AnalyticsSmContainer>
-                        }
-                    }>
-                        {resource
-                            .get()
-                            .and_then(|res| res.ok())
-                            .map(|data| {
-                                let data_clone = data.clone();
-                                view! {
-                                    <AnalyticsSmContainer>
-                                        <AnalyticsSimpleInfo
-                                            label=convert_to_span("Total Blocks".into())
-                                            value=convert_to_span(
-                                                data_clone
-                                                    .data
-                                                    .blocks
-                                                    .first()
-                                                    .map(|b| b.total_num_blocks.to_string())
-                                                    .unwrap_or_default(),
-                                            )
-
-                                            variant=ColorVariant::Blue
-                                        />
-
-                                    </AnalyticsSmContainer>
-                                    <AnalyticsSmContainer>
-                                        <AnalyticsSimpleInfo
-                                            label=convert_to_span("Blocks This Epoch".into())
-                                            value=convert_to_span(
-                                                data
-                                                    .data
-                                                    .blocks
-                                                    .first()
-                                                    .map(|b| b.epoch_num_blocks.to_string())
-                                                    .unwrap_or_default(),
-                                            )
-
-                                            variant=ColorVariant::Green
-                                        />
-
-                                    </AnalyticsSmContainer>
-                                }
-                            })}
-
-                    </Suspense>
+                    </AnalyticsSmContainer>
                     {move || {
                         limit_sig.get();
                         view! {
