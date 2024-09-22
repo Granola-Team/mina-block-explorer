@@ -75,11 +75,11 @@ setTimeout(async () => {
   const blockOffset = blockchainLength - blockLimit;
   let chartDom = document.getElementById("user-commands-volume");
   window.addEventListener("resize", function () {
-    myChart.resize();
+    volumeChart.resize();
   });
-  let myChart = echarts.init(chartDom);
+  let volumeChart = echarts.init(chartDom);
 
-  myChart.showLoading({
+  volumeChart.showLoading({
     text: "Loading...", // Display text with the spinner
     color: "#E39844", // Spinner color
     zlevel: 0,
@@ -180,5 +180,5 @@ setTimeout(async () => {
   document.getElementById("total-failed-account-creations").innerHTML =
     new Intl.NumberFormat().format(stats.total_failed_account_creations);
 
-  renderTransactionVolumeChart(data, myChart);
+  renderTransactionVolumeChart(data, volumeChart);
 }, 1000);
