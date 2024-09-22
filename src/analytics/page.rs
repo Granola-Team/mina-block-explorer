@@ -19,7 +19,7 @@ pub fn BlocksAnalyticsPage() -> impl IntoView {
                 <AnalyticsLayout>
                     <AnalyticsSmContainer>
                         <AnalyticsSimpleInfo
-                            label=convert_to_span("Total Blocks".into())
+                            label=convert_to_span("Canonical Blocks".into())
                             value=convert_to_span("...".to_string())
 
                             variant=ColorVariant::Blue
@@ -28,7 +28,7 @@ pub fn BlocksAnalyticsPage() -> impl IntoView {
                     </AnalyticsSmContainer>
                     <AnalyticsSmContainer>
                         <AnalyticsSimpleInfo
-                            label=convert_to_span("Blocks This Epoch".into())
+                            label=convert_to_span("Non-Canonical Blocks".into())
                             value=convert_to_span("...".to_string())
 
                             variant=ColorVariant::Green
