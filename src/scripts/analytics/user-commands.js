@@ -1,4 +1,50 @@
-function renderTopRecipientsChart(data, myChart) {}
+function renderTopRecipientsChart(dataMap, myChart) {
+  let data = Object.entries(dataMap);
+  data.sort((a, b) => b[1] - a[1]); // descending
+
+  data = data.slice(0, 10);
+  data.reverse();
+
+  let option;
+
+  myChart.hideLoading();
+
+  option = {
+    tooltip: {
+      position: "top",
+    },
+    title: {
+      text: `Top recipients`,
+      left: "center",
+    },
+    xAxis: {
+      type: "value",
+      name: "Txn recieved",
+    },
+    yAxis: {
+      type: "category",
+      data: data.map(([recipient, _count]) => recipient),
+      axisLabel: {
+        formatter: (value) => "..." + value.slice(-6),
+      },
+    },
+    series: [
+      {
+        data: data.map(([_recipient, count]) => count),
+        type: "bar",
+      },
+    ],
+  };
+
+  const PUBLIC_KEY_LEN = 55;
+  myChart.on("click", function (params) {
+    if (params.name && params.name.length == PUBLIC_KEY_LEN) {
+      window.open("/addresses/accounts/" + params.name, "_blank");
+    }
+  });
+
+  option && myChart.setOption(option);
+}
 
 function renderTransactionVolumeChart(data, myChart) {
   let dates = Object.keys(data).map((key) =>
@@ -76,11 +122,14 @@ setTimeout(async () => {
   let { blockchainLength } = await summary_response.json();
   const blockOffset = blockchainLength - blockLimit;
   let volumeChartDom = document.getElementById("user-commands-volume");
+  let topRecipientsChartDom = document.getElementById(
+    "user-commands-top-recipients",
+  );
   window.addEventListener("resize", function () {
     volumeChart.resize();
   });
   let volumeChart = echarts.init(volumeChartDom);
-  let topRecipientsChart = echarts.init(volumeChartDom);
+  let topRecipientsChart = echarts.init(topRecipientsChartDom);
 
   volumeChart.showLoading({
     text: "Loading...", // Display text with the spinner
