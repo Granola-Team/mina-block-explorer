@@ -3,6 +3,9 @@ function renderCoinbaseRewardsChart(data, myChart) {
 
   myChart.hideLoading();
 
+  const slots = Object.keys(data).map((slot) => parseInt(slot));
+  const rewards = Object.values(data);
+
   option = {
     tooltip: {
       position: "top",
@@ -14,7 +17,7 @@ function renderCoinbaseRewardsChart(data, myChart) {
     xAxis: {
       type: "category",
       name: "Global Slot",
-      data: Object.keys(data),
+      data: slots,
     },
     yAxis: {
       type: "value",
@@ -25,7 +28,7 @@ function renderCoinbaseRewardsChart(data, myChart) {
     },
     series: [
       {
-        data: Object.values(data),
+        data: rewards,
         type: "line",
         smooth: true,
         yAxisIndex: 0,
@@ -51,7 +54,7 @@ setTimeout(async () => {
   });
   let { blockchainLength } = await summary_response.json();
   const blockOffset = blockchainLength - blockLimit;
-  const groupSize = 50;
+  const groupSize = 120;
 
   let chartDom = document.getElementById("chart");
   window.addEventListener("resize", function () {
@@ -91,7 +94,7 @@ setTimeout(async () => {
         limit: 1e9,
         sort_by: "BLOCKHEIGHT_DESC",
         query: {
-          blockHeight_lte: blockOffset,
+          blockHeight_gte: blockOffset,
         },
       },
       operationName: "BlocksQuery",
@@ -100,7 +103,7 @@ setTimeout(async () => {
 
   let jsonResp = await response.json();
   let data = jsonResp.data.blocks.reduce((agg, record) => {
-    if (!record.canonical) return;
+    if (!record.canonical) return agg;
     let slot = record.globalSlotSinceGenesis;
     let key = slot - (slot % groupSize);
     let value = record.transactions.coinbase;

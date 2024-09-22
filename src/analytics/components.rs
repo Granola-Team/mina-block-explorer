@@ -73,7 +73,7 @@ pub fn AnalayticsFilters(
 
                             number_props=HashMap::from([
                                 ("step".to_string(), "1".to_string()),
-                                ("min".to_string(), "1000".to_string()),
+                                ("min".to_string(), "0".to_string()),
                                 // ("max".to_string(), "5000".to_string()),
                             ])
                         />

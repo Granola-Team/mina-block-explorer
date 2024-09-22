@@ -12,7 +12,7 @@ pub fn BlocksAnalyticsPage() -> impl IntoView {
         <PageContainer>
             <AppSection>
                 <AppHeading heading="Filters" />
-                <AnalayticsFilters block_limit=false epoch=true/>
+                <AnalayticsFilters />
             </AppSection>
             <AppSection>
                 <AppHeading heading="Blocks Analytics" />
