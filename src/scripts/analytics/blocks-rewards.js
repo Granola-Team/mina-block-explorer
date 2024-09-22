@@ -121,5 +121,18 @@ setTimeout(async () => {
     key,
     val.reward_sum,
   ]);
+
+  document.getElementById("canonical-blocks-count").innerHTML = Object.values(
+    data,
+  ).reduce((agg, { canonical_count }) => {
+    agg += canonical_count;
+    return agg;
+  }, 0);
+  document.getElementById("non-canonical-blocks-count").innerHTML =
+    Object.values(data).reduce((agg, { noncanonical_count }) => {
+      agg += noncanonical_count;
+      return agg;
+    }, 0);
+
   renderCoinbaseRewardsChart(rewards_data, myChart);
 }, 1000);

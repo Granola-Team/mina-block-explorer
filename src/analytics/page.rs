@@ -17,27 +17,27 @@ pub fn BlocksAnalyticsPage() -> impl IntoView {
             <AppSection>
                 <AppHeading heading="Blocks Analytics" />
                 <AnalyticsLayout>
-                    <AnalyticsSmContainer>
-                        <AnalyticsSimpleInfo
-                            label=convert_to_span("Canonical Blocks".into())
-                            value=convert_to_span("...".to_string())
-                            id="canonical-blocks-count"
-                            variant=ColorVariant::Blue
-                        />
-
-                    </AnalyticsSmContainer>
-                    <AnalyticsSmContainer>
-                        <AnalyticsSimpleInfo
-                            label=convert_to_span("Non-Canonical Blocks".into())
-                            value=convert_to_span("...".to_string())
-                            id="-non-canonical-blocks-count"
-                            variant=ColorVariant::Green
-                        />
-
-                    </AnalyticsSmContainer>
                     {move || {
                         limit_sig.get();
                         view! {
+                            <AnalyticsSmContainer>
+                                <AnalyticsSimpleInfo
+                                    label=convert_to_span("Canonical Blocks".into())
+                                    value=convert_to_span("...".to_string())
+                                    id="canonical-blocks-count"
+                                    variant=ColorVariant::Blue
+                                />
+
+                            </AnalyticsSmContainer>
+                            <AnalyticsSmContainer>
+                                <AnalyticsSimpleInfo
+                                    label=convert_to_span("Non-Canonical Blocks".into())
+                                    value=convert_to_span("...".to_string())
+                                    id="non-canonical-blocks-count"
+                                    variant=ColorVariant::Green
+                                />
+
+                            </AnalyticsSmContainer>
                             <AnalyticsXLContainer>
                                 <div id="chart" class="w-full h-96"></div>
                                 <script
