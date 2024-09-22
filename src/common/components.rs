@@ -500,7 +500,9 @@ pub fn AnalyticsSimpleInfo(
     }
     view! {
         <div class=container_class_str>
-            <div id=id.unwrap_or("simple-info".to_string()) class=value_class_str>{value}</div>
+            <div id=id.unwrap_or("simple-info".to_string()) class=value_class_str>
+                {value}
+            </div>
             <div class=label_class_str>{label}</div>
         </div>
     }
