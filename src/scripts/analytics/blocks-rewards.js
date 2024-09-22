@@ -79,7 +79,7 @@ setTimeout(async () => {
       position: "top",
     },
     title: {
-      text: `Coinbase Rewards in the last ${blockLimit} blocks`,
+      text: `Coinbase Rewards`,
       left: "center",
     },
     xAxis: {
