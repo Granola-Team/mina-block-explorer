@@ -3,8 +3,10 @@ function renderCoinbaseRewardsChart(data, myChart) {
 
   myChart.hideLoading();
 
-  const slots = Object.keys(data).map((slot) => parseInt(slot));
-  const rewards = Object.values(data);
+  console.log(data);
+
+  const slots = data.map(([slot]) => parseInt(slot));
+  const rewards = data.map(([_slot, reward]) => reward);
 
   option = {
     tooltip: {
@@ -108,11 +110,18 @@ setTimeout(async () => {
     let key = slot - (slot % groupSize);
     let value = record.transactions.coinbase;
     if (!agg[key]) {
-      agg[key] = 0;
+      agg[key] = { reward_sum: 0, canonical_count: 0, noncanonical_count: 0 };
     }
-    agg[key] += +value;
+    record.canonical
+      ? agg[key].canonical_count++
+      : agg[key].noncanonical_count++;
+    agg[key].reward_sum += +value;
     return agg;
   }, {});
 
-  renderCoinbaseRewardsChart(data, myChart);
+  let rewards_data = Object.entries(data).map(([key, val]) => [
+    key,
+    val.reward_sum,
+  ]);
+  renderCoinbaseRewardsChart(rewards_data, myChart);
 }, 1000);
