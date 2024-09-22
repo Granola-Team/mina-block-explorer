@@ -1,3 +1,50 @@
+function renderTopTransfersChart(data, myChart) {
+  let option;
+
+  myChart.hideLoading();
+
+  option = {
+    tooltip: {
+      position: "top",
+    },
+    title: {
+      text: `Transfers with highest values`,
+      left: "center",
+    },
+    xAxis: {
+      type: "value",
+      name: "Txn amount (MINA)",
+      nameLocation: "middle",
+      nameTextStyle: { padding: [8, 0, 0, 0] },
+      axisLabel: {
+        formatter: (value) => (value / 1e12).toFixed(2) + "k",
+      },
+    },
+    yAxis: {
+      type: "category",
+      data: data.map(([hash, _amount]) => hash),
+      axisLabel: {
+        formatter: (value) => "..." + value.slice(-6),
+      },
+    },
+    series: [
+      {
+        data: data.map(([_hash, amount]) => amount),
+        type: "bar",
+      },
+    ],
+  };
+
+  const HASH_LEN = 53;
+  myChart.on("click", function (params) {
+    if (params.name && params.name.length == HASH_LEN) {
+      window.open("/commands/" + params.name, "_blank");
+    }
+  });
+
+  option && myChart.setOption(option);
+}
+
 function renderTopRecipientsChart(dataMap, myChart) {
   let data = Object.entries(dataMap);
   data.sort((a, b) => b[1] - a[1]); // descending
@@ -14,12 +61,14 @@ function renderTopRecipientsChart(dataMap, myChart) {
       position: "top",
     },
     title: {
-      text: `Top recipients`,
+      text: `Most frequent recipients`,
       left: "center",
     },
     xAxis: {
       type: "value",
       name: "Txn recieved",
+      nameLocation: "middle",
+      nameTextStyle: { padding: [8, 0, 0, 0] },
     },
     yAxis: {
       type: "category",
@@ -125,11 +174,15 @@ setTimeout(async () => {
   let topRecipientsChartDom = document.getElementById(
     "user-commands-top-recipients",
   );
+  let topTransfersChartDom = document.getElementById(
+    "user-commands-top-transfers",
+  );
   window.addEventListener("resize", function () {
     volumeChart.resize();
   });
   let volumeChart = echarts.init(volumeChartDom);
   let topRecipientsChart = echarts.init(topRecipientsChartDom);
+  let topTransfersChart = echarts.init(topTransfersChartDom);
 
   volumeChart.showLoading({
     text: "Loading...", // Display text with the spinner
@@ -137,6 +190,11 @@ setTimeout(async () => {
     zlevel: 0,
   });
   topRecipientsChart.showLoading({
+    text: "Loading...", // Display text with the spinner
+    color: "#E39844", // Spinner color
+    zlevel: 0,
+  });
+  topTransfersChart.showLoading({
     text: "Loading...", // Display text with the spinner
     color: "#E39844", // Spinner color
     zlevel: 0,
@@ -187,6 +245,7 @@ setTimeout(async () => {
     total_number_of_transactions: 0,
     total_failed_account_creations: 0,
     recipients_count: {},
+    largest_transfers: [],
   };
 
   let jsonResp = await response.json();
@@ -208,6 +267,14 @@ setTimeout(async () => {
     acc[unixTimestamp].count += 1;
     acc[unixTimestamp].totalAmount += transaction.amount;
 
+    // keep top 10 largest transfers
+    stats.largest_transfers.push([transaction.hash, transaction.amount]);
+    stats.largest_transfers.sort((a, b) => b[1] - a[1]); //descending
+    stats.largest_transfers = stats.largest_transfers.slice(
+      0,
+      Math.min(stats.largest_transfers.length, 10),
+    );
+
     stats.total_transferred += transaction.amount;
     stats.total_number_of_transactions += 1;
     stats.total_fees += transaction.fee;
@@ -224,6 +291,8 @@ setTimeout(async () => {
     return acc;
   }, {});
 
+  stats.largest_transfers.reverse();
+
   document.getElementById("total-transferred").innerHTML =
     new Intl.NumberFormat().format(stats.total_transferred / 1e15, {
       style: "currency",
@@ -239,4 +308,5 @@ setTimeout(async () => {
 
   renderTransactionVolumeChart(data, volumeChart);
   renderTopRecipientsChart(stats.recipients_count, topRecipientsChart);
+  renderTopTransfersChart(stats.largest_transfers, topTransfersChart);
 }, 1000);
