@@ -1,5 +1,15 @@
 setTimeout(async () => {
-  const blockLimit = 2000;
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const blockLimit = urlParams.get("limit") || 1000;
+  let summary_response = await fetch(config.rest_endpoint + "/summary", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  let { blockchainLength } = await summary_response.json();
+  const blockOffset = blockchainLength - blockLimit;
   const groupSize = 50;
 
   let chartDom = document.getElementById("chart");
@@ -24,22 +34,23 @@ setTimeout(async () => {
             $query: BlockQueryInput!
             $limit: Int = 10
             $sort_by: BlockSortByInput!
-          ) {
-            blocks(query: $query, limit: $limit, sortBy: $sort_by) {
-              blockHeight
-              globalSlotSinceGenesis
-              transactions {
-                coinbase 
-              }
-              snarkFees
-              txFees
-            }
-          }`,
+      ) {
+        blocks(query: $query, limit: $limit, sortBy: $sort_by) {
+          blockHeight
+          globalSlotSinceGenesis
+          transactions {
+            coinbase
+          }
+          snarkFees
+          txFees
+          canonical
+        }
+      }`,
       variables: {
-        limit: blockLimit,
+        limit: 1e9,
         sort_by: "BLOCKHEIGHT_DESC",
         query: {
-          canonical: true,
+          blockHeight_lte: blockOffset,
         },
       },
       operationName: "BlocksQuery",
@@ -48,6 +59,7 @@ setTimeout(async () => {
 
   let jsonResp = await response.json();
   let data = jsonResp.data.blocks.reduce((agg, record) => {
+    if (!record.canonical) return;
     let slot = record.globalSlotSinceGenesis;
     let key = slot - (slot % groupSize);
     let value = record.transactions.coinbase;
@@ -63,6 +75,9 @@ setTimeout(async () => {
   myChart.hideLoading();
 
   option = {
+    tooltip: {
+      position: "top",
+    },
     title: {
       text: `Coinbase Rewards in the last ${blockLimit} blocks`,
       left: "center",
@@ -76,21 +91,21 @@ setTimeout(async () => {
       type: "value",
       name: "Coinbase Rewards",
       axisLabel: {
-        formatter: (value) => `${(value / 1e12).toFixed(2)}k MINA`, // Display values in trillions
+        formatter: (value) => `${(value / 1e12).toFixed(0)}k MINA`, // Display values in trillions
       },
     },
-
     series: [
       {
         data: Object.values(data),
         type: "line",
-        areaStyle: {},
+        smooth: true,
         yAxisIndex: 0,
+        tooltip: {
+          valueFormatter: (value) => `${(value / 1e12).toFixed(0)}k MINA`,
+        },
       },
     ],
   };
-
-  console.log(option);
 
   option && myChart.setOption(option);
 }, 1000);
