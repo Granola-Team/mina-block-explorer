@@ -3,8 +3,6 @@ function renderCoinbaseRewardsChart(data, myChart) {
 
   myChart.hideLoading();
 
-  console.log(data);
-
   const slots = data.map(([slot]) => parseInt(slot));
   const rewards = data.map(([_slot, reward]) => reward);
 
