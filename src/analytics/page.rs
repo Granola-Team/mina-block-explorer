@@ -10,9 +10,15 @@ pub fn BlocksAnalyticsPage() -> impl IntoView {
         || (),
         move |_| async move { load_block_summary_data().await },
     );
+
+    let (limit_sig, _) = create_query_signal::<u64>("limit");
     view! {
         <Title text="Analytics | Blocks" />
         <PageContainer>
+            <AppSection>
+                <AppHeading heading="Filters" />
+                <AnalayticsFilters />
+            </AppSection>
             <AppSection>
                 <AppHeading heading="Blocks Analytics" />
                 <AnalyticsLayout>
@@ -80,10 +86,18 @@ pub fn BlocksAnalyticsPage() -> impl IntoView {
                             })}
 
                     </Suspense>
-                    <AnalyticsXLContainer>
-                        <div id="chart" class="w-full h-96"></div>
-                        <script src="/scripts/analytics/blocks-rewards.js" defer=true></script>
-                    </AnalyticsXLContainer>
+                    {move || {
+                        limit_sig.get();
+                        view! {
+                            <AnalyticsXLContainer>
+                                <div id="chart" class="w-full h-96"></div>
+                                <script
+                                    src="/scripts/analytics/blocks-rewards.js"
+                                    defer=true
+                                ></script>
+                            </AnalyticsXLContainer>
+                        }
+                    }}
                 </AnalyticsLayout>
             </AppSection>
         </PageContainer>
