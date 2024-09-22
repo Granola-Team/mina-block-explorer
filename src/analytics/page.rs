@@ -41,7 +41,7 @@ pub fn BlocksAnalyticsPage() -> impl IntoView {
                             <AnalyticsXLContainer>
                                 <div id="chart" class="w-full h-96"></div>
                                 <script
-                                    src="/scripts/analytics/blocks-rewards.js"
+                                    src="/scripts/analytics/blocks.js"
                                     defer=true
                                 ></script>
                             </AnalyticsXLContainer>
