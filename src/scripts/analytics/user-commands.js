@@ -186,7 +186,7 @@ setTimeout(async () => {
     total_fees: 0,
     total_number_of_transactions: 0,
     total_failed_account_creations: 0,
-    reciepients_count: {},
+    recipients_count: {},
   };
 
   let jsonResp = await response.json();
@@ -215,11 +215,11 @@ setTimeout(async () => {
       stats.total_failed_account_creations += 1;
     }
 
-    if (!stats.reciepients_count[transaction.receiver.publicKey]) {
-      stats.reciepients_count[transaction.receiver.publicKey] = 0;
+    if (!stats.recipients_count[transaction.receiver.publicKey]) {
+      stats.recipients_count[transaction.receiver.publicKey] = 0;
     }
 
-    stats.reciepients_count[transaction.receiver.publicKey] += 1;
+    stats.recipients_count[transaction.receiver.publicKey] += 1;
 
     return acc;
   }, {});
@@ -238,5 +238,5 @@ setTimeout(async () => {
     new Intl.NumberFormat().format(stats.total_failed_account_creations);
 
   renderTransactionVolumeChart(data, volumeChart);
-  renderTopRecipientsChart(stats.reciepients_count, topRecipientsChart);
+  renderTopRecipientsChart(stats.recipients_count, topRecipientsChart);
 }, 1000);
