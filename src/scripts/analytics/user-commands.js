@@ -101,7 +101,9 @@ setTimeout(async () => {
           amount
           kind
           fee
-          receiver
+          receiver {
+            publicKey
+          }
           blockHeight
           failureReason
           block {
