@@ -1,3 +1,5 @@
+function renderTopRecipientsChart(data, myChart) {}
+
 function renderTransactionVolumeChart(data, myChart) {
   let dates = Object.keys(data).map((key) =>
     new Date(parseInt(key) * 1000).toISOString().substring(0, 10),
@@ -73,13 +75,19 @@ setTimeout(async () => {
   });
   let { blockchainLength } = await summary_response.json();
   const blockOffset = blockchainLength - blockLimit;
-  let chartDom = document.getElementById("user-commands-volume");
+  let volumeChartDom = document.getElementById("user-commands-volume");
   window.addEventListener("resize", function () {
     volumeChart.resize();
   });
-  let volumeChart = echarts.init(chartDom);
+  let volumeChart = echarts.init(volumeChartDom);
+  let topRecipientsChart = echarts.init(volumeChartDom);
 
   volumeChart.showLoading({
+    text: "Loading...", // Display text with the spinner
+    color: "#E39844", // Spinner color
+    zlevel: 0,
+  });
+  topRecipientsChart.showLoading({
     text: "Loading...", // Display text with the spinner
     color: "#E39844", // Spinner color
     zlevel: 0,
@@ -181,4 +189,5 @@ setTimeout(async () => {
     new Intl.NumberFormat().format(stats.total_failed_account_creations);
 
   renderTransactionVolumeChart(data, volumeChart);
+  renderTopRecipientsChart(stats.reciepients_count, topRecipientsChart);
 }, 1000);
