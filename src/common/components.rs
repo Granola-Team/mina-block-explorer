@@ -462,6 +462,7 @@ pub fn AnalyticsLayout(children: Children) -> impl IntoView {
 pub fn AnalyticsSimpleInfo(
     value: HtmlElement<html::AnyElement>,
     label: HtmlElement<html::AnyElement>,
+    #[prop(optional, into)] id: Option<String>,
     variant: ColorVariant,
 ) -> impl IntoView {
     let mut container_class_str =
@@ -499,7 +500,9 @@ pub fn AnalyticsSimpleInfo(
     }
     view! {
         <div class=container_class_str>
-            <div class=value_class_str>{value}</div>
+            <div id=id.unwrap_or("simple-info".to_string()) class=value_class_str>
+                {value}
+            </div>
             <div class=label_class_str>{label}</div>
         </div>
     }

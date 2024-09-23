@@ -126,19 +126,68 @@ pub fn SnarksAnalyticsPage() -> impl IntoView {
 
 #[component]
 pub fn UserCommandsAnalyticsPage() -> impl IntoView {
+    let (limit_sig, _) = create_query_signal::<u64>("limit");
     view! {
         <Title text="Analytics | User Commands" />
         <PageContainer>
             <AppSection>
+                <AppHeading heading="Filters" />
+                <AnalayticsFilters />
+            </AppSection>
+            <AppSection>
                 <AppHeading heading="User Commands Analytics" />
                 <AnalyticsLayout>
-                    <AnalyticsXLContainer>
-                        <div id="chart" class="w-full h-96"></div>
-                        <script
-                            src="/scripts/analytics/user-commands-per-day.js"
-                            defer=true
-                        ></script>
-                    </AnalyticsXLContainer>
+                    {move || {
+                        limit_sig.get();
+                        view! {
+                            <script src="/scripts/analytics/user-commands.js" defer=true></script>
+                            <AnalyticsSmContainer>
+                                <AnalyticsSimpleInfo
+                                    label=convert_to_span("Total Transferred".into())
+                                    value=convert_to_span("...".to_string())
+                                    id="total-transferred"
+                                    variant=ColorVariant::Blue
+                                />
+
+                            </AnalyticsSmContainer>
+                            <AnalyticsSmContainer>
+                                <AnalyticsSimpleInfo
+                                    label=convert_to_span("Total Fees".into())
+                                    value=convert_to_span("...".to_string())
+                                    id="total-fees"
+                                    variant=ColorVariant::Green
+                                />
+
+                            </AnalyticsSmContainer>
+                            <AnalyticsSmContainer>
+                                <AnalyticsSimpleInfo
+                                    label=convert_to_span("Total Number Of Transactions".into())
+                                    value=convert_to_span("...".to_string())
+                                    id="total-number-of-transactions"
+                                    variant=ColorVariant::Orange
+                                />
+
+                            </AnalyticsSmContainer>
+                            <AnalyticsSmContainer>
+                                <AnalyticsSimpleInfo
+                                    label=convert_to_span("Total Failed Account Creations".into())
+                                    value=convert_to_span("...".to_string())
+                                    id="total-failed-account-creations"
+                                    variant=ColorVariant::DarkBlue
+                                />
+
+                            </AnalyticsSmContainer>
+                            <AnalyticsXLContainer>
+                                <div id="user-commands-volume" class="w-full h-96"></div>
+                            </AnalyticsXLContainer>
+                            <AnalyticsLgContainer>
+                                <div id="user-commands-top-recipients" class="w-full h-96"></div>
+                            </AnalyticsLgContainer>
+                            <AnalyticsLgContainer>
+                                <div id="user-commands-top-transfers" class="w-full h-96"></div>
+                            </AnalyticsLgContainer>
+                        }
+                    }}
                 </AnalyticsLayout>
             </AppSection>
         </PageContainer>
