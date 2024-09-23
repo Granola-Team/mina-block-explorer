@@ -36,7 +36,23 @@ pub fn BlocksAnalyticsPage() -> impl IntoView {
                                     id="non-canonical-blocks-count"
                                     variant=ColorVariant::Green
                                 />
+                            </AnalyticsSmContainer>
+                            <AnalyticsSmContainer>
+                                <AnalyticsSimpleInfo
+                                    label=convert_to_span("Number of supercharged blocks".into())
+                                    value=convert_to_span("...".to_string())
+                                    id="supercharged-blocks-count"
+                                    variant=ColorVariant::DarkBlue
+                                />
+                            </AnalyticsSmContainer>
 
+                            <AnalyticsSmContainer>
+                                <AnalyticsSimpleInfo
+                                    label=convert_to_span("Number of unique block producers".into())
+                                    value=convert_to_span("...".to_string())
+                                    id="unique-block-producers-count"
+                                    variant=ColorVariant::Orange
+                                />
                             </AnalyticsSmContainer>
                             <AnalyticsXLContainer>
                                 <div id="chart" class="w-full h-96"></div>

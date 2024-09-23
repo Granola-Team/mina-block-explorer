@@ -85,6 +85,7 @@ setTimeout(async () => {
           transactions {
             coinbase
           }
+          creator
           snarkFees
           txFees
           canonical
@@ -102,18 +103,29 @@ setTimeout(async () => {
   });
 
   let jsonResp = await response.json();
+  let smallest_key = null;
+  let largest_key = null;
+  let unique_creators = {};
   let data = jsonResp.data.blocks.reduce((agg, record) => {
     if (!record.canonical) return agg;
     let slot = record.globalSlotSinceGenesis;
     let key = slot - (slot % groupSize);
     let value = record.transactions.coinbase;
-    if (!agg[key]) {
-      agg[key] = { reward_sum: 0, canonical_count: 0, noncanonical_count: 0 };
+    if (!unique_creators[record.creator]) {
+      unique_creators[record.creator] = 0;
     }
-    record.canonical
-      ? agg[key].canonical_count++
-      : agg[key].noncanonical_count++;
+    unique_creators[record.creator] += 1;
+    if (!agg[key]) {
+      agg[key] = {
+        reward_sum: 0,
+        canonical_blocks_count: 0,
+        non_canonical_blocks_count: 0,
+      };
+    }
     agg[key].reward_sum += +value;
+    record.canonical
+      ? (agg[key].canonical_blocks_count += 1)
+      : (canonical_blocks_count.non_canonical_blocks_count += 1);
     return agg;
   }, {});
 
@@ -124,15 +136,17 @@ setTimeout(async () => {
 
   document.getElementById("canonical-blocks-count").innerHTML = Object.values(
     data,
-  ).reduce((agg, { canonical_count }) => {
-    agg += canonical_count;
+  ).reduce((agg, { canonical_blocks_count }) => {
+    agg += canonical_blocks_count;
     return agg;
   }, 0);
   document.getElementById("non-canonical-blocks-count").innerHTML =
-    Object.values(data).reduce((agg, { noncanonical_count }) => {
-      agg += noncanonical_count;
+    Object.values(data).reduce((agg, { non_canonical_blocks_count }) => {
+      agg += non_canonical_blocks_count;
       return agg;
     }, 0);
+  document.getElementById("unique-block-producers-count").innerHTML =
+    Object.keys(unique_creators).length;
 
   renderCoinbaseRewardsChart(rewards_data, myChart);
 }, 1000);
