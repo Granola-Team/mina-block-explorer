@@ -20,6 +20,10 @@ pub fn BlocksAnalyticsPage() -> impl IntoView {
                     {move || {
                         limit_sig.get();
                         view! {
+                            <script
+                                src="/scripts/analytics/blocks.js"
+                                defer=true
+                            ></script>
                             <AnalyticsSmContainer>
                                 <AnalyticsSimpleInfo
                                     label=convert_to_span("Canonical Blocks".into())
@@ -55,11 +59,10 @@ pub fn BlocksAnalyticsPage() -> impl IntoView {
                                 />
                             </AnalyticsSmContainer>
                             <AnalyticsXLContainer>
-                                <div id="chart" class="w-full h-96"></div>
-                                <script
-                                    src="/scripts/analytics/blocks.js"
-                                    defer=true
-                                ></script>
+                                <div id="rewards" class="w-full h-96"></div>
+                            </AnalyticsXLContainer>
+                            <AnalyticsXLContainer>
+                                <div id="blocks" class="w-full h-96"></div>
                             </AnalyticsXLContainer>
                         }
                     }}

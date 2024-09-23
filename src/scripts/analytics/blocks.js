@@ -1,4 +1,49 @@
-function renderCanonicalVsNonCanonicalChart(data, myChart) {}
+function renderCanonicalVsNonCanonicalChart(data, myChart) {
+  let option;
+
+  myChart.hideLoading();
+
+  const slots = data.map(([slot]) => parseInt(slot));
+  const canonical_blocks = data.map(([_slot, canonical]) => canonical);
+  const non_canonical_blocks = data.map(
+    ([_slot, _canonical, non_canonical]) => non_canonical,
+  );
+
+  option = {
+    tooltip: {
+      position: "top",
+    },
+    title: {
+      text: `Blocks`,
+      left: "center",
+    },
+    xAxis: {
+      type: "category",
+      name: "Global Slot",
+      data: slots,
+    },
+    yAxis: {
+      type: "value",
+      name: "Block Count",
+    },
+    series: [
+      {
+        data: non_canonical_blocks,
+        type: "bar",
+        stack: "block",
+        name: "Non-canonical Blocks",
+      },
+      {
+        data: canonical_blocks,
+        type: "bar",
+        stack: "block",
+        name: "Canonical Blocks",
+      },
+    ],
+  };
+
+  option && myChart.setOption(option);
+}
 
 function renderCoinbaseRewardsChart(data, myChart) {
   let option;
@@ -58,13 +103,14 @@ setTimeout(async () => {
   const blockOffset = blockchainLength - blockLimit;
   const groupSize = 120;
 
-  let chartDom = document.getElementById("chart");
+  let rewardsChartDom = document.getElementById("rewards");
+  let blocksChartDom = document.getElementById("blocks");
   window.addEventListener("resize", function () {
     rewardsChart.resize();
-    canonicalChart.resize();
+    blocksChart.resize();
   });
-  let rewardsChart = echarts.init(chartDom);
-  let canonicalChart = echarts.init(chartDom);
+  let rewardsChart = echarts.init(rewardsChartDom);
+  let blocksChart = echarts.init(blocksChartDom);
 
   rewardsChart.showLoading({
     text: "Loading...", // Display text with the spinner
@@ -72,7 +118,7 @@ setTimeout(async () => {
     zlevel: 0,
   });
 
-  canonicalChart.showLoading({
+  blocksChart.showLoading({
     text: "Loading...", // Display text with the spinner
     color: "#E39844", // Spinner color
     zlevel: 0,
@@ -171,5 +217,5 @@ setTimeout(async () => {
     Object.keys(unique_creators).length;
 
   renderCoinbaseRewardsChart(rewards_data, rewardsChart);
-  renderCanonicalVsNonCanonicalChart(canonical_data, canonicalChart);
+  renderCanonicalVsNonCanonicalChart(canonical_data, blocksChart);
 }, 1000);
