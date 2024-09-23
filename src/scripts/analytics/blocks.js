@@ -1,7 +1,7 @@
-function renderCoinbaseRewardsChart(data, myChart) {
+function renderCoinbaseRewardsChart(data, rewardsChart) {
   let option;
 
-  myChart.hideLoading();
+  rewardsChart.hideLoading();
 
   const slots = data.map(([slot]) => parseInt(slot));
   const rewards = data.map(([_slot, reward]) => reward);
@@ -39,7 +39,7 @@ function renderCoinbaseRewardsChart(data, myChart) {
     ],
   };
 
-  option && myChart.setOption(option);
+  option && rewardsChart.setOption(option);
 }
 
 setTimeout(async () => {
@@ -58,11 +58,11 @@ setTimeout(async () => {
 
   let chartDom = document.getElementById("chart");
   window.addEventListener("resize", function () {
-    myChart.resize();
+    rewardsChart.resize();
   });
-  let myChart = echarts.init(chartDom);
+  let rewardsChart = echarts.init(chartDom);
 
-  myChart.showLoading({
+  rewardsChart.showLoading({
     text: "Loading...", // Display text with the spinner
     color: "#E39844", // Spinner color
     zlevel: 0,
@@ -140,6 +140,12 @@ setTimeout(async () => {
     val.reward_sum,
   ]);
 
+  let canonical_data = Object.entries(data).map(([key, val]) => [
+    key,
+    val.canonical_blocks_count,
+    val.non_canonical_blocks_count,
+  ]);
+
   document.getElementById("canonical-blocks-count").innerHTML = Object.values(
     data,
   ).reduce((agg, { canonical_blocks_count }) => {
@@ -154,5 +160,6 @@ setTimeout(async () => {
   document.getElementById("unique-block-producers-count").innerHTML =
     Object.keys(unique_creators).length;
 
-  renderCoinbaseRewardsChart(rewards_data, myChart);
+  renderCoinbaseRewardsChart(rewards_data, rewardsChart);
+  renderCanonicalVsNonCanonicalChart(canonical_data, rewardsChart);
 }, 1000);
