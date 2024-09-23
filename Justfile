@@ -60,16 +60,16 @@ audit:
   cargo machete Cargo.toml
 
 # Install cypress dependencies
-pnpm_install:
+pnpm-install:
   @echo "--- Installing NPM dependencies"
   pnpm install
 
 # Serve application on localhost
-dev: pnpm_install deploy-mina-indexer
+dev: pnpm-install deploy-mina-indexer
   trunk serve --port="{{trunk_port}}" --open
 
 # Run tier2 application regression tests
-test-e2e-tier2: pnpm_install deploy-mina-indexer && shutdown-mina-indexer
+test-e2e-tier2: pnpm-install deploy-mina-indexer && shutdown-mina-indexer
   @echo "--- Performing end-to-end @tier2 tests"
   ruby ops/validate-env.rb GRAPHQL_URL REST_URL
   CYPRESS_tags="@tier2" \
@@ -81,7 +81,7 @@ test-e2e-tier2: pnpm_install deploy-mina-indexer && shutdown-mina-indexer
     --second-cmd="pnpm exec cypress run -r list -q"
 
 # Run regression tests with interactive GUI
-test-e2e-local: pnpm_install deploy-mina-indexer
+test-e2e-local: pnpm-install deploy-mina-indexer
   ruby ops/validate-env.rb GRAPHQL_URL REST_URL
   ruby ./ops/manage-processes.rb \
     --port={{trunk_port}} \
@@ -89,7 +89,7 @@ test-e2e-local: pnpm_install deploy-mina-indexer
     --second-cmd="pnpm exec cypress open"
 
 # Publish application
-publish: clean pnpm_install
+publish: clean pnpm-install
   ruby ops/validate-env.rb GRAPHQL_URL REST_URL
   @echo "--- Publishing"
   trunk build --release --filehash true
@@ -97,7 +97,7 @@ publish: clean pnpm_install
   pnpm exec -- wrangler pages deploy --branch main
 
 # Lint application source code
-lint: pnpm_install && audit
+lint: pnpm-install && audit
   @echo "--- Linting JS/TS"
   pnpm exec prettier --check cypress/
   @echo "--- Linting Rust code"
