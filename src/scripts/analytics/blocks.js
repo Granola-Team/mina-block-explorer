@@ -103,8 +103,6 @@ setTimeout(async () => {
   });
 
   let jsonResp = await response.json();
-  let smallest_key = null;
-  let largest_key = null;
   let unique_creators = {};
   let data = jsonResp.data.blocks.reduce((agg, record) => {
     if (!record.canonical) return agg;
@@ -128,6 +126,14 @@ setTimeout(async () => {
       : (canonical_blocks_count.non_canonical_blocks_count += 1);
     return agg;
   }, {});
+
+  // trim the first slot and last slot
+  // as they most likely will not contain
+  // a full data set
+  let keys = Object.keys(data).map((k) => parseInt(k));
+  keys.sort((a, b) => a - b); // sort the values asc
+  delete data[keys[0]];
+  delete data[keys[keys.length - 1]];
 
   let rewards_data = Object.entries(data).map(([key, val]) => [
     key,
