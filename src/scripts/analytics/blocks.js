@@ -1,7 +1,9 @@
-function renderCoinbaseRewardsChart(data, rewardsChart) {
+function renderCanonicalVsNonCanonicalChart(data, myChart) {}
+
+function renderCoinbaseRewardsChart(data, myChart) {
   let option;
 
-  rewardsChart.hideLoading();
+  myChart.hideLoading();
 
   const slots = data.map(([slot]) => parseInt(slot));
   const rewards = data.map(([_slot, reward]) => reward);
@@ -39,7 +41,7 @@ function renderCoinbaseRewardsChart(data, rewardsChart) {
     ],
   };
 
-  option && rewardsChart.setOption(option);
+  option && myChart.setOption(option);
 }
 
 setTimeout(async () => {
@@ -59,10 +61,18 @@ setTimeout(async () => {
   let chartDom = document.getElementById("chart");
   window.addEventListener("resize", function () {
     rewardsChart.resize();
+    canonicalChart.resize();
   });
   let rewardsChart = echarts.init(chartDom);
+  let canonicalChart = echarts.init(chartDom);
 
   rewardsChart.showLoading({
+    text: "Loading...", // Display text with the spinner
+    color: "#E39844", // Spinner color
+    zlevel: 0,
+  });
+
+  canonicalChart.showLoading({
     text: "Loading...", // Display text with the spinner
     color: "#E39844", // Spinner color
     zlevel: 0,
@@ -161,5 +171,5 @@ setTimeout(async () => {
     Object.keys(unique_creators).length;
 
   renderCoinbaseRewardsChart(rewards_data, rewardsChart);
-  renderCanonicalVsNonCanonicalChart(canonical_data, rewardsChart);
+  renderCanonicalVsNonCanonicalChart(canonical_data, canonicalChart);
 }, 1000);
