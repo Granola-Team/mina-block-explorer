@@ -97,6 +97,67 @@ pub fn AnalayticsFilters(
 }
 
 #[component]
+pub fn SnarkerLeaderboard() -> impl IntoView {
+    let (epoch_sig, _) = create_query_signal::<u32>("epoch");
+    let resource = create_resource(
+        move || epoch_sig.get(),
+        move |epoch| async move {
+            load_snarker_leaderboard_data(epoch, SnarkerLeaderboardSort::HighestFeeDesc).await
+        },
+    );
+    let (data_sig, set_data) = create_signal(None);
+
+    create_effect(move |_| {
+        set_data.set(
+            resource
+                .get()
+                .and_then(|res| res.ok())
+                .map(|res| res.data.top_snarkers),
+        );
+    });
+
+    {
+        move || {
+            let table_columns = vec![
+                TableColumn {
+                    column: "Username".to_string(),
+                    ..Default::default()
+                },
+                TableColumn {
+                    column: "Public Key".to_string(),
+                    ..Default::default()
+                },
+                TableColumn {
+                    column: "Total Fees".to_string(),
+                    ..Default::default()
+                },
+                TableColumn {
+                    column: "Min Fee".to_string(),
+                    ..Default::default()
+                },
+                TableColumn {
+                    column: "Max Fee".to_string(),
+                    ..Default::default()
+                },
+                TableColumn {
+                    column: "Snarks Sold".to_string(),
+                    ..Default::default()
+                },
+            ];
+            view! {
+                <TableSectionTemplate
+                    table_columns
+                    data_sig
+                    is_loading=resource.loading()
+                    section_heading="Snarker Leaderboard"
+                    controls=|| ().into_view()
+                />
+            }
+        }
+    }
+}
+
+#[component]
 pub fn StakerLeaderboard() -> impl IntoView {
     let (epoch_sig, _) = create_query_signal::<u32>("epoch");
     let resource = create_resource(
