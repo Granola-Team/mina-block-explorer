@@ -1,4 +1,4 @@
-use super::models::{SnarkStats, SnarkStatsContainer, StakerStats};
+use super::models::{SnarkStats, SnarkStatsContainer, StakerStats, TopSnarkerStat};
 use crate::common::{functions::*, table::TableData};
 use leptos::*;
 
@@ -22,6 +22,36 @@ impl TableData for Vec<StakerStats> {
                     convert_to_span(format_number(
                         stat.orphan_rate().unwrap_or("n/a".to_string()),
                     )),
+                ]
+            })
+            .collect()
+    }
+}
+
+const TOP_SNARKER_FEE_MAX_LHS_DIGITS: usize = 3;
+impl TableData for Vec<TopSnarkerStat> {
+    fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
+        self.iter()
+            .map(|stat| {
+                vec![
+                    convert_to_span(stat.username.clone()),
+                    convert_to_link(
+                        stat.public_key.clone(),
+                        format!("/addresses/accounts/{}/spotlight", stat.public_key),
+                    ),
+                    convert_to_span(format_number_for_html(
+                        nanomina_to_mina(stat.total_fees).as_str(),
+                        TOP_SNARKER_FEE_MAX_LHS_DIGITS,
+                    )),
+                    convert_to_span(format_number_for_html(
+                        nanomina_to_mina(stat.min_fee).as_str(),
+                        TOP_SNARKER_FEE_MAX_LHS_DIGITS,
+                    )),
+                    convert_to_span(format_number_for_html(
+                        nanomina_to_mina(stat.max_fee).as_str(),
+                        TOP_SNARKER_FEE_MAX_LHS_DIGITS,
+                    )),
+                    convert_to_span(stat.snarks_sold.to_string()),
                 ]
             })
             .collect()

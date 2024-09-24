@@ -18,6 +18,12 @@ suite(["@tier2"], "fitler", () => {
       expected_url_value: 0,
       expected_url_key: "epoch",
     },
+    {
+      url: "/analytics/snarker-leaderboard",
+      filter_id: "#epoch",
+      expected_url_value: 0,
+      expected_url_key: "epoch",
+    },
   ];
   pages.forEach(({ url, filter_id, expected_url_value, expected_url_key }) =>
     it(`has defaults for ${url}`, () => {

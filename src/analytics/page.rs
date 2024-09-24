@@ -104,6 +104,20 @@ pub fn SnarksAnalyticsPage() -> impl IntoView {
 }
 
 #[component]
+pub fn SnarkerLeaderboardPage() -> impl IntoView {
+    view! {
+        <Title text="Analytics | Snarker Leaderboard" />
+        <PageContainer>
+            <AppSection>
+                <AppHeading heading="Filters" />
+                <AnalayticsFilters block_limit=false epoch=true />
+            </AppSection>
+            <SnarkerLeaderboard />
+        </PageContainer>
+    }
+}
+
+#[component]
 pub fn StakerLeaderboardPage() -> impl IntoView {
     view! {
         <Title text="Analytics | Staker Leaderboard" />
@@ -235,6 +249,12 @@ pub fn AnalyticsTabbedPage() -> impl IntoView {
         NavEntry {
             href: "/analytics/staker-leaderboard".to_string(),
             text: "Staker Leaderboard".to_string(),
+            icon: NavIcon::Leaderboard,
+            ..Default::default()
+        },
+        NavEntry {
+            href: "/analytics/snarker-leaderboard".to_string(),
+            text: "Snarker Leaderboard".to_string(),
             icon: NavIcon::Leaderboard,
             ..Default::default()
         },

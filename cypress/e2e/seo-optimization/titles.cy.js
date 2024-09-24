@@ -8,6 +8,10 @@ suite(["@tier2"], "meta title", () => {
       title: "Analytics | Staker Leaderboard",
     },
     {
+      url: "/analytics/snarker-leaderboard",
+      title: "Analytics | Snarker Leaderboard",
+    },
+    {
       url: "/addresses/accounts",
       title: "Accounts | Search for accounts on Mina Blockchain",
     },

@@ -159,3 +159,51 @@ impl StakerStats {
         }
     }
 }
+
+#[derive(Deserialize, Serialize, Debug, Clone)]
+pub struct TopSnarkerStat {
+    pub username: String,
+    pub public_key: String,
+    pub total_fees: u64,
+    pub min_fee: u64,
+    pub max_fee: u64,
+    pub snarks_sold: u64,
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct TopSnarkers {
+    pub top_snarkers: Vec<TopSnarkerStat>,
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone)]
+pub struct SnarkerLeaderboardResponse {
+    pub data: TopSnarkers,
+}
+
+#[allow(dead_code)]
+pub enum SnarkerLeaderboardSort {
+    TotalFeesAsc,
+    TotalFeesDesc,
+    HighestFeeAsc,
+    HighestFeeDesc,
+}
+
+impl fmt::Display for SnarkerLeaderboardSort {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            SnarkerLeaderboardSort::TotalFeesAsc => {
+                write!(f, "TOTAL_FEES_ASC")
+            }
+            SnarkerLeaderboardSort::TotalFeesDesc => {
+                write!(f, "TOTAL_FEES_DESC")
+            }
+            SnarkerLeaderboardSort::HighestFeeAsc => {
+                write!(f, "MAX_FEE_ASC")
+            }
+            SnarkerLeaderboardSort::HighestFeeDesc => {
+                write!(f, "MAX_FEE_DESC")
+            }
+        }
+    }
+}
