@@ -106,3 +106,25 @@ pub struct BlocksAnalyticsResponse {
 pub struct SnarkFeesResponse {
     pub data: SnarkFeesData,
 }
+
+#[derive(Deserialize, Serialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct StakerStats {
+    pub username: String,
+    pub public_key: String,
+    pub num_blocks_produced: u32,
+    pub num_canonical_blocks_produced: u32,
+    pub num_supercharged_blocks_produced: u32,
+    pub num_slots_produced: u32,
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct TopStakers {
+    pub top_stakers: Vec<StakerStats>,
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone)]
+pub struct StakerLeaderboardResponse {
+    pub data: TopStakers,
+}
