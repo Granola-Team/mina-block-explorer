@@ -159,3 +159,24 @@ impl StakerStats {
         }
     }
 }
+
+#[derive(Deserialize, Serialize, Debug, Clone)]
+pub struct TopSnarkerStat {
+    pub username: String,
+    pub public_key: String,
+    pub total_fees: u64,
+    pub min_fee: u64,
+    pub max_fee: u64,
+    pub snarks_sold: u64,
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct TopSnarkers {
+    pub top_snarkers: Vec<TopSnarkerStat>,
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone)]
+pub struct SnarkerLeaderboardResponse {
+    pub data: TopSnarkers,
+}
