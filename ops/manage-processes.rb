@@ -1,14 +1,12 @@
-require 'optparse'
-require 'socket'
+require "optparse"
+require "socket"
 
 # Function to check if the port is available using Ruby's Socket class
-def port_open?(port, host = '127.0.0.1')
-  begin
-    Socket.tcp(host, port, connect_timeout: 1).close
-    true
-  rescue Errno::ECONNREFUSED, Errno::EHOSTUNREACH, SocketError
-    false
-  end
+def port_open?(port, host = "127.0.0.1")
+  Socket.tcp(host, port, connect_timeout: 1).close
+  true
+rescue Errno::ECONNREFUSED, Errno::EHOSTUNREACH, SocketError
+  false
 end
 
 # Function to wait for a port to become available
@@ -24,8 +22,7 @@ end
 # Start a process and return its PID
 def start_process(command)
   puts "Starting process: #{command}"
-  pid = Process.spawn(command)
-  pid
+  Process.spawn(command)
 end
 
 # Kill a process by its PID

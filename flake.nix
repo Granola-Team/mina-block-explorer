@@ -32,19 +32,20 @@
         buildInputs = with pkgs;
           [
             nightlyToolchain.passthru.availableComponents.rustfmt
+            alejandra
             cacert
             cargo-audit
             cargo-machete
             cargo-nextest
             leptosfmt
             just
-            alejandra
             nodejs_18
             nodePackages.pnpm
             openssl
             pkg-config
             rsync
             ruby
+            rubyPackages.standard
             rust-analyzer
             toolchain
             trunk

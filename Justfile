@@ -12,6 +12,12 @@ export CARGO_HOME := `pwd` + '/.cargo'
 
 set dotenv-load := true
 
+# Ensure rustfmt works in all environments
+# Nix environment has rustfmt nightly and won't work with +nightly
+# Non-Nix environment needs nightly toolchain installed and requires +nightly
+is_rustfmt_nightly := `rustfmt --version | grep stable || echo "true"`
+nightly_if_required := if is_rustfmt_nightly == "true" { "" } else { "+nightly" }
+
 default:
   @echo "Topologically sorted recipes:"
   @just --list --unsorted --list-heading '' --justfile {{justfile()}}
@@ -45,7 +51,8 @@ clean:
 # Format rust and cypress source code
 format:
   pnpm exec prettier --write cypress/ src/scripts/
-  cargo fmt --all
+  standardrb --fix ops/*.rb
+  cargo {{nightly_if_required}} fmt --all
   leptosfmt ./src
   alejandra flake.nix
 
@@ -100,12 +107,15 @@ publish: clean pnpm-install
 lint: pnpm-install && audit
   @echo "--- Linting JS/TS"
   pnpm exec prettier --check cypress/
-  @echo "--- Linting Rust code"
-  cargo fmt --all --check
-  leptosfmt --check ./src
-  cargo clippy --all-targets --all-features -- -D warnings
+  @echo "--- Linting ops scripts"
+  ruby -cw ops/*.rb
+  standardrb --no-fix ops/*.rb
   @echo "--- Linting Nix configs"
   alejandra --check flake.nix
+  @echo "--- Linting Rust code"
+  time cargo {{nightly_if_required}} fmt --all --check
+  leptosfmt --check ./src
+  time cargo clippy --all-targets --all-features -- -D warnings
 
 # Run tier1 tests
 tier1: lint test-unit

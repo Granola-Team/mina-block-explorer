@@ -12,7 +12,7 @@ missing_vars = required_env_vars.select { |var| ENV[var].nil? || ENV[var].strip.
 
 # If there are any missing variables, output an error and exit
 unless missing_vars.empty?
-  puts "Error: The following environment variables are missing or empty: #{missing_vars.join(', ')}"
+  puts "Error: The following environment variables are missing or empty: #{missing_vars.join(", ")}"
   exit 1
 end
 
