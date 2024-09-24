@@ -20,10 +20,7 @@ pub fn BlocksAnalyticsPage() -> impl IntoView {
                     {move || {
                         limit_sig.get();
                         view! {
-                            <script
-                                src="/scripts/analytics/blocks.js"
-                                defer=true
-                            ></script>
+                            <script src="/scripts/analytics/blocks.js" defer=true></script>
                             <AnalyticsSmContainer>
                                 <AnalyticsSimpleInfo
                                     label=convert_to_span("Canonical Blocks".into())
