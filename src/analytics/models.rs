@@ -109,7 +109,6 @@ pub struct SnarkFeesResponse {
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
-#[serde(rename_all = "camelCase")]
 pub struct StakerStats {
     pub username: String,
     pub public_key: String,
