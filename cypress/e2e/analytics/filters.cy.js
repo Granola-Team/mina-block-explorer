@@ -1,10 +1,29 @@
 suite(["@tier2"], "fitler", () => {
-  let pages = ["/analytics/commands/user", "/analytics/snarks"];
-  pages.forEach((page) =>
-    it(`has defaults for ${page}`, () => {
-      cy.visit(page);
-      cy.get("#block-limit").should("have.value", 1000);
-      cy.url().should("include", "limit=1000");
+  let pages = [
+    {
+      url: "/analytics/commands/user",
+      filter_id: "#block-limit",
+      expected_url_value: 1000,
+      expected_url_key: "limit",
+    },
+    {
+      url: "/analytics/snarks",
+      filter_id: "#block-limit",
+      expected_url_value: 1000,
+      expected_url_key: "limit",
+    },
+    {
+      url: "/analytics/staker-leaderboard",
+      filter_id: "#epoch",
+      expected_url_value: 0,
+      expected_url_key: "epoch",
+    },
+  ];
+  pages.forEach(({ url, filter_id, expected_url_value, expected_url_key }) =>
+    it(`has defaults for ${url}`, () => {
+      cy.visit(url);
+      cy.get(filter_id).should("have.value", expected_url_value);
+      cy.url().should("include", `${expected_url_key}=${expected_url_value}`);
     }),
   );
 });
