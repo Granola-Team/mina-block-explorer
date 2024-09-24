@@ -180,3 +180,30 @@ pub struct TopSnarkers {
 pub struct SnarkerLeaderboardResponse {
     pub data: TopSnarkers,
 }
+
+#[allow(dead_code)]
+pub enum SnarkerLeaderboardSort {
+    TotalFeesAsc,
+    TotalFeesDesc,
+    HighestFeeAsc,
+    HighestFeeDesc,
+}
+
+impl fmt::Display for SnarkerLeaderboardSort {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            SnarkerLeaderboardSort::TotalFeesAsc => {
+                write!(f, "TOTAL_FEES_ASC")
+            }
+            SnarkerLeaderboardSort::TotalFeesDesc => {
+                write!(f, "TOTAL_FEES_DESC")
+            }
+            SnarkerLeaderboardSort::HighestFeeAsc => {
+                write!(f, "HIGHEST_FEE_ASC")
+            }
+            SnarkerLeaderboardSort::HighestFeeDesc => {
+                write!(f, "HIGHEST_FEE_DESC")
+            }
+        }
+    }
+}
