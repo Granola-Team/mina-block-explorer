@@ -18,6 +18,9 @@ pub fn AnalayticsFilters(
     if limit_sig.get_untracked().is_none() {
         set_limit.set(Some(1000u64));
     }
+    if epoch_sig.get_untracked().is_none() {
+        set_epoch.set(Some(0u64));
+    }
 
     view! {
         <div class="w-full flex justify-start items-center p-2 pl-8 md:p-8 md:py-2">
@@ -79,6 +82,7 @@ pub fn AnalayticsFilters(
                                 number_props=HashMap::from([
                                     ("step".to_string(), "1".to_string()),
                                     ("min".to_string(), "0".to_string()),
+                                    ("max".to_string(), "1000".to_string()),
                                 ])
                             />
 
