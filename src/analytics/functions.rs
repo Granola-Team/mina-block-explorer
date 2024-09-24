@@ -27,6 +27,36 @@ pub async fn load_snark_fees(limit: Option<u64>) -> Result<SnarkFeesResponse, My
     }
 }
 
+pub async fn load_snarker_leaderboard_data(
+    epoch: Option<u32>,
+    sort_by: SnarkerLeaderboardSort,
+) -> Result<SnarkerLeaderboardResponse, MyError> {
+    if epoch.is_none() {
+        return Err(MyError::ParseError("Epoch must not be None".into()));
+    }
+    let query_body = format!(
+        r#"{{"query":"query TopSnarkers($query: TopSnarkersQueryInput!, $limit: Int = 50, $sort_by: TopSnarkersSortByInput!) {{ topSnarkers(query: $query, limit: $limit, sortBy: $sort_by) {{ username public_key total_fees min_fee max_fee snarks_sold }} }}","variables":{{"limit": 50, "sort_by": "{}", "query": {{ "epoch": {} }} }},"operationName":"TopSnarkers"}}"#,
+        sort_by,
+        epoch.unwrap()
+    );
+    let client = reqwest::Client::new();
+    let response = client
+        .post(GRAPHQL_ENDPOINT)
+        .body(query_body)
+        .send()
+        .await
+        .map_err(|e| MyError::NetworkError(e.to_string()))?;
+
+    if response.status().is_success() {
+        Ok(response
+            .json::<SnarkerLeaderboardResponse>()
+            .await
+            .map_err(|e| MyError::ParseError(e.to_string()))?)
+    } else {
+        Err(MyError::NetworkError("Failed to fetch data".into()))
+    }
+}
+
 pub async fn load_staker_leaderboard_data(
     epoch: Option<u32>,
     sort_by: StakerLeaderboardSort,
