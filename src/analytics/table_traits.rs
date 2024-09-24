@@ -1,6 +1,32 @@
-use super::models::{SnarkStats, SnarkStatsContainer};
+use super::models::{SnarkStats, SnarkStatsContainer, StakerStats};
 use crate::common::{functions::*, table::TableData};
 use leptos::*;
+
+impl TableData for Vec<StakerStats> {
+    fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
+        self.iter()
+            .map(|stat| {
+                vec![
+                    convert_to_span(stat.username.clone()),
+                    convert_to_link(
+                        stat.public_key.clone(),
+                        format!("/addresses/accounts/{}/spotlight", stat.public_key),
+                    ),
+                    convert_to_span(format_number(
+                        stat.num_canonical_blocks_produced.to_string(),
+                    )),
+                    convert_to_span(format_number(
+                        stat.num_supercharged_blocks_produced.to_string(),
+                    )),
+                    convert_to_span(format_number(stat.num_slots_produced.to_string())),
+                    convert_to_span(format_number(
+                        stat.orphan_rate().unwrap_or("n/a".to_string()),
+                    )),
+                ]
+            })
+            .collect()
+    }
+}
 
 impl TableData for Option<SnarkStatsContainer> {
     fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
