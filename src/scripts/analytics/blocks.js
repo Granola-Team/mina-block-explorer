@@ -185,9 +185,8 @@ setTimeout(async () => {
     return agg;
   }, {});
 
-  // trim the first slot and last slot
-  // as they most likely will not contain
-  // a full data set
+  // trim the first slot group and last slot group
+  // as they most likely will not contain a full data set
   let keys = Object.keys(data).map((k) => parseInt(k));
   keys.sort((a, b) => a - b); // sort the values asc
   delete data[keys[0]];
@@ -198,7 +197,7 @@ setTimeout(async () => {
     val.reward_sum,
   ]);
 
-  let canonical_data = Object.entries(data).map(([key, val]) => [
+  let blocks_data = Object.entries(data).map(([key, val]) => [
     key,
     val.canonical_blocks_count,
     val.non_canonical_blocks_count,
@@ -219,5 +218,5 @@ setTimeout(async () => {
     Object.keys(unique_creators).length;
 
   renderCoinbaseRewardsChart(rewards_data, rewardsChart);
-  renderCanonicalVsNonCanonicalChart(canonical_data, blocksChart);
+  renderCanonicalVsNonCanonicalChart(blocks_data, blocksChart);
 }, 1000);
