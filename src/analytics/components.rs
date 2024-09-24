@@ -1,8 +1,7 @@
 use super::{functions::*, models::*};
-use crate::common::table::ColumnTextAlignment;
 use crate::common::{
     components::*,
-    table::{TableColumn, TableSectionTemplate},
+    table::{ColumnTextAlignment, TableColumn, TableSectionTemplate, TableSortDirection},
 };
 use leptos::*;
 use leptos_router::create_query_signal;
@@ -134,8 +133,7 @@ pub fn StakerLeaderboard() -> impl IntoView {
                 },
                 TableColumn {
                     column: "Canonical Blocks Produced".to_string(),
-                    is_searchable: true,
-                    html_input_type: "number".to_string(),
+                    sort_direction: Some(TableSortDirection::Desc),
                     alignment: Some(ColumnTextAlignment::Right),
                     ..Default::default()
                 },
