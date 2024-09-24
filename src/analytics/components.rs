@@ -129,14 +129,18 @@ pub fn SnarkerLeaderboard() -> impl IntoView {
                 },
                 TableColumn {
                     column: "Total Fees".to_string(),
+                    alignment: Some(ColumnTextAlignment::Right),
                     ..Default::default()
                 },
                 TableColumn {
                     column: "Min Fee".to_string(),
+                    alignment: Some(ColumnTextAlignment::Right),
                     ..Default::default()
                 },
                 TableColumn {
                     column: "Max Fee".to_string(),
+                    sort_direction: Some(TableSortDirection::Desc),
+                    alignment: Some(ColumnTextAlignment::Right),
                     ..Default::default()
                 },
                 TableColumn {
