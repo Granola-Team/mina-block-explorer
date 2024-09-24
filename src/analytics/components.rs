@@ -93,6 +93,71 @@ pub fn AnalayticsFilters(
 }
 
 #[component]
+pub fn StakerLeaderboard() -> impl IntoView {
+    let (epoch_sig, _) = create_query_signal::<u32>("epoch");
+    let resource = create_resource(
+        move || epoch_sig.get(),
+        move |epoch| async move {
+            load_staker_leaderboard_data(
+                epoch,
+                StakerLeaderboardSort::NumCanonicalBlocksProducedDesc,
+            )
+            .await
+        },
+    );
+    let (data_sig, set_data) = create_signal(None);
+
+    create_effect(move |_| {
+        set_data.set(
+            resource
+                .get()
+                .and_then(|res| res.ok())
+                .map(|res| res.data.top_stakers),
+        );
+    });
+
+    {
+        move || {
+            let table_columns = vec![
+                TableColumn {
+                    column: "Username".to_string(),
+                    ..Default::default()
+                },
+                TableColumn {
+                    column: "Public Key".to_string(),
+                    ..Default::default()
+                },
+                TableColumn {
+                    column: "Canonical Blocks Produced".to_string(),
+                    ..Default::default()
+                },
+                TableColumn {
+                    column: "Supercharged Blocks Produced".to_string(),
+                    ..Default::default()
+                },
+                TableColumn {
+                    column: "Slots Blocks Produced".to_string(),
+                    ..Default::default()
+                },
+                TableColumn {
+                    column: "Orphan Rate".to_string(),
+                    ..Default::default()
+                },
+            ];
+            view! {
+                <TableSectionTemplate
+                    table_columns
+                    data_sig
+                    is_loading=resource.loading()
+                    section_heading="Staker Leaderboard"
+                    controls=|| ().into_view()
+                />
+            }
+        }
+    }
+}
+
+#[component]
 pub fn SnarkFees() -> impl IntoView {
     let (limit_sig, _) = create_query_signal::<u64>("limit");
     let resource = create_resource(
