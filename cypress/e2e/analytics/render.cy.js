@@ -9,7 +9,7 @@ suite(["@tier2"], "chart", () => {
         "#user-commands-top-transfers",
       ],
     },
-    { page: "/analytics/blocks", chart_ids: ["#chart"] },
+    { page: "/analytics/blocks", chart_ids: ["#rewards", "#blocks"] },
     { page: "/analytics/snarks", chart_ids: ["#avg-snark-fee"] },
   ];
 
