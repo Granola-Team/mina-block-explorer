@@ -110,7 +110,7 @@ pub fn StakerLeaderboardPage() -> impl IntoView {
         <PageContainer>
             <AppSection>
                 <AppHeading heading="Filters" />
-                <AnalayticsFilters />
+                <AnalayticsFilters block_limit=false epoch=true />
             </AppSection>
             <StakerLeaderboard />
         </PageContainer>
