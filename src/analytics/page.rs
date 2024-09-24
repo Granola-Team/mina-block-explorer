@@ -238,6 +238,12 @@ pub fn AnalyticsTabbedPage() -> impl IntoView {
             icon: NavIcon::Leaderboard,
             ..Default::default()
         },
+        NavEntry {
+            href: "/analytics/snarker-leaderboard".to_string(),
+            text: "Snarker Leaderboard".to_string(),
+            icon: NavIcon::Leaderboard,
+            ..Default::default()
+        },
     ];
     view! { <TabbedPage tabs /> }
 }
