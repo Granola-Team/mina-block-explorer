@@ -129,7 +129,9 @@ pub struct StakerLeaderboardResponse {
     pub data: TopStakers,
 }
 
+#[allow(dead_code)]
 pub enum StakerLeaderboardSort {
+    NumCanonicalBlocksProducedAsc,
     NumCanonicalBlocksProducedDesc,
 }
 
