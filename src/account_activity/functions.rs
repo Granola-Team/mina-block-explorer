@@ -53,6 +53,7 @@ pub async fn load_data(
             public_key: public_key.clone(),
             username: None,
             balance_lte: None,
+            delegate: None,
         },
         blocks_query: account_activity_query::BlockQueryInput {
             block_height_lte: block_height,
