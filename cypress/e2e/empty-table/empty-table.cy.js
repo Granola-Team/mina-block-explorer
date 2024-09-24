@@ -9,6 +9,7 @@ suite(["@tier2"], "empty table", () => {
     "/staking-ledgers?q-key=B62qfake",
     "/snarks?q-state-hash=3Nfake",
     "/analytics/staker-leaderboard?epoch=100000",
+    "/analytics/snarker-leaderboard?epoch=100000",
   ];
 
   pages.forEach((page) =>

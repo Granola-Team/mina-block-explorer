@@ -3,6 +3,16 @@ import { DEFAULT_ACCOUNT_PK, FIRST_BLOCK_WITH_SNARK_WORK } from "../constants";
 suite(["@tier2"], "account page", () => {
   let pages = [
     {
+      origin: `/analytics/snarker-leaderboard`,
+      column: "Public Key",
+      tableHeader: "Snarker Leaderboard",
+    },
+    {
+      origin: `/analytics/staker-leaderboard`,
+      column: "Public Key",
+      tableHeader: "Staker Leaderboard",
+    },
+    {
       origin: `/addresses/accounts`,
       column: "Public Key",
       tableHeader: "Accounts",
