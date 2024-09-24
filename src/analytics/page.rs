@@ -104,6 +104,11 @@ pub fn SnarksAnalyticsPage() -> impl IntoView {
 }
 
 #[component]
+pub fn StakerLeaderboard() -> impl IntoView {
+    ().into_view()
+}
+
+#[component]
 pub fn UserCommandsAnalyticsPage() -> impl IntoView {
     let (limit_sig, _) = create_query_signal::<u64>("limit");
     view! {
