@@ -144,4 +144,5 @@ pub enum NavIcon {
     Analytics,
     More,
     Delegates,
+    Leaderboard,
 }
