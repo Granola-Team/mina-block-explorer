@@ -12,6 +12,7 @@ input AccountQueryInput {
   publicKey: String
   username: String
   balance_lte: Int
+  delegate: String
 }
 
 enum AccountSortByInput {
