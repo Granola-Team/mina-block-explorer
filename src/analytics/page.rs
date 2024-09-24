@@ -104,6 +104,19 @@ pub fn SnarksAnalyticsPage() -> impl IntoView {
 }
 
 #[component]
+pub fn SnarkerLeaderboardPage() -> impl IntoView {
+    view! {
+        <Title text="Analytics | Snarker Leaderboard" />
+        <PageContainer>
+            <AppSection>
+                <AppHeading heading="Filters" />
+                <AnalayticsFilters block_limit=false epoch=true />
+            </AppSection>
+        </PageContainer>
+    }
+}
+
+#[component]
 pub fn StakerLeaderboardPage() -> impl IntoView {
     view! {
         <Title text="Analytics | Staker Leaderboard" />
