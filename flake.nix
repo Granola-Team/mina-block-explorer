@@ -43,13 +43,11 @@
             nodePackages.pnpm
             openssl
             pkg-config
-            rsync
             ruby
             rubyPackages.standard
             rust-analyzer
             toolchain
             trunk
-            netcat
           ]
           ++ lib.optionals stdenv.isDarwin
           [darwin.apple_sdk.frameworks.SystemConfiguration];
