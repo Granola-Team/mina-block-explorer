@@ -14,17 +14,14 @@ pub fn AnalayticsFilters(
 ) -> impl IntoView {
     let (limit_sig, set_limit) = create_query_signal::<u64>("limit");
     let (epoch_sig, set_epoch) = create_query_signal::<u64>("epoch");
-    if limit_sig.get_untracked().is_none() {
-        set_limit.set(Some(1000u64));
-    }
-    if epoch_sig.get_untracked().is_none() {
-        set_epoch.set(Some(0u64));
-    }
 
     view! {
         <div class="w-full flex justify-start items-center p-2 pl-8 md:p-8 md:py-2">
             {move || match block_limit {
                 true => {
+                    if limit_sig.get_untracked().is_none() {
+                        set_limit.set(Some(1000u64));
+                    }
                     view! {
                         <div class="flex justify-start items-baseline mr-2 md:mr-4">
                             <label for="block-limit" class="mr-2">
@@ -59,6 +56,9 @@ pub fn AnalayticsFilters(
             }}
             {move || match epoch {
                 true => {
+                    if epoch_sig.get_untracked().is_none() {
+                        set_epoch.set(Some(0u64));
+                    }
                     view! {
                         <div class="flex justify-start items-baseline mr-2 md:mr-4">
                             <label for="block-limit" class="mr-2">
