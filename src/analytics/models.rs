@@ -162,7 +162,7 @@ impl StakerStats {
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct TopSnarkerStat {
-    pub username: String,
+    pub username: Option<String>,
     pub public_key: String,
     pub total_fees: u64,
     pub min_fee: u64,
