@@ -177,9 +177,11 @@ setTimeout(async () => {
       };
     }
     agg[key].reward_sum += +value;
-    record.canonical
-      ? (agg[key].canonical_blocks_count += 1)
-      : (canonical_blocks_count.non_canonical_blocks_count += 1);
+    if (record.canonical == true) {
+      agg[key].canonical_blocks_count += 1;
+    } else {
+      agg[key].non_canonical_blocks_count += 1;
+    }
     return agg;
   }, {});
 
