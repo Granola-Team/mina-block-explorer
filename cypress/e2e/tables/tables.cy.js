@@ -18,6 +18,23 @@ import { parseFormattedNumber } from "../helpers";
 let test_suite_data = [
   {
     tag: "@tier2",
+    url: `/analytics/staker-leaderboard?epoch=0`,
+    table: {
+      heading: "Staker Leaderboard",
+      columns: [
+        "Username",
+        "Public Key",
+        "Canonical Blocks Produced",
+        "Supercharged Blocks Produced",
+        "Slots Produced",
+        "Orphan Rate",
+      ],
+      filter_tests: [],
+    },
+    tests: [],
+  },
+  {
+    tag: "@tier2",
     url: `/analytics/snarks`,
     table: {
       heading: "SNARK Fees Overview",

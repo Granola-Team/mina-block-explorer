@@ -1,5 +1,6 @@
 use serde::*;
 use statrs::statistics::{Data, Distribution, OrderStatistics};
+use std::fmt;
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct BlockAnalyticsData {
@@ -105,4 +106,56 @@ pub struct BlocksAnalyticsResponse {
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct SnarkFeesResponse {
     pub data: SnarkFeesData,
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone)]
+pub struct StakerStats {
+    pub username: String,
+    pub public_key: String,
+    pub num_blocks_produced: u32,
+    pub num_canonical_blocks_produced: u32,
+    pub num_supercharged_blocks_produced: u32,
+    pub num_slots_produced: u32,
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct TopStakers {
+    pub top_stakers: Vec<StakerStats>,
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone)]
+pub struct StakerLeaderboardResponse {
+    pub data: TopStakers,
+}
+
+#[allow(dead_code)]
+pub enum StakerLeaderboardSort {
+    NumCanonicalBlocksProducedAsc,
+    NumCanonicalBlocksProducedDesc,
+}
+
+impl fmt::Display for StakerLeaderboardSort {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            StakerLeaderboardSort::NumCanonicalBlocksProducedAsc => {
+                write!(f, "NUM_CANONICAL_BLOCKS_PRODUCED_ASC")
+            }
+            StakerLeaderboardSort::NumCanonicalBlocksProducedDesc => {
+                write!(f, "NUM_CANONICAL_BLOCKS_PRODUCED_DESC")
+            }
+        }
+    }
+}
+
+impl StakerStats {
+    pub fn orphan_rate(&self) -> Option<String> {
+        if self.num_blocks_produced > 0 {
+            let orphan_frac =
+                1f32 - self.num_canonical_blocks_produced as f32 / self.num_blocks_produced as f32;
+            Some(format!("{:.2}", orphan_frac * 100.0))
+        } else {
+            None
+        }
+    }
 }

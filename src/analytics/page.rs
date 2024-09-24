@@ -104,6 +104,20 @@ pub fn SnarksAnalyticsPage() -> impl IntoView {
 }
 
 #[component]
+pub fn StakerLeaderboardPage() -> impl IntoView {
+    view! {
+        <Title text="Analytics | Staker Leaderboard" />
+        <PageContainer>
+            <AppSection>
+                <AppHeading heading="Filters" />
+                <AnalayticsFilters block_limit=false epoch=true />
+            </AppSection>
+            <StakerLeaderboard />
+        </PageContainer>
+    }
+}
+
+#[component]
 pub fn UserCommandsAnalyticsPage() -> impl IntoView {
     let (limit_sig, _) = create_query_signal::<u64>("limit");
     view! {
@@ -216,6 +230,12 @@ pub fn AnalyticsTabbedPage() -> impl IntoView {
             href: "/analytics/snarks".to_string(),
             text: "SNARKs".to_string(),
             icon: NavIcon::SNARKs,
+            ..Default::default()
+        },
+        NavEntry {
+            href: "/analytics/staker-leaderboard".to_string(),
+            text: "Staker Leaderboard".to_string(),
+            icon: NavIcon::Leaderboard,
             ..Default::default()
         },
     ];

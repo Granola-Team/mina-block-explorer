@@ -6,7 +6,7 @@ use crate::{
     accounts::page::AccountsPage,
     analytics::page::{
         AnalyticsTabbedPage, BlocksAnalyticsPage, InternalCommandsAnalayticsPage,
-        SnarksAnalyticsPage, UserCommandsAnalyticsPage,
+        SnarksAnalyticsPage, StakerLeaderboardPage, UserCommandsAnalyticsPage,
     },
     blocks::page::{
         BlockAnalyticsTab, BlockInternalCommandsTab, BlockSnarkJobsTab, BlockSpotlightTab,
@@ -98,6 +98,7 @@ pub fn Root() -> impl IntoView {
                         <Route path="/commands/user" view=UserCommandsAnalyticsPage />
                         <Route path="/blocks" view=BlocksAnalyticsPage />
                         <Route path="/snarks" view=SnarksAnalyticsPage />
+                        <Route path="/staker-leaderboard" view=StakerLeaderboardPage />
                     </Route>
                 </Routes>
             </main>

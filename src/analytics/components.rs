@@ -1,7 +1,7 @@
 use super::{functions::*, models::*};
 use crate::common::{
     components::*,
-    table::{TableColumn, TableSectionTemplate},
+    table::{ColumnTextAlignment, TableColumn, TableSectionTemplate, TableSortDirection},
 };
 use leptos::*;
 use leptos_router::create_query_signal;
@@ -14,14 +14,14 @@ pub fn AnalayticsFilters(
 ) -> impl IntoView {
     let (limit_sig, set_limit) = create_query_signal::<u64>("limit");
     let (epoch_sig, set_epoch) = create_query_signal::<u64>("epoch");
-    if limit_sig.get_untracked().is_none() {
-        set_limit.set(Some(1000u64));
-    }
 
     view! {
         <div class="w-full flex justify-start items-center p-2 pl-8 md:p-8 md:py-2">
             {move || match block_limit {
                 true => {
+                    if limit_sig.get_untracked().is_none() {
+                        set_limit.set(Some(1000u64));
+                    }
                     view! {
                         <div class="flex justify-start items-baseline mr-2 md:mr-4">
                             <label for="block-limit" class="mr-2">
@@ -56,6 +56,9 @@ pub fn AnalayticsFilters(
             }}
             {move || match epoch {
                 true => {
+                    if epoch_sig.get_untracked().is_none() {
+                        set_epoch.set(Some(0u64));
+                    }
                     view! {
                         <div class="flex justify-start items-baseline mr-2 md:mr-4">
                             <label for="block-limit" class="mr-2">
@@ -78,6 +81,7 @@ pub fn AnalayticsFilters(
                                 number_props=HashMap::from([
                                     ("step".to_string(), "1".to_string()),
                                     ("min".to_string(), "0".to_string()),
+                                    ("max".to_string(), "1000".to_string()),
                                 ])
                             />
 
@@ -89,6 +93,76 @@ pub fn AnalayticsFilters(
             }}
 
         </div>
+    }
+}
+
+#[component]
+pub fn StakerLeaderboard() -> impl IntoView {
+    let (epoch_sig, _) = create_query_signal::<u32>("epoch");
+    let resource = create_resource(
+        move || epoch_sig.get(),
+        move |epoch| async move {
+            load_staker_leaderboard_data(
+                epoch,
+                StakerLeaderboardSort::NumCanonicalBlocksProducedDesc,
+            )
+            .await
+        },
+    );
+    let (data_sig, set_data) = create_signal(None);
+
+    create_effect(move |_| {
+        set_data.set(
+            resource
+                .get()
+                .and_then(|res| res.ok())
+                .map(|res| res.data.top_stakers),
+        );
+    });
+
+    {
+        move || {
+            let table_columns = vec![
+                TableColumn {
+                    column: "Username".to_string(),
+                    ..Default::default()
+                },
+                TableColumn {
+                    column: "Public Key".to_string(),
+                    ..Default::default()
+                },
+                TableColumn {
+                    column: "Canonical Blocks Produced".to_string(),
+                    sort_direction: Some(TableSortDirection::Desc),
+                    alignment: Some(ColumnTextAlignment::Right),
+                    ..Default::default()
+                },
+                TableColumn {
+                    column: "Supercharged Blocks Produced".to_string(),
+                    alignment: Some(ColumnTextAlignment::Right),
+                    ..Default::default()
+                },
+                TableColumn {
+                    column: "Slots Produced".to_string(),
+                    alignment: Some(ColumnTextAlignment::Right),
+                    ..Default::default()
+                },
+                TableColumn {
+                    column: "Orphan Rate".to_string(),
+                    alignment: Some(ColumnTextAlignment::Right),
+                    ..Default::default()
+                },
+            ];
+            view! {
+                <TableSectionTemplate
+                    table_columns
+                    data_sig
+                    is_loading=resource.loading()
+                    section_heading="Staker Leaderboard"
+                    controls=|| ().into_view()
+                />
+            }
+        }
     }
 }
 
