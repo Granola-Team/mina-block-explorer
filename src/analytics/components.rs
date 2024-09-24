@@ -130,6 +130,8 @@ pub fn StakerLeaderboard() -> impl IntoView {
                 },
                 TableColumn {
                     column: "Canonical Blocks Produced".to_string(),
+                    is_searchable: true,
+                    html_input_type: "number".to_string(),
                     alignment: Some(ColumnTextAlignment::Right),
                     ..Default::default()
                 },
