@@ -199,10 +199,10 @@ impl fmt::Display for SnarkerLeaderboardSort {
                 write!(f, "TOTAL_FEES_DESC")
             }
             SnarkerLeaderboardSort::HighestFeeAsc => {
-                write!(f, "HIGHEST_FEE_ASC")
+                write!(f, "MAX_FEE_ASC")
             }
             SnarkerLeaderboardSort::HighestFeeDesc => {
-                write!(f, "HIGHEST_FEE_DESC")
+                write!(f, "MAX_FEE_DESC")
             }
         }
     }
