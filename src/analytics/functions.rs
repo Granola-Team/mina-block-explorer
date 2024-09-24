@@ -35,7 +35,7 @@ pub async fn load_staker_leaderboard_data(
         return Err(MyError::ParseError("Epoch must not be None".into()));
     }
     let query_body = format!(
-        r#"{{"query":"query TopStakers($query: TopStakersQueryInput!, $limit: Int = 50, $sort_by: TopStakersSortByInput!) {{ topStakers(query: $query, limit: $limit, sortBy: $sort_by) {{ username public_key num_blocks_produced num_canonical_blocks_produced num_supercharged_blocks_produced num_slots_produced }} }}","variables":{{"limit": 50, "sort_by": {}, "query": {{ "epoch": {} }} }},"operationName":"TopStakers"}}"#,
+        r#"{{"query":"query TopStakers($query: TopStakersQueryInput!, $limit: Int = 50, $sort_by: TopStakersSortByInput!) {{ topStakers(query: $query, limit: $limit, sortBy: $sort_by) {{ username public_key num_blocks_produced num_canonical_blocks_produced num_supercharged_blocks_produced num_slots_produced }} }}","variables":{{"limit": 50, "sort_by": "{}", "query": {{ "epoch": {} }} }},"operationName":"TopStakers"}}"#,
         sort_by,
         epoch.unwrap()
     );
