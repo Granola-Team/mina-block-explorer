@@ -28,6 +28,7 @@ impl TableData for Vec<StakerStats> {
     }
 }
 
+const TOP_SNARKER_FEE_MAX_LHS_DIGITS: usize = 3;
 impl TableData for Vec<TopSnarkerStat> {
     fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
         self.iter()
@@ -38,10 +39,19 @@ impl TableData for Vec<TopSnarkerStat> {
                         stat.public_key.clone(),
                         format!("/addresses/accounts/{}/spotlight", stat.public_key),
                     ),
-                    convert_to_span(nanomina_to_mina(stat.total_fees)),
-                    convert_to_span(nanomina_to_mina(stat.min_fee)),
-                    convert_to_span(nanomina_to_mina(stat.max_fee)),
-                    convert_to_span(nanomina_to_mina(stat.snarks_sold)),
+                    convert_to_span(format_number_for_html(
+                        nanomina_to_mina(stat.total_fees).as_str(),
+                        TOP_SNARKER_FEE_MAX_LHS_DIGITS,
+                    )),
+                    convert_to_span(format_number_for_html(
+                        nanomina_to_mina(stat.min_fee).as_str(),
+                        TOP_SNARKER_FEE_MAX_LHS_DIGITS,
+                    )),
+                    convert_to_span(format_number_for_html(
+                        nanomina_to_mina(stat.max_fee).as_str(),
+                        TOP_SNARKER_FEE_MAX_LHS_DIGITS,
+                    )),
+                    convert_to_span(stat.snarks_sold.to_string()),
                 ]
             })
             .collect()
