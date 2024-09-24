@@ -112,6 +112,7 @@ pub fn SnarkerLeaderboardPage() -> impl IntoView {
                 <AppHeading heading="Filters" />
                 <AnalayticsFilters block_limit=false epoch=true />
             </AppSection>
+            <SnarkerLeaderboard />
         </PageContainer>
     }
 }
