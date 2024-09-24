@@ -10,13 +10,13 @@ importers:
     devDependencies:
       '@simonsmith/cypress-image-snapshot':
         specifier: ^9.1.0
-        version: 9.1.0(cypress@13.14.2)
+        version: 9.1.0(cypress@13.12.0)
       '@tailwindcss/container-queries':
         specifier: ^0.1.1
         version: 0.1.1(tailwindcss@3.4.13)
       cypress:
-        specifier: ^13.14.2
-        version: 13.14.2
+        specifier: 13.12.0
+        version: 13.12.0
       husky:
         specifier: ^9.1.6
         version: 9.1.6
@@ -615,8 +615,8 @@ packages:
     engines: {node: '>=4'}
     hasBin: true
 
-  cypress@13.14.2:
-    resolution: {integrity: sha512-lsiQrN17vHMB2fnvxIrKLAjOr9bPwsNbPZNrWf99s4u+DVmCY6U+w7O3GGG9FvP4EUVYaDu+guWeNLiUzBrqvA==}
+  cypress@13.12.0:
+    resolution: {integrity: sha512-udzS2JilmI9ApO/UuqurEwOvThclin5ntz7K0BtnHBs+tg2Bl9QShLISXpSEMDv/u8b6mqdoAdyKeZiSqKWL8g==}
     engines: {node: ^16.0.0 || ^18.0.0 || >=20.0.0}
     hasBin: true
 
@@ -1955,11 +1955,11 @@ snapshots:
   '@pkgjs/parseargs@0.11.0':
     optional: true
 
-  '@simonsmith/cypress-image-snapshot@9.1.0(cypress@13.14.2)':
+  '@simonsmith/cypress-image-snapshot@9.1.0(cypress@13.12.0)':
     dependencies:
       '@types/jest-image-snapshot': 6.4.0
       chalk: 4.1.2
-      cypress: 13.14.2
+      cypress: 13.12.0
       jest-image-snapshot: 6.4.0
     transitivePeerDependencies:
       - jest
@@ -2244,7 +2244,7 @@ snapshots:
 
   cssesc@3.0.0: {}
 
-  cypress@13.14.2:
+  cypress@13.12.0:
     dependencies:
       '@cypress/request': 3.0.5
       '@cypress/xvfb': 1.2.4(supports-color@8.1.1)
