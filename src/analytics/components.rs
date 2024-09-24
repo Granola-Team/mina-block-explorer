@@ -1,4 +1,5 @@
 use super::{functions::*, models::*};
+use crate::common::table::ColumnTextAlignment;
 use crate::common::{
     components::*,
     table::{TableColumn, TableSectionTemplate},
@@ -129,18 +130,22 @@ pub fn StakerLeaderboard() -> impl IntoView {
                 },
                 TableColumn {
                     column: "Canonical Blocks Produced".to_string(),
+                    alignment: Some(ColumnTextAlignment::Right),
                     ..Default::default()
                 },
                 TableColumn {
                     column: "Supercharged Blocks Produced".to_string(),
+                    alignment: Some(ColumnTextAlignment::Right),
                     ..Default::default()
                 },
                 TableColumn {
                     column: "Slots Blocks Produced".to_string(),
+                    alignment: Some(ColumnTextAlignment::Right),
                     ..Default::default()
                 },
                 TableColumn {
                     column: "Orphan Rate".to_string(),
+                    alignment: Some(ColumnTextAlignment::Right),
                     ..Default::default()
                 },
             ];
