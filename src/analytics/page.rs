@@ -104,8 +104,17 @@ pub fn SnarksAnalyticsPage() -> impl IntoView {
 }
 
 #[component]
-pub fn StakerLeaderboard() -> impl IntoView {
-    ().into_view()
+pub fn StakerLeaderboardPage() -> impl IntoView {
+    view! {
+        <Title text="Analytics | User Commands" />
+        <PageContainer>
+            <AppSection>
+                <AppHeading heading="Filters" />
+                <AnalayticsFilters />
+            </AppSection>
+            <StakerLeaderboard />
+        </PageContainer>
+    }
 }
 
 #[component]
