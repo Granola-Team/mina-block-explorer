@@ -130,7 +130,6 @@ pub struct StakerLeaderboardResponse {
 }
 
 pub enum StakerLeaderboardSort {
-    NumCanonicalBlocksProducedAsc,
     NumCanonicalBlocksProducedDesc,
 }
 

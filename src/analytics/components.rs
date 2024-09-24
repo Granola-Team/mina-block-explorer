@@ -143,7 +143,7 @@ pub fn StakerLeaderboard() -> impl IntoView {
                     ..Default::default()
                 },
                 TableColumn {
-                    column: "Slots Blocks Produced".to_string(),
+                    column: "Slots Produced".to_string(),
                     alignment: Some(ColumnTextAlignment::Right),
                     ..Default::default()
                 },
