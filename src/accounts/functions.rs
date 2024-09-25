@@ -7,16 +7,19 @@ pub async fn load_data(
     public_key: Option<String>,
     username: Option<String>,
     balance: Option<i64>,
+    delegate: Option<String>,
 ) -> Result<accounts_query::ResponseData, MyError> {
-    let query = if public_key.is_none() && username.is_none() && balance.is_none() {
-        None
-    } else {
-        Some(accounts_query::AccountQueryInput {
-            public_key,
-            username,
-            balance_lte: balance,
-        })
-    };
+    let query =
+        if public_key.is_none() && username.is_none() && balance.is_none() && delegate.is_none() {
+            None
+        } else {
+            Some(accounts_query::AccountQueryInput {
+                public_key,
+                username,
+                balance_lte: balance,
+                delegate,
+            })
+        };
 
     let variables = accounts_query::Variables {
         limit: Some(limit as i64),

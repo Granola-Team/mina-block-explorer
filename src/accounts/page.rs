@@ -32,14 +32,23 @@ fn AccountsPageContents() -> impl IntoView {
     let (public_key_sig, _) = create_query_signal::<String>("q-public-key");
     let (username_sig, _) = create_query_signal::<String>("q-username");
     let (balance_sig, _) = create_query_signal::<i64>("q-balance");
+    let (delegate_sig, _) = create_query_signal::<String>("q-delegate");
     let resource = create_resource(
-        move || (public_key_sig.get(), username_sig.get(), balance_sig.get()),
-        |(public_key, username, balance)| async move {
+        move || {
+            (
+                public_key_sig.get(),
+                username_sig.get(),
+                balance_sig.get(),
+                delegate_sig.get(),
+            )
+        },
+        |(public_key, username, balance, delegate)| async move {
             load_data(
                 TABLE_ROW_LIMIT,
                 public_key,
                 username,
                 balance.map(|b| b * 1_000_000_000i64),
+                delegate,
             )
             .await
         },
@@ -74,6 +83,7 @@ fn AccountsPageContents() -> impl IntoView {
         TableColumn {
             column: "Delegate".to_string(),
             width: Some(String::from(TABLE_COL_HASH_WIDTH)),
+            is_searchable: true,
             ..Default::default()
         },
         TableColumn {
