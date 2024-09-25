@@ -1,4 +1,5 @@
-use super::{functions::*, models::AccountActivityQueryDelegatorExt};
+use super::models::DelegateCount;
+use super::{functions::*, models::*};
 use crate::account_activity::graphql::account_activity_query::AccountActivityQueryIncomingTransactions;
 use crate::account_activity::graphql::account_activity_query::AccountActivityQueryOutgoingTransactions;
 use crate::{
@@ -139,14 +140,15 @@ pub fn AccountDelegationsPage() -> impl IntoView {
     let delegations_sig: ReadSignal<Option<Vec<Option<AccountActivityQueryDelegatorExt>>>> =
         use_context::<ReadSignal<Option<Vec<Option<AccountActivityQueryDelegatorExt>>>>>()
             .expect("there to be an optional AccountActivityQueryFeetransfers signal provided");
-    let delegator_count: ReadSignal<Option<i64>> = use_context::<ReadSignal<Option<i64>>>()
-        .expect("there to be an optional delegator count signal provided");
+    let delegator_count: ReadSignal<Option<DelegateCount>> =
+        use_context::<ReadSignal<Option<DelegateCount>>>()
+            .expect("there to be an optional delegator count signal provided");
     {
         move || {
             view! {
                 <AccountDelegationsSection
                     delegations_sig=delegations_sig
-                    delegator_count=delegator_count.get()
+                    delegator_count=delegator_count.get().map(|c| c.0)
                     is_loading=Signal::derive(move || delegations_sig.get().is_none())
                 />
             }
@@ -174,7 +176,6 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
     let (summary_sig, _, _) =
         use_local_storage::<BlockchainSummary, JsonSerdeCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
 
-    let id = move || memo_params_map.get().get("id").cloned().unwrap_or_default();
     let current_epoch_staking_ledger = move || Some(summary_sig.get().epoch);
     let activity_resource = create_resource(
         move || {
@@ -284,12 +285,15 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
                     .collect();
 
                 set_delegators.set(Some(delegators));
-                set_delegators_counts.set(
+                set_delegators_counts.set(Some(DelegateCount(
                     delegate
                         .delegation_totals
                         .as_ref()
-                        .and_then(|totals| totals.count_delegates),
-                );
+                        .and_then(|totals| {
+                            totals.count_delegates.and_then(|c| usize::try_from(c).ok())
+                        })
+                        .unwrap_or_default(),
+                )));
             }
         }
     });
@@ -310,54 +314,89 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
     provide_context(delegators);
     provide_context(delegators_count);
 
-    let tabs = move || {
-        vec![
-            NavEntry {
-                href: format!("/addresses/accounts/{}/commands/user", id()),
-                text: "User Commands".to_string(),
-                icon: NavIcon::Transactions,
-                number_bubble: Some(transactions.get().map(|t| t.len()).unwrap_or(0)),
-                ..Default::default()
-            },
-            NavEntry {
-                href: format!("/addresses/accounts/{}/commands/internal", id()),
-                text: "Internal Commands".to_string(),
-                icon: NavIcon::Transactions,
-                number_bubble: Some(internal_transactions.get().map(|t| t.len()).unwrap_or(0)),
-                ..Default::default()
-            },
-            NavEntry {
-                href: format!("/addresses/accounts/{}/snark-jobs", id()),
-                text: "SNARK Jobs".to_string(),
-                icon: NavIcon::SNARKs,
-                number_bubble: Some(snarks.get().map(|t| t.len()).unwrap_or(0)),
-                ..Default::default()
-            },
-            NavEntry {
-                href: format!("/addresses/accounts/{}/block-production", id()),
-                text: "Block Production".to_string(),
-                icon: NavIcon::Blocks,
-                number_bubble: Some(blocks.get().map(|t| t.len()).unwrap_or(0)),
-                ..Default::default()
-            },
-            NavEntry {
-                href: format!("/addresses/accounts/{}/delegations", id()),
-                text: "Delegations".to_string(),
-                icon: NavIcon::Delegates,
-                number_bubble: delegators_count
-                    .get()
-                    .and_then(|n| n.try_into().ok())
-                    .or(Some(0)),
-                ..Default::default()
-            },
-        ]
-    };
-    {
-        move || {
+    view! {
+        { move || {
+            transactions.get();
+            internal_transactions.get();
+            snarks.get();
+            blocks.get();
+            account.get();
+            delegators.get();
             view! {
-                <TabbedPage tabs=tabs() exclude_outlet=true />
-                <AccountSpotlightPage />
+                <AccountSpotlightTabs />
             }
-        }
+        }}
+        <AccountSpotlightPage />
+    }
+}
+
+#[component]
+pub fn AccountSpotlightTabs() -> impl IntoView {
+    let memo_params_map = use_params_map();
+    let id = move || memo_params_map.get().get("id").cloned().unwrap_or_default();
+
+    let transactions = use_context::<
+        ReadSignal<Option<Vec<Option<AccountActivityQueryDirectionalTransactions>>>>,
+    >()
+    .expect("there to be an optional AccountActivityQueryDirectionalTransactions signal provided");
+
+    let delegator_count: ReadSignal<Option<DelegateCount>> =
+        use_context::<ReadSignal<Option<DelegateCount>>>()
+            .expect("there to be an optional DelegateCount signal provided");
+
+    let txn: ReadSignal<Option<Vec<Option<AccountActivityQueryFeetransfers>>>> =
+        use_context::<ReadSignal<Option<Vec<Option<AccountActivityQueryFeetransfers>>>>>()
+            .expect("there to be an optional AccountActivityQueryFeetransfers signal provided");
+
+    let blocks = use_context::<ReadSignal<Option<Vec<Option<AccountActivityQueryBlocks>>>>>()
+        .expect("there to be an optional AccountActivityQueryBlocks signal provided");
+
+    let snarks = use_context::<ReadSignal<Option<Vec<Option<AccountActivityQuerySnarks>>>>>()
+        .expect("there to be an optional AccountActivityQuerySnarks signal provided");
+
+    let tabs = vec![
+        NavEntry {
+            href: format!("/addresses/accounts/{}/commands/user", id()),
+            text: "User Commands".to_string(),
+            icon: NavIcon::Transactions,
+            number_bubble: transactions
+                .get()
+                .map(|t| t.len())
+                .map(Some)
+                .unwrap_or(Some(0)), // Wrap in Some(usize)
+            ..Default::default()
+        },
+        NavEntry {
+            href: format!("/addresses/accounts/{}/commands/internal", id()),
+            text: "Internal Commands".to_string(),
+            icon: NavIcon::Transactions,
+            number_bubble: txn.get().map(|t| t.len()).map(Some).unwrap_or(Some(0)),
+            ..Default::default()
+        },
+        NavEntry {
+            href: format!("/addresses/accounts/{}/snark-jobs", id()),
+            text: "SNARK Jobs".to_string(),
+            icon: NavIcon::SNARKs,
+            number_bubble: snarks.get().map(|t| t.len()).map(Some).unwrap_or(Some(0)),
+            ..Default::default()
+        },
+        NavEntry {
+            href: format!("/addresses/accounts/{}/block-production", id()),
+            text: "Block Production".to_string(),
+            icon: NavIcon::Blocks,
+            number_bubble: blocks.get().map(|t| t.len()).map(Some).unwrap_or(Some(0)),
+            ..Default::default()
+        },
+        NavEntry {
+            href: format!("/addresses/accounts/{}/delegations", id()),
+            text: "Delegations".to_string(),
+            icon: NavIcon::Delegates,
+            number_bubble: Some(delegator_count.get().map(|c| c.0).unwrap_or(0)), // Wrap in Some
+            ..Default::default()
+        },
+    ];
+
+    view! {
+        <TabbedPage tabs exclude_outlet=true />
     }
 }
