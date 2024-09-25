@@ -389,6 +389,16 @@ let test_suite_data = [
             cy.tableColumnValuesEqual("Accounts", "Username", ROMEK_USERNAME);
           },
         },
+        {
+          column: "Delegate",
+          input: ROMEK_ADDRESS,
+          assertion: function () {
+            cy.aliasTableRows("Accounts", "table-rows");
+            cy.assertForEachColumnValue("Accounts", "Delegate", (text) => {
+              expect(text).to.equal(ROMEK_ADDRESS);
+            });
+          },
+        },
       ],
     },
     tests: [],
