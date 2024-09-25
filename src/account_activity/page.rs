@@ -1,4 +1,6 @@
 use super::{functions::*, models::AccountActivityQueryDelegatorExt};
+use crate::account_activity::graphql::account_activity_query::AccountActivityQueryIncomingTransactions;
+use crate::account_activity::graphql::account_activity_query::AccountActivityQueryOutgoingTransactions;
 use crate::{
     account_activity::{
         components::{
@@ -86,7 +88,7 @@ pub fn AccountUserCommandsPage() -> impl IntoView {
     let transactions = use_context::<
         ReadSignal<Option<Vec<Option<AccountActivityQueryDirectionalTransactions>>>>,
     >()
-    .expect("there to be an optional AccountActivityQueryDirectionalTransactions signal provided");
+    .expect("Expected there to be an optional AccountActivityQueryDirectionalTransactions signal provided");
     view! {
         <AccountTransactionsSection
             transactions_sig=transactions
@@ -195,9 +197,10 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
             slot,
             current_epoch_staking_ledger,
         )| async move {
-            if value.get("id").is_some() {
-                load_data(
-                    value.get("id").cloned(),
+            if let Some(id) = value.get("id").cloned() {
+                // Attempt to load data and handle any potential errors more gracefully
+                match load_data(
+                    Some(id.clone()),
                     Some(TABLE_ROW_LIMIT),
                     Some(TABLE_ROW_LIMIT),
                     Some(TABLE_ROW_LIMIT),
@@ -206,16 +209,24 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
                     block_height,
                     qp_map.get("q-txn-hash").cloned(),
                     qp_map.get("q-state-hash").cloned(),
-                    value.get("id").cloned(),
+                    Some(id.clone()),
                     nonce,
                     qp_map.get("q-counterparty").cloned(),
                     slot,
-                    value.get("id").cloned(),
+                    Some(id),
                     current_epoch_staking_ledger,
                     canonical_opt,
                 )
                 .await
+                {
+                    Ok(data) => Ok(data),
+                    Err(e) => {
+                        logging::error!("Error loading data: {:?}", e); // Log the error
+                        Err(e) // Return the error for further handling
+                    }
+                }
             } else {
+                logging::error!("Could not parse id parameter from URL");
                 Err(MyError::ParseError(String::from(
                     "Could not parse id parameter from url",
                 )))
@@ -225,24 +236,28 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
 
     create_effect(move |_| {
         if let Some(res) = activity_resource.get().and_then(|res| res.ok()) {
-            let mut transactions: Vec<_> = res
+            let mut transactions: Vec<Option<AccountActivityQueryDirectionalTransactions>> = res
                 .incoming_transactions
                 .into_iter()
-                .filter(|t| t.is_some())
-                .map(|r| r.map(|t| t.into()))
-                .chain(
-                    res.outgoing_transactions
-                        .into_iter()
-                        .filter(|t| t.is_some())
-                        .map(|r| r.map(|t| t.into())),
-                )
+                .filter_map(|t| {
+                    t.map(|x| {
+                        Some(<AccountActivityQueryIncomingTransactions as Into<
+                            AccountActivityQueryDirectionalTransactions,
+                        >>::into(x))
+                    })
+                })
+                .chain(res.outgoing_transactions.into_iter().filter_map(|t| {
+                    t.map(|x| {
+                        Some(<AccountActivityQueryOutgoingTransactions as Into<
+                            AccountActivityQueryDirectionalTransactions,
+                        >>::into(x))
+                    })
+                }))
                 .collect();
             transactions.sort_by(|a, b| {
                 match (
-                    a.clone()
-                        .and_then(|x: AccountActivityQueryDirectionalTransactions| x.date_time),
-                    b.clone()
-                        .and_then(|x: AccountActivityQueryDirectionalTransactions| x.date_time),
+                    a.as_ref().and_then(|x| x.date_time),
+                    b.as_ref().and_then(|x| x.date_time),
                 ) {
                     (Some(date_time_a), Some(date_time_b)) => date_time_b.cmp(&date_time_a),
                     (Some(_), None) => std::cmp::Ordering::Greater,
@@ -257,8 +272,7 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
             set_blocks.set(Some(res.blocks));
             set_int_txn.set(Some(res.feetransfers));
             if let Some(Some(account)) = res.accounts.first() {
-                let account_clone: AccountActivityQueryAccounts = account.clone();
-                set_account.set(Some(account_clone));
+                set_account.set(Some(account.clone()));
             }
             if let Some(Some(delegate)) = res.delegate.first() {
                 let delegators: Vec<Option<AccountActivityQueryDelegatorExt>> = res
@@ -267,16 +281,17 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
                     .map(|stake_opt| {
                         stake_opt.map(|delegator| extend_delegator_info(&delegator, delegate))
                     })
-                    .collect::<Vec<_>>();
+                    .collect();
+
                 set_delegators.set(Some(delegators));
                 set_delegators_counts.set(
                     delegate
                         .delegation_totals
                         .as_ref()
                         .and_then(|totals| totals.count_delegates),
-                )
+                );
             }
-        };
+        }
     });
 
     create_effect(move |_| {
