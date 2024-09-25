@@ -1,27 +1,54 @@
-suite(["@tier2"], "tab count and row count", () => {
-  let tabs = ["SNARK Jobs", "User Commands", "Internal Commands"];
+import {
+  ADDRESS_WITH_SNARK_AND_BLOCK_PRODUCTION,
+  DEFAULT_ACCOUNT_PK,
+} from "../constants";
 
-  tabs.forEach((tab) =>
-    it(`match on ${tab} tab (random block audit)`, () => {
-      cy.visit("/blocks");
-      cy.clickLinkInTable(1, "State Hash", "Blocks");
+suite(["@tier2"], "number bubble in tab", () => {
+  let tabs = [
+    {
+      url: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}/commands/user`,
+      tab: "User Commands",
+      expected_row_count: 29,
+    },
+    {
+      url: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}/block-production`,
+      tab: "Block Production",
+      expected_row_count: 25,
+    },
+    {
+      url: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}/delegations`,
+      tab: "Delegations",
+      expected_row_count: 5,
+    },
+    {
+      url: `/addresses/accounts/${ADDRESS_WITH_SNARK_AND_BLOCK_PRODUCTION}/snark-jobs`,
+      tab: "SNARK Jobs",
+      expected_row_count: 25,
+    },
+    {
+      url: `/addresses/accounts/${ADDRESS_WITH_SNARK_AND_BLOCK_PRODUCTION}/commands/internal`,
+      tab: "Internal Commands",
+      expected_row_count: 2,
+    },
+  ];
 
-      cy.url().should("include", "/spotlight");
-      cy.contains("a.tab", tab).as("tab");
-      cy.get("@tab").find(".number-bubble").as("tab-count");
+  tabs.forEach(({ url, tab, expected_row_count }) =>
+    it(`matches row count on tab '${tab}' at ${url}`, () => {
+      cy.visit(url);
 
-      cy.get("@tab").click();
-      cy.get("@tab-count")
+      cy.contains("a.tab", tab).find(".number-bubble").should("not.contain", 0);
+
+      cy.contains("a.tab", tab)
+        .find(".number-bubble")
         .invoke("text")
-        .then((count) => {
-          let c = Number(count);
-          if (c > 0) {
-            cy.aliasTableRows(tab, "tr");
-            cy.get("@tr").should("have.lengthOf", c);
-          } else {
-            cy.contains("No data for this view");
-          }
+        .then(($value) => {
+          let num = parseInt($value);
+          // tabs may dipslay total count from indexer and may be greater than rendered amount
+          expect(num).to.be.at.least(expected_row_count);
         });
+
+      cy.aliasTableRows(tab, "tr");
+      cy.get("@tr").should("have.lengthOf", expected_row_count);
     }),
   );
 });
