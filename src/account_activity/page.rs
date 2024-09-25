@@ -315,7 +315,7 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
                 href: format!("/addresses/accounts/{}/commands/internal", id()),
                 text: "Internal Commands".to_string(),
                 icon: NavIcon::Transactions,
-                number_bubble: Some(blocks.get().map(|t| t.len()).unwrap_or(0)),
+                number_bubble: Some(internal_transactions.get().map(|t| t.len()).unwrap_or(0)),
                 ..Default::default()
             },
             NavEntry {
