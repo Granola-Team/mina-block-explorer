@@ -1,10 +1,27 @@
 import {
   ADDRESS_WITH_SNARK_AND_BLOCK_PRODUCTION,
   DEFAULT_ACCOUNT_PK,
+  ROMEK_BLOCK_STATE_HASH,
+  VETAL_BLOCK_STATE_HASH,
 } from "../constants";
 
 suite(["@tier2"], "number bubble in tab", () => {
   let tabs = [
+    {
+      url: `/blocks/${VETAL_BLOCK_STATE_HASH}/commands/user`,
+      tab: "User Commands",
+      expected_row_count: 2,
+    },
+    {
+      url: `/blocks/${VETAL_BLOCK_STATE_HASH}/snark-jobs`,
+      tab: "SNARK Jobs",
+      expected_row_count: 3,
+    },
+    {
+      url: `/blocks/${VETAL_BLOCK_STATE_HASH}/commands/internal`,
+      tab: "Internal Commands",
+      expected_row_count: 2,
+    },
     {
       url: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}/commands/user`,
       tab: "User Commands",
