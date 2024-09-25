@@ -239,25 +239,18 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
                 .collect();
             transactions.sort_by(|a, b| {
                 match (
-                        <std::option::Option<
-                            AccountActivityQueryDirectionalTransactions,
-                        > as Clone>::clone(a)
-                            .unwrap()
-                            .date_time,
-                        <std::option::Option<
-                            AccountActivityQueryDirectionalTransactions,
-                        > as Clone>::clone(b)
-                            .unwrap()
-                            .date_time,
-                    ) {
-                        (Some(date_time_a), Some(date_time_b)) => {
-                            date_time_b.cmp(&date_time_a)
-                        }
-                        (Some(_), None) => std::cmp::Ordering::Greater,
-                        (None, Some(_)) => std::cmp::Ordering::Less,
-                        (None, None) => std::cmp::Ordering::Equal,
-                    }
+                    a.clone()
+                        .and_then(|x: AccountActivityQueryDirectionalTransactions| x.date_time),
+                    b.clone()
+                        .and_then(|x: AccountActivityQueryDirectionalTransactions| x.date_time),
+                ) {
+                    (Some(date_time_a), Some(date_time_b)) => date_time_b.cmp(&date_time_a),
+                    (Some(_), None) => std::cmp::Ordering::Greater,
+                    (None, Some(_)) => std::cmp::Ordering::Less,
+                    (None, None) => std::cmp::Ordering::Equal,
+                }
             });
+
             let end_index = res.snarks.len().min(50);
             set_transactions.set(Some(transactions));
             set_snarks.set(Some(res.snarks[..end_index].to_vec()));
