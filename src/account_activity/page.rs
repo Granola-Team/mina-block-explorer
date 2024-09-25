@@ -323,6 +323,7 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
             blocks.get();
             account.get();
             delegators.get();
+            delegators_count.get();
             view! { <AccountSpotlightTabs /> }
         }}
         <AccountSpotlightPage />

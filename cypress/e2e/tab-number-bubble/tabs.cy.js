@@ -54,7 +54,7 @@ suite(["@tier2"], "number bubble in tab", () => {
 
       cy.contains("a.tab", tab).find(".number-bubble").as("bubble");
       cy.wait(100);
-      cy.get("@bubble").should("not.equal", 0);
+      cy.get("@bubble").should("not.equal", "0");
 
       cy.get("@bubble")
         .invoke("text")
