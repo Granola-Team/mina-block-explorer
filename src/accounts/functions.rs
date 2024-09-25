@@ -1,8 +1,5 @@
 use super::graphql::{accounts_query, AccountsQuery};
-use crate::{
-    common::{constants::GRAPHQL_ENDPOINT, models::*},
-    logging,
-};
+use crate::common::{constants::GRAPHQL_ENDPOINT, models::*};
 use graphql_client::reqwest::post_graphql;
 
 pub async fn load_data(
@@ -12,7 +9,6 @@ pub async fn load_data(
     balance: Option<i64>,
     delegate: Option<String>,
 ) -> Result<accounts_query::ResponseData, MyError> {
-    logging::log!("{:#?}", delegate.clone());
     let query =
         if public_key.is_none() && username.is_none() && balance.is_none() && delegate.is_none() {
             None
