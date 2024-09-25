@@ -1,7 +1,7 @@
-use super::models::DelegateCount;
-use super::{functions::*, models::*};
-use crate::account_activity::graphql::account_activity_query::AccountActivityQueryIncomingTransactions;
-use crate::account_activity::graphql::account_activity_query::AccountActivityQueryOutgoingTransactions;
+use super::{
+    functions::*,
+    models::{DelegateCount, *},
+};
 use crate::{
     account_activity::{
         components::{
@@ -10,7 +10,8 @@ use crate::{
         },
         graphql::account_activity_query::{
             AccountActivityQueryAccounts, AccountActivityQueryBlocks,
-            AccountActivityQueryFeetransfers, AccountActivityQuerySnarks,
+            AccountActivityQueryFeetransfers, AccountActivityQueryIncomingTransactions,
+            AccountActivityQueryOutgoingTransactions, AccountActivityQuerySnarks,
         },
         models::AccountActivityQueryDirectionalTransactions,
     },
@@ -315,16 +316,14 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
     provide_context(delegators_count);
 
     view! {
-        { move || {
+        {move || {
             transactions.get();
             internal_transactions.get();
             snarks.get();
             blocks.get();
             account.get();
             delegators.get();
-            view! {
-                <AccountSpotlightTabs />
-            }
+            view! { <AccountSpotlightTabs /> }
         }}
         <AccountSpotlightPage />
     }
@@ -396,7 +395,5 @@ pub fn AccountSpotlightTabs() -> impl IntoView {
         },
     ];
 
-    view! {
-        <TabbedPage tabs exclude_outlet=true />
-    }
+    view! { <TabbedPage tabs exclude_outlet=true /> }
 }
