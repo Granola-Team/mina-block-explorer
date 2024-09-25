@@ -29,12 +29,6 @@ impl From<reqwest::Error> for MyError {
     }
 }
 
-pub enum Status {
-    Pending,
-    Complete,
-    Unknown,
-}
-
 pub enum ColorVariant {
     Green,
     Blue,

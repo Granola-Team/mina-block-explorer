@@ -367,19 +367,6 @@ mod format_number_for_html_tests {
     }
 }
 
-pub fn get_status(timestamp: &str) -> Status {
-    match timestamp.parse::<DateTime<Utc>>() {
-        Ok(parsed_timestamp) => {
-            if Utc::now() < parsed_timestamp {
-                Status::Pending
-            } else {
-                Status::Complete
-            }
-        }
-        Err(_) => Status::Unknown,
-    }
-}
-
 pub fn convert_to_span(data: String) -> HtmlElement<html::AnyElement> {
     html::span()
         .child(data)

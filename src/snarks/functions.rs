@@ -50,10 +50,6 @@ pub async fn load_data(
         .ok_or(MyError::GraphQLEmpty("No data available".to_string()))
 }
 
-pub fn get_snark_date_time(snark: &SnarksQuerySnarks) -> String {
-    snark.date_time.map_or_else(String::new, |o| o.to_string())
-}
-
 pub fn get_block_height(snark: &SnarksQuerySnarks) -> String {
     snark
         .block_height
