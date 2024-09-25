@@ -1,7 +1,6 @@
 import {
   ADDRESS_WITH_SNARK_AND_BLOCK_PRODUCTION,
   DEFAULT_ACCOUNT_PK,
-  ROMEK_BLOCK_STATE_HASH,
   VETAL_BLOCK_STATE_HASH,
 } from "../constants";
 
@@ -53,10 +52,11 @@ suite(["@tier2"], "number bubble in tab", () => {
     it(`matches row count on tab '${tab}' at ${url}`, () => {
       cy.visit(url);
 
-      cy.contains("a.tab", tab).find(".number-bubble").should("not.contain", 0);
+      cy.contains("a.tab", tab).find(".number-bubble").as("bubble");
+      cy.wait(100);
+      cy.get("@bubble").should("not.equal", 0);
 
-      cy.contains("a.tab", tab)
-        .find(".number-bubble")
+      cy.get("@bubble")
         .invoke("text")
         .then(($value) => {
           let num = parseInt($value);
