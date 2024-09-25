@@ -181,7 +181,7 @@ pub fn AccountInternalCommandsSection(
 #[component]
 pub fn AccountDelegationsSection(
     delegations_sig: ReadSignal<Option<Vec<Option<AccountActivityQueryDelegatorExt>>>>,
-    delegator_count: Option<i64>,
+    delegator_count: Option<usize>,
     is_loading: Signal<bool>,
 ) -> impl IntoView {
     let table_columns = vec![

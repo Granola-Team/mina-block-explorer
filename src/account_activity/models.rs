@@ -10,6 +10,9 @@ use heck::ToTitleCase;
 use leptos_router::Params;
 use serde::{Deserialize, Serialize};
 
+#[derive(Copy, Clone)]
+pub struct DelegateCount(pub usize);
+
 #[derive(Params, PartialEq)]
 pub struct URLParams {
     pub id: Option<String>,
