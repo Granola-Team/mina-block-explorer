@@ -101,7 +101,7 @@ publish: clean pnpm-install
   @echo "--- Publishing"
   trunk build --release --filehash true
   @echo "Publishing version {{VERSION}}"
-  pnpm exec -- wrangler pages deploy --branch main
+  npx wrangler pages deploy --branch main
 
 # Lint application source code
 lint: pnpm-install && audit
