@@ -1,6 +1,8 @@
 use super::graphql::{accounts_query, AccountsQuery};
-use crate::common::{constants::GRAPHQL_ENDPOINT, models::*};
-use crate::logging;
+use crate::{
+    common::{constants::GRAPHQL_ENDPOINT, models::*},
+    logging,
+};
 use graphql_client::reqwest::post_graphql;
 
 pub async fn load_data(
