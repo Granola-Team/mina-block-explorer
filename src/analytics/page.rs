@@ -104,7 +104,6 @@ pub fn SnarkerLeaderboardPage() -> impl IntoView {
         <Title text="Analytics | Snarker Leaderboard" />
         <PageContainer>
             <AppSection>
-                <AnalayticsFilters block_limit=false epoch=true />
                 <SnarkerLeaderboard />
             </AppSection>
         </PageContainer>

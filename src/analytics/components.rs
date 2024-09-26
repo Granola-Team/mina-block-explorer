@@ -98,7 +98,7 @@ pub fn AnalayticsFilters(
 
 #[component]
 pub fn SnarkerLeaderboard() -> impl IntoView {
-    let (epoch_sig, _) = create_query_signal::<u32>("epoch");
+    let (epoch_sig, set_epoch) = create_query_signal::<u32>("epoch");
     let resource = create_resource(
         move || epoch_sig.get(),
         move |epoch| async move {
@@ -154,7 +154,35 @@ pub fn SnarkerLeaderboard() -> impl IntoView {
                     data_sig
                     is_loading=resource.loading()
                     section_heading="Snarker Leaderboard"
-                    controls=|| ().into_view()
+                    controls=move || {
+                        view! {
+                            <div class="flex justify-start items-baseline mr-2 md:mr-4">
+                                <label for="block-limit" class="mr-2">
+                                    "Epoch:"
+                                </label>
+                                <ControlledInput
+                                    id="epoch"
+                                    input_type="number"
+                                    name="epoch"
+                                    disabled_sig=Signal::from(|| false)
+                                    value=epoch_sig.get().map(|s| s.to_string()).unwrap_or_default()
+                                    setter_sig=SignalSetter::map(move |opt_str: Option<String>| {
+                                        set_epoch
+                                            .set(
+                                                opt_str
+                                                    .map(|v_str| v_str.parse::<u32>().ok().unwrap_or_default()),
+                                            )
+                                    })
+
+                                    number_props=HashMap::from([
+                                        ("step".to_string(), "1".to_string()),
+                                        ("min".to_string(), "0".to_string()),
+                                        ("max".to_string(), "1000".to_string()),
+                                    ])
+                                />
+                            </div>
+                        }
+                    }
                 />
             }
         }
