@@ -73,10 +73,8 @@ pub fn SnarksAnalyticsPage() -> impl IntoView {
         <Title text="Analytics | SNARKs" />
         <PageContainer>
             <AppSection>
-                <AppHeading heading="Filters" />
+                <AppHeading heading="SNARK Analytics" />
                 <AnalayticsFilters />
-            </AppSection>
-            <AppSection>
                 <AnalyticsLayout>
                     {move || {
                         limit_sig.get();
@@ -106,10 +104,9 @@ pub fn SnarkerLeaderboardPage() -> impl IntoView {
         <Title text="Analytics | Snarker Leaderboard" />
         <PageContainer>
             <AppSection>
-                <AppHeading heading="Filters" />
                 <AnalayticsFilters block_limit=false epoch=true />
+                <SnarkerLeaderboard />
             </AppSection>
-            <SnarkerLeaderboard />
         </PageContainer>
     }
 }
@@ -120,10 +117,9 @@ pub fn StakerLeaderboardPage() -> impl IntoView {
         <Title text="Analytics | Staker Leaderboard" />
         <PageContainer>
             <AppSection>
-                <AppHeading heading="Filters" />
                 <AnalayticsFilters block_limit=false epoch=true />
+                <StakerLeaderboard />
             </AppSection>
-            <StakerLeaderboard />
         </PageContainer>
     }
 }
@@ -135,11 +131,8 @@ pub fn UserCommandsAnalyticsPage() -> impl IntoView {
         <Title text="Analytics | User Commands" />
         <PageContainer>
             <AppSection>
-                <AppHeading heading="Filters" />
-                <AnalayticsFilters />
-            </AppSection>
-            <AppSection>
                 <AppHeading heading="User Commands Analytics" />
+                <AnalayticsFilters />
                 <AnalyticsLayout>
                     {move || {
                         limit_sig.get();
