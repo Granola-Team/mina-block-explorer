@@ -75,11 +75,20 @@ pub async fn load_data(
     delegate: Option<String>,
     stake: Option<String>,
 ) -> Result<staking_ledgers_query::ResponseData, MyError> {
+    if stake.is_some() {
+        if normalize_number_format(stake.as_deref().unwrap()).is_err() {
+            return Err(MyError::ParseError(
+                "Unable to normalize stake input".to_string(),
+            ));
+        }
+    }
     let variables = staking_ledgers_query::Variables {
         sort_by: staking_ledgers_query::StakeSortByInput::STAKE_DESC,
         limit: Some(TABLE_ROW_LIMIT as i64),
         query: staking_ledgers_query::StakeQueryInput {
-            stake_lte: stake,
+            stake_lte: stake
+                .as_deref()
+                .map(|num| normalize_number_format(num).ok().unwrap()),
             public_key,
             delegate,
             epoch: epoch.map(|x| x as i64),
