@@ -871,7 +871,12 @@ pub fn normalize_number_format(number: &str) -> Result<String, String> {
     }
 
     // Clean up LHS (remove thousands separators like spaces, dots, or commas)
-    let lhs: String = parts[0].replace([',', '.', ' '], "");
+    let mut lhs: String = parts[0].replace([',', '.', ' '], "");
+
+    // If there's no integer part, replace with "0"
+    if lhs.is_empty() {
+        lhs = "0".to_string();
+    }
 
     // Clean up RHS (remove any non-digit characters such as commas or dots)
     let rhs: String = parts[1].replace([',', '.', ' '], "");
