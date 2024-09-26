@@ -2,10 +2,11 @@ use super::{
     graphql::account_activity_query::{AccountActivityQueryBlocks, AccountActivityQuerySnarks},
     models::AccountActivityQueryDirectionalTransactions,
 };
-use crate::account_activity::graphql::account_activity_query::AccountActivityQueryAccounts;
 use crate::{
     account_activity::{
-        graphql::account_activity_query::AccountActivityQueryFeetransfers,
+        graphql::account_activity_query::{
+            AccountActivityQueryAccounts, AccountActivityQueryFeetransfers,
+        },
         models::AccountActivityQueryDelegatorExt,
     },
     common::{components::*, constants::*, models::*, table::*},
@@ -86,7 +87,11 @@ pub fn AccountTransactionsSection(
                             transactions_sig.get().map(|a| a.len()).unwrap_or_default(),
                         )
                         .unwrap_or_default(),
-                    available_records: account.get().and_then(|a| a.pk_total_num_user_commands.and_then(|t| u64::try_from(t).ok())),
+                    available_records: account
+                        .get()
+                        .and_then(|a| {
+                            a.pk_total_num_user_commands.and_then(|t| u64::try_from(t).ok())
+                        }),
                 })
             })
 
