@@ -6,6 +6,14 @@ type Account {
   delegate: String
   timeLocked: Boolean
   is_genesis_account: Boolean
+  pk_epoch_num_blocks: Int
+  pk_total_num_blocks: Int
+  pk_epoch_num_snarks: Int
+  pk_total_num_snarks: Int
+  pk_epoch_num_user_commands: Int
+  pk_total_num_user_commands: Int
+  pk_epoch_num_internal_commands: Int
+  pk_total_num_internal_commands: Int
 }
 
 input AccountQueryInput {
