@@ -439,6 +439,22 @@ let test_suite_data = [
             );
           },
         },
+        {
+          column: "Stake",
+          input: "37,123,109.762455837",
+          assertion: function () {
+            cy.aliasTableRows("Staking Ledger - Epoch 20", "table-rows");
+            cy.assertForEachColumnValue(
+              "Staking Ledger - Epoch 20",
+              "Stake",
+              (text) => {
+                expect(parseFloat(text)).to.be.lte(
+                  parseFloat("37,123,109.762455837"),
+                );
+              },
+            );
+          },
+        },
       ],
     },
     tests: [
