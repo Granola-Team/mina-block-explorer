@@ -166,11 +166,11 @@ pub fn AccountInternalCommandsSection(
                             txn_sig.get().map(|a| a.len()).unwrap_or_default(),
                         )
                         .unwrap_or_default(),
-                        available_records: account
-                            .get()
-                            .and_then(|a| {
-                                a.pk_total_num_internal_commands.and_then(|t| u64::try_from(t).ok())
-                            }),
+                    available_records: account
+                        .get()
+                        .and_then(|a| {
+                            a.pk_total_num_internal_commands.and_then(|t| u64::try_from(t).ok())
+                        }),
                 })
             })
 
@@ -249,6 +249,8 @@ pub fn AccountOverviewSnarkJobTable(
     snarks_sig: ReadSignal<Option<Vec<Option<AccountActivityQuerySnarks>>>>,
     is_loading: Signal<bool>,
 ) -> impl IntoView {
+    let account = use_context::<ReadSignal<Option<AccountActivityQueryAccounts>>>()
+        .expect("there to be an optional account provided");
     let (summary_sig, _, _) =
         use_local_storage::<BlockchainSummary, JsonSerdeCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
     let memo_params_map = use_params_map();
@@ -305,7 +307,9 @@ pub fn AccountOverviewSnarkJobTable(
                             snarks_sig.get().map(|a| a.len()).unwrap_or_default(),
                         )
                         .unwrap_or_default(),
-                    available_records: None,
+                    available_records: account
+                        .get()
+                        .and_then(|a| { a.pk_total_num_snarks.and_then(|t| u64::try_from(t).ok()) }),
                 })
             })
 
