@@ -848,8 +848,6 @@ pub fn pill_variant_to_style_str(pill_variant: ColorVariant) -> String {
 
 pub fn normalize_number_format(number: &str) -> Result<String, String> {
     let delim: char;
-    let lhs: String;
-    let rhs: String;
 
     // Determine the decimal separator
     if number.contains('.') && number.contains(',') {
@@ -873,10 +871,10 @@ pub fn normalize_number_format(number: &str) -> Result<String, String> {
     }
 
     // Clean up LHS (remove thousands separators like spaces, dots, or commas)
-    lhs = parts[0].replace(',', "").replace('.', "").replace(' ', "");
+    let lhs: String = parts[0].replace([',', '.', ' '], "");
 
     // Clean up RHS (remove any non-digit characters such as commas or dots)
-    rhs = parts[1].replace(',', "").replace('.', "").replace(' ', "");
+    let rhs: String = parts[1].replace([',', '.', ' '], "");
 
     // Return the normalized number with a single dot separating LHS and RHS
     Ok(format!("{}.{}", lhs, rhs))
