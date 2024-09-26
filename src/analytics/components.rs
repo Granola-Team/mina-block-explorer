@@ -158,6 +158,7 @@ pub fn SnarkerLeaderboard() -> impl IntoView {
                     is_loading=resource.loading()
                     section_heading="Snarker Leaderboard"
                     controls=move || {
+                        epoch_sig.get();
                         view! {
                             <div class="flex justify-start items-baseline mr-2 md:mr-4">
                                 <label for="block-limit" class="mr-2">
@@ -168,7 +169,7 @@ pub fn SnarkerLeaderboard() -> impl IntoView {
                                     input_type="number"
                                     name="epoch"
                                     disabled_sig=Signal::from(|| false)
-                                    value=epoch_sig.get().map(|s| s.to_string()).unwrap_or_default()
+                                    value=epoch_sig.get().map(|s| s.to_string()).unwrap_or("0".to_string())
                                     setter_sig=SignalSetter::map(move |opt_str: Option<String>| {
                                         set_epoch
                                             .set(
@@ -259,6 +260,7 @@ pub fn StakerLeaderboard() -> impl IntoView {
                     is_loading=resource.loading()
                     section_heading="Staker Leaderboard"
                     controls=move || {
+                        epoch_sig.get();
                         view! {
                             <div class="flex justify-start items-baseline mr-2 md:mr-4">
                                 <label for="block-limit" class="mr-2">
@@ -269,7 +271,7 @@ pub fn StakerLeaderboard() -> impl IntoView {
                                     input_type="number"
                                     name="epoch"
                                     disabled_sig=Signal::from(|| false)
-                                    value=epoch_sig.get().map(|s| s.to_string()).unwrap_or_default()
+                                    value=epoch_sig.get().map(|s| s.to_string()).unwrap_or("0".to_string())
                                     setter_sig=SignalSetter::map(move |opt_str: Option<String>| {
                                         set_epoch
                                             .set(
