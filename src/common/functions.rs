@@ -845,3 +845,124 @@ pub fn pill_variant_to_style_str(pill_variant: ColorVariant) -> String {
         ColorVariant::Orange => "bg-amber-600".to_string(),
     }
 }
+
+pub fn normalize_number_format(number: &str) -> Result<String, String> {
+    let delim: char;
+
+    // Determine the decimal separator
+    if number.contains('.') && number.contains(',') {
+        if number.rfind('.') > number.rfind(',') {
+            delim = '.';
+        } else {
+            delim = ',';
+        }
+    } else if number.contains('.') {
+        delim = '.';
+    } else if number.contains(',') {
+        delim = ',';
+    } else {
+        return Err("Number does not have a valid decimal separator.".into());
+    }
+
+    // Split into LHS and RHS based on the determined decimal separator
+    let parts: Vec<&str> = number.split(delim).collect();
+    if parts.len() != 2 {
+        return Err("Invalid number format.".into());
+    }
+
+    // Clean up LHS (remove thousands separators like spaces, dots, or commas)
+    let mut lhs: String = parts[0].replace([',', '.', ' '], "");
+
+    // If there's no integer part, replace with "0"
+    if lhs.is_empty() {
+        lhs = "0".to_string();
+    }
+
+    // Clean up RHS (remove any non-digit characters such as commas or dots)
+    let rhs: String = parts[1].replace([',', '.', ' '], "");
+
+    // Return the normalized number with a single dot separating LHS and RHS
+    Ok(format!("{}.{}", lhs, rhs))
+}
+
+#[cfg(test)]
+mod normalize_number_format_tests {
+    use super::normalize_number_format;
+
+    #[test]
+    fn test_dot_separator() {
+        let number = "123.456"; // English format
+        let result = normalize_number_format(number);
+        assert_eq!(result, Ok("123.456".to_string()));
+    }
+
+    #[test]
+    fn test_comma_separator() {
+        let number = "123,456"; // French/German format
+        let result = normalize_number_format(number);
+        assert_eq!(result, Ok("123.456".to_string()));
+    }
+
+    #[test]
+    fn test_both_separators_dot_last() {
+        let number = "1,234.56"; // English format with thousands separator
+        let result = normalize_number_format(number);
+        assert_eq!(result, Ok("1234.56".to_string()));
+    }
+
+    #[test]
+    fn test_both_separators_comma_last() {
+        let number = "1.234,56"; // German format with thousands separator
+        let result = normalize_number_format(number);
+        assert_eq!(result, Ok("1234.56".to_string()));
+    }
+
+    #[test]
+    fn test_no_separator() {
+        let number = "123456"; // No decimal separator
+        let result = normalize_number_format(number);
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_only_integer_part() {
+        let number = "123."; // Only integer part
+        let result = normalize_number_format(number);
+        assert_eq!(result, Ok("123.".to_string()));
+    }
+
+    #[test]
+    fn test_only_fractional_part() {
+        let number = ".456"; // Only fractional part
+        let result = normalize_number_format(number);
+        assert_eq!(result, Ok("0.456".to_string()));
+    }
+
+    #[test]
+    fn test_trailing_zeros_dot() {
+        let number = "123.000"; // English format with trailing zeros
+        let result = normalize_number_format(number);
+        assert_eq!(result, Ok("123.000".to_string()));
+    }
+
+    #[test]
+    fn test_trailing_zeros_comma() {
+        let number = "123,000"; // French/German format with trailing zeros
+        let result = normalize_number_format(number);
+        assert_eq!(result, Ok("123.000".to_string()));
+    }
+
+    #[test]
+    fn test_french_format() {
+        let number = "1 234,56"; // French format with space as thousands separator
+        let result = normalize_number_format(number);
+        assert_eq!(result, Ok("1234.56".to_string()));
+    }
+
+    #[test]
+    fn test_german_format() {
+        let number = "1.234,56"; // German format with dot as thousands separator
+        let result = normalize_number_format(number);
+        assert_eq!(result, Ok("1234.56".to_string()));
+    }
+}

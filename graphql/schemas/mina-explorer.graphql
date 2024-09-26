@@ -2898,6 +2898,7 @@ input StakeTimingUpdateInput {
 }
 
 input StakeQueryInput {
+  stake_lte: String
   timing_exists: Boolean
   chainId_gte: String
   balance_ne: Float

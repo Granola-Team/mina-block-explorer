@@ -18,6 +18,7 @@ pub struct StakingLedgersQuery;
 impl Default for StakeQueryInput {
     fn default() -> Self {
         StakeQueryInput {
+            stake_lte: None,
             timing_exists: None,
             chain_id_gte: None,
             balance_ne: None,
