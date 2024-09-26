@@ -117,7 +117,6 @@ pub fn StakerLeaderboardPage() -> impl IntoView {
         <Title text="Analytics | Staker Leaderboard" />
         <PageContainer>
             <AppSection>
-                <AnalayticsFilters block_limit=false epoch=true />
                 <StakerLeaderboard />
             </AppSection>
         </PageContainer>
