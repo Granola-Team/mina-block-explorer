@@ -11,11 +11,8 @@ pub fn BlocksAnalyticsPage() -> impl IntoView {
         <Title text="Analytics | Blocks" />
         <PageContainer>
             <AppSection>
-                <AppHeading heading="Filters" />
-                <AnalayticsFilters />
-            </AppSection>
-            <AppSection>
                 <AppHeading heading="Blocks Analytics" />
+                <AnalayticsFilters />
                 <AnalyticsLayout>
                     {move || {
                         limit_sig.get();
