@@ -99,6 +99,9 @@ pub fn AnalayticsFilters(
 #[component]
 pub fn SnarkerLeaderboard() -> impl IntoView {
     let (epoch_sig, set_epoch) = create_query_signal::<u32>("epoch");
+    if epoch_sig.get_untracked().is_none() {
+        set_epoch.set(Some(0u32));
+    }
     let resource = create_resource(
         move || epoch_sig.get(),
         move |epoch| async move {
@@ -192,6 +195,9 @@ pub fn SnarkerLeaderboard() -> impl IntoView {
 #[component]
 pub fn StakerLeaderboard() -> impl IntoView {
     let (epoch_sig, set_epoch) = create_query_signal::<u32>("epoch");
+    if epoch_sig.get_untracked().is_none() {
+        set_epoch.set(Some(0u32));
+    }
     let resource = create_resource(
         move || epoch_sig.get(),
         move |epoch| async move {
