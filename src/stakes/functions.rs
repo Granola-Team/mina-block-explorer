@@ -73,11 +73,13 @@ pub async fn load_data(
     epoch: Option<u64>,
     public_key: Option<String>,
     delegate: Option<String>,
+    stake: Option<String>,
 ) -> Result<staking_ledgers_query::ResponseData, MyError> {
     let variables = staking_ledgers_query::Variables {
         sort_by: staking_ledgers_query::StakeSortByInput::STAKE_DESC,
         limit: Some(TABLE_ROW_LIMIT as i64),
         query: staking_ledgers_query::StakeQueryInput {
+            stake_lte: stake,
             public_key,
             delegate,
             epoch: epoch.map(|x| x as i64),
