@@ -12,7 +12,7 @@ pub fn BlocksAnalyticsPage() -> impl IntoView {
         <PageContainer>
             <AppSection>
                 <AppHeading heading="Blocks Analytics" />
-                <AnalayticsFilters />
+                <AnalyticsFilters />
                 <AnalyticsLayout>
                     {move || {
                         limit_sig.get();
@@ -74,7 +74,7 @@ pub fn SnarksAnalyticsPage() -> impl IntoView {
         <PageContainer>
             <AppSection>
                 <AppHeading heading="SNARK Analytics" />
-                <AnalayticsFilters />
+                <AnalyticsFilters />
                 <AnalyticsLayout>
                     {move || {
                         limit_sig.get();
@@ -130,7 +130,7 @@ pub fn UserCommandsAnalyticsPage() -> impl IntoView {
         <PageContainer>
             <AppSection>
                 <AppHeading heading="User Commands Analytics" />
-                <AnalayticsFilters />
+                <AnalyticsFilters />
                 <AnalyticsLayout>
                     {move || {
                         limit_sig.get();

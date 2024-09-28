@@ -8,7 +8,7 @@ use leptos_router::create_query_signal;
 use std::collections::HashMap;
 
 #[component]
-pub fn AnalayticsFilters(
+pub fn AnalyticsFilters(
     #[prop(optional)] epoch: bool,
     #[prop(optional, default = true)] block_limit: bool,
 ) -> impl IntoView {
