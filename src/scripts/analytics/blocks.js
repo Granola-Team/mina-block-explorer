@@ -85,6 +85,7 @@ function renderCoinbaseRewardsChart(data, myChart) {
       {
         data: rewards,
         type: "line",
+        areaStyle: { ...SERIES_LINE_AREA_STYLES },
         smooth: true,
         yAxisIndex: 0,
         tooltip: {

@@ -79,22 +79,28 @@ setTimeout(async () => {
       ...TOOLTIP_DEFAULT,
     },
     title: {
+      ...TITLE_DEFAULT,
       text: `Fees by block with averages`,
-      left: "center",
     },
+    grid: { ...GRID_DEFAULT },
     xAxis: {
+      ...X_AXIS_DEFAULT,
       type: "category",
+      name: "Block Height",
       data: heights,
     },
     yAxis: [
       {
+        ...Y_AXIS_DEFAULT,
         type: "value",
-        name: "Avg Fee Per Block",
+        name: "Avg Fee Per Block (MINA)",
         axisLabel: {
-          formatter: (value) => `${value} MINA`,
+          ...Y_AXIS_AXIS_LABEL_DEFAULT,
+          formatter: (value) => `${value}`,
         },
       },
       {
+        ...Y_AXIS_DEFAULT,
         type: "value",
         name: "Fees Per Block",
         position: "right",
@@ -104,6 +110,7 @@ setTimeout(async () => {
       {
         data: avgFees,
         type: "line",
+        areaStyle: { ...SERIES_LINE_AREA_STYLES },
         yAxisIndex: 0,
         tooltip: {
           valueFormatter: (value) => `${value.toFixed(5)} MINA`,
@@ -119,8 +126,6 @@ setTimeout(async () => {
       },
     ],
   };
-
-  console.log(option);
 
   option && myChart.setOption(option);
 }, 1000);

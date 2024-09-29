@@ -157,8 +157,8 @@ setTimeout(async () => {
       },
       {
         name: "transfers",
-        type: "scatter",
-        symbolSize: 12,
+        type: "line",
+        areaStyle: { ...SERIES_LINE_AREA_STYLES },
         data: Object.values(data).map((fees, i) => ["" + i, fees.length]),
         yAxisIndex: 1,
         tooltip: {

@@ -55,6 +55,7 @@ const X_AXIS_DEFAULT = {
 const BAR_SERIES_DEFAULT = {
   barMaxWidth: 40,
 };
+const SERIES_LINE_AREA_STYLES = {};
 
 function getBlockLimit() {
   const queryString = window.location.search;
