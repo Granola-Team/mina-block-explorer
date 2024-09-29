@@ -1,6 +1,6 @@
 setTimeout(async () => {
   const blockLimit = getBlockLimit();
-  const groupSize = 10;
+  const groupSize = 50;
 
   let chartDom = document.getElementById("chart");
   window.addEventListener("resize", function () {
@@ -59,12 +59,13 @@ setTimeout(async () => {
 
   option = {
     title: {
-      text: `Fee Transfers in the last ${blockLimit} blocks`,
-      left: "center",
+      ...TITLE_DEFAULT,
+      text: `Fee Transfers`,
     },
     tooltip: {
       ...TOOLTIP_DEFAULT,
     },
+    grid: { ...GRID_DEFAULT },
     dataset: [
       {
         source: Object.entries(data).map(([_, fees]) => [...fees]),
@@ -81,9 +82,11 @@ setTimeout(async () => {
       },
     ],
     xAxis: {
+      ...X_AXIS_DEFAULT,
       type: "category",
       name: "Global Slot",
       axisLabel: {
+        ...X_AXIS_LABEL_DEFAULT,
         formatter: function (value) {
           return xAxis[value];
         },
@@ -91,19 +94,23 @@ setTimeout(async () => {
     },
     yAxis: [
       {
+        ...Y_AXIS_DEFAULT,
         type: "value",
-        name: "Fee",
+        name: "Fee (MINA)",
         axisLabel: {
+          ...Y_AXIS_AXIS_LABEL_DEFAULT,
           formatter: function (value) {
-            return `${value} MINA`;
+            return `${value}`;
           },
         },
       },
       {
+        ...Y_AXIS_DEFAULT,
         type: "value",
         name: "Transfers Count",
         position: "right",
         axisLabel: {
+          ...Y_AXIS_AXIS_LABEL_DEFAULT,
           formatter: function (value) {
             return `${value}`;
           },

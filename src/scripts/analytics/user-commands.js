@@ -11,6 +11,7 @@ function renderTopTransfersChart(data, myChart) {
       text: `Transfers with highest values`,
       ...TITLE_DEFAULT,
     },
+    grid: { ...GRID_DEFAULT },
     xAxis: {
       type: "value",
       name: "Txn amount (MINA)",
