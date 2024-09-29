@@ -15,7 +15,7 @@ function renderCanonicalVsNonCanonicalChart(data, myChart) {
     },
     title: {
       text: `Blocks`,
-      left: "center",
+      left: "0",
     },
     xAxis: {
       type: "category",
@@ -58,9 +58,10 @@ function renderCoinbaseRewardsChart(data, myChart) {
       position: "top",
     },
     title: {
+      ...TITLE_DEFAULT,
       text: `Coinbase Rewards`,
-      left: "center",
     },
+    grid: { ...GRID_DEFAULT },
     xAxis: {
       type: "category",
       name: "Global Slot",
@@ -69,8 +70,10 @@ function renderCoinbaseRewardsChart(data, myChart) {
     yAxis: {
       type: "value",
       name: "Coinbase Rewards",
+      ...Y_AXIS_DEFAULT,
       axisLabel: {
-        formatter: (value) => `${(value / 1e12).toFixed(0)}k MINA`, // Display values in trillions
+        ...Y_AXIS_AXIS_LABEL_DEFAULT,
+        formatter: (value) => `${(value / 1e12).toFixed(0)}k MINA`,
       },
     },
     series: [
