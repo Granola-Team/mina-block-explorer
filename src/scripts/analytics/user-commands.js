@@ -111,6 +111,7 @@ function renderTransactionVolumeChart(data, myChart) {
 
   option = {
     tooltip: { ...TOOLTIP_DEFAULT },
+    color: [...CHART_COLORS],
     title: {
       ...TITLE_DEFAULT,
       text: `Transaction volume by day`,

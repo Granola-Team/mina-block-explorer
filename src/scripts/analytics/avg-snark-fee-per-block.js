@@ -78,6 +78,7 @@ setTimeout(async () => {
     tooltip: {
       ...TOOLTIP_DEFAULT,
     },
+    color: [...CHART_COLORS],
     title: {
       ...TITLE_DEFAULT,
       text: `Fees by block with averages`,

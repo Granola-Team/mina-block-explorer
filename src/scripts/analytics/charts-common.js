@@ -1,3 +1,4 @@
+const CHART_COLORS = ["#7BBBCA", "#A57B66", "#E2918F", "#629EDE", "#84BD7C"];
 const TOOLTIP_DEFAULT = { position: "top" };
 const AXIS_NAME_TEXT_STYLE = {
   fontWeight: 700,
@@ -55,7 +56,7 @@ const X_AXIS_DEFAULT = {
 const BAR_SERIES_DEFAULT = {
   barMaxWidth: 40,
 };
-const SERIES_LINE_AREA_STYLES = {};
+const SERIES_LINE_AREA_STYLES = { opacity: 0.5 };
 
 function getBlockLimit() {
   const queryString = window.location.search;

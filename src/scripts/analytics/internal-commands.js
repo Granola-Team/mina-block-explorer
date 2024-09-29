@@ -62,6 +62,7 @@ setTimeout(async () => {
       ...TITLE_DEFAULT,
       text: `Fee Transfers`,
     },
+    color: [...CHART_COLORS],
     tooltip: {
       ...TOOLTIP_DEFAULT,
     },
@@ -158,7 +159,6 @@ setTimeout(async () => {
       {
         name: "transfers",
         type: "line",
-        areaStyle: { ...SERIES_LINE_AREA_STYLES },
         data: Object.values(data).map((fees, i) => ["" + i, fees.length]),
         yAxisIndex: 1,
         tooltip: {

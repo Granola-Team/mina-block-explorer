@@ -13,6 +13,7 @@ function renderCanonicalVsNonCanonicalChart(data, myChart) {
     tooltip: {
       ...TOOLTIP_DEFAULT,
     },
+    color: [...CHART_COLORS],
     title: {
       ...TITLE_DEFAULT,
       text: "Blocks",
