@@ -37,6 +37,11 @@ const Y_AXIS_DEFAULT = {
     ...Y_AXIS_AXIS_LABEL_DEFAULT,
   },
 };
+const X_AXIS_LABEL_DEFAULT = {
+  fontWeight: 700,
+  fontSize: 12,
+  color: "#21252D",
+};
 const X_AXIS_DEFAULT = {
   nameLocation: "middle",
   nameGap: 20,
@@ -44,10 +49,11 @@ const X_AXIS_DEFAULT = {
     ...AXIS_NAME_TEXT_STYLE,
   },
   axisLabel: {
-    fontWeight: 700,
-    fontSize: 12,
-    color: "#21252D",
+    ...X_AXIS_LABEL_DEFAULT,
   },
+};
+const BAR_SERIES_DEFAULT = {
+  barMaxWidth: 40,
 };
 
 function getBlockLimit() {

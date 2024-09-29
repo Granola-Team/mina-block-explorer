@@ -37,11 +37,11 @@ function renderCanonicalVsNonCanonicalChart(data, myChart) {
         name: "Non-canonical Blocks",
       },
       {
+        ...BAR_SERIES_DEFAULT,
         data: canonical_blocks,
         type: "bar",
         stack: "block",
         name: "Canonical Blocks",
-        barMaxWidth: 40,
       },
     ],
   };

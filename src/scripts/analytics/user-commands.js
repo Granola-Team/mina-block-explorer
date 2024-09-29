@@ -9,21 +9,23 @@ function renderTopTransfersChart(data, myChart) {
     },
     title: {
       text: `Transfers with highest values`,
-      left: "center",
+      ...TITLE_DEFAULT,
     },
     xAxis: {
       type: "value",
       name: "Txn amount (MINA)",
-      nameLocation: "middle",
-      nameTextStyle: { padding: [8, 0, 0, 0] },
+      ...X_AXIS_DEFAULT,
       axisLabel: {
+        ...X_AXIS_LABEL_DEFAULT,
         formatter: (value) => (value / 1e12).toFixed(2) + "k",
       },
     },
     yAxis: {
+      ...Y_AXIS_DEFAULT,
       type: "category",
       data: data.map(([hash, _amount]) => hash),
       axisLabel: {
+        ...Y_AXIS_AXIS_LABEL_DEFAULT,
         formatter: (value) => "..." + value.slice(-6),
       },
     },
@@ -57,28 +59,28 @@ function renderTopRecipientsChart(dataMap, myChart) {
   myChart.hideLoading();
 
   option = {
-    tooltip: {
-      position: "top",
-    },
+    tooltip: { ...TOOLTIP_DEFAULT },
     title: {
+      ...TITLE_DEFAULT,
       text: `Most frequent recipients`,
-      left: "center",
     },
     xAxis: {
       type: "value",
       name: "Txn recieved",
-      nameLocation: "middle",
-      nameTextStyle: { padding: [8, 0, 0, 0] },
+      ...X_AXIS_DEFAULT,
     },
     yAxis: {
+      ...Y_AXIS_DEFAULT,
       type: "category",
       data: data.map(([recipient, _count]) => recipient),
       axisLabel: {
+        ...Y_AXIS_AXIS_LABEL_DEFAULT,
         formatter: (value) => "..." + value.slice(-6),
       },
     },
     series: [
       {
+        ...BAR_SERIES_DEFAULT,
         data: data.map(([_recipient, count]) => count),
         type: "bar",
       },
@@ -107,27 +109,29 @@ function renderTransactionVolumeChart(data, myChart) {
   myChart.hideLoading();
 
   option = {
-    tooltip: {
-      position: "top",
-    },
+    tooltip: { ...TOOLTIP_DEFAULT },
     title: {
+      ...TITLE_DEFAULT,
       text: `Transaction volume by day`,
-      left: "center",
     },
     xAxis: {
+      ...X_AXIS_DEFAULT,
       type: "category",
       data: dates,
     },
     yAxis: [
       {
+        ...Y_AXIS_DEFAULT,
         type: "value",
         name: "Txn Count",
       },
       {
+        ...Y_AXIS_DEFAULT,
         type: "value",
         name: "Txn Amount (millions of MINA)",
         position: "right",
         axisLabel: {
+          ...Y_AXIS_AXIS_LABEL_DEFAULT,
           formatter: (value) => `${(value / 1e15).toFixed(2)}`,
         },
       },
@@ -143,6 +147,7 @@ function renderTransactionVolumeChart(data, myChart) {
         },
       },
       {
+        ...BAR_SERIES_DEFAULT,
         data: amounts,
         type: "bar",
         yAxisIndex: 1,
