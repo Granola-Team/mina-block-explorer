@@ -63,10 +63,7 @@ setTimeout(async () => {
       left: "center",
     },
     tooltip: {
-      trigger: "item",
-      axisPointer: {
-        type: "shadow",
-      },
+      ...TOOLTIP_DEFAULT,
     },
     dataset: [
       {

@@ -5,7 +5,7 @@ function renderTopTransfersChart(data, myChart) {
 
   option = {
     tooltip: {
-      position: "top",
+      ...TOOLTIP_DEFAULT,
     },
     title: {
       text: `Transfers with highest values`,

@@ -76,7 +76,7 @@ setTimeout(async () => {
 
   option = {
     tooltip: {
-      position: "top",
+      ...TOOLTIP_DEFAULT,
     },
     title: {
       text: `Fees by block with averages`,

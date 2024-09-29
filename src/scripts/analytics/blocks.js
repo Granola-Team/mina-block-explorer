@@ -11,7 +11,7 @@ function renderCanonicalVsNonCanonicalChart(data, myChart) {
 
   option = {
     tooltip: {
-      position: "top",
+      ...TOOLTIP_DEFAULT,
     },
     title: {
       ...TITLE_DEFAULT,
