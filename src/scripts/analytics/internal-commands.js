@@ -1,5 +1,5 @@
 setTimeout(async () => {
-  const blockLimit = 500;
+  const blockLimit = getBlockLimit();
   const groupSize = 10;
 
   let chartDom = document.getElementById("chart");
@@ -31,7 +31,7 @@ setTimeout(async () => {
             }
           }
         }
-      } 
+      }
     `,
     }),
   });

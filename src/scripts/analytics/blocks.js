@@ -90,9 +90,7 @@ function renderCoinbaseRewardsChart(data, myChart) {
 }
 
 setTimeout(async () => {
-  const queryString = window.location.search;
-  const urlParams = new URLSearchParams(queryString);
-  const blockLimit = urlParams.get("limit") || 1000;
+  const blockLimit = getBlockLimit();
   let summary_response = await fetch(config.rest_endpoint + "/summary", {
     method: "GET",
     headers: {
