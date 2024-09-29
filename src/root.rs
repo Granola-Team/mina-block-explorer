@@ -42,6 +42,10 @@ pub fn Root() -> impl IntoView {
                 REST_ENDPOINT,
             )}
         </script>
+        <script
+            src="/scripts/analytics/charts-common.js"
+            defer=true
+        ></script>
         <SummaryLocalStorage />
         // TODO: loading 1000 blocks is too expensive for now
         // <BlocksLocalStorage/>
