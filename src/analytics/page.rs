@@ -52,12 +52,12 @@ pub fn BlocksAnalyticsPage() -> impl IntoView {
                                     variant=ColorVariant::Orange
                                 />
                             </AnalyticsSmContainer>
-                            <AnalyticsXLContainer>
+                            <AnalyticsLgContainer>
                                 <div id="rewards" class="w-full h-96"></div>
-                            </AnalyticsXLContainer>
-                            <AnalyticsXLContainer>
+                            </AnalyticsLgContainer>
+                            <AnalyticsLgContainer>
                                 <div id="blocks" class="w-full h-96"></div>
-                            </AnalyticsXLContainer>
+                            </AnalyticsLgContainer>
                         }
                     }}
                 </AnalyticsLayout>
