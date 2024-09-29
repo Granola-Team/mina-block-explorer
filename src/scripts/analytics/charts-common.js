@@ -1,6 +1,13 @@
 const TOOLTIP_DEFAULT = { position: "top" };
+const AXIS_NAME_TEXT_STYLE = {
+  fontWeight: 700,
+  fontFamily: "system-ui",
+  fontSize: 12,
+  lineHeight: 16,
+  color: "#21252D",
+};
 const TITLE_DEFAULT = {
-  left: 25,
+  left: 15,
   textStyle: {
     fontWeight: 600,
     fontFamily: "system-ui",
@@ -14,15 +21,32 @@ const GRID_DEFAULT = {
   containLabel: true,
 };
 const Y_AXIS_AXIS_LABEL_DEFAULT = {
-  inside: true,
   showMinLabel: false,
+  fontWeight: 700,
+  fontSize: 12,
+  color: "#21252D",
 };
 const Y_AXIS_DEFAULT = {
   nameLocation: "middle",
   nameRotate: 90,
-  nameGap: 20,
+  nameGap: 35,
+  nameTextStyle: {
+    ...AXIS_NAME_TEXT_STYLE,
+  },
   axisLabel: {
     ...Y_AXIS_AXIS_LABEL_DEFAULT,
+  },
+};
+const X_AXIS_DEFAULT = {
+  nameLocation: "middle",
+  nameGap: 20,
+  nameTextStyle: {
+    ...AXIS_NAME_TEXT_STYLE,
+  },
+  axisLabel: {
+    fontWeight: 700,
+    fontSize: 12,
+    color: "#21252D",
   },
 };
 

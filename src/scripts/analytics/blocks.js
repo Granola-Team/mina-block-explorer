@@ -14,10 +14,12 @@ function renderCanonicalVsNonCanonicalChart(data, myChart) {
       position: "top",
     },
     title: {
-      text: `Blocks`,
-      left: "0",
+      ...TITLE_DEFAULT,
+      text: "Blocks",
     },
+    grid: { ...GRID_DEFAULT },
     xAxis: {
+      ...X_AXIS_DEFAULT,
       type: "category",
       name: "Global Slot",
       data: slots,
@@ -25,6 +27,7 @@ function renderCanonicalVsNonCanonicalChart(data, myChart) {
     yAxis: {
       type: "value",
       name: "Block Count",
+      ...Y_AXIS_DEFAULT,
     },
     series: [
       {
@@ -38,6 +41,7 @@ function renderCanonicalVsNonCanonicalChart(data, myChart) {
         type: "bar",
         stack: "block",
         name: "Canonical Blocks",
+        barMaxWidth: 40,
       },
     ],
   };
@@ -63,6 +67,7 @@ function renderCoinbaseRewardsChart(data, myChart) {
     },
     grid: { ...GRID_DEFAULT },
     xAxis: {
+      ...X_AXIS_DEFAULT,
       type: "category",
       name: "Global Slot",
       data: slots,
@@ -73,7 +78,7 @@ function renderCoinbaseRewardsChart(data, myChart) {
       ...Y_AXIS_DEFAULT,
       axisLabel: {
         ...Y_AXIS_AXIS_LABEL_DEFAULT,
-        formatter: (value) => `${(value / 1e12).toFixed(0)}k MINA`,
+        formatter: (value) => `${(value / 1e12).toFixed(0)}k`,
       },
     },
     series: [
