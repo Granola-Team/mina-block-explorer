@@ -11,20 +11,28 @@ function renderCanonicalVsNonCanonicalChart(data, myChart) {
 
   option = {
     tooltip: {
-      position: "top",
+      ...TOOLTIP_DEFAULT,
     },
+    color: [...CHART_COLORS],
     title: {
-      text: `Blocks`,
-      left: "center",
+      ...TITLE_DEFAULT,
+      text: "Blocks",
     },
+    grid: { ...GRID_DEFAULT },
     xAxis: {
+      ...X_AXIS_DEFAULT,
       type: "category",
       name: "Global Slot",
       data: slots,
+      splitLine: {
+        ...GRID_LINES,
+        show: false,
+      },
     },
     yAxis: {
       type: "value",
       name: "Block Count",
+      ...Y_AXIS_DEFAULT,
     },
     series: [
       {
@@ -34,6 +42,7 @@ function renderCanonicalVsNonCanonicalChart(data, myChart) {
         name: "Non-canonical Blocks",
       },
       {
+        ...BAR_SERIES_DEFAULT,
         data: canonical_blocks,
         type: "bar",
         stack: "block",
@@ -58,10 +67,12 @@ function renderCoinbaseRewardsChart(data, myChart) {
       position: "top",
     },
     title: {
+      ...TITLE_DEFAULT,
       text: `Coinbase Rewards`,
-      left: "center",
     },
+    grid: { ...GRID_DEFAULT },
     xAxis: {
+      ...X_AXIS_DEFAULT,
       type: "category",
       name: "Global Slot",
       data: slots,
@@ -69,18 +80,21 @@ function renderCoinbaseRewardsChart(data, myChart) {
     yAxis: {
       type: "value",
       name: "Coinbase Rewards",
+      ...Y_AXIS_DEFAULT,
       axisLabel: {
-        formatter: (value) => `${(value / 1e12).toFixed(0)}k MINA`, // Display values in trillions
+        ...Y_AXIS_AXIS_LABEL_DEFAULT,
+        formatter: nanominaToKMina,
       },
     },
     series: [
       {
         data: rewards,
         type: "line",
+        areaStyle: { ...SERIES_LINE_AREA_STYLES },
         smooth: true,
         yAxisIndex: 0,
         tooltip: {
-          valueFormatter: (value) => `${(value / 1e12).toFixed(0)}k MINA`,
+          valueFormatter: (value) => nanominaToKMina(value) + " MINA",
         },
       },
     ],
@@ -90,18 +104,10 @@ function renderCoinbaseRewardsChart(data, myChart) {
 }
 
 setTimeout(async () => {
-  const queryString = window.location.search;
-  const urlParams = new URLSearchParams(queryString);
-  const blockLimit = urlParams.get("limit") || 1000;
-  let summary_response = await fetch(config.rest_endpoint + "/summary", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  let { blockchainLength } = await summary_response.json();
+  const blockLimit = getBlockLimit();
+  let { blockchainLength } = await getBlockchainSummary();
   const blockOffset = blockchainLength - blockLimit;
-  const groupSize = 120;
+  const groupSize = SLOT_GROUPING;
 
   let rewardsChartDom = document.getElementById("rewards");
   let blocksChartDom = document.getElementById("blocks");
