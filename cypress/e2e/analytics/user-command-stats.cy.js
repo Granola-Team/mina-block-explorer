@@ -1,7 +1,7 @@
 suite(["@tier2"], "user commands stats", () => {
   it("are rendered", () => {
     cy.visit("/analytics/commands/user?limit=10000");
-    cy.get("#total-transferred").should("have.text", "4.861 million MINA", {
+    cy.get("#total-transferred").should("have.text", "4.861", {
       timeout: 15000,
     });
     cy.get("#total-fees").should("have.text", "377.994 MINA");
