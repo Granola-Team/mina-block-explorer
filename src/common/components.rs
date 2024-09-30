@@ -465,7 +465,7 @@ pub fn AnalyticsSimpleInfo(
     value: HtmlElement<html::AnyElement>,
     label: HtmlElement<html::AnyElement>,
     #[prop(optional, into)] id: Option<String>,
-    variant: ColorVariant,
+    #[prop(optional)] variant: ColorVariant,
 ) -> impl IntoView {
     let mut container_class_str =
         "w-full p-4 rounded-lg flex flex-col justify-around items-stretch ".to_string();
