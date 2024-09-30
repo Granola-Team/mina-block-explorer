@@ -1,3 +1,67 @@
+function renderTransferCountPlot(data, myChart) {
+  let xAxis = Object.keys(data);
+  let option;
+
+  myChart.hideLoading();
+
+  option = {
+    title: {
+      ...TITLE_DEFAULT,
+      text: `Fee Transfer Count`,
+    },
+    color: [...CHART_COLORS],
+    tooltip: {
+      ...TOOLTIP_DEFAULT,
+    },
+    grid: { ...GRID_DEFAULT },
+    xAxis: {
+      ...X_AXIS_DEFAULT,
+      type: "category",
+      name: "Global Slot",
+      axisLabel: {
+        ...X_AXIS_LABEL_DEFAULT,
+        formatter: function (value) {
+          return xAxis[value];
+        },
+      },
+    },
+    yAxis: {
+      ...Y_AXIS_DEFAULT,
+      type: "value",
+      name: "Transfers Count",
+      axisLabel: {
+        ...Y_AXIS_AXIS_LABEL_DEFAULT,
+        formatter: function (value) {
+          return `${value}`;
+        },
+      },
+    },
+    series: [
+      {
+        name: "transfers",
+        type: "bar",
+        data: Object.values(data).map((fees, i) => ["" + i, fees.length]),
+        tooltip: {
+          formatter: function (param) {
+            return [
+              [
+                "Slot",
+                xAxis[param.name] +
+                  `-${+xAxis[param.name] + SLOT_GROUPING - 1}`,
+              ],
+              ["count", param.data[1]],
+            ]
+              .map(([a, b]) => `<strong>${a}</strong>: ${b}`)
+              .join("</br>");
+          },
+        },
+      },
+    ],
+  };
+
+  option && myChart.setOption(option);
+}
+
 function renderBoxAndWhiskerPlot(data, myChart) {
   let xAxis = Object.keys(data);
   let option;
@@ -7,7 +71,7 @@ function renderBoxAndWhiskerPlot(data, myChart) {
   option = {
     title: {
       ...TITLE_DEFAULT,
-      text: `Fee Transfers`,
+      text: `Fee Transfer Spread`,
     },
     color: [...CHART_COLORS],
     tooltip: {
@@ -56,22 +120,6 @@ function renderBoxAndWhiskerPlot(data, myChart) {
           },
         },
       },
-      {
-        ...Y_AXIS_DEFAULT,
-        type: "value",
-        name: "Transfers Count",
-        position: "right",
-        axisLabel: {
-          ...Y_AXIS_AXIS_LABEL_DEFAULT,
-          formatter: function (value) {
-            return `${value}`;
-          },
-        },
-        splitLine: {
-          ...GRID_LINES,
-          show: false,
-        },
-      },
     ],
     series: [
       {
@@ -82,15 +130,19 @@ function renderBoxAndWhiskerPlot(data, myChart) {
         tooltip: {
           formatter: function (param) {
             return [
-              "Slot: " +
+              [
+                "Slot",
                 xAxis[param.name] +
-                `-${+xAxis[param.name] + groupSize - 1}`,
-              "upper: " + param.data[5],
-              "Q3: " + param.data[4],
-              "median: " + param.data[3],
-              "Q1: " + param.data[2],
-              "lower: " + param.data[1],
-            ].join("<br/>");
+                  `-${+xAxis[param.name] + SLOT_GROUPING - 1}`,
+              ],
+              ["max", param.data[5]],
+              ["Q3", param.data[4]],
+              ["median", param.data[3]],
+              ["Q1", param.data[2]],
+              ["min", param.data[1]],
+            ]
+              .map(([a, b]) => `<strong>${a}</strong>: ${b}`)
+              .join("</br>");
           },
         },
       },
@@ -103,22 +155,15 @@ function renderBoxAndWhiskerPlot(data, myChart) {
         tooltip: {
           formatter: function (param) {
             return [
-              "Slot: " +
+              [
+                "Slot",
                 xAxis[param.name] +
-                `-${+xAxis[param.name] + groupSize - 1}`,
-              "Fee: " + param.data[1],
-            ].join("<br/>");
-          },
-        },
-      },
-      {
-        name: "transfers",
-        type: "line",
-        data: Object.values(data).map((fees, i) => ["" + i, fees.length]),
-        yAxisIndex: 1,
-        tooltip: {
-          formatter: function (param) {
-            return `Slot: ${xAxis[param.dataIndex]}-${+xAxis[param.dataIndex] + groupSize - 1}<br/>Transfers: ${param.value[1]}`;
+                  `-${+xAxis[param.name] + SLOT_GROUPING - 1}`,
+              ],
+              ["Fee", param.data[1]],
+            ]
+              .map(([a, b]) => `<strong>${a}</strong>: ${b}`)
+              .join("</br>");
           },
         },
       },
@@ -131,13 +176,22 @@ function renderBoxAndWhiskerPlot(data, myChart) {
 setTimeout(async () => {
   const blockLimit = getBlockLimit();
 
-  let chartDom = document.getElementById("chart");
+  let feeSpreadDom = document.getElementById("fee-spread");
+  let feeCountsDom = document.getElementById("transfer-count");
   window.addEventListener("resize", function () {
     boxAndWhiskerChart.resize();
+    barPlot.resize();
   });
-  let boxAndWhiskerChart = echarts.init(chartDom);
+  let boxAndWhiskerChart = echarts.init(feeSpreadDom);
+  let barPlot = echarts.init(feeCountsDom);
 
   boxAndWhiskerChart.showLoading({
+    text: "Loading...", // Display text with the spinner
+    color: "#E39844", // Spinner color
+    zlevel: 0,
+  });
+
+  barPlot.showLoading({
     text: "Loading...", // Display text with the spinner
     color: "#E39844", // Spinner color
     zlevel: 0,
@@ -182,4 +236,5 @@ setTimeout(async () => {
   }, {});
 
   renderBoxAndWhiskerPlot(data, boxAndWhiskerChart);
+  renderTransferCountPlot(data, barPlot);
 }, 1000);
