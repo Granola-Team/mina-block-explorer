@@ -197,10 +197,13 @@ pub fn InternalCommandsAnalayticsPage() -> impl IntoView {
             <AppSection>
                 <AppHeading heading="Internal Commands Analytics" />
                 <AnalyticsLayout>
-                    <AnalyticsXLContainer>
-                        <div id="chart" class="w-full h-96"></div>
-                        <script src="/scripts/analytics/internal-commands.js" defer=true></script>
-                    </AnalyticsXLContainer>
+                    <script src="/scripts/analytics/internal-commands.js" defer=true></script>
+                    <AnalyticsLgContainer>
+                        <div id="fee-spread" class="w-full h-96"></div>
+                    </AnalyticsLgContainer>
+                    <AnalyticsLgContainer>
+                        <div id="transfer-count" class="w-full h-96"></div>
+                    </AnalyticsLgContainer>
                 </AnalyticsLayout>
             </AppSection>
         </PageContainer>
