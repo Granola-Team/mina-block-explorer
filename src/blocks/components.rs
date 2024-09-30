@@ -223,8 +223,6 @@ pub fn BlockAnalytics(block: BlocksQueryBlocks) -> impl IntoView {
                     <AnalyticsSimpleInfo
                         label=convert_to_span("Total User Amounts Transferred".into())
                         value=decorate_with_mina_tag(nanomina_to_mina(user_command_amount_total()))
-
-                        variant=ColorVariant::Transparent
                     />
 
                 </AnalyticsSmContainer>
@@ -232,8 +230,6 @@ pub fn BlockAnalytics(block: BlocksQueryBlocks) -> impl IntoView {
                     <AnalyticsSimpleInfo
                         label=convert_to_span("Total Internal Fees Transferred".into())
                         value=decorate_with_mina_tag(get_transaction_fees(&block_sig.get()))
-
-                        variant=ColorVariant::Transparent
                     />
                 </AnalyticsSmContainer>
                 <AnalyticsSmContainer>
@@ -243,8 +239,6 @@ pub fn BlockAnalytics(block: BlocksQueryBlocks) -> impl IntoView {
                             decorate_with_mina_tag(get_snark_fees(&block_sig.get())),
                             ColorVariant::Blue,
                         )
-
-                        variant=ColorVariant::Blue
                     />
                 </AnalyticsSmContainer>
                 <AnalyticsSmContainer>

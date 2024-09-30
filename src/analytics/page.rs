@@ -23,7 +23,6 @@ pub fn BlocksAnalyticsPage() -> impl IntoView {
                                     label=convert_to_span("Canonical Blocks".into())
                                     value=convert_to_span("...".to_string())
                                     id="canonical-blocks-count"
-                                    variant=ColorVariant::Blue
                                 />
 
                             </AnalyticsSmContainer>
@@ -32,7 +31,6 @@ pub fn BlocksAnalyticsPage() -> impl IntoView {
                                     label=convert_to_span("Non-Canonical Blocks".into())
                                     value=convert_to_span("...".to_string())
                                     id="non-canonical-blocks-count"
-                                    variant=ColorVariant::Green
                                 />
                             </AnalyticsSmContainer>
                             <AnalyticsSmContainer>
@@ -40,7 +38,6 @@ pub fn BlocksAnalyticsPage() -> impl IntoView {
                                     label=convert_to_span("Number of supercharged blocks".into())
                                     value=convert_to_span("...".to_string())
                                     id="supercharged-blocks-count"
-                                    variant=ColorVariant::DarkBlue
                                 />
                             </AnalyticsSmContainer>
 
@@ -49,7 +46,6 @@ pub fn BlocksAnalyticsPage() -> impl IntoView {
                                     label=convert_to_span("Number of unique block producers".into())
                                     value=convert_to_span("...".to_string())
                                     id="unique-block-producers-count"
-                                    variant=ColorVariant::Orange
                                 />
                             </AnalyticsSmContainer>
                             <AnalyticsLgContainer>
@@ -139,9 +135,9 @@ pub fn UserCommandsAnalyticsPage() -> impl IntoView {
                             <AnalyticsSmContainer>
                                 <AnalyticsSimpleInfo
                                     label=convert_to_span("Total Transferred".into())
+                                    subtext="In millions of MINA"
                                     value=convert_to_span("...".to_string())
                                     id="total-transferred"
-                                    variant=ColorVariant::Blue
                                 />
 
                             </AnalyticsSmContainer>
@@ -149,8 +145,8 @@ pub fn UserCommandsAnalyticsPage() -> impl IntoView {
                                 <AnalyticsSimpleInfo
                                     label=convert_to_span("Total Fees".into())
                                     value=convert_to_span("...".to_string())
+                                    subtext="In MINA"
                                     id="total-fees"
-                                    variant=ColorVariant::Green
                                 />
 
                             </AnalyticsSmContainer>
@@ -159,7 +155,6 @@ pub fn UserCommandsAnalyticsPage() -> impl IntoView {
                                     label=convert_to_span("Total Number Of Transactions".into())
                                     value=convert_to_span("...".to_string())
                                     id="total-number-of-transactions"
-                                    variant=ColorVariant::Orange
                                 />
 
                             </AnalyticsSmContainer>
@@ -168,7 +163,6 @@ pub fn UserCommandsAnalyticsPage() -> impl IntoView {
                                     label=convert_to_span("Total Failed Account Creations".into())
                                     value=convert_to_span("...".to_string())
                                     id="total-failed-account-creations"
-                                    variant=ColorVariant::DarkBlue
                                 />
 
                             </AnalyticsSmContainer>
