@@ -1,3 +1,4 @@
+const SLOT_GROUPING = 50; // groups slots by 50
 const CHART_COLORS = ["#7BBBCA", "#A57B66", "#E2918F", "#629EDE", "#84BD7C"];
 const TOOLTIP_DEFAULT = { position: "top" };
 const GRID_LINES = {
@@ -75,10 +76,13 @@ function getBlockLimit() {
 }
 
 async function getBlockchainSummary() {
-  return await fetch(config.rest_endpoint + "/summary", {
+  let response = await fetch(config.rest_endpoint + "/summary", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
     },
   });
+  return await response.json();
 }
+
+const nanominaToKMina = (value) => `${(value / 1e12).toFixed(0)}k`;
