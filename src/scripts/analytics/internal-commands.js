@@ -1,57 +1,4 @@
-setTimeout(async () => {
-  const blockLimit = 500;
-  const groupSize = 10;
-
-  let chartDom = document.getElementById("chart");
-  window.addEventListener("resize", function () {
-    myChart.resize();
-  });
-  let myChart = echarts.init(chartDom);
-
-  myChart.showLoading({
-    text: "Loading...", // Display text with the spinner
-    color: "#E39844", // Spinner color
-    zlevel: 0,
-  });
-
-  let response = await fetch(config.graphql_endpoint, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      query: `query MyQuery() {
-        feetransfers(query: { canonical: true }, sortBy: BLOCKHEIGHT_DESC, limit: ${blockLimit}) {
-          fee,
-          blockStateHash {
-            protocolState {
-              consensusState {
-                slotSinceGenesis
-              }
-            }
-          }
-        }
-      } 
-    `,
-    }),
-  });
-
-  let jsonResp = await response.json();
-  let data = jsonResp.data.feetransfers.reduce((agg, record) => {
-    let slot =
-      record.blockStateHash.protocolState.consensusState.slotSinceGenesis;
-    let key = slot - (slot % groupSize);
-    let value = record.fee;
-    if (!agg[key]) {
-      agg[key] = [];
-    }
-    let parsedFloat = parseFloat(value / 1e9);
-    if (parsedFloat < 700) {
-      agg[key].push(parsedFloat);
-    }
-    return agg;
-  }, {});
-
+function renderBoxAndWhiskerPlot(data, myChart) {
   let xAxis = Object.keys(data);
   let option;
 
@@ -59,15 +6,14 @@ setTimeout(async () => {
 
   option = {
     title: {
-      text: `Fee Transfers in the last ${blockLimit} blocks`,
-      left: "center",
+      ...TITLE_DEFAULT,
+      text: `Fee Transfers`,
     },
+    color: [...CHART_COLORS],
     tooltip: {
-      trigger: "item",
-      axisPointer: {
-        type: "shadow",
-      },
+      ...TOOLTIP_DEFAULT,
     },
+    grid: { ...GRID_DEFAULT },
     dataset: [
       {
         source: Object.entries(data).map(([_, fees]) => [...fees]),
@@ -84,32 +30,46 @@ setTimeout(async () => {
       },
     ],
     xAxis: {
+      ...X_AXIS_DEFAULT,
       type: "category",
       name: "Global Slot",
       axisLabel: {
+        ...X_AXIS_LABEL_DEFAULT,
         formatter: function (value) {
           return xAxis[value];
         },
       },
+      splitLine: {
+        ...GRID_LINES,
+        show: false,
+      },
     },
     yAxis: [
       {
+        ...Y_AXIS_DEFAULT,
         type: "value",
-        name: "Fee",
+        name: "Fee (MINA)",
         axisLabel: {
+          ...Y_AXIS_AXIS_LABEL_DEFAULT,
           formatter: function (value) {
-            return `${value} MINA`;
+            return `${value}`;
           },
         },
       },
       {
+        ...Y_AXIS_DEFAULT,
         type: "value",
         name: "Transfers Count",
         position: "right",
         axisLabel: {
+          ...Y_AXIS_AXIS_LABEL_DEFAULT,
           formatter: function (value) {
             return `${value}`;
           },
+        },
+        splitLine: {
+          ...GRID_LINES,
+          show: false,
         },
       },
     ],
@@ -153,8 +113,7 @@ setTimeout(async () => {
       },
       {
         name: "transfers",
-        type: "scatter",
-        symbolSize: 12,
+        type: "line",
         data: Object.values(data).map((fees, i) => ["" + i, fees.length]),
         yAxisIndex: 1,
         tooltip: {
@@ -167,4 +126,60 @@ setTimeout(async () => {
   };
 
   option && myChart.setOption(option);
+}
+
+setTimeout(async () => {
+  const blockLimit = getBlockLimit();
+
+  let chartDom = document.getElementById("chart");
+  window.addEventListener("resize", function () {
+    boxAndWhiskerChart.resize();
+  });
+  let boxAndWhiskerChart = echarts.init(chartDom);
+
+  boxAndWhiskerChart.showLoading({
+    text: "Loading...", // Display text with the spinner
+    color: "#E39844", // Spinner color
+    zlevel: 0,
+  });
+
+  let response = await fetch(config.graphql_endpoint, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      query: `query MyQuery() {
+        feetransfers(query: { canonical: true }, sortBy: BLOCKHEIGHT_DESC, limit: ${blockLimit}) {
+          fee,
+          blockStateHash {
+            protocolState {
+              consensusState {
+                slotSinceGenesis
+              }
+            }
+          }
+        }
+      }
+    `,
+    }),
+  });
+
+  let jsonResp = await response.json();
+  let data = jsonResp.data.feetransfers.reduce((agg, record) => {
+    let slot =
+      record.blockStateHash.protocolState.consensusState.slotSinceGenesis;
+    let key = slot - (slot % SLOT_GROUPING);
+    let value = record.fee;
+    if (!agg[key]) {
+      agg[key] = [];
+    }
+    let parsedFloat = parseFloat(value / 1e9);
+    if (parsedFloat < 700) {
+      agg[key].push(parsedFloat);
+    }
+    return agg;
+  }, {});
+
+  renderBoxAndWhiskerPlot(data, boxAndWhiskerChart);
 }, 1000);
