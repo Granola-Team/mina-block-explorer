@@ -1,5 +1,13 @@
 const CHART_COLORS = ["#7BBBCA", "#A57B66", "#E2918F", "#629EDE", "#84BD7C"];
 const TOOLTIP_DEFAULT = { position: "top" };
+const GRID_LINES = {
+  show: true, // Show or hide grid lines for the X-axis
+  lineStyle: {
+    color: "#A6A6A6", // Color of the grid lines
+    width: 1, // Width of the grid lines
+    type: "dashed", // Style of the grid lines ('solid', 'dashed', 'dotted')
+  },
+};
 const AXIS_NAME_TEXT_STYLE = {
   fontWeight: 700,
   fontFamily: "system-ui",
@@ -37,6 +45,7 @@ const Y_AXIS_DEFAULT = {
   axisLabel: {
     ...Y_AXIS_AXIS_LABEL_DEFAULT,
   },
+  splitLine: { ...GRID_LINES },
 };
 const X_AXIS_LABEL_DEFAULT = {
   fontWeight: 700,
@@ -52,6 +61,7 @@ const X_AXIS_DEFAULT = {
   axisLabel: {
     ...X_AXIS_LABEL_DEFAULT,
   },
+  splitLine: { ...GRID_LINES },
 };
 const BAR_SERIES_DEFAULT = {
   barMaxWidth: 40,

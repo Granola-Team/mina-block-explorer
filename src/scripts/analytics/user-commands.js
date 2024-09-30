@@ -29,6 +29,10 @@ function renderTopTransfersChart(data, myChart) {
         ...Y_AXIS_AXIS_LABEL_DEFAULT,
         formatter: (value) => "..." + value.slice(-6),
       },
+      splitLine: {
+        ...GRID_LINES,
+        show: false,
+      },
     },
     series: [
       {
@@ -78,6 +82,10 @@ function renderTopRecipientsChart(dataMap, myChart) {
         ...Y_AXIS_AXIS_LABEL_DEFAULT,
         formatter: (value) => "..." + value.slice(-6),
       },
+      splitLine: {
+        ...GRID_LINES,
+        show: false,
+      },
     },
     series: [
       {
@@ -120,6 +128,10 @@ function renderTransactionVolumeChart(data, myChart) {
       ...X_AXIS_DEFAULT,
       type: "category",
       data: dates,
+      splitLine: {
+        ...GRID_LINES,
+        show: false,
+      },
     },
     yAxis: [
       {

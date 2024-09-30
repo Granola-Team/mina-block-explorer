@@ -92,6 +92,10 @@ setTimeout(async () => {
           return xAxis[value];
         },
       },
+      splitLine: {
+        ...GRID_LINES,
+        show: false,
+      },
     },
     yAxis: [
       {
@@ -115,6 +119,10 @@ setTimeout(async () => {
           formatter: function (value) {
             return `${value}`;
           },
+        },
+        splitLine: {
+          ...GRID_LINES,
+          show: false,
         },
       },
     ],

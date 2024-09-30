@@ -24,6 +24,10 @@ function renderCanonicalVsNonCanonicalChart(data, myChart) {
       type: "category",
       name: "Global Slot",
       data: slots,
+      splitLine: {
+        ...GRID_LINES,
+        show: false,
+      },
     },
     yAxis: {
       type: "value",
