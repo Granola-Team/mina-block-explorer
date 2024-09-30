@@ -464,48 +464,25 @@ pub fn AnalyticsLayout(children: Children) -> impl IntoView {
 pub fn AnalyticsSimpleInfo(
     value: HtmlElement<html::AnyElement>,
     label: HtmlElement<html::AnyElement>,
+    #[prop(optional, into)] subtext: Option<String>,
     #[prop(optional, into)] id: Option<String>,
-    #[prop(optional)] variant: ColorVariant,
 ) -> impl IntoView {
-    let mut container_class_str =
-        "w-full p-4 rounded-lg flex flex-col justify-around items-stretch ".to_string();
-    let base_class_str = "flex justify-center items-center";
-    let mut value_class_str = " text-sm lg:text-base ".to_string();
+    let container_class_str =
+        "w-full p-4 rounded-lg flex justify-center items-stretch ".to_string();
+    let base_class_str = "flex justify-center items-center mx-4";
+    let mut value_class_str = " text-6xl font-bold ".to_string();
     value_class_str.push_str(base_class_str);
-    let mut label_class_str = " text-xs mt-2 ".to_string();
-    label_class_str.push_str(base_class_str);
-    match variant {
-        ColorVariant::Blue => {
-            container_class_str.push_str(" bg-blue/25 ");
-            value_class_str.push_str(" text-blue ");
-        }
-        ColorVariant::Green => {
-            container_class_str.push_str(" bg-green/25 ");
-            value_class_str.push_str(" text-green ");
-        }
-        ColorVariant::Grey => {
-            container_class_str.push_str(" bg-slate-400/25 ");
-            value_class_str.push_str(" text-slate-400 ");
-        }
-        ColorVariant::Transparent => {
-            container_class_str.push_str(" bg-transparent ");
-            value_class_str.push_str(" text-inherit ");
-        }
-        ColorVariant::DarkBlue => {
-            container_class_str.push_str(" bg-dark-blue/25 ");
-            value_class_str.push_str(" text-dark-blue ");
-        }
-        ColorVariant::Orange => {
-            container_class_str.push_str(" bg-amber-600/25 ");
-            value_class_str.push_str(" text-inherit ");
-        }
-    }
+    let label_class_str = " text-lg font-semibold ".to_string();
+    let subtext_class_str = " text-sm font-medium text-slate-400 ".to_string();
     view! {
         <div class=container_class_str>
+            <div class="flex justify-center items-start flex-col mx-4">
+                <div class=label_class_str>{label}</div>
+                {subtext.map(|t| view! { <div class=subtext_class_str>{t}</div> })}
+            </div>
             <div id=id.unwrap_or("simple-info".to_string()) class=value_class_str>
                 {value}
             </div>
-            <div class=label_class_str>{label}</div>
         </div>
     }
 }

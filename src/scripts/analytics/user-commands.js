@@ -313,11 +313,11 @@ setTimeout(async () => {
   document.getElementById("total-transferred").innerHTML =
     new Intl.NumberFormat().format(stats.total_transferred / 1e15, {
       style: "currency",
-    }) + " million MINA";
+    });
   document.getElementById("total-fees").innerHTML =
     new Intl.NumberFormat().format(stats.total_fees / 1e9, {
       style: "currency",
-    }) + " MINA";
+    });
   document.getElementById("total-number-of-transactions").innerHTML =
     new Intl.NumberFormat().format(stats.total_number_of_transactions);
   document.getElementById("total-failed-account-creations").innerHTML =

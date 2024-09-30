@@ -33,7 +33,6 @@ pub enum ColorVariant {
     Green,
     Blue,
     Grey,
-    Transparent,
     DarkBlue,
     Orange,
 }
