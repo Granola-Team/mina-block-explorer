@@ -172,9 +172,9 @@ pub fn UserCommandsAnalyticsPage() -> impl IntoView {
                                 />
 
                             </AnalyticsSmContainer>
-                            <AnalyticsXLContainer>
+                            <AnalyticsLgContainer>
                                 <div id="user-commands-volume" class="w-full h-96"></div>
-                            </AnalyticsXLContainer>
+                            </AnalyticsLgContainer>
                             <AnalyticsLgContainer>
                                 <div id="user-commands-top-recipients" class="w-full h-96"></div>
                             </AnalyticsLgContainer>
