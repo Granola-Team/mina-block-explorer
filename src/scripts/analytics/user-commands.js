@@ -72,6 +72,7 @@ function renderTopRecipientsChart(dataMap, myChart) {
       ...TITLE_DEFAULT,
       text: `Most frequent recipients`,
     },
+    grid: { ...GRID_DEFAULT },
     xAxis: {
       type: "value",
       name: "Txn recieved",
@@ -127,6 +128,8 @@ function renderTransactionVolumeChart(data, myChart) {
       ...TITLE_DEFAULT,
       text: `Transaction volume by day`,
     },
+
+    grid: { ...GRID_DEFAULT },
     xAxis: {
       ...X_AXIS_DEFAULT,
       type: "category",
