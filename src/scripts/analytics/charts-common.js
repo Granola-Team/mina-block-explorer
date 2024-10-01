@@ -87,8 +87,17 @@ async function getBlockchainSummary() {
 
 const nanominaToKMina = (value) => `${(value / 1e12).toFixed(0)}k`;
 
+function getOrdinal(number) {
+  const suffixes = ["th", "st", "nd", "rd"];
+  const v = number % 100;
+  const suffix = suffixes[(v - 20) % 10] || suffixes[v] || suffixes[0];
+
+  return number + suffix;
+}
+
 if (typeof module !== "undefined" && module.exports) {
   module.exports = {
     nanominaToKMina,
+    getOrdinal,
   };
 }
