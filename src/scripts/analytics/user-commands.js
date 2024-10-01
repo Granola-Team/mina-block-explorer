@@ -27,7 +27,8 @@ function renderTopTransfersChart(data, myChart) {
       data: data.map(([hash, _amount]) => hash),
       axisLabel: {
         ...Y_AXIS_AXIS_LABEL_DEFAULT,
-        formatter: (value) => "..." + value.slice(-6),
+        showMinLabel: true,
+        formatter: (_, zero_based_index) => getOrdinal(10 - zero_based_index),
       },
       splitLine: {
         ...GRID_LINES,
@@ -84,7 +85,8 @@ function renderTopRecipientsChart(dataMap, myChart) {
       data: data.map(([recipient, _count]) => recipient),
       axisLabel: {
         ...Y_AXIS_AXIS_LABEL_DEFAULT,
-        formatter: (value) => "..." + value.slice(-6),
+        showMinLabel: true,
+        formatter: (_, zero_based_index) => getOrdinal(10 - zero_based_index),
       },
       splitLine: {
         ...GRID_LINES,
