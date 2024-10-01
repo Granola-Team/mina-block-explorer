@@ -468,7 +468,7 @@ pub fn AnalyticsSimpleInfo(
     #[prop(optional, into)] id: Option<String>,
 ) -> impl IntoView {
     let container_class_str =
-        "w-full p-4 rounded-lg flex justify-center items-stretch ".to_string();
+        "w-full p-4 rounded-lg flex flex-col md:flex-row justify-center items-stretch".to_string();
     let base_class_str = "flex justify-center items-center mx-4";
     let mut value_class_str = " text-6xl font-bold ".to_string();
     value_class_str.push_str(base_class_str);
@@ -476,7 +476,7 @@ pub fn AnalyticsSimpleInfo(
     let subtext_class_str = " text-sm font-medium text-slate-400 ".to_string();
     view! {
         <div class=container_class_str>
-            <div class="flex justify-center items-start flex-col mx-4">
+            <div class="flex justify-center items-center md:items-start flex-col mx-4">
                 <div class=label_class_str>{label}</div>
                 {subtext.map(|t| view! { <div class=subtext_class_str>{t}</div> })}
             </div>
