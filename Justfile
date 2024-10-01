@@ -58,7 +58,9 @@ format:
 
 # Perform unit tests
 test-unit:
-  @echo "--- Performing unit tests"
+  @echo "--- Performing jest unit tests"
+  pnpm exec jest test
+  @echo "--- Performing rust unit tests"
   cargo-nextest nextest run
 
 # Perform dependency audit

@@ -86,3 +86,9 @@ async function getBlockchainSummary() {
 }
 
 const nanominaToKMina = (value) => `${(value / 1e12).toFixed(0)}k`;
+
+if (typeof module !== "undefined" && module.exports) {
+  module.exports = {
+    nanominaToKMina,
+  };
+}
