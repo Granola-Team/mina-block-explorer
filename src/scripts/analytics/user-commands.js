@@ -38,6 +38,9 @@ function renderTopTransfersChart(data, myChart) {
       {
         data: data.map(([_hash, amount]) => amount),
         type: "bar",
+        tooltip: {
+          valueFormatter: (value) => scaleMina(value),
+        },
       },
     ],
   };
