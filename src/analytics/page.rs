@@ -129,6 +129,10 @@ pub fn UserCommandsAnalyticsPage() -> impl IntoView {
                         limit_sig.get();
                         view! {
                             <script src="/scripts/analytics/user-commands.js" defer=true></script>
+                            <script
+                                src="/scripts/analytics/internal-commands.js"
+                                defer=true
+                            ></script>
                             <AnalyticsSmContainer>
                                 <AnalyticsSimpleInfo
                                     label=convert_to_span("Total Transferred".into())
@@ -172,28 +176,14 @@ pub fn UserCommandsAnalyticsPage() -> impl IntoView {
                             <AnalyticsLgContainer>
                                 <div id="user-commands-top-transfers" class="w-full h-96"></div>
                             </AnalyticsLgContainer>
+                            <AnalyticsLgContainer>
+                                <div id="fee-spread" class="w-full h-96"></div>
+                            </AnalyticsLgContainer>
+                            <AnalyticsLgContainer>
+                                <div id="transfer-count" class="w-full h-96"></div>
+                            </AnalyticsLgContainer>
                         }
                     }}
-                </AnalyticsLayout>
-            </AppSection>
-        </PageContainer>
-    }
-}
-
-#[component]
-pub fn InternalCommandsAnalayticsPage() -> impl IntoView {
-    view! {
-        <Title text="Analytics | Internal Commands" />
-        <PageContainer>
-            <AppSection>
-                <AnalyticsLayout>
-                    <script src="/scripts/analytics/internal-commands.js" defer=true></script>
-                    <AnalyticsLgContainer>
-                        <div id="fee-spread" class="w-full h-96"></div>
-                    </AnalyticsLgContainer>
-                    <AnalyticsLgContainer>
-                        <div id="transfer-count" class="w-full h-96"></div>
-                    </AnalyticsLgContainer>
                 </AnalyticsLayout>
             </AppSection>
         </PageContainer>
@@ -212,12 +202,6 @@ pub fn AnalyticsTabbedPage() -> impl IntoView {
         NavEntry {
             href: "/analytics/commands/user".to_string(),
             text: "Transactions".to_string(),
-            icon: NavIcon::Transactions,
-            ..Default::default()
-        },
-        NavEntry {
-            href: "/analytics/commands/internal".to_string(),
-            text: "Internal Commands".to_string(),
             icon: NavIcon::Transactions,
             ..Default::default()
         },
