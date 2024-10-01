@@ -1,15 +1,13 @@
 suite(["@tier2"], "chart", () => {
   let analytics_pages = [
     {
-      page: "/analytics/commands/internal",
-      chart_ids: ["#fee-spread", "#transfer-count"],
-    },
-    {
       page: "/analytics/commands/user",
       chart_ids: [
         "#user-commands-volume",
         "#user-commands-top-recipients",
         "#user-commands-top-transfers",
+        "#fee-spread",
+        "#transfer-count",
       ],
     },
     { page: "/analytics/blocks", chart_ids: ["#rewards", "#blocks"] },
