@@ -82,11 +82,7 @@ impl TableData for Vec<Option<TransactionsQueryTransactions>> {
                         transaction.get_block_datetime(),
                     ),
                     convert_to_pill(transaction.get_kind(), ColorVariant::Grey),
-                    if transaction
-                        .get_failure_reason()
-                        .map(|fr| fr.is_empty())
-                        .unwrap_or_default()
-                    {
+                    if transaction.get_failure_reason().is_none() {
                         convert_to_pill(TXN_STATUS_APPLIED.to_string(), ColorVariant::Green)
                     } else {
                         convert_to_pill(TXN_STATUS_FAILED.to_string(), ColorVariant::Orange)

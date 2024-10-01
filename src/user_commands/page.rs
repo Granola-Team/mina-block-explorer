@@ -95,10 +95,7 @@ pub fn CommandSpotlightPage() -> impl IntoView {
                         Some(Some(transaction)) => {
                             let state_hash = transaction.get_hash();
                             let date_time = transaction.get_block_datetime();
-                            let has_succeeded = transaction
-                                .get_failure_reason()
-                                .map(|fr| fr.is_empty())
-                                .unwrap_or_default();
+                            let has_succeeded = transaction.get_failure_reason().is_none();
                             let status = if has_succeeded {
                                 TXN_STATUS_APPLIED
                             } else {
