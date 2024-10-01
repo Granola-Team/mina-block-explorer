@@ -85,10 +85,33 @@ async function getBlockchainSummary() {
   return await response.json();
 }
 
+function scaleMina(nanomina) {
+  const mina = nanomina / 1e9; // Convert nanomina to mina
+
+  // If the value is less than 1 Mina, show it in nanomina
+  if (nanomina < 1e9) {
+    return `${nanomina} nanomina`; // Return the value in nanomina
+  }
+
+  // If the value is equal to or greater than 1 million Mina, use 'M'
+  if (mina >= 1e6) {
+    return `${(mina / 1e6).toFixed(2)}M Mina`; // Mega Mina (millions of Mina)
+  }
+
+  // If the value is equal to or greater than 1 thousand Mina, use 'k'
+  if (mina >= 1e3) {
+    return `${(mina / 1e3).toFixed(2)}k Mina`; // Kilo Mina (thousands of Mina)
+  }
+
+  // Otherwise, just show the value in Mina
+  return `${mina.toFixed(2)} Mina`;
+}
+
 const nanominaToKMina = (value) => `${(value / 1e12).toFixed(0)}k`;
 
 if (typeof module !== "undefined" && module.exports) {
   module.exports = {
     nanominaToKMina,
+    scaleMina,
   };
 }
