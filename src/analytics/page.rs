@@ -11,7 +11,6 @@ pub fn BlocksAnalyticsPage() -> impl IntoView {
         <Title text="Analytics | Blocks" />
         <PageContainer>
             <AppSection>
-                <AppHeading heading="Blocks Analytics" />
                 <AnalyticsFilters />
                 <AnalyticsLayout>
                     {move || {
@@ -69,7 +68,6 @@ pub fn SnarksAnalyticsPage() -> impl IntoView {
         <Title text="Analytics | SNARKs" />
         <PageContainer>
             <AppSection>
-                <AppHeading heading="SNARK Analytics" />
                 <AnalyticsFilters />
                 <AnalyticsLayout>
                     {move || {
@@ -125,7 +123,6 @@ pub fn UserCommandsAnalyticsPage() -> impl IntoView {
         <Title text="Analytics | User Commands" />
         <PageContainer>
             <AppSection>
-                <AppHeading heading="User Commands Analytics" />
                 <AnalyticsFilters />
                 <AnalyticsLayout>
                     {move || {
@@ -189,7 +186,6 @@ pub fn InternalCommandsAnalayticsPage() -> impl IntoView {
         <Title text="Analytics | Internal Commands" />
         <PageContainer>
             <AppSection>
-                <AppHeading heading="Internal Commands Analytics" />
                 <AnalyticsLayout>
                     <script src="/scripts/analytics/internal-commands.js" defer=true></script>
                     <AnalyticsLgContainer>
