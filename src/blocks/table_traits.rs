@@ -114,21 +114,15 @@ impl TableData for Vec<Option<BlocksQueryBlocksTransactionsUserCommandsExt>> {
                     },
                     convert_to_pill(user_command.get_kind(), ColorVariant::Grey),
                     convert_to_pill(
-                        if user_command
-                            .get_failure_reason()
-                            .map_or(true, |failure_reason| failure_reason.is_empty())
-                        {
-                            TXN_STATUS_FAILED.to_string()
-                        } else {
+                        if user_command.get_failure_reason().is_none() {
                             TXN_STATUS_APPLIED.to_string()
-                        },
-                        if user_command
-                            .get_failure_reason()
-                            .map_or(true, |failure_reason| failure_reason.is_empty())
-                        {
-                            ColorVariant::Orange
                         } else {
+                            TXN_STATUS_FAILED.to_string()
+                        },
+                        if user_command.get_failure_reason().is_none() {
                             ColorVariant::Green
+                        } else {
+                            ColorVariant::Orange
                         },
                     ),
                     convert_to_link(

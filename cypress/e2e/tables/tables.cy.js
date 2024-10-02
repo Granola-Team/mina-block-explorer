@@ -63,6 +63,7 @@ let test_suite_data = [
   {
     tag: "@tier2",
     url: `/blocks/${BLOCK_STATE_HASH_MIXED_USER_COMMANDS}/commands/user`,
+    exclusive: true,
     table: {
       heading: "User Commands",
       columns: [
@@ -81,8 +82,8 @@ let test_suite_data = [
       () => {
         cy.aliasTableRows("User Commands", "table-rows");
         cy.get("@table-rows").should("have.lengthOf", 6);
-        cy.get("@table-rows").eq(5).should("contain.text", "Failed");
-        cy.get("@table-rows").eq(0).should("contain.text", "Applied");
+        cy.get("@table-rows").eq(0).should("contain.text", "Failed");
+        cy.get("@table-rows").eq(5).should("contain.text", "Applied");
       },
     ],
   },
