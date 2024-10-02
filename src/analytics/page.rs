@@ -6,7 +6,8 @@ use leptos_router::create_query_signal;
 
 #[component]
 pub fn BlocksAnalyticsPage() -> impl IntoView {
-    let (limit_sig, _) = create_query_signal::<u64>("limit");
+    let (blockheight_lte_sig, _) = create_query_signal::<u64>("q-blockheight-lte");
+    let (blockheight_gte_sig, _) = create_query_signal::<u64>("q-blockheight-gte");
     view! {
         <Title text="Analytics | Blocks" />
         <PageContainer>
@@ -14,7 +15,8 @@ pub fn BlocksAnalyticsPage() -> impl IntoView {
                 <AnalyticsFilters by_block=true />
                 <AnalyticsLayout>
                     {move || {
-                        limit_sig.get();
+                        blockheight_lte_sig.get();
+                        blockheight_gte_sig.get();
                         view! {
                             <script src="/scripts/analytics/blocks.js" defer=true></script>
                             <AnalyticsSmContainer>
