@@ -1,50 +1,118 @@
 use super::{functions::*, models::*};
-use crate::common::{
-    components::*,
-    table::{ColumnTextAlignment, TableColumn, TableSectionTemplate, TableSortDirection},
+use crate::{
+    common::{
+        components::*,
+        constants::*,
+        table::{ColumnTextAlignment, TableColumn, TableSectionTemplate, TableSortDirection},
+    },
+    summary::models::BlockchainSummary,
 };
+use codee::string::JsonSerdeCodec;
 use leptos::*;
 use leptos_router::create_query_signal;
+use leptos_use::storage::use_local_storage;
 use std::collections::HashMap;
+
+const DEFAULT_BLOCK_RANGE: u64 = 3000;
+const INPUT_STYLES: &str =
+    "mr-4 h-8 pl-4 text-sm box-border border-[1px] border-slate-300 rounded-md";
 
 #[component]
 pub fn AnalyticsFilters(
     #[prop(optional)] epoch: bool,
-    #[prop(optional, default = true)] block_limit: bool,
+    #[prop(optional, default = false)] by_block: bool,
 ) -> impl IntoView {
-    let (limit_sig, set_limit) = create_query_signal::<u64>("limit");
+    let (blockheight_lte, set_blockheight_lte) = create_query_signal::<u64>("q-blockheight-lte");
+    let (blockheight_gte, set_blockheight_gte) = create_query_signal::<u64>("q-blockheight-gte");
     let (epoch_sig, set_epoch) = create_query_signal::<u64>("epoch");
+    let (summary_sig, _, _) =
+        use_local_storage::<BlockchainSummary, JsonSerdeCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
+
+    create_effect(move |_| {
+        if by_block && blockheight_lte.get().is_none() {
+            set_blockheight_lte.set(Some(summary_sig.get().blockchain_length));
+        }
+        if by_block && blockheight_gte.get().is_none() {
+            set_blockheight_gte.set(Some(
+                summary_sig
+                    .get()
+                    .blockchain_length
+                    .saturating_sub(DEFAULT_BLOCK_RANGE),
+            ))
+        }
+    });
+
+    create_effect(move |_| {
+        if epoch_sig.get_untracked().is_none() {
+            set_epoch.set(Some(summary_sig.get().epoch));
+        }
+    });
 
     view! {
         <div class="w-full flex justify-start items-center p-2 pl-8 md:p-8 md:py-2">
-            {move || match block_limit {
+            {move || match by_block {
                 true => {
-                    if limit_sig.get_untracked().is_none() {
-                        set_limit.set(Some(1000u64));
-                    }
                     view! {
                         <div class="flex justify-start items-baseline mr-2 md:mr-4">
-                            <label for="block-limit" class="mr-2">
-                                "Block limit:"
+                            <label for="blockheight-gte font-semibold" class="mr-2">
+                                "Start Block Height: "
                             </label>
                             <ControlledInput
-                                id="block-limit"
+                                id="blockheight-gte"
                                 input_type="number"
-                                name="block-limit"
+                                name="blockheight-gte"
                                 disabled_sig=Signal::from(|| false)
-                                value=limit_sig.get().map(|s| s.to_string()).unwrap_or_default()
+                                value=blockheight_gte
+                                    .get()
+                                    .map(|s| s.to_string())
+                                    .unwrap_or_default()
                                 setter_sig=SignalSetter::map(move |opt_str: Option<String>| {
-                                    set_limit
+                                    set_blockheight_gte
                                         .set(
                                             opt_str
                                                 .map(|v_str| v_str.parse::<u64>().ok().unwrap_or_default()),
                                         )
                                 })
-
+                                input_class=INPUT_STYLES.to_string()
                                 number_props=HashMap::from([
+                                    ("min".to_string(), "0".to_string()),
                                     ("step".to_string(), "1000".to_string()),
-                                    ("min".to_string(), "1000".to_string()),
-                                    ("max".to_string(), "10000".to_string()),
+                                    (
+                                        "max".to_string(),
+                                        summary_sig.get().blockchain_length.to_string(),
+                                    ),
+                                ])
+                            />
+                            <label for="blockheight-lte font-semibold" class="mr-2">
+                                "End Block Height: "
+                            </label>
+                            <ControlledInput
+                                id="blockheight-lte"
+                                input_type="number"
+                                name="blockheight-lte"
+                                disabled_sig=Signal::from(|| false)
+                                value=blockheight_lte
+                                    .get()
+                                    .map(|s| s.to_string())
+                                    .unwrap_or_default()
+                                setter_sig=SignalSetter::map(move |opt_str: Option<String>| {
+                                    set_blockheight_lte
+                                        .set(
+                                            opt_str
+                                                .map(|v_str| v_str.parse::<u64>().ok().unwrap_or_default()),
+                                        )
+                                })
+                                input_class=INPUT_STYLES.to_string()
+                                number_props=HashMap::from([
+                                    (
+                                        "min".to_string(),
+                                        blockheight_gte.get().unwrap_or(0).to_string(),
+                                    ),
+                                    ("step".to_string(), "1000".to_string()),
+                                    (
+                                        "max".to_string(),
+                                        summary_sig.get().blockchain_length.to_string(),
+                                    ),
                                 ])
                             />
 
@@ -56,12 +124,9 @@ pub fn AnalyticsFilters(
             }}
             {move || match epoch {
                 true => {
-                    if epoch_sig.get_untracked().is_none() {
-                        set_epoch.set(Some(0u64));
-                    }
                     view! {
                         <div class="flex justify-start items-baseline mr-2 md:mr-4">
-                            <label for="block-limit" class="mr-2">
+                            <label for="blockheight-lte" class="mr-2">
                                 "Epoch:"
                             </label>
                             <ControlledInput
@@ -161,7 +226,7 @@ pub fn SnarkerLeaderboard() -> impl IntoView {
                         epoch_sig.get();
                         view! {
                             <div class="flex justify-start items-baseline mr-2 md:mr-4">
-                                <label for="block-limit" class="mr-2">
+                                <label for="blockheight-lte" class="mr-2">
                                     "Epoch:"
                                 </label>
                                 <ControlledInput
@@ -266,7 +331,7 @@ pub fn StakerLeaderboard() -> impl IntoView {
                         epoch_sig.get();
                         view! {
                             <div class="flex justify-start items-baseline mr-2 md:mr-4">
-                                <label for="block-limit" class="mr-2">
+                                <label for="blockheight-lte" class="mr-2">
                                     "Epoch:"
                                 </label>
                                 <ControlledInput
