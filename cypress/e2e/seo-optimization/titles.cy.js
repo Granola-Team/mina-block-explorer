@@ -16,10 +16,6 @@ suite(["@tier2"], "meta title", () => {
       title: "Accounts | Search for accounts on Mina Blockchain",
     },
     {
-      url: `/analytics/commands/internal`,
-      title: `Analytics | Internal Commands`,
-    },
-    {
       url: `/analytics/commands/user`,
       title: `Analytics | User Commands`,
     },
