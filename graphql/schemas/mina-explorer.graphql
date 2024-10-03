@@ -2898,6 +2898,7 @@ input StakeTimingUpdateInput {
 }
 
 input StakeQueryInput {
+  username: String
   stake_lte: String
   timing_exists: Boolean
   chainId_gte: String
