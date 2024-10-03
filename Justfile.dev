@@ -2,11 +2,12 @@
 
 # Justfile for useful development commands
 
+# Fix linting errors
 lint-fix:
     standardrb --fix ops/*.rb
     cargo clippy --fix --allow-dirty --allow-staged
 
-# builds documention in the home directory
+# Builds documention in the home directory
 build-docs:
     rm -rf $HOME/mina_block_explorer_docs/
     cargo doc --document-private-items --target-dir $HOME/mina_block_explorer_docs/
