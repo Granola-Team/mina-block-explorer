@@ -174,7 +174,8 @@ function renderBoxAndWhiskerPlot(data, myChart) {
 }
 
 setTimeout(async () => {
-  const blockLimit = getBlockLimit();
+  let blockheightLte = parseInt(getUrlParam("q-blockheight-lte"));
+  let blockheightGte = parseInt(getUrlParam("q-blockheight-gte"));
 
   let feeSpreadDom = document.getElementById("fee-spread");
   let feeCountsDom = document.getElementById("transfer-count");
@@ -203,19 +204,33 @@ setTimeout(async () => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      query: `query MyQuery() {
-        feetransfers(query: { canonical: true }, sortBy: BLOCKHEIGHT_DESC, limit: ${blockLimit}) {
-          fee,
-          blockStateHash {
-            protocolState {
-              consensusState {
-                slotSinceGenesis
+      query: `query InternalCommands(
+          $limit: Int
+          $sort_by: FeetransferSortByInput!
+          $query: FeetransferQueryInput!
+        ) {
+          feetransfers(limit: $limit, sortBy: $sort_by, query: $query) {
+            fee,
+            blockStateHash {
+              protocolState {
+                consensusState {
+                  slotSinceGenesis
+                }
               }
             }
           }
-        }
-      }
-    `,
+        },
+      `,
+      variables: {
+        limit: 10000000,
+        sort_by: "BLOCKHEIGHT_DESC",
+        query: {
+          canonical: true,
+          blockHeight_gte: blockheightGte,
+          blockHeight_lte: blockheightLte,
+        },
+      },
+      operationName: "InternalCommands",
     }),
   });
 

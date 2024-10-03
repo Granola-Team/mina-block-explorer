@@ -1,8 +1,6 @@
 setTimeout(async () => {
-  const blockLimit = getBlockLimit();
-  let { blockchainLength } = await getBlockchainSummary();
-  const blockOffset = blockchainLength - blockLimit;
-
+  let blockheightLte = parseInt(getUrlParam("q-blockheight-lte"));
+  let blockheightGte = parseInt(getUrlParam("q-blockheight-gte"));
   let chartDom = document.getElementById("avg-snark-fee");
   window.addEventListener("resize", function () {
     myChart.resize();
@@ -21,7 +19,7 @@ setTimeout(async () => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      query: `query SnarkFees($limit: Int = 10, $sort_by: SnarkSortByInput!, $query: SnarkQueryInput!) {
+      query: `query SnarkFeesAnalyticsQuery($limit: Int = 10, $sort_by: SnarkSortByInput!, $query: SnarkQueryInput!) {
         snarks(limit: $limit, sortBy: $sort_by, query: $query ) {
           fee
           blockHeight
@@ -32,10 +30,11 @@ setTimeout(async () => {
         sort_by: "BLOCKHEIGHT_DESC",
         query: {
           canonical: true,
-          blockHeight_gte: blockOffset,
+          blockHeight_gte: blockheightGte,
+          blockHeight_lte: blockheightLte,
         },
       },
-      operationName: "SnarkFees",
+      operationName: "SnarkFeesAnalyticsQuery",
     }),
   });
 

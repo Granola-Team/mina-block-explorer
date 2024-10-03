@@ -75,6 +75,12 @@ function getBlockLimit() {
   return urlParams.get("limit") || 1000;
 }
 
+function getUrlParam(param) {
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  return urlParams.get(param);
+}
+
 async function getBlockchainSummary() {
   let response = await fetch(config.rest_endpoint + "/summary", {
     method: "GET",
