@@ -109,6 +109,10 @@ publish: pre-publish clean pnpm-install
   @echo "Publishing version {{VERSION}}"
   npx wrangler pages deploy --branch main
 
+# Check rust code
+check:
+  cargo check
+
 # Lint application source code
 lint: pnpm-install && audit
   @echo "--- Linting JS/TS"
