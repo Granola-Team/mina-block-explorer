@@ -38,11 +38,13 @@ pub fn StakesPageContents(
             let public_key = params_map.get("q-key").cloned();
             let delegate = params_map.get("q-delegate").cloned();
             let stake = params_map.get("q-stake").cloned();
+            let username = params_map.get("q-username").cloned();
             load_data(
                 Some(epoch_opt.unwrap_or(current_epoch)),
                 public_key,
                 delegate,
                 stake,
+                username,
             )
             .await
         },
