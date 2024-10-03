@@ -11,16 +11,19 @@ use std::collections::HashMap;
 use web_sys::{window, Event, MouseEvent};
 
 #[component]
-pub fn ControlledInput(
+pub fn ControlledInput<T>(
     #[prop(into, default = "controlled-input-id".to_string())] id: String,
     #[prop(into, default = "controlled-input-name".to_string())] name: String,
     #[prop(into)] input_type: String,
     #[prop(into)] disabled_sig: Signal<bool>,
-    #[prop(into)] value: String,
+    #[prop(into)] value_sig: Memo<Option<T>>,
     #[prop(into)] setter_sig: SignalSetter<Option<String>>,
     #[prop(optional)] input_class: Option<String>,
     #[prop(optional)] number_props: Option<HashMap<String, String>>,
-) -> impl IntoView {
+) -> impl IntoView
+where
+    T: From<u32> + ToString + Clone + 'static,
+{
     let unwrapped_input_class = input_class.unwrap_or(DEFAULT_INPUT_STYLES.to_string());
     let input_element: NodeRef<html::Input> = create_node_ref();
     let (handle_input_sig, _) = create_signal(use_debounce_fn_with_options(
@@ -39,10 +42,6 @@ pub fn ControlledInput(
         <input
             id=id
             type=input_type
-            on:keypress=move |ev| {
-                ev.prevent_default();
-            }
-
             on:input=move |_| {
                 let handle = handle_input_sig.get_untracked();
                 handle();
@@ -50,7 +49,7 @@ pub fn ControlledInput(
 
             disabled=move || disabled_sig.get()
             name=name
-            value=value
+            value=value_sig.get().map(|v| v.to_string()).unwrap_or_default()
             step=number_props
                 .clone()
                 .and_then(|props| props.get("step").cloned())
