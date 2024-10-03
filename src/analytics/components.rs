@@ -32,7 +32,7 @@ pub fn AnalyticsFilters(
                                 input_type="number"
                                 name="block-limit"
                                 disabled_sig=Signal::from(|| false)
-                                value=limit_sig.get().map(|s| s.to_string()).unwrap_or_default()
+                                value_sig=limit_sig
                                 setter_sig=SignalSetter::map(move |opt_str: Option<String>| {
                                     set_limit
                                         .set(
@@ -69,7 +69,7 @@ pub fn AnalyticsFilters(
                                 input_type="number"
                                 name="epoch"
                                 disabled_sig=Signal::from(|| false)
-                                value=epoch_sig.get().map(|s| s.to_string()).unwrap_or_default()
+                                value_sig=epoch_sig
                                 setter_sig=SignalSetter::map(move |opt_str: Option<String>| {
                                     set_epoch
                                         .set(
@@ -169,10 +169,7 @@ pub fn SnarkerLeaderboard() -> impl IntoView {
                                     input_type="number"
                                     name="epoch"
                                     disabled_sig=Signal::from(|| false)
-                                    value=epoch_sig
-                                        .get()
-                                        .map(|s| s.to_string())
-                                        .unwrap_or("0".to_string())
+                                    value_sig=epoch_sig
                                     setter_sig=SignalSetter::map(move |opt_str: Option<String>| {
                                         set_epoch
                                             .set(
@@ -274,10 +271,7 @@ pub fn StakerLeaderboard() -> impl IntoView {
                                     input_type="number"
                                     name="epoch"
                                     disabled_sig=Signal::from(|| false)
-                                    value=epoch_sig
-                                        .get()
-                                        .map(|s| s.to_string())
-                                        .unwrap_or("0".to_string())
+                                    value_sig=epoch_sig
                                     setter_sig=SignalSetter::map(move |opt_str: Option<String>| {
                                         set_epoch
                                             .set(
