@@ -22,12 +22,14 @@ default:
   @echo "Topologically sorted recipes:"
   @just --list --unsorted --list-heading '' --justfile {{justfile()}}
 
+# Deploys the mina-indexer locally
 deploy-mina-indexer:
   @echo "--- Deploying mina-indexer at {{INDEXER_VERSION}}"
   ruby ops/validate-env.rb VOLUMES_DIR INDEXER_PORT
   mkdir -p $VOLUMES_DIR/mina-indexer-prod
   cd lib/mina-indexer && VOLUMES_DIR=$VOLUMES_DIR nix develop --command just deploy-local-prod 10000 $INDEXER_PORT
 
+# Shuts down the locally running mina-indexer
 shutdown-mina-indexer:
   @echo "--- Shutting down mina-indexer"
   ruby ops/validate-env.rb VOLUMES_DIR
@@ -79,8 +81,8 @@ pnpm-install:
 dev: pnpm-install deploy-mina-indexer
   trunk serve --port="{{trunk_port}}" --open
 
-# Run tier2 application regression tests
-test-e2e-tier2: pnpm-install deploy-mina-indexer && shutdown-mina-indexer
+# Run tier2 tests
+t2: pnpm-install deploy-mina-indexer && shutdown-mina-indexer
   @echo "--- Performing end-to-end @tier2 tests"
   ruby ops/validate-env.rb GRAPHQL_URL REST_URL
   CYPRESS_tags="@tier2" \
@@ -91,14 +93,15 @@ test-e2e-tier2: pnpm-install deploy-mina-indexer && shutdown-mina-indexer
     --first-cmd="trunk serve --no-autoreload --port={{trunk_port}}" \
     --second-cmd="pnpm exec cypress run -r list -q"
 
-# Run regression tests with interactive GUI
-test-e2e-local: pnpm-install deploy-mina-indexer
+# Run tier2 tests interactively with GUI
+t2-i: pnpm-install deploy-mina-indexer
   ruby ops/validate-env.rb GRAPHQL_URL REST_URL
   ruby ./ops/manage-processes.rb \
     --port={{trunk_port}} \
     --first-cmd="trunk serve --no-autoreload --port={{trunk_port}}" \
     --second-cmd="pnpm exec cypress open"
 
+# Validates the environment before publishing application to CDN
 pre-publish:
   @echo "--- Validating environment variables for publishing"
   ruby ops/validate-env.rb GRAPHQL_URL REST_URL
@@ -133,4 +136,4 @@ lint: pnpm-install && audit
 tier1: lint test-unit
 
 # Run tier2 regression suite in CI
-tier2: lint test-unit && test-e2e-tier2
+tier2: lint test-unit && t2
