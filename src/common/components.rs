@@ -42,10 +42,6 @@ where
         <input
             id=id
             type=input_type
-            on:keypress=move |ev| {
-                ev.prevent_default();
-            }
-
             on:input=move |_| {
                 let handle = handle_input_sig.get_untracked();
                 handle();
