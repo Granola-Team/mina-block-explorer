@@ -25,12 +25,27 @@ def start_process(command)
   Process.spawn(command, pgroup: true) # Start in a new process group
 end
 
-# Kill a process group by its PID
 def kill_process_group(pid)
-  puts "Killing process group with PID: #{pid}"
-  Process.kill("TERM", -pid) # Use negative PID to target process group
-  Process.wait(pid)
+  puts "Attempting to kill process group with PID: #{pid}"
+  begin
+    # Send the TERM signal to the process group (-pid means the group)
+    Process.kill("TERM", -pid)
+  rescue Errno::EPERM => e
+    # Ignore permission errors when killing the process group
+    puts "Error: #{e.message}. Some processes in the group could not be killed."
+  rescue Errno::ESRCH => e
+    # Ignore errors if the process or group does not exist
+    puts "Error: #{e.message}. Process group not found."
+  end
+
+  # Ensure that we wait for the main process itself to finish
+  begin
+    Process.wait(pid)
+  rescue Errno::ECHILD
+    puts "No child processes left to wait for."
+  end
 end
+
 
 if __FILE__ == $0
   # Set up OptionParser for handling command-line arguments
