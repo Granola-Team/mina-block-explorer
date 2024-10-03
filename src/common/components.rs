@@ -216,6 +216,28 @@ pub fn PageContainer(children: Children) -> impl IntoView {
 }
 
 #[component]
+pub fn NavEntryIcon(nav_entry: NavEntry) -> impl IntoView {
+    view! {
+        {match nav_entry.icon {
+            NavIcon::Blocks => view! { <BlockIcon /> },
+            NavIcon::Transactions => view! { <TransactionIcon /> },
+            NavIcon::Send => view! { <SendIcon /> },
+            NavIcon::SNARKs => view! { <CheckCircleIcon /> },
+            NavIcon::Staking => view! { <StakingIcon /> },
+            NavIcon::Accounts => view! { <AccountIcon /> },
+            NavIcon::ZKApps => view! { <ZKAppSymbol /> },
+            NavIcon::Tokens => view! { <TokenSymbol /> },
+            NavIcon::Addresses => view! { <AddressIcon /> },
+            NavIcon::FeeTransfers => view! { <FeeTransferIcon /> },
+            NavIcon::Analytics => view! { <AnalyticsIcon /> },
+            NavIcon::More => view! { <MoreIcon /> },
+            NavIcon::Delegates => view! { <DelegateIcon /> },
+            NavIcon::Leaderboard => view! { <LeaderboardIcon /> },
+        }}
+    }
+}
+
+#[component]
 pub fn PreSectionContainer(children: Children) -> impl IntoView {
     view! { <div class="flex flex-col md:flex-row mx-4 mb-4">{children()}</div> }
 }
@@ -251,26 +273,12 @@ where
     create_effect(move |_| {
         set_link_class.set(get_link_class.get());
     });
+    let text = nav_entry.text.clone();
+    let href = nav_entry.href.clone();
     view! {
-        <a on:click=on_click class=move || link_class.get() href=nav_entry.href>
-            {match nav_entry.icon {
-                NavIcon::Blocks => view! { <BlockIcon /> },
-                NavIcon::Transactions => view! { <TransactionIcon /> },
-                NavIcon::Send => view! { <SendIcon /> },
-                NavIcon::SNARKs => view! { <CheckCircleIcon /> },
-                NavIcon::Staking => view! { <StakingIcon /> },
-                NavIcon::Accounts => view! { <AccountIcon /> },
-                NavIcon::ZKApps => view! { <ZKAppSymbol /> },
-                NavIcon::Tokens => view! { <TokenSymbol /> },
-                NavIcon::Addresses => view! { <AddressIcon /> },
-                NavIcon::FeeTransfers => view! { <FeeTransferIcon /> },
-                NavIcon::Analytics => view! { <AnalyticsIcon /> },
-                NavIcon::More => view! { <MoreIcon /> },
-                NavIcon::Delegates => view! { <DelegateIcon /> },
-                NavIcon::Leaderboard => view! { <LeaderboardIcon /> },
-            }}
-
-            <span class="ml-0.5">{nav_entry.text}</span>
+        <a on:click=on_click class=move || link_class.get() href=href>
+            <NavEntryIcon nav_entry />
+            <span class="ml-0.5">{text}</span>
         </a>
     }
 }
@@ -285,6 +293,9 @@ pub fn TabLink(nav_entry: NavEntry) -> impl IntoView {
     let active_state = "active text-granola-orange border-granola-orange";
     let inactive_state = "inactive text-white border-transparent hover:border-white";
     let n_entry = nav_entry.clone();
+    let text = nav_entry.text.clone();
+    let number_bubble = nav_entry.number_bubble;
+    let href = nav_entry.href.clone();
     view! {
         <a
             class=move || {
@@ -295,28 +306,11 @@ pub fn TabLink(nav_entry: NavEntry) -> impl IntoView {
                     if n_entry.disabled { disabled_link_class } else { "" },
                 )
             }
-
-            href=nav_entry.href
+            href=href
         >
-            {match nav_entry.icon {
-                NavIcon::Blocks => view! { <BlockIcon /> },
-                NavIcon::Transactions => view! { <TransactionIcon /> },
-                NavIcon::Send => view! { <SendIcon /> },
-                NavIcon::SNARKs => view! { <CheckCircleIcon /> },
-                NavIcon::Staking => view! { <StakingIcon /> },
-                NavIcon::Accounts => view! { <AccountIcon /> },
-                NavIcon::ZKApps => view! { <ZKAppSymbol /> },
-                NavIcon::Tokens => view! { <TokenSymbol /> },
-                NavIcon::Addresses => view! { <AddressIcon /> },
-                NavIcon::FeeTransfers => view! { <FeeTransferIcon /> },
-                NavIcon::Analytics => view! { <AnalyticsIcon /> },
-                NavIcon::More => view! { <MoreIcon /> },
-                NavIcon::Delegates => view! { <DelegateIcon /> },
-                NavIcon::Leaderboard => view! { <LeaderboardIcon /> },
-            }}
-
-            <div class="ml-0.5">{nav_entry.text}</div>
-            {match nav_entry.number_bubble {
+            <NavEntryIcon nav_entry />
+            <div class="ml-0.5">{text}</div>
+            {match number_bubble {
                 Some(number) => {
                     view! {
                         <div class="number-bubble ml-1 px-1 flex text-granola-orange text-xs bg-granola-orange/25 justify-center items-center rounded-full">
