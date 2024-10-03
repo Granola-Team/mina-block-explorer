@@ -335,56 +335,50 @@ pub fn AccountSpotlightTabs() -> impl IntoView {
     let memo_params_map = use_params_map();
     let id = move || memo_params_map.get().get("id").cloned().unwrap_or_default();
 
-    let transactions = use_context::<
-        ReadSignal<Option<Vec<Option<AccountActivityQueryDirectionalTransactions>>>>,
-    >()
-    .expect("there to be an optional AccountActivityQueryDirectionalTransactions signal provided");
-
     let delegator_count: ReadSignal<Option<DelegateCount>> =
         use_context::<ReadSignal<Option<DelegateCount>>>()
             .expect("there to be an optional DelegateCount signal provided");
 
-    let txn: ReadSignal<Option<Vec<Option<AccountActivityQueryFeetransfers>>>> =
-        use_context::<ReadSignal<Option<Vec<Option<AccountActivityQueryFeetransfers>>>>>()
-            .expect("there to be an optional AccountActivityQueryFeetransfers signal provided");
-
-    let blocks = use_context::<ReadSignal<Option<Vec<Option<AccountActivityQueryBlocks>>>>>()
-        .expect("there to be an optional AccountActivityQueryBlocks signal provided");
-
-    let snarks = use_context::<ReadSignal<Option<Vec<Option<AccountActivityQuerySnarks>>>>>()
-        .expect("there to be an optional AccountActivityQuerySnarks signal provided");
+    let account = use_context::<ReadSignal<Option<AccountActivityQueryAccounts>>>()
+        .expect("there to be an optional account provided");
 
     let tabs = vec![
         NavEntry {
             href: format!("/addresses/accounts/{}/commands/user", id()),
             text: "User Commands".to_string(),
             icon: NavIcon::Transactions,
-            number_bubble: transactions
-                .get()
-                .map(|t| t.len())
-                .map(Some)
-                .unwrap_or(Some(0)), // Wrap in Some(usize)
+            number_bubble: account.get().and_then(|a| {
+                a.pk_total_num_user_commands
+                    .and_then(|t| usize::try_from(t).ok())
+            }),
             ..Default::default()
         },
         NavEntry {
             href: format!("/addresses/accounts/{}/commands/internal", id()),
             text: "Internal Commands".to_string(),
             icon: NavIcon::Transactions,
-            number_bubble: txn.get().map(|t| t.len()).map(Some).unwrap_or(Some(0)),
+            number_bubble: account.get().and_then(|a| {
+                a.pk_total_num_internal_commands
+                    .and_then(|t| usize::try_from(t).ok())
+            }),
             ..Default::default()
         },
         NavEntry {
             href: format!("/addresses/accounts/{}/snark-jobs", id()),
             text: "SNARK Jobs".to_string(),
             icon: NavIcon::SNARKs,
-            number_bubble: snarks.get().map(|t| t.len()).map(Some).unwrap_or(Some(0)),
+            number_bubble: account
+                .get()
+                .and_then(|a| a.pk_total_num_snarks.and_then(|t| usize::try_from(t).ok())),
             ..Default::default()
         },
         NavEntry {
             href: format!("/addresses/accounts/{}/block-production", id()),
             text: "Block Production".to_string(),
             icon: NavIcon::Blocks,
-            number_bubble: blocks.get().map(|t| t.len()).map(Some).unwrap_or(Some(0)),
+            number_bubble: account
+                .get()
+                .and_then(|a| a.pk_total_num_blocks.and_then(|t| usize::try_from(t).ok())),
             ..Default::default()
         },
         NavEntry {

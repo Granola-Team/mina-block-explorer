@@ -147,12 +147,32 @@ Cypress.Commands.add("testSpotlightValue", (key, value) => {
   });
 });
 
+Cypress.Commands.add(
+  "aliasTableMetadata",
+  (heading, alias = "table-metadata") => {
+    cy.aliasTableRows(heading, "table-rows");
+    cy.get("@table-rows").then(($rows) => {
+      cy.wrap($rows).parents("section").find(".metadata").as(alias);
+    });
+  },
+);
+
+Cypress.Commands.add("assertTableMetadataCorrect", (heading, metadata, ith) => {
+  cy.aliasTableMetadata(heading, "table-metdata");
+  cy.get("@table-metadata")
+    .invoke("text")
+    .then((text) => {
+      text = text.replace(/\+/g, ""); // remove + symbol
+      let parsed_metadata = text.split(" of ");
+      expect(parseFormattedNumber(parsed_metadata[ith])).to.equal(metadata);
+    });
+});
+
 Cypress.Commands.add("assertTableRecordsCorrect", (heading) => {
+  cy.aliasTableMetadata(heading, "table-metadata");
   cy.aliasTableRows(heading, "table-rows");
   cy.get("@table-rows").then(($rows) => {
-    cy.wrap($rows)
-      .parents("section")
-      .find(".metadata")
+    cy.get("@table-metadata")
       .invoke("text")
       .then((text) => {
         let [displaying, available, total] = text.split(" of ");
