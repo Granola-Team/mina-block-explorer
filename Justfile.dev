@@ -3,7 +3,7 @@
 # Justfile for useful development commands
 
 lint-fix:
-    standardrb ops/*.rb
+    standardrb --fix ops/*.rb
     cargo clippy --fix --allow-dirty --allow-staged
 
 # builds documention in the home directory
