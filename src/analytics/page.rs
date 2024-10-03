@@ -6,15 +6,17 @@ use leptos_router::create_query_signal;
 
 #[component]
 pub fn BlocksAnalyticsPage() -> impl IntoView {
-    let (limit_sig, _) = create_query_signal::<u64>("limit");
+    let (blockheight_lte_sig, _) = create_query_signal::<u64>("q-blockheight-lte");
+    let (blockheight_gte_sig, _) = create_query_signal::<u64>("q-blockheight-gte");
     view! {
         <Title text="Analytics | Blocks" />
         <PageContainer>
             <AppSection>
-                <AnalyticsFilters />
+                <AnalyticsFilters by_block=true />
                 <AnalyticsLayout>
                     {move || {
-                        limit_sig.get();
+                        blockheight_lte_sig.get();
+                        blockheight_gte_sig.get();
                         view! {
                             <script src="/scripts/analytics/blocks.js" defer=true></script>
                             <AnalyticsSmContainer>
@@ -63,15 +65,17 @@ pub fn BlocksAnalyticsPage() -> impl IntoView {
 
 #[component]
 pub fn SnarksAnalyticsPage() -> impl IntoView {
-    let (limit_sig, _) = create_query_signal::<u64>("limit");
+    let (blockheight_lte_sig, _) = create_query_signal::<u64>("q-blockheight-lte");
+    let (blockheight_gte_sig, _) = create_query_signal::<u64>("q-blockheight-gte");
     view! {
         <Title text="Analytics | SNARKs" />
         <PageContainer>
             <AppSection>
-                <AnalyticsFilters />
+                <AnalyticsFilters by_block=true />
                 <AnalyticsLayout>
                     {move || {
-                        limit_sig.get();
+                        blockheight_lte_sig.get();
+                        blockheight_gte_sig.get();
                         view! {
                             // redraw
 
@@ -118,15 +122,17 @@ pub fn StakerLeaderboardPage() -> impl IntoView {
 
 #[component]
 pub fn UserCommandsAnalyticsPage() -> impl IntoView {
-    let (limit_sig, _) = create_query_signal::<u64>("limit");
+    let (blockheight_lte_sig, _) = create_query_signal::<u64>("q-blockheight-lte");
+    let (blockheight_gte_sig, _) = create_query_signal::<u64>("q-blockheight-gte");
     view! {
         <Title text="Analytics | User Commands" />
         <PageContainer>
             <AppSection>
-                <AnalyticsFilters />
+                <AnalyticsFilters by_block=true />
                 <AnalyticsLayout>
                     {move || {
-                        limit_sig.get();
+                        blockheight_lte_sig.get();
+                        blockheight_gte_sig.get();
                         view! {
                             <script src="/scripts/analytics/user-commands.js" defer=true></script>
                             <script

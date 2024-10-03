@@ -45,9 +45,11 @@
             pkg-config
             ruby
             rubyPackages.standard
+            rubyPackages.rspec
             rust-analyzer
             toolchain
             trunk
+            netcat
           ]
           ++ lib.optionals stdenv.isDarwin
           [darwin.apple_sdk.frameworks.SystemConfiguration];

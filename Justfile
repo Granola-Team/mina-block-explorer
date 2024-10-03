@@ -60,6 +60,8 @@ format:
 test-unit:
   @echo "--- Performing jest unit tests"
   pnpm exec jest test
+  @echo "--- Performing ruby tests"
+  rspec **/*-spec.rb
   @echo "--- Performing rust unit tests"
   cargo-nextest nextest run
 

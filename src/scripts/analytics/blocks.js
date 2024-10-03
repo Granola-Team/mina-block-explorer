@@ -104,9 +104,8 @@ function renderCoinbaseRewardsChart(data, myChart) {
 }
 
 setTimeout(async () => {
-  const blockLimit = getBlockLimit();
-  let { blockchainLength } = await getBlockchainSummary();
-  const blockOffset = blockchainLength - blockLimit;
+  let blockheightLte = parseInt(getUrlParam("q-blockheight-lte"));
+  let blockheightGte = parseInt(getUrlParam("q-blockheight-gte"));
   const groupSize = SLOT_GROUPING;
 
   let rewardsChartDom = document.getElementById("rewards");
@@ -157,7 +156,8 @@ setTimeout(async () => {
         limit: 1e9,
         sort_by: "BLOCKHEIGHT_DESC",
         query: {
-          blockHeight_gte: blockOffset,
+          blockHeight_gte: blockheightGte,
+          blockHeight_lte: blockheightLte,
         },
       },
       operationName: "BlocksQuery",
