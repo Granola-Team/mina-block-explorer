@@ -120,7 +120,8 @@ pub fn StakerLeaderboardPage() -> impl IntoView {
 
 #[component]
 pub fn UserCommandsAnalyticsPage() -> impl IntoView {
-    let (limit_sig, _) = create_query_signal::<u64>("limit");
+    let (blockheight_lte_sig, _) = create_query_signal::<u64>("q-blockheight-lte");
+    let (blockheight_gte_sig, _) = create_query_signal::<u64>("q-blockheight-gte");
     view! {
         <Title text="Analytics | User Commands" />
         <PageContainer>
@@ -128,7 +129,8 @@ pub fn UserCommandsAnalyticsPage() -> impl IntoView {
                 <AnalyticsFilters by_block=true />
                 <AnalyticsLayout>
                     {move || {
-                        limit_sig.get();
+                        blockheight_lte_sig.get();
+                        blockheight_gte_sig.get();
                         view! {
                             <script src="/scripts/analytics/user-commands.js" defer=true></script>
                             <script

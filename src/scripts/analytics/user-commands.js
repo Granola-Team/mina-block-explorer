@@ -186,15 +186,8 @@ function renderTransactionVolumeChart(data, myChart) {
 }
 
 setTimeout(async () => {
-  const blockLimit = getBlockLimit();
-  let summary_response = await fetch(config.rest_endpoint + "/summary", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  let { blockchainLength } = await summary_response.json();
-  const blockOffset = blockchainLength - blockLimit;
+  let blockheightLte = parseInt(getUrlParam("q-blockheight-lte"));
+  let blockheightGte = parseInt(getUrlParam("q-blockheight-gte"));
   let volumeChartDom = document.getElementById("user-commands-volume");
   let topRecipientsChartDom = document.getElementById(
     "user-commands-top-recipients",
@@ -257,7 +250,8 @@ setTimeout(async () => {
         query: {
           canonical: true,
           kind: "PAYMENT",
-          blockHeight_gte: blockOffset,
+          blockHeight_gte: blockheightGte,
+          blockHeight_lte: blockheightLte,
         },
       },
       operationName: "TransactionsQuery",
