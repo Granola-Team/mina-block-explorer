@@ -19,13 +19,13 @@ suite(["@tier2"], "fitler", () => {
       expected_url_keys: ["q-blockheight-gte", "q-blockheight-lte"],
     },
     {
-      url: "/analytics/staker-leaderboard",
+      url: "/analytics/staker-leaderboard?epoch=0",
       filter_ids: ["#epoch"],
       expected_url_values: [0],
       expected_url_keys: ["epoch"],
     },
     {
-      url: "/analytics/snarker-leaderboard",
+      url: "/analytics/snarker-leaderboard?epoch=0",
       filter_ids: ["#epoch"],
       expected_url_values: [0],
       expected_url_keys: ["epoch"],
