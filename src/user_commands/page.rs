@@ -176,7 +176,7 @@ pub fn CommandSpotlightPage() -> impl IntoView {
                                     ..Default::default()
                                 },
                                 SpotlightEntry {
-                                    label: "From".to_string(),
+                                    label: "From/Fee Payer".to_string(),
                                     any_el: Some(
                                         convert_to_link(
                                             transaction.get_from(),
@@ -296,7 +296,7 @@ pub fn CommandSpotlightPage() -> impl IntoView {
                             ..Default::default()
                         },
                         SpotlightEntry {
-                            label: "From".to_string(),
+                            label: "From/Fee Payer".to_string(),
                             ..Default::default()
                         },
                         SpotlightEntry {

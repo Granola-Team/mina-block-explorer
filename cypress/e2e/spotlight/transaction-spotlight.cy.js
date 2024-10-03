@@ -16,7 +16,7 @@ suite(["@tier2"], "transaction spotlight", () => {
     "Date",
     "Canonical",
     "Amount",
-    "From",
+    "From/Fee Payer",
     "Nonce",
     "Kind",
     "Txn Hash",
