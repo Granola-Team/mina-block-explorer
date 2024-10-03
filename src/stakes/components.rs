@@ -82,6 +82,7 @@ pub fn StakesPageContents(
         TableColumn {
             column: "Username".to_string(),
             width: Some(String::from(TABLE_COL_USERNAME_WIDTH)),
+            is_searchable: true,
             ..Default::default()
         },
         TableColumn {
