@@ -1,13 +1,17 @@
 use super::models::*;
 use crate::common::{constants::*, models::MyError};
 
-pub async fn load_snark_fees(limit: Option<u64>) -> Result<SnarkFeesResponse, MyError> {
-    if limit.is_none() {
-        return Err(MyError::ParseError("Limit must not be None".into()));
+pub async fn load_snark_fees(
+    blockheight_lte: Option<u64>,
+    blockheight_gte: Option<u64>,
+) -> Result<SnarkFeesResponse, MyError> {
+    if blockheight_lte.is_none() || blockheight_gte.is_none() {
+        return Err(MyError::ParseError("Block limits must be set".into()));
     }
     let query_body = format!(
-        r#"{{"query":"query SnarkFeesQuery(\n  $limit: Int = 100\n) {{\n  blocks(limit: $limit) {{\n    blockHeight\n    snarkFees\n    snarkJobs{{\n fee }}\n}}\n}}\n","variables":{{"limit": {}}},"operationName":"SnarkFeesQuery"}}"#,
-        limit.unwrap()
+        r#"{{"query":"query SnarkFeesQuery(\n  $limit: Int = 100\n, $query: BlockQueryInput!) {{\n  blocks(limit: $limit, query: $query) {{\n    blockHeight\n    snarkFees\n    snarkJobs{{\n fee }}\n}}\n}}\n","variables":{{"limit": 10000000, "query": {{ "blockHeight_lte": {}, "blockHeight_gte": {} }} }},"operationName":"SnarkFeesQuery"}}"#,
+        blockheight_lte.unwrap(),
+        blockheight_gte.unwrap()
     );
     let client = reqwest::Client::new();
     let response = client

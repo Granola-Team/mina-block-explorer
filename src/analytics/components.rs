@@ -368,10 +368,13 @@ pub fn StakerLeaderboard() -> impl IntoView {
 
 #[component]
 pub fn SnarkFees() -> impl IntoView {
-    let (limit_sig, _) = create_query_signal::<u64>("limit");
+    let (blockheight_lte_sig, _) = create_query_signal::<u64>("q-blockheight-lte");
+    let (blockheight_gte_sig, _) = create_query_signal::<u64>("q-blockheight-gte");
     let resource = create_resource(
-        move || limit_sig.get(),
-        move |limit| async move { load_snark_fees(limit).await },
+        move || (blockheight_lte_sig.get(), blockheight_gte_sig.get()),
+        move |(blockheight_lte, blockheight_gte)| async move {
+            load_snark_fees(blockheight_lte, blockheight_gte).await
+        },
     );
     let (data_sig, set_data) = create_signal(None);
 
