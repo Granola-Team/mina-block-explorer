@@ -62,7 +62,7 @@ pub fn AnalyticsFilters(
                                 input_type="number"
                                 name="blockheight-gte"
                                 disabled_sig=Signal::from(|| false)
-                                value_sig=limit_sig
+                                value_sig=blockheight_gte
                                 setter_sig=SignalSetter::map(move |opt_str: Option<String>| {
                                     set_blockheight_gte
                                         .set(
@@ -88,10 +88,7 @@ pub fn AnalyticsFilters(
                                 input_type="number"
                                 name="blockheight-lte"
                                 disabled_sig=Signal::from(|| false)
-                                value=blockheight_lte
-                                    .get()
-                                    .map(|s| s.to_string())
-                                    .unwrap_or_default()
+                                value_sig=blockheight_lte
                                 setter_sig=SignalSetter::map(move |opt_str: Option<String>| {
                                     set_blockheight_lte
                                         .set(
