@@ -45,6 +45,7 @@
             pkg-config
             ruby
             rubyPackages.standard
+            rubyPackages.rspec
             rust-analyzer
             toolchain
             trunk
