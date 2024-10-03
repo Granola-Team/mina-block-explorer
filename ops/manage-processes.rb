@@ -46,7 +46,6 @@ def kill_process_group(pid)
   end
 end
 
-
 if __FILE__ == $0
   # Set up OptionParser for handling command-line arguments
   options = {}
