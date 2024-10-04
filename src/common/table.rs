@@ -77,19 +77,19 @@ pub struct NoSort;
 #[derive(Clone)]
 #[allow(dead_code)]
 pub enum AnySort {
-    NoSort(NoSort),
-    SnarkerLeaderboardTotalFeesSort(SnarkerLeaderboardTotalFeesSort),
-    SnarkerLeaderboardHighestFeeSort(SnarkerLeaderboardHighestFeesSort),
-    DelegatorSort(DelegatorsSort),
+    None(NoSort),
+    SnarkerLeaderboardTotalFees(SnarkerLeaderboardTotalFeesSort),
+    SnarkerLeaderboardHighestFee(SnarkerLeaderboardHighestFeesSort),
+    Delegator(DelegatorsSort),
 }
 
 impl SortDirection for AnySort {
     fn is_desc(&self) -> bool {
         match self {
-            AnySort::NoSort(_) => false,
-            AnySort::SnarkerLeaderboardTotalFeesSort(sort) => sort.is_desc(),
-            AnySort::SnarkerLeaderboardHighestFeeSort(sort) => sort.is_desc(),
-            AnySort::DelegatorSort(sort) => sort.is_desc(),
+            AnySort::None(_) => false,
+            AnySort::SnarkerLeaderboardTotalFees(sort) => sort.is_desc(),
+            AnySort::SnarkerLeaderboardHighestFee(sort) => sort.is_desc(),
+            AnySort::Delegator(sort) => sort.is_desc(),
         }
     }
 }
@@ -98,10 +98,10 @@ impl SortDirection for AnySort {
 impl ToString for AnySort {
     fn to_string(&self) -> String {
         match self {
-            AnySort::NoSort(_) => String::new(),
-            AnySort::SnarkerLeaderboardTotalFeesSort(sort) => sort.to_string(),
-            AnySort::SnarkerLeaderboardHighestFeeSort(sort) => sort.to_string(),
-            AnySort::DelegatorSort(sort) => sort.to_string(),
+            AnySort::None(_) => String::new(),
+            AnySort::SnarkerLeaderboardTotalFees(sort) => sort.to_string(),
+            AnySort::SnarkerLeaderboardHighestFee(sort) => sort.to_string(),
+            AnySort::Delegator(sort) => sort.to_string(),
         }
     }
 }
