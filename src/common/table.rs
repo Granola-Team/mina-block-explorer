@@ -18,12 +18,6 @@ pub trait TableData {
 }
 
 #[derive(Clone)]
-pub enum TableSortDirection {
-    // ASC,
-    Desc,
-}
-
-#[derive(Clone)]
 pub enum ColumnTextAlignment {
     #[allow(dead_code)]
     Left,
@@ -81,6 +75,7 @@ impl SortDirection for NoSort {
     }
 }
 
+#[allow(clippy::to_string_trait_impl)]
 impl ToString for NoSort {
     fn to_string(&self) -> String {
         String::new()
