@@ -184,24 +184,24 @@ pub struct SnarkerLeaderboardResponse {
 
 #[derive(Clone)]
 #[allow(dead_code)]
-pub enum SnarkerLeaderboardTotalFeesSort {
+pub enum SnarkerLeaderboardTotalFees {
     TotalFeesAsc,
     TotalFeesDesc,
 }
 
-impl SortDirection for SnarkerLeaderboardTotalFeesSort {
+impl SortDirection for SnarkerLeaderboardTotalFees {
     fn is_desc(&self) -> bool {
-        matches!(self, SnarkerLeaderboardTotalFeesSort::TotalFeesDesc)
+        matches!(self, SnarkerLeaderboardTotalFees::TotalFeesDesc)
     }
 }
 
-impl fmt::Display for SnarkerLeaderboardTotalFeesSort {
+impl fmt::Display for SnarkerLeaderboardTotalFees {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            SnarkerLeaderboardTotalFeesSort::TotalFeesAsc => {
+            SnarkerLeaderboardTotalFees::TotalFeesAsc => {
                 write!(f, "TOTAL_FEES_ASC")
             }
-            SnarkerLeaderboardTotalFeesSort::TotalFeesDesc => {
+            SnarkerLeaderboardTotalFees::TotalFeesDesc => {
                 write!(f, "TOTAL_FEES_DESC")
             }
         }
@@ -210,24 +210,24 @@ impl fmt::Display for SnarkerLeaderboardTotalFeesSort {
 
 #[derive(Clone)]
 #[allow(dead_code)]
-pub enum SnarkerLeaderboardHighestFeesSort {
+pub enum SnarkerLeaderboardHighestFees {
     HighestFeeAsc,
     HighestFeeDesc,
 }
 
-impl SortDirection for SnarkerLeaderboardHighestFeesSort {
+impl SortDirection for SnarkerLeaderboardHighestFees {
     fn is_desc(&self) -> bool {
-        matches!(self, SnarkerLeaderboardHighestFeesSort::HighestFeeDesc)
+        matches!(self, SnarkerLeaderboardHighestFees::HighestFeeDesc)
     }
 }
 
-impl fmt::Display for SnarkerLeaderboardHighestFeesSort {
+impl fmt::Display for SnarkerLeaderboardHighestFees {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            SnarkerLeaderboardHighestFeesSort::HighestFeeAsc => {
+            SnarkerLeaderboardHighestFees::HighestFeeAsc => {
                 write!(f, "MAX_FEE_ASC")
             }
-            SnarkerLeaderboardHighestFeesSort::HighestFeeDesc => {
+            SnarkerLeaderboardHighestFees::HighestFeeDesc => {
                 write!(f, "MAX_FEE_DESC")
             }
         }

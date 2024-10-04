@@ -331,20 +331,20 @@ pub struct AccountActivityQueryDelegatorExt {
 }
 
 #[derive(Clone)]
-pub enum DelegatorsSort {
+pub enum Delegators {
     BalanceDesc,
 }
 
-impl SortDirection for DelegatorsSort {
+impl SortDirection for Delegators {
     fn is_desc(&self) -> bool {
-        matches!(self, DelegatorsSort::BalanceDesc)
+        matches!(self, Delegators::BalanceDesc)
     }
 }
 
-impl fmt::Display for DelegatorsSort {
+impl fmt::Display for Delegators {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            DelegatorsSort::BalanceDesc => {
+            Delegators::BalanceDesc => {
                 write!(f, "BALANCE_DESC")
             }
         }

@@ -212,7 +212,7 @@ pub fn AccountDelegationsSection(
         TableColumn {
             column: "Delegated Balance".to_string(),
             width: Some(String::from(TABLE_COL_LARGE_BALANCE)),
-            sort_direction: Some(AnySort::Delegator(DelegatorsSort::BalanceDesc)),
+            sort_direction: Some(AnySort::Delegator(Delegators::BalanceDesc)),
             ..Default::default()
         },
         TableColumn {

@@ -1,7 +1,7 @@
 use super::{components::*, functions::*, models::*};
 use crate::{
-    account_activity::models::DelegatorsSort,
-    analytics::models::{SnarkerLeaderboardHighestFeesSort, SnarkerLeaderboardTotalFeesSort},
+    account_activity::models::Delegators,
+    analytics::models::{SnarkerLeaderboardHighestFees, SnarkerLeaderboardTotalFees},
     common::constants::*,
     icons::*,
 };
@@ -72,15 +72,15 @@ pub trait SortDirection {
 }
 
 #[derive(Clone)]
-pub struct NoSort;
+pub struct Nil;
 
 #[derive(Clone)]
 #[allow(dead_code)]
 pub enum AnySort {
-    None(NoSort),
-    SnarkerLeaderboardTotalFees(SnarkerLeaderboardTotalFeesSort),
-    SnarkerLeaderboardHighestFee(SnarkerLeaderboardHighestFeesSort),
-    Delegator(DelegatorsSort),
+    None(Nil),
+    SnarkerLeaderboardTotalFees(SnarkerLeaderboardTotalFees),
+    SnarkerLeaderboardHighestFee(SnarkerLeaderboardHighestFees),
+    Delegator(Delegators),
 }
 
 impl SortDirection for AnySort {

@@ -33,8 +33,8 @@ pub async fn load_snark_fees(
 
 pub async fn load_snarker_leaderboard_data(
     epoch: Option<u32>,
-    sort_by_total_fees_opt: Option<SnarkerLeaderboardTotalFeesSort>,
-    sort_by_highest_fee_opt: Option<SnarkerLeaderboardHighestFeesSort>,
+    sort_by_total_fees_opt: Option<SnarkerLeaderboardTotalFees>,
+    sort_by_highest_fee_opt: Option<SnarkerLeaderboardHighestFees>,
 ) -> Result<SnarkerLeaderboardResponse, MyError> {
     if epoch.is_none() {
         return Err(MyError::ParseError("Epoch must not be None".into()));
@@ -44,7 +44,7 @@ pub async fn load_snarker_leaderboard_data(
         sort_by_total_fees_opt
             .map(|s| s.to_string())
             .or_else(|| sort_by_highest_fee_opt.map(|s| s.to_string()))
-            .unwrap_or(SnarkerLeaderboardHighestFeesSort::HighestFeeDesc.to_string()),
+            .unwrap_or(SnarkerLeaderboardHighestFees::HighestFeeDesc.to_string()),
         epoch.unwrap()
     );
     let client = reqwest::Client::new();

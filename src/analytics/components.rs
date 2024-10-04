@@ -163,7 +163,7 @@ pub fn SnarkerLeaderboard() -> impl IntoView {
             load_snarker_leaderboard_data(
                 epoch,
                 None,
-                Some(SnarkerLeaderboardHighestFeesSort::HighestFeeDesc),
+                Some(SnarkerLeaderboardHighestFees::HighestFeeDesc),
             )
             .await
         },
@@ -203,7 +203,7 @@ pub fn SnarkerLeaderboard() -> impl IntoView {
                 TableColumn {
                     column: "Max Fee".to_string(),
                     sort_direction: Some(AnySort::SnarkerLeaderboardHighestFee(
-                        SnarkerLeaderboardHighestFeesSort::HighestFeeDesc,
+                        SnarkerLeaderboardHighestFees::HighestFeeDesc,
                     )),
                     alignment: Some(ColumnTextAlignment::Right),
                     ..Default::default()
