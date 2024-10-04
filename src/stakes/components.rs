@@ -72,7 +72,7 @@ pub fn StakesPageContents(
         }));
     });
 
-    let table_columns = vec![
+    let table_columns: Vec<TableColumn<NoSort>> = vec![
         TableColumn {
             column: "Key".to_string(),
             is_searchable: true,
@@ -92,7 +92,8 @@ pub fn StakesPageContents(
         },
         TableColumn {
             column: "Total Stake %".to_string(),
-            sort_direction: Some(TableSortDirection::Desc),
+            // TODO: implement sort_direction generic
+            // sort_direction: Some(TableSortDirection::Desc),
             width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
             alignment: Some(ColumnTextAlignment::Right),
             ..Default::default()

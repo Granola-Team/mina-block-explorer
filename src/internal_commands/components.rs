@@ -38,7 +38,7 @@ pub fn InternalCommandsTab() -> impl IntoView {
             .map(|data| set_data.set(Some(data.feetransfers)))
     });
 
-    let table_columns = vec![
+    let table_columns: Vec<TableColumn<NoSort>> = vec![
         TableColumn {
             column: "Height".to_string(),
             is_searchable: true,

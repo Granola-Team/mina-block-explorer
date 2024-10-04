@@ -1,10 +1,6 @@
 use super::{functions::*, models::*};
 use crate::{
-    common::{
-        components::*,
-        constants::*,
-        table::{ColumnTextAlignment, TableColumn, TableSectionTemplate, TableSortDirection},
-    },
+    common::{components::*, constants::*, table::*},
     summary::models::BlockchainSummary,
 };
 use codee::string::JsonSerdeCodec;
@@ -180,7 +176,7 @@ pub fn SnarkerLeaderboard() -> impl IntoView {
 
     {
         move || {
-            let table_columns = vec![
+            let table_columns: Vec<TableColumn<NoSort>> = vec![
                 TableColumn {
                     column: "Username".to_string(),
                     ..Default::default()
@@ -201,7 +197,8 @@ pub fn SnarkerLeaderboard() -> impl IntoView {
                 },
                 TableColumn {
                     column: "Max Fee".to_string(),
-                    sort_direction: Some(TableSortDirection::Desc),
+                    // TODO: implement sort_direction generic
+                    // sort_direction: Some(TableSortDirection::Desc),
                     alignment: Some(ColumnTextAlignment::Right),
                     ..Default::default()
                 },
@@ -281,7 +278,7 @@ pub fn StakerLeaderboard() -> impl IntoView {
 
     {
         move || {
-            let table_columns = vec![
+            let table_columns: Vec<TableColumn<NoSort>> = vec![
                 TableColumn {
                     column: "Username".to_string(),
                     ..Default::default()
@@ -292,7 +289,8 @@ pub fn StakerLeaderboard() -> impl IntoView {
                 },
                 TableColumn {
                     column: "Canonical Blocks Produced".to_string(),
-                    sort_direction: Some(TableSortDirection::Desc),
+                    // TODO: implement sort_direction generic
+                    // sort_direction: Some(TableSortDirection::Desc),
                     alignment: Some(ColumnTextAlignment::Right),
                     ..Default::default()
                 },
@@ -377,7 +375,7 @@ pub fn SnarkFees() -> impl IntoView {
 
     {
         move || {
-            let table_columns = vec![
+            let table_columns: Vec<TableColumn<NoSort>> = vec![
                 TableColumn {
                     column: "Metric".to_string(),
                     ..Default::default()

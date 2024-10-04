@@ -27,7 +27,7 @@ pub fn AccountTransactionsSection(
         .expect("there to be an optional account provided");
     let (summary_sig, _, _) =
         use_local_storage::<BlockchainSummary, JsonSerdeCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
-    let table_columns = vec![
+    let table_columns: Vec<TableColumn<NoSort>> = vec![
         TableColumn {
             column: "Height".to_string(),
             is_searchable: true,
@@ -122,7 +122,7 @@ pub fn AccountInternalCommandsSection(
         .expect("there to be an optional account provided");
     let (summary_sig, _, _) =
         use_local_storage::<BlockchainSummary, JsonSerdeCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
-    let table_columns = vec![
+    let table_columns: Vec<TableColumn<NoSort>> = vec![
         TableColumn {
             column: "Height".to_string(),
             is_searchable: true,
@@ -198,7 +198,7 @@ pub fn AccountDelegationsSection(
     delegator_count: Option<usize>,
     is_loading: Signal<bool>,
 ) -> impl IntoView {
-    let table_columns = vec![
+    let table_columns: Vec<TableColumn<NoSort>> = vec![
         TableColumn {
             column: "Public Key".to_string(),
             width: Some(String::from(TABLE_COL_HASH_WIDTH)),
@@ -212,7 +212,8 @@ pub fn AccountDelegationsSection(
         TableColumn {
             column: "Delegated Balance".to_string(),
             width: Some(String::from(TABLE_COL_LARGE_BALANCE)),
-            sort_direction: Some(TableSortDirection::Desc),
+            // TODO: implement sort_direction generic
+            // sort_direction: Some(TableSortDirection::Desc),
             ..Default::default()
         },
         TableColumn {
@@ -263,7 +264,7 @@ pub fn AccountOverviewSnarkJobTable(
             .unwrap_or_else(|| "/snarks".to_string()),
     );
 
-    let table_columns = vec![
+    let table_columns: Vec<TableColumn<NoSort>> = vec![
         TableColumn {
             column: "Height".to_string(),
             is_searchable: true,
@@ -350,7 +351,7 @@ pub fn AccountOverviewBlocksTable(
             .unwrap_or_else(|| "/blocks".to_string()),
     );
 
-    let table_columns = vec![
+    let table_columns: Vec<TableColumn<NoSort>> = vec![
         TableColumn {
             column: "Height".to_string(),
             is_searchable: true,

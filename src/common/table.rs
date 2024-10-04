@@ -72,6 +72,21 @@ pub trait SortDirection {
     fn is_desc(&self) -> bool;
 }
 
+#[derive(Clone)]
+pub struct NoSort;
+
+impl SortDirection for NoSort {
+    fn is_desc(&self) -> bool {
+        false
+    }
+}
+
+impl ToString for NoSort {
+    fn to_string(&self) -> String {
+        String::new()
+    }
+}
+
 #[component]
 pub fn TableSectionTemplate<T, F, E, S>(
     table_columns: Vec<TableColumn<S>>,

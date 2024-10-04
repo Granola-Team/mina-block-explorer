@@ -53,7 +53,7 @@ fn AccountsPageContents() -> impl IntoView {
             .await
         },
     );
-    let table_columns = vec![
+    let table_columns: Vec<TableColumn<NoSort>> = vec![
         TableColumn {
             column: "Public Key".to_string(),
             is_searchable: true,
@@ -69,10 +69,12 @@ fn AccountsPageContents() -> impl IntoView {
         TableColumn {
             column: "Balance".to_string(),
             width: Some(String::from(TABLE_COL_LARGE_BALANCE)),
-            sort_direction: Some(TableSortDirection::Desc),
+            // TODO: implement sort_direction generic
+            // sort_direction: Some(TableSortDirection::Desc),
             is_searchable: true,
             html_input_type: "number".to_string(),
             alignment: Some(ColumnTextAlignment::Right),
+            ..Default::default()
         },
         TableColumn {
             column: "Nonce".to_string(),
