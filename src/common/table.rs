@@ -299,7 +299,10 @@ where
 }
 
 #[component]
-pub fn TableCell(children: Children, column_opt: Option<TableColumn>) -> impl IntoView {
+pub fn TableCell<T>(children: Children, column_opt: Option<TableColumn<T>>) -> impl IntoView
+where
+    T: Clone + 'static,
+{
     let clss = " text-ellipsis overflow-hidden text-table-row-text-color font-medium text-sm whitespace-nowrap max-w-40 ".to_string();
     view! {
         <td class=CELL_PADDING_CLASS.to_string()
