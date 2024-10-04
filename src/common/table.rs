@@ -147,7 +147,7 @@ where
 }
 
 #[component]
-pub fn ColGroup(columns: Vec<TableColumn<T>>) -> impl IntoView
+pub fn ColGroup<T>(columns: Vec<TableColumn<T>>) -> impl IntoView
 where
     T: Clone + 'static,
 {
@@ -166,7 +166,7 @@ where
 }
 
 #[component]
-pub fn TableHeader(columns: Vec<TableColumn<T>>) -> impl IntoView
+pub fn TableHeader<T>(columns: Vec<TableColumn<T>>) -> impl IntoView
 where
     T: SortDirection + ToString + Clone + 'static,
 {
@@ -186,12 +186,11 @@ where
 const ICON_CLASS: &str = " inline-block cursor-pointer pl-1 items-center ";
 
 #[component]
-fn ColumnHeader(id: String, column: TableColumn<T>) -> impl IntoView
+fn ColumnHeader<T>(id: String, column: TableColumn<T>) -> impl IntoView
 where
     T: SortDirection + ToString + Clone + 'static,
 {
     let id_copy = id.clone();
-    let (_, set_sort) = create_query_signal::<String>("sort-dir");
     let (value, set_value) = create_query_signal::<String>(id);
     let input_element: NodeRef<html::Input> = create_node_ref();
     let mut th_class = " whitespace-nowrap h-12 bg-table-header-fill xl:sticky xl:top-16 z-20 text-table-header-text-color font-semibold uppercase text-xs text-left py-4 box-border ".to_string();
