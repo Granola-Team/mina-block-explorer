@@ -92,8 +92,7 @@ pub fn StakesPageContents(
         },
         TableColumn {
             column: "Total Stake %".to_string(),
-            // TODO: implement sort_direction generic
-            // sort_direction: Some(TableSortDirection::Desc),
+            sort_direction: Some(AnySort::Stakes(StakesSort::StakeDesc)),
             width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
             alignment: Some(ColumnTextAlignment::Right),
             ..Default::default()

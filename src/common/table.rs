@@ -8,6 +8,7 @@ use crate::{
     },
     common::constants::*,
     icons::*,
+    stakes::models::StakesSort,
 };
 use heck::ToKebabCase;
 use leptos::{html::*, *};
@@ -87,6 +88,7 @@ pub enum AnySort {
     Delegator(Delegators),
     Accounts(AccountsSort),
     StakerLeaderboardCanonicalBlocks(StakerLeaderboardCanonicalBlocks),
+    Stakes(StakesSort),
 }
 
 impl SortDirection for AnySort {
@@ -98,6 +100,7 @@ impl SortDirection for AnySort {
             AnySort::Delegator(sort) => sort.is_desc(),
             AnySort::Accounts(sort) => sort.is_desc(),
             AnySort::StakerLeaderboardCanonicalBlocks(sort) => sort.is_desc(),
+            AnySort::Stakes(sort) => sort.is_desc(),
         }
     }
 }
@@ -112,6 +115,7 @@ impl ToString for AnySort {
             AnySort::Delegator(sort) => sort.to_string(),
             AnySort::Accounts(sort) => sort.to_string(),
             AnySort::StakerLeaderboardCanonicalBlocks(sort) => sort.to_string(),
+            AnySort::Stakes(sort) => sort.to_string(),
         }
     }
 }
