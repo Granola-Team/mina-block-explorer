@@ -147,7 +147,10 @@ where
 }
 
 #[component]
-pub fn ColGroup(columns: Vec<TableColumn>) -> impl IntoView {
+pub fn ColGroup(columns: Vec<TableColumn<T>>) -> impl IntoView
+where
+    T: Clone + 'static,
+{
     view! {
         {columns
             .iter()
