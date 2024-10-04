@@ -33,16 +33,16 @@ pub enum ColumnTextAlignment {
 }
 
 #[derive(Clone)]
-pub struct TableColumn {
+pub struct TableColumn<T> {
     pub column: String,
     pub is_searchable: bool,
-    pub sort_direction: Option<TableSortDirection>,
+    pub sort_direction: Option<T>,
     pub width: Option<String>,
     pub html_input_type: String,
     pub alignment: Option<ColumnTextAlignment>,
 }
 
-impl Default for TableColumn {
+impl<T> Default for TableColumn<T> {
     fn default() -> Self {
         TableColumn {
             column: String::new(),
