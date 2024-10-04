@@ -1,6 +1,6 @@
 use super::{
     graphql::account_activity_query::{AccountActivityQueryBlocks, AccountActivityQuerySnarks},
-    models::AccountActivityQueryDirectionalTransactions,
+    models::*,
 };
 use crate::{
     account_activity::{
@@ -212,8 +212,7 @@ pub fn AccountDelegationsSection(
         TableColumn {
             column: "Delegated Balance".to_string(),
             width: Some(String::from(TABLE_COL_LARGE_BALANCE)),
-            // TODO: implement sort_direction generic
-            // sort_direction: Some(TableSortDirection::Desc),
+            sort_direction: Some(AnySort::DelegatorSort(DelegatorsSort::BalanceDesc)),
             ..Default::default()
         },
         TableColumn {

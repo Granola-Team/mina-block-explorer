@@ -1,8 +1,7 @@
+use crate::common::table::SortDirection;
 use serde::*;
 use statrs::statistics::{Data, Distribution, OrderStatistics};
 use std::fmt;
-
-use crate::common::table::SortDirection;
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct BlockAnalyticsData {
@@ -184,6 +183,7 @@ pub struct SnarkerLeaderboardResponse {
 }
 
 #[derive(Clone)]
+#[allow(dead_code)]
 pub enum SnarkerLeaderboardTotalFeesSort {
     TotalFeesAsc,
     TotalFeesDesc,
@@ -209,6 +209,7 @@ impl fmt::Display for SnarkerLeaderboardTotalFeesSort {
 }
 
 #[derive(Clone)]
+#[allow(dead_code)]
 pub enum SnarkerLeaderboardHighestFeesSort {
     HighestFeeAsc,
     HighestFeeDesc,

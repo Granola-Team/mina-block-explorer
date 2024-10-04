@@ -2,13 +2,15 @@ use super::graphql::account_activity_query::{
     AccountActivityQueryIncomingTransactions, AccountActivityQueryOutgoingTransactions,
 };
 use crate::{
-    account_activity::graphql::account_activity_query::StakeQueryInput, common::functions::*,
+    account_activity::graphql::account_activity_query::StakeQueryInput,
+    common::{functions::*, table::SortDirection},
     Params,
 };
 use chrono::{DateTime, Utc};
 use heck::ToTitleCase;
 use leptos_router::Params;
 use serde::{Deserialize, Serialize};
+use std::fmt;
 
 #[derive(Copy, Clone)]
 pub struct DelegateCount(pub usize);
@@ -326,4 +328,25 @@ pub struct AccountActivityQueryDelegatorExt {
     pub public_key: Option<String>,
     pub delegated_balance: Option<i64>,
     pub percent_of_delegation: Option<f64>,
+}
+
+#[derive(Clone)]
+pub enum DelegatorsSort {
+    BalanceDesc,
+}
+
+impl SortDirection for DelegatorsSort {
+    fn is_desc(&self) -> bool {
+        matches!(self, DelegatorsSort::BalanceDesc)
+    }
+}
+
+impl fmt::Display for DelegatorsSort {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            DelegatorsSort::BalanceDesc => {
+                write!(f, "BALANCE_DESC")
+            }
+        }
+    }
 }
