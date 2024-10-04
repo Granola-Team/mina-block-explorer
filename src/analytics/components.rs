@@ -202,8 +202,9 @@ pub fn SnarkerLeaderboard() -> impl IntoView {
                 },
                 TableColumn {
                     column: "Max Fee".to_string(),
-                    // TODO: implement sort_direction generic
-                    // sort_direction: Some(TableSortDirection::Desc),
+                    sort_direction: Some(AnySort::SnarkerLeaderboardHighestFeeSort(
+                        SnarkerLeaderboardHighestFeesSort::HighestFeeDesc,
+                    )),
                     alignment: Some(ColumnTextAlignment::Right),
                     ..Default::default()
                 },
