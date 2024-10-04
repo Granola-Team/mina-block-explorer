@@ -271,9 +271,10 @@ where
 }
 
 #[component]
-pub fn TableRows<T>(data: T, columns: Vec<TableColumn>) -> impl IntoView
+pub fn TableRows<T, S>(data: T, columns: Vec<TableColumn<S>>) -> impl IntoView
 where
     T: TableData,
+    S: Clone + 'static,
 {
     data.get_rows()
         .into_iter()
