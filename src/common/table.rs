@@ -68,6 +68,10 @@ pub fn Table(children: Children) -> impl IntoView {
     }
 }
 
+pub trait SortDirection {
+    fn is_desc(&self) -> bool;
+}
+
 #[component]
 pub fn TableSectionTemplate<T, F, E>(
     table_columns: Vec<TableColumn>,
