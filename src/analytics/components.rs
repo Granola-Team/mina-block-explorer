@@ -160,7 +160,12 @@ pub fn SnarkerLeaderboard() -> impl IntoView {
     let resource = create_resource(
         move || epoch_sig.get(),
         move |epoch| async move {
-            load_snarker_leaderboard_data(epoch, SnarkerLeaderboardSort::HighestFeeDesc).await
+            load_snarker_leaderboard_data(
+                epoch,
+                None,
+                Some(SnarkerLeaderboardHighestFeesSort::HighestFeeDesc),
+            )
+            .await
         },
     );
     let (data_sig, set_data) = create_signal(None);

@@ -2,6 +2,8 @@ use serde::*;
 use statrs::statistics::{Data, Distribution, OrderStatistics};
 use std::fmt;
 
+use crate::common::table::SortDirection;
+
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct BlockAnalyticsData {
     pub epoch_num_blocks: i64,
@@ -181,27 +183,48 @@ pub struct SnarkerLeaderboardResponse {
     pub data: TopSnarkers,
 }
 
-#[allow(dead_code)]
-pub enum SnarkerLeaderboardSort {
+pub enum SnarkerLeaderboardTotalFeesSort {
     TotalFeesAsc,
     TotalFeesDesc,
+}
+
+impl SortDirection for SnarkerLeaderboardTotalFeesSort {
+    fn is_desc(&self) -> bool {
+        matches!(self, SnarkerLeaderboardTotalFeesSort::TotalFeesDesc)
+    }
+}
+
+impl fmt::Display for SnarkerLeaderboardTotalFeesSort {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            SnarkerLeaderboardTotalFeesSort::TotalFeesAsc => {
+                write!(f, "TOTAL_FEES_ASC")
+            }
+            SnarkerLeaderboardTotalFeesSort::TotalFeesDesc => {
+                write!(f, "TOTAL_FEES_DESC")
+            }
+        }
+    }
+}
+
+pub enum SnarkerLeaderboardHighestFeesSort {
     HighestFeeAsc,
     HighestFeeDesc,
 }
 
-impl fmt::Display for SnarkerLeaderboardSort {
+impl SortDirection for SnarkerLeaderboardHighestFeesSort {
+    fn is_desc(&self) -> bool {
+        matches!(self, SnarkerLeaderboardHighestFeesSort::HighestFeeDesc)
+    }
+}
+
+impl fmt::Display for SnarkerLeaderboardHighestFeesSort {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            SnarkerLeaderboardSort::TotalFeesAsc => {
-                write!(f, "TOTAL_FEES_ASC")
-            }
-            SnarkerLeaderboardSort::TotalFeesDesc => {
-                write!(f, "TOTAL_FEES_DESC")
-            }
-            SnarkerLeaderboardSort::HighestFeeAsc => {
+            SnarkerLeaderboardHighestFeesSort::HighestFeeAsc => {
                 write!(f, "MAX_FEE_ASC")
             }
-            SnarkerLeaderboardSort::HighestFeeDesc => {
+            SnarkerLeaderboardHighestFeesSort::HighestFeeDesc => {
                 write!(f, "MAX_FEE_DESC")
             }
         }
