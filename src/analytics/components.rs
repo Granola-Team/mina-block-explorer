@@ -295,8 +295,9 @@ pub fn StakerLeaderboard() -> impl IntoView {
                 },
                 TableColumn {
                     column: "Canonical Blocks Produced".to_string(),
-                    // TODO: implement sort_direction generic
-                    // sort_direction: Some(TableSortDirection::Desc),
+                    sort_direction: Some(AnySort::StakerLeaderboardCanonicalBlocks(
+                        StakerLeaderboardCanonicalBlocks::NumberOfCanonicalBlocksProducedDesc,
+                    )),
                     alignment: Some(ColumnTextAlignment::Right),
                     ..Default::default()
                 },

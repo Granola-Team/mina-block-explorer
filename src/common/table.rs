@@ -2,7 +2,10 @@ use super::{components::*, functions::*, models::*};
 use crate::{
     account_activity::models::Delegators,
     accounts::models::AccountsSort,
-    analytics::models::{SnarkerLeaderboardHighestFees, SnarkerLeaderboardTotalFees},
+    analytics::models::{
+        SnarkerLeaderboardHighestFees, SnarkerLeaderboardTotalFees,
+        StakerLeaderboardCanonicalBlocks,
+    },
     common::constants::*,
     icons::*,
 };
@@ -83,6 +86,7 @@ pub enum AnySort {
     SnarkerLeaderboardHighestFee(SnarkerLeaderboardHighestFees),
     Delegator(Delegators),
     Accounts(AccountsSort),
+    StakerLeaderboardCanonicalBlocks(StakerLeaderboardCanonicalBlocks),
 }
 
 impl SortDirection for AnySort {
@@ -93,6 +97,7 @@ impl SortDirection for AnySort {
             AnySort::SnarkerLeaderboardHighestFee(sort) => sort.is_desc(),
             AnySort::Delegator(sort) => sort.is_desc(),
             AnySort::Accounts(sort) => sort.is_desc(),
+            AnySort::StakerLeaderboardCanonicalBlocks(sort) => sort.is_desc(),
         }
     }
 }
@@ -106,6 +111,7 @@ impl ToString for AnySort {
             AnySort::SnarkerLeaderboardHighestFee(sort) => sort.to_string(),
             AnySort::Delegator(sort) => sort.to_string(),
             AnySort::Accounts(sort) => sort.to_string(),
+            AnySort::StakerLeaderboardCanonicalBlocks(sort) => sort.to_string(),
         }
     }
 }

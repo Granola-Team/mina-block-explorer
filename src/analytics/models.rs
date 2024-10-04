@@ -233,3 +233,28 @@ impl fmt::Display for SnarkerLeaderboardHighestFees {
         }
     }
 }
+
+#[derive(Clone)]
+#[allow(dead_code)]
+pub enum StakerLeaderboardCanonicalBlocks {
+    NumberOfCanonicalBlocksProducedDesc,
+}
+
+impl SortDirection for StakerLeaderboardCanonicalBlocks {
+    fn is_desc(&self) -> bool {
+        matches!(
+            self,
+            StakerLeaderboardCanonicalBlocks::NumberOfCanonicalBlocksProducedDesc
+        )
+    }
+}
+
+impl fmt::Display for StakerLeaderboardCanonicalBlocks {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            StakerLeaderboardCanonicalBlocks::NumberOfCanonicalBlocksProducedDesc => {
+                write!(f, "NUM_CANONICAL_BLOCKS_PRODUCED_DESC")
+            }
+        }
+    }
+}
