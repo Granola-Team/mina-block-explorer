@@ -73,8 +73,8 @@ pub trait SortDirection {
 }
 
 #[component]
-pub fn TableSectionTemplate<T, F, E>(
-    table_columns: Vec<TableColumn>,
+pub fn TableSectionTemplate<T, F, E, S>(
+    table_columns: Vec<TableColumn<S>>,
     data_sig: ReadSignal<Option<T>>,
     is_loading: Signal<bool>,
     #[prop(optional)] metadata: Option<Signal<Option<TableMetadata>>>,
@@ -87,6 +87,7 @@ where
     E: IntoView,
     F: Fn() -> E + 'static,
     T: TableData + Clone + 'static,
+    S: SortDirection + ToString + Clone + 'static,
 {
     let table_cols_length = table_columns.len();
 
