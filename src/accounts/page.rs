@@ -1,5 +1,5 @@
 use crate::{
-    accounts::functions::*,
+    accounts::{functions::*, models::AccountsSort},
     common::{
         components::*,
         constants::{TABLE_ROW_LIMIT, *},
@@ -69,12 +69,10 @@ fn AccountsPageContents() -> impl IntoView {
         TableColumn {
             column: "Balance".to_string(),
             width: Some(String::from(TABLE_COL_LARGE_BALANCE)),
-            // TODO: implement sort_direction generic
-            // sort_direction: Some(TableSortDirection::Desc),
+            sort_direction: Some(AnySort::Accounts(AccountsSort::BalanceDesc)),
             is_searchable: true,
             html_input_type: "number".to_string(),
             alignment: Some(ColumnTextAlignment::Right),
-            ..Default::default()
         },
         TableColumn {
             column: "Nonce".to_string(),
