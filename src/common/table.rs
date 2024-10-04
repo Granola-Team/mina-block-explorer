@@ -166,7 +166,10 @@ where
 }
 
 #[component]
-pub fn TableHeader(columns: Vec<TableColumn>) -> impl IntoView {
+pub fn TableHeader(columns: Vec<TableColumn<T>>) -> impl IntoView
+where
+    T: SortDirection + ToString + Clone + 'static,
+{
     view! {
         <tr>
             {columns
