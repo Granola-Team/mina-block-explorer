@@ -63,7 +63,7 @@ fn SnarksPageContents() -> impl IntoView {
         },
     );
 
-    let table_columns: Vec<TableColumn<NoSort>> = vec![
+    let table_columns: Vec<TableColumn<AnySort>> = vec![
         TableColumn {
             column: "Height".to_string(),
             is_searchable: true,

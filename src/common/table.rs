@@ -69,16 +69,25 @@ pub trait SortDirection {
 #[derive(Clone)]
 pub struct NoSort;
 
-impl SortDirection for NoSort {
+#[derive(Clone)]
+pub enum AnySort {
+    NoSort(NoSort),
+}
+
+impl SortDirection for AnySort {
     fn is_desc(&self) -> bool {
-        false
+        match self {
+            AnySort::NoSort(_) => false,
+        }
     }
 }
 
 #[allow(clippy::to_string_trait_impl)]
-impl ToString for NoSort {
+impl ToString for AnySort {
     fn to_string(&self) -> String {
-        String::new()
+        match self {
+            AnySort::NoSort(_) => String::new(),
+        }
     }
 }
 

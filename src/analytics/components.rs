@@ -176,7 +176,7 @@ pub fn SnarkerLeaderboard() -> impl IntoView {
 
     {
         move || {
-            let table_columns: Vec<TableColumn<NoSort>> = vec![
+            let table_columns: Vec<TableColumn<AnySort>> = vec![
                 TableColumn {
                     column: "Username".to_string(),
                     ..Default::default()
@@ -278,7 +278,7 @@ pub fn StakerLeaderboard() -> impl IntoView {
 
     {
         move || {
-            let table_columns: Vec<TableColumn<NoSort>> = vec![
+            let table_columns: Vec<TableColumn<AnySort>> = vec![
                 TableColumn {
                     column: "Username".to_string(),
                     ..Default::default()
@@ -375,7 +375,7 @@ pub fn SnarkFees() -> impl IntoView {
 
     {
         move || {
-            let table_columns: Vec<TableColumn<NoSort>> = vec![
+            let table_columns: Vec<TableColumn<AnySort>> = vec![
                 TableColumn {
                     column: "Metric".to_string(),
                     ..Default::default()

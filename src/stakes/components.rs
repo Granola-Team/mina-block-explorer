@@ -72,7 +72,7 @@ pub fn StakesPageContents(
         }));
     });
 
-    let table_columns: Vec<TableColumn<NoSort>> = vec![
+    let table_columns: Vec<TableColumn<AnySort>> = vec![
         TableColumn {
             column: "Key".to_string(),
             is_searchable: true,
