@@ -183,6 +183,7 @@ pub struct SnarkerLeaderboardResponse {
     pub data: TopSnarkers,
 }
 
+#[derive(Clone)]
 pub enum SnarkerLeaderboardTotalFeesSort {
     TotalFeesAsc,
     TotalFeesDesc,
@@ -207,6 +208,7 @@ impl fmt::Display for SnarkerLeaderboardTotalFeesSort {
     }
 }
 
+#[derive(Clone)]
 pub enum SnarkerLeaderboardHighestFeesSort {
     HighestFeeAsc,
     HighestFeeDesc,

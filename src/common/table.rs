@@ -1,5 +1,9 @@
 use super::{components::*, functions::*, models::*};
-use crate::{common::constants::*, icons::*};
+use crate::{
+    analytics::models::{SnarkerLeaderboardHighestFeesSort, SnarkerLeaderboardTotalFeesSort},
+    common::constants::*,
+    icons::*,
+};
 use heck::ToKebabCase;
 use leptos::{html::*, *};
 use leptos_router::*;
@@ -72,12 +76,16 @@ pub struct NoSort;
 #[derive(Clone)]
 pub enum AnySort {
     NoSort(NoSort),
+    SnarkerLeaderboardTotalFeesSort(SnarkerLeaderboardTotalFeesSort),
+    SnarkerLeaderboardHighestFeeSort(SnarkerLeaderboardHighestFeesSort),
 }
 
 impl SortDirection for AnySort {
     fn is_desc(&self) -> bool {
         match self {
             AnySort::NoSort(_) => false,
+            AnySort::SnarkerLeaderboardTotalFeesSort(sort) => sort.is_desc(),
+            AnySort::SnarkerLeaderboardHighestFeeSort(sort) => sort.is_desc(),
         }
     }
 }
@@ -87,6 +95,8 @@ impl ToString for AnySort {
     fn to_string(&self) -> String {
         match self {
             AnySort::NoSort(_) => String::new(),
+            AnySort::SnarkerLeaderboardTotalFeesSort(sort) => sort.to_string(),
+            AnySort::SnarkerLeaderboardHighestFeeSort(sort) => sort.to_string(),
         }
     }
 }
