@@ -49,6 +49,9 @@ pub fn BlocksAnalyticsPage() -> impl IntoView {
                                     id="unique-block-producers-count"
                                 />
                             </AnalyticsSmContainer>
+                            <AnalyticsXLContainer>
+                                <div id="tree" class="w-full h-48"></div>
+                            </AnalyticsXLContainer>
                             <AnalyticsLgContainer>
                                 <div id="rewards" class="w-full h-96"></div>
                             </AnalyticsLgContainer>
