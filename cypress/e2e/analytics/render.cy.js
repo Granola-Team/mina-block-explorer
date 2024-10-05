@@ -11,7 +11,10 @@ suite(["@tier2"], "chart", () => {
       ],
     },
     { page: "/analytics/blocks", chart_ids: ["#rewards", "#blocks"] },
-    { page: "/analytics/snarks", chart_ids: ["#avg-snark-fee"] },
+    {
+      page: "/analytics/snarks",
+      chart_ids: ["#avg-snark-fee", "#fees-per-block"],
+    },
   ];
 
   analytics_pages.forEach(({ page, chart_ids }) =>

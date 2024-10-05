@@ -77,15 +77,16 @@ pub fn SnarksAnalyticsPage() -> impl IntoView {
                         blockheight_lte_sig.get();
                         blockheight_gte_sig.get();
                         view! {
-                            // redraw
-
-                            <AnalyticsXLContainer>
+                            <script
+                                src="/scripts/analytics/avg-snark-fee-per-block.js"
+                                defer=true
+                            ></script>
+                            <AnalyticsLgContainer>
                                 <div id="avg-snark-fee" class="w-full h-96"></div>
-                                <script
-                                    src="/scripts/analytics/avg-snark-fee-per-block.js"
-                                    defer=true
-                                ></script>
-                            </AnalyticsXLContainer>
+                            </AnalyticsLgContainer>
+                            <AnalyticsLgContainer>
+                                <div id="fees-per-block" class="w-full h-96"></div>
+                            </AnalyticsLgContainer>
                         }
                     }}
 
