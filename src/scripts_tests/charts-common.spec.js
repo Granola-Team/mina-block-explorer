@@ -2,6 +2,7 @@ const {
   nanominaToKMina,
   scaleMina,
   getOrdinal,
+  buildTree,
 } = require("../scripts/analytics/charts-common.js");
 
 test("nanominaToKMina", () => {
@@ -90,5 +91,94 @@ describe("getOrdinal", () => {
 
   test('should return "113th" for 113', () => {
     expect(getOrdinal(113)).toBe("113th");
+  });
+});
+
+describe("Tree Building with Correct Data", () => {
+  const inputBlocks = [
+    {
+      canonical: true,
+      stateHash: "3NLhfsN1QPHsKzqu6RaVyLKmMCYTXnkrueMoWpmRQErfBkh6v6as",
+      previousStateHash: "3NLjanAoyqjqmPsQHafJcvQiGW2xbvyXANHxEyNwPwan2eUoZBV9",
+      blockHeight: 10000,
+    },
+    {
+      canonical: false,
+      stateHash: "3NLB1hQ6wdSHQbDB1L1xYMUv6oARhWz25uCMg4oeyW1jjDrs5Zjx",
+      previousStateHash: "3NLjanAoyqjqmPsQHafJcvQiGW2xbvyXANHxEyNwPwan2eUoZBV9",
+      blockHeight: 10000,
+    },
+    {
+      canonical: true,
+      stateHash: "3NLjanAoyqjqmPsQHafJcvQiGW2xbvyXANHxEyNwPwan2eUoZBV9",
+      previousStateHash: "3NKFhMmNeGZR8daKD8zWASLzUUzhVtyMp3DfjFteUxyKKAvukYwk",
+      blockHeight: 9999,
+    },
+    {
+      canonical: true,
+      stateHash: "3NKFhMmNeGZR8daKD8zWASLzUUzhVtyMp3DfjFteUxyKKAvukYwk",
+      previousStateHash: "3NLpcWsFesKbesARzHWFbbzQLDNGQP1Jto7MPPYwTrisRW935Agi",
+      blockHeight: 9998,
+    },
+    {
+      canonical: false,
+      stateHash: "3NKrd5saMRPLRLXBZoN7wfxbwNhJVB5t2ksK4dVXatCKhYC1CK7o",
+      previousStateHash: "3NLpcWsFesKbesARzHWFbbzQLDNGQP1Jto7MPPYwTrisRW935Agi",
+      blockHeight: 9998,
+    },
+    {
+      canonical: true,
+      stateHash: "3NLpcWsFesKbesARzHWFbbzQLDNGQP1Jto7MPPYwTrisRW935Agi",
+      previousStateHash: "3NKeCAcqyEUEjenRvFVuea58wmSKuLLCvbtTFaRMjPqkM9Axs2dw",
+      blockHeight: 9997,
+    },
+    {
+      canonical: false,
+      stateHash: "3NLmHHjWp7vGwrMFrsYYYW3MJLBaRneSZLohGHhsAvGgEH1J4RbE",
+      previousStateHash: "3NKeCAcqyEUEjenRvFVuea58wmSKuLLCvbtTFaRMjPqkM9Axs2dw",
+      blockHeight: 9997,
+    },
+    {
+      canonical: false,
+      stateHash: "3NLsNLbpJGYkGYWVMPUfRoxkdi7PDrtpJRJBAhh94qtpLJ5FwRNK",
+      previousStateHash: "3NKeCAcqyEUEjenRvFVuea58wmSKuLLCvbtTFaRMjPqkM9Axs2dw",
+      blockHeight: 9997,
+    },
+    {
+      canonical: false,
+      stateHash: "3NLNWxa9GWpcAn1NF6ULPVifBm77PTWkmBsPvaQA9EZQNftJYrd6",
+      previousStateHash: "3NKeCAcqyEUEjenRvFVuea58wmSKuLLCvbtTFaRMjPqkM9Axs2dw",
+      blockHeight: 9997,
+    },
+    {
+      canonical: true,
+      stateHash: "3NKeCAcqyEUEjenRvFVuea58wmSKuLLCvbtTFaRMjPqkM9Axs2dw",
+      previousStateHash: "3NLoTex5WS72VpQkqZqVTkgxTbMq4Gm6ABLebiju158dZTB5jrFW",
+      blockHeight: 9996,
+    },
+  ];
+
+  test("Build tree from the lowest block height", () => {
+    const tree = buildTree(inputBlocks);
+    expect(tree.blockHeight).toBe(9996); // Root should be the lowest block height
+
+    // Check if the next level of children exists
+    expect(tree.children).toHaveLength(4); // 3 non-canonical and one canonical
+  });
+
+  test("Ensure tree extends to blockHeight 10000", () => {
+    const tree = buildTree(inputBlocks);
+    console.log(JSON.stringify(tree));
+    let currentBlock = tree;
+
+    // Traverse the tree upwards by following the hash linkage
+    while (currentBlock.children.length > 0) {
+      currentBlock = currentBlock.children[0]; // Follow the first child
+    }
+
+    expect(currentBlock.blockHeight).toBe(10000);
+    expect(currentBlock.stateHash).toBe(
+      "3NLhfsN1QPHsKzqu6RaVyLKmMCYTXnkrueMoWpmRQErfBkh6v6as",
+    );
   });
 });
