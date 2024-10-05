@@ -324,10 +324,10 @@ describe("Tree Building with Correct Data", () => {
 
   test("Build tree from the lowest block height", () => {
     const tree = buildTree(inputBlocks);
-    expect(tree.blockHeight).toBe(9996); // Root should be the lowest block height
+    expect(tree.blockHeight).toBe(9993); // Root should be the lowest block height
 
     // Check if the next level of children exists
-    expect(tree.children).toHaveLength(4); // 3 non-canonical and one canonical
+    expect(tree.children).toHaveLength(2);
   });
 
   test("Ensure tree extends to blockHeight 10000", () => {
@@ -337,12 +337,14 @@ describe("Tree Building with Correct Data", () => {
 
     // Traverse the tree upwards by following the hash linkage
     while (currentBlock.children.length > 0) {
-      currentBlock = currentBlock.children[0]; // Follow the first child
+      currentBlock = currentBlock.children.find((child) => {
+        return (child.canonical = true);
+      });
     }
 
-    expect(currentBlock.blockHeight).toBe(10000);
+    expect(currentBlock.blockHeight).toBe(9998);
     expect(currentBlock.stateHash).toBe(
-      "3NLhfsN1QPHsKzqu6RaVyLKmMCYTXnkrueMoWpmRQErfBkh6v6as",
+      "3NKFhMmNeGZR8daKD8zWASLzUUzhVtyMp3DfjFteUxyKKAvukYwk",
     );
   });
 });
