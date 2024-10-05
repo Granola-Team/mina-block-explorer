@@ -1,5 +1,5 @@
 use crate::{
-    accounts::functions::*,
+    accounts::{functions::*, models::AccountsSort},
     common::{
         components::*,
         constants::{TABLE_ROW_LIMIT, *},
@@ -53,7 +53,7 @@ fn AccountsPageContents() -> impl IntoView {
             .await
         },
     );
-    let table_columns = vec![
+    let table_columns: Vec<TableColumn<AnySort>> = vec![
         TableColumn {
             column: "Public Key".to_string(),
             is_searchable: true,
@@ -69,7 +69,7 @@ fn AccountsPageContents() -> impl IntoView {
         TableColumn {
             column: "Balance".to_string(),
             width: Some(String::from(TABLE_COL_LARGE_BALANCE)),
-            sort_direction: Some(TableSortDirection::Desc),
+            sort_direction: Some(AnySort::Accounts(AccountsSort::BalanceDesc)),
             is_searchable: true,
             html_input_type: "number".to_string(),
             alignment: Some(ColumnTextAlignment::Right),

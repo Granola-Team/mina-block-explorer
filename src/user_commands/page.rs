@@ -217,7 +217,7 @@ pub fn CommandSpotlightPage() -> impl IntoView {
                                     ..Default::default()
                                 },
                             ];
-                            let table_columns = vec![
+                            let table_columns: Vec<TableColumn<AnySort>> = vec![
                                 TableColumn {
                                     column: "Height".to_string(),
                                     html_input_type: "number".to_string(),

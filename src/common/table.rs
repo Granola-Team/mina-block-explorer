@@ -1,5 +1,15 @@
 use super::{components::*, functions::*, models::*};
-use crate::{common::constants::*, icons::*};
+use crate::{
+    account_activity::models::Delegators,
+    accounts::models::AccountsSort,
+    analytics::models::{
+        SnarkerLeaderboardHighestFees, SnarkerLeaderboardTotalFees,
+        StakerLeaderboardCanonicalBlocks,
+    },
+    common::constants::*,
+    icons::*,
+    stakes::models::StakesSort,
+};
 use heck::ToKebabCase;
 use leptos::{html::*, *};
 use leptos_router::*;
@@ -18,12 +28,6 @@ pub trait TableData {
 }
 
 #[derive(Clone)]
-pub enum TableSortDirection {
-    // ASC,
-    Desc,
-}
-
-#[derive(Clone)]
 pub enum ColumnTextAlignment {
     #[allow(dead_code)]
     Left,
@@ -33,16 +37,16 @@ pub enum ColumnTextAlignment {
 }
 
 #[derive(Clone)]
-pub struct TableColumn {
+pub struct TableColumn<T> {
     pub column: String,
     pub is_searchable: bool,
-    pub sort_direction: Option<TableSortDirection>,
+    pub sort_direction: Option<T>,
     pub width: Option<String>,
     pub html_input_type: String,
     pub alignment: Option<ColumnTextAlignment>,
 }
 
-impl Default for TableColumn {
+impl<T> Default for TableColumn<T> {
     fn default() -> Self {
         TableColumn {
             column: String::new(),
@@ -68,9 +72,57 @@ pub fn Table(children: Children) -> impl IntoView {
     }
 }
 
+pub trait SortDirection {
+    fn is_desc(&self) -> bool;
+}
+
+#[derive(Clone)]
+pub struct Nil;
+
+#[derive(Clone)]
+#[allow(dead_code)]
+pub enum AnySort {
+    None(Nil),
+    SnarkerLeaderboardTotalFees(SnarkerLeaderboardTotalFees),
+    SnarkerLeaderboardHighestFee(SnarkerLeaderboardHighestFees),
+    Delegator(Delegators),
+    Accounts(AccountsSort),
+    StakerLeaderboardCanonicalBlocks(StakerLeaderboardCanonicalBlocks),
+    Stakes(StakesSort),
+}
+
+impl SortDirection for AnySort {
+    fn is_desc(&self) -> bool {
+        match self {
+            AnySort::None(_) => false,
+            AnySort::SnarkerLeaderboardTotalFees(sort) => sort.is_desc(),
+            AnySort::SnarkerLeaderboardHighestFee(sort) => sort.is_desc(),
+            AnySort::Delegator(sort) => sort.is_desc(),
+            AnySort::Accounts(sort) => sort.is_desc(),
+            AnySort::StakerLeaderboardCanonicalBlocks(sort) => sort.is_desc(),
+            AnySort::Stakes(sort) => sort.is_desc(),
+        }
+    }
+}
+
+#[allow(clippy::to_string_trait_impl)]
+impl ToString for AnySort {
+    fn to_string(&self) -> String {
+        match self {
+            AnySort::None(_) => String::new(),
+            AnySort::SnarkerLeaderboardTotalFees(sort) => sort.to_string(),
+            AnySort::SnarkerLeaderboardHighestFee(sort) => sort.to_string(),
+            AnySort::Delegator(sort) => sort.to_string(),
+            AnySort::Accounts(sort) => sort.to_string(),
+            AnySort::StakerLeaderboardCanonicalBlocks(sort) => sort.to_string(),
+            AnySort::Stakes(sort) => sort.to_string(),
+        }
+    }
+}
+
 #[component]
-pub fn TableSectionTemplate<T, F, E>(
-    table_columns: Vec<TableColumn>,
+pub fn TableSectionTemplate<T, F, E, S>(
+    table_columns: Vec<TableColumn<S>>,
     data_sig: ReadSignal<Option<T>>,
     is_loading: Signal<bool>,
     #[prop(optional)] metadata: Option<Signal<Option<TableMetadata>>>,
@@ -83,6 +135,7 @@ where
     E: IntoView,
     F: Fn() -> E + 'static,
     T: TableData + Clone + 'static,
+    S: SortDirection + ToString + Clone + 'static,
 {
     let table_cols_length = table_columns.len();
 
@@ -142,7 +195,10 @@ where
 }
 
 #[component]
-pub fn ColGroup(columns: Vec<TableColumn>) -> impl IntoView {
+pub fn ColGroup<T>(columns: Vec<TableColumn<T>>) -> impl IntoView
+where
+    T: Clone + 'static,
+{
     view! {
         {columns
             .iter()
@@ -158,7 +214,10 @@ pub fn ColGroup(columns: Vec<TableColumn>) -> impl IntoView {
 }
 
 #[component]
-pub fn TableHeader(columns: Vec<TableColumn>) -> impl IntoView {
+pub fn TableHeader<T>(columns: Vec<TableColumn<T>>) -> impl IntoView
+where
+    T: SortDirection + ToString + Clone + 'static,
+{
     view! {
         <tr>
             {columns
@@ -175,7 +234,10 @@ pub fn TableHeader(columns: Vec<TableColumn>) -> impl IntoView {
 const ICON_CLASS: &str = " inline-block cursor-pointer pl-1 items-center ";
 
 #[component]
-fn ColumnHeader(id: String, column: TableColumn) -> impl IntoView {
+fn ColumnHeader<T>(id: String, column: TableColumn<T>) -> impl IntoView
+where
+    T: SortDirection + ToString + Clone + 'static,
+{
     let id_copy = id.clone();
     let (value, set_value) = create_query_signal::<String>(id);
     let input_element: NodeRef<html::Input> = create_node_ref();
@@ -213,14 +275,23 @@ fn ColumnHeader(id: String, column: TableColumn) -> impl IntoView {
         <th class=th_class
             + CELL_PADDING_CLASS>
             {column.column.clone()}
-            {match column.sort_direction {
-                Some(TableSortDirection::Desc) => {
-                    view! {
-                        <span class=ICON_CLASS>
-                            <DownArrow width=12 />
-                        </span>
+            {match &column.sort_direction {
+                Some(direction) => {
+                    if direction.is_desc() {
+                        view! {
+                            <span class=ICON_CLASS>
+                                <DownArrow width=12 />
+                            </span>
+                        }
+                            .into_view()
+                    } else {
+                        view! {
+                            <span class=ICON_CLASS>
+                                <UpArrow width=12 />
+                            </span>
+                        }
+                            .into_view()
                     }
-                        .into_view()
                 }
                 None => ().into_view(),
             }}
@@ -248,9 +319,10 @@ fn ColumnHeader(id: String, column: TableColumn) -> impl IntoView {
 }
 
 #[component]
-pub fn TableRows<T>(data: T, columns: Vec<TableColumn>) -> impl IntoView
+pub fn TableRows<T, S>(data: T, columns: Vec<TableColumn<S>>) -> impl IntoView
 where
     T: TableData,
+    S: Clone + 'static,
 {
     data.get_rows()
         .into_iter()
@@ -275,7 +347,10 @@ where
 }
 
 #[component]
-pub fn TableCell(children: Children, column_opt: Option<TableColumn>) -> impl IntoView {
+pub fn TableCell<T>(children: Children, column_opt: Option<TableColumn<T>>) -> impl IntoView
+where
+    T: Clone + 'static,
+{
     let clss = " text-ellipsis overflow-hidden text-table-row-text-color font-medium text-sm whitespace-nowrap max-w-40 ".to_string();
     view! {
         <td class=CELL_PADDING_CLASS.to_string()

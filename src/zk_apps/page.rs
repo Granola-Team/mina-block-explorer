@@ -153,19 +153,19 @@ pub fn ZkAppSpotlight() -> impl IntoView {
             </TableSection>
             <TableSectionTemplate
                 table_columns=vec![
-                    TableColumn {
+                    TableColumn::<AnySort> {
                         column: "Account".to_string(),
                         ..Default::default()
                     },
-                    TableColumn {
+                    TableColumn::<AnySort> {
                         column: "Balance".to_string(),
                         ..Default::default()
                     },
-                    TableColumn {
+                    TableColumn::<AnySort> {
                         column: "Commands".to_string(),
                         ..Default::default()
                     },
-                    TableColumn {
+                    TableColumn::<AnySort> {
                         column: "Delegate".to_string(),
                         ..Default::default()
                     },
@@ -178,27 +178,27 @@ pub fn ZkAppSpotlight() -> impl IntoView {
             />
             <TableSectionTemplate
                 table_columns=vec![
-                    TableColumn {
+                    TableColumn::<AnySort> {
                         column: "Prover".to_string(),
                         ..Default::default()
                     },
-                    TableColumn {
+                    TableColumn::<AnySort> {
                         column: "txn Hash".to_string(),
                         ..Default::default()
                     },
-                    TableColumn {
+                    TableColumn::<AnySort> {
                         column: "Age".to_string(),
                         ..Default::default()
                     },
-                    TableColumn {
+                    TableColumn::<AnySort> {
                         column: "Account Updates".to_string(),
                         ..Default::default()
                     },
-                    TableColumn {
+                    TableColumn::<AnySort> {
                         column: "Updated Accounts".to_string(),
                         ..Default::default()
                     },
-                    TableColumn {
+                    TableColumn::<AnySort> {
                         column: "Fee".to_string(),
                         ..Default::default()
                     },
@@ -240,7 +240,7 @@ fn ZkAppDetailTh(children: Children) -> impl IntoView {
 pub fn ZkAppTransactionsPage() -> impl IntoView {
     let (data_sig, _) = create_signal(Some(stub_zk_app_txn_data(TABLE_ROW_LIMIT)));
     let (loading_sig, _) = create_signal(false);
-    let table_columns = vec![
+    let table_columns: Vec<TableColumn<AnySort>> = vec![
         TableColumn {
             column: "Account".to_string(),
             ..Default::default()
@@ -276,7 +276,7 @@ pub fn ZkAppTransactionsPage() -> impl IntoView {
 pub fn ZkAppsPage() -> impl IntoView {
     let (data_sig, _) = create_signal(Some(stub_zk_apps_data(TABLE_ROW_LIMIT)));
     let (loading_sig, _) = create_signal(false);
-    let table_columns = vec![
+    let table_columns: Vec<TableColumn<AnySort>> = vec![
         TableColumn {
             column: "Account".to_string(),
             ..Default::default()

@@ -54,7 +54,7 @@ pub fn BlockUserCommands(block: BlocksQueryBlocks) -> impl IntoView {
     let (data_sig, _) = create_signal(get_user_commands(&block));
     let (loading_sig, _) = create_signal(false);
 
-    let table_columns = vec![
+    let table_columns: Vec<TableColumn<AnySort>> = vec![
         TableColumn {
             column: "Hash".to_string(),
             width: Some(String::from(TABLE_COL_HASH_WIDTH)),
@@ -113,7 +113,7 @@ pub fn BlockSnarkJobs(block: BlocksQueryBlocks) -> impl IntoView {
     let (data_sig, _) = create_signal(block.snark_jobs);
     let (loading_sig, _) = create_signal(false);
 
-    let table_columns = vec![
+    let table_columns: Vec<TableColumn<AnySort>> = vec![
         TableColumn {
             column: "State Hash".to_string(),
             width: Some(String::from(TABLE_COL_HASH_WIDTH)),
@@ -161,7 +161,7 @@ pub fn BlockInternalCommands(block: BlocksQueryBlocks) -> impl IntoView {
         );
     });
 
-    let table_columns = vec![
+    let table_columns: Vec<TableColumn<AnySort>> = vec![
         TableColumn {
             column: "Recipient".to_string(),
             ..Default::default()
@@ -621,7 +621,7 @@ pub fn BlocksSection() -> impl IntoView {
         },
     );
 
-    let table_columns = vec![
+    let table_columns: Vec<TableColumn<AnySort>> = vec![
         TableColumn {
             column: "Height".to_string(),
             html_input_type: "number".to_string(),

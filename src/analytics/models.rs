@@ -1,3 +1,4 @@
+use crate::common::table::SortDirection;
 use serde::*;
 use statrs::statistics::{Data, Distribution, OrderStatistics};
 use std::fmt;
@@ -181,28 +182,78 @@ pub struct SnarkerLeaderboardResponse {
     pub data: TopSnarkers,
 }
 
+#[derive(Clone)]
 #[allow(dead_code)]
-pub enum SnarkerLeaderboardSort {
+pub enum SnarkerLeaderboardTotalFees {
     TotalFeesAsc,
     TotalFeesDesc,
+}
+
+impl SortDirection for SnarkerLeaderboardTotalFees {
+    fn is_desc(&self) -> bool {
+        matches!(self, SnarkerLeaderboardTotalFees::TotalFeesDesc)
+    }
+}
+
+impl fmt::Display for SnarkerLeaderboardTotalFees {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            SnarkerLeaderboardTotalFees::TotalFeesAsc => {
+                write!(f, "TOTAL_FEES_ASC")
+            }
+            SnarkerLeaderboardTotalFees::TotalFeesDesc => {
+                write!(f, "TOTAL_FEES_DESC")
+            }
+        }
+    }
+}
+
+#[derive(Clone)]
+#[allow(dead_code)]
+pub enum SnarkerLeaderboardHighestFees {
     HighestFeeAsc,
     HighestFeeDesc,
 }
 
-impl fmt::Display for SnarkerLeaderboardSort {
+impl SortDirection for SnarkerLeaderboardHighestFees {
+    fn is_desc(&self) -> bool {
+        matches!(self, SnarkerLeaderboardHighestFees::HighestFeeDesc)
+    }
+}
+
+impl fmt::Display for SnarkerLeaderboardHighestFees {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            SnarkerLeaderboardSort::TotalFeesAsc => {
-                write!(f, "TOTAL_FEES_ASC")
-            }
-            SnarkerLeaderboardSort::TotalFeesDesc => {
-                write!(f, "TOTAL_FEES_DESC")
-            }
-            SnarkerLeaderboardSort::HighestFeeAsc => {
+            SnarkerLeaderboardHighestFees::HighestFeeAsc => {
                 write!(f, "MAX_FEE_ASC")
             }
-            SnarkerLeaderboardSort::HighestFeeDesc => {
+            SnarkerLeaderboardHighestFees::HighestFeeDesc => {
                 write!(f, "MAX_FEE_DESC")
+            }
+        }
+    }
+}
+
+#[derive(Clone)]
+#[allow(dead_code)]
+pub enum StakerLeaderboardCanonicalBlocks {
+    NumberOfCanonicalBlocksProducedDesc,
+}
+
+impl SortDirection for StakerLeaderboardCanonicalBlocks {
+    fn is_desc(&self) -> bool {
+        matches!(
+            self,
+            StakerLeaderboardCanonicalBlocks::NumberOfCanonicalBlocksProducedDesc
+        )
+    }
+}
+
+impl fmt::Display for StakerLeaderboardCanonicalBlocks {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            StakerLeaderboardCanonicalBlocks::NumberOfCanonicalBlocksProducedDesc => {
+                write!(f, "NUM_CANONICAL_BLOCKS_PRODUCED_DESC")
             }
         }
     }

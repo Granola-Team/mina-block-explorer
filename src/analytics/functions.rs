@@ -33,14 +33,18 @@ pub async fn load_snark_fees(
 
 pub async fn load_snarker_leaderboard_data(
     epoch: Option<u32>,
-    sort_by: SnarkerLeaderboardSort,
+    sort_by_total_fees_opt: Option<SnarkerLeaderboardTotalFees>,
+    sort_by_highest_fee_opt: Option<SnarkerLeaderboardHighestFees>,
 ) -> Result<SnarkerLeaderboardResponse, MyError> {
     if epoch.is_none() {
         return Err(MyError::ParseError("Epoch must not be None".into()));
     }
     let query_body = format!(
         r#"{{"query":"query TopSnarkers($query: TopSnarkersQueryInput!, $limit: Int = 50, $sort_by: TopSnarkersSortByInput!) {{ topSnarkers(query: $query, limit: $limit, sortBy: $sort_by) {{ username public_key total_fees min_fee max_fee snarks_sold }} }}","variables":{{"limit": 50, "sort_by": "{}", "query": {{ "epoch": {} }} }},"operationName":"TopSnarkers"}}"#,
-        sort_by,
+        sort_by_total_fees_opt
+            .map(|s| s.to_string())
+            .or_else(|| sort_by_highest_fee_opt.map(|s| s.to_string()))
+            .unwrap_or(SnarkerLeaderboardHighestFees::HighestFeeDesc.to_string()),
         epoch.unwrap()
     );
     let client = reqwest::Client::new();

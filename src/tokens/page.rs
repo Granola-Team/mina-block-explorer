@@ -8,7 +8,7 @@ pub fn TokensPage() -> impl IntoView {
     let (data_sig, _) = create_signal(Some(stub_token_data(TABLE_ROW_LIMIT)));
     let (loading_sig, _) = create_signal(false);
 
-    let table_columns = vec![
+    let table_columns: Vec<TableColumn<AnySort>> = vec![
         TableColumn {
             column: "Token Name".to_string(),
             ..Default::default()

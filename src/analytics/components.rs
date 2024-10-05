@@ -1,10 +1,6 @@
 use super::{functions::*, models::*};
 use crate::{
-    common::{
-        components::*,
-        constants::*,
-        table::{ColumnTextAlignment, TableColumn, TableSectionTemplate, TableSortDirection},
-    },
+    common::{components::*, constants::*, table::*},
     summary::models::BlockchainSummary,
 };
 use codee::string::JsonSerdeCodec;
@@ -164,7 +160,12 @@ pub fn SnarkerLeaderboard() -> impl IntoView {
     let resource = create_resource(
         move || epoch_sig.get(),
         move |epoch| async move {
-            load_snarker_leaderboard_data(epoch, SnarkerLeaderboardSort::HighestFeeDesc).await
+            load_snarker_leaderboard_data(
+                epoch,
+                None,
+                Some(SnarkerLeaderboardHighestFees::HighestFeeDesc),
+            )
+            .await
         },
     );
     let (data_sig, set_data) = create_signal(None);
@@ -180,7 +181,7 @@ pub fn SnarkerLeaderboard() -> impl IntoView {
 
     {
         move || {
-            let table_columns = vec![
+            let table_columns: Vec<TableColumn<AnySort>> = vec![
                 TableColumn {
                     column: "Username".to_string(),
                     ..Default::default()
@@ -201,7 +202,9 @@ pub fn SnarkerLeaderboard() -> impl IntoView {
                 },
                 TableColumn {
                     column: "Max Fee".to_string(),
-                    sort_direction: Some(TableSortDirection::Desc),
+                    sort_direction: Some(AnySort::SnarkerLeaderboardHighestFee(
+                        SnarkerLeaderboardHighestFees::HighestFeeDesc,
+                    )),
                     alignment: Some(ColumnTextAlignment::Right),
                     ..Default::default()
                 },
@@ -281,7 +284,7 @@ pub fn StakerLeaderboard() -> impl IntoView {
 
     {
         move || {
-            let table_columns = vec![
+            let table_columns: Vec<TableColumn<AnySort>> = vec![
                 TableColumn {
                     column: "Username".to_string(),
                     ..Default::default()
@@ -292,7 +295,9 @@ pub fn StakerLeaderboard() -> impl IntoView {
                 },
                 TableColumn {
                     column: "Canonical Blocks Produced".to_string(),
-                    sort_direction: Some(TableSortDirection::Desc),
+                    sort_direction: Some(AnySort::StakerLeaderboardCanonicalBlocks(
+                        StakerLeaderboardCanonicalBlocks::NumberOfCanonicalBlocksProducedDesc,
+                    )),
                     alignment: Some(ColumnTextAlignment::Right),
                     ..Default::default()
                 },
@@ -377,7 +382,7 @@ pub fn SnarkFees() -> impl IntoView {
 
     {
         move || {
-            let table_columns = vec![
+            let table_columns: Vec<TableColumn<AnySort>> = vec![
                 TableColumn {
                     column: "Metric".to_string(),
                     ..Default::default()
