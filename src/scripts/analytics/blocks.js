@@ -1,3 +1,60 @@
+function renderTreeChart(data, myChart) {
+  let option;
+
+  myChart.hideLoading();
+
+  let maxHeight = data[0].blockHeight;
+  let fileredData = data.filter((b) => b.blockHeight > maxHeight - 10);
+  let tree = mapTreeToEchartsFormat(buildTree(fileredData));
+
+  option = {
+    tooltip: {
+      position: "top",
+    },
+    title: {
+      ...TITLE_DEFAULT,
+      text: `Blockchain Tree`,
+    },
+    series: [
+      {
+        data: [tree],
+        type: "tree",
+        top: "1%",
+        left: "7%",
+        bottom: "1%",
+        right: "20%",
+        symbolSize: 7,
+        label: {
+          position: "left",
+          verticalAlign: "middle",
+          align: "right",
+          fontSize: 9,
+        },
+        leaves: {
+          label: {
+            position: "right",
+            verticalAlign: "middle",
+            align: "left",
+          },
+        },
+        tooltip: {
+          formatter: "{b}",
+        },
+        expandAndCollapse: false,
+        animationDuration: 550,
+        animationDurationUpdate: 750,
+      },
+    ],
+  };
+
+  option && myChart.setOption(option);
+  myChart.on("click", function (params) {
+    if (params.data.stateHash) {
+      window.open("/blocks/" + params.data.stateHash, "_blank");
+    }
+  });
+}
+
 function renderCanonicalVsNonCanonicalChart(data, myChart) {
   let option;
 
@@ -108,25 +165,19 @@ setTimeout(async () => {
   let blockheightGte = parseInt(getUrlParam("q-blockheight-gte"));
   const groupSize = SLOT_GROUPING;
 
-  let rewardsChartDom = document.getElementById("rewards");
-  let blocksChartDom = document.getElementById("blocks");
-  window.addEventListener("resize", function () {
-    rewardsChart.resize();
-    blocksChart.resize();
-  });
-  let rewardsChart = echarts.init(rewardsChartDom);
-  let blocksChart = echarts.init(blocksChartDom);
+  let rewardsChart = echarts.init(document.getElementById("rewards"));
+  let blocksChart = echarts.init(document.getElementById("blocks"));
+  let treeChart = echarts.init(document.getElementById("tree"));
 
-  rewardsChart.showLoading({
-    text: "Loading...", // Display text with the spinner
-    color: "#E39844", // Spinner color
-    zlevel: 0,
-  });
-
-  blocksChart.showLoading({
-    text: "Loading...", // Display text with the spinner
-    color: "#E39844", // Spinner color
-    zlevel: 0,
+  [rewardsChart, blocksChart, treeChart].forEach((chart) => {
+    window.addEventListener("resize", function () {
+      chart.resize();
+    });
+    chart.showLoading({
+      text: "Loading...", // Display text with the spinner
+      color: "#E39844", // Spinner color
+      zlevel: 0,
+    });
   });
 
   let response = await fetch(config.graphql_endpoint, {
@@ -150,6 +201,10 @@ setTimeout(async () => {
           snarkFees
           txFees
           canonical
+          stateHash
+          protocolState {
+            previousStateHash
+          }
         }
       }`,
       variables: {
@@ -167,14 +222,12 @@ setTimeout(async () => {
   let jsonResp = await response.json();
   let unique_creators = {};
   let data = jsonResp.data.blocks.reduce((agg, record) => {
-    if (!record.canonical) return agg;
     let slot = record.globalSlotSinceGenesis;
     let key = slot - (slot % groupSize);
     let value = record.transactions.coinbase;
     if (!unique_creators[record.creator]) {
       unique_creators[record.creator] = 0;
     }
-    unique_creators[record.creator] += 1;
     if (!agg[key]) {
       agg[key] = {
         reward_sum: 0,
@@ -182,9 +235,11 @@ setTimeout(async () => {
         non_canonical_blocks_count: 0,
       };
     }
-    agg[key].reward_sum += +value;
-    if (record.canonical == true) {
+
+    if (record.canonical) {
+      unique_creators[record.creator] += 1;
       agg[key].canonical_blocks_count += 1;
+      agg[key].reward_sum += +value;
     } else {
       agg[key].non_canonical_blocks_count += 1;
     }
@@ -223,6 +278,7 @@ setTimeout(async () => {
   document.getElementById("unique-block-producers-count").innerHTML =
     Object.keys(unique_creators).length;
 
+  renderTreeChart(jsonResp.data.blocks, treeChart);
   renderCoinbaseRewardsChart(rewards_data, rewardsChart);
   renderCanonicalVsNonCanonicalChart(blocks_data, blocksChart);
 }, 1000);
