@@ -201,11 +201,22 @@ function mapTreeToEchartsFormat(node) {
   return formattedNode;
 }
 
+function getMaxDepth(node) {
+  if (!node.children || node.children.length === 0) {
+    return 1; // A leaf node has a depth of 1
+  }
+
+  // Recursively calculate the depth of each child, and return the maximum depth + 1 (for the current node)
+  const childDepths = node.children.map(getMaxDepth);
+  return Math.max(...childDepths) + 1;
+}
+
 if (typeof module !== "undefined" && module.exports) {
   module.exports = {
     nanominaToKMina,
     scaleMina,
     getOrdinal,
     buildTree,
+    getMaxDepth,
   };
 }
