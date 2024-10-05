@@ -155,7 +155,8 @@ function buildTree(blocks) {
     const canonicalChild = blocksByHeight[nextHeight]
       ? blocksByHeight[nextHeight].find(
           (block) =>
-            block.previousStateHash === node.stateHash && block.canonical,
+            block.protocolState.previousStateHash === node.stateHash &&
+            block.canonical,
         )
       : null;
 
@@ -170,7 +171,8 @@ function buildTree(blocks) {
     const nonCanonicalChildren = blocksByHeight[nextHeight]
       ? blocksByHeight[nextHeight].filter(
           (block) =>
-            block.previousStateHash === node.stateHash && !block.canonical,
+            block.protocolState.previousStateHash === node.stateHash &&
+            !block.canonical,
         )
       : [];
 
@@ -185,6 +187,18 @@ function buildTree(blocks) {
   }
 
   return root;
+}
+
+function mapTreeToEchartsFormat(node) {
+  // Base case: if the node has no children, return it with the required changes
+  const formattedNode = {
+    name: node.blockHeight.toString(), // Map blockHeight to name (as a string)
+    ...node,
+    children: node.children.map(mapTreeToEchartsFormat), // Recursively format the children
+    previousStateHash: node.previousStateHash,
+  };
+
+  return formattedNode;
 }
 
 if (typeof module !== "undefined" && module.exports) {

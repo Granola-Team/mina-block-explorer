@@ -97,64 +97,228 @@ describe("getOrdinal", () => {
 describe("Tree Building with Correct Data", () => {
   const inputBlocks = [
     {
+      blockHeight: 10000,
+      globalSlotSinceGenesis: 14106,
+      transactions: { coinbase: "720000000000" },
+      creator: "B62qqgGAQfpFhX8G1iF253C37CMsj6ypn77C9fr3Y17iU6B5Ft4XjPo",
+      snarkFees: "0",
+      txFees: "15000000",
       canonical: true,
       stateHash: "3NLhfsN1QPHsKzqu6RaVyLKmMCYTXnkrueMoWpmRQErfBkh6v6as",
-      previousStateHash: "3NLjanAoyqjqmPsQHafJcvQiGW2xbvyXANHxEyNwPwan2eUoZBV9",
-      blockHeight: 10000,
+      protocolState: {
+        previousStateHash:
+          "3NLjanAoyqjqmPsQHafJcvQiGW2xbvyXANHxEyNwPwan2eUoZBV9",
+      },
     },
     {
+      blockHeight: 10000,
+      globalSlotSinceGenesis: 14106,
+      transactions: { coinbase: "720000000000" },
+      creator: "B62qoVopcNoQPFydweGWUBnJJbrokkebVDiWGmAzYoaLysrFfzNCbya",
+      snarkFees: "0",
+      txFees: "15000000",
       canonical: false,
       stateHash: "3NLB1hQ6wdSHQbDB1L1xYMUv6oARhWz25uCMg4oeyW1jjDrs5Zjx",
-      previousStateHash: "3NLjanAoyqjqmPsQHafJcvQiGW2xbvyXANHxEyNwPwan2eUoZBV9",
-      blockHeight: 10000,
+      protocolState: {
+        previousStateHash:
+          "3NLjanAoyqjqmPsQHafJcvQiGW2xbvyXANHxEyNwPwan2eUoZBV9",
+      },
     },
     {
+      blockHeight: 9999,
+      globalSlotSinceGenesis: 14105,
+      transactions: { coinbase: "1440000000000" },
+      creator: "B62qqhURJQo3CvWC3WFo9LhUhtcaJWLBcJsaA3DXaU2GH5KgXujZiwB",
+      snarkFees: "0",
+      txFees: "12000000",
       canonical: true,
       stateHash: "3NLjanAoyqjqmPsQHafJcvQiGW2xbvyXANHxEyNwPwan2eUoZBV9",
-      previousStateHash: "3NKFhMmNeGZR8daKD8zWASLzUUzhVtyMp3DfjFteUxyKKAvukYwk",
-      blockHeight: 9999,
+      protocolState: {
+        previousStateHash:
+          "3NKrd5saMRPLRLXBZoN7wfxbwNhJVB5t2ksK4dVXatCKhYC1CK7o",
+      },
     },
     {
-      canonical: true,
-      stateHash: "3NKFhMmNeGZR8daKD8zWASLzUUzhVtyMp3DfjFteUxyKKAvukYwk",
-      previousStateHash: "3NLpcWsFesKbesARzHWFbbzQLDNGQP1Jto7MPPYwTrisRW935Agi",
       blockHeight: 9998,
+      globalSlotSinceGenesis: 14219,
+      transactions: { coinbase: "720000000000" },
+      creator: "B62qoeKm4p9J6Q3hYWzb82Yo5uP163MqooBX4ZWjp8FpX3N6Y81QgFc",
+      snarkFees: "0",
+      txFees: "0",
+      canonical: false,
+      stateHash: "3NKFhMmNeGZR8daKD8zWASLzUUzhVtyMp3DfjFteUxyKKAvukYwk",
+      protocolState: {
+        previousStateHash:
+          "3NLmHHjWp7vGwrMFrsYYYW3MJLBaRneSZLohGHhsAvGgEH1J4RbE",
+      },
     },
     {
+      blockHeight: 9998,
+      globalSlotSinceGenesis: 14104,
+      transactions: { coinbase: "720000000000" },
+      creator: "B62qq2PGvsoNC4u3uxthhs2ztXzuXRzqoWX9pWUDo5xdC3vdG7DQkjU",
+      snarkFees: "0",
+      txFees: "25000000",
       canonical: false,
       stateHash: "3NKrd5saMRPLRLXBZoN7wfxbwNhJVB5t2ksK4dVXatCKhYC1CK7o",
-      previousStateHash: "3NLpcWsFesKbesARzHWFbbzQLDNGQP1Jto7MPPYwTrisRW935Agi",
-      blockHeight: 9998,
+      protocolState: {
+        previousStateHash:
+          "3NLmHHjWp7vGwrMFrsYYYW3MJLBaRneSZLohGHhsAvGgEH1J4RbE",
+      },
     },
     {
-      canonical: true,
-      stateHash: "3NLpcWsFesKbesARzHWFbbzQLDNGQP1Jto7MPPYwTrisRW935Agi",
-      previousStateHash: "3NKeCAcqyEUEjenRvFVuea58wmSKuLLCvbtTFaRMjPqkM9Axs2dw",
       blockHeight: 9997,
+      globalSlotSinceGenesis: 14102,
+      transactions: { coinbase: "720000000000" },
+      creator: "B62qqgGAQfpFhX8G1iF253C37CMsj6ypn77C9fr3Y17iU6B5Ft4XjPo",
+      snarkFees: "0",
+      txFees: "12000000",
+      canonical: false,
+      stateHash: "3NLpcWsFesKbesARzHWFbbzQLDNGQP1Jto7MPPYwTrisRW935Agi",
+      protocolState: {
+        previousStateHash:
+          "3NKdioMLUnWMaAfCRSN7xDXGhYE4HFZXnncg7W4goigLCsGRK2oE",
+      },
     },
     {
+      blockHeight: 9997,
+      globalSlotSinceGenesis: 14102,
+      transactions: { coinbase: "720000000000" },
+      creator: "B62qqgGAQfpFhX8G1iF253C37CMsj6ypn77C9fr3Y17iU6B5Ft4XjPo",
+      snarkFees: "0",
+      txFees: "12000000",
       canonical: false,
       stateHash: "3NLmHHjWp7vGwrMFrsYYYW3MJLBaRneSZLohGHhsAvGgEH1J4RbE",
-      previousStateHash: "3NKeCAcqyEUEjenRvFVuea58wmSKuLLCvbtTFaRMjPqkM9Axs2dw",
-      blockHeight: 9997,
+      protocolState: {
+        previousStateHash:
+          "3NKeCAcqyEUEjenRvFVuea58wmSKuLLCvbtTFaRMjPqkM9Axs2dw",
+      },
     },
     {
+      blockHeight: 9997,
+      globalSlotSinceGenesis: 14102,
+      transactions: { coinbase: "720000000000" },
+      creator: "B62qoeKm4p9J6Q3hYWzb82Yo5uP163MqooBX4ZWjp8FpX3N6Y81QgFc",
+      snarkFees: "0",
+      txFees: "12000000",
       canonical: false,
       stateHash: "3NLsNLbpJGYkGYWVMPUfRoxkdi7PDrtpJRJBAhh94qtpLJ5FwRNK",
-      previousStateHash: "3NKeCAcqyEUEjenRvFVuea58wmSKuLLCvbtTFaRMjPqkM9Axs2dw",
-      blockHeight: 9997,
+      protocolState: {
+        previousStateHash:
+          "3NKdioMLUnWMaAfCRSN7xDXGhYE4HFZXnncg7W4goigLCsGRK2oE",
+      },
     },
     {
+      blockHeight: 9997,
+      globalSlotSinceGenesis: 14102,
+      transactions: { coinbase: "720000000000" },
+      creator: "B62qoeKm4p9J6Q3hYWzb82Yo5uP163MqooBX4ZWjp8FpX3N6Y81QgFc",
+      snarkFees: "0",
+      txFees: "12000000",
       canonical: false,
       stateHash: "3NLNWxa9GWpcAn1NF6ULPVifBm77PTWkmBsPvaQA9EZQNftJYrd6",
-      previousStateHash: "3NKeCAcqyEUEjenRvFVuea58wmSKuLLCvbtTFaRMjPqkM9Axs2dw",
-      blockHeight: 9997,
+      protocolState: {
+        previousStateHash:
+          "3NKeCAcqyEUEjenRvFVuea58wmSKuLLCvbtTFaRMjPqkM9Axs2dw",
+      },
     },
     {
+      blockHeight: 9996,
+      globalSlotSinceGenesis: 14101,
+      transactions: { coinbase: "720000000000" },
+      creator: "B62qrQBarKiVK11xP943pMQxnmNrfYpT7hskHLWdFXbx2K1E9wR1Vdy",
+      snarkFees: "0",
+      txFees: "13000000",
       canonical: true,
       stateHash: "3NKeCAcqyEUEjenRvFVuea58wmSKuLLCvbtTFaRMjPqkM9Axs2dw",
-      previousStateHash: "3NLoTex5WS72VpQkqZqVTkgxTbMq4Gm6ABLebiju158dZTB5jrFW",
+      protocolState: {
+        previousStateHash:
+          "3NLoTex5WS72VpQkqZqVTkgxTbMq4Gm6ABLebiju158dZTB5jrFW",
+      },
+    },
+    {
       blockHeight: 9996,
+      globalSlotSinceGenesis: 14101,
+      transactions: { coinbase: "720000000000" },
+      creator: "B62qmFf6UZn2sg3j8bYLGmMinzS2FHX6hDM71nFxAfMhvh4hnGBtkBD",
+      snarkFees: "0",
+      txFees: "13000000",
+      canonical: false,
+      stateHash: "3NKdioMLUnWMaAfCRSN7xDXGhYE4HFZXnncg7W4goigLCsGRK2oE",
+      protocolState: {
+        previousStateHash:
+          "3NLoTex5WS72VpQkqZqVTkgxTbMq4Gm6ABLebiju158dZTB5jrFW",
+      },
+    },
+    {
+      blockHeight: 9995,
+      globalSlotSinceGenesis: 14100,
+      transactions: { coinbase: "720000000000" },
+      creator: "B62qj3Gzxgb4G4M8CwZRXZPtmVwGJtGfVXVbpMrACNDSqQLoXzSQ9HW",
+      snarkFees: "0",
+      txFees: "12000000",
+      canonical: true,
+      stateHash: "3NLoTex5WS72VpQkqZqVTkgxTbMq4Gm6ABLebiju158dZTB5jrFW",
+      protocolState: {
+        previousStateHash:
+          "3NKiHSvFR4k5iNXLMjrdQm23gUcmTwivf4dC4Va7Rn3zjmjQXdgt",
+      },
+    },
+    {
+      blockHeight: 9994,
+      globalSlotSinceGenesis: 14099,
+      transactions: { coinbase: "720000000000" },
+      creator: "B62qmRG3THXszPjfJXDCk2MjDZqWLXMoVzyEWMPStEdfqhMe7GJaGxE",
+      snarkFees: "0",
+      txFees: "12000000",
+      canonical: true,
+      stateHash: "3NKiHSvFR4k5iNXLMjrdQm23gUcmTwivf4dC4Va7Rn3zjmjQXdgt",
+      protocolState: {
+        previousStateHash:
+          "3NKfdnW8uY2CgpsubUKT2K8kLXFFa4HhmkCgbmBQkKvXKcuNf41d",
+      },
+    },
+    {
+      blockHeight: 9994,
+      globalSlotSinceGenesis: 14099,
+      transactions: { coinbase: "720000000000" },
+      creator: "B62qoXQhp63oNsLSN9Dy7wcF3PzLmdBnnin2rTnNWLbpgF7diABciU6",
+      snarkFees: "0",
+      txFees: "12000000",
+      canonical: false,
+      stateHash: "3NKnpRrkaoLtsJL7xdsMVMxFPdsMK3HwtdvYzsTg13wJ9vzyLiwQ",
+      protocolState: {
+        previousStateHash:
+          "3NKfdnW8uY2CgpsubUKT2K8kLXFFa4HhmkCgbmBQkKvXKcuNf41d",
+      },
+    },
+    {
+      blockHeight: 9993,
+      globalSlotSinceGenesis: 14098,
+      transactions: { coinbase: "720000000000" },
+      creator: "B62qjhiEXP45KEk8Fch4FnYJQ7UMMfiR3hq9ZeMUZ8ia3MbfEteSYDg",
+      snarkFees: "0",
+      txFees: "12000000",
+      canonical: true,
+      stateHash: "3NKfdnW8uY2CgpsubUKT2K8kLXFFa4HhmkCgbmBQkKvXKcuNf41d",
+      protocolState: {
+        previousStateHash:
+          "3NLtVqfra25CqZGXeHF1HH5XthLYeqqLYvnt3Q2GLmviMyy5nBwo",
+      },
+    },
+    {
+      blockHeight: 9993,
+      globalSlotSinceGenesis: 14151,
+      transactions: { coinbase: "720000000000" },
+      creator: "B62qjw2PdqLJYNTr6cNDXEmnc9FLNoaqVMHMqiTX7sqLYJRpd3mshFA",
+      snarkFees: "0",
+      txFees: "582000000",
+      canonical: false,
+      stateHash: "3NKnRumoD28URCCZ9iCy5MxMMi91w8UrLNhavGgYH5bBFkqeHahE",
+      protocolState: {
+        previousStateHash:
+          "3NLWbWj5US2atTS38JkecFofgRN3BUGhwsWGtMMvD2qbAeKJtb6m",
+      },
     },
   ];
 
