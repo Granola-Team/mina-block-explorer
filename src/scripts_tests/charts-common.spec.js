@@ -3,6 +3,7 @@ const {
   scaleMina,
   getOrdinal,
   buildTree,
+  getMaxDepth,
 } = require("../scripts/analytics/charts-common.js");
 
 test("nanominaToKMina", () => {
@@ -159,7 +160,7 @@ describe("Tree Building with Correct Data", () => {
       creator: "B62qq2PGvsoNC4u3uxthhs2ztXzuXRzqoWX9pWUDo5xdC3vdG7DQkjU",
       snarkFees: "0",
       txFees: "25000000",
-      canonical: false,
+      canonical: true,
       stateHash: "3NKrd5saMRPLRLXBZoN7wfxbwNhJVB5t2ksK4dVXatCKhYC1CK7o",
       protocolState: {
         previousStateHash:
@@ -342,9 +343,15 @@ describe("Tree Building with Correct Data", () => {
       });
     }
 
-    expect(currentBlock.blockHeight).toBe(9998);
+    expect(currentBlock.blockHeight).toBe(10000);
     expect(currentBlock.stateHash).toBe(
-      "3NKFhMmNeGZR8daKD8zWASLzUUzhVtyMp3DfjFteUxyKKAvukYwk",
+      "3NLhfsN1QPHsKzqu6RaVyLKmMCYTXnkrueMoWpmRQErfBkh6v6as",
     );
+  });
+
+  test("Get maximum depth of the tree", () => {
+    const tree = buildTree(inputBlocks);
+    const maxDepth = getMaxDepth(tree);
+    expect(maxDepth).toBe(8); // Based on the current tree structure
   });
 });
