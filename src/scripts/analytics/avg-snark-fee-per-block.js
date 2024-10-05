@@ -1,13 +1,114 @@
+function renderTotalFeesPerBlock(data, heights, myChart) {
+  let option;
+
+  myChart.hideLoading();
+
+  option = {
+    tooltip: {
+      ...TOOLTIP_DEFAULT,
+    },
+    color: [...CHART_COLORS],
+    title: {
+      ...TITLE_DEFAULT,
+      text: `Total Fees Per Block `,
+    },
+    grid: { ...GRID_DEFAULT },
+    xAxis: {
+      ...X_AXIS_DEFAULT,
+      type: "category",
+      name: "Block Height",
+      data: heights,
+    },
+    yAxis: [
+      {
+        ...Y_AXIS_DEFAULT,
+        type: "value",
+        name: "Fee Amount",
+        axisLabel: {
+          ...Y_AXIS_AXIS_LABEL_DEFAULT,
+          formatter: (value) => `${(value / 1e9).toFixed(3)}`,
+        },
+      },
+    ],
+    series: [
+      {
+        data: data,
+        type: "bar",
+        tooltip: {
+          valueFormatter: (value) => scaleMina(value),
+        },
+      },
+    ],
+  };
+
+  option && myChart.setOption(option);
+}
+
+function renderAveFeePerBlock(data, heights, myChart) {
+  let option;
+
+  myChart.hideLoading();
+
+  option = {
+    tooltip: {
+      ...TOOLTIP_DEFAULT,
+    },
+    color: [...CHART_COLORS],
+    title: {
+      ...TITLE_DEFAULT,
+      text: `Ave Fee Per Block`,
+    },
+    grid: { ...GRID_DEFAULT },
+    xAxis: {
+      ...X_AXIS_DEFAULT,
+      type: "category",
+      name: "Block Height",
+      data: heights,
+    },
+    yAxis: [
+      {
+        ...Y_AXIS_DEFAULT,
+        type: "value",
+        name: "Fee (MINA)",
+        axisLabel: {
+          ...Y_AXIS_AXIS_LABEL_DEFAULT,
+          formatter: (value) => `${(value / 1e9).toFixed(3)}`,
+        },
+      },
+    ],
+    series: [
+      {
+        data: data,
+        type: "bar",
+        tooltip: {
+          valueFormatter: (value) => scaleMina(mina),
+        },
+      },
+    ],
+  };
+
+  option && myChart.setOption(option);
+}
+
 setTimeout(async () => {
   let blockheightLte = parseInt(getUrlParam("q-blockheight-lte"));
   let blockheightGte = parseInt(getUrlParam("q-blockheight-gte"));
-  let chartDom = document.getElementById("avg-snark-fee");
+  let avgFeeDom = document.getElementById("avg-snark-fee");
+  let feePerBlockDom = document.getElementById("fees-per-block");
   window.addEventListener("resize", function () {
-    myChart.resize();
+    avgFeeChart.resize();
+    feePerBlockChart.resize();
   });
-  let myChart = echarts.init(chartDom);
+  let avgFeeChart = echarts.init(avgFeeDom);
+  let feePerBlockChart = echarts.init(feePerBlockDom);
 
-  myChart.showLoading({
+  avgFeeChart.showLoading({
+    text: "Loading...", // Display text with the spinner
+    color: "#E39844", // Spinner color
+    zlevel: 0,
+  });
+
+  feePerBlockChart.showLoading({
     text: "Loading...", // Display text with the spinner
     color: "#E39844", // Spinner color
     zlevel: 0,
@@ -56,70 +157,13 @@ setTimeout(async () => {
   let heights = Object.keys(data).sort();
   for (const height of heights) {
     if (data[height].count != 0) {
-      data[height].totalFees = data[height].totalFees / 1e9; // nanomina to mina
+      data[height].totalFees = data[height].totalFees;
       data[height].avgFee = data[height].totalFees / data[height].count;
     }
   }
-  let counts = Object.values(data).map((e) => e.count);
+  let totalFees = Object.values(data).map((e) => e.totalFees);
   let avgFees = Object.values(data).map((e) => e.avgFee);
 
-  let option;
-
-  myChart.hideLoading();
-
-  option = {
-    tooltip: {
-      ...TOOLTIP_DEFAULT,
-    },
-    color: [...CHART_COLORS],
-    title: {
-      ...TITLE_DEFAULT,
-      text: `Fees by block with averages`,
-    },
-    grid: { ...GRID_DEFAULT },
-    xAxis: {
-      ...X_AXIS_DEFAULT,
-      type: "category",
-      name: "Block Height",
-      data: heights,
-    },
-    yAxis: [
-      {
-        ...Y_AXIS_DEFAULT,
-        type: "value",
-        name: "Avg Fee Per Block (MINA)",
-        axisLabel: {
-          ...Y_AXIS_AXIS_LABEL_DEFAULT,
-          formatter: (value) => `${value}`,
-        },
-      },
-      {
-        ...Y_AXIS_DEFAULT,
-        type: "value",
-        name: "Fees Per Block",
-        position: "right",
-      },
-    ],
-    series: [
-      {
-        data: avgFees,
-        type: "line",
-        areaStyle: { ...SERIES_LINE_AREA_STYLES },
-        yAxisIndex: 0,
-        tooltip: {
-          valueFormatter: (value) => `${value.toFixed(5)} MINA`,
-        },
-      },
-      {
-        data: counts,
-        type: "scatter",
-        yAxisIndex: 1,
-        tooltip: {
-          valueFormatter: (value) => `${value} fees`,
-        },
-      },
-    ],
-  };
-
-  option && myChart.setOption(option);
+  renderAveFeePerBlock(avgFees, heights, avgFeeChart);
+  renderTotalFeesPerBlock(totalFees, heights, feePerBlockChart);
 }, 1000);
