@@ -93,25 +93,23 @@ function renderAveFeePerBlock(data, heights, myChart) {
 setTimeout(async () => {
   let blockheightLte = parseInt(getUrlParam("q-blockheight-lte"));
   let blockheightGte = parseInt(getUrlParam("q-blockheight-gte"));
-  let avgFeeDom = document.getElementById("avg-snark-fee");
-  let feePerBlockDom = document.getElementById("fees-per-block");
-  window.addEventListener("resize", function () {
-    avgFeeChart.resize();
-    feePerBlockChart.resize();
-  });
-  let avgFeeChart = echarts.init(avgFeeDom);
-  let feePerBlockChart = echarts.init(feePerBlockDom);
 
-  avgFeeChart.showLoading({
-    text: "Loading...", // Display text with the spinner
-    color: "#E39844", // Spinner color
-    zlevel: 0,
-  });
-
-  feePerBlockChart.showLoading({
-    text: "Loading...", // Display text with the spinner
-    color: "#E39844", // Spinner color
-    zlevel: 0,
+  let avgFeeChart = echarts.init(document.getElementById("avg-snark-fee"));
+  let feePerBlockChart = echarts.init(
+    document.getElementById("fees-per-block"),
+  );
+  let feeDistributionChart = echarts.init(
+    document.getElementById("fee-distribution"),
+  );
+  [avgFeeChart, feePerBlockChart, feeDistributionChart].forEach((chart) => {
+    window.addEventListener("resize", function () {
+      chart.resize();
+    });
+    chart.showLoading({
+      text: "Loading...", // Display text with the spinner
+      color: "#E39844", // Spinner color
+      zlevel: 0,
+    });
   });
 
   let response = await fetch(config.graphql_endpoint, {
@@ -153,6 +151,15 @@ setTimeout(async () => {
 
     return acc;
   }, {});
+  const feeDist = jsonResp.data.snarks.reduce((acc, snark) => {
+    let key = snark.fee;
+    if (!acc[key]) {
+      acc[key] = 0;
+    }
+
+    acc[snark.fee] += 1;
+    return acc;
+  }, {});
 
   let heights = Object.keys(data).sort();
   for (const height of heights) {
@@ -163,6 +170,7 @@ setTimeout(async () => {
   }
   let totalFees = Object.values(data).map((e) => e.totalFees);
   let avgFees = Object.values(data).map((e) => e.avgFee);
+  console.log(feeDist);
 
   renderAveFeePerBlock(avgFees, heights, avgFeeChart);
   renderTotalFeesPerBlock(totalFees, heights, feePerBlockChart);
