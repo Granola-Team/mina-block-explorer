@@ -1,3 +1,61 @@
+function renderFeeDistributionChart(data, myChart) {
+  let option;
+
+  myChart.hideLoading();
+
+  delete data["0"];
+
+  let fees = Object.keys(data);
+  let counts = Object.values(data);
+
+  option = {
+    tooltip: {
+      ...TOOLTIP_DEFAULT,
+    },
+    color: [...CHART_COLORS],
+    title: {
+      ...TITLE_DEFAULT,
+      text: `Fee Distribution `,
+    },
+    grid: { ...GRID_DEFAULT },
+    yAxis: {
+      ...Y_AXIS_DEFAULT,
+      type: "category",
+      data: fees,
+      axisLabel: {
+        ...Y_AXIS_AXIS_LABEL_DEFAULT,
+        formatter: (value) => scaleMina(value),
+      },
+    },
+    xAxis: [
+      {
+        ...X_AXIS_DEFAULT,
+        type: "value",
+        name: "Instances of Fee Amount",
+        min: 0,
+      },
+    ],
+    series: [
+      {
+        name: "Instances of fee amount",
+        data: counts,
+        type: "scatter",
+        tooltip: {
+          formatter: function (params) {
+            return `${params.value} instances of ${scaleMina(params.name)}`;
+          },
+        },
+        label: {
+          show: true,
+          position: "right",
+        },
+      },
+    ],
+  };
+
+  option && myChart.setOption(option);
+}
+
 function renderTotalFeesPerBlock(data, heights, myChart) {
   let option;
 
@@ -26,7 +84,7 @@ function renderTotalFeesPerBlock(data, heights, myChart) {
         name: "Fee Amount",
         axisLabel: {
           ...Y_AXIS_AXIS_LABEL_DEFAULT,
-          formatter: (value) => `${(value / 1e9).toFixed(3)}`,
+          formatter: (value) => `${(value / 1e9).toFixed(0)}`,
         },
       },
     ],
@@ -81,7 +139,7 @@ function renderAveFeePerBlock(data, heights, myChart) {
         data: data,
         type: "bar",
         tooltip: {
-          valueFormatter: (value) => scaleMina(mina),
+          valueFormatter: (value) => scaleMina(value),
         },
       },
     ],
@@ -172,6 +230,7 @@ setTimeout(async () => {
   let avgFees = Object.values(data).map((e) => e.avgFee);
   console.log(feeDist);
 
+  renderFeeDistributionChart(feeDist, feeDistributionChart);
   renderAveFeePerBlock(avgFees, heights, avgFeeChart);
   renderTotalFeesPerBlock(totalFees, heights, feePerBlockChart);
 }, 1000);
