@@ -9,7 +9,7 @@ use leptos_router::create_query_signal;
 use leptos_use::storage::use_local_storage;
 use std::collections::HashMap;
 
-const DEFAULT_BLOCK_RANGE: u64 = 3000;
+const DEFAULT_BLOCK_RANGE: u64 = 1000;
 const INPUT_STYLES: &str =
     "mr-4 h-8 pl-4 text-sm box-border border-[1px] border-slate-300 rounded-md";
 
