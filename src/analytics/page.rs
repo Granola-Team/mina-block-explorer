@@ -82,6 +82,9 @@ pub fn SnarksAnalyticsPage() -> impl IntoView {
                                 defer=true
                             ></script>
                             <AnalyticsLgContainer>
+                                <div id="fee-distribution" class="w-full h-96"></div>
+                            </AnalyticsLgContainer>
+                            <AnalyticsLgContainer>
                                 <div id="avg-snark-fee" class="w-full h-96"></div>
                             </AnalyticsLgContainer>
                             <AnalyticsLgContainer>
