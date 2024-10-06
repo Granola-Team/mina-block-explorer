@@ -1,3 +1,59 @@
+function renderFeeDistributionChart(data, myChart) {
+  let option;
+
+  myChart.hideLoading();
+
+  let fees = Object.keys(data).map((f) => +f);
+  let counts = Object.values(data);
+
+  option = {
+    tooltip: {
+      ...TOOLTIP_DEFAULT,
+    },
+    color: [...CHART_COLORS],
+    title: {
+      ...TITLE_DEFAULT,
+      text: `Fee Distribution (Non-Zero Fees)`,
+    },
+    grid: { ...GRID_DEFAULT },
+    yAxis: {
+      ...Y_AXIS_DEFAULT,
+      type: "category",
+      data: fees,
+      axisLabel: {
+        ...Y_AXIS_AXIS_LABEL_DEFAULT,
+        formatter: (value) => scaleMina(value),
+      },
+    },
+    xAxis: [
+      {
+        ...X_AXIS_DEFAULT,
+        type: "value",
+        name: "Instances of Fee Amount",
+        min: 0,
+      },
+    ],
+    series: [
+      {
+        name: "Instances of fee amount",
+        data: counts,
+        type: "scatter",
+        tooltip: {
+          formatter: function (params) {
+            return `${params.value} instances of ${scaleMina(params.name)}`;
+          },
+        },
+        label: {
+          show: true,
+          position: "right",
+        },
+      },
+    ],
+  };
+
+  option && myChart.setOption(option);
+}
+
 function renderTotalFeesPerBlock(data, heights, myChart) {
   let option;
 
@@ -26,7 +82,7 @@ function renderTotalFeesPerBlock(data, heights, myChart) {
         name: "Fee Amount",
         axisLabel: {
           ...Y_AXIS_AXIS_LABEL_DEFAULT,
-          formatter: (value) => `${(value / 1e9).toFixed(3)}`,
+          formatter: (value) => `${(value / 1e9).toFixed(0)}`,
         },
       },
     ],
@@ -56,7 +112,7 @@ function renderAveFeePerBlock(data, heights, myChart) {
     color: [...CHART_COLORS],
     title: {
       ...TITLE_DEFAULT,
-      text: `Ave Fee Per Block`,
+      text: `Average Fee Per Block`,
     },
     grid: { ...GRID_DEFAULT },
     xAxis: {
@@ -72,7 +128,7 @@ function renderAveFeePerBlock(data, heights, myChart) {
         name: "Fee (MINA)",
         axisLabel: {
           ...Y_AXIS_AXIS_LABEL_DEFAULT,
-          formatter: (value) => `${(value / 1e9).toFixed(3)}`,
+          formatter: (value) => `${(value / 1e9).toFixed(0)}`,
         },
       },
     ],
@@ -81,7 +137,7 @@ function renderAveFeePerBlock(data, heights, myChart) {
         data: data,
         type: "bar",
         tooltip: {
-          valueFormatter: (value) => scaleMina(mina),
+          valueFormatter: (value) => scaleMina(value),
         },
       },
     ],
@@ -93,25 +149,23 @@ function renderAveFeePerBlock(data, heights, myChart) {
 setTimeout(async () => {
   let blockheightLte = parseInt(getUrlParam("q-blockheight-lte"));
   let blockheightGte = parseInt(getUrlParam("q-blockheight-gte"));
-  let avgFeeDom = document.getElementById("avg-snark-fee");
-  let feePerBlockDom = document.getElementById("fees-per-block");
-  window.addEventListener("resize", function () {
-    avgFeeChart.resize();
-    feePerBlockChart.resize();
-  });
-  let avgFeeChart = echarts.init(avgFeeDom);
-  let feePerBlockChart = echarts.init(feePerBlockDom);
 
-  avgFeeChart.showLoading({
-    text: "Loading...", // Display text with the spinner
-    color: "#E39844", // Spinner color
-    zlevel: 0,
-  });
-
-  feePerBlockChart.showLoading({
-    text: "Loading...", // Display text with the spinner
-    color: "#E39844", // Spinner color
-    zlevel: 0,
+  let avgFeeChart = echarts.init(document.getElementById("avg-snark-fee"));
+  let feePerBlockChart = echarts.init(
+    document.getElementById("fees-per-block"),
+  );
+  let feeDistributionChart = echarts.init(
+    document.getElementById("fee-distribution"),
+  );
+  [avgFeeChart, feePerBlockChart, feeDistributionChart].forEach((chart) => {
+    window.addEventListener("resize", function () {
+      chart.resize();
+    });
+    chart.showLoading({
+      text: "Loading...", // Display text with the spinner
+      color: "#E39844", // Spinner color
+      zlevel: 0,
+    });
   });
 
   let response = await fetch(config.graphql_endpoint, {
@@ -153,6 +207,15 @@ setTimeout(async () => {
 
     return acc;
   }, {});
+  const feeDist = jsonResp.data.snarks.reduce((acc, snark) => {
+    let key = snark.fee;
+    if (!acc[key]) {
+      acc[key] = 0;
+    }
+
+    acc[snark.fee] += 1;
+    return acc;
+  }, {});
 
   let heights = Object.keys(data).sort();
   for (const height of heights) {
@@ -164,6 +227,25 @@ setTimeout(async () => {
   let totalFees = Object.values(data).map((e) => e.totalFees);
   let avgFees = Object.values(data).map((e) => e.avgFee);
 
+  const fees = Object.keys(feeDist)
+    .map((f) => +f)
+    .sort();
+  const [fee, unit] = scaleMina(Math.max(...fees)).split(" ");
+
+  document.getElementById("fee-free-work").innerHTML =
+    new Intl.NumberFormat().format(feeDist["0"]);
+  document.getElementById("total-snark-jobs").innerHTML =
+    new Intl.NumberFormat().format(jsonResp.data.snarks.length);
+  document.getElementById("for-fee-jobs").innerHTML =
+    new Intl.NumberFormat().format(jsonResp.data.snarks.length - +feeDist["0"]);
+  document.getElementById("highest-fee").innerHTML =
+    new Intl.NumberFormat().format(fee, { style: "currency" });
+  document
+    .getElementById("highest-fee")
+    .parentElement.querySelector(".subtext").innerHTML = `in ${unit}`;
+
+  delete feeDist["0"];
+  renderFeeDistributionChart(feeDist, feeDistributionChart);
   renderAveFeePerBlock(avgFees, heights, avgFeeChart);
   renderTotalFeesPerBlock(totalFees, heights, feePerBlockChart);
 }, 1000);

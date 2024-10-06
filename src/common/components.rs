@@ -465,8 +465,8 @@ pub fn AnalyticsSimpleInfo(
     let base_class_str = "flex justify-center items-center mx-4";
     let mut value_class_str = " text-6xl font-bold ".to_string();
     value_class_str.push_str(base_class_str);
-    let label_class_str = " text-lg font-semibold ".to_string();
-    let subtext_class_str = " text-sm font-medium text-slate-400 ".to_string();
+    let label_class_str = " label text-lg font-semibold ".to_string();
+    let subtext_class_str = " subtext text-sm font-medium text-slate-400 ".to_string();
     view! {
         <div class=container_class_str>
             <div class="flex justify-center items-center md:items-start flex-col mx-4">

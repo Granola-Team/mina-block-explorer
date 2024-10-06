@@ -84,6 +84,38 @@ pub fn SnarksAnalyticsPage() -> impl IntoView {
                                 src="/scripts/analytics/avg-snark-fee-per-block.js"
                                 defer=true
                             ></script>
+                            <AnalyticsSmContainer>
+                                <AnalyticsSimpleInfo
+                                    label=convert_to_span("Fee-free SNARK work".into())
+                                    value=convert_to_span("...".to_string())
+                                    id="fee-free-work"
+                                />
+                            </AnalyticsSmContainer>
+                            <AnalyticsSmContainer>
+                                <AnalyticsSimpleInfo
+                                    label=convert_to_span("For-fee SNARK work".into())
+                                    value=convert_to_span("...".to_string())
+                                    id="for-fee-jobs"
+                                />
+                            </AnalyticsSmContainer>
+                            <AnalyticsSmContainer>
+                                <AnalyticsSimpleInfo
+                                    label=convert_to_span("Total SNARK jobs".into())
+                                    value=convert_to_span("...".to_string())
+                                    id="total-snark-jobs"
+                                />
+                            </AnalyticsSmContainer>
+                            <AnalyticsSmContainer>
+                                <AnalyticsSimpleInfo
+                                    label=convert_to_span("Highest Fee".into())
+                                    subtext=""
+                                    value=convert_to_span("...".to_string())
+                                    id="highest-fee"
+                                />
+                            </AnalyticsSmContainer>
+                            <AnalyticsLgContainer>
+                                <div id="fee-distribution" class="w-full h-96"></div>
+                            </AnalyticsLgContainer>
                             <AnalyticsLgContainer>
                                 <div id="avg-snark-fee" class="w-full h-96"></div>
                             </AnalyticsLgContainer>

@@ -13,7 +13,7 @@ suite(["@tier2"], "chart", () => {
     { page: "/analytics/blocks", chart_ids: ["#rewards", "#blocks", "#tree"] },
     {
       page: "/analytics/snarks",
-      chart_ids: ["#avg-snark-fee", "#fees-per-block"],
+      chart_ids: ["#avg-snark-fee", "#fees-per-block", "#fee-distribution"],
     },
   ];
 
