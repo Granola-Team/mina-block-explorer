@@ -157,16 +157,21 @@ setTimeout(async () => {
   let feeDistributionChart = echarts.init(
     document.getElementById("fee-distribution"),
   );
-  [avgFeeChart, feePerBlockChart, feeDistributionChart].forEach((chart) => {
-    window.addEventListener("resize", function () {
-      chart.resize();
-    });
-    chart.showLoading({
-      text: "Loading...", // Display text with the spinner
-      color: "#E39844", // Spinner color
-      zlevel: 0,
-    });
-  });
+  let snarkJobsChart = echarts.init(
+    document.getElementById("snark-jobs-count"),
+  );
+  [avgFeeChart, feePerBlockChart, feeDistributionChart, snarkJobsChart].forEach(
+    (chart) => {
+      window.addEventListener("resize", function () {
+        chart.resize();
+      });
+      chart.showLoading({
+        text: "Loading...", // Display text with the spinner
+        color: "#E39844", // Spinner color
+        zlevel: 0,
+      });
+    },
+  );
 
   let response = await fetch(config.graphql_endpoint, {
     method: "POST",
