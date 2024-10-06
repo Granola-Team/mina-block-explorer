@@ -23,7 +23,7 @@ function renderTreeChart(data, myChart) {
         left: "7%",
         bottom: "1%",
         right: "20%",
-        symbolSize: 7,
+        symbolSize: 20,
         label: {
           position: "left",
           verticalAlign: "middle",
