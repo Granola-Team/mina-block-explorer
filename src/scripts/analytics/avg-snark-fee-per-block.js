@@ -232,12 +232,14 @@ setTimeout(async () => {
     .sort();
   const [fee, unit] = scaleMina(Math.max(...fees)).split(" ");
 
-  document.getElementById("fee-free-work").innerHTML = feeDist["0"];
+  document.getElementById("fee-free-work").innerHTML =
+    new Intl.NumberFormat().format(feeDist["0"]);
   document.getElementById("total-snark-jobs").innerHTML =
-    jsonResp.data.snarks.length;
+    new Intl.NumberFormat().format(jsonResp.data.snarks.length);
   document.getElementById("for-fee-jobs").innerHTML =
-    jsonResp.data.snarks.length - +feeDist["0"];
-  document.getElementById("highest-fee").innerHTML = fee;
+    new Intl.NumberFormat().format(jsonResp.data.snarks.length - +feeDist["0"]);
+  document.getElementById("highest-fee").innerHTML =
+    new Intl.NumberFormat().format(fee, { style: "currency" });
   document
     .getElementById("highest-fee")
     .parentElement.querySelector(".subtext").innerHTML = `in ${unit}`;
