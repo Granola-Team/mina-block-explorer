@@ -122,11 +122,101 @@ function getOrdinal(number) {
 
   return number + suffix;
 }
+// Group blocks by blockHeight
+function groupBlocksByHeight(blocks) {
+  return blocks.reduce((acc, block) => {
+    if (!acc[block.blockHeight]) {
+      acc[block.blockHeight] = [];
+    }
+    acc[block.blockHeight].push(block);
+    return acc;
+  }, {});
+}
+
+function buildTree(blocks) {
+  const blocksByHeight = groupBlocksByHeight(blocks);
+
+  // Find the root block with the lowest height
+  const rootHeight = Math.min(...Object.keys(blocksByHeight));
+  const root = blocksByHeight[rootHeight].find((block) => block.canonical); // Start with the canonical block at the root
+
+  const visited = new Set(); // Track visited blocks to avoid duplicates
+  const queue = [root]; // Initialize the queue with the root node
+
+  visited.add(root.stateHash); // Mark the root as visited
+  root.children = []; // Initialize the children for the root
+
+  while (queue.length > 0) {
+    const node = queue.shift(); // Dequeue the next node
+
+    const nextHeight = node.blockHeight + 1;
+
+    // Find the canonical block at the next height whose previousStateHash matches the current node's stateHash
+    const canonicalChild = blocksByHeight[nextHeight]
+      ? blocksByHeight[nextHeight].find(
+          (block) =>
+            block.protocolState.previousStateHash === node.stateHash &&
+            block.canonical,
+        )
+      : null;
+
+    if (canonicalChild && !visited.has(canonicalChild.stateHash)) {
+      visited.add(canonicalChild.stateHash); // Mark the canonical child as visited
+      canonicalChild.children = []; // Initialize the children
+      node.children.push(canonicalChild); // Attach the canonical child
+      queue.push(canonicalChild); // Add the canonical child to the queue
+    }
+
+    // Now add non-canonical children at the next height whose previousStateHash matches the current node's stateHash
+    const nonCanonicalChildren = blocksByHeight[nextHeight]
+      ? blocksByHeight[nextHeight].filter(
+          (block) =>
+            block.protocolState.previousStateHash === node.stateHash &&
+            !block.canonical,
+        )
+      : [];
+
+    nonCanonicalChildren.forEach((child) => {
+      if (!visited.has(child.stateHash)) {
+        visited.add(child.stateHash); // Mark non-canonical child as visited
+        child.children = []; // Initialize the children for the child
+        node.children.push(child); // Attach the non-canonical child
+        queue.push(child); // Add to the queue
+      }
+    });
+  }
+
+  return root;
+}
+
+function mapTreeToEchartsFormat(node) {
+  // Base case: if the node has no children, return it with the required changes
+  const formattedNode = {
+    name: node.blockHeight.toString(), // Map blockHeight to name (as a string)
+    ...node,
+    children: node.children.map(mapTreeToEchartsFormat), // Recursively format the children
+    previousStateHash: node.previousStateHash,
+  };
+
+  return formattedNode;
+}
+
+function getMaxDepth(node) {
+  if (!node.children || node.children.length === 0) {
+    return 1; // A leaf node has a depth of 1
+  }
+
+  // Recursively calculate the depth of each child, and return the maximum depth + 1 (for the current node)
+  const childDepths = node.children.map(getMaxDepth);
+  return Math.max(...childDepths) + 1;
+}
 
 if (typeof module !== "undefined" && module.exports) {
   module.exports = {
     nanominaToKMina,
     scaleMina,
     getOrdinal,
+    buildTree,
+    getMaxDepth,
   };
 }
