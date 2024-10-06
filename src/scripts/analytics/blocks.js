@@ -1,10 +1,12 @@
+const MAX_DEPTH = 25;
+
 function renderTreeChart(data, myChart) {
   let option;
 
   myChart.hideLoading();
 
   let maxHeight = data[0].blockHeight;
-  let fileredData = data.filter((b) => b.blockHeight > maxHeight - 10);
+  let fileredData = data.filter((b) => b.blockHeight > maxHeight - MAX_DEPTH);
   let tree = mapTreeToEchartsFormat(buildTree(fileredData));
 
   option = {
@@ -41,8 +43,8 @@ function renderTreeChart(data, myChart) {
           formatter: "{b}",
         },
         expandAndCollapse: false,
-        animationDuration: 550,
-        animationDurationUpdate: 750,
+        animationDuration: 0,
+        animationDurationUpdate: 0,
       },
     ],
   };
