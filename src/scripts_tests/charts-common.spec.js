@@ -4,6 +4,7 @@ const {
   getOrdinal,
   buildTree,
   getMaxDepth,
+  getUnixTimestampTruncatedToDay,
 } = require("../scripts/analytics/charts-common.js");
 
 test("nanominaToKMina", () => {
@@ -352,5 +353,34 @@ describe("Tree Building with Correct Data", () => {
     const tree = buildTree(inputBlocks);
     const maxDepth = getMaxDepth(tree);
     expect(maxDepth).toBe(8); // Based on the current tree structure
+  });
+});
+
+describe("time utils", () => {
+  test("getUnixTimestampTruncatedToDay should return correct Unix timestamp truncated to the day", () => {
+    const dateStr = "2024-06-04T08:51:00.000Z";
+    const expectedTimestamp = 1717459200; // Unix timestamp for 2024-06-04 00:00:00 UTC
+
+    const result = getUnixTimestampTruncatedToDay(dateStr);
+
+    expect(result).toBe(expectedTimestamp);
+  });
+
+  test("getUnixTimestampTruncatedToDay should handle different time values correctly", () => {
+    const dateStr = "2024-06-04T23:59:59.999Z";
+    const expectedTimestamp = 1717459200; // Unix timestamp for 2024-06-04 00:00:00 UTC
+
+    const result = getUnixTimestampTruncatedToDay(dateStr);
+
+    expect(result).toBe(expectedTimestamp);
+  });
+
+  test("getUnixTimestampTruncatedToDay should handle leap years correctly", () => {
+    const dateStr = "2024-02-29T15:30:00.000Z";
+    const expectedTimestamp = 1709164800; // Unix timestamp for 2024-02-29 00:00:00 UTC (leap year)
+
+    const result = getUnixTimestampTruncatedToDay(dateStr);
+
+    expect(result).toBe(expectedTimestamp);
   });
 });

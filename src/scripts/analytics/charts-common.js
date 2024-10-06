@@ -211,6 +211,14 @@ function getMaxDepth(node) {
   return Math.max(...childDepths) + 1;
 }
 
+function getUnixTimestampTruncatedToDay(dateString) {
+  const date = new Date(dateString);
+  // Set hours, minutes, seconds, and milliseconds to 0
+  date.setUTCHours(0, 0, 0, 0);
+  // Return the Unix timestamp (seconds since 1970-01-01)
+  return Math.floor(date.getTime() / 1000);
+}
+
 if (typeof module !== "undefined" && module.exports) {
   module.exports = {
     nanominaToKMina,
@@ -218,5 +226,6 @@ if (typeof module !== "undefined" && module.exports) {
     getOrdinal,
     buildTree,
     getMaxDepth,
+    getUnixTimestampTruncatedToDay,
   };
 }
