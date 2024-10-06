@@ -219,6 +219,12 @@ function getUnixTimestampTruncatedToDay(dateString) {
   return Math.floor(date.getTime() / 1000);
 }
 
+function unixTimestampToDateString(timestamp) {
+  return new Date(parseInt(timestamp, 10) * 1000)
+    .toISOString()
+    .substring(0, 10);
+}
+
 if (typeof module !== "undefined" && module.exports) {
   module.exports = {
     nanominaToKMina,
@@ -227,5 +233,6 @@ if (typeof module !== "undefined" && module.exports) {
     buildTree,
     getMaxDepth,
     getUnixTimestampTruncatedToDay,
+    unixTimestampToDateString,
   };
 }

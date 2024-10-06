@@ -5,6 +5,7 @@ const {
   buildTree,
   getMaxDepth,
   getUnixTimestampTruncatedToDay,
+  unixTimestampToDateString,
 } = require("../scripts/analytics/charts-common.js");
 
 test("nanominaToKMina", () => {
@@ -382,5 +383,50 @@ describe("time utils", () => {
     const result = getUnixTimestampTruncatedToDay(dateStr);
 
     expect(result).toBe(expectedTimestamp);
+  });
+
+  test("unixTimestampToDateString converts timestamp correctly for a regular date", () => {
+    const timestamp = 1717459200; // Unix timestamp for 2024-06-04 00:00:00 UTC
+    const expectedDateString = "2024-06-04";
+
+    const result = unixTimestampToDateString(timestamp);
+
+    expect(result).toBe(expectedDateString);
+  });
+
+  test("unixTimestampToDateString converts timestamp correctly for a leap year date", () => {
+    const timestamp = 1709164800; // Unix timestamp for 2024-02-29 00:00:00 UTC (leap year)
+    const expectedDateString = "2024-02-29";
+
+    const result = unixTimestampToDateString(timestamp);
+
+    expect(result).toBe(expectedDateString);
+  });
+
+  test("unixTimestampToDateString handles timestamp at the Unix epoch", () => {
+    const timestamp = 0; // Unix timestamp for 1970-01-01 00:00:00 UTC
+    const expectedDateString = "1970-01-01";
+
+    const result = unixTimestampToDateString(timestamp);
+
+    expect(result).toBe(expectedDateString);
+  });
+
+  test("unixTimestampToDateString handles timestamp before 1970 (negative Unix timestamp)", () => {
+    const timestamp = -86400; // Unix timestamp for 1969-12-31 00:00:00 UTC
+    const expectedDateString = "1969-12-31";
+
+    const result = unixTimestampToDateString(timestamp);
+
+    expect(result).toBe(expectedDateString);
+  });
+
+  test("unixTimestampToDateString handles timestamp with string input", () => {
+    const timestamp = "1717459200"; // Unix timestamp as string
+    const expectedDateString = "2024-06-04";
+
+    const result = unixTimestampToDateString(timestamp);
+
+    expect(result).toBe(expectedDateString);
   });
 });
