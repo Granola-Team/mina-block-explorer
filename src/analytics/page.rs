@@ -83,14 +83,14 @@ pub fn SnarksAnalyticsPage() -> impl IntoView {
                             ></script>
                             <AnalyticsSmContainer>
                                 <AnalyticsSimpleInfo
-                                    label=convert_to_span("Fee-free SNARK jobs".into())
+                                    label=convert_to_span("Fee-free SNARK work".into())
                                     value=convert_to_span("...".to_string())
                                     id="fee-free-work"
                                 />
                             </AnalyticsSmContainer>
                             <AnalyticsSmContainer>
                                 <AnalyticsSimpleInfo
-                                    label=convert_to_span("For-fee SNARK jobs".into())
+                                    label=convert_to_span("For-fee SNARK work".into())
                                     value=convert_to_span("...".to_string())
                                     id="for-fee-jobs"
                                 />
@@ -105,6 +105,7 @@ pub fn SnarksAnalyticsPage() -> impl IntoView {
                             <AnalyticsSmContainer>
                                 <AnalyticsSimpleInfo
                                     label=convert_to_span("Highest Fee".into())
+                                    subtext=""
                                     value=convert_to_span("...".to_string())
                                     id="highest-fee"
                                 />

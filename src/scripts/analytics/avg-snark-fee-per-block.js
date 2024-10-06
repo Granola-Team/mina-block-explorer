@@ -3,7 +3,7 @@ function renderFeeDistributionChart(data, myChart) {
 
   myChart.hideLoading();
 
-  let fees = Object.keys(data);
+  let fees = Object.keys(data).map((f) => +f);
   let counts = Object.values(data);
 
   option = {
@@ -227,17 +227,20 @@ setTimeout(async () => {
   let totalFees = Object.values(data).map((e) => e.totalFees);
   let avgFees = Object.values(data).map((e) => e.avgFee);
 
-  const fees = Object.keys(feeDist).map((f) => +f);
-  console.log(fees);
+  const fees = Object.keys(feeDist)
+    .map((f) => +f)
+    .sort();
+  const [fee, unit] = scaleMina(Math.max(...fees)).split(" ");
 
   document.getElementById("fee-free-work").innerHTML = feeDist["0"];
   document.getElementById("total-snark-jobs").innerHTML =
     jsonResp.data.snarks.length;
   document.getElementById("for-fee-jobs").innerHTML =
     jsonResp.data.snarks.length - +feeDist["0"];
-  document.getElementById("highest-fee").innerHTML = scaleMina(
-    fees[fees.length - 1],
-  );
+  document.getElementById("highest-fee").innerHTML = fee;
+  document
+    .getElementById("highest-fee")
+    .parentElement.querySelector(".subtext").innerHTML = `in ${unit}`;
 
   delete feeDist["0"];
   renderFeeDistributionChart(feeDist, feeDistributionChart);
