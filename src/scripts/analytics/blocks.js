@@ -1,6 +1,5 @@
-const MAX_DEPTH = 25;
-
 function renderTreeChart(data, myChart) {
+  const MAX_DEPTH = 25;
   let option;
 
   myChart.hideLoading();
