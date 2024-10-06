@@ -228,7 +228,6 @@ setTimeout(async () => {
   }
   let totalFees = Object.values(data).map((e) => e.totalFees);
   let avgFees = Object.values(data).map((e) => e.avgFee);
-  console.log(feeDist);
 
   renderFeeDistributionChart(feeDist, feeDistributionChart);
   renderAveFeePerBlock(avgFees, heights, avgFeeChart);
