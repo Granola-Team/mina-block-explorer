@@ -26,6 +26,8 @@ function renderTreeChart(data, myChart) {
         bottom: "1%",
         right: "20%",
         symbolSize: 20,
+        layout: "orthogonal",
+        orient: "LR",
         label: {
           position: "left",
           verticalAlign: "middle",
@@ -40,7 +42,21 @@ function renderTreeChart(data, myChart) {
           },
         },
         tooltip: {
-          formatter: "{b}",
+          formatter: (params) => {
+            return `<strong>${params.name}</strong>  |  ${params.data.canonical ? '<span style="color:#56D05F;">canonical</span>' : '<span style="color:#FB7631;">non-canonical</span>'}`;
+          },
+        },
+        lineStyle: {
+          width: 2,
+          color: "#21252D",
+        },
+        itemStyle: {
+          color: "#21252D",
+          borderWidth: 4,
+        },
+        emphasis: {
+          focus: "relative",
+          blurScope: "coordinateSystem",
         },
         expandAndCollapse: false,
         animationDuration: 0,
