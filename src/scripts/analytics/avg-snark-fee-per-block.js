@@ -3,8 +3,6 @@ function renderFeeDistributionChart(data, myChart) {
 
   myChart.hideLoading();
 
-  delete data["0"];
-
   let fees = Object.keys(data);
   let counts = Object.values(data);
 
@@ -15,7 +13,7 @@ function renderFeeDistributionChart(data, myChart) {
     color: [...CHART_COLORS],
     title: {
       ...TITLE_DEFAULT,
-      text: `Fee Distribution `,
+      text: `Fee Distribution (Non-Zero Fees)`,
     },
     grid: { ...GRID_DEFAULT },
     yAxis: {
@@ -114,7 +112,7 @@ function renderAveFeePerBlock(data, heights, myChart) {
     color: [...CHART_COLORS],
     title: {
       ...TITLE_DEFAULT,
-      text: `Ave Fee Per Block`,
+      text: `Average Fee Per Block`,
     },
     grid: { ...GRID_DEFAULT },
     xAxis: {
@@ -130,7 +128,7 @@ function renderAveFeePerBlock(data, heights, myChart) {
         name: "Fee (MINA)",
         axisLabel: {
           ...Y_AXIS_AXIS_LABEL_DEFAULT,
-          formatter: (value) => `${(value / 1e9).toFixed(3)}`,
+          formatter: (value) => `${(value / 1e9).toFixed(0)}`,
         },
       },
     ],
@@ -229,6 +227,19 @@ setTimeout(async () => {
   let totalFees = Object.values(data).map((e) => e.totalFees);
   let avgFees = Object.values(data).map((e) => e.avgFee);
 
+  const fees = Object.keys(feeDist).map((f) => +f);
+  console.log(fees);
+
+  document.getElementById("fee-free-work").innerHTML = feeDist["0"];
+  document.getElementById("total-snark-jobs").innerHTML =
+    jsonResp.data.snarks.length;
+  document.getElementById("for-fee-jobs").innerHTML =
+    jsonResp.data.snarks.length - +feeDist["0"];
+  document.getElementById("highest-fee").innerHTML = scaleMina(
+    fees[fees.length - 1],
+  );
+
+  delete feeDist["0"];
   renderFeeDistributionChart(feeDist, feeDistributionChart);
   renderAveFeePerBlock(avgFees, heights, avgFeeChart);
   renderTotalFeesPerBlock(totalFees, heights, feePerBlockChart);
