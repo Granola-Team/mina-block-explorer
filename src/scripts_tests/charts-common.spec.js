@@ -333,7 +333,6 @@ describe("Tree Building with Correct Data", () => {
 
   test("Ensure tree extends to blockHeight 10000", () => {
     const tree = buildTree(inputBlocks);
-    console.log(JSON.stringify(tree));
     let currentBlock = tree;
 
     // Traverse the tree upwards by following the hash linkage
