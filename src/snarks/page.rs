@@ -32,6 +32,7 @@ fn SnarksPageContents() -> impl IntoView {
     let query_params_map = use_query_map();
     let (canonical_qp, _) = create_query_signal::<bool>("canonical");
     let (block_height_sig, _) = create_query_signal::<u64>("q-height");
+    let (row_limit_sig, _) = create_query_signal::<i64>("row-limit");
     let UseIntervalReturn { counter, .. } = use_interval(LIVE_RELOAD_INTERVAL);
 
     let resource = create_resource(
@@ -41,13 +42,15 @@ fn SnarksPageContents() -> impl IntoView {
                 query_params_map.get(),
                 canonical_qp.get(),
                 block_height_sig.get(),
+                row_limit_sig.get(),
             )
         },
-        move |(_, value, canonical, block_height)| async move {
+        move |(_, value, canonical, block_height, mut row_limit)| async move {
             if visibility.get() == VisibilityState::Visible {
                 let prover = value.get("q-prover");
                 let block_state_hash = value.get("q-state-hash");
                 load_data(
+                    Some(*row_limit.get_or_insert(25i64)),
                     prover.cloned(),
                     block_state_hash.cloned(),
                     block_height,
@@ -123,6 +126,22 @@ fn SnarksPageContents() -> impl IntoView {
             section_heading="SNARKs"
             controls=move || {
                 view! {
+                    <div class="hidden md:flex justify-center items-center">
+                        <UrlParamSelectMenu
+                            label="Rows"
+                            id="row-limit"
+                            query_str_key="row-limit"
+                            labels=UrlParamSelectOptions {
+                                is_boolean_option: false,
+                                cases: vec![
+                                    "25".to_string(),
+                                    "50".to_string(),
+                                    "100".to_string(),
+                                    "250".to_string(),
+                                ],
+                            }
+                        />
+                    </div>
                     <UrlParamSelectMenu
                         id="canonical-selection"
                         query_str_key="canonical"

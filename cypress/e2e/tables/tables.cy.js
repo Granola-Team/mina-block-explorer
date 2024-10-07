@@ -588,7 +588,13 @@ let test_suite_data = [
         },
       ],
     },
-    tests: [],
+    tests: [
+      () => {
+        [25, 50, 100, 250].forEach((l) => {
+          cy.assertRowLimitWorks("SNARKs", l);
+        });
+      },
+    ],
   },
 ];
 
