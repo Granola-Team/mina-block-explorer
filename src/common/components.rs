@@ -466,20 +466,16 @@ pub fn AnalyticsSimpleInfo(
     #[prop(optional, into)] subtext: Option<String>,
     #[prop(optional, into)] id: Option<String>,
 ) -> impl IntoView {
-    let container_class_str =
-        "w-full p-4 rounded-lg flex flex-col md:flex-row justify-center items-stretch".to_string();
-    let base_class_str = "flex justify-center items-center mx-4";
-    let mut value_class_str = " text-6xl font-bold ".to_string();
-    value_class_str.push_str(base_class_str);
-    let label_class_str = " label text-lg font-semibold ".to_string();
-    let subtext_class_str = " subtext text-sm font-medium text-slate-400 ".to_string();
     view! {
-        <div class=container_class_str>
-            <div class="flex justify-center items-center md:items-start flex-col mx-4">
-                <div class=label_class_str>{label}</div>
-                {subtext.map(|t| view! { <div class=subtext_class_str>{t}</div> })}
+        <div class="w-full p-4 rounded-lg flex flex-col md:flex-row justify-center items-stretch">
+            <div class="w-full md:w-1/2 flex flex-wrap flex-col justify-center mx-4">
+                <div class="min-w-full flex justify-center md:justify-end label text-lg font-semibold text-ellipsis overflow-hidden">{label}</div>
+                {subtext.map(|t| view! {
+                    <div class="min-w-full flex justify-center md:justify-end subtext text-sm font-medium text-slate-400">{t}</div>
+                })}
             </div>
-            <div id=id.unwrap_or("simple-info".to_string()) class=value_class_str>
+            <div class="w-full md:w-1/2 flex grow-0 justify-center md:justify-start items-center mx-4 text-6xl font-bold"
+                id=id.unwrap_or("simple-info".to_string()) >
                 {value}
             </div>
         </div>
