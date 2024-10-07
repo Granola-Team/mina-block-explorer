@@ -25,6 +25,14 @@
 
 import { parseFormattedNumber } from "../e2e/helpers";
 
+Cypress.Commands.add("assertRowLimitWorks", (tableHeading, limit) => {
+  cy.get("select#row-limit")
+    .select("" + limit)
+    .should("have.value", "" + limit);
+  cy.aliasTableRows("Blocks", "table-rows");
+  cy.get("@table-rows").should("have.lengthOf", limit);
+});
+
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 Cypress.Commands.add(
   "aliasTableRows",
