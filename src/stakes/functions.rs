@@ -70,6 +70,7 @@ pub fn get_delegators_count(stake: &StakingLedgersQueryStakes) -> String {
 }
 
 pub async fn load_data(
+    limit: Option<i64>,
     epoch: Option<u64>,
     public_key: Option<String>,
     delegate: Option<String>,
@@ -82,7 +83,7 @@ pub async fn load_data(
     }
     let variables = staking_ledgers_query::Variables {
         sort_by: staking_ledgers_query::StakeSortByInput::STAKE_DESC,
-        limit: Some(TABLE_ROW_LIMIT as i64),
+        limit,
         query: staking_ledgers_query::StakeQueryInput {
             stake_lte: stake
                 .as_deref()

@@ -484,6 +484,11 @@ let test_suite_data = [
             expect(text.split(" of ").length).to.equal(3);
           });
       },
+      () => {
+        [25, 50, 100, 250].forEach((l) => {
+          cy.assertRowLimitWorks("Staking Ledger - Epoch 20", l);
+        });
+      },
     ],
   },
   {

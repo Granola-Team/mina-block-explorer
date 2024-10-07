@@ -1,5 +1,5 @@
 use super::{functions::*, models::*};
-use crate::common::{constants::*, functions::*, models::TableMetadata, table::*};
+use crate::common::{components::*, constants::*, functions::*, models::*, table::*};
 use leptos::*;
 use leptos_router::*;
 
@@ -29,16 +29,18 @@ pub fn StakesPageContents(
     let (prev_epoch_sig, _) = create_signal(prev_epoch_opt);
     let (data_sig, set_data) = create_signal(None);
     let query_params_map = use_query_map();
+    let (row_limit_sig, _) = create_query_signal::<i64>("row-limit");
 
     let (ledger_hash, set_ledger_hash) = create_signal(None::<String>);
 
     let resource = create_resource(
-        move || (selected_epoch, query_params_map.get()),
-        move |(epoch_opt, params_map)| async move {
+        move || (selected_epoch, query_params_map.get(), row_limit_sig.get()),
+        move |(epoch_opt, params_map, mut row_limit)| async move {
             let public_key = params_map.get("q-key").cloned();
             let delegate = params_map.get("q-delegate").cloned();
             let stake = params_map.get("q-stake").cloned();
             load_data(
+                Some(*row_limit.get_or_insert(25i64)),
                 Some(epoch_opt.unwrap_or(current_epoch)),
                 public_key,
                 delegate,
@@ -126,6 +128,22 @@ pub fn StakesPageContents(
             is_loading=resource.loading()
             controls=move || {
                 view! {
+                    <div class="hidden md:flex justify-center items-center">
+                        <UrlParamSelectMenu
+                            label="Rows"
+                            id="row-limit"
+                            query_str_key="row-limit"
+                            labels=UrlParamSelectOptions {
+                                is_boolean_option: false,
+                                cases: vec![
+                                    "25".to_string(),
+                                    "50".to_string(),
+                                    "100".to_string(),
+                                    "250".to_string(),
+                                ],
+                            }
+                        />
+                    </div>
                     <EpochButton
                         disabled=prev_epoch_sig
                             .get()
