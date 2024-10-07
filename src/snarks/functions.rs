@@ -1,12 +1,9 @@
 use super::graphql::{snarks_query::SnarksQuerySnarks, *};
-use crate::common::{
-    constants::{GRAPHQL_ENDPOINT, LHS_MAX_SPACE_FEES, TABLE_ROW_LIMIT},
-    functions::*,
-    models::*,
-};
+use crate::common::{constants::*, functions::*, models::*};
 use graphql_client::reqwest::post_graphql;
 
 pub async fn load_data(
+    limit: Option<i64>,
     prover: Option<String>,
     block_state_hash: Option<String>,
     block_height: Option<u64>,
@@ -14,7 +11,7 @@ pub async fn load_data(
 ) -> Result<snarks_query::ResponseData, MyError> {
     let variables = snarks_query::Variables {
         sort_by: snarks_query::SnarkSortByInput::BLOCKHEIGHT_DESC,
-        limit: Some(TABLE_ROW_LIMIT as i64),
+        limit,
         query: snarks_query::SnarkQueryInput {
             block_height_lte: block_height.map(|x| x as i64),
             prover,
