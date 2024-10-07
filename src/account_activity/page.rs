@@ -173,6 +173,7 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
     let (block_height_sig, _) = create_query_signal::<i64>("q-height");
     let (nonce_sig, _) = create_query_signal::<u64>("q-nonce");
     let (slot_sig, _) = create_query_signal::<u64>("q-slot");
+    let (row_limit_sig, _) = create_query_signal::<i64>("row-limit");
 
     let (summary_sig, _, _) =
         use_local_storage::<BlockchainSummary, JsonSerdeCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
@@ -188,6 +189,7 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
                 nonce_sig.get(),
                 slot_sig.get(),
                 current_epoch_staking_ledger(),
+                row_limit_sig.get(),
             )
         },
         |(
@@ -198,16 +200,18 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
             nonce,
             slot,
             current_epoch_staking_ledger,
+            mut row_limit,
         )| async move {
+            let limit = *row_limit.get_or_insert(25i64);
             if let Some(id) = value.get("id").cloned() {
                 // Attempt to load data and handle any potential errors more gracefully
                 match load_data(
                     Some(id.clone()),
-                    Some(TABLE_ROW_LIMIT),
-                    Some(TABLE_ROW_LIMIT),
-                    Some(TABLE_ROW_LIMIT),
-                    Some(TABLE_ROW_LIMIT),
-                    Some(TABLE_ROW_LIMIT),
+                    Some(limit),
+                    Some(limit),
+                    Some(limit),
+                    Some(limit),
+                    Some(limit),
                     block_height,
                     qp_map.get("q-txn-hash").cloned(),
                     qp_map.get("q-state-hash").cloned(),
