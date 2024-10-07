@@ -16,6 +16,7 @@ pub fn InternalCommandsTab() -> impl IntoView {
     let (data_sig, set_data) = create_signal(None);
     let (recipient, _) = create_query_signal::<String>("q-recipient");
     let (height_sig, _) = create_query_signal::<u64>("q-height");
+    let (row_limit_sig, _) = create_query_signal::<u64>("row-limit");
     let (state_hash_sig, _) = create_query_signal::<String>("q-state-hash");
     let (canonical_sig, _) = create_query_signal::<bool>("canonical");
     let resource = create_resource(
@@ -25,10 +26,18 @@ pub fn InternalCommandsTab() -> impl IntoView {
                 height_sig.get(),
                 state_hash_sig.get(),
                 canonical_sig.get(),
+                row_limit_sig.get(),
             )
         },
-        |(opt_recipient, height, state_hash, canonical)| async move {
-            load_data(opt_recipient, height, state_hash, canonical).await
+        |(opt_recipient, height, state_hash, canonical, row_limit)| async move {
+            load_data(
+                row_limit.map(|l| l as i64),
+                opt_recipient,
+                height,
+                state_hash,
+                canonical,
+            )
+            .await
         },
     );
     create_effect(move |_| {
@@ -98,6 +107,22 @@ pub fn InternalCommandsTab() -> impl IntoView {
                 section_heading="Internal Commands"
                 controls=move || {
                     view! {
+                        <div class="hidden md:flex justify-center items-center">
+                            <UrlParamSelectMenu
+                                label="Rows"
+                                id="row-limit"
+                                query_str_key="row-limit"
+                                labels=UrlParamSelectOptions {
+                                    is_boolean_option: false,
+                                    cases: vec![
+                                        "25".to_string(),
+                                        "50".to_string(),
+                                        "100".to_string(),
+                                        "250".to_string(),
+                                    ],
+                                }
+                            />
+                        </div>
                         <UrlParamSelectMenu
                             id="canonical-selection"
                             query_str_key="canonical"

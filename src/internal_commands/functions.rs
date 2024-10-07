@@ -7,6 +7,7 @@ use crate::{
 use graphql_client::reqwest::post_graphql;
 
 pub async fn load_data(
+    mut limit: Option<i64>,
     recipient: Option<String>,
     block_height: Option<u64>,
     state_hash: Option<String>,
@@ -14,7 +15,7 @@ pub async fn load_data(
 ) -> Result<internal_commands_query::ResponseData, MyError> {
     let variables = internal_commands_query::Variables {
         sort_by: internal_commands_query::FeetransferSortByInput::BLOCKHEIGHT_DESC,
-        limit: Some(TABLE_ROW_LIMIT as i64),
+        limit: Some(*limit.get_or_insert(25i64)),
         query: internal_commands_query::FeetransferQueryInput {
             block_height_lte: block_height.map(|x| x as i64),
             block_state_hash: state_hash.map(|sh| BlockQueryInput {
