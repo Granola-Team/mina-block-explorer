@@ -1,3 +1,54 @@
+function renderSnarkJobsChart(data, myChart) {
+  let dates = Object.keys(data).map(unixTimestampToDateString); // Convert back to milliseconds for chart
+  let snarkJobs = Object.values(data);
+
+  let option;
+
+  myChart.hideLoading();
+
+  option = {
+    tooltip: { ...TOOLTIP_DEFAULT },
+    color: [...CHART_COLORS],
+    title: {
+      ...TITLE_DEFAULT,
+      text: `SNARK volume by day`,
+    },
+
+    grid: { ...GRID_DEFAULT },
+    xAxis: {
+      ...X_AXIS_DEFAULT,
+      type: "category",
+      data: dates,
+      splitLine: {
+        ...GRID_LINES,
+        show: false,
+      },
+      axisLabel: {
+        ...X_AXIS_LABEL_DEFAULT,
+        formatter: dayAxisLabelFormatter,
+      },
+    },
+    yAxis: [
+      {
+        ...Y_AXIS_DEFAULT,
+        type: "value",
+        name: "SNARK Job Count",
+      },
+    ],
+    series: [
+      {
+        data: snarkJobs,
+        type: "bar",
+        tooltip: {
+          valueFormatter: (v) => `${v} jobs`,
+        },
+      },
+    ],
+  };
+
+  option && myChart.setOption(option);
+}
+
 function renderFeeDistributionChart(data, myChart) {
   let option;
 
@@ -157,16 +208,21 @@ setTimeout(async () => {
   let feeDistributionChart = echarts.init(
     document.getElementById("fee-distribution"),
   );
-  [avgFeeChart, feePerBlockChart, feeDistributionChart].forEach((chart) => {
-    window.addEventListener("resize", function () {
-      chart.resize();
-    });
-    chart.showLoading({
-      text: "Loading...", // Display text with the spinner
-      color: "#E39844", // Spinner color
-      zlevel: 0,
-    });
-  });
+  let snarkJobsChart = echarts.init(
+    document.getElementById("snark-jobs-count"),
+  );
+  [avgFeeChart, feePerBlockChart, feeDistributionChart, snarkJobsChart].forEach(
+    (chart) => {
+      window.addEventListener("resize", function () {
+        chart.resize();
+      });
+      chart.showLoading({
+        text: "Loading...", // Display text with the spinner
+        color: "#E39844", // Spinner color
+        zlevel: 0,
+      });
+    },
+  );
 
   let response = await fetch(config.graphql_endpoint, {
     method: "POST",
@@ -178,6 +234,7 @@ setTimeout(async () => {
         snarks(limit: $limit, sortBy: $sort_by, query: $query ) {
           fee
           blockHeight
+          dateTime
         }
       }`,
       variables: {
@@ -207,6 +264,17 @@ setTimeout(async () => {
 
     return acc;
   }, {});
+  const countsByDay = jsonResp.data.snarks.reduce((acc, snark) => {
+    let key = getUnixTimestampTruncatedToDay(snark.dateTime);
+    if (!acc[key]) {
+      acc[key] = 0;
+    }
+
+    acc[key] += 1;
+
+    return acc;
+  }, {});
+
   const feeDist = jsonResp.data.snarks.reduce((acc, snark) => {
     let key = snark.fee;
     if (!acc[key]) {
@@ -245,6 +313,7 @@ setTimeout(async () => {
     .parentElement.querySelector(".subtext").innerHTML = `in ${unit}`;
 
   delete feeDist["0"];
+  renderSnarkJobsChart(countsByDay, snarkJobsChart);
   renderFeeDistributionChart(feeDist, feeDistributionChart);
   renderAveFeePerBlock(avgFees, heights, avgFeeChart);
   renderTotalFeesPerBlock(totalFees, heights, feePerBlockChart);

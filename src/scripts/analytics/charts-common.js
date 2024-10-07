@@ -211,6 +211,34 @@ function getMaxDepth(node) {
   return Math.max(...childDepths) + 1;
 }
 
+function getUnixTimestampTruncatedToDay(dateString) {
+  const date = new Date(dateString);
+  // Set hours, minutes, seconds, and milliseconds to 0
+  date.setUTCHours(0, 0, 0, 0);
+  // Return the Unix timestamp (seconds since 1970-01-01)
+  return Math.floor(date.getTime() / 1000);
+}
+
+function unixTimestampToDateString(timestamp) {
+  return new Date(parseInt(timestamp, 10) * 1000)
+    .toISOString()
+    .substring(0, 10);
+}
+
+function dayAxisLabelFormatter(value) {
+  const parts = value.split("-");
+  const date = new Date(Date.UTC(parts[0], parts[1] - 1, parts[2])); // Treat as UTC
+
+  const year = date.getUTCFullYear();
+  const month = date.toLocaleString("en-US", {
+    month: "short",
+    timeZone: "UTC",
+  });
+  const day = date.getUTCDate(); // No zero-padding for single-digit days
+
+  return `${month} ${day}, ${year}`;
+}
+
 if (typeof module !== "undefined" && module.exports) {
   module.exports = {
     nanominaToKMina,
@@ -218,5 +246,8 @@ if (typeof module !== "undefined" && module.exports) {
     getOrdinal,
     buildTree,
     getMaxDepth,
+    getUnixTimestampTruncatedToDay,
+    unixTimestampToDateString,
+    dayAxisLabelFormatter,
   };
 }

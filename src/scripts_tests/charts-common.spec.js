@@ -4,6 +4,9 @@ const {
   getOrdinal,
   buildTree,
   getMaxDepth,
+  getUnixTimestampTruncatedToDay,
+  unixTimestampToDateString,
+  dayAxisLabelFormatter,
 } = require("../scripts/analytics/charts-common.js");
 
 test("nanominaToKMina", () => {
@@ -352,5 +355,106 @@ describe("Tree Building with Correct Data", () => {
     const tree = buildTree(inputBlocks);
     const maxDepth = getMaxDepth(tree);
     expect(maxDepth).toBe(8); // Based on the current tree structure
+  });
+});
+
+describe("time utils", () => {
+  test("formats a valid date string in YYYY-MM-DD format to human-readable form", () => {
+    const value = "2024-06-04"; // Date in YYYY-MM-DD format
+    const expected = "Jun 4, 2024"; // Expected output for en-US locale
+
+    const result = dayAxisLabelFormatter(value);
+
+    expect(result).toBe(expected);
+  });
+
+  test("formats another valid date string correctly", () => {
+    const value = "2023-12-25"; // Date in YYYY-MM-DD format
+    const expected = "Dec 25, 2023"; // Expected output for en-US locale
+
+    const result = dayAxisLabelFormatter(value);
+
+    expect(result).toBe(expected);
+  });
+
+  test("handles leap year date formatting correctly", () => {
+    const value = "2024-02-29"; // Leap year date
+    const expected = "Feb 29, 2024"; // Expected output for en-US locale
+
+    const result = dayAxisLabelFormatter(value);
+
+    expect(result).toBe(expected);
+  });
+
+  test("getUnixTimestampTruncatedToDay should return correct Unix timestamp truncated to the day", () => {
+    const dateStr = "2024-06-04T08:51:00.000Z";
+    const expectedTimestamp = 1717459200; // Unix timestamp for 2024-06-04 00:00:00 UTC
+
+    const result = getUnixTimestampTruncatedToDay(dateStr);
+
+    expect(result).toBe(expectedTimestamp);
+  });
+
+  test("getUnixTimestampTruncatedToDay should handle different time values correctly", () => {
+    const dateStr = "2024-06-04T23:59:59.999Z";
+    const expectedTimestamp = 1717459200; // Unix timestamp for 2024-06-04 00:00:00 UTC
+
+    const result = getUnixTimestampTruncatedToDay(dateStr);
+
+    expect(result).toBe(expectedTimestamp);
+  });
+
+  test("getUnixTimestampTruncatedToDay should handle leap years correctly", () => {
+    const dateStr = "2024-02-29T15:30:00.000Z";
+    const expectedTimestamp = 1709164800; // Unix timestamp for 2024-02-29 00:00:00 UTC (leap year)
+
+    const result = getUnixTimestampTruncatedToDay(dateStr);
+
+    expect(result).toBe(expectedTimestamp);
+  });
+
+  test("unixTimestampToDateString converts timestamp correctly for a regular date", () => {
+    const timestamp = 1717459200; // Unix timestamp for 2024-06-04 00:00:00 UTC
+    const expectedDateString = "2024-06-04";
+
+    const result = unixTimestampToDateString(timestamp);
+
+    expect(result).toBe(expectedDateString);
+  });
+
+  test("unixTimestampToDateString converts timestamp correctly for a leap year date", () => {
+    const timestamp = 1709164800; // Unix timestamp for 2024-02-29 00:00:00 UTC (leap year)
+    const expectedDateString = "2024-02-29";
+
+    const result = unixTimestampToDateString(timestamp);
+
+    expect(result).toBe(expectedDateString);
+  });
+
+  test("unixTimestampToDateString handles timestamp at the Unix epoch", () => {
+    const timestamp = 0; // Unix timestamp for 1970-01-01 00:00:00 UTC
+    const expectedDateString = "1970-01-01";
+
+    const result = unixTimestampToDateString(timestamp);
+
+    expect(result).toBe(expectedDateString);
+  });
+
+  test("unixTimestampToDateString handles timestamp before 1970 (negative Unix timestamp)", () => {
+    const timestamp = -86400; // Unix timestamp for 1969-12-31 00:00:00 UTC
+    const expectedDateString = "1969-12-31";
+
+    const result = unixTimestampToDateString(timestamp);
+
+    expect(result).toBe(expectedDateString);
+  });
+
+  test("unixTimestampToDateString handles timestamp with string input", () => {
+    const timestamp = "1717459200"; // Unix timestamp as string
+    const expectedDateString = "2024-06-04";
+
+    const result = unixTimestampToDateString(timestamp);
+
+    expect(result).toBe(expectedDateString);
   });
 });

@@ -113,9 +113,7 @@ function renderTopRecipientsChart(dataMap, myChart) {
 }
 
 function renderTransactionVolumeChart(data, myChart) {
-  let dates = Object.keys(data).map((key) =>
-    new Date(parseInt(key) * 1000).toISOString().substring(0, 10),
-  ); // Convert back to milliseconds for chart
+  let dates = Object.keys(data).map(unixTimestampToDateString); // Convert back to milliseconds for chart
   let txnVolume = Object.values(data).map((value) => value.count);
   let amounts = Object.values(data).map((value) => value.totalAmount);
 
@@ -270,12 +268,9 @@ setTimeout(async () => {
   let jsonResp = await response.json();
   // Use reduce to aggregate transaction count and total amount per day
   const data = jsonResp.data.transactions.reduce((acc, transaction) => {
-    // Convert dateTime to a Date object and adjust it to the start of the day
-    const date = new Date(transaction.block.dateTime);
-    date.setUTCHours(0, 0, 0, 0);
-
-    // Convert adjusted date to a Unix timestamp (milliseconds since Unix Epoch divided by 1000 for seconds)
-    const unixTimestamp = Math.floor(date.getTime() / 1000);
+    const unixTimestamp = getUnixTimestampTruncatedToDay(
+      transaction.block.dateTime,
+    );
 
     // Initialize the date key if not already present
     if (!acc[unixTimestamp]) {
