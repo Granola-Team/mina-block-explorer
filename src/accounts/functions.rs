@@ -3,7 +3,7 @@ use crate::common::{constants::GRAPHQL_ENDPOINT, models::*};
 use graphql_client::reqwest::post_graphql;
 
 pub async fn load_data(
-    limit: u64,
+    limit: Option<i64>,
     public_key: Option<String>,
     username: Option<String>,
     balance: Option<i64>,
@@ -22,7 +22,7 @@ pub async fn load_data(
         };
 
     let variables = accounts_query::Variables {
-        limit: Some(limit as i64),
+        limit,
         query,
         sort_by: accounts_query::AccountSortByInput::BALANCE_DESC,
     };

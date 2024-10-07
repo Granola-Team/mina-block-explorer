@@ -1,11 +1,6 @@
 use crate::{
     accounts::{functions::*, models::AccountsSort},
-    common::{
-        components::*,
-        constants::{TABLE_ROW_LIMIT, *},
-        models::*,
-        table::*,
-    },
+    common::{components::*, constants::*, models::*, table::*},
     summary::models::BlockchainSummary,
 };
 use codee::string::JsonSerdeCodec;
@@ -33,6 +28,7 @@ fn AccountsPageContents() -> impl IntoView {
     let (username_sig, _) = create_query_signal::<String>("q-username");
     let (balance_sig, _) = create_query_signal::<i64>("q-balance");
     let (delegate_sig, _) = create_query_signal::<String>("q-delegate");
+    let (row_limit_sig, _) = create_query_signal::<i64>("row-limit");
     let resource = create_resource(
         move || {
             (
@@ -40,11 +36,12 @@ fn AccountsPageContents() -> impl IntoView {
                 username_sig.get(),
                 balance_sig.get(),
                 delegate_sig.get(),
+                row_limit_sig.get(),
             )
         },
-        |(public_key, username, balance, delegate)| async move {
+        |(public_key, username, balance, delegate, mut row_limit)| async move {
             load_data(
-                TABLE_ROW_LIMIT,
+                Some(*row_limit.get_or_insert(25i64)),
                 public_key,
                 username,
                 balance.map(|b| b * 1_000_000_000i64),
@@ -119,7 +116,26 @@ fn AccountsPageContents() -> impl IntoView {
 
             section_heading="Accounts"
             is_loading=resource.loading()
-            controls=|| ().into_view()
+            controls=move || {
+                view! {
+                    <div class="hidden md:flex justify-center items-center">
+                        <UrlParamSelectMenu
+                            label="Rows"
+                            id="row-limit"
+                            query_str_key="row-limit"
+                            labels=UrlParamSelectOptions {
+                                is_boolean_option: false,
+                                cases: vec![
+                                    "25".to_string(),
+                                    "50".to_string(),
+                                    "100".to_string(),
+                                    "250".to_string(),
+                                ],
+                            }
+                        />
+                    </div>
+                }
+            }
         />
     }
 }
