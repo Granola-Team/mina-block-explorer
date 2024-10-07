@@ -583,6 +583,7 @@ pub fn BlocksSection() -> impl IntoView {
     let query_params_map = use_query_map();
     let (data_sig, set_data_sig) = create_signal(None);
     let (block_height_sig, _) = create_query_signal::<u64>("q-height");
+    let (row_limit_sig, _) = create_query_signal::<u64>("row-limit");
     let (slot_sig, _) = create_query_signal::<u64>("q-slot");
     let (canonical_sig, _) = create_query_signal::<bool>("canonical");
     let UseIntervalReturn { counter, .. } = use_interval(LIVE_RELOAD_INTERVAL);
@@ -595,12 +596,13 @@ pub fn BlocksSection() -> impl IntoView {
                 block_height_sig.get(),
                 slot_sig.get(),
                 canonical_sig.get(),
+                row_limit_sig.get(),
             )
         },
-        move |(_, q_map, block_height, slot, canonical)| async move {
+        move |(_, q_map, block_height, slot, canonical, row_limit)| async move {
             if visibility.get() == VisibilityState::Visible {
                 load_data(
-                    TABLE_ROW_LIMIT,
+                    row_limit,
                     q_map.get("q-block-producer").cloned(),
                     q_map.get("q-state-hash").cloned(),
                     block_height,
@@ -715,6 +717,20 @@ pub fn BlocksSection() -> impl IntoView {
             is_loading=resource.loading()
             controls=move || {
                 view! {
+                    <UrlParamSelectMenu
+                        label="Rows"
+                        id="row-limit"
+                        query_str_key="row-limit"
+                        labels=UrlParamSelectOptions {
+                            is_boolean_option: false,
+                            cases: vec![
+                                "25".to_string(),
+                                "50".to_string(),
+                                "100".to_string(),
+                                "250".to_string(),
+                            ],
+                        }
+                    />
                     <UrlParamSelectMenu
                         id="canonical-selection"
                         query_str_key="canonical"

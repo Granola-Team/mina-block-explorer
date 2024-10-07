@@ -131,6 +131,7 @@ where
 
 #[component]
 pub fn UrlParamSelectMenu(
+    #[prop(into, optional)] label: Option<String>,
     #[prop(into)] id: String,
     #[prop(into)] query_str_key: String,
     labels: UrlParamSelectOptions,
@@ -138,6 +139,11 @@ pub fn UrlParamSelectMenu(
     let (query_val, set_query_val) = create_query_signal::<String>(query_str_key);
     let comparison_labels = labels.cases.clone();
     view! {
+        {label
+            .map(|l| {
+                view! { <label class="text-xs font-medium text-black">{l}</label> }.into_view()
+            })
+            .unwrap_or_else(|| ().into_view())}
         <select
             class="ml-5 sm:ml-2 w-full sm:w-fit border-2 border-slate-200 focus:border-granola-orange focus:outline-none focus-visible:border-granola-orange active:border-granola-orange rounded-xl text-xs font-medium text-black p-2"
             id=id
