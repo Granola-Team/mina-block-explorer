@@ -57,7 +57,7 @@ pub fn BlocksLocalStorage() -> impl IntoView {
 
     let resource = create_resource(
         move || counter.get(),
-        |_| async move { load_data(1000, None, None, None, None, Some(true)).await },
+        |_| async move { load_data(Some(1000), None, None, None, None, Some(true)).await },
     );
 
     create_effect(move |_| {
@@ -78,7 +78,7 @@ pub fn BlockTabbedPage() -> impl IntoView {
         move || memo_params_map.get(),
         |value| async move {
             let state_hash = value.get("id");
-            load_data(1, None, state_hash.cloned(), None, None, None).await
+            load_data(Some(1), None, state_hash.cloned(), None, None, None).await
         },
     );
 
