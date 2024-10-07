@@ -417,7 +417,7 @@ where
                     }}
 
                 </div>
-                <div class="grow md:grow-0 h-16 flex justify-end items-center pr-4">
+                <div class="grow md:grow-0 h-16 flex justify-end items-center flex-wrap pr-4">
                     {controls()}
                 </div>
             </span>

@@ -717,20 +717,22 @@ pub fn BlocksSection() -> impl IntoView {
             is_loading=resource.loading()
             controls=move || {
                 view! {
-                    <UrlParamSelectMenu
-                        label="Rows"
-                        id="row-limit"
-                        query_str_key="row-limit"
-                        labels=UrlParamSelectOptions {
-                            is_boolean_option: false,
-                            cases: vec![
-                                "25".to_string(),
-                                "50".to_string(),
-                                "100".to_string(),
-                                "250".to_string(),
-                            ],
-                        }
-                    />
+                    <div class="hidden md:flex justify-center items-center">
+                        <UrlParamSelectMenu
+                            label="Rows"
+                            id="row-limit"
+                            query_str_key="row-limit"
+                            labels=UrlParamSelectOptions {
+                                is_boolean_option: false,
+                                cases: vec![
+                                    "25".to_string(),
+                                    "50".to_string(),
+                                    "100".to_string(),
+                                    "250".to_string(),
+                                ],
+                            }
+                        />
+                    </div>
                     <UrlParamSelectMenu
                         id="canonical-selection"
                         query_str_key="canonical"
