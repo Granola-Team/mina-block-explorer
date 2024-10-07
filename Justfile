@@ -79,7 +79,8 @@ pnpm-install:
 
 # Serve application on localhost
 dev: pnpm-install deploy-mina-indexer
-  trunk serve --port="{{trunk_port}}" --open
+  trap 'just shutdown-mina-indexer' INT; trunk serve --port="{{trunk_port}}" --open
+
 
 # Run tier2 tests
 t2: pnpm-install deploy-mina-indexer && shutdown-mina-indexer
