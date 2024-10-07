@@ -29,7 +29,7 @@ Cypress.Commands.add("assertRowLimitWorks", (tableHeading, limit) => {
   cy.get("select#row-limit")
     .select("" + limit)
     .should("have.value", "" + limit);
-  cy.aliasTableRows("Blocks", "table-rows");
+  cy.aliasTableRows(tableHeading, "table-rows");
   cy.get("@table-rows").should("have.lengthOf", limit);
 });
 
