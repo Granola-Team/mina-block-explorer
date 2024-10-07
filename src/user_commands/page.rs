@@ -52,7 +52,16 @@ pub fn CommandSpotlightPage() -> impl IntoView {
         move || (memo_params_map.get(), state_hash_sig.get()),
         |(value, state_hash)| async move {
             let txn_hash = value.get("id");
-            load_data(10, None, None, txn_hash.cloned(), None, state_hash, None).await
+            load_data(
+                Some(10),
+                None,
+                None,
+                txn_hash.cloned(),
+                None,
+                state_hash,
+                None,
+            )
+            .await
         },
     );
     let (other_txns, set_other_txns) = create_signal(None);

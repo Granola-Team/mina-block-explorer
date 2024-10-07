@@ -25,6 +25,7 @@ pub fn TransactionsSection() -> impl IntoView {
     let visibility = use_document_visibility();
     let (data_sig, set_data) = create_signal(None);
     let (txn_type_qp, _) = create_query_signal::<String>(QP_TXN_TYPE);
+    let (row_limit_sig, _) = create_query_signal::<u64>("row-limit");
     let query_params_map = use_query_map();
     let (block_height_sig, _) = create_query_signal::<u64>(QP_HEIGHT);
     let UseIntervalReturn { counter, .. } = use_interval(LIVE_RELOAD_INTERVAL);
@@ -36,15 +37,16 @@ pub fn TransactionsSection() -> impl IntoView {
                 query_params_map.get(),
                 txn_type_qp.get(),
                 block_height_sig.get(),
+                row_limit_sig.get(),
             )
         },
-        move |(_, url_query_map, txn_type, block_height)| async move {
+        move |(_, url_query_map, txn_type, block_height, row_limit)| async move {
             if visibility.get() == VisibilityState::Visible {
                 match txn_type {
                     Some(ref txn_type_str) if txn_type_str == "Pending" => load_pending_txn().await,
                     Some(ref txn_type_str) if txn_type_str == "Canonical" => {
                         load_data(
-                            TABLE_ROW_LIMIT,
+                            row_limit,
                             url_query_map.get(QP_FROM).cloned(),
                             url_query_map.get(QP_TO).cloned(),
                             url_query_map.get(QP_TXN_HASH).cloned(),
@@ -56,7 +58,7 @@ pub fn TransactionsSection() -> impl IntoView {
                     }
                     Some(ref txn_type_str) if txn_type_str == "Non-Canonical" => {
                         load_data(
-                            TABLE_ROW_LIMIT,
+                            row_limit,
                             url_query_map.get(QP_FROM).cloned(),
                             url_query_map.get(QP_TO).cloned(),
                             url_query_map.get(QP_TXN_HASH).cloned(),
@@ -68,7 +70,7 @@ pub fn TransactionsSection() -> impl IntoView {
                     }
                     Some(_) | None => {
                         load_data(
-                            TABLE_ROW_LIMIT,
+                            row_limit,
                             url_query_map.get(QP_FROM).cloned(),
                             url_query_map.get(QP_TO).cloned(),
                             url_query_map.get(QP_TXN_HASH).cloned(),
@@ -175,6 +177,22 @@ pub fn TransactionsSection() -> impl IntoView {
             section_heading="User Commands"
             controls=move || {
                 view! {
+                    <div class="hidden md:flex justify-center items-center">
+                        <UrlParamSelectMenu
+                            label="Rows"
+                            id="row-limit"
+                            query_str_key="row-limit"
+                            labels=UrlParamSelectOptions {
+                                is_boolean_option: false,
+                                cases: vec![
+                                    "25".to_string(),
+                                    "50".to_string(),
+                                    "100".to_string(),
+                                    "250".to_string(),
+                                ],
+                            }
+                        />
+                    </div>
                     <UrlParamSelectMenu
                         id="canonical-selection"
                         query_str_key="txn-type"
