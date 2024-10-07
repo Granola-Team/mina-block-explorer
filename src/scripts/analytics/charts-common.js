@@ -225,6 +225,20 @@ function unixTimestampToDateString(timestamp) {
     .substring(0, 10);
 }
 
+function dayAxisLabelFormatter(value) {
+  const parts = value.split("-");
+  const date = new Date(Date.UTC(parts[0], parts[1] - 1, parts[2])); // Treat as UTC
+
+  const year = date.getUTCFullYear();
+  const month = date.toLocaleString("en-US", {
+    month: "short",
+    timeZone: "UTC",
+  });
+  const day = date.getUTCDate(); // No zero-padding for single-digit days
+
+  return `${month} ${day}, ${year}`;
+}
+
 if (typeof module !== "undefined" && module.exports) {
   module.exports = {
     nanominaToKMina,
@@ -234,5 +248,6 @@ if (typeof module !== "undefined" && module.exports) {
     getMaxDepth,
     getUnixTimestampTruncatedToDay,
     unixTimestampToDateString,
+    dayAxisLabelFormatter,
   };
 }

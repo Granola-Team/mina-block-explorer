@@ -6,6 +6,7 @@ const {
   getMaxDepth,
   getUnixTimestampTruncatedToDay,
   unixTimestampToDateString,
+  dayAxisLabelFormatter,
 } = require("../scripts/analytics/charts-common.js");
 
 test("nanominaToKMina", () => {
@@ -358,6 +359,33 @@ describe("Tree Building with Correct Data", () => {
 });
 
 describe("time utils", () => {
+  test("formats a valid date string in YYYY-MM-DD format to human-readable form", () => {
+    const value = "2024-06-04"; // Date in YYYY-MM-DD format
+    const expected = "Jun 4, 2024"; // Expected output for en-US locale
+
+    const result = dayAxisLabelFormatter(value);
+
+    expect(result).toBe(expected);
+  });
+
+  test("formats another valid date string correctly", () => {
+    const value = "2023-12-25"; // Date in YYYY-MM-DD format
+    const expected = "Dec 25, 2023"; // Expected output for en-US locale
+
+    const result = dayAxisLabelFormatter(value);
+
+    expect(result).toBe(expected);
+  });
+
+  test("handles leap year date formatting correctly", () => {
+    const value = "2024-02-29"; // Leap year date
+    const expected = "Feb 29, 2024"; // Expected output for en-US locale
+
+    const result = dayAxisLabelFormatter(value);
+
+    expect(result).toBe(expected);
+  });
+
   test("getUnixTimestampTruncatedToDay should return correct Unix timestamp truncated to the day", () => {
     const dateStr = "2024-06-04T08:51:00.000Z";
     const expectedTimestamp = 1717459200; // Unix timestamp for 2024-06-04 00:00:00 UTC
