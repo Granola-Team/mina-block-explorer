@@ -130,6 +130,7 @@ impl NegateSort for AnySort {
     fn negate(&self) -> AnySort {
         match self {
             AnySort::None(_) => AnySort::None(Nil),
+            AnySort::Stakes(sort) => sort.negate(),
             _ => AnySort::None(Nil),
         }
     }
@@ -287,29 +288,34 @@ where
         DebounceOptions::default(),
     );
 
+    let col_clone = column.clone();
+    let col_clone_2 = col_clone.clone();
     view! {
-        <th class=th_class
-            + CELL_PADDING_CLASS>
+        <th
+            class=th_class + CELL_PADDING_CLASS
+            class=(
+                "cursor-pointer",
+                move || col_clone_2.sort_direction.is_some() || col_clone_2.is_sortable,
+            )
+            on:click=move |_| {
+                if let Some(dir) = &col_clone.sort_direction {
+                    set_sort_dir.set(Some(dir.negate().to_string()))
+                }
+            }
+        >
             {column.column.clone()}
             {match (&column.sort_direction, column.is_sortable) {
                 (Some(direction), _) => {
-                    let dir = direction.clone();
                     if direction.is_desc() {
                         view! {
-                            <span
-                                on:click=move |_| set_sort_dir.set(Some(dir.negate().to_string()))
-                                class=ICON_CLASS
-                            >
+                            <span class=ICON_CLASS>
                                 <DownArrow width=12 />
                             </span>
                         }
                             .into_view()
                     } else {
                         view! {
-                            <span
-                                on:click=move |_| set_sort_dir.set(Some(dir.negate().to_string()))
-                                class=ICON_CLASS
-                            >
+                            <span class=ICON_CLASS>
                                 <UpArrow width=12 />
                             </span>
                         }

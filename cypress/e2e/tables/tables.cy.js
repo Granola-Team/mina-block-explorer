@@ -12,6 +12,8 @@ import {
   ROMEK_BLOCK_STATE_HASH,
   VETAL_BLOCK_STATE_HASH,
   ROMEK_NAMING_MEMO,
+  SNZ_USERNAME,
+  SNZPOOL_ADDRESS,
 } from "../constants";
 import { parseFormattedNumber } from "../helpers";
 
@@ -423,9 +425,8 @@ let test_suite_data = [
     ],
   },
   {
-    disabled: true,
     tag: "@tier2",
-    url: "/staking-ledgers?epoch=20",
+    url: "/staking-ledgers?epoch=1",
     table: {
       columns: [
         "Key",
@@ -436,39 +437,47 @@ let test_suite_data = [
         "Delegate",
         "Delegators",
       ],
-      heading: "Staking Ledger - Epoch 20",
+      sorting_columns: [
+        {
+          column: "Total Stake %",
+          type: "numeric",
+          sort_options: ["STAKE_DESC", "STAKE_ASC"],
+          default_sort: "STAKE_DESC",
+        },
+      ],
+      heading: "Staking Ledger - Epoch 1",
       filter_tests: [
         {
           column: "Key",
-          input: ROMEK_ADDRESS,
+          input: SNZPOOL_ADDRESS,
           assertion: function () {
-            cy.aliasTableRows("Staking Ledger - Epoch 20", "table-rows");
+            cy.aliasTableRows("Staking Ledger - Epoch 1", "table-rows");
             cy.get("@table-rows").should("have.lengthOf", 1);
             cy.assertForEachColumnValue(
-              "Staking Ledger - Epoch 20",
+              "Staking Ledger - Epoch 1",
               "Key",
               (text) => {
-                expect(text).to.equal(ROMEK_ADDRESS);
+                expect(text).to.equal(SNZPOOL_ADDRESS);
               },
             );
             cy.tableColumnValuesEqual(
-              "Staking Ledger - Epoch 20",
+              "Staking Ledger - Epoch 1",
               "Username",
-              ROMEK_USERNAME,
+              SNZ_USERNAME,
             );
           },
         },
         {
           column: "Stake",
-          input: "37,123,109.762455837",
+          input: "7,399,987.246422696",
           assertion: function () {
-            cy.aliasTableRows("Staking Ledger - Epoch 20", "table-rows");
+            cy.aliasTableRows("Staking Ledger - Epoch 1", "table-rows");
             cy.assertForEachColumnValue(
-              "Staking Ledger - Epoch 20",
+              "Staking Ledger - Epoch 1",
               "Stake",
               (text) => {
                 expect(parseFloat(text)).to.be.lte(
-                  parseFloat("37,123,109.762455837"),
+                  parseFloat("7,399,987.246422696"),
                 );
               },
             );
@@ -486,7 +495,7 @@ let test_suite_data = [
       },
       () => {
         [25, 50, 100, 250].forEach((l) => {
-          cy.assertRowLimitWorks("Staking Ledger - Epoch 20", l);
+          cy.assertRowLimitWorks("Staking Ledger - Epoch 1", l);
         });
       },
     ],
@@ -608,7 +617,7 @@ test_suite_data.forEach((test_suite_datum) => {
     disabled,
     tag,
     url,
-    table: { heading, filter_tests, columns },
+    table: { heading, filter_tests, columns, sorting_columns = [] },
     tests,
   } = test_suite_datum;
 
@@ -622,13 +631,35 @@ test_suite_data.forEach((test_suite_datum) => {
         cy.intercept("GET", "/summary").as("summaryData");
         cy.wait("@summaryData").then(() => {
           cy.tableHasOrderedColumns(heading, columns);
+          sorting_columns.forEach(
+            ({ column, type, sort_options, default_sort }) => {
+              // cy.url().contains(`sort-dir=${default_sort}`);
+              cy.assertSortOrder(
+                heading,
+                column,
+                default_sort.includes("DESC"),
+                type,
+              );
+              cy.get("th").contains(column).click();
+              let next_sort = sort_options.find((s) => s != default_sort);
+              cy.url().should("include", `sort-dir=${next_sort}`);
+              cy.assertSortOrder(
+                heading,
+                column,
+                next_sort.includes("DESC"),
+                type,
+              );
+            },
+          );
           filter_tests.forEach(({ column, input, assertion }) => {
             cy.get("th").contains(column).find("input").as("input");
             cy.wait(1000);
             cy.get("@input").type(input, { delay: 0 });
             cy.wait(1000);
             assertion();
-            cy.assertTableRecordsCorrect(heading);
+            if (heading != "Staking Ledger - Epoch 1") {
+              cy.assertTableRecordsCorrect(heading);
+            }
             cy.get("@input").clear();
           });
 

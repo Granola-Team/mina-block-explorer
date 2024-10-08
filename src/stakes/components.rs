@@ -1,5 +1,8 @@
 use super::{functions::*, models::*};
-use crate::common::{components::*, constants::*, functions::*, models::*, table::*};
+use crate::{
+    common::{components::*, constants::*, functions::*, models::*, table::*},
+    stakes::graphql::staking_ledgers_query::StakeSortByInput,
+};
 use leptos::*;
 use leptos_router::*;
 
@@ -11,6 +14,54 @@ pub fn StakesPageContents(
     #[prop(into)] total_num_accounts: Option<u64>,
     selected_epoch: Option<u64>,
 ) -> impl IntoView {
+    fn create_table_columns(total_stake_percent_sort: AnySort) -> Vec<TableColumn<AnySort>> {
+        vec![
+            TableColumn {
+                column: "Key".to_string(),
+                is_searchable: true,
+                width: Some(String::from(TABLE_COL_HASH_WIDTH)),
+                ..Default::default()
+            },
+            TableColumn {
+                column: "Username".to_string(),
+                width: Some(String::from(TABLE_COL_USERNAME_WIDTH)),
+                ..Default::default()
+            },
+            TableColumn {
+                column: "Stake".to_string(),
+                width: Some(String::from(TABLE_COL_LARGE_BALANCE)),
+                is_searchable: true,
+                ..Default::default()
+            },
+            TableColumn {
+                column: "Total Stake %".to_string(),
+                sort_direction: Some(total_stake_percent_sort),
+                is_sortable: true,
+                width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
+                alignment: Some(ColumnTextAlignment::Right),
+                ..Default::default()
+            },
+            TableColumn {
+                column: "Block Win %".to_string(),
+                width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
+                alignment: Some(ColumnTextAlignment::Right),
+                ..Default::default()
+            },
+            TableColumn {
+                column: "Delegate".to_string(),
+                is_searchable: true,
+                width: Some(String::from(TABLE_COL_HASH_WIDTH)),
+                ..Default::default()
+            },
+            TableColumn {
+                column: "Delegators".to_string(),
+                width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
+                alignment: Some(ColumnTextAlignment::Right),
+                ..Default::default()
+            },
+        ]
+    }
+
     let (metadata_sig, set_metadata) = create_signal(None);
     let header_epoch = selected_epoch.unwrap_or(current_epoch);
     let next_epoch = header_epoch + 1;
@@ -27,6 +78,7 @@ pub fn StakesPageContents(
     let (section_heading_sig, _) = create_signal(section_heading);
     let (next_epoch_sig, _) = create_signal(next_epoch_opt);
     let (prev_epoch_sig, _) = create_signal(prev_epoch_opt);
+    let (sort_dir, _) = create_query_signal::<String>("sort-dir");
     let (data_sig, set_data) = create_signal(None);
     let query_params_map = use_query_map();
     let (row_limit_sig, _) = create_query_signal::<i64>("row-limit");
@@ -34,17 +86,36 @@ pub fn StakesPageContents(
     let (ledger_hash, set_ledger_hash) = create_signal(None::<String>);
 
     let resource = create_resource(
-        move || (selected_epoch, query_params_map.get(), row_limit_sig.get()),
-        move |(epoch_opt, params_map, mut row_limit)| async move {
+        move || {
+            (
+                selected_epoch,
+                query_params_map.get(),
+                row_limit_sig.get(),
+                sort_dir.get(),
+            )
+        },
+        move |(epoch_opt, params_map, mut row_limit, sort_dir)| async move {
             let public_key = params_map.get("q-key").cloned();
             let delegate = params_map.get("q-delegate").cloned();
             let stake = params_map.get("q-stake").cloned();
+            let mut sort_by = StakeSortByInput::STAKE_DESC;
+            if let Some(s_dir) = sort_dir {
+                match StakesSort::try_from(s_dir) {
+                    Ok(StakesSort::StakeAsc) => {
+                        sort_by = StakeSortByInput::STAKE_ASC;
+                    }
+                    Ok(StakesSort::StakeDesc) => sort_by = StakeSortByInput::STAKE_DESC,
+                    Err(_) => (),
+                };
+            }
+
             load_data(
                 Some(*row_limit.get_or_insert(25i64)),
                 Some(epoch_opt.unwrap_or(current_epoch)),
                 public_key,
                 delegate,
                 stake,
+                sort_by,
             )
             .await
         },
@@ -74,133 +145,97 @@ pub fn StakesPageContents(
         }));
     });
 
-    let table_columns: Vec<TableColumn<AnySort>> = vec![
-        TableColumn {
-            column: "Key".to_string(),
-            is_searchable: true,
-            width: Some(String::from(TABLE_COL_HASH_WIDTH)),
-            ..Default::default()
-        },
-        TableColumn {
-            column: "Username".to_string(),
-            width: Some(String::from(TABLE_COL_USERNAME_WIDTH)),
-            ..Default::default()
-        },
-        TableColumn {
-            column: "Stake".to_string(),
-            width: Some(String::from(TABLE_COL_LARGE_BALANCE)),
-            is_searchable: true,
-            ..Default::default()
-        },
-        TableColumn {
-            column: "Total Stake %".to_string(),
-            sort_direction: Some(AnySort::Stakes(StakesSort::StakeDesc)),
-            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
-            alignment: Some(ColumnTextAlignment::Right),
-            ..Default::default()
-        },
-        TableColumn {
-            column: "Block Win %".to_string(),
-            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
-            alignment: Some(ColumnTextAlignment::Right),
-            ..Default::default()
-        },
-        TableColumn {
-            column: "Delegate".to_string(),
-            is_searchable: true,
-            width: Some(String::from(TABLE_COL_HASH_WIDTH)),
-            ..Default::default()
-        },
-        TableColumn {
-            column: "Delegators".to_string(),
-            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
-            alignment: Some(ColumnTextAlignment::Right),
-            ..Default::default()
-        },
-    ];
-
-    view! {
-        <TableSectionTemplate
-            table_columns
-            data_sig
-            metadata=metadata_sig.into()
-            section_heading=section_heading_sig.get()
-            is_loading=resource.loading()
-            controls=move || {
-                view! {
-                    <div class="hidden md:flex justify-center items-center">
-                        <UrlParamSelectMenu
-                            label="Rows"
-                            id="row-limit"
-                            query_str_key="row-limit"
-                            labels=UrlParamSelectOptions {
-                                is_boolean_option: false,
-                                cases: vec![
-                                    "25".to_string(),
-                                    "50".to_string(),
-                                    "100".to_string(),
-                                    "250".to_string(),
-                                ],
-                            }
-                        />
-                    </div>
-                    <EpochButton
-                        disabled=prev_epoch_sig
-                            .get()
-                            .map(|prev_epoch| prev_epoch == 0)
-                            .unwrap_or_default()
-                        text="Previous"
-                        style_variant=EpochStyleVariant::Secondary
-                        epoch_target=prev_epoch_sig.get().unwrap_or_default()
-                    />
-                    <EpochButton
-                        disabled=next_epoch_opt.is_none()
-                        text="Next"
-                        style_variant=EpochStyleVariant::Primary
-                        epoch_target=next_epoch_sig.get().unwrap_or_default()
-                    />
-                }
-            }
-
-            additional_info=view! {
-                <div class="h-8 min-w-64 text-sm text-slate-500 ledger-hash">
-                    {move || {
-                        ledger_hash
-                            .get()
-                            .map_or_else(
-                                || data_placeholder().into_view(),
-                                |lh| { convert_to_link(lh, "#".to_string()).into_view() },
-                            )
-                    }}
-
-                </div>
-
-                {move || {
-                    if next_epoch_sig
-                        .get()
-                        .map_or(false, |next_epoch| current_epoch == next_epoch - 1)
-                    {
+    {
+        move || {
+            let s_dir = sort_dir
+                .get()
+                .and_then(|s| StakesSort::try_from(s).ok())
+                .unwrap_or(StakesSort::StakeDesc);
+            let table_columns = create_table_columns(AnySort::Stakes(s_dir));
+            view! {
+                <TableSectionTemplate
+                    table_columns
+                    data_sig
+                    metadata=metadata_sig.into()
+                    section_heading=section_heading_sig.get()
+                    is_loading=resource.loading()
+                    controls=move || {
                         view! {
-                            <div class="text-sm text-slate-500 staking-ledger-percent-complete">
-                                {format!(
-                                    "{:.2}% complete ({}/{} slots filled)",
-                                    format_number(
-                                        ((slot_in_epoch as f64 / EPOCH_SLOTS as f64) * 100.0)
-                                            .to_string(),
-                                    ),
-                                    format_number(slot_in_epoch.to_string()),
-                                    format_number(EPOCH_SLOTS.to_string()),
-                                )}
-
+                            <div class="hidden md:flex justify-center items-center">
+                                <UrlParamSelectMenu
+                                    label="Rows"
+                                    id="row-limit"
+                                    query_str_key="row-limit"
+                                    labels=UrlParamSelectOptions {
+                                        is_boolean_option: false,
+                                        cases: vec![
+                                            "25".to_string(),
+                                            "50".to_string(),
+                                            "100".to_string(),
+                                            "250".to_string(),
+                                        ],
+                                    }
+                                />
                             </div>
+                            <EpochButton
+                                disabled=prev_epoch_sig
+                                    .get()
+                                    .map(|prev_epoch| prev_epoch == 0)
+                                    .unwrap_or_default()
+                                text="Previous"
+                                style_variant=EpochStyleVariant::Secondary
+                                epoch_target=prev_epoch_sig.get().unwrap_or_default()
+                            />
+                            <EpochButton
+                                disabled=next_epoch_opt.is_none()
+                                text="Next"
+                                style_variant=EpochStyleVariant::Primary
+                                epoch_target=next_epoch_sig.get().unwrap_or_default()
+                            />
                         }
-                            .into_view()
-                    } else {
-                        ().into_view()
                     }
-                }}
+
+                    additional_info=view! {
+                        <div class="h-8 min-w-64 text-sm text-slate-500 ledger-hash">
+                            {move || {
+                                ledger_hash
+                                    .get()
+                                    .map_or_else(
+                                        || data_placeholder().into_view(),
+                                        |lh| { convert_to_link(lh, "#".to_string()).into_view() },
+                                    )
+                            }}
+
+                        </div>
+
+                        {move || {
+                            if next_epoch_sig
+                                .get()
+                                .map_or(false, |next_epoch| current_epoch == next_epoch - 1)
+                            {
+                                view! {
+                                    <div class="text-sm text-slate-500 staking-ledger-percent-complete">
+                                        {format!(
+                                            "{:.2}% complete ({}/{} slots filled)",
+                                            format_number(
+                                                ((slot_in_epoch as f64 / EPOCH_SLOTS as f64) * 100.0)
+                                                    .to_string(),
+                                            ),
+                                            format_number(slot_in_epoch.to_string()),
+                                            format_number(EPOCH_SLOTS.to_string()),
+                                        )}
+
+                                    </div>
+                                }
+                                    .into_view()
+                            } else {
+                                ().into_view()
+                            }
+                        }}
+                    }
+                />
             }
-        />
+        }
     }
 }
 
