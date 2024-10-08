@@ -36,7 +36,7 @@ pub fn BlocksAnalyticsPage() -> impl IntoView {
                             </AnalyticsSmContainer>
                             <AnalyticsSmContainer>
                                 <AnalyticsSimpleInfo
-                                    label=convert_to_span("Number of supercharged blocks".into())
+                                    label=convert_to_span("# of supercharged blocks".into())
                                     value=convert_to_span("...".to_string())
                                     id="supercharged-blocks-count"
                                 />
@@ -44,7 +44,7 @@ pub fn BlocksAnalyticsPage() -> impl IntoView {
 
                             <AnalyticsSmContainer>
                                 <AnalyticsSimpleInfo
-                                    label=convert_to_span("Number of unique block producers".into())
+                                    label=convert_to_span("# of unique block producers".into())
                                     value=convert_to_span("...".to_string())
                                     id="unique-block-producers-count"
                                 />
