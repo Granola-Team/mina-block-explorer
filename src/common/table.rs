@@ -138,7 +138,7 @@ impl NegateSort for AnySort {
 
 #[component]
 pub fn TableSectionTemplate<T, F, E, S>(
-    table_columns: Vec<TableColumn<S>>,
+    #[prop(optional,default=vec![])] table_columns: Vec<TableColumn<S>>, // deprecated
     data_sig: ReadSignal<Option<T>>,
     is_loading: Signal<bool>,
     #[prop(optional)] metadata: Option<Signal<Option<TableMetadata>>>,
@@ -296,14 +296,14 @@ where
                 (Some(direction), _) => {
                     if direction.is_desc() {
                         view! {
-                            <span class=ICON_CLASS>
+                            <span on:click=move |_| set_sort_dir.set(Some(dir.negate().to_string())) class=ICON_CLASS>
                                 <DownArrow width=12 />
                             </span>
                         }
                             .into_view()
                     } else {
                         view! {
-                            <span class=ICON_CLASS>
+                            <span on:click=move |_| set_sort_dir.set(Some(dir.negate().to_string())) class=ICON_CLASS>
                                 <UpArrow width=12 />
                             </span>
                         }
