@@ -130,6 +130,7 @@ impl NegateSort for AnySort {
     fn negate(&self) -> AnySort {
         match self {
             AnySort::None(_) => AnySort::None(Nil),
+            AnySort::Stakes(sort) => sort.negate(),
             _ => AnySort::None(Nil),
         }
     }
