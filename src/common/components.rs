@@ -469,13 +469,22 @@ pub fn AnalyticsSimpleInfo(
     view! {
         <div class="w-full p-4 rounded-lg flex flex-col md:flex-row justify-center items-stretch">
             <div class="w-full md:w-1/2 flex flex-wrap flex-col justify-center mx-4">
-                <div class="min-w-full flex justify-center md:justify-end label text-lg font-semibold text-ellipsis overflow-hidden">{label}</div>
-                {subtext.map(|t| view! {
-                    <div class="min-w-full flex justify-center md:justify-end subtext text-sm font-medium text-slate-400">{t}</div>
-                })}
+                <div class="min-w-full flex justify-center md:justify-end label text-lg font-semibold text-ellipsis overflow-hidden">
+                    {label}
+                </div>
+                {subtext
+                    .map(|t| {
+                        view! {
+                            <div class="min-w-full flex justify-center md:justify-end subtext text-sm font-medium text-slate-400">
+                                {t}
+                            </div>
+                        }
+                    })}
             </div>
-            <div class="w-full md:w-1/2 flex grow-0 justify-center md:justify-start items-center mx-4 text-6xl font-bold"
-                id=id.unwrap_or("simple-info".to_string()) >
+            <div
+                class="w-full md:w-1/2 flex grow-0 justify-center md:justify-start items-center mx-4 text-6xl font-bold"
+                id=id.unwrap_or("simple-info".to_string())
+            >
                 {value}
             </div>
         </div>
