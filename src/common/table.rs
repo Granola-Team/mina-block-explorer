@@ -41,6 +41,7 @@ pub struct TableColumn<T> {
     pub column: String,
     pub is_searchable: bool,
     pub sort_direction: Option<T>,
+    pub is_sortable: bool,
     pub width: Option<String>,
     pub html_input_type: String,
     pub alignment: Option<ColumnTextAlignment>,
@@ -52,6 +53,7 @@ impl<T> Default for TableColumn<T> {
             column: String::new(),
             is_searchable: false,
             sort_direction: None,
+            is_sortable: false,
             width: None,
             html_input_type: "text".to_string(),
             alignment: None,
@@ -275,8 +277,8 @@ where
         <th class=th_class
             + CELL_PADDING_CLASS>
             {column.column.clone()}
-            {match &column.sort_direction {
-                Some(direction) => {
+            {match (&column.sort_direction, column.is_sortable) {
+                (Some(direction), _) => {
                     if direction.is_desc() {
                         view! {
                             <span class=ICON_CLASS>
@@ -293,7 +295,12 @@ where
                             .into_view()
                     }
                 }
-                None => ().into_view(),
+                (None, true) => view! {
+                    <span class=ICON_CLASS>
+                        <UpDownArrow width=12 />
+                    </span>
+                }.into_view(),
+                (None, false) => ().into_view()
             }}
             {if column.is_searchable {
                 view! {

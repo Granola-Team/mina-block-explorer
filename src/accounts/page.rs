@@ -70,6 +70,7 @@ fn AccountsPageContents() -> impl IntoView {
             is_searchable: true,
             html_input_type: "number".to_string(),
             alignment: Some(ColumnTextAlignment::Right),
+            ..Default::default()
         },
         TableColumn {
             column: "Nonce".to_string(),
