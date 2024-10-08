@@ -308,14 +308,18 @@ where
                 (Some(direction), _) => {
                     if direction.is_desc() {
                         view! {
-                            <span class=ICON_CLASS>
+                            <span
+                                class=ICON_CLASS
+                            >
                                 <DownArrow width=12 />
                             </span>
                         }
                             .into_view()
                     } else {
                         view! {
-                            <span class=ICON_CLASS>
+                            <span
+                                class=ICON_CLASS
+                            >
                                 <UpArrow width=12 />
                             </span>
                         }
