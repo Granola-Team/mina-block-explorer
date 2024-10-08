@@ -296,26 +296,35 @@ where
                     let dir = direction.clone();
                     if direction.is_desc() {
                         view! {
-                            <span on:click=move |_| set_sort_dir.set(Some(dir.negate().to_string())) class=ICON_CLASS>
+                            <span
+                                on:click=move |_| set_sort_dir.set(Some(dir.negate().to_string()))
+                                class=ICON_CLASS
+                            >
                                 <DownArrow width=12 />
                             </span>
                         }
                             .into_view()
                     } else {
                         view! {
-                            <span on:click=move |_| set_sort_dir.set(Some(dir.negate().to_string())) class=ICON_CLASS>
+                            <span
+                                on:click=move |_| set_sort_dir.set(Some(dir.negate().to_string()))
+                                class=ICON_CLASS
+                            >
                                 <UpArrow width=12 />
                             </span>
                         }
                             .into_view()
                     }
                 }
-                (None, true) => view! {
-                    <span class=ICON_CLASS>
-                        <UpDownArrow width=12 />
-                    </span>
-                }.into_view(),
-                (None, false) => ().into_view()
+                (None, true) => {
+                    view! {
+                        <span class=ICON_CLASS>
+                            <UpDownArrow width=12 />
+                        </span>
+                    }
+                        .into_view()
+                }
+                (None, false) => ().into_view(),
             }}
             {if column.is_searchable {
                 view! {
