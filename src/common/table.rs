@@ -130,7 +130,6 @@ impl NegateSort for AnySort {
     fn negate(&self) -> AnySort {
         match self {
             AnySort::None(_) => AnySort::None(Nil),
-            AnySort::Stakes(sort) => sort.negate(),
             _ => AnySort::None(Nil),
         }
     }
@@ -138,7 +137,7 @@ impl NegateSort for AnySort {
 
 #[component]
 pub fn TableSectionTemplate<T, F, E, S>(
-    #[prop(optional,default=vec![])] table_columns: Vec<TableColumn<S>>, // deprecated
+    table_columns: Vec<TableColumn<S>>, // deprecated
     data_sig: ReadSignal<Option<T>>,
     is_loading: Signal<bool>,
     #[prop(optional)] metadata: Option<Signal<Option<TableMetadata>>>,

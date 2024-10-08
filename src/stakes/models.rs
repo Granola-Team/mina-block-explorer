@@ -1,5 +1,4 @@
-use crate::common::table::AnySort;
-use crate::common::table::{NegateSort, SortDirection};
+use crate::common::table::SortDirection;
 use std::fmt;
 
 pub enum EpochStyleVariant {
@@ -11,7 +10,6 @@ pub enum EpochStyleVariant {
 #[allow(dead_code)]
 pub enum StakesSort {
     StakeDesc,
-    StakeAsc,
 }
 
 impl SortDirection for StakesSort {
@@ -26,18 +24,6 @@ impl fmt::Display for StakesSort {
             StakesSort::StakeDesc => {
                 write!(f, "STAKE_DESC")
             }
-            StakesSort::StakeAsc => {
-                write!(f, "STAKE_ASC")
-            }
-        }
-    }
-}
-
-impl NegateSort for StakesSort {
-    fn negate(&self) -> AnySort {
-        match self {
-            StakesSort::StakeDesc => AnySort::Stakes(StakesSort::StakeAsc),
-            StakesSort::StakeAsc => AnySort::Stakes(StakesSort::StakeDesc),
         }
     }
 }
