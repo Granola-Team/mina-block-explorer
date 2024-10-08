@@ -78,6 +78,10 @@ pub trait SortDirection {
     fn is_desc(&self) -> bool;
 }
 
+pub trait NegateSort {
+    fn negate(&self) -> AnySort;
+}
+
 #[derive(Clone)]
 pub struct Nil;
 
@@ -122,6 +126,16 @@ impl ToString for AnySort {
     }
 }
 
+impl NegateSort for AnySort {
+    fn negate(&self) -> AnySort {
+        match self {
+            AnySort::None(_) => AnySort::None(Nil),
+            AnySort::Stakes(sort) => sort.negate(),
+            _ => AnySort::None(Nil),
+        }
+    }
+}
+
 #[component]
 pub fn TableSectionTemplate<T, F, E, S>(
     table_columns: Vec<TableColumn<S>>,
@@ -137,7 +151,7 @@ where
     E: IntoView,
     F: Fn() -> E + 'static,
     T: TableData + Clone + 'static,
-    S: SortDirection + ToString + Clone + 'static,
+    S: NegateSort + SortDirection + ToString + Clone + 'static,
 {
     let table_cols_length = table_columns.len();
 
@@ -218,7 +232,7 @@ where
 #[component]
 pub fn TableHeader<T>(columns: Vec<TableColumn<T>>) -> impl IntoView
 where
-    T: SortDirection + ToString + Clone + 'static,
+    T: NegateSort + SortDirection + ToString + Clone + 'static,
 {
     view! {
         <tr>
@@ -238,10 +252,11 @@ const ICON_CLASS: &str = " inline-block cursor-pointer pl-1 items-center ";
 #[component]
 fn ColumnHeader<T>(id: String, column: TableColumn<T>) -> impl IntoView
 where
-    T: SortDirection + ToString + Clone + 'static,
+    T: NegateSort + SortDirection + ToString + Clone + 'static,
 {
     let id_copy = id.clone();
     let (value, set_value) = create_query_signal::<String>(id);
+    let (_, set_sort_dir) = create_query_signal::<String>("sort-dir");
     let input_element: NodeRef<html::Input> = create_node_ref();
     let mut th_class = " whitespace-nowrap h-12 bg-table-header-fill xl:sticky xl:top-16 z-20 text-table-header-text-color font-semibold uppercase text-xs text-left py-4 box-border ".to_string();
     let mut input_class = "".to_string();
