@@ -1,5 +1,4 @@
-use crate::common::table::AnySort;
-use crate::common::table::{NegateSort, SortDirection};
+use crate::common::table::{AnySort, NegateSort, SortDirection};
 use std::fmt;
 
 pub enum EpochStyleVariant {

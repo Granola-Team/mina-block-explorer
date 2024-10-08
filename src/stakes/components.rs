@@ -1,6 +1,8 @@
 use super::{functions::*, models::*};
-use crate::common::{components::*, constants::*, functions::*, models::*, table::*};
-use crate::stakes::graphql::staking_ledgers_query::StakeSortByInput;
+use crate::{
+    common::{components::*, constants::*, functions::*, models::*, table::*},
+    stakes::graphql::staking_ledgers_query::StakeSortByInput,
+};
 use leptos::*;
 use leptos_router::*;
 
@@ -147,8 +149,7 @@ pub fn StakesPageContents(
         move || {
             let s_dir = sort_dir
                 .get()
-                .map(|s| StakesSort::try_from(s).ok())
-                .flatten()
+                .and_then(|s| StakesSort::try_from(s).ok())
                 .unwrap_or(StakesSort::StakeDesc);
             let table_columns = create_table_columns(AnySort::Stakes(s_dir));
             view! {
