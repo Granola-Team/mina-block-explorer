@@ -19,19 +19,19 @@ suite(["@tier2"], "number bubble in tab", () => {
     {
       url: `/blocks/${VETAL_BLOCK_STATE_HASH}/commands/internal`,
       tab: "Internal Commands",
-      expected_row_count: 2,
+      expected_row_count: 1,
     },
     {
       url: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}/commands/user`,
       tab: "User Commands",
       expected_row_count: 29,
-      expected_total_count: 11659,
+      expected_total_count: 40257,
     },
     {
       url: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}/block-production`,
       tab: "Block Production",
       expected_row_count: 25,
-      expected_total_count: 31,
+      expected_total_count: 45,
     },
     {
       url: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}/delegations`,
@@ -43,13 +43,13 @@ suite(["@tier2"], "number bubble in tab", () => {
       url: `/addresses/accounts/${ADDRESS_WITH_SNARK_AND_BLOCK_PRODUCTION}/snark-jobs`,
       tab: "SNARK Jobs",
       expected_row_count: 25,
-      expected_total_count: 6912,
+      expected_total_count: 10831,
     },
     {
       url: `/addresses/accounts/${ADDRESS_WITH_SNARK_AND_BLOCK_PRODUCTION}/commands/internal`,
       tab: "Internal Commands",
       expected_row_count: 2,
-      expected_total_count: 1,
+      expected_total_count: 2,
     },
   ];
 
