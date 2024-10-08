@@ -26,8 +26,7 @@ dependency conflicts.
 ## Back-End Integration
 
 Integration with an [Indexer](https://github.com/Granola-Team/mina-indexer) is
-accomplished through GraphQL and REST endpoints. MinaExplorer.com's GraphqlQL
-and RESTful endpoints are used by default. To override, you may specify your
+accomplished through GraphQL and REST endpoints. You must specify your
 own environment variables. This can be done through
 
 - `.env` file
@@ -41,7 +40,7 @@ required.
 Note that the `mina-indexer` is a git submodule and is integrated at a specific version
 for tier2 tests. Tier2 tests are coded to work against the first 10000 blocks in the
 Mina Blockchain. Running `just tier2` the first time will incur a one-time penalty as the
-indexer will be setup on the device upon which tier2 tests are run.
+indexer will be setup on localhost against which tier2 tests are run.
 
 ## License
 
