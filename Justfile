@@ -98,6 +98,7 @@ t2: pnpm-install deploy-mina-indexer && shutdown-mina-indexer
 # Run tier2 tests interactively with GUI
 t2-i: pnpm-install deploy-mina-indexer
   ruby ops/validate-env.rb GRAPHQL_URL REST_URL
+  trap 'just shutdown-mina-indexer' INT; \
   ruby ./ops/manage-processes.rb \
     --port={{trunk_port}} \
     --first-cmd="trunk serve --no-autoreload --port={{trunk_port}}" \
