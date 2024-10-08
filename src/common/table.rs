@@ -294,6 +294,7 @@ where
             {column.column.clone()}
             {match (&column.sort_direction, column.is_sortable) {
                 (Some(direction), _) => {
+                    let dir = direction.clone();
                     if direction.is_desc() {
                         view! {
                             <span on:click=move |_| set_sort_dir.set(Some(dir.negate().to_string())) class=ICON_CLASS>
