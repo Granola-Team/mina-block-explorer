@@ -25,6 +25,42 @@
 
 import { parseFormattedNumber } from "../e2e/helpers";
 
+Cypress.Commands.add(
+  "assertSortOrder",
+  (
+    tableHeading,
+    columnHeading,
+    expectDesc,
+    columnType = "numeric",
+    limit = 5,
+  ) => {
+    let lastNumber = null;
+    cy.assertForEachColumnValue(
+      tableHeading,
+      columnHeading,
+      (text) => {
+        switch (columnType) {
+          case "numeric":
+            let number = parseFormattedNumber(text);
+            if (lastNumber != null) {
+              if (expectDesc) {
+                expect(number).to.be.lte(lastNumber);
+              } else {
+                expect(number).to.be.gte(lastNumber);
+              }
+            }
+            lastNumber = number;
+            break;
+          default:
+            throw Error(`Unrecognized column type: ${columnType}`);
+        }
+      },
+      limit,
+    );
+    lastNumber = null;
+  },
+);
+
 Cypress.Commands.add("assertRowLimitWorks", (tableHeading, limit) => {
   cy.get("select#row-limit")
     .select("" + limit)

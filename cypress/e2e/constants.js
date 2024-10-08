@@ -34,6 +34,9 @@ export const WHISPERIT_BLOCK_STATE_HASH =
   "3NLjanAoyqjqmPsQHafJcvQiGW2xbvyXANHxEyNwPwan2eUoZBV9";
 export const LONG_LIVE_SNZ_HASH =
   "CkpYebtjxHNdhLt1u88uNBzdRsvDYMqXmeeHGYWmbAKV7wFpwkcFy";
+export const SNZPOOL_ADDRESS =
+  "B62qq3tqfdj19hqaVCozJFM2q9gT2WezQMaJMKD6wxyvK3fMpHiP9va";
+export const SNZ_USERNAME = "SNZPool";
 export const BLOCK_STATE_HASH_MIXED_USER_COMMANDS =
   "3NKR3LoD3TLQ4Gotmhg59xUYcuq9hwVMuEujT99QywJhkDTYWwDy";
 export const DEFAULT_LOCALE = "en-US";
