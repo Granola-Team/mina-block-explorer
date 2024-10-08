@@ -41,6 +41,7 @@ pub struct TableColumn<T> {
     pub column: String,
     pub is_searchable: bool,
     pub sort_direction: Option<T>,
+    pub is_sortable: bool,
     pub width: Option<String>,
     pub html_input_type: String,
     pub alignment: Option<ColumnTextAlignment>,
@@ -52,6 +53,7 @@ impl<T> Default for TableColumn<T> {
             column: String::new(),
             is_searchable: false,
             sort_direction: None,
+            is_sortable: false,
             width: None,
             html_input_type: "text".to_string(),
             alignment: None,
@@ -74,6 +76,10 @@ pub fn Table(children: Children) -> impl IntoView {
 
 pub trait SortDirection {
     fn is_desc(&self) -> bool;
+}
+
+pub trait NegateSort {
+    fn negate(&self) -> AnySort;
 }
 
 #[derive(Clone)]
@@ -120,9 +126,18 @@ impl ToString for AnySort {
     }
 }
 
+impl NegateSort for AnySort {
+    fn negate(&self) -> AnySort {
+        match self {
+            AnySort::None(_) => AnySort::None(Nil),
+            _ => AnySort::None(Nil),
+        }
+    }
+}
+
 #[component]
 pub fn TableSectionTemplate<T, F, E, S>(
-    table_columns: Vec<TableColumn<S>>,
+    table_columns: Vec<TableColumn<S>>, // deprecated
     data_sig: ReadSignal<Option<T>>,
     is_loading: Signal<bool>,
     #[prop(optional)] metadata: Option<Signal<Option<TableMetadata>>>,
@@ -135,7 +150,7 @@ where
     E: IntoView,
     F: Fn() -> E + 'static,
     T: TableData + Clone + 'static,
-    S: SortDirection + ToString + Clone + 'static,
+    S: NegateSort + SortDirection + ToString + Clone + 'static,
 {
     let table_cols_length = table_columns.len();
 
@@ -216,7 +231,7 @@ where
 #[component]
 pub fn TableHeader<T>(columns: Vec<TableColumn<T>>) -> impl IntoView
 where
-    T: SortDirection + ToString + Clone + 'static,
+    T: NegateSort + SortDirection + ToString + Clone + 'static,
 {
     view! {
         <tr>
@@ -236,10 +251,11 @@ const ICON_CLASS: &str = " inline-block cursor-pointer pl-1 items-center ";
 #[component]
 fn ColumnHeader<T>(id: String, column: TableColumn<T>) -> impl IntoView
 where
-    T: SortDirection + ToString + Clone + 'static,
+    T: NegateSort + SortDirection + ToString + Clone + 'static,
 {
     let id_copy = id.clone();
     let (value, set_value) = create_query_signal::<String>(id);
+    let (_, set_sort_dir) = create_query_signal::<String>("sort-dir");
     let input_element: NodeRef<html::Input> = create_node_ref();
     let mut th_class = " whitespace-nowrap h-12 bg-table-header-fill xl:sticky xl:top-16 z-20 text-table-header-text-color font-semibold uppercase text-xs text-left py-4 box-border ".to_string();
     let mut input_class = "".to_string();
@@ -275,25 +291,40 @@ where
         <th class=th_class
             + CELL_PADDING_CLASS>
             {column.column.clone()}
-            {match &column.sort_direction {
-                Some(direction) => {
+            {match (&column.sort_direction, column.is_sortable) {
+                (Some(direction), _) => {
+                    let dir = direction.clone();
                     if direction.is_desc() {
                         view! {
-                            <span class=ICON_CLASS>
+                            <span
+                                on:click=move |_| set_sort_dir.set(Some(dir.negate().to_string()))
+                                class=ICON_CLASS
+                            >
                                 <DownArrow width=12 />
                             </span>
                         }
                             .into_view()
                     } else {
                         view! {
-                            <span class=ICON_CLASS>
+                            <span
+                                on:click=move |_| set_sort_dir.set(Some(dir.negate().to_string()))
+                                class=ICON_CLASS
+                            >
                                 <UpArrow width=12 />
                             </span>
                         }
                             .into_view()
                     }
                 }
-                None => ().into_view(),
+                (None, true) => {
+                    view! {
+                        <span class=ICON_CLASS>
+                            <UpDownArrow width=12 />
+                        </span>
+                    }
+                        .into_view()
+                }
+                (None, false) => ().into_view(),
             }}
             {if column.is_searchable {
                 view! {
