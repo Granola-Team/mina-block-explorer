@@ -160,14 +160,7 @@ function buildTree(blocks) {
         )
       : null;
 
-    if (canonicalChild && !visited.has(canonicalChild.stateHash)) {
-      visited.add(canonicalChild.stateHash); // Mark the canonical child as visited
-      canonicalChild.children = []; // Initialize the children
-      node.children.push(canonicalChild); // Attach the canonical child
-      queue.push(canonicalChild); // Add the canonical child to the queue
-    }
-
-    // Now add non-canonical children at the next height whose previousStateHash matches the current node's stateHash
+    // Now find non-canonical children
     const nonCanonicalChildren = blocksByHeight[nextHeight]
       ? blocksByHeight[nextHeight].filter(
           (block) =>
@@ -176,12 +169,20 @@ function buildTree(blocks) {
         )
       : [];
 
-    nonCanonicalChildren.forEach((child) => {
+    // Insert the canonical child into the middle of the non-canonical children (if it exists)
+    let allChildren = nonCanonicalChildren;
+    if (canonicalChild) {
+      const middleIndex = Math.floor(nonCanonicalChildren.length / 2);
+      allChildren.splice(middleIndex, 0, canonicalChild); // Insert canonical child at the middle
+    }
+
+    // Add the children to the current node
+    allChildren.forEach((child) => {
       if (!visited.has(child.stateHash)) {
-        visited.add(child.stateHash); // Mark non-canonical child as visited
-        child.children = []; // Initialize the children for the child
-        node.children.push(child); // Attach the non-canonical child
-        queue.push(child); // Add to the queue
+        visited.add(child.stateHash); // Mark as visited
+        child.children = []; // Initialize children for the child
+        node.children.push(child); // Attach the child to the current node
+        queue.push(child); // Add the child to the queue
       }
     });
   }
