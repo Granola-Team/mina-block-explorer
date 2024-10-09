@@ -115,6 +115,7 @@ impl SortDirection for AnySort {
             self,
             AnySort::None(_)
                 | AnySort::SnarkerLeaderboardHighestFee(SnarkerLeaderboardHighestFees::Nil)
+                | AnySort::SnarkerLeaderboardTotalFees(SnarkerLeaderboardTotalFees::Nil)
         )
     }
 }
@@ -141,6 +142,7 @@ impl CycleSort for AnySort {
             AnySort::Stakes(sort) => sort.cycle(),
             AnySort::Accounts(sort) => sort.cycle(),
             AnySort::SnarkerLeaderboardHighestFee(sort) => sort.cycle(),
+            AnySort::SnarkerLeaderboardTotalFees(sort) => sort.cycle(),
             _ => AnySort::None(Nil),
         }
     }

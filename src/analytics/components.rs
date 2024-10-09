@@ -161,9 +161,12 @@ pub fn SnarkerLeaderboard() -> impl IntoView {
     let resource = create_resource(
         move || (epoch_sig.get(), sort_dir_sig.get()),
         move |(epoch, sort_dir)| async move {
-            let highest_fee_sort =
-                sort_dir.and_then(|s| SnarkerLeaderboardHighestFees::try_from(s).ok());
-            load_snarker_leaderboard_data(epoch, None, highest_fee_sort).await
+            let highest_fee_sort = sort_dir
+                .clone()
+                .and_then(|s| SnarkerLeaderboardHighestFees::try_from(s).ok());
+            let total_fees_sort =
+                sort_dir.and_then(|s| SnarkerLeaderboardTotalFees::try_from(s).ok());
+            load_snarker_leaderboard_data(epoch, total_fees_sort, highest_fee_sort).await
         },
     );
     let (data_sig, set_data) = create_signal(None);
@@ -186,6 +189,13 @@ pub fn SnarkerLeaderboard() -> impl IntoView {
             {
                 highest_fee_sort = hf_sort;
             }
+            let mut total_fees_sort = SnarkerLeaderboardTotalFees::Nil;
+            if let Some(tf_sort) = sort_dir_sig
+                .get()
+                .and_then(|s| SnarkerLeaderboardTotalFees::try_from(s).ok())
+            {
+                total_fees_sort = tf_sort;
+            }
             let table_columns: Vec<TableColumn<AnySort>> = vec![
                 TableColumn {
                     column: "Username".to_string(),
@@ -198,6 +208,7 @@ pub fn SnarkerLeaderboard() -> impl IntoView {
                 TableColumn {
                     column: "Total Fees".to_string(),
                     alignment: Some(ColumnTextAlignment::Right),
+                    sort_direction: Some(AnySort::SnarkerLeaderboardTotalFees(total_fees_sort)),
                     ..Default::default()
                 },
                 TableColumn {
@@ -208,7 +219,6 @@ pub fn SnarkerLeaderboard() -> impl IntoView {
                 TableColumn {
                     column: "Max Fee".to_string(),
                     sort_direction: Some(AnySort::SnarkerLeaderboardHighestFee(highest_fee_sort)),
-                    is_sortable: true,
                     alignment: Some(ColumnTextAlignment::Right),
                     ..Default::default()
                 },

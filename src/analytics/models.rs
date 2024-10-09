@@ -187,6 +187,7 @@ pub struct SnarkerLeaderboardResponse {
 pub enum SnarkerLeaderboardTotalFees {
     TotalFeesAsc,
     TotalFeesDesc,
+    Nil,
 }
 
 impl SortDirection for SnarkerLeaderboardTotalFees {
@@ -194,7 +195,7 @@ impl SortDirection for SnarkerLeaderboardTotalFees {
         matches!(self, SnarkerLeaderboardTotalFees::TotalFeesDesc)
     }
     fn is_active(&self) -> bool {
-        true
+        !matches!(self, SnarkerLeaderboardTotalFees::Nil)
     }
 }
 
@@ -207,6 +208,35 @@ impl fmt::Display for SnarkerLeaderboardTotalFees {
             SnarkerLeaderboardTotalFees::TotalFeesDesc => {
                 write!(f, "TOTAL_FEES_DESC")
             }
+            SnarkerLeaderboardTotalFees::Nil => {
+                write!(f, "")
+            }
+        }
+    }
+}
+
+impl CycleSort for SnarkerLeaderboardTotalFees {
+    fn cycle(&self) -> AnySort {
+        match self {
+            SnarkerLeaderboardTotalFees::Nil => {
+                AnySort::SnarkerLeaderboardTotalFees(SnarkerLeaderboardTotalFees::TotalFeesDesc)
+            }
+            SnarkerLeaderboardTotalFees::TotalFeesDesc => {
+                AnySort::SnarkerLeaderboardTotalFees(SnarkerLeaderboardTotalFees::TotalFeesAsc)
+            }
+            SnarkerLeaderboardTotalFees::TotalFeesAsc => {
+                AnySort::SnarkerLeaderboardTotalFees(SnarkerLeaderboardTotalFees::Nil)
+            }
+        }
+    }
+}
+impl TryFrom<String> for SnarkerLeaderboardTotalFees {
+    type Error = &'static str;
+    fn try_from(str: String) -> Result<SnarkerLeaderboardTotalFees, Self::Error> {
+        match str.as_str() {
+            "TOTAL_FEES_ASC" => Ok(SnarkerLeaderboardTotalFees::TotalFeesAsc),
+            "TOTAL_FEES_DESC" => Ok(SnarkerLeaderboardTotalFees::TotalFeesDesc),
+            _ => Err("Unable to parse the AccountsSort from string"),
         }
     }
 }

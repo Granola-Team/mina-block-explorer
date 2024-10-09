@@ -38,6 +38,12 @@ let test_suite_data = [
           // Sort options order should be the same as the cycle order, starting with the default sort
           sort_options: [null, "MAX_FEE_DESC", "MAX_FEE_ASC"],
         },
+        {
+          column: "Total Fees",
+          type: "numeric",
+          // Sort options order should be the same as the cycle order, starting with the default sort
+          sort_options: [null, "TOTAL_FEES_DESC", "TOTAL_FEES_ASC"],
+        },
       ],
       filter_tests: [],
     },
