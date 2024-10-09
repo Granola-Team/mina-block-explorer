@@ -25,6 +25,7 @@ function renderTreeChart(data, myChart) {
         bottom: "1%",
         right: "20%",
         symbolSize: 20,
+        symbol: "circle",
         layout: "orthogonal",
         orient: "LR",
         label: {
@@ -50,8 +51,8 @@ function renderTreeChart(data, myChart) {
           color: "#21252D",
         },
         itemStyle: {
-          color: "#21252D",
-          borderWidth: 4,
+          borderColor: "#21252D",
+          borderWidth: 2,
         },
         emphasis: {
           focus: "relative",

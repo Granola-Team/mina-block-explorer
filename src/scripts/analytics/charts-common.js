@@ -195,6 +195,7 @@ function mapTreeToEchartsFormat(node) {
   const formattedNode = {
     name: node.blockHeight.toString(), // Map blockHeight to name (as a string)
     ...node,
+    itemStyle: { color: node.canonical ? "#56D05F" : "#FB7631" },
     children: node.children.map(mapTreeToEchartsFormat), // Recursively format the children
     previousStateHash: node.previousStateHash,
   };
