@@ -29,6 +29,9 @@ impl SortDirection for AccountsSort {
     fn is_desc(&self) -> bool {
         matches!(self, AccountsSort::BalanceDesc)
     }
+    fn is_active(&self) -> bool {
+        true
+    }
 }
 
 impl fmt::Display for AccountsSort {
@@ -44,8 +47,8 @@ impl fmt::Display for AccountsSort {
     }
 }
 
-impl NegateSort for AccountsSort {
-    fn negate(&self) -> AnySort {
+impl CycleSort for AccountsSort {
+    fn cycle(&self) -> AnySort {
         match self {
             AccountsSort::BalanceDesc => AnySort::Accounts(AccountsSort::BalanceAsc),
             AccountsSort::BalanceAsc => AnySort::Accounts(AccountsSort::BalanceDesc),

@@ -1,4 +1,4 @@
-use crate::common::table::{AnySort, NegateSort, SortDirection};
+use crate::common::table::{AnySort, CycleSort, SortDirection};
 use std::fmt;
 
 pub enum EpochStyleVariant {
@@ -17,6 +17,9 @@ impl SortDirection for StakesSort {
     fn is_desc(&self) -> bool {
         matches!(self, StakesSort::StakeDesc)
     }
+    fn is_active(&self) -> bool {
+        true
+    }
 }
 
 impl fmt::Display for StakesSort {
@@ -32,8 +35,8 @@ impl fmt::Display for StakesSort {
     }
 }
 
-impl NegateSort for StakesSort {
-    fn negate(&self) -> AnySort {
+impl CycleSort for StakesSort {
+    fn cycle(&self) -> AnySort {
         match self {
             StakesSort::StakeDesc => AnySort::Stakes(StakesSort::StakeAsc),
             StakesSort::StakeAsc => AnySort::Stakes(StakesSort::StakeDesc),

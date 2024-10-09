@@ -1,4 +1,4 @@
-use crate::common::table::SortDirection;
+use crate::common::table::{AnySort, CycleSort, SortDirection};
 use serde::*;
 use statrs::statistics::{Data, Distribution, OrderStatistics};
 use std::fmt;
@@ -193,6 +193,9 @@ impl SortDirection for SnarkerLeaderboardTotalFees {
     fn is_desc(&self) -> bool {
         matches!(self, SnarkerLeaderboardTotalFees::TotalFeesDesc)
     }
+    fn is_active(&self) -> bool {
+        true
+    }
 }
 
 impl fmt::Display for SnarkerLeaderboardTotalFees {
@@ -213,11 +216,15 @@ impl fmt::Display for SnarkerLeaderboardTotalFees {
 pub enum SnarkerLeaderboardHighestFees {
     HighestFeeAsc,
     HighestFeeDesc,
+    Nil,
 }
 
 impl SortDirection for SnarkerLeaderboardHighestFees {
     fn is_desc(&self) -> bool {
         matches!(self, SnarkerLeaderboardHighestFees::HighestFeeDesc)
+    }
+    fn is_active(&self) -> bool {
+        !matches!(self, SnarkerLeaderboardHighestFees::Nil)
     }
 }
 
@@ -230,6 +237,35 @@ impl fmt::Display for SnarkerLeaderboardHighestFees {
             SnarkerLeaderboardHighestFees::HighestFeeDesc => {
                 write!(f, "MAX_FEE_DESC")
             }
+            SnarkerLeaderboardHighestFees::Nil => {
+                write!(f, "")
+            }
+        }
+    }
+}
+
+impl CycleSort for SnarkerLeaderboardHighestFees {
+    fn cycle(&self) -> AnySort {
+        match self {
+            SnarkerLeaderboardHighestFees::Nil => {
+                AnySort::SnarkerLeaderboardHighestFee(SnarkerLeaderboardHighestFees::HighestFeeDesc)
+            }
+            SnarkerLeaderboardHighestFees::HighestFeeDesc => {
+                AnySort::SnarkerLeaderboardHighestFee(SnarkerLeaderboardHighestFees::HighestFeeAsc)
+            }
+            SnarkerLeaderboardHighestFees::HighestFeeAsc => {
+                AnySort::SnarkerLeaderboardHighestFee(SnarkerLeaderboardHighestFees::Nil)
+            }
+        }
+    }
+}
+impl TryFrom<String> for SnarkerLeaderboardHighestFees {
+    type Error = &'static str;
+    fn try_from(str: String) -> Result<SnarkerLeaderboardHighestFees, Self::Error> {
+        match str.as_str() {
+            "MAX_FEE_ASC" => Ok(SnarkerLeaderboardHighestFees::HighestFeeAsc),
+            "MAX_FEE_DESC" => Ok(SnarkerLeaderboardHighestFees::HighestFeeDesc),
+            _ => Err("Unable to parse the AccountsSort from string"),
         }
     }
 }
@@ -246,6 +282,9 @@ impl SortDirection for StakerLeaderboardCanonicalBlocks {
             self,
             StakerLeaderboardCanonicalBlocks::NumberOfCanonicalBlocksProducedDesc
         )
+    }
+    fn is_active(&self) -> bool {
+        true
     }
 }
 

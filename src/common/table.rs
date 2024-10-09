@@ -76,10 +76,11 @@ pub fn Table(children: Children) -> impl IntoView {
 
 pub trait SortDirection {
     fn is_desc(&self) -> bool;
+    fn is_active(&self) -> bool;
 }
 
-pub trait NegateSort {
-    fn negate(&self) -> AnySort;
+pub trait CycleSort {
+    fn cycle(&self) -> AnySort;
 }
 
 #[derive(Clone)]
@@ -109,6 +110,13 @@ impl SortDirection for AnySort {
             AnySort::Stakes(sort) => sort.is_desc(),
         }
     }
+    fn is_active(&self) -> bool {
+        !matches!(
+            self,
+            AnySort::None(_)
+                | AnySort::SnarkerLeaderboardHighestFee(SnarkerLeaderboardHighestFees::Nil)
+        )
+    }
 }
 
 #[allow(clippy::to_string_trait_impl)]
@@ -126,12 +134,13 @@ impl ToString for AnySort {
     }
 }
 
-impl NegateSort for AnySort {
-    fn negate(&self) -> AnySort {
+impl CycleSort for AnySort {
+    fn cycle(&self) -> AnySort {
         match self {
             AnySort::None(_) => AnySort::None(Nil),
-            AnySort::Stakes(sort) => sort.negate(),
-            AnySort::Accounts(sort) => sort.negate(),
+            AnySort::Stakes(sort) => sort.cycle(),
+            AnySort::Accounts(sort) => sort.cycle(),
+            AnySort::SnarkerLeaderboardHighestFee(sort) => sort.cycle(),
             _ => AnySort::None(Nil),
         }
     }
@@ -152,7 +161,7 @@ where
     E: IntoView,
     F: Fn() -> E + 'static,
     T: TableData + Clone + 'static,
-    S: NegateSort + SortDirection + ToString + Clone + 'static,
+    S: CycleSort + SortDirection + ToString + Clone + 'static,
 {
     let table_cols_length = table_columns.len();
 
@@ -233,7 +242,7 @@ where
 #[component]
 pub fn TableHeader<T>(columns: Vec<TableColumn<T>>) -> impl IntoView
 where
-    T: NegateSort + SortDirection + ToString + Clone + 'static,
+    T: CycleSort + SortDirection + ToString + Clone + 'static,
 {
     view! {
         <tr>
@@ -253,7 +262,7 @@ const ICON_CLASS: &str = " inline-block cursor-pointer pl-1 items-center ";
 #[component]
 fn ColumnHeader<T>(id: String, column: TableColumn<T>) -> impl IntoView
 where
-    T: NegateSort + SortDirection + ToString + Clone + 'static,
+    T: CycleSort + SortDirection + ToString + Clone + 'static,
 {
     let id_copy = id.clone();
     let (value, set_value) = create_query_signal::<String>(id);
@@ -300,38 +309,39 @@ where
             )
             on:click=move |_| {
                 if let Some(dir) = &col_clone.sort_direction {
-                    set_sort_dir.set(Some(dir.negate().to_string()))
+                    set_sort_dir.set(Some(dir.cycle().to_string()))
                 }
             }
         >
             {column.column.clone()}
-            {match (&column.sort_direction, column.is_sortable) {
-                (Some(direction), _) => {
-                    if direction.is_desc() {
-                        view! {
-                            <span class=ICON_CLASS>
-                                <DownArrow width=12 />
-                            </span>
+            {match &column.sort_direction {
+                Some(direction) => {
+                    if direction.is_active() {
+                        if direction.is_desc() {
+                            view! {
+                                <span class=ICON_CLASS>
+                                    <DownArrow width=12 />
+                                </span>
+                            }
+                                .into_view()
+                        } else {
+                            view! {
+                                <span class=ICON_CLASS>
+                                    <UpArrow width=12 />
+                                </span>
+                            }
+                                .into_view()
                         }
-                            .into_view()
                     } else {
                         view! {
                             <span class=ICON_CLASS>
-                                <UpArrow width=12 />
+                                <UpDownArrow width=12 />
                             </span>
                         }
                             .into_view()
                     }
                 }
-                (None, true) => {
-                    view! {
-                        <span class=ICON_CLASS>
-                            <UpDownArrow width=12 />
-                        </span>
-                    }
-                        .into_view()
-                }
-                (None, false) => ().into_view(),
+                None => ().into_view(),
             }}
             {if column.is_searchable {
                 view! {

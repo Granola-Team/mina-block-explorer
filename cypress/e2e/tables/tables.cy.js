@@ -31,6 +31,14 @@ let test_suite_data = [
         "Max Fee",
         "Snarks Sold",
       ],
+      sorting_columns: [
+        {
+          column: "Max Fee",
+          type: "numeric",
+          // Sort options order should be the same as the cycle order, starting with the default sort
+          sort_options: [null, "MAX_FEE_DESC", "MAX_FEE_ASC"],
+        },
+      ],
       filter_tests: [],
     },
     tests: [],
@@ -371,8 +379,8 @@ let test_suite_data = [
         {
           column: "Balance",
           type: "numeric",
+          // Sort options order should be the same as the cycle order, starting with the default sort
           sort_options: ["BALANCE_DESC", "BALANCE_ASC"],
-          default_sort: "BALANCE_DESC",
         },
       ],
       filter_tests: [
@@ -449,8 +457,8 @@ let test_suite_data = [
         {
           column: "Total Stake %",
           type: "numeric",
+          // Sort options order should be the same as the cycle order, starting with the default sort
           sort_options: ["STAKE_DESC", "STAKE_ASC"],
-          default_sort: "STAKE_DESC",
         },
       ],
       heading: "Staking Ledger - Epoch 1",
@@ -639,26 +647,25 @@ test_suite_data.forEach((test_suite_datum) => {
         cy.intercept("GET", "/summary").as("summaryData");
         cy.wait("@summaryData").then(() => {
           cy.tableHasOrderedColumns(heading, columns);
-          sorting_columns.forEach(
-            ({ column, type, sort_options, default_sort }) => {
-              cy.assertSortOrder(
-                heading,
-                column,
-                default_sort.includes("DESC"),
-                type,
-              );
+          sorting_columns.forEach(({ column, type, sort_options }) => {
+            sort_options.forEach((sort, i) => {
+              if (sort != null) {
+                cy.log("Testing Sort Order: " + sort);
+                cy.assertSortOrder(
+                  heading,
+                  column,
+                  sort.includes("DESC"),
+                  type,
+                );
+                // we don't necessarily expect the url to indicate
+                // sort direction on the first page load
+                if (i !== 0) {
+                  cy.url().should("include", `sort-dir=${sort}`);
+                }
+              }
               cy.get("th").contains(column).click("top");
-              let next_sort = sort_options.find((s) => s != default_sort);
-              cy.url().should("include", `sort-dir=${next_sort}`);
-              cy.assertSortOrder(
-                heading,
-                column,
-                next_sort.includes("DESC"),
-                type,
-              );
-              cy.get("th").contains(column).click("top"); // back to default sort
-            },
-          );
+            });
+          });
           filter_tests.forEach(({ column, input, assertion }) => {
             cy.get("th").contains(column).find("input").as("input");
             cy.wait(1000);

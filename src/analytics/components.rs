@@ -154,18 +154,16 @@ pub fn AnalyticsFilters(
 #[component]
 pub fn SnarkerLeaderboard() -> impl IntoView {
     let (epoch_sig, set_epoch) = create_query_signal::<u32>("epoch");
+    let (sort_dir_sig, _) = create_query_signal::<String>("sort-dir");
     if epoch_sig.get_untracked().is_none() {
         set_epoch.set(Some(0u32));
     }
     let resource = create_resource(
-        move || epoch_sig.get(),
-        move |epoch| async move {
-            load_snarker_leaderboard_data(
-                epoch,
-                None,
-                Some(SnarkerLeaderboardHighestFees::HighestFeeDesc),
-            )
-            .await
+        move || (epoch_sig.get(), sort_dir_sig.get()),
+        move |(epoch, sort_dir)| async move {
+            let highest_fee_sort =
+                sort_dir.and_then(|s| SnarkerLeaderboardHighestFees::try_from(s).ok());
+            load_snarker_leaderboard_data(epoch, None, highest_fee_sort).await
         },
     );
     let (data_sig, set_data) = create_signal(None);
@@ -181,6 +179,13 @@ pub fn SnarkerLeaderboard() -> impl IntoView {
 
     {
         move || {
+            let mut highest_fee_sort = SnarkerLeaderboardHighestFees::Nil;
+            if let Some(hf_sort) = sort_dir_sig
+                .get()
+                .and_then(|s| SnarkerLeaderboardHighestFees::try_from(s).ok())
+            {
+                highest_fee_sort = hf_sort;
+            }
             let table_columns: Vec<TableColumn<AnySort>> = vec![
                 TableColumn {
                     column: "Username".to_string(),
@@ -202,9 +207,8 @@ pub fn SnarkerLeaderboard() -> impl IntoView {
                 },
                 TableColumn {
                     column: "Max Fee".to_string(),
-                    sort_direction: Some(AnySort::SnarkerLeaderboardHighestFee(
-                        SnarkerLeaderboardHighestFees::HighestFeeDesc,
-                    )),
+                    sort_direction: Some(AnySort::SnarkerLeaderboardHighestFee(highest_fee_sort)),
+                    is_sortable: true,
                     alignment: Some(ColumnTextAlignment::Right),
                     ..Default::default()
                 },

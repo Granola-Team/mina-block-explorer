@@ -339,6 +339,9 @@ impl SortDirection for Delegators {
     fn is_desc(&self) -> bool {
         matches!(self, Delegators::BalanceDesc)
     }
+    fn is_active(&self) -> bool {
+        true
+    }
 }
 
 impl fmt::Display for Delegators {
