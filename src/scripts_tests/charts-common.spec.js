@@ -356,6 +356,34 @@ describe("Tree Building with Correct Data", () => {
     const maxDepth = getMaxDepth(tree);
     expect(maxDepth).toBe(8); // Based on the current tree structure
   });
+
+  test("Ensure canonical node is in the middle (alternating for even numbers)", () => {
+    const tree = buildTree(inputBlocks);
+
+    function verifyCanonicalPosition(node) {
+      if (node.children && node.children.length > 1) {
+        const nonCanonicalChildrenCount = node.children.filter(
+          (child) => !child.canonical,
+        ).length;
+        const middleIndex = Math.floor(nonCanonicalChildrenCount / 2);
+        const canonicalChildIndex = node.children.findIndex(
+          (child) => child.canonical,
+        );
+
+        const totalChildren = nonCanonicalChildrenCount + 1;
+
+        if (totalChildren % 2 === 0) {
+          expect([middleIndex, middleIndex + 1]).toContain(canonicalChildIndex);
+        } else {
+          expect(canonicalChildIndex).toBe(middleIndex);
+        }
+
+        node.children.forEach((child) => verifyCanonicalPosition(child));
+      }
+    }
+
+    verifyCanonicalPosition(tree);
+  });
 });
 
 describe("time utils", () => {

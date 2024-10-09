@@ -141,13 +141,13 @@ function buildTree(blocks) {
   const root = blocksByHeight[rootHeight].find((block) => block.canonical); // Start with the canonical block at the root
 
   const visited = new Set(); // Track visited blocks to avoid duplicates
-  const queue = [root]; // Initialize the queue with the root node
+  const queue = [{ node: root, shouldAlternateLeft: true }]; // Initialize the queue with the root node and an alternating flag
 
   visited.add(root.stateHash); // Mark the root as visited
   root.children = []; // Initialize the children for the root
 
   while (queue.length > 0) {
-    const node = queue.shift(); // Dequeue the next node
+    const { node, shouldAlternateLeft } = queue.shift(); // Dequeue the next node and flag
 
     const nextHeight = node.blockHeight + 1;
 
@@ -169,11 +169,26 @@ function buildTree(blocks) {
         )
       : [];
 
-    // Insert the canonical child into the middle of the non-canonical children (if it exists)
+    // Combine the canonical and non-canonical children to count the total
     let allChildren = nonCanonicalChildren;
     if (canonicalChild) {
+      const totalChildrenCount = nonCanonicalChildren.length + 1; // Total count including canonical child
       const middleIndex = Math.floor(nonCanonicalChildren.length / 2);
-      allChildren.splice(middleIndex, 0, canonicalChild); // Insert canonical child at the middle
+
+      // Adjust the insertion index based on total children being even or odd, and the alternating flag
+      const insertIndex =
+        totalChildrenCount % 2 === 0
+          ? shouldAlternateLeft
+            ? middleIndex
+            : middleIndex + 1
+          : middleIndex;
+
+      // Create the full list with the canonical child inserted at the computed index
+      allChildren = [
+        ...nonCanonicalChildren.slice(0, insertIndex),
+        canonicalChild,
+        ...nonCanonicalChildren.slice(insertIndex),
+      ];
     }
 
     // Add the children to the current node
@@ -182,7 +197,8 @@ function buildTree(blocks) {
         visited.add(child.stateHash); // Mark as visited
         child.children = []; // Initialize children for the child
         node.children.push(child); // Attach the child to the current node
-        queue.push(child); // Add the child to the queue
+        // Alternate the insertion position for even numbered children
+        queue.push({ node: child, shouldAlternateLeft: !shouldAlternateLeft });
       }
     });
   }
