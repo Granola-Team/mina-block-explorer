@@ -367,6 +367,14 @@ let test_suite_data = [
         "Delegate",
         "Time Locked",
       ],
+      sorting_columns: [
+        {
+          column: "Balance",
+          type: "numeric",
+          sort_options: ["BALANCE_DESC", "BALANCE_ASC"],
+          default_sort: "BALANCE_DESC",
+        },
+      ],
       filter_tests: [
         {
           column: "Balance",
@@ -633,14 +641,13 @@ test_suite_data.forEach((test_suite_datum) => {
           cy.tableHasOrderedColumns(heading, columns);
           sorting_columns.forEach(
             ({ column, type, sort_options, default_sort }) => {
-              // cy.url().contains(`sort-dir=${default_sort}`);
               cy.assertSortOrder(
                 heading,
                 column,
                 default_sort.includes("DESC"),
                 type,
               );
-              cy.get("th").contains(column).click();
+              cy.get("th").contains(column).click("top");
               let next_sort = sort_options.find((s) => s != default_sort);
               cy.url().should("include", `sort-dir=${next_sort}`);
               cy.assertSortOrder(
@@ -649,13 +656,14 @@ test_suite_data.forEach((test_suite_datum) => {
                 next_sort.includes("DESC"),
                 type,
               );
+              cy.get("th").contains(column).click("top"); // back to default sort
             },
           );
           filter_tests.forEach(({ column, input, assertion }) => {
             cy.get("th").contains(column).find("input").as("input");
             cy.wait(1000);
             cy.get("@input").type(input, { delay: 0 });
-            cy.wait(1000);
+            cy.wait(2000);
             assertion();
             if (heading != "Staking Ledger - Epoch 1") {
               cy.assertTableRecordsCorrect(heading);

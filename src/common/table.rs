@@ -131,6 +131,7 @@ impl NegateSort for AnySort {
         match self {
             AnySort::None(_) => AnySort::None(Nil),
             AnySort::Stakes(sort) => sort.negate(),
+            AnySort::Accounts(sort) => sort.negate(),
             _ => AnySort::None(Nil),
         }
     }
@@ -259,7 +260,7 @@ where
     let (_, set_sort_dir) = create_query_signal::<String>("sort-dir");
     let input_element: NodeRef<html::Input> = create_node_ref();
     let mut th_class = " whitespace-nowrap h-12 bg-table-header-fill xl:sticky xl:top-16 z-20 text-table-header-text-color font-semibold uppercase text-xs text-left py-4 box-border ".to_string();
-    let mut input_class = "".to_string();
+    let mut input_class = " pointer-events-auto ".to_string();
     match column.alignment {
         Some(ColumnTextAlignment::Left) => {
             th_class += " text-left ";
@@ -340,7 +341,9 @@ where
                         on:input=move |_| {
                             update_value();
                         }
-
+                        on:click=move |e| {
+                            e.stop_propagation();
+                        }
                         node_ref=input_element
                         class=INPUT_CLASS.to_string() + &input_class
                         id=id_copy

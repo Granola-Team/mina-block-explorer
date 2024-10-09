@@ -25,6 +25,7 @@ input AccountQueryInput {
 
 enum AccountSortByInput {
   BALANCE_DESC
+  BALANCE_ASC
 }
 
 input BlockTransactionUserCommandFromAccountInsertInput {

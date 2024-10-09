@@ -1,4 +1,7 @@
-use super::graphql::{accounts_query, AccountsQuery};
+use super::graphql::{
+    accounts_query::{self, AccountSortByInput},
+    AccountsQuery,
+};
 use crate::common::{constants::GRAPHQL_ENDPOINT, models::*};
 use graphql_client::reqwest::post_graphql;
 
@@ -8,6 +11,7 @@ pub async fn load_data(
     username: Option<String>,
     balance: Option<i64>,
     delegate: Option<String>,
+    sort_by: Option<accounts_query::AccountSortByInput>,
 ) -> Result<accounts_query::ResponseData, MyError> {
     let query =
         if public_key.is_none() && username.is_none() && balance.is_none() && delegate.is_none() {
@@ -24,7 +28,7 @@ pub async fn load_data(
     let variables = accounts_query::Variables {
         limit,
         query,
-        sort_by: accounts_query::AccountSortByInput::BALANCE_DESC,
+        sort_by: sort_by.unwrap_or(AccountSortByInput::BALANCE_DESC),
     };
 
     let client = reqwest::Client::new();
