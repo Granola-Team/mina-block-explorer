@@ -1,5 +1,5 @@
 function renderTreeChart(data, myChart) {
-  const MAX_DEPTH = 25;
+  const MAX_DEPTH = getUrlParam("tree-depth") || 150;
   let option;
 
   myChart.hideLoading();
@@ -21,9 +21,9 @@ function renderTreeChart(data, myChart) {
         data: [tree],
         type: "tree",
         top: "1%",
-        left: "7%",
+        left: "50px",
         bottom: "1%",
-        right: "20%",
+        right: "50px",
         symbolSize: 20,
         symbol: "circle",
         layout: "orthogonal",

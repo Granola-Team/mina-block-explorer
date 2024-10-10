@@ -50,7 +50,15 @@ pub fn BlocksAnalyticsPage() -> impl IntoView {
                                 />
                             </AnalyticsSmContainer>
                             <AnalyticsXLContainer>
-                                <div id="tree" class="w-full h-48"></div>
+                                <div id="tree-container" class="w-full h-72 overflow-x-auto">
+                                    <div id="tree" class="w-[3000px] h-full"></div>
+                                </div>
+                                <script type="text/javascript">
+                                    (function() {
+                                        let container = document.getElementById("tree-container");
+                                        container.scrollLeft = container.scrollWidth;
+                                    })();
+                                </script>
                             </AnalyticsXLContainer>
                             <AnalyticsLgContainer>
                                 <div id="rewards" class="w-full h-96"></div>
