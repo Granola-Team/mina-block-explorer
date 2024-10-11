@@ -2,6 +2,7 @@ use super::models::*;
 use crate::{
     common::{constants::*, functions::*},
     icons::*,
+    stakes::models::EpochStyleVariant,
 };
 use leptos::{html::Div, *};
 use leptos_meta::Script;
@@ -9,6 +10,40 @@ use leptos_router::{create_query_signal, *};
 use leptos_use::{use_debounce_fn_with_options, DebounceOptions};
 use std::collections::HashMap;
 use web_sys::{window, Event, MouseEvent};
+
+#[component]
+pub fn Button<F>(
+    on_click: F,
+    #[prop(into)] text: String,
+    #[prop(optional, default=EpochStyleVariant::Primary)] style_variant: EpochStyleVariant,
+    #[prop(optional, default = false)] disabled: bool,
+) -> impl IntoView
+where
+    F: Fn(MouseEvent) + 'static,
+{
+    let button_base_styles = "text-sm rounded-md p-2 h-9 font-semibold ml-2 flex justify-center items-center border border-granola-orange border-[1px]";
+    let mut button_variant_styles = match style_variant {
+        EpochStyleVariant::Primary => {
+            format!("{} {}", button_base_styles, "text-white bg-granola-orange")
+        }
+        EpochStyleVariant::Secondary => {
+            format!("{} {}", button_base_styles, "text-granola-orange bg-white")
+        }
+    };
+    button_variant_styles = match disabled {
+        true => format!(
+            "{} {}",
+            button_variant_styles,
+            "bg-slate-100 text-slate-400 border-slate-100 hover:cursor-not-allowed"
+        ),
+        false => button_variant_styles,
+    };
+    view! {
+        <button on:click=on_click class=button_variant_styles>
+            {text}
+        </button>
+    }
+}
 
 #[component]
 pub fn ControlledInput<T>(

@@ -286,12 +286,7 @@ pub fn EpochButton(
                 Default::default(),
             );
         };
-        view! {
-            <button on:click=handle_click class=button_variant_styles>
-                {text}
-            </button>
-        }
-        .into_view()
+        view! { <Button on_click=handle_click text=text style_variant disabled /> }.into_view()
     } else {
         view! {
             <a href=href class=button_variant_styles>
