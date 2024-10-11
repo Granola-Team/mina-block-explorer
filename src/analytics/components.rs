@@ -49,8 +49,11 @@ pub fn AnalyticsFilters(
             {move || match by_block {
                 true => {
                     view! {
-                        <div class="flex justify-start items-baseline mr-2 md:mr-4">
-                            <label for="blockheight-gte font-semibold" class="mr-2">
+                        <div class="w-full md:w-fit grid grid-cols-2 gap-4 md:flex md:flex-row md:justify-start md:items-baseline md:mr-4">
+                            <label
+                                for="blockheight-gte"
+                                class="font-semibold whitespace-nowrap mr-2"
+                            >
                                 "Start Block Height: "
                             </label>
                             <ControlledInput
@@ -76,7 +79,10 @@ pub fn AnalyticsFilters(
                                     ),
                                 ])
                             />
-                            <label for="blockheight-lte font-semibold" class="mr-2">
+                            <label
+                                for="blockheight-lte"
+                                class="font-semibold whitespace-nowrap mr-2"
+                            >
                                 "End Block Height: "
                             </label>
                             <ControlledInput
