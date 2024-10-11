@@ -206,21 +206,15 @@ setTimeout(async () => {
   let volumeChart = echarts.init(volumeChartDom);
   let topRecipientsChart = echarts.init(topRecipientsChartDom);
   let topTransfersChart = echarts.init(topTransfersChartDom);
-
-  volumeChart.showLoading({
-    text: "Loading...", // Display text with the spinner
-    color: "#E39844", // Spinner color
-    zlevel: 0,
-  });
-  topRecipientsChart.showLoading({
-    text: "Loading...", // Display text with the spinner
-    color: "#E39844", // Spinner color
-    zlevel: 0,
-  });
-  topTransfersChart.showLoading({
-    text: "Loading...", // Display text with the spinner
-    color: "#E39844", // Spinner color
-    zlevel: 0,
+  [volumeChart, topRecipientsChart, topTransfersChart].forEach((chart) => {
+    window.addEventListener("resize", function () {
+      chart.resize();
+    });
+    chart.showLoading({
+      text: "Loading...", // Display text with the spinner
+      color: "#E39844", // Spinner color
+      zlevel: 0,
+    });
   });
 
   let response = await fetch(config.graphql_endpoint, {
