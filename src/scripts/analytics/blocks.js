@@ -78,7 +78,7 @@ function renderCanonicalVsNonCanonicalChart(data, myChart) {
 
   myChart.hideLoading();
 
-  const slots = data.map(([slot]) => parseInt(slot));
+  const slots = data.map(([slot]) => slot);
   const canonical_blocks = data.map(([_slot, canonical]) => canonical);
   const non_canonical_blocks = data.map(
     ([_slot, _canonical, non_canonical]) => non_canonical,
@@ -97,11 +97,15 @@ function renderCanonicalVsNonCanonicalChart(data, myChart) {
     xAxis: {
       ...X_AXIS_DEFAULT,
       type: "category",
-      name: "Global Slot",
+      name: "Block Height",
       data: slots,
       splitLine: {
         ...GRID_LINES,
         show: false,
+      },
+      axisLabel: {
+        ...X_AXIS_LABEL_DEFAULT,
+        formatter: (v) => parseInt(v.split("-")[0]),
       },
     },
     yAxis: {
@@ -134,7 +138,7 @@ function renderCoinbaseRewardsChart(data, myChart) {
 
   myChart.hideLoading();
 
-  const slots = data.map(([slot]) => parseInt(slot));
+  const slots = data.map(([slot]) => slot);
   const rewards = data.map(([_slot, reward]) => reward);
 
   option = {
@@ -149,8 +153,12 @@ function renderCoinbaseRewardsChart(data, myChart) {
     xAxis: {
       ...X_AXIS_DEFAULT,
       type: "category",
-      name: "Global Slot",
+      name: "Block Height",
       data: slots,
+      axisLabel: {
+        ...X_AXIS_LABEL_DEFAULT,
+        formatter: (v) => parseInt(v.split("-")[0]),
+      },
     },
     yAxis: {
       type: "value",
@@ -245,8 +253,8 @@ setTimeout(async () => {
   let jsonResp = await response.json();
   let unique_creators = {};
   let data = jsonResp.data.blocks.reduce((agg, record) => {
-    let slot = record.globalSlotSinceGenesis;
-    let key = slot - (slot % groupSize);
+    let key = record.blockHeight - (record.blockHeight % groupSize);
+    key = `${key}-${key + groupSize - 1}`;
     let value = record.transactions.coinbase;
     if (!unique_creators[record.creator]) {
       unique_creators[record.creator] = 0;
@@ -269,23 +277,22 @@ setTimeout(async () => {
     return agg;
   }, {});
 
-  // trim the first slot group and last slot group
-  // as they most likely will not contain a full data set
-  let keys = Object.keys(data).map((k) => parseInt(k));
-  keys.sort((a, b) => a - b); // sort the values asc
-  delete data[keys[0]];
-  delete data[keys[keys.length - 1]];
-
   let rewards_data = Object.entries(data).map(([key, val]) => [
     key,
     val.reward_sum,
   ]);
+  rewards_data.sort(
+    (a, b) => parseInt(a[0].split("-")[0]) - parseInt(b[0].split("-")[0]),
+  );
 
   let blocks_data = Object.entries(data).map(([key, val]) => [
     key,
     val.canonical_blocks_count,
     val.non_canonical_blocks_count,
   ]);
+  blocks_data.sort(
+    (a, b) => parseInt(a[0].split("-")[0]) - parseInt(b[0].split("-")[0]),
+  );
 
   document.getElementById("canonical-blocks-count").innerHTML = Object.values(
     data,
