@@ -46,10 +46,10 @@ pub fn AnalyticsFilters(
 
     view! {
         <div class="w-full flex justify-start items-center p-2 pl-8 md:p-8 md:py-2">
-            {move || match by_block {
-                true => {
-                    view! {
-                        <div class="w-full md:w-fit grid grid-cols-2 gap-4 md:flex md:flex-row md:justify-start md:items-baseline md:mr-4">
+            <div class="w-full md:w-fit grid grid-cols-2 gap-4 md:flex md:flex-row md:justify-start md:items-baseline md:mr-4">
+                {move || match by_block {
+                    true => {
+                        view! {
                             <label
                                 for="blockheight-gte"
                                 class="font-semibold whitespace-nowrap mr-2"
@@ -111,17 +111,14 @@ pub fn AnalyticsFilters(
                                     ),
                                 ])
                             />
-
-                        </div>
+                        }
+                            .into_view()
                     }
-                        .into_view()
-                }
-                false => ().into_view(),
-            }}
-            {move || match epoch {
-                true => {
-                    view! {
-                        <div class="flex justify-start items-baseline mr-2 md:mr-4">
+                    false => ().into_view(),
+                }}
+                {move || match epoch {
+                    true => {
+                        view! {
                             <label for="blockheight-lte" class="mr-2">
                                 "Epoch:"
                             </label>
@@ -145,14 +142,12 @@ pub fn AnalyticsFilters(
                                     ("max".to_string(), "1000".to_string()),
                                 ])
                             />
-
-                        </div>
+                        }
+                            .into_view()
                     }
-                        .into_view()
-                }
-                false => ().into_view(),
-            }}
-
+                    false => ().into_view(),
+                }}
+            </div>
         </div>
     }
 }
