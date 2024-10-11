@@ -113,7 +113,9 @@ function renderTopRecipientsChart(dataMap, myChart) {
 }
 
 function renderTransactionVolumeChart(data, myChart) {
-  let dates = Object.keys(data).map(unixTimestampToDateString); // Convert back to milliseconds for chart
+  let dates = Object.keys(data)
+    .map(unixTimestampToDateString)
+    .map(dayAxisLabelFormatter);
   let txnVolume = Object.values(data).map((value) => value.count);
   let amounts = Object.values(data).map((value) => value.totalAmount);
 

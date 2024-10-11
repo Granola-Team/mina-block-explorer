@@ -1,5 +1,7 @@
 function renderSnarkJobsChart(data, myChart) {
-  let dates = Object.keys(data).map(unixTimestampToDateString); // Convert back to milliseconds for chart
+  let dates = Object.keys(data)
+    .map(unixTimestampToDateString)
+    .map(dayAxisLabelFormatter);
   let snarkJobs = Object.values(data);
 
   let option;
@@ -22,10 +24,6 @@ function renderSnarkJobsChart(data, myChart) {
       splitLine: {
         ...GRID_LINES,
         show: false,
-      },
-      axisLabel: {
-        ...X_AXIS_LABEL_DEFAULT,
-        formatter: dayAxisLabelFormatter,
       },
     },
     yAxis: [
