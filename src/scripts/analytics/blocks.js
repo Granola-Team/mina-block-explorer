@@ -180,7 +180,6 @@ function renderCoinbaseRewardsChart(data, myChart) {
 
 setTimeout(async () => {
   let summary = await getBlockchainSummary();
-  console.log(summary);
   let blockheightLte = parseInt(
     getUrlParamOrDefault("q-blockheight-lte", summary.blockchainLength),
   );
@@ -188,7 +187,6 @@ setTimeout(async () => {
     getUrlParamOrDefault("q-blockheight-gte", summary.blockchainLength - 1000),
   );
   const groupSize = SLOT_GROUPING;
-  console.log(blockheightGte, blockheightLte);
 
   let rewardsChart = echarts.init(document.getElementById("rewards"));
   let blocksChart = echarts.init(document.getElementById("blocks"));
