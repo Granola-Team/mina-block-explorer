@@ -1,5 +1,8 @@
 function renderTransferCountPlot(data, myChart) {
-  let xAxis = Object.keys(data);
+  let transfer_counts = Object.entries(data);
+  transfer_counts.sort(
+    (a, b) => parseInt(a[0].split("-")[0]) - parseInt(b[0].split("-")[0]),
+  );
   let option;
 
   myChart.hideLoading();
@@ -17,44 +20,23 @@ function renderTransferCountPlot(data, myChart) {
     xAxis: {
       ...X_AXIS_DEFAULT,
       type: "category",
-      name: "Global Slot",
+      name: "Block Height",
+      data: transfer_counts.map(([height]) => height),
       axisLabel: {
         ...X_AXIS_LABEL_DEFAULT,
-        formatter: function (value) {
-          return xAxis[value];
-        },
+        formatter: (v) => v.split("-")[0],
       },
     },
     yAxis: {
       ...Y_AXIS_DEFAULT,
       type: "value",
       name: "Transfers Count",
-      axisLabel: {
-        ...Y_AXIS_AXIS_LABEL_DEFAULT,
-        formatter: function (value) {
-          return `${value}`;
-        },
-      },
     },
     series: [
       {
         name: "transfers",
         type: "bar",
-        data: Object.values(data).map((fees, i) => ["" + i, fees.length]),
-        tooltip: {
-          formatter: function (param) {
-            return [
-              [
-                "Slot",
-                xAxis[param.name] +
-                  `-${+xAxis[param.name] + SLOT_GROUPING - 1}`,
-              ],
-              ["count", param.data[1]],
-            ]
-              .map(([a, b]) => `<strong>${a}</strong>: ${b}`)
-              .join("</br>");
-          },
-        },
+        data: transfer_counts.map(([_, fee]) => fee.length),
       },
     ],
   };
@@ -63,7 +45,11 @@ function renderTransferCountPlot(data, myChart) {
 }
 
 function renderBoxAndWhiskerPlot(data, myChart) {
-  let xAxis = Object.keys(data);
+  let fee_transfers = Object.entries(data);
+  fee_transfers.sort(
+    (a, b) => parseInt(a[0].split("-")[0]) - parseInt(b[0].split("-")[0]),
+  );
+  let xAxis = fee_transfers.map(([height]) => height);
   let option;
 
   myChart.hideLoading();
@@ -80,7 +66,7 @@ function renderBoxAndWhiskerPlot(data, myChart) {
     grid: { ...GRID_DEFAULT },
     dataset: [
       {
-        source: Object.entries(data).map(([_, fees]) => [...fees]),
+        source: fee_transfers.map(([blockHeight, fees]) => [...fees]),
       },
       {
         fromDatasetIndex: 0,
@@ -96,12 +82,10 @@ function renderBoxAndWhiskerPlot(data, myChart) {
     xAxis: {
       ...X_AXIS_DEFAULT,
       type: "category",
-      name: "Global Slot",
+      name: "Block Height",
       axisLabel: {
         ...X_AXIS_LABEL_DEFAULT,
-        formatter: function (value) {
-          return xAxis[value];
-        },
+        formatter: (v) => xAxis[v].split("-")[0],
       },
       splitLine: {
         ...GRID_LINES,
@@ -113,12 +97,6 @@ function renderBoxAndWhiskerPlot(data, myChart) {
         ...Y_AXIS_DEFAULT,
         type: "value",
         name: "Fee (MINA)",
-        axisLabel: {
-          ...Y_AXIS_AXIS_LABEL_DEFAULT,
-          formatter: function (value) {
-            return `${value}`;
-          },
-        },
       },
     ],
     series: [
@@ -130,11 +108,7 @@ function renderBoxAndWhiskerPlot(data, myChart) {
         tooltip: {
           formatter: function (param) {
             return [
-              [
-                "Slot",
-                xAxis[param.name] +
-                  `-${+xAxis[param.name] + SLOT_GROUPING - 1}`,
-              ],
+              ["Slot", xAxis[param.name]],
               ["max", param.data[5]],
               ["Q3", param.data[4]],
               ["median", param.data[3]],
@@ -155,11 +129,7 @@ function renderBoxAndWhiskerPlot(data, myChart) {
         tooltip: {
           formatter: function (param) {
             return [
-              [
-                "Slot",
-                xAxis[param.name] +
-                  `-${+xAxis[param.name] + SLOT_GROUPING - 1}`,
-              ],
+              ["Slot", xAxis[param.name]],
               ["Fee", param.data[1]],
             ]
               .map(([a, b]) => `<strong>${a}</strong>: ${b}`)
@@ -174,6 +144,7 @@ function renderBoxAndWhiskerPlot(data, myChart) {
 }
 
 setTimeout(async () => {
+  const groupSize = SLOT_GROUPING;
   let summary = await getBlockchainSummary();
   let blockheightLte = parseInt(
     getUrlParamOrDefault("q-blockheight-lte", summary.blockchainLength),
@@ -182,25 +153,17 @@ setTimeout(async () => {
     getUrlParamOrDefault("q-blockheight-gte", summary.blockchainLength - 1000),
   );
 
-  let feeSpreadDom = document.getElementById("fee-spread");
-  let feeCountsDom = document.getElementById("transfer-count");
-  window.addEventListener("resize", function () {
-    boxAndWhiskerChart.resize();
-    barPlot.resize();
-  });
-  let boxAndWhiskerChart = echarts.init(feeSpreadDom);
-  let barPlot = echarts.init(feeCountsDom);
-
-  boxAndWhiskerChart.showLoading({
-    text: "Loading...", // Display text with the spinner
-    color: "#E39844", // Spinner color
-    zlevel: 0,
-  });
-
-  barPlot.showLoading({
-    text: "Loading...", // Display text with the spinner
-    color: "#E39844", // Spinner color
-    zlevel: 0,
+  let boxAndWhiskerChart = echarts.init(document.getElementById("fee-spread"));
+  let barPlot = echarts.init(document.getElementById("transfer-count"));
+  [boxAndWhiskerChart, barPlot].forEach((chart) => {
+    window.addEventListener("resize", function () {
+      chart.resize();
+    });
+    chart.showLoading({
+      text: "Loading...", // Display text with the spinner
+      color: "#E39844", // Spinner color
+      zlevel: 0,
+    });
   });
 
   let response = await fetch(config.graphql_endpoint, {
@@ -216,13 +179,7 @@ setTimeout(async () => {
         ) {
           feetransfers(limit: $limit, sortBy: $sort_by, query: $query) {
             fee,
-            blockStateHash {
-              protocolState {
-                consensusState {
-                  slotSinceGenesis
-                }
-              }
-            }
+            blockHeight
           }
         },
       `,
@@ -241,9 +198,8 @@ setTimeout(async () => {
 
   let jsonResp = await response.json();
   let data = jsonResp.data.feetransfers.reduce((agg, record) => {
-    let slot =
-      record.blockStateHash.protocolState.consensusState.slotSinceGenesis;
-    let key = slot - (slot % SLOT_GROUPING);
+    let key = record.blockHeight - (record.blockHeight % groupSize);
+    key = `${key}-${key + groupSize - 1}`;
     let value = record.fee;
     if (!agg[key]) {
       agg[key] = [];
