@@ -17,11 +17,12 @@ pub fn Button<F>(
     #[prop(into)] text: String,
     #[prop(optional, default=EpochStyleVariant::Primary)] style_variant: EpochStyleVariant,
     #[prop(optional, default = false)] disabled: bool,
+    #[prop(optional, into, default=String::new())] class_str: String,
 ) -> impl IntoView
 where
     F: Fn(MouseEvent) + 'static,
 {
-    let button_base_styles = "text-sm rounded-md p-2 h-9 font-semibold ml-2 flex justify-center items-center border border-granola-orange border-[1px]";
+    let button_base_styles = "text-sm rounded-md p-2 h-9 font-semibold flex justify-center items-center border border-granola-orange border-[1px]";
     let mut button_variant_styles = match style_variant {
         EpochStyleVariant::Primary => {
             format!("{} {}", button_base_styles, "text-white bg-granola-orange")
@@ -39,7 +40,7 @@ where
         false => button_variant_styles,
     };
     view! {
-        <button on:click=on_click class=button_variant_styles>
+        <button on:click=on_click class=class_str + " " + &button_variant_styles>
             {text}
         </button>
     }

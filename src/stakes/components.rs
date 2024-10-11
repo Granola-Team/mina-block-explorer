@@ -289,7 +289,7 @@ pub fn EpochButton(
         view! { <Button on_click=handle_click text=text style_variant disabled /> }.into_view()
     } else {
         view! {
-            <a href=href class=button_variant_styles>
+            <a href=href class=button_variant_styles + " ml-2">
                 {text}
             </a>
         }

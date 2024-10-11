@@ -196,8 +196,14 @@ function renderAveFeePerBlock(data, heights, myChart) {
 }
 
 setTimeout(async () => {
-  let blockheightLte = parseInt(getUrlParam("q-blockheight-lte"));
-  let blockheightGte = parseInt(getUrlParam("q-blockheight-gte"));
+  let summary = await getBlockchainSummary();
+
+  let blockheightLte = parseInt(
+    getUrlParamOrDefault("q-blockheight-lte", summary.blockchainLength),
+  );
+  let blockheightGte = parseInt(
+    getUrlParamOrDefault("q-blockheight-gte", summary.blockchainLength - 1000),
+  );
 
   let avgFeeChart = echarts.init(document.getElementById("avg-snark-fee"));
   let feePerBlockChart = echarts.init(

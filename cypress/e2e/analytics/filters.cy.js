@@ -1,46 +1,62 @@
-suite(["@tier2"], "fitler", () => {
+suite(["@tier2"], "block height filters", () => {
   let pages = [
     {
-      url: "/analytics/commands/user?q-blockheight-gte=0&q-blockheight-lte=10000",
-      filter_ids: ["#blockheight-gte", "#blockheight-lte"],
-      expected_url_values: [0, 10000],
-      expected_url_keys: ["q-blockheight-gte", "q-blockheight-lte"],
+      url: "/analytics/blocks",
     },
     {
-      url: "/analytics/commands/user?q-blockheight-gte=0&q-blockheight-lte=10000",
-      filter_ids: ["#blockheight-gte", "#blockheight-lte"],
-      expected_url_values: [0, 10000],
-      expected_url_keys: ["q-blockheight-gte", "q-blockheight-lte"],
+      url: "/analytics/commands/user",
     },
     {
-      url: "/analytics/snarks?q-blockheight-gte=0&q-blockheight-lte=10000",
-      filter_ids: ["#blockheight-gte", "#blockheight-lte"],
-      expected_url_values: [0, 10000],
-      expected_url_keys: ["q-blockheight-gte", "q-blockheight-lte"],
-    },
-    {
-      url: "/analytics/staker-leaderboard?epoch=0",
-      filter_ids: ["#epoch"],
-      expected_url_values: [0],
-      expected_url_keys: ["epoch"],
-    },
-    {
-      url: "/analytics/snarker-leaderboard?epoch=0",
-      filter_ids: ["#epoch"],
-      expected_url_values: [0],
-      expected_url_keys: ["epoch"],
+      url: "/analytics/snarks",
     },
   ];
-  pages.forEach(({ url, filter_ids, expected_url_values, expected_url_keys }) =>
-    it(`has defaults for ${url}`, () => {
+  pages.forEach(({ url }) =>
+    it(`work on ${url}`, () => {
       cy.visit(url);
-      filter_ids.forEach((filter_id, index) => {
-        const expected_url_value = expected_url_values[+index];
-        const expected_url_key = expected_url_keys[+index];
+      cy.get("label")
+        .contains("Start Block Height")
+        .next()
+        .as("start-block-height");
+      cy.get("label")
+        .contains("End Block Height")
+        .next()
+        .as("end-block-height");
+      cy.get("button").contains("Apply").as("submit");
 
-        cy.get(filter_id).should("have.value", expected_url_value);
-        cy.url().should("include", `${expected_url_key}=${expected_url_value}`);
-      });
+      cy.get("@submit").click();
+      cy.get("#input-validation").should(
+        "have.text",
+        "Missing start block height",
+      );
+
+      cy.get("@start-block-height").clear().type(9000);
+      cy.get("#input-validation").should("not.exist");
+      cy.get("@submit").click();
+      cy.get("#input-validation").should(
+        "have.text",
+        "Missing end block height",
+      );
+
+      cy.get("@end-block-height").clear().type(9000);
+      cy.get("#input-validation").should("not.exist");
+      cy.get("@submit").click();
+      cy.get("#input-validation").should(
+        "have.text",
+        "End block must be larger than start block",
+      );
+
+      cy.get("@end-block-height").clear().type(9001);
+      cy.get("#input-validation").should("not.exist");
+      cy.get("@submit").click();
+      cy.get("#input-validation").should("not.exist");
+
+      cy.get("@start-block-height").clear().type(6000);
+      cy.get("#input-validation").should("not.exist");
+      cy.get("@submit").click();
+      cy.get("#input-validation").should(
+        "have.text",
+        "Block range must not exceed 2000",
+      );
     }),
   );
 });

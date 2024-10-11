@@ -1,5 +1,5 @@
 function renderTreeChart(data, myChart) {
-  const MAX_DEPTH = getUrlParam("tree-depth") || 150;
+  const MAX_DEPTH = 150;
   let option;
 
   myChart.hideLoading();
@@ -179,9 +179,16 @@ function renderCoinbaseRewardsChart(data, myChart) {
 }
 
 setTimeout(async () => {
-  let blockheightLte = parseInt(getUrlParam("q-blockheight-lte"));
-  let blockheightGte = parseInt(getUrlParam("q-blockheight-gte"));
+  let summary = await getBlockchainSummary();
+  console.log(summary);
+  let blockheightLte = parseInt(
+    getUrlParamOrDefault("q-blockheight-lte", summary.blockchainLength),
+  );
+  let blockheightGte = parseInt(
+    getUrlParamOrDefault("q-blockheight-gte", summary.blockchainLength - 1000),
+  );
   const groupSize = SLOT_GROUPING;
+  console.log(blockheightGte, blockheightLte);
 
   let rewardsChart = echarts.init(document.getElementById("rewards"));
   let blocksChart = echarts.init(document.getElementById("blocks"));

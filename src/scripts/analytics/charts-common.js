@@ -75,10 +75,14 @@ function getBlockLimit() {
   return urlParams.get("limit") || 1000;
 }
 
-function getUrlParam(param) {
+function getUrlParamOrDefault(key, defaultVal) {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
-  return urlParams.get(param);
+  if (urlParams.has(key)) {
+    return urlParams.get(key);
+  } else {
+    return defaultVal;
+  }
 }
 
 async function getBlockchainSummary() {

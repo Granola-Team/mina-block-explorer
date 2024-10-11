@@ -965,3 +965,60 @@ mod normalize_number_format_tests {
         assert_eq!(result, Ok("1234.56".to_string()));
     }
 }
+
+const MAXIMUM_BLOCK_RANGE: u64 = 2000;
+pub fn validate_block_height_range(
+    blockheight_gte_opt: Option<u64>,
+    blockheight_lte_opt: Option<u64>,
+) -> Result<(), &'static str> {
+    if blockheight_gte_opt.is_none() {
+        return Err("Missing start block height");
+    }
+    if blockheight_lte_opt.is_none() {
+        return Err("Missing end block height");
+    }
+    let blockheight_gte = blockheight_gte_opt.unwrap();
+    let blockheight_lte = blockheight_lte_opt.unwrap();
+    if blockheight_gte >= blockheight_lte {
+        return Err("End block must be larger than start block");
+    }
+    if blockheight_lte - blockheight_gte > MAXIMUM_BLOCK_RANGE {
+        return Err("Block range must not exceed 2000");
+    }
+    Ok(())
+}
+
+#[cfg(test)]
+mod validate_block_height_range_tests {
+    use super::*;
+
+    #[test]
+    fn test_validate_block_height_range() {
+        // Case 1: Missing start block height
+        assert_eq!(
+            validate_block_height_range(None, Some(100)),
+            Err("Missing start block height")
+        );
+
+        // Case 2: Missing end block height
+        assert_eq!(
+            validate_block_height_range(Some(10), None),
+            Err("Missing end block height")
+        );
+
+        // Case 3: End block is not larger than start block
+        assert_eq!(
+            validate_block_height_range(Some(100), Some(50)),
+            Err("End block must be larger than start block")
+        );
+
+        // Case 3: Block range is too large
+        assert_eq!(
+            validate_block_height_range(Some(0), Some(2001)),
+            Err("Block range must not exceed 2000"),
+        );
+
+        // Case 4: Valid range
+        assert_eq!(validate_block_height_range(Some(50), Some(100)), Ok(()));
+    }
+}

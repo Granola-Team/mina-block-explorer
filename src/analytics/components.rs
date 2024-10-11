@@ -1,107 +1,121 @@
 use super::{functions::*, models::*};
 use crate::{
-    common::{components::*, constants::*, table::*},
+    common::{components::*, constants::*, functions::*, table::*},
     summary::models::BlockchainSummary,
 };
 use codee::string::JsonSerdeCodec;
 use leptos::*;
-use leptos_router::create_query_signal;
+use leptos_router::{create_query_signal, use_location, use_navigate, ParamsMap};
 use leptos_use::storage::use_local_storage;
 use std::collections::HashMap;
 
-const DEFAULT_BLOCK_RANGE: u64 = 1000;
 const INPUT_STYLES: &str =
     "mr-4 h-8 pl-4 text-sm box-border border-[1px] border-slate-300 rounded-md";
 
 #[component]
 pub fn AnalyticsFilters(#[prop(optional, default = false)] by_block: bool) -> impl IntoView {
-    let (blockheight_lte, set_blockheight_lte) = create_query_signal::<u64>("q-blockheight-lte");
-    let (blockheight_gte, set_blockheight_gte) = create_query_signal::<u64>("q-blockheight-gte");
+    let (blockheight_lte_query_input_sig, set_blockheight_lte_query_input) =
+        create_signal::<Option<u64>>(None);
+    let (blockheight_gte_query_input_sig, set_blockheight_gte_query_input) =
+        create_signal::<Option<u64>>(None);
+    let (validation_message_sig, set_validation_message) = create_signal::<Option<&str>>(None);
+    let navigate = use_navigate();
+    let nav_clone = navigate.clone();
+    let location = use_location();
+
     let (summary_sig, _, _) =
         use_local_storage::<BlockchainSummary, JsonSerdeCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
 
-    create_effect(move |_| {
-        if by_block && blockheight_lte.get().is_none() {
-            set_blockheight_lte.set(Some(summary_sig.get().blockchain_length));
-        }
-        if by_block && blockheight_gte.get().is_none() {
-            set_blockheight_gte.set(Some(
-                summary_sig
-                    .get()
-                    .blockchain_length
-                    .saturating_sub(DEFAULT_BLOCK_RANGE),
-            ))
-        }
-    });
+    let apply = move |_| {
+        by_block.then(|| {
+            let blockheight_gte_opt = blockheight_gte_query_input_sig.get();
+            let blockheight_lte_opt = blockheight_lte_query_input_sig.get();
+            match validate_block_height_range(blockheight_gte_opt, blockheight_lte_opt) {
+                Err(err) => set_validation_message.set(Some(err)),
+                Ok(_) => {
+                    set_validation_message.set(None);
+                    let mut q_params = ParamsMap::new();
+                    if let Some(blockheight_gte) = blockheight_gte_opt {
+                        q_params
+                            .insert("q-blockheight-gte".to_string(), blockheight_gte.to_string());
+                    }
+                    if let Some(blockheight_lte) = blockheight_lte_opt {
+                        q_params
+                            .insert("q-blockheight-lte".to_string(), blockheight_lte.to_string());
+                    }
+                    nav_clone(
+                        &format!("{}{}", location.pathname.get(), q_params.to_query_string()),
+                        Default::default(),
+                    )
+                }
+            }
+        });
+    };
 
     view! {
-        <div class="w-full flex justify-start items-center p-2 pl-8 md:p-8 md:py-2">
+        <div class="w-full flex justify-start items-center p-2 md:p-8 md:py-2">
             <div class="w-full md:w-fit grid grid-cols-2 gap-4 md:flex md:flex-row md:justify-start md:items-baseline md:mr-4">
+                {by_block
+                    .then(|| {
+                        view! {
+                            <label
+                                for="blockheight-gte"
+                                class="font-semibold whitespace-nowrap mr-2"
+                            >
+                                "Start Block Height: "
+                            </label>
+                            <input
+                                id="blockheight-gte"
+                                type="number"
+                                name="blockheight-gte"
+                                on:input=move |e| {
+                                    set_validation_message.set(None);
+                                    set_blockheight_gte_query_input
+                                        .set(
+                                            Some(event_target_value(&e))
+                                                .filter(|s| !s.is_empty())
+                                                .and_then(|s| s.parse::<u64>().ok()),
+                                        );
+                                }
+                                class=INPUT_STYLES
+                                min=0
+                                step=50
+                                max=summary_sig.get().blockchain_length.to_string()
+                            />
+                            <label
+                                for="blockheight-lte"
+                                class="font-semibold whitespace-nowrap mr-2"
+                            >
+                                "End Block Height: "
+                            </label>
+                            <input
+                                id="blockheight-lte"
+                                type="number"
+                                name="blockheight-lte"
+                                on:input=move |e| {
+                                    set_validation_message.set(None);
+                                    set_blockheight_lte_query_input
+                                        .set(
+                                            Some(event_target_value(&e))
+                                                .filter(|s| !s.is_empty())
+                                                .and_then(|s| s.parse::<u64>().ok()),
+                                        );
+                                }
+                                class=INPUT_STYLES
+                                min=0
+                                step=50
+                                max=summary_sig.get().blockchain_length.to_string()
+                            />
+                        }
+                    })} <Button text="Apply" on_click=apply class_str="col-span-2" />
                 {move || {
-                    by_block
-                        .then(|| {
+                    validation_message_sig
+                        .get()
+                        .map(|message| {
                             view! {
-                                <label
-                                    for="blockheight-gte"
-                                    class="font-semibold whitespace-nowrap mr-2"
-                                >
-                                    "Start Block Height: "
-                                </label>
-                                <ControlledInput
-                                    id="blockheight-gte"
-                                    input_type="number"
-                                    name="blockheight-gte"
-                                    disabled_sig=Signal::from(|| false)
-                                    value_sig=blockheight_gte
-                                    setter_sig=SignalSetter::map(move |opt_str: Option<String>| {
-                                        set_blockheight_gte
-                                            .set(
-                                                opt_str
-                                                    .map(|v_str| v_str.parse::<u64>().ok().unwrap_or_default()),
-                                            )
-                                    })
-                                    input_class=INPUT_STYLES.to_string()
-                                    number_props=HashMap::from([
-                                        ("min".to_string(), "0".to_string()),
-                                        ("step".to_string(), "1000".to_string()),
-                                        (
-                                            "max".to_string(),
-                                            summary_sig.get().blockchain_length.to_string(),
-                                        ),
-                                    ])
-                                />
-                                <label
-                                    for="blockheight-lte"
-                                    class="font-semibold whitespace-nowrap mr-2"
-                                >
-                                    "End Block Height: "
-                                </label>
-                                <ControlledInput
-                                    id="blockheight-lte"
-                                    input_type="number"
-                                    name="blockheight-lte"
-                                    disabled_sig=Signal::from(|| false)
-                                    value_sig=blockheight_lte
-                                    setter_sig=SignalSetter::map(move |opt_str: Option<String>| {
-                                        set_blockheight_lte
-                                            .set(
-                                                opt_str
-                                                    .map(|v_str| v_str.parse::<u64>().ok().unwrap_or_default()),
-                                            )
-                                    })
-                                    input_class=INPUT_STYLES.to_string()
-                                    number_props=HashMap::from([
-                                        (
-                                            "min".to_string(),
-                                            blockheight_gte.get().unwrap_or(0).to_string(),
-                                        ),
-                                        ("step".to_string(), "1000".to_string()),
-                                        (
-                                            "max".to_string(),
-                                            summary_sig.get().blockchain_length.to_string(),
-                                        ),
-                                    ])
-                                />
+                                <div id="input-validation" class="col-span-2 text-red-600">
+                                    {message}
+                                </div>
                             }
                         })
                 }}
