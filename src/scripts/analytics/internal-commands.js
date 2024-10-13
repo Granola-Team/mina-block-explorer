@@ -44,12 +44,7 @@ function renderTransferCountPlot(data, myChart) {
   option && myChart.setOption(option);
 }
 
-function renderBoxAndWhiskerPlot(data, myChart) {
-  let fee_transfers = Object.entries(data);
-  fee_transfers.sort(
-    (a, b) => parseInt(a[0].split("-")[0]) - parseInt(b[0].split("-")[0]),
-  );
-  let xAxis = fee_transfers.map(([height]) => height);
+function renderBoxAndWhiskerPlotIT(fees, myChart) {
   let option;
 
   myChart.hideLoading();
@@ -57,7 +52,7 @@ function renderBoxAndWhiskerPlot(data, myChart) {
   option = {
     title: {
       ...TITLE_DEFAULT,
-      text: `Fee Transfer Spread`,
+      text: `Fee Distribution`,
     },
     color: [...CHART_COLORS],
     tooltip: {
@@ -66,7 +61,7 @@ function renderBoxAndWhiskerPlot(data, myChart) {
     grid: { ...GRID_DEFAULT },
     dataset: [
       {
-        source: fee_transfers.map(([blockHeight, fees]) => [...fees]),
+        source: [fees],
       },
       {
         fromDatasetIndex: 0,
@@ -82,21 +77,30 @@ function renderBoxAndWhiskerPlot(data, myChart) {
     xAxis: {
       ...X_AXIS_DEFAULT,
       type: "category",
-      name: "Block Height",
-      axisLabel: {
-        ...X_AXIS_LABEL_DEFAULT,
-        formatter: (v) => xAxis[v].split("-")[0],
-      },
       splitLine: {
         ...GRID_LINES,
         show: false,
       },
+      splitArea: {
+        show: true,
+      },
+      boundaryGap: true,
+      nameGap: 30,
     },
     yAxis: [
       {
         ...Y_AXIS_DEFAULT,
         type: "value",
-        name: "Fee (MINA)",
+        name: "Fee Transfers (MINA)",
+      },
+      {
+        ...Y_AXIS_DEFAULT,
+        type: "value",
+        name: "Outliers (MINA)",
+        splitLine: {
+          ...GRID_LINES,
+          show: false,
+        },
       },
     ],
     series: [
@@ -104,35 +108,30 @@ function renderBoxAndWhiskerPlot(data, myChart) {
         name: "boxplot",
         type: "boxplot",
         datasetIndex: 1,
-        yAxisIndex: 0,
         tooltip: {
           formatter: function (param) {
             return [
-              ["Slot", xAxis[param.name]],
               ["max", param.data[5]],
               ["Q3", param.data[4]],
               ["median", param.data[3]],
               ["Q1", param.data[2]],
               ["min", param.data[1]],
             ]
-              .map(([a, b]) => `<strong>${a}</strong>: ${b}`)
+              .map(([a, b]) => `<strong>${a}</strong>: ${b.toFixed(3)} MINA`)
               .join("</br>");
           },
         },
       },
       {
-        name: "boxplot",
+        name: "deviations",
         type: "scatter",
         symbolSize: 8,
         datasetIndex: 2,
-        yAxisIndex: 0,
+        yAxisIndex: 1,
         tooltip: {
           formatter: function (param) {
-            return [
-              ["Slot", xAxis[param.name]],
-              ["Fee", param.data[1]],
-            ]
-              .map(([a, b]) => `<strong>${a}</strong>: ${b}`)
+            return [["Fee", param.data[1]]]
+              .map(([a, b]) => `<strong>${a}</strong>: ${b.toFixed(3)} MINA`)
               .join("</br>");
           },
         },
@@ -200,17 +199,16 @@ setTimeout(async () => {
   let data = jsonResp.data.feetransfers.reduce((agg, record) => {
     let key = record.blockHeight - (record.blockHeight % groupSize);
     key = `${key}-${key + groupSize - 1}`;
-    let value = record.fee;
     if (!agg[key]) {
       agg[key] = [];
     }
-    let parsedFloat = parseFloat(value / 1e9);
-    if (parsedFloat < 700) {
-      agg[key].push(parsedFloat);
+    let fee = record.fee / 1e9;
+    if (fee < 700) {
+      agg[key].push(fee);
     }
     return agg;
   }, {});
 
-  renderBoxAndWhiskerPlot(data, boxAndWhiskerChart);
+  renderBoxAndWhiskerPlotIT(Object.values(data).flat(), boxAndWhiskerChart);
   renderTransferCountPlot(data, barPlot);
 }, 1000);
