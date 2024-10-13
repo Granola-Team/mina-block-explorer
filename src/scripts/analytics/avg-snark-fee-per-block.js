@@ -169,54 +169,98 @@ function renderSnarkJobsChart(data, myChart) {
   option && myChart.setOption(option);
 }
 
-function renderFeeDistributionChart(data, myChart) {
+function renderBoxAndWhiskerPlot(fees, myChart) {
   let option;
+
+  fees = fees.map((f) => f / 1e9); // convert to mina
 
   myChart.hideLoading();
 
-  let fees = Object.keys(data).map((f) => +f);
-  let counts = Object.values(data);
-
   option = {
+    title: {
+      ...TITLE_DEFAULT,
+      text: `Fee Distribution`,
+    },
+    color: [...CHART_COLORS],
     tooltip: {
       ...TOOLTIP_DEFAULT,
     },
-    color: [...CHART_COLORS],
-    title: {
-      ...TITLE_DEFAULT,
-      text: `Fee Distribution (Non-Zero Fees)`,
-    },
     grid: { ...GRID_DEFAULT },
-    yAxis: {
-      ...Y_AXIS_DEFAULT,
-      type: "category",
-      data: fees,
-      axisLabel: {
-        ...Y_AXIS_AXIS_LABEL_DEFAULT,
-        formatter: (value) => scaleMina(value),
-      },
-    },
-    xAxis: [
+    dataset: [
       {
-        ...X_AXIS_DEFAULT,
+        source: [fees],
+      },
+      {
+        fromDatasetIndex: 0,
+        transform: {
+          type: "boxplot",
+        },
+      },
+      {
+        fromDatasetIndex: 1,
+        fromTransformResult: 1,
+      },
+    ],
+    xAxis: {
+      ...X_AXIS_DEFAULT,
+      type: "category",
+      splitLine: {
+        ...GRID_LINES,
+        show: false,
+      },
+      splitArea: {
+        show: true,
+      },
+      boundaryGap: true,
+      nameGap: 30,
+    },
+    yAxis: [
+      {
+        ...Y_AXIS_DEFAULT,
         type: "value",
-        name: "Instances of Fee Amount",
-        min: 0,
+        name: "Fee (MINA)",
+      },
+      {
+        ...Y_AXIS_DEFAULT,
+        type: "value",
+        name: "Outliers (MINA)",
+        splitLine: {
+          ...GRID_LINES,
+          show: false,
+        },
       },
     ],
     series: [
       {
-        name: "Instances of fee amount",
-        data: counts,
-        type: "scatter",
+        name: "boxplot",
+        type: "boxplot",
+        datasetIndex: 1,
         tooltip: {
-          formatter: function (params) {
-            return `${params.value} instances of ${scaleMina(params.name)}`;
+          formatter: function (param) {
+            return [
+              ["max", param.data[5]],
+              ["Q3", param.data[4]],
+              ["median", param.data[3]],
+              ["Q1", param.data[2]],
+              ["min", param.data[1]],
+            ]
+              .map(([a, b]) => `<strong>${a}</strong>: ${b.toFixed(3)} MINA`)
+              .join("</br>");
           },
         },
-        label: {
-          show: true,
-          position: "right",
+      },
+      {
+        name: "deviations",
+        type: "scatter",
+        symbolSize: 8,
+        datasetIndex: 2,
+        yAxisIndex: 1,
+        tooltip: {
+          formatter: function (param) {
+            return [["Fee", param.data[1]]]
+              .map(([a, b]) => `<strong>${a}</strong>: ${b.toFixed(3)} MINA`)
+              .join("</br>");
+          },
         },
       },
     ],
@@ -467,7 +511,7 @@ setTimeout(async () => {
   renderTopSNARKEarnersChart(topSnarkEarners, topSnarkProversChart);
   renderTopSNARKWorkersChart(topSnarkEarners, topSNARKWorkersChart);
   renderSnarkJobsChart(countsByDay, snarkJobsChart);
-  renderFeeDistributionChart(feeDist, feeDistributionChart);
+  renderBoxAndWhiskerPlot(fees, feeDistributionChart);
   renderAveFeePerBlock(avgFees, heights, avgFeeChart);
   renderTotalFeesPerBlock(totalFees, heights, feePerBlockChart);
 }, 1000);
