@@ -63,7 +63,7 @@ impl TableData for Vec<Option<BlocksQueryBlocks>> {
                         get_creator_account(block),
                         format!("/addresses/accounts/{}", get_creator_account(block)),
                     ),
-                    decorate_with_mina_tag(get_coinbase(block)),
+                    decorate_with_mina_tag(strip_decimal_if_zero(get_coinbase(block))),
                     convert_to_pill(
                         get_transaction_count(block).map_or_else(String::new, |o| o.to_string()),
                         ColorVariant::Blue,
@@ -134,9 +134,9 @@ impl TableData for Vec<Option<BlocksQueryBlocksTransactionsUserCommandsExt>> {
                         format!("/addresses/accounts/{}", user_command.get_to()),
                     ),
                     convert_to_pill(format_number(user_command.get_nonce()), ColorVariant::Grey),
-                    decorate_with_mina_tag(nanomina_to_mina(
+                    decorate_with_mina_tag(strip_decimal_if_zero(nanomina_to_mina(
                         user_command.get_fee().parse::<u64>().ok().unwrap_or(0),
-                    )),
+                    ))),
                     decorate_with_mina_tag(nanomina_to_mina(
                         user_command.get_amount().parse::<u64>().ok().unwrap_or(0),
                     )),
@@ -230,7 +230,7 @@ impl TableData for Vec<Option<BlocksQueryBlocksSnarkJobs>> {
                         get_snark_prover(snark),
                         format!("/addresses/accounts/{}", get_snark_prover(snark)),
                     ),
-                    decorate_with_mina_tag(get_snark_fee(snark)),
+                    decorate_with_mina_tag(strip_decimal_if_zero(get_snark_fee(snark))),
                 ],
                 None => vec![],
             })
@@ -247,7 +247,7 @@ impl TableData for Vec<Option<BlocksQueryBlocksTransactionsFeeTransfer>> {
                         fee_transfer.get_receipient(),
                         format!("/addresses/accounts/{}", fee_transfer.get_receipient()),
                     ),
-                    decorate_with_mina_tag(fee_transfer.get_fee()),
+                    decorate_with_mina_tag(strip_decimal_if_zero(fee_transfer.get_fee())),
                     convert_to_pill(fee_transfer.get_type(), ColorVariant::Grey),
                 ],
                 None => vec![],

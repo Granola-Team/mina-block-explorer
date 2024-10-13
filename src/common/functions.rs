@@ -445,6 +445,64 @@ pub fn decorate_with_currency_tag(
     .into()
 }
 
+/// Format currency by stripping out the decimal if it is 0 and calling
+/// [format_with_commas].
+pub fn strip_decimal_if_zero(num_str: String) -> String {
+    // Check for special cases first
+    match num_str.to_lowercase().as_str() {
+        "inf" | "+inf" | "infinity" | "+infinity" => return "inf".to_string(),
+        "-inf" | "-infinity" => return "-inf".to_string(),
+        "nan" => return "NaN".to_string(),
+        _ => {}
+    }
+
+    // Remove existing commas
+    let no_commas = num_str.replace(',', "");
+
+    // Try to parse as a number
+    if let Ok(num) = no_commas.parse::<f64>() {
+        if num == 0.0 {
+            return "0".to_string();
+        }
+
+        // Split the string into integer and fractional parts
+        let parts: Vec<&str> = no_commas.split('.').collect();
+
+        match parts.as_slice() {
+            [integer] => format_with_commas(integer.parse::<i64>().unwrap()),
+            [integer, fraction] => {
+                let int_with_commas = format_with_commas(integer.parse::<i64>().unwrap());
+                let trimmed_fraction = fraction.trim_end_matches('0');
+                if trimmed_fraction.is_empty() {
+                    int_with_commas
+                } else {
+                    format!("{}.{}", int_with_commas, trimmed_fraction)
+                }
+            }
+            _ => num_str, // Should never happen for valid numbers
+        }
+    } else {
+        // If parsing fails, return the original string
+        num_str
+    }
+}
+
+/// Format [num][i64] with commas (every 3 digits).
+fn format_with_commas(num: i64) -> String {
+    use std::fmt::Write;
+
+    let mut result = String::new();
+    write!(&mut result, "{}", num).unwrap();
+    let mut formatted = String::new();
+    for (count, c) in result.chars().rev().enumerate() {
+        if count != 0 && count % 3 == 0 {
+            formatted.push(',');
+        }
+        formatted.push(c);
+    }
+    formatted.chars().rev().collect()
+}
+
 pub fn convert_to_tooltip(tooltip: String) -> HtmlElement<html::AnyElement> {
     view! {
         <span
@@ -481,6 +539,60 @@ pub fn convert_to_link(data: String, href: String) -> HtmlElement<html::AnyEleme
         </span>
     }
     .into()
+}
+
+#[cfg(test)]
+mod strip_decimal_if_zero_tests {
+    fn strip_decimal_if_zero(num_str: &str) -> String {
+        super::strip_decimal_if_zero(num_str.to_string())
+    }
+
+    #[test]
+    fn test_whole_numbers() {
+        assert_eq!(strip_decimal_if_zero("1440.0"), "1,440");
+        assert_eq!(strip_decimal_if_zero("100.0"), "100");
+        assert_eq!(strip_decimal_if_zero("1000"), "1,000");
+        assert_eq!(strip_decimal_if_zero("1000000"), "1,000,000");
+    }
+
+    #[test]
+    fn test_decimal_numbers() {
+        assert_eq!(strip_decimal_if_zero("0.54335"), "0.54335");
+        assert_eq!(strip_decimal_if_zero("3.14"), "3.14");
+        assert_eq!(strip_decimal_if_zero("0.1000000000000000"), "0.1");
+        assert_eq!(strip_decimal_if_zero("1234567.89"), "1,234,567.89");
+    }
+
+    #[test]
+    fn test_high_precision_numbers() {
+        assert_eq!(strip_decimal_if_zero("0.100000000000000000"), "0.1");
+        assert_eq!(
+            strip_decimal_if_zero("1.234567890123456789"),
+            "1.234567890123456789"
+        );
+    }
+
+    #[test]
+    fn test_numbers_with_commas() {
+        assert_eq!(strip_decimal_if_zero("1,440.0"), "1,440");
+        assert_eq!(strip_decimal_if_zero("1,000,000.0"), "1,000,000");
+        assert_eq!(strip_decimal_if_zero("1,234,567.890"), "1,234,567.89");
+    }
+
+    #[test]
+    fn test_non_numeric_strings() {
+        assert_eq!(strip_decimal_if_zero("not a number"), "not a number");
+        assert_eq!(strip_decimal_if_zero("123abc"), "123abc");
+    }
+
+    #[test]
+    fn test_edge_cases() {
+        assert_eq!(strip_decimal_if_zero("0.0"), "0");
+        assert_eq!(strip_decimal_if_zero("-0.0"), "0");
+        assert_eq!(strip_decimal_if_zero("inf"), "inf");
+        assert_eq!(strip_decimal_if_zero("-inf"), "-inf");
+        assert_eq!(strip_decimal_if_zero("NaN"), "NaN");
+    }
 }
 
 pub fn generate_random_string(len: usize) -> String {

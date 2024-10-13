@@ -222,21 +222,27 @@ pub fn BlockAnalytics(block: BlocksQueryBlocks) -> impl IntoView {
                 <AnalyticsSmContainer>
                     <AnalyticsSimpleInfo
                         label=convert_to_span("Total User Amounts Transferred".into())
-                        value=decorate_with_mina_tag(nanomina_to_mina(user_command_amount_total()))
+                        value=decorate_with_mina_tag(
+                            strip_decimal_if_zero(nanomina_to_mina(user_command_amount_total())),
+                        )
                     />
 
                 </AnalyticsSmContainer>
                 <AnalyticsSmContainer>
                     <AnalyticsSimpleInfo
                         label=convert_to_span("Total Internal Fees Transferred".into())
-                        value=decorate_with_mina_tag(get_transaction_fees(&block_sig.get()))
+                        value=decorate_with_mina_tag(
+                            strip_decimal_if_zero(get_transaction_fees(&block_sig.get())),
+                        )
                     />
                 </AnalyticsSmContainer>
                 <AnalyticsSmContainer>
                     <AnalyticsSimpleInfo
                         label=convert_to_span("Total SNARK Fees".into())
                         value=wrap_in_pill(
-                            decorate_with_mina_tag(get_snark_fees(&block_sig.get())),
+                            decorate_with_mina_tag(
+                                strip_decimal_if_zero(get_snark_fees(&block_sig.get())),
+                            ),
                             ColorVariant::Blue,
                         )
                     />
@@ -429,7 +435,9 @@ pub fn BlockSpotlight(block: BlocksQueryBlocks) -> impl IntoView {
         },
         SpotlightEntry {
             label: "Coinbase".to_string(),
-            any_el: Some(decorate_with_mina_tag(get_coinbase(&block))),
+            any_el: Some(decorate_with_mina_tag(strip_decimal_if_zero(get_coinbase(
+                &block,
+            )))),
             ..Default::default()
         },
         SpotlightEntry {
@@ -445,7 +453,9 @@ pub fn BlockSpotlight(block: BlocksQueryBlocks) -> impl IntoView {
         },
         SpotlightEntry {
             label: "SNARK Fees".to_string(),
-            any_el: Some(decorate_with_mina_tag(get_snark_fees(&block))),
+            any_el: Some(decorate_with_mina_tag(strip_decimal_if_zero(
+                get_snark_fees(&block),
+            ))),
             ..Default::default()
         },
         SpotlightEntry {
@@ -465,7 +475,9 @@ pub fn BlockSpotlight(block: BlocksQueryBlocks) -> impl IntoView {
         },
         SpotlightEntry {
             label: "Transaction Fees".to_string(),
-            any_el: Some(decorate_with_mina_tag(get_transaction_fees(&block))),
+            any_el: Some(decorate_with_mina_tag(strip_decimal_if_zero(
+                get_transaction_fees(&block),
+            ))),
             ..Default::default()
         },
         SpotlightEntry {
@@ -478,7 +490,9 @@ pub fn BlockSpotlight(block: BlocksQueryBlocks) -> impl IntoView {
         },
         SpotlightEntry {
             label: "Total MINA".to_string(),
-            any_el: Some(decorate_with_mina_tag(get_total_currency(&block))),
+            any_el: Some(decorate_with_mina_tag(strip_decimal_if_zero(
+                get_total_currency(&block),
+            ))),
             ..Default::default()
         },
         SpotlightEntry {
