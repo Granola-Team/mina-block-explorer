@@ -1,3 +1,125 @@
+function renderTopSNARKWorkersChart(dataMap, myChart) {
+  let data = Object.entries(dataMap);
+  data.sort((a, b) => b[1].count - a[1].count); // descending
+
+  data = data.slice(0, 10);
+  data.reverse();
+
+  let option;
+
+  myChart.hideLoading();
+
+  option = {
+    tooltip: { ...TOOLTIP_DEFAULT },
+    title: {
+      ...TITLE_DEFAULT,
+      text: `Top SNARK Provers`,
+    },
+    grid: { ...GRID_DEFAULT },
+    xAxis: {
+      type: "value",
+      name: "SNARKs Proved",
+      ...X_AXIS_DEFAULT,
+    },
+    yAxis: {
+      ...Y_AXIS_DEFAULT,
+      type: "category",
+      data: data.map(([prover, _count]) => prover),
+      axisLabel: {
+        ...Y_AXIS_AXIS_LABEL_DEFAULT,
+        showMinLabel: true,
+        formatter: (_, zero_based_index) => getOrdinal(10 - zero_based_index),
+      },
+      splitLine: {
+        ...GRID_LINES,
+        show: false,
+      },
+    },
+    series: [
+      {
+        ...BAR_SERIES_DEFAULT,
+        data: data.map(([_prover, data]) => data.count),
+        type: "bar",
+      },
+    ],
+  };
+
+  const PUBLIC_KEY_LEN = 55;
+  myChart.on("click", function (params) {
+    if (params.name && params.name.length == PUBLIC_KEY_LEN) {
+      window.open("/addresses/accounts/" + params.name, "_blank");
+    }
+  });
+
+  option && myChart.setOption(option);
+}
+
+function renderTopSNARKEarnersChart(dataMap, myChart) {
+  let data = Object.entries(dataMap);
+  data.sort((a, b) => b[1].totalFees - a[1].totalFees); // descending
+
+  data = data.slice(0, 10);
+  data.reverse();
+  data = data.map(([prover, data]) => [
+    prover,
+    {
+      ...data,
+      totalFees: data.totalFees / 1e9, // nanomina to mina conversion
+    },
+  ]);
+
+  let option;
+
+  myChart.hideLoading();
+
+  option = {
+    tooltip: { ...TOOLTIP_DEFAULT },
+    title: {
+      ...TITLE_DEFAULT,
+      text: `Top SNARK Earners`,
+    },
+    grid: { ...GRID_DEFAULT },
+    xAxis: {
+      type: "value",
+      name: "Earned (Mina)",
+      ...X_AXIS_DEFAULT,
+    },
+    yAxis: {
+      ...Y_AXIS_DEFAULT,
+      type: "category",
+      data: data.map(([prover, _data]) => prover),
+      axisLabel: {
+        ...Y_AXIS_AXIS_LABEL_DEFAULT,
+        showMinLabel: true,
+        formatter: (_, zero_based_index) => getOrdinal(10 - zero_based_index),
+      },
+      splitLine: {
+        ...GRID_LINES,
+        show: false,
+      },
+    },
+    series: [
+      {
+        ...BAR_SERIES_DEFAULT,
+        data: data.map(([_prover, data]) => data.totalFees),
+        type: "bar",
+        tooltip: {
+          valueFormatter: (v) => scaleMina(v * 1e9), //scale mina down to nanomina,
+        },
+      },
+    ],
+  };
+
+  const PUBLIC_KEY_LEN = 55;
+  myChart.on("click", function (params) {
+    if (params.name && params.name.length == PUBLIC_KEY_LEN) {
+      window.open("/addresses/accounts/" + params.name, "_blank");
+    }
+  });
+
+  option && myChart.setOption(option);
+}
+
 function renderSnarkJobsChart(data, myChart) {
   let dates = Object.keys(data)
     .map(unixTimestampToDateString)
@@ -215,18 +337,29 @@ setTimeout(async () => {
   let snarkJobsChart = echarts.init(
     document.getElementById("snark-jobs-count"),
   );
-  [avgFeeChart, feePerBlockChart, feeDistributionChart, snarkJobsChart].forEach(
-    (chart) => {
-      window.addEventListener("resize", function () {
-        chart.resize();
-      });
-      chart.showLoading({
-        text: "Loading...", // Display text with the spinner
-        color: "#E39844", // Spinner color
-        zlevel: 0,
-      });
-    },
+  let topSnarkProversChart = echarts.init(
+    document.getElementById("top-snark-provers"),
   );
+  let topSNARKWorkersChart = echarts.init(
+    document.getElementById("top-snark-workers"),
+  );
+  [
+    avgFeeChart,
+    feePerBlockChart,
+    feeDistributionChart,
+    snarkJobsChart,
+    topSnarkProversChart,
+    topSNARKWorkersChart,
+  ].forEach((chart) => {
+    window.addEventListener("resize", function () {
+      chart.resize();
+    });
+    chart.showLoading({
+      text: "Loading...", // Display text with the spinner
+      color: "#E39844", // Spinner color
+      zlevel: 0,
+    });
+  });
 
   let response = await fetch(config.graphql_endpoint, {
     method: "POST",
@@ -239,6 +372,7 @@ setTimeout(async () => {
           fee
           blockHeight
           dateTime
+          prover
         }
       }`,
       variables: {
@@ -258,6 +392,18 @@ setTimeout(async () => {
   // Use reduce to aggregate transaction count and total amount per day
   const data = jsonResp.data.snarks.reduce((acc, snark) => {
     let key = snark.blockHeight;
+    if (!acc[key]) {
+      acc[key] = { count: 0, totalFees: 0 };
+    }
+
+    // Increment count and add to total amount
+    acc[key].count += 1;
+    acc[key].totalFees += snark.fee;
+
+    return acc;
+  }, {});
+  const topSnarkEarners = jsonResp.data.snarks.reduce((acc, snark) => {
+    let key = snark.prover;
     if (!acc[key]) {
       acc[key] = { count: 0, totalFees: 0 };
     }
@@ -317,6 +463,9 @@ setTimeout(async () => {
     .parentElement.querySelector(".subtext").innerHTML = `in ${unit}`;
 
   delete feeDist["0"];
+
+  renderTopSNARKEarnersChart(topSnarkEarners, topSnarkProversChart);
+  renderTopSNARKWorkersChart(topSnarkEarners, topSNARKWorkersChart);
   renderSnarkJobsChart(countsByDay, snarkJobsChart);
   renderFeeDistributionChart(feeDist, feeDistributionChart);
   renderAveFeePerBlock(avgFees, heights, avgFeeChart);

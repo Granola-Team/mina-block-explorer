@@ -18,6 +18,8 @@ suite(["@tier2"], "chart", () => {
         "#fees-per-block",
         "#fee-distribution",
         "#snark-jobs-count",
+        "#top-snark-provers",
+        "#top-snark-workers",
       ],
     },
   ];

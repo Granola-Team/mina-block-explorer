@@ -133,6 +133,12 @@ pub fn SnarksAnalyticsPage() -> impl IntoView {
                             <AnalyticsLgContainer>
                                 <div id="fees-per-block" class="w-full h-96"></div>
                             </AnalyticsLgContainer>
+                            <AnalyticsLgContainer>
+                                <div id="top-snark-provers" class="w-full h-96"></div>
+                            </AnalyticsLgContainer>
+                            <AnalyticsLgContainer>
+                                <div id="top-snark-workers" class="w-full h-96"></div>
+                            </AnalyticsLgContainer>
                         }
                     }}
 
