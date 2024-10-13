@@ -88,10 +88,7 @@ pub fn SnarksAnalyticsPage() -> impl IntoView {
                         blockheight_lte_sig.get();
                         blockheight_gte_sig.get();
                         view! {
-                            <script
-                                src="/scripts/analytics/avg-snark-fee-per-block.js"
-                                defer=true
-                            ></script>
+                            <script src="/scripts/analytics/snarks.js" defer=true></script>
                             <AnalyticsSmContainer>
                                 <AnalyticsSimpleInfo
                                     label=convert_to_span("Fee-free SNARK work".into())
