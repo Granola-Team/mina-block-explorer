@@ -8,7 +8,7 @@ impl TableData for Vec<Option<ZkAppData>> {
             .map(|opt_app| match opt_app {
                 Some(zk_app) => vec![
                     convert_to_link(zk_app.validator_pk.to_string(), "#".to_string()),
-                    decorate_with_mina_tag(zk_app.balance.to_string()),
+                    decorate_with_mina_tag(strip_decimal_if_zero(zk_app.balance.to_string())),
                     convert_to_pill(format_number(zk_app.nonce.to_string()), ColorVariant::Blue),
                     convert_to_link(zk_app.delegate.to_string(), "#".to_string()),
                 ],
@@ -37,7 +37,7 @@ impl TableData for Vec<Option<ZkAppTransactionData>> {
                             .collect::<Vec<_>>(),
                     )
                     .attr("class", "block"),
-                    decorate_with_mina_tag(txn.fee.to_string()),
+                    decorate_with_mina_tag(strip_decimal_if_zero(txn.fee.to_string())),
                 ],
                 None => vec![],
             })

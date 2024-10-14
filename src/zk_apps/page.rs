@@ -46,7 +46,11 @@ pub fn ZkAppSpotlight() -> impl IntoView {
                 spotlight_items=vec![
                     SpotlightEntry {
                         label: String::from("Balance"),
-                        any_el: Some(decorate_with_mina_tag("1324.593847562".to_string())),
+                        any_el: Some(
+                            decorate_with_mina_tag(
+                                strip_decimal_if_zero("1324.593847562".to_string()),
+                            ),
+                        ),
                         ..Default::default()
                     },
                     SpotlightEntry {

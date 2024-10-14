@@ -126,7 +126,7 @@ impl TableData for Vec<Option<AccountActivityQuerySnarks>> {
                         snark.get_date_time(),
                     ),
                     convert_to_span(snark.get_prover()),
-                    decorate_with_mina_tag(snark.get_fee()),
+                    decorate_with_mina_tag(strip_decimal_if_zero(snark.get_fee())),
                 ],
                 None => vec![],
             })
@@ -214,7 +214,7 @@ impl TableData for Vec<Option<AccountActivityQueryBlocks>> {
                         block.get_date_time(),
                     ),
                     convert_to_span(block.get_creator_account()),
-                    decorate_with_mina_tag(block.get_coinbase()),
+                    decorate_with_mina_tag(strip_decimal_if_zero(block.get_coinbase())),
                     convert_to_pill(block.get_transaction_count(), ColorVariant::Blue),
                     convert_to_pill(block.get_snark_job_count(), ColorVariant::Blue),
                     convert_to_link(
@@ -331,7 +331,7 @@ impl TableData for Vec<Option<AccountActivityQueryFeetransfers>> {
                         internal_command.get_state_hash(),
                         format!("/blocks/{}", internal_command.get_state_hash()),
                     ),
-                    decorate_with_mina_tag(internal_command.get_fee()),
+                    decorate_with_mina_tag(strip_decimal_if_zero(internal_command.get_fee())),
                     convert_to_pill(internal_command.get_type(), ColorVariant::Grey),
                     convert_to_title(
                         print_time_since(&internal_command.get_block_datetime()),
