@@ -28,7 +28,7 @@ pub fn get_browser_locale() -> String {
     LANGUAGE.with(String::clone)
 }
 
-fn format_number_helper(number: &str, max_significant_digits: Option<u32>) -> String {
+pub fn format_number_helper(number: &str, max_significant_digits: Option<u32>) -> String {
     let locale_array = Array::new();
     locale_array.push(&JsValue::from_str(&get_browser_locale()));
 

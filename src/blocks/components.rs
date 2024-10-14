@@ -222,22 +222,35 @@ pub fn BlockAnalytics(block: BlocksQueryBlocks) -> impl IntoView {
                 <AnalyticsSmContainer>
                     <AnalyticsSimpleInfo
                         label=convert_to_span("Total User Amounts Transferred".into())
-                        value=decorate_with_mina_tag(nanomina_to_mina(user_command_amount_total()))
+                        subtext="In MINA"
+                        value=convert_to_span(
+                            format_number_helper(
+                                &normalize_number_format(
+                                        &nanomina_to_mina(user_command_amount_total()),
+                                    )
+                                    .ok()
+                                    .unwrap(),
+                                Some(1),
+                            ),
+                        )
                     />
 
                 </AnalyticsSmContainer>
                 <AnalyticsSmContainer>
                     <AnalyticsSimpleInfo
                         label=convert_to_span("Total Internal Fees Transferred".into())
-                        value=decorate_with_mina_tag(get_transaction_fees(&block_sig.get()))
+                        subtext="In MINA"
+                        value=convert_to_span(
+                            format_number_helper(&get_transaction_fees(&block_sig.get()), Some(5)),
+                        )
                     />
                 </AnalyticsSmContainer>
                 <AnalyticsSmContainer>
                     <AnalyticsSimpleInfo
                         label=convert_to_span("Total SNARK Fees".into())
-                        value=wrap_in_pill(
-                            decorate_with_mina_tag(get_snark_fees(&block_sig.get())),
-                            ColorVariant::Blue,
+                        subtext="In MINA"
+                        value=convert_to_span(
+                            format_number_helper(&get_snark_fees(&block_sig.get()), Some(5)),
                         )
                     />
                 </AnalyticsSmContainer>

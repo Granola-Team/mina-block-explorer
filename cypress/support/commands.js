@@ -25,6 +25,15 @@
 
 import { parseFormattedNumber } from "../e2e/helpers";
 
+Cypress.Commands.add("assertAnalyticsSimplValueEquals", (label, value) => {
+  cy.get("span")
+    .contains(label)
+    .parent()
+    .parent()
+    .siblings()
+    .should("have.text", value);
+});
+
 Cypress.Commands.add(
   "assertSortOrder",
   (
