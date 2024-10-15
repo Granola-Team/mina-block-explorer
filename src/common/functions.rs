@@ -437,7 +437,7 @@ pub fn decorate_with_currency_tag(
                 }
                     .into_view()
             } else {
-                view! { {data} }.into_view()
+                view! { "Free" }.into_view()
             }}
 
         </span>
