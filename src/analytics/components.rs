@@ -13,6 +13,16 @@ const INPUT_STYLES: &str =
     "mr-4 h-8 pl-4 text-sm box-border border-[1px] border-slate-300 rounded-md";
 
 #[component]
+pub fn CacheBustScript(
+    #[prop(into)] src: String,
+    #[prop(optional, default = false)] defer: bool,
+) -> impl IntoView {
+    view! {
+        <script src=format!("{}?v={}", src, get_unix_timestamp().to_string()) defer=defer></script>
+    }
+}
+
+#[component]
 pub fn AnalyticsFilters(#[prop(optional, default = false)] by_block: bool) -> impl IntoView {
     let input_blockheight_gte: NodeRef<html::Input> = create_node_ref();
     let input_blockheight_lte: NodeRef<html::Input> = create_node_ref();

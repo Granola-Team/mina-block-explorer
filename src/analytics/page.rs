@@ -18,7 +18,7 @@ pub fn BlocksAnalyticsPage() -> impl IntoView {
                         blockheight_lte_sig.get();
                         blockheight_gte_sig.get();
                         view! {
-                            <script src="/scripts/analytics/blocks.js" defer=true></script>
+                            <CacheBustScript src="/scripts/analytics/blocks.js" defer=true />
                             <AnalyticsSmContainer>
                                 <AnalyticsSimpleInfo
                                     label=convert_to_span("Canonical Blocks".into())
@@ -88,7 +88,7 @@ pub fn SnarksAnalyticsPage() -> impl IntoView {
                         blockheight_lte_sig.get();
                         blockheight_gte_sig.get();
                         view! {
-                            <script src="/scripts/analytics/snarks.js" defer=true></script>
+                            <CacheBustScript src="/scripts/analytics/snarks.js" defer=true />
                             <AnalyticsSmContainer>
                                 <AnalyticsSimpleInfo
                                     label=convert_to_span("Fee-free SNARK work".into())
@@ -184,11 +184,11 @@ pub fn UserCommandsAnalyticsPage() -> impl IntoView {
                         blockheight_lte_sig.get();
                         blockheight_gte_sig.get();
                         view! {
-                            <script src="/scripts/analytics/user-commands.js" defer=true></script>
-                            <script
+                            <CacheBustScript src="/scripts/analytics/user-commands.js" defer=true />
+                            <CacheBustScript
                                 src="/scripts/analytics/internal-commands.js"
                                 defer=true
-                            ></script>
+                            />
                             <AnalyticsSmContainer>
                                 <AnalyticsSimpleInfo
                                     label=convert_to_span("Total Transferred".into())

@@ -1022,3 +1022,10 @@ mod validate_block_height_range_tests {
         assert_eq!(validate_block_height_range(Some(50), Some(100)), Ok(()));
     }
 }
+
+#[wasm_bindgen(
+    inline_js = "export function get_unix_timestamp() { return Math.floor(Date.now() / 1000); }"
+)]
+extern "C" {
+    pub fn get_unix_timestamp() -> f64;
+}
