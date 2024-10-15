@@ -14,10 +14,10 @@ const INPUT_STYLES: &str =
 
 #[component]
 pub fn AnalyticsFilters(#[prop(optional, default = false)] by_block: bool) -> impl IntoView {
-    let (blockheight_lte_query_input_sig, set_blockheight_lte_query_input) =
-        create_signal::<Option<u64>>(None);
-    let (blockheight_gte_query_input_sig, set_blockheight_gte_query_input) =
-        create_signal::<Option<u64>>(None);
+    let input_blockheight_gte: NodeRef<html::Input> = create_node_ref();
+    let input_blockheight_lte: NodeRef<html::Input> = create_node_ref();
+    let (blockheight_gte_sig, _) = create_query_signal::<u64>("q-blockheight-gte");
+    let (blockheight_lte_sig, _) = create_query_signal::<u64>("q-blockheight-lte");
     let (validation_message_sig, set_validation_message) = create_signal::<Option<&str>>(None);
     let navigate = use_navigate();
     let nav_clone = navigate.clone();
@@ -28,8 +28,22 @@ pub fn AnalyticsFilters(#[prop(optional, default = false)] by_block: bool) -> im
 
     let apply = move |_| {
         by_block.then(|| {
-            let blockheight_gte_opt = blockheight_gte_query_input_sig.get();
-            let blockheight_lte_opt = blockheight_lte_query_input_sig.get();
+            let blockheight_gte_opt = Some(
+                input_blockheight_gte
+                    .get()
+                    .expect("<input/> should be mounted")
+                    .value(),
+            )
+            .filter(|s| !s.is_empty())
+            .and_then(|s| s.parse::<u64>().ok());
+            let blockheight_lte_opt = Some(
+                input_blockheight_lte
+                    .get()
+                    .expect("<input/> should be mounted")
+                    .value(),
+            )
+            .filter(|s| !s.is_empty())
+            .and_then(|s| s.parse::<u64>().ok());
             match validate_block_height_range(blockheight_gte_opt, blockheight_lte_opt) {
                 Err(err) => set_validation_message.set(Some(err)),
                 Ok(_) => {
@@ -52,6 +66,8 @@ pub fn AnalyticsFilters(#[prop(optional, default = false)] by_block: bool) -> im
         });
     };
 
+    let blockchain_length_opt = Some(summary_sig.get().blockchain_length).filter(|&n| n != 0);
+
     view! {
         <div class="w-full flex justify-start items-center p-2 md:p-8 md:py-2">
             <div class="w-full md:w-fit grid grid-cols-2 gap-4 md:flex md:flex-row md:justify-start md:items-baseline md:mr-4">
@@ -68,19 +84,19 @@ pub fn AnalyticsFilters(#[prop(optional, default = false)] by_block: bool) -> im
                                 id="blockheight-gte"
                                 type="number"
                                 name="blockheight-gte"
-                                on:input=move |e| {
+                                on:input=move |_| {
                                     set_validation_message.set(None);
-                                    set_blockheight_gte_query_input
-                                        .set(
-                                            Some(event_target_value(&e))
-                                                .filter(|s| !s.is_empty())
-                                                .and_then(|s| s.parse::<u64>().ok()),
-                                        );
                                 }
                                 class=INPUT_STYLES
                                 min=0
                                 step=50
                                 max=summary_sig.get().blockchain_length.to_string()
+                                value=blockheight_gte_sig
+                                    .get()
+                                    .or(blockchain_length_opt.map(|l| l - 1000))
+                                    .map(|v| v.to_string())
+                                    .unwrap_or_default()
+                                node_ref=input_blockheight_gte
                             />
                             <label
                                 for="blockheight-lte"
@@ -92,19 +108,19 @@ pub fn AnalyticsFilters(#[prop(optional, default = false)] by_block: bool) -> im
                                 id="blockheight-lte"
                                 type="number"
                                 name="blockheight-lte"
-                                on:input=move |e| {
+                                on:input=move |_| {
                                     set_validation_message.set(None);
-                                    set_blockheight_lte_query_input
-                                        .set(
-                                            Some(event_target_value(&e))
-                                                .filter(|s| !s.is_empty())
-                                                .and_then(|s| s.parse::<u64>().ok()),
-                                        );
                                 }
                                 class=INPUT_STYLES
                                 min=0
                                 step=50
                                 max=summary_sig.get().blockchain_length.to_string()
+                                value=blockheight_lte_sig
+                                    .get()
+                                    .or(blockchain_length_opt)
+                                    .map(|v| v.to_string())
+                                    .unwrap_or_default()
+                                node_ref=input_blockheight_lte
                             />
                         }
                     })} <Button text="Apply" on_click=apply class_str="col-span-2" />

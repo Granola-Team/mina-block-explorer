@@ -60,3 +60,49 @@ suite(["@tier2"], "block height filters", () => {
     }),
   );
 });
+
+suite(["@tier2"], "block height filter url params", () => {
+  let cases = [
+    {
+      url: "/analytics/blocks?q-blockheight-gte=7000",
+      expected_gte_input: 7000,
+      expected_lte_input: null,
+    },
+    {
+      url: "/analytics/blocks?q-blockheight-lte=9050",
+      expected_gte_input: null,
+      expected_lte_input: 9050,
+    },
+    {
+      url: "/analytics/blocks?q-blockheight-gte=8050&q-blockheight-lte=9050",
+      expected_gte_input: 8050,
+      expected_lte_input: 9050,
+    },
+  ];
+
+  cases.forEach(({ url, expected_gte_input, expected_lte_input }) =>
+    it(`work for ${url}`, () => {
+      cy.visit(url);
+      cy.get("label")
+        .contains("Start Block Height")
+        .next()
+        .as("start-block-height");
+      cy.get("label")
+        .contains("End Block Height")
+        .next()
+        .as("end-block-height");
+
+      if (expected_gte_input == null) {
+        cy.get("@start-block-height").should("not.have.value");
+      } else {
+        cy.get("@start-block-height").should("have.value", expected_gte_input);
+      }
+
+      if (expected_lte_input == null) {
+        cy.get("@end-block-height").should("not.have.value");
+      } else {
+        cy.get("@end-block-height").should("have.value", expected_lte_input);
+      }
+    }),
+  );
+});
