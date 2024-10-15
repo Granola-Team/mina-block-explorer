@@ -26,6 +26,7 @@ pub fn TransactionsSection() -> impl IntoView {
     let (data_sig, set_data) = create_signal(None);
     let (txn_type_qp, _) = create_query_signal::<String>(QP_TXN_TYPE);
     let (row_limit_sig, _) = create_query_signal::<u64>("row-limit");
+    let (txn_applied_sig, _) = create_query_signal::<bool>("txn-applied");
     let query_params_map = use_query_map();
     let (block_height_sig, _) = create_query_signal::<u64>(QP_HEIGHT);
     let UseIntervalReturn { counter, .. } = use_interval(LIVE_RELOAD_INTERVAL);
@@ -38,56 +39,36 @@ pub fn TransactionsSection() -> impl IntoView {
                 txn_type_qp.get(),
                 block_height_sig.get(),
                 row_limit_sig.get(),
+                txn_applied_sig.get(),
             )
         },
-        move |(_, url_query_map, txn_type, block_height, row_limit)| async move {
-            if visibility.get() == VisibilityState::Visible {
-                match txn_type {
-                    Some(ref txn_type_str) if txn_type_str == "Pending" => load_pending_txn().await,
-                    Some(ref txn_type_str) if txn_type_str == "Canonical" => {
-                        load_data(
-                            row_limit,
-                            url_query_map.get(QP_FROM).cloned(),
-                            url_query_map.get(QP_TO).cloned(),
-                            url_query_map.get(QP_TXN_HASH).cloned(),
-                            block_height,
-                            None,
-                            Some(true),
-                        )
-                        .await
-                    }
-                    Some(ref txn_type_str) if txn_type_str == "Non-Canonical" => {
-                        load_data(
-                            row_limit,
-                            url_query_map.get(QP_FROM).cloned(),
-                            url_query_map.get(QP_TO).cloned(),
-                            url_query_map.get(QP_TXN_HASH).cloned(),
-                            block_height,
-                            None,
-                            Some(false),
-                        )
-                        .await
-                    }
-                    Some(_) | None => {
-                        load_data(
-                            row_limit,
-                            url_query_map.get(QP_FROM).cloned(),
-                            url_query_map.get(QP_TO).cloned(),
-                            url_query_map.get(QP_TXN_HASH).cloned(),
-                            block_height,
-                            None,
-                            Some(true),
-                        )
-                        .await
-                    }
-                }
-            } else {
+        move |(_, url_query_map, txn_type, block_height, row_limit, txn_applied)| async move {
+            if visibility.get() != VisibilityState::Visible {
                 logging::log!("Document not visible. Data polling skipped for user commands.");
-                Ok(transactions_query::ResponseData {
+                return Ok(transactions_query::ResponseData {
                     transactions: data_sig.get().unwrap_or_default(),
                     other_transactions: vec![],
-                })
+                });
             }
+
+            let (canonical, load_fn) = match txn_type.as_deref() {
+                Some("Pending") => return load_pending_txn().await,
+                Some("Canonical") => (Some(true), load_data),
+                Some("Non-Canonical") => (Some(false), load_data),
+                _ => (Some(true), load_data),
+            };
+
+            load_fn(
+                row_limit,
+                url_query_map.get(QP_FROM).cloned(),
+                url_query_map.get(QP_TO).cloned(),
+                url_query_map.get(QP_TXN_HASH).cloned(),
+                block_height,
+                None,
+                canonical,
+                txn_applied,
+            )
+            .await
         },
     );
 
@@ -193,6 +174,14 @@ pub fn TransactionsSection() -> impl IntoView {
                             }
                         />
                     </div>
+                    <UrlParamSelectMenu
+                        id="txn-status"
+                        query_str_key="txn-applied"
+                        labels=UrlParamSelectOptions {
+                            is_boolean_option: true,
+                            cases: vec!["Applied".to_string(), "Failed".to_string()],
+                        }
+                    />
                     <UrlParamSelectMenu
                         id="canonical-selection"
                         query_str_key="txn-type"

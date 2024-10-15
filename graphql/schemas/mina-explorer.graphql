@@ -1241,6 +1241,7 @@ type BlockCreatorAccount {
 }
 
 input TransactionQueryInput {
+  isApplied: Boolean
   fee_in: [Float]
   canonical_exists: Boolean
   memo_lt: String

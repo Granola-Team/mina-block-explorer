@@ -97,6 +97,7 @@ impl Default for BlockQueryInput {
 impl Default for TransactionQueryInput {
     fn default() -> Self {
         TransactionQueryInput {
+            is_applied: None,
             from: None,
             canonical: None,
             fee_in: None,

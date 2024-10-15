@@ -29,6 +29,7 @@ pub async fn load_pending_txn() -> Result<transactions_query::ResponseData, MyEr
     }
 }
 
+#[allow(clippy::too_many_arguments)]
 pub async fn load_data(
     limit: Option<u64>,
     from_account: Option<String>,
@@ -37,11 +38,13 @@ pub async fn load_data(
     block_height: Option<u64>,
     state_hash: Option<String>,
     canonical: Option<bool>,
+    is_applied: Option<bool>,
 ) -> Result<transactions_query::ResponseData, MyError> {
     let variables = transactions_query::Variables {
         sort_by: transactions_query::TransactionSortByInput::BLOCKHEIGHT_DESC,
         limit: limit.map_or(Some(25i64), |l| Some(l as i64)),
         txn_query: transactions_query::TransactionQueryInput {
+            is_applied,
             from: from_account,
             to: to_account,
             hash: txn_hash.clone(),

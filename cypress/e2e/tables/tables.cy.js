@@ -237,6 +237,33 @@ let test_suite_data = [
           cy.assertRowLimitWorks("User Commands", l);
         });
       },
+      () => {
+        cy.get("select#txn-status").as("txn-applied");
+        cy.get("select#canonical-selection").as("canonical");
+        ["Failed", "Applied"].forEach((txnApplied) => {
+          ["Non-Canonical", "Canonical"].forEach((canonical) => {
+            cy.get("@txn-applied")
+              .select(txnApplied)
+              .should("have.value", txnApplied);
+            cy.get("@canonical")
+              .select(canonical)
+              .should("have.value", canonical);
+            cy.intercept("POST", "/graphql").as("graphql");
+            cy.wait("@graphql").then(() => {
+              cy.assertForEachColumnValue("User Commands", "Status", (text) => {
+                expect(text).to.be.eq(txnApplied);
+              });
+              cy.clickLinkInTable(0, "Txn Hash", "User Commands");
+              cy.testSpotlightValue("Status", txnApplied);
+              cy.testSpotlightValue(
+                "Canonical",
+                "" + (canonical === "Canonical"),
+              );
+              cy.go("back");
+            });
+          });
+        });
+      },
     ],
   },
   {

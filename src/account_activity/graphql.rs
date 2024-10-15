@@ -393,6 +393,7 @@ impl Default for SnarkQueryInput {
 impl Default for TransactionQueryInput {
     fn default() -> Self {
         TransactionQueryInput {
+            is_applied: None,
             fee_in: None,
             canonical_exists: None,
             memo_lt: None,

@@ -60,6 +60,7 @@ pub fn CommandSpotlightPage() -> impl IntoView {
                 None,
                 state_hash,
                 None,
+                None,
             )
             .await
         },
