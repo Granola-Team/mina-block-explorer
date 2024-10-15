@@ -257,6 +257,14 @@ pub fn ZkAppTransactionsPage() -> impl IntoView {
             column: "Delegate".to_string(),
             ..Default::default()
         },
+        TableColumn {
+            column: "Counterparties".to_string(),
+            ..Default::default()
+        },
+        TableColumn {
+            column: "Fee".to_string(),
+            ..Default::default()
+        },
     ];
     view! {
         <Title text="Commands | ZK Apps" />

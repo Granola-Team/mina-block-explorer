@@ -37,7 +37,7 @@ impl TableData for Vec<Option<ZkAppTransactionData>> {
                             .collect::<Vec<_>>(),
                     )
                     .attr("class", "block"),
-                    decorate_with_mina_tag(txn.fee.to_string()),
+                    convert_to_span(format_number_for_html(&txn.fee.to_string(), 1)),
                 ],
                 None => vec![],
             })
