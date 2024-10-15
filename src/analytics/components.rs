@@ -81,6 +81,7 @@ pub fn AnalyticsFilters(#[prop(optional, default = false)] by_block: bool) -> im
                                 min=0
                                 step=50
                                 max=summary_sig.get().blockchain_length.to_string()
+                                value=(summary_sig.get().blockchain_length - 1000).to_string()
                             />
                             <label
                                 for="blockheight-lte"
@@ -105,6 +106,7 @@ pub fn AnalyticsFilters(#[prop(optional, default = false)] by_block: bool) -> im
                                 min=0
                                 step=50
                                 max=summary_sig.get().blockchain_length.to_string()
+                                value=summary_sig.get().blockchain_length.to_string()
                             />
                         }
                     })} <Button text="Apply" on_click=apply class_str="col-span-2" />
