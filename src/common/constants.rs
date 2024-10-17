@@ -22,3 +22,5 @@ pub const LHS_MAX_SPACE_FEES: usize = 2;
 pub const TXN_STATUS_APPLIED: &str = "Applied";
 pub const TXN_STATUS_FAILED: &str = "Failed";
 pub const DEFAULT_INPUT_STYLES: &str = "block h-6 text-base text-sm font-normal font-mono p-2 text-right border rounded-sm border-slate-400 focus:border-granola-orange";
+pub const QUERY_PARAM_BLOCKHEIGHT_GTE: &str = "q-blockheight-gte";
+pub const QUERY_PARAM_BLOCKHEIGHT_LTE: &str = "q-blockheight-lte";

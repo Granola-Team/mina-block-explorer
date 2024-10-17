@@ -26,8 +26,8 @@ pub fn CacheBustScript(
 pub fn AnalyticsFilters(#[prop(optional, default = false)] by_block: bool) -> impl IntoView {
     let input_blockheight_gte: NodeRef<html::Input> = create_node_ref();
     let input_blockheight_lte: NodeRef<html::Input> = create_node_ref();
-    let (blockheight_gte_sig, _) = create_query_signal::<u64>("q-blockheight-gte");
-    let (blockheight_lte_sig, _) = create_query_signal::<u64>("q-blockheight-lte");
+    let (blockheight_gte_sig, _) = create_query_signal::<u64>(QUERY_PARAM_BLOCKHEIGHT_GTE);
+    let (blockheight_lte_sig, _) = create_query_signal::<u64>(QUERY_PARAM_BLOCKHEIGHT_LTE);
     let (validation_message_sig, set_validation_message) = create_signal::<Option<&str>>(None);
     let navigate = use_navigate();
     let nav_clone = navigate.clone();
@@ -60,12 +60,16 @@ pub fn AnalyticsFilters(#[prop(optional, default = false)] by_block: bool) -> im
                     set_validation_message.set(None);
                     let mut q_params = ParamsMap::new();
                     if let Some(blockheight_gte) = blockheight_gte_opt {
-                        q_params
-                            .insert("q-blockheight-gte".to_string(), blockheight_gte.to_string());
+                        q_params.insert(
+                            QUERY_PARAM_BLOCKHEIGHT_GTE.to_string(),
+                            blockheight_gte.to_string(),
+                        );
                     }
                     if let Some(blockheight_lte) = blockheight_lte_opt {
-                        q_params
-                            .insert("q-blockheight-lte".to_string(), blockheight_lte.to_string());
+                        q_params.insert(
+                            QUERY_PARAM_BLOCKHEIGHT_LTE.to_string(),
+                            blockheight_lte.to_string(),
+                        );
                     }
                     nav_clone(
                         &format!("{}{}", location.pathname.get(), q_params.to_query_string()),
@@ -374,8 +378,8 @@ pub fn StakerLeaderboard() -> impl IntoView {
 
 #[component]
 pub fn SnarkFees() -> impl IntoView {
-    let (blockheight_lte_sig, _) = create_query_signal::<u64>("q-blockheight-lte");
-    let (blockheight_gte_sig, _) = create_query_signal::<u64>("q-blockheight-gte");
+    let (blockheight_lte_sig, _) = create_query_signal::<u64>(QUERY_PARAM_BLOCKHEIGHT_LTE);
+    let (blockheight_gte_sig, _) = create_query_signal::<u64>(QUERY_PARAM_BLOCKHEIGHT_GTE);
     let resource = create_resource(
         move || (blockheight_lte_sig.get(), blockheight_gte_sig.get()),
         move |(blockheight_lte, blockheight_gte)| async move {

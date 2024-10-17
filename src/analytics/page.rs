@@ -1,13 +1,13 @@
 use super::components::*;
-use crate::common::{components::*, functions::*, models::*};
+use crate::common::{components::*, constants::*, functions::*, models::*};
 use leptos::*;
 use leptos_meta::*;
 use leptos_router::create_query_signal;
 
 #[component]
 pub fn BlocksAnalyticsPage() -> impl IntoView {
-    let (blockheight_lte_sig, _) = create_query_signal::<u64>("q-blockheight-lte");
-    let (blockheight_gte_sig, _) = create_query_signal::<u64>("q-blockheight-gte");
+    let (blockheight_lte_sig, _) = create_query_signal::<u64>(QUERY_PARAM_BLOCKHEIGHT_LTE);
+    let (blockheight_gte_sig, _) = create_query_signal::<u64>(QUERY_PARAM_BLOCKHEIGHT_GTE);
     view! {
         <Title text="Analytics | Blocks" />
         <PageContainer>
@@ -76,8 +76,8 @@ pub fn BlocksAnalyticsPage() -> impl IntoView {
 
 #[component]
 pub fn SnarksAnalyticsPage() -> impl IntoView {
-    let (blockheight_lte_sig, _) = create_query_signal::<u64>("q-blockheight-lte");
-    let (blockheight_gte_sig, _) = create_query_signal::<u64>("q-blockheight-gte");
+    let (blockheight_lte_sig, _) = create_query_signal::<u64>(QUERY_PARAM_BLOCKHEIGHT_LTE);
+    let (blockheight_gte_sig, _) = create_query_signal::<u64>(QUERY_PARAM_BLOCKHEIGHT_GTE);
     view! {
         <Title text="Analytics | SNARKs" />
         <PageContainer>
@@ -172,8 +172,8 @@ pub fn StakerLeaderboardPage() -> impl IntoView {
 
 #[component]
 pub fn UserCommandsAnalyticsPage() -> impl IntoView {
-    let (blockheight_lte_sig, _) = create_query_signal::<u64>("q-blockheight-lte");
-    let (blockheight_gte_sig, _) = create_query_signal::<u64>("q-blockheight-gte");
+    let (blockheight_lte_sig, _) = create_query_signal::<u64>(QUERY_PARAM_BLOCKHEIGHT_LTE);
+    let (blockheight_gte_sig, _) = create_query_signal::<u64>(QUERY_PARAM_BLOCKHEIGHT_GTE);
     view! {
         <Title text="Analytics | User Commands" />
         <PageContainer>
