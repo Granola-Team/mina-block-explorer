@@ -36,18 +36,13 @@ pub fn BlocksAnalyticsPage() -> impl IntoView {
                             </AnalyticsSmContainer>
                             <AnalyticsSmContainer>
                                 <AnalyticsSimpleInfo
-                                    label=convert_to_span("# of supercharged blocks".into())
-                                    value=convert_to_span("...".to_string())
-                                    id="supercharged-blocks-count"
-                                />
-                            </AnalyticsSmContainer>
-
-                            <AnalyticsSmContainer>
-                                <AnalyticsSimpleInfo
                                     label=convert_to_span("# of unique block producers".into())
                                     value=convert_to_span("...".to_string())
                                     id="unique-block-producers-count"
                                 />
+                            </AnalyticsSmContainer>
+                            <AnalyticsSmContainer>
+                                <span></span>
                             </AnalyticsSmContainer>
                             <AnalyticsXLContainer>
                                 <div id="tree-container" class="w-full h-72 overflow-x-auto">
