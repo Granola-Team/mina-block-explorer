@@ -33,7 +33,10 @@ deploy-mina-indexer:
 shutdown-mina-indexer:
   @echo "--- Shutting down mina-indexer"
   ruby ops/validate-env.rb VOLUMES_DIR
-  cd lib/mina-indexer && nix develop --command just shutdown
+  $VOLUMES_DIR/mina-indexer-prod/bin/mina-indexer-{{INDEXER_VERSION}} \
+    --socket $VOLUMES_DIR/mina-indexer-prod/mina-indexer-{{INDEXER_VERSION}}.sock \
+    server \
+    shutdown
 
 # Remove build and test artifacts
 clean:
