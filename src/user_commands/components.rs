@@ -146,7 +146,27 @@ pub fn TransactionsSection() -> impl IntoView {
             metadata=Signal::derive(move || {
                 Some(TableMetadata {
                     total_records: u64::try_from(summary_sig.get().total_num_user_commands).ok(),
-                    available_records: None,
+                    available_records: match (txn_type_qp.get(), txn_applied_sig.get()) {
+                        (Some(tt), Some(true)) if &tt == "Canonical" =>
+                            Some(summary_sig.get().total_num_applied_canonical_user_commands),
+
+                        (None, Some(true)) | (None, None) =>
+                            Some(summary_sig.get().total_num_applied_canonical_user_commands),
+
+                        (Some(tt), Some(false)) if &tt == "Canonical" =>
+                            Some(summary_sig.get().total_num_failed_canonical_user_commands),
+
+                        (None, Some(false)) =>
+                            Some(summary_sig.get().total_num_failed_canonical_user_commands),
+
+                        (Some(tt), Some(true)) if &tt == "Non-Canonical" =>
+                            Some(summary_sig.get().total_num_applied_user_commands - summary_sig.get().total_num_applied_canonical_user_commands),
+
+                        (Some(tt), Some(false)) if &tt == "Non-Canonical" =>
+                            Some(summary_sig.get().total_num_failed_user_commands - summary_sig.get().total_num_failed_canonical_user_commands),
+
+                        _ => None,
+                    },
                     displayed_records: u64::try_from(
                             data_sig.get().map(|d| d.len()).unwrap_or_default(),
                         )
