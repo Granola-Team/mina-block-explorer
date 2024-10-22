@@ -114,7 +114,21 @@ fn SnarksPageContents() -> impl IntoView {
             metadata=Signal::derive(move || {
                 Some(TableMetadata {
                     total_records: u64::try_from(summary_sig.get().total_num_snarks).ok(),
-                    available_records: None,
+                    available_records: canonical_qp
+                        .get()
+                        .and_then(|c| {
+                            Some(
+                                if c {
+                                    summary_sig.get().total_num_canonical_snarks
+                                } else {
+                                    (summary_sig.get().total_num_snarks as u64)
+                                        .saturating_sub(
+                                            summary_sig.get().total_num_canonical_snarks,
+                                        )
+                                },
+                            )
+                        })
+                        .or_else(|| Some(summary_sig.get().total_num_canonical_snarks)),
                     displayed_records: u64::try_from(
                             data_sig.get().map(|d| d.len()).unwrap_or_default(),
                         )
