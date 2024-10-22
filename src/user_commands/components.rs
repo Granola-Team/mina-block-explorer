@@ -14,9 +14,50 @@ use web_sys::VisibilityState;
 
 const QP_TXN_HASH: &str = "q-txn-hash";
 const QP_TXN_TYPE: &str = "txn-type";
+const QP_TXN_APPLIED: &str = "txn-applied";
+const QP_ROW_LIMIT: &str = "row-limit";
 const QP_HEIGHT: &str = "q-height";
 const QP_FROM: &str = "q-from";
 const QP_TO: &str = "q-to";
+
+fn get_available_records(
+    summary: BlockchainSummary,
+    canonical_opt: Option<String>,
+    applied_opt: Option<bool>,
+    other_qps: bool,
+) -> Option<u64> {
+    if other_qps {
+        None
+    } else {
+        match (canonical_opt, applied_opt) {
+            (Some(tt), Some(true)) if &tt == "Canonical" => {
+                Some(summary.total_num_applied_canonical_user_commands)
+            }
+
+            (None, Some(true)) | (None, None) => {
+                Some(summary.total_num_applied_canonical_user_commands)
+            }
+
+            (Some(tt), Some(false)) if &tt == "Canonical" => {
+                Some(summary.total_num_failed_canonical_user_commands)
+            }
+
+            (None, Some(false)) => Some(summary.total_num_failed_canonical_user_commands),
+
+            (Some(tt), Some(true)) if &tt == "Non-Canonical" => Some(
+                summary.total_num_applied_user_commands
+                    - summary.total_num_applied_canonical_user_commands,
+            ),
+
+            (Some(tt), Some(false)) if &tt == "Non-Canonical" => Some(
+                summary.total_num_failed_user_commands
+                    - summary.total_num_failed_canonical_user_commands,
+            ),
+
+            _ => None,
+        }
+    }
+}
 
 #[component]
 pub fn TransactionsSection() -> impl IntoView {
@@ -25,8 +66,8 @@ pub fn TransactionsSection() -> impl IntoView {
     let visibility = use_document_visibility();
     let (data_sig, set_data) = create_signal(None);
     let (txn_type_qp, _) = create_query_signal::<String>(QP_TXN_TYPE);
-    let (row_limit_sig, _) = create_query_signal::<u64>("row-limit");
-    let (txn_applied_sig, _) = create_query_signal::<bool>("txn-applied");
+    let (row_limit_sig, _) = create_query_signal::<u64>(QP_ROW_LIMIT);
+    let (txn_applied_sig, _) = create_query_signal::<bool>(QP_TXN_APPLIED);
     let query_params_map = use_query_map();
     let (block_height_sig, _) = create_query_signal::<u64>(QP_HEIGHT);
     let UseIntervalReturn { counter, .. } = use_interval(LIVE_RELOAD_INTERVAL);
@@ -144,29 +185,18 @@ pub fn TransactionsSection() -> impl IntoView {
             table_columns
             data_sig
             metadata=Signal::derive(move || {
+                let mut otherQps = query_params_map.get();
+                otherQps.remove(QP_TXN_TYPE);
+                otherQps.remove(QP_TXN_APPLIED);
+                otherQps.remove(QP_ROW_LIMIT);
                 Some(TableMetadata {
                     total_records: u64::try_from(summary_sig.get().total_num_user_commands).ok(),
-                    available_records: match (txn_type_qp.get(), txn_applied_sig.get()) {
-                        (Some(tt), Some(true)) if &tt == "Canonical" =>
-                            Some(summary_sig.get().total_num_applied_canonical_user_commands),
-
-                        (None, Some(true)) | (None, None) =>
-                            Some(summary_sig.get().total_num_applied_canonical_user_commands),
-
-                        (Some(tt), Some(false)) if &tt == "Canonical" =>
-                            Some(summary_sig.get().total_num_failed_canonical_user_commands),
-
-                        (None, Some(false)) =>
-                            Some(summary_sig.get().total_num_failed_canonical_user_commands),
-
-                        (Some(tt), Some(true)) if &tt == "Non-Canonical" =>
-                            Some(summary_sig.get().total_num_applied_user_commands - summary_sig.get().total_num_applied_canonical_user_commands),
-
-                        (Some(tt), Some(false)) if &tt == "Non-Canonical" =>
-                            Some(summary_sig.get().total_num_failed_user_commands - summary_sig.get().total_num_failed_canonical_user_commands),
-
-                        _ => None,
-                    },
+                    available_records: get_available_records(
+                        summary_sig.get(),
+                        txn_type_qp.get(),
+                        txn_applied_sig.get(),
+                        !otherQps.to_query_string().is_empty(),
+                    ),
                     displayed_records: u64::try_from(
                             data_sig.get().map(|d| d.len()).unwrap_or_default(),
                         )
@@ -217,5 +247,127 @@ pub fn TransactionsSection() -> impl IntoView {
                 }
             }
         />
+    }
+}
+
+#[cfg(test)]
+mod get_available_records_tests {
+    use super::*;
+
+    #[test]
+    fn test_canonical_applied_true() {
+        let summary = BlockchainSummary {
+            total_num_applied_canonical_user_commands: 100,
+            total_num_failed_canonical_user_commands: 50,
+            total_num_applied_user_commands: 200,
+            total_num_failed_user_commands: 75,
+            ..Default::default()
+        };
+        let result =
+            get_available_records(summary, Some("Canonical".to_string()), Some(true), false);
+        assert_eq!(result, Some(100));
+    }
+
+    #[test]
+    fn test_non_canonical_applied_true() {
+        let summary = BlockchainSummary {
+            total_num_applied_canonical_user_commands: 100,
+            total_num_failed_canonical_user_commands: 50,
+            total_num_applied_user_commands: 200,
+            total_num_failed_user_commands: 75,
+            ..Default::default()
+        };
+        let result = get_available_records(
+            summary,
+            Some("Non-Canonical".to_string()),
+            Some(true),
+            false,
+        );
+        assert_eq!(result, Some(100)); // 200 - 100
+    }
+
+    #[test]
+    fn test_canonical_applied_false() {
+        let summary = BlockchainSummary {
+            total_num_applied_canonical_user_commands: 100,
+            total_num_failed_canonical_user_commands: 50,
+            total_num_applied_user_commands: 200,
+            total_num_failed_user_commands: 75,
+            ..Default::default()
+        };
+        let result =
+            get_available_records(summary, Some("Canonical".to_string()), Some(false), false);
+        assert_eq!(result, Some(50));
+    }
+
+    #[test]
+    fn test_non_canonical_applied_false() {
+        let summary = BlockchainSummary {
+            total_num_applied_canonical_user_commands: 100,
+            total_num_failed_canonical_user_commands: 50,
+            total_num_applied_user_commands: 200,
+            total_num_failed_user_commands: 75,
+            ..Default::default()
+        };
+        let result = get_available_records(
+            summary,
+            Some("Non-Canonical".to_string()),
+            Some(false),
+            false,
+        );
+        assert_eq!(result, Some(25)); // 75 - 50
+    }
+
+    #[test]
+    fn test_none_applied_true() {
+        let summary = BlockchainSummary {
+            total_num_applied_canonical_user_commands: 100,
+            total_num_failed_canonical_user_commands: 50,
+            total_num_applied_user_commands: 200,
+            total_num_failed_user_commands: 75,
+            ..Default::default()
+        };
+        let result = get_available_records(summary, None, Some(true), false);
+        assert_eq!(result, Some(100));
+    }
+
+    #[test]
+    fn test_none_applied_false() {
+        let summary = BlockchainSummary {
+            total_num_applied_canonical_user_commands: 100,
+            total_num_failed_canonical_user_commands: 50,
+            total_num_applied_user_commands: 200,
+            total_num_failed_user_commands: 75,
+            ..Default::default()
+        };
+        let result = get_available_records(summary, None, Some(false), false);
+        assert_eq!(result, Some(50));
+    }
+
+    #[test]
+    fn test_none_none() {
+        let summary = BlockchainSummary {
+            total_num_applied_canonical_user_commands: 100,
+            total_num_failed_canonical_user_commands: 50,
+            total_num_applied_user_commands: 200,
+            total_num_failed_user_commands: 75,
+            ..Default::default()
+        };
+        let result = get_available_records(summary, None, None, false);
+        assert_eq!(result, Some(100));
+    }
+
+    #[test]
+    fn test_other_qps_true() {
+        let summary = BlockchainSummary {
+            total_num_applied_canonical_user_commands: 100,
+            total_num_failed_canonical_user_commands: 50,
+            total_num_applied_user_commands: 200,
+            total_num_failed_user_commands: 75,
+            ..Default::default()
+        };
+        let result =
+            get_available_records(summary, Some("Canonical".to_string()), Some(true), true);
+        assert_eq!(result, None);
     }
 }
