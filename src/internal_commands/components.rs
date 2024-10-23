@@ -96,14 +96,17 @@ pub fn InternalCommandsTab() -> impl IntoView {
                         total_records: u64::try_from(summary_sig.get().total_num_internal_commands)
                             .ok(),
                         available_records: canonical_sig
-                            .get().map(|c| if c {
-                                        summary_sig.get().total_num_canonical_internal_commands
-                                    } else {
-                                        (summary_sig.get().total_num_internal_commands as u64)
-                                            .saturating_sub(
-                                                summary_sig.get().total_num_canonical_internal_commands,
-                                            )
-                                    })
+                            .get()
+                            .map(|c| {
+                                if c {
+                                    summary_sig.get().total_num_canonical_internal_commands
+                                } else {
+                                    (summary_sig.get().total_num_internal_commands as u64)
+                                        .saturating_sub(
+                                            summary_sig.get().total_num_canonical_internal_commands,
+                                        )
+                                }
+                            })
                             .or_else(|| Some(
                                 summary_sig.get().total_num_canonical_internal_commands,
                             )),
