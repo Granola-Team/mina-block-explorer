@@ -61,10 +61,6 @@ pub fn StakesPage() -> impl IntoView {
     let (summary_sig, _, _) =
         use_local_storage::<BlockchainSummary, JsonSerdeCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
 
-    if epoch_sig.0.get_untracked().is_none() {
-        epoch_sig.1.set(Some(summary_sig.get().epoch));
-    }
-
     let resource = create_resource(
         move || epoch_sig.0.get(),
         |epoch| async move { load_epoch_summary(epoch).await },
