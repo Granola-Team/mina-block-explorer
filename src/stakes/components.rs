@@ -176,21 +176,21 @@ pub fn StakesPageContents(
                                         ],
                                     }
                                 />
-                            <EpochButton
-                                disabled=prev_epoch_sig
-                                    .get()
-                                    .map(|prev_epoch| prev_epoch == 0)
-                                    .unwrap_or_default()
-                                text="Previous"
-                                style_variant=EpochStyleVariant::Secondary
-                                epoch_target=prev_epoch_sig.get().unwrap_or_default()
-                            />
-                            <EpochButton
-                                disabled=next_epoch_opt.is_none()
-                                text="Next"
-                                style_variant=EpochStyleVariant::Primary
-                                epoch_target=next_epoch_sig.get().unwrap_or_default()
-                            />
+                                <EpochButton
+                                    disabled=prev_epoch_sig
+                                        .get()
+                                        .map(|prev_epoch| prev_epoch == 0)
+                                        .unwrap_or_default()
+                                    text="Previous"
+                                    style_variant=EpochStyleVariant::Secondary
+                                    epoch_target=prev_epoch_sig.get().unwrap_or_default()
+                                />
+                                <EpochButton
+                                    disabled=next_epoch_opt.is_none()
+                                    text="Next"
+                                    style_variant=EpochStyleVariant::Primary
+                                    epoch_target=next_epoch_sig.get().unwrap_or_default()
+                                />
                             </div>
                         }
                     }
