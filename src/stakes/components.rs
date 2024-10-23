@@ -161,7 +161,7 @@ pub fn StakesPageContents(
                     is_loading=resource.loading()
                     controls=move || {
                         view! {
-                            <div class="hidden md:flex justify-center items-center">
+                            <div class="hidden md:flex justify-center items-center space-x-4">
                                 <UrlParamSelectMenu
                                     label="Rows"
                                     id="row-limit"
@@ -176,7 +176,6 @@ pub fn StakesPageContents(
                                         ],
                                     }
                                 />
-                            </div>
                             <EpochButton
                                 disabled=prev_epoch_sig
                                     .get()
@@ -192,6 +191,7 @@ pub fn StakesPageContents(
                                 style_variant=EpochStyleVariant::Primary
                                 epoch_target=next_epoch_sig.get().unwrap_or_default()
                             />
+                            </div>
                         }
                     }
 
