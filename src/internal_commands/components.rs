@@ -118,7 +118,7 @@ pub fn InternalCommandsTab() -> impl IntoView {
                 })
 
                 is_loading=resource.loading()
-                section_heading="Internal Commands"
+                section_heading=(String::from("Internal Commands"), ().into_view())
                 controls=move || {
                     view! {
                         <div class="hidden md:flex justify-center items-center">

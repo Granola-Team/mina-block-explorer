@@ -40,13 +40,13 @@ pub fn TokensPage() -> impl IntoView {
     ];
 
     view! {
-        <Title text="Tokens | Search For Tokens" />
+        <Title text="Tokens | Search" />
         <PageContainer>
             <TableSectionTemplate
                 table_columns
                 data_sig
                 is_loading=loading_sig.into()
-                section_heading="Tokens"
+                section_heading=(String::from("Tokens"), ().into_view())
                 controls=|| ().into_view()
             />
         </PageContainer>

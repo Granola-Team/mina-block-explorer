@@ -95,7 +95,7 @@ pub fn AccountTransactionsSection(
                 })
             })
 
-            section_heading="User Commands"
+            section_heading=(String::from("User Commands"), ().into_view())
             is_loading
             controls=move || {
                 view! {
@@ -190,7 +190,7 @@ pub fn AccountInternalCommandsSection(
                 })
             })
 
-            section_heading="Internal Commands"
+            section_heading=(String::from("Internal Commands"), ().into_view())
             is_loading
             controls=move || {
                 view! {
@@ -269,7 +269,7 @@ pub fn AccountDelegationsSection(
                 })
             })
 
-            section_heading="Delegations"
+            section_heading=(String::from("Delegations"), ().into_view())
             is_loading
             controls=move || {
                 view! {
@@ -350,7 +350,7 @@ pub fn AccountOverviewSnarkJobTable(
         <TableSectionTemplate
             table_columns
             data_sig=snarks_sig
-            section_heading="SNARK Jobs"
+            section_heading=(String::from("SNARK Jobs"), ().into_view())
             metadata=Signal::derive(move || {
                 Some(TableMetadata {
                     total_records: u64::try_from(summary_sig.get().total_num_snarks).ok(),
@@ -494,7 +494,7 @@ pub fn AccountOverviewBlocksTable(
                 })
             })
 
-            section_heading="Block Production"
+            section_heading=(String::from("Block Production"), ().into_view())
             is_loading
             controls=move || {
                 view! {
