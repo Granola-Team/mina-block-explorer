@@ -154,7 +154,7 @@ pub fn TableSectionTemplate<T, F, E, S>(
     data_sig: ReadSignal<Option<T>>,
     is_loading: Signal<bool>,
     #[prop(optional)] metadata: Option<Signal<Option<TableMetadata>>>,
-    #[prop(into)] section_heading: (String, View),
+    #[prop(into)] section_heading: String,
     #[prop(optional, into)] additional_info: View,
     controls: F,
     #[prop(default = false)] half_width: bool,
@@ -439,7 +439,7 @@ pub fn EmptyTable(#[prop(into)] message: String) -> impl IntoView {
 
 #[component]
 pub fn TableSection<E, F>(
-    #[prop(into)] section_heading: (String, View),
+    #[prop(into)] section_heading: String,
     children: Children,
     #[prop(optional, into)] additional_info: View,
     metadata: Signal<Option<TableMetadata>>,
@@ -455,8 +455,7 @@ where
         <AppSection>
             <span class="w-full flex justify-between flex-wrap">
                 <div class="flex justify-start items-baseline flex-wrap">
-                    <AppHeading heading=section_heading.0 />
-                    {section_heading.1}
+                    <AppHeading heading=section_heading />
                     {move || {
                         metadata
                             .get()

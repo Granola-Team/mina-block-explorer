@@ -57,19 +57,19 @@ async fn load_epoch_summary(epoch: Option<u64>) -> Result<EpochSummaryResponse, 
 
 #[component]
 pub fn StakesPage() -> impl IntoView {
-    let epoch_sig = create_query_signal::<u64>("epoch");
+    let (epoch_sig, _) = create_query_signal::<u64>("epoch");
     let (summary_sig, _, _) =
         use_local_storage::<BlockchainSummary, JsonSerdeCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
 
     let resource = create_resource(
-        move || epoch_sig.0.get(),
+        move || epoch_sig.get(),
         |epoch| async move { load_epoch_summary(epoch).await },
     );
 
     view! {
         <Title
             text=move || {
-                if let Some(epoch) = epoch_sig.0.get() {
+                if let Some(epoch) = epoch_sig.get() {
                     format!("Epoch {}", epoch)
                 } else {
                     "Current".to_string()
@@ -82,7 +82,7 @@ pub fn StakesPage() -> impl IntoView {
             {move || {
                 view! {
                     <StakesPageContents
-                        epoch_sig=epoch_sig
+                        selected_epoch=epoch_sig.get()
                         current_epoch=summary_sig.get().epoch
                         slot_in_epoch=summary_sig.get().slot
                         total_num_accounts=Some(summary_sig.get().total_num_accounts)

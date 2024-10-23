@@ -253,10 +253,7 @@ pub fn CommandSpotlightPage() -> impl IntoView {
                                 <TableSectionTemplate
                                     table_columns
                                     data_sig=other_txns
-                                    section_heading=(
-                                        String::from("In Other Blocks"),
-                                        ().into_view(),
-                                    )
+                                    section_heading="In Other Blocks"
                                     is_loading=resource.loading()
                                     controls=|| ().into_view()
                                     half_width=true

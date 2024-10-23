@@ -5,7 +5,6 @@ use crate::{
 };
 use leptos::*;
 use leptos_router::*;
-use std::collections::HashMap;
 
 #[component]
 pub fn StakesPageContents(
@@ -13,7 +12,7 @@ pub fn StakesPageContents(
     #[prop(into)] slot_in_epoch: u64,
     #[prop(into)] epoch_num_accounts: Option<u64>,
     #[prop(into)] total_num_accounts: Option<u64>,
-    epoch_sig: (Memo<Option<u64>>, SignalSetter<Option<u64>>),
+    selected_epoch: Option<u64>,
 ) -> impl IntoView {
     fn create_table_columns(total_stake_percent_sort: AnySort) -> Vec<TableColumn<AnySort>> {
         vec![
@@ -64,7 +63,7 @@ pub fn StakesPageContents(
     }
 
     let (metadata_sig, set_metadata) = create_signal(None);
-    let header_epoch = epoch_sig.0.get().unwrap_or(current_epoch);
+    let header_epoch = selected_epoch.unwrap_or(current_epoch);
     let next_epoch = header_epoch + 1;
     let prev_epoch = header_epoch.saturating_sub(1); // prevents underflow
 
@@ -74,30 +73,9 @@ pub fn StakesPageContents(
         Some(next_epoch)
     };
     let prev_epoch_opt = Some(prev_epoch);
-    let section_heading = move || {
-        epoch_sig.0.get();
-        view! {
-            <div style="padding-left: 10px;" />
-            <ControlledInput
-                id="epoch"
-                input_type="number"
-                name="epoch"
-                disabled_sig=Signal::from(|| false)
-                value_sig=epoch_sig.0
-                setter_sig=SignalSetter::map(move |opt_str: Option<String>| {
-                    epoch_sig
-                        .1
-                        .set(opt_str.map(|v_str| v_str.parse::<u64>().ok().unwrap_or(header_epoch)))
-                })
-                number_props=HashMap::from([
-                    ("step".to_string(), "1".to_string()),
-                    ("min".to_string(), "0".to_string()),
-                    ("max".to_string(), (current_epoch + 1).to_string()),
-                ])
-            />
-        }
-    };
 
+    let section_heading = format!("Staking Ledger - Epoch {}", header_epoch);
+    let (section_heading_sig, _) = create_signal(section_heading);
     let (next_epoch_sig, _) = create_signal(next_epoch_opt);
     let (prev_epoch_sig, _) = create_signal(prev_epoch_opt);
     let (sort_dir, _) = create_query_signal::<String>("sort-dir");
@@ -110,7 +88,7 @@ pub fn StakesPageContents(
     let resource = create_resource(
         move || {
             (
-                epoch_sig.0.get(),
+                selected_epoch,
                 query_params_map.get(),
                 row_limit_sig.get(),
                 sort_dir.get(),
@@ -179,10 +157,7 @@ pub fn StakesPageContents(
                     table_columns
                     data_sig
                     metadata=metadata_sig.into()
-                    section_heading=(
-                        String::from("Staking Ledger - Epoch "),
-                        section_heading.into_view(),
-                    )
+                    section_heading=section_heading_sig.get()
                     is_loading=resource.loading()
                     controls=move || {
                         view! {
@@ -201,21 +176,21 @@ pub fn StakesPageContents(
                                         ],
                                     }
                                 />
-                                <EpochButton
-                                    disabled=prev_epoch_sig
-                                        .get()
-                                        .map(|prev_epoch| prev_epoch == 0)
-                                        .unwrap_or_default()
-                                    text="Previous"
-                                    style_variant=EpochStyleVariant::Secondary
-                                    epoch_target=prev_epoch_sig.get().unwrap_or_default()
-                                />
-                                <EpochButton
-                                    disabled=next_epoch_opt.is_none()
-                                    text="Next"
-                                    style_variant=EpochStyleVariant::Primary
-                                    epoch_target=next_epoch_sig.get().unwrap_or_default()
-                                />
+                            <EpochButton
+                                disabled=prev_epoch_sig
+                                    .get()
+                                    .map(|prev_epoch| prev_epoch == 0)
+                                    .unwrap_or_default()
+                                text="Previous"
+                                style_variant=EpochStyleVariant::Secondary
+                                epoch_target=prev_epoch_sig.get().unwrap_or_default()
+                            />
+                            <EpochButton
+                                disabled=next_epoch_opt.is_none()
+                                text="Next"
+                                style_variant=EpochStyleVariant::Primary
+                                epoch_target=next_epoch_sig.get().unwrap_or_default()
+                            />
                             </div>
                         }
                     }

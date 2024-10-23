@@ -39,10 +39,10 @@ pub fn ZkAppSpotlight() -> impl IntoView {
         },
     )]));
     view! {
-        <Title text="zkApp Spotlight" />
+        <Title text="ZK App Spotlight" />
         <PageContainer>
             <SpotlightSection
-                header="zkApp Spotlight".to_string()
+                header="ZK App Spotlight".to_string()
                 spotlight_items=vec![
                     SpotlightEntry {
                         label: String::from("Balance"),
@@ -74,7 +74,7 @@ pub fn ZkAppSpotlight() -> impl IntoView {
             </SpotlightSection>
             <TableSection
                 metadata=metadata.into()
-                section_heading=(String::from("zkApp Details"), ().into_view())
+                section_heading="ZK App Details".to_string()
                 controls=|| ().into_view()
             >
                 <SpotlightTable>
@@ -173,7 +173,7 @@ pub fn ZkAppSpotlight() -> impl IntoView {
 
                 data_sig=txn_sig
                 is_loading=loading_sig.into()
-                section_heading=(String::from("zkApp Commands"), ().into_view())
+                section_heading="zkApp Commands"
                 controls=|| ().into_view()
             />
             <TableSectionTemplate
@@ -206,7 +206,7 @@ pub fn ZkAppSpotlight() -> impl IntoView {
 
                 data_sig=fees_sig
                 is_loading=loading_sig.into()
-                section_heading=(String::from("zkApp Internal Commands"), ().into_view())
+                section_heading="zkApp Internal Commands"
                 controls=|| ().into_view()
             />
         </PageContainer>
@@ -267,13 +267,13 @@ pub fn ZkAppTransactionsPage() -> impl IntoView {
         },
     ];
     view! {
-        <Title text="Commands | zkApps" />
+        <Title text="Commands | ZK Apps" />
         <PageContainer>
             <TableSectionTemplate
                 table_columns
                 data_sig
                 is_loading=loading_sig.into()
-                section_heading=(String::from("zkApp Commands"), ().into_view())
+                section_heading="Zk App Commands"
                 controls=|| ().into_view()
             />
         </PageContainer>
@@ -303,13 +303,13 @@ pub fn ZkAppsPage() -> impl IntoView {
         },
     ];
     view! {
-        <Title text="zkApps | Search" />
+        <Title text="ZK Apps | Search For ZK Apps" />
         <PageContainer>
             <TableSectionTemplate
                 table_columns
                 data_sig
                 is_loading=loading_sig.into()
-                section_heading=(String::from("zkApps"), ().into_view())
+                section_heading="Zk Apps"
                 controls=|| ().into_view()
             />
         </PageContainer>
@@ -405,7 +405,7 @@ pub fn ZkAppTransactionSpotlightPage() -> impl IntoView {
             </SpotlightSection>
             <TableSection
                 metadata=metadata.into()
-                section_heading=(String::from("Account Update #1"), ().into_view())
+                section_heading="Account Update #1"
                 controls=|| ().into_view()
             >
                 <SpotlightTable>

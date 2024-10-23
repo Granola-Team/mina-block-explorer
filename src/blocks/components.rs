@@ -102,7 +102,7 @@ pub fn BlockUserCommands(block: BlocksQueryBlocks) -> impl IntoView {
             table_columns
             data_sig
             is_loading=loading_sig.into()
-            section_heading=(String::from("User Commands"), ().into_view())
+            section_heading="User Commands"
             controls=|| ().into_view()
         />
     }
@@ -141,7 +141,7 @@ pub fn BlockSnarkJobs(block: BlocksQueryBlocks) -> impl IntoView {
             table_columns
             data_sig
             is_loading=loading_sig.into()
-            section_heading=(String::from("SNARK Jobs"), ().into_view())
+            section_heading="SNARK Jobs"
             controls=|| ().into_view()
         />
     }
@@ -181,7 +181,7 @@ pub fn BlockInternalCommands(block: BlocksQueryBlocks) -> impl IntoView {
             table_columns
             data_sig
             is_loading=loading_sig.into()
-            section_heading=(String::from("Internal Commands"), ().into_view())
+            section_heading="Internal Commands"
             controls=|| ().into_view()
         />
     }
@@ -215,7 +215,7 @@ pub fn BlockAnalytics(block: BlocksQueryBlocks) -> impl IntoView {
     view! {
         <TableSection
             metadata=metadata.into()
-            section_heading=(String::from("Analytics"), ().into_view())
+            section_heading="Analytics"
             controls=|| ().into_view()
         >
             <AnalyticsLayout>
@@ -705,7 +705,7 @@ pub fn BlocksSection() -> impl IntoView {
         <TableSectionTemplate
             table_columns
             data_sig
-            section_heading=(String::from("Blocks"), ().into_view())
+            section_heading="Blocks"
             metadata=Signal::derive(move || {
                 Some(TableMetadata {
                     displayed_records: u64::try_from(

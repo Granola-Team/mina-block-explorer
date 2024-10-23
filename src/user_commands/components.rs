@@ -205,7 +205,7 @@ pub fn TransactionsSection() -> impl IntoView {
             })
 
             is_loading=resource.loading()
-            section_heading=(String::from("User Commands"), ().into_view())
+            section_heading="User Commands"
             controls=move || {
                 view! {
                     <div class="hidden md:flex justify-center items-center">
