@@ -133,7 +133,7 @@ fn SnarksPageContents() -> impl IntoView {
             })
 
             is_loading=resource.loading()
-            section_heading="SNARKs"
+            section_heading=(String::from("SNARKs"), ().into_view())
             controls=move || {
                 view! {
                     <div class="hidden md:flex justify-center items-center">

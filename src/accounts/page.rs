@@ -138,7 +138,7 @@ fn AccountsPageContents() -> impl IntoView {
                         })
                     })
 
-                    section_heading="Accounts"
+                    section_heading=(String::from("Accounts"), ().into_view())
                     is_loading=resource.loading()
                     controls=move || {
                         view! {

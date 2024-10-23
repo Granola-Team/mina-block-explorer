@@ -235,7 +235,7 @@ pub fn SnarkerLeaderboard() -> impl IntoView {
                     table_columns
                     data_sig
                     is_loading=resource.loading()
-                    section_heading="Snarker Leaderboard"
+                    section_heading=(String::from("SNARKER Leaderboard"), ().into_view())
                     controls=move || {
                         epoch_sig.get();
                         view! {
@@ -339,7 +339,7 @@ pub fn StakerLeaderboard() -> impl IntoView {
                     table_columns
                     data_sig
                     is_loading=resource.loading()
-                    section_heading="Staker Leaderboard"
+                    section_heading=(String::from("Staker Leaderboard"), ().into_view())
                     controls=move || {
                         epoch_sig.get();
                         view! {
@@ -418,7 +418,7 @@ pub fn SnarkFees() -> impl IntoView {
                     table_columns
                     data_sig
                     is_loading=resource.loading()
-                    section_heading="SNARK Fees Overview"
+                    section_heading=(String::from("SNARK Fees Overview"), ().into_view())
                     controls=|| ().into_view()
                 />
             }
