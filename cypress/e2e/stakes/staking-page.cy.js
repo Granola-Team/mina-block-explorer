@@ -2,7 +2,7 @@ import { parseFormattedNumber } from "../helpers";
 
 suite(["@tier2"], "staking ledger", () => {
   beforeEach(() => {
-    cy.visit("/staking-ledgers");
+    cy.visit("/staking-ledgers?epoch=1");
     cy.intercept("GET", "/summary").as("summaryData");
     cy.wait("@summaryData");
   });
@@ -51,7 +51,6 @@ suite(["@tier2"], "staking ledger", () => {
   });
 
   it("disables 'Previous' button appropriately", () => {
-    cy.visit("/staking-ledgers?epoch=0");
     cy.get("button.hover\\:cursor-not-allowed")
       .contains("Previous")
       .should("exist");
@@ -61,7 +60,6 @@ suite(["@tier2"], "staking ledger", () => {
   });
 
   it("contains buttons for epoch navigation", () => {
-    cy.visit("/staking-ledgers?epoch=1");
     cy.get("section").contains("Staking Ledger - Epoch 1");
     cy.get("section").contains("button", "Next").click();
     cy.wait(500);
