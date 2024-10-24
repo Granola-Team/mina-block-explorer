@@ -51,7 +51,7 @@ pub fn BlocksAnalyticsPage() -> impl IntoView {
                                 <script type="text/javascript">
                                     (function() {
                                         let container = document.getElementById("tree-container");
-                                        container.scrollLeft = container.scrollWidth;
+                                        container.scrollLeft = container.scrollWidth / 2;
                                     })();
                                 </script>
                             </AnalyticsXLContainer>
@@ -60,6 +60,9 @@ pub fn BlocksAnalyticsPage() -> impl IntoView {
                             </AnalyticsLgContainer>
                             <AnalyticsLgContainer>
                                 <div id="blocks" class="w-full h-96"></div>
+                            </AnalyticsLgContainer>
+                            <AnalyticsLgContainer>
+                                <div id="top-block-producers" class="w-full h-96"></div>
                             </AnalyticsLgContainer>
                         }
                     }}

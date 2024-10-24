@@ -1,3 +1,59 @@
+function renderTopBlockProducersChart(dataMap, myChart) {
+  let data = Object.entries(dataMap);
+  data.sort((a, b) => b[1] - a[1]); // descending
+
+  data = data.slice(0, 10);
+  data.reverse();
+
+  let option;
+
+  myChart.hideLoading();
+
+  option = {
+    tooltip: { ...TOOLTIP_DEFAULT },
+    title: {
+      ...TITLE_DEFAULT,
+      text: `Top Block Producers`,
+    },
+    grid: { ...GRID_DEFAULT },
+    xAxis: {
+      type: "value",
+      name: "Blocks Produced",
+      ...X_AXIS_DEFAULT,
+    },
+    yAxis: {
+      ...Y_AXIS_DEFAULT,
+      type: "category",
+      data: data.map(([producer, _count]) => producer),
+      axisLabel: {
+        ...Y_AXIS_AXIS_LABEL_DEFAULT,
+        showMinLabel: true,
+        formatter: (_, zero_based_index) => getOrdinal(10 - zero_based_index),
+      },
+      splitLine: {
+        ...GRID_LINES,
+        show: false,
+      },
+    },
+    series: [
+      {
+        ...BAR_SERIES_DEFAULT,
+        data: data.map(([_producer, count]) => count),
+        type: "bar",
+      },
+    ],
+  };
+
+  const PUBLIC_KEY_LEN = 55;
+  myChart.on("click", function (params) {
+    if (params.name && params.name.length == PUBLIC_KEY_LEN) {
+      window.open("/addresses/accounts/" + params.name, "_blank");
+    }
+  });
+
+  option && myChart.setOption(option);
+}
+
 function renderTreeChart(data, myChart) {
   const MAX_DEPTH = 150;
   let option;
@@ -199,8 +255,11 @@ setTimeout(async () => {
   let rewardsChart = echarts.init(document.getElementById("rewards"));
   let blocksChart = echarts.init(document.getElementById("blocks"));
   let treeChart = echarts.init(document.getElementById("tree"));
+  let topProducersChart = echarts.init(
+    document.getElementById("top-block-producers"),
+  );
 
-  [rewardsChart, blocksChart, treeChart].forEach((chart) => {
+  [rewardsChart, blocksChart, treeChart, topProducersChart].forEach((chart) => {
     window.addEventListener("resize", function () {
       chart.resize();
     });
@@ -311,4 +370,5 @@ setTimeout(async () => {
   renderTreeChart(jsonResp.data.blocks, treeChart);
   renderCoinbaseRewardsChart(rewards_data, rewardsChart);
   renderCanonicalVsNonCanonicalChart(blocks_data, blocksChart);
+  renderTopBlockProducersChart(unique_creators, topProducersChart);
 }, 1000);
