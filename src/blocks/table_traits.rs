@@ -49,7 +49,10 @@ impl TableData for Vec<Option<BlocksQueryBlocks>> {
         self.iter()
             .map(|opt_blocks| match opt_blocks {
                 Some(block) => vec![
-                    convert_to_span(get_block_height(block)),
+                    convert_to_canonical(
+                        get_block_height(block),
+                        block.canonical.unwrap_or_default(),
+                    ),
                     convert_to_link(
                         get_state_hash(block),
                         format!("/blocks/{}/spotlight", get_state_hash(block)),

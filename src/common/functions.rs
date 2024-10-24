@@ -423,6 +423,26 @@ pub fn decorate_with_mina_tag(data: String) -> HtmlElement<html::AnyElement> {
     decorate_with_currency_tag(data, "MINA".to_string())
 }
 
+pub fn convert_to_canonical(data: String, canonical: bool) -> HtmlElement<html::AnyElement> {
+    html::span()
+        .attr("class", "flex justify-between items-center w-full")
+        .child(vec![
+            html::span().attr(
+                "class",
+                format!(
+                    "{} w-3 h-3 ml-2 rounded-[50%]",
+                    if canonical {
+                        "canonical bg-status-success"
+                    } else {
+                        "non-canonical bg-status-failed"
+                    },
+                ),
+            ),
+            html::span().child(data),
+        ])
+        .into()
+}
+
 pub fn decorate_with_currency_tag(
     data: String,
     currency_tag: String,

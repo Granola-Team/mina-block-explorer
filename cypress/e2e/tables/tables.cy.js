@@ -167,6 +167,32 @@ let test_suite_data = [
       () => {
         cy.assertStandardRowLimits("Blocks");
       },
+      () => {
+        cy.get("select#canonical-selection").as("canonical");
+        cy.get("@canonical").select("Canonical");
+        cy.intercept("POST", "/graphql").as("graphql");
+        cy.wait("@graphql").then(() => {
+          cy.aliasTableRows("Blocks", "table-rows");
+          cy.get("@table-rows").find(".non-canonical").should("not.exist");
+          cy.get("@table-rows").find(".canonical").should("exist");
+        });
+
+        cy.get("@canonical").select("Non-Canonical");
+        cy.intercept("POST", "/graphql").as("graphql");
+        cy.wait("@graphql").then(() => {
+          cy.aliasTableRows("Blocks", "table-rows");
+          cy.get("@table-rows").find(".non-canonical").should("exist");
+          cy.get("@table-rows").find(".canonical").should("not.exist");
+        });
+
+        cy.get("@canonical").select("All");
+        cy.intercept("POST", "/graphql").as("graphql");
+        cy.wait("@graphql").then(() => {
+          cy.aliasTableRows("Blocks", "table-rows");
+          cy.get("@table-rows").find(".non-canonical").should("exist");
+          cy.get("@table-rows").find(".canonical").should("exist");
+        });
+      },
     ],
   },
   {

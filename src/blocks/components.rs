@@ -598,7 +598,7 @@ pub fn BlocksSection() -> impl IntoView {
     let (block_height_sig, _) = create_query_signal::<u64>("q-height");
     let (row_limit_sig, _) = create_query_signal::<u64>("row-limit");
     let (slot_sig, _) = create_query_signal::<u64>("q-slot");
-    let (canonical_sig, _) = create_query_signal::<bool>("canonical");
+    let (canonical_sig, _) = create_query_signal::<String>("canonical");
     let UseIntervalReturn { counter, .. } = use_interval(LIVE_RELOAD_INTERVAL);
 
     let resource = create_resource(
@@ -620,10 +620,11 @@ pub fn BlocksSection() -> impl IntoView {
                     q_map.get("q-state-hash").cloned(),
                     block_height,
                     slot,
-                    if canonical.is_some() {
-                        canonical
-                    } else {
-                        Some(true)
+                    match canonical {
+                        Some(c) if &c == "All" => None,
+                        Some(c) if &c == "Canonical" => Some(true),
+                        Some(c) if &c == "Non-Canonical" => Some(false),
+                        _ => None,
                     },
                 )
                 .await
@@ -714,6 +715,7 @@ pub fn BlocksSection() -> impl IntoView {
                         .unwrap_or_default(),
                     available_records: canonical_sig
                         .get()
+                        .map(|c| &c == "Canonical")
                         .map(|c| {
                             if c {
                                 summary_sig.get().blockchain_length
@@ -737,8 +739,12 @@ pub fn BlocksSection() -> impl IntoView {
                         id="canonical-selection"
                         query_str_key="canonical"
                         labels=UrlParamSelectOptions {
-                            is_boolean_option: true,
-                            cases: vec!["Canonical".to_string(), "Non-Canonical".to_string()],
+                            is_boolean_option: false,
+                            cases: vec![
+                                "All".to_string(),
+                                "Canonical".to_string(),
+                                "Non-Canonical".to_string(),
+                            ],
                         }
                     />
                 }
