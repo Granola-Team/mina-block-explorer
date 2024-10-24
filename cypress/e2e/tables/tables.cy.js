@@ -122,11 +122,11 @@ let test_suite_data = [
       filter_tests: [
         {
           column: "Height",
-          input: 50000,
+          input: 2000,
           assertion: function () {
             cy.assertForEachColumnValue("Blocks", "Height", (text) => {
               let height = parseFormattedNumber(text);
-              expect(height).to.be.lte(50000);
+              expect(height).to.be.lte(2000);
             });
           },
         },
@@ -191,11 +191,11 @@ let test_suite_data = [
       filter_tests: [
         {
           column: "Height",
-          input: 50000,
+          input: 2000,
           assertion: function () {
             cy.assertForEachColumnValue("User Commands", "Height", (text) => {
               let height = parseFormattedNumber(text);
-              expect(height).to.be.lte(50000);
+              expect(height).to.be.lte(2000);
             });
           },
         },
@@ -558,14 +558,14 @@ let test_suite_data = [
       filter_tests: [
         {
           column: "Height",
-          input: 50000,
+          input: 2000,
           assertion: function () {
             cy.assertForEachColumnValue(
               "Internal Commands",
               "Height",
               (text) => {
                 let height = parseFormattedNumber(text);
-                expect(height).to.be.lte(50000);
+                expect(height).to.be.lte(2000);
               },
             );
           },
@@ -619,11 +619,11 @@ let test_suite_data = [
       filter_tests: [
         {
           column: "Height",
-          input: 50000,
+          input: 2000,
           assertion: function () {
             cy.assertForEachColumnValue("SNARKs", "Height", (text) => {
               let height = parseFormattedNumber(text);
-              expect(height).to.be.lte(50000);
+              expect(height).to.be.lte(2000);
             });
           },
         },

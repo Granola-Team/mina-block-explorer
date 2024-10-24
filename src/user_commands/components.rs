@@ -19,6 +19,7 @@ const QP_ROW_LIMIT: &str = "row-limit";
 const QP_HEIGHT: &str = "q-height";
 const QP_FROM: &str = "q-from";
 const QP_TO: &str = "q-to";
+const BACKSCAN_LIMIT: u64 = 2000;
 
 fn get_available_records(
     summary: BlockchainSummary,
@@ -105,6 +106,7 @@ pub fn TransactionsSection() -> impl IntoView {
                 url_query_map.get(QP_TO).cloned(),
                 url_query_map.get(QP_TXN_HASH).cloned(),
                 block_height,
+                txn_applied.and_then(|a| if !a { Some(BACKSCAN_LIMIT) } else { None }),
                 None,
                 canonical,
                 txn_applied,

@@ -22,12 +22,12 @@ pub fn CommandsTabbedPage() -> impl IntoView {
             icon: NavIcon::Transactions,
             ..Default::default()
         },
-        NavEntry {
-            href: "/commands/zk-app".to_string(),
-            text: "zkApp Commands".to_string(),
-            icon: NavIcon::ZKApps,
-            ..Default::default()
-        },
+        // NavEntry {
+        //     href: "/commands/zk-app".to_string(),
+        //     text: "zkApp Commands".to_string(),
+        //     icon: NavIcon::ZKApps,
+        //     ..Default::default()
+        // },
     ];
 
     view! { <TabbedPage tabs=tabs /> }
@@ -57,6 +57,7 @@ pub fn CommandSpotlightPage() -> impl IntoView {
                 None,
                 None,
                 txn_hash.cloned(),
+                None,
                 None,
                 state_hash,
                 None,

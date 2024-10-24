@@ -36,6 +36,7 @@ pub async fn load_data(
     to_account: Option<String>,
     txn_hash: Option<String>,
     block_height: Option<u64>,
+    block_backscan_limit: Option<u64>,
     state_hash: Option<String>,
     canonical: Option<bool>,
     is_applied: Option<bool>,
@@ -49,6 +50,9 @@ pub async fn load_data(
             to: to_account,
             hash: txn_hash.clone(),
             block_height_lte: block_height.map(|x| x as i64),
+            block_height_gt: block_height
+                .zip(block_backscan_limit)
+                .map(|(h, l)| (h - l) as i64),
             canonical,
             block: state_hash
                 .clone()
