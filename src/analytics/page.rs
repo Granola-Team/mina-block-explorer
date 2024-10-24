@@ -64,6 +64,9 @@ pub fn BlocksAnalyticsPage() -> impl IntoView {
                             <AnalyticsLgContainer>
                                 <div id="top-block-producers" class="w-full h-96"></div>
                             </AnalyticsLgContainer>
+                            <AnalyticsLgContainer>
+                                <div id="top-block-earners" class="w-full h-96"></div>
+                            </AnalyticsLgContainer>
                         }
                     }}
                 </AnalyticsLayout>

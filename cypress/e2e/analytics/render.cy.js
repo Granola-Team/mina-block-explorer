@@ -12,7 +12,13 @@ suite(["@tier2"], "chart", () => {
     },
     {
       page: "/analytics/blocks",
-      chart_ids: ["#rewards", "#blocks", "#tree", "#top-block-producers"],
+      chart_ids: [
+        "#rewards",
+        "#blocks",
+        "#tree",
+        "#top-block-producers",
+        "#top-block-earners",
+      ],
     },
     {
       page: "/analytics/snarks",

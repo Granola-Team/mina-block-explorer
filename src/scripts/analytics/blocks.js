@@ -1,3 +1,66 @@
+function renderTopBlockEarnersChart(dataMap, myChart) {
+  let data = Object.entries(dataMap);
+  data.sort((a, b) => b[1] - a[1]); // descending
+
+  data = data.slice(0, 10);
+  data.reverse();
+
+  let option;
+
+  myChart.hideLoading();
+
+  option = {
+    tooltip: { ...TOOLTIP_DEFAULT },
+    title: {
+      ...TITLE_DEFAULT,
+      text: `Top Block Reward Earners`,
+    },
+    grid: { ...GRID_DEFAULT },
+    xAxis: {
+      type: "value",
+      name: "Mina Earned (in thousands of Mina)",
+      ...X_AXIS_DEFAULT,
+      axisLabel: {
+        ...Y_AXIS_AXIS_LABEL_DEFAULT,
+        formatter: nanominaToKMina,
+      },
+    },
+    yAxis: {
+      ...Y_AXIS_DEFAULT,
+      type: "category",
+      data: data.map(([producer, _count]) => producer),
+      axisLabel: {
+        ...Y_AXIS_AXIS_LABEL_DEFAULT,
+        showMinLabel: true,
+        formatter: (_, zero_based_index) => getOrdinal(10 - zero_based_index),
+      },
+      splitLine: {
+        ...GRID_LINES,
+        show: false,
+      },
+    },
+    series: [
+      {
+        ...BAR_SERIES_DEFAULT,
+        data: data.map(([_producer, count]) => count),
+        type: "bar",
+        tooltip: {
+          valueFormatter: (value) => scaleMina(value),
+        },
+      },
+    ],
+  };
+
+  const PUBLIC_KEY_LEN = 55;
+  myChart.on("click", function (params) {
+    if (params.name && params.name.length == PUBLIC_KEY_LEN) {
+      window.open("/addresses/accounts/" + params.name, "_blank");
+    }
+  });
+
+  option && myChart.setOption(option);
+}
+
 function renderTopBlockProducersChart(dataMap, myChart) {
   let data = Object.entries(dataMap);
   data.sort((a, b) => b[1] - a[1]); // descending
@@ -258,8 +321,17 @@ setTimeout(async () => {
   let topProducersChart = echarts.init(
     document.getElementById("top-block-producers"),
   );
+  let topEarnedChart = echarts.init(
+    document.getElementById("top-block-earners"),
+  );
 
-  [rewardsChart, blocksChart, treeChart, topProducersChart].forEach((chart) => {
+  [
+    rewardsChart,
+    blocksChart,
+    treeChart,
+    topProducersChart,
+    topEarnedChart,
+  ].forEach((chart) => {
     window.addEventListener("resize", function () {
       chart.resize();
     });
@@ -316,7 +388,7 @@ setTimeout(async () => {
     key = `${key}-${key + groupSize - 1}`;
     let value = record.transactions.coinbase;
     if (!unique_creators[record.creator]) {
-      unique_creators[record.creator] = 0;
+      unique_creators[record.creator] = { created: 0, earned: 0 };
     }
     if (!agg[key]) {
       agg[key] = {
@@ -327,7 +399,8 @@ setTimeout(async () => {
     }
 
     if (record.canonical) {
-      unique_creators[record.creator] += 1;
+      unique_creators[record.creator].created += 1;
+      unique_creators[record.creator].earned += +value;
       agg[key].canonical_blocks_count += 1;
       agg[key].reward_sum += +value;
     } else {
@@ -370,5 +443,18 @@ setTimeout(async () => {
   renderTreeChart(jsonResp.data.blocks, treeChart);
   renderCoinbaseRewardsChart(rewards_data, rewardsChart);
   renderCanonicalVsNonCanonicalChart(blocks_data, blocksChart);
-  renderTopBlockProducersChart(unique_creators, topProducersChart);
+  renderTopBlockProducersChart(
+    Object.entries(unique_creators).reduce((agg, [key, entry]) => {
+      agg[key] = entry.created;
+      return agg;
+    }, {}),
+    topProducersChart,
+  );
+  renderTopBlockEarnersChart(
+    Object.entries(unique_creators).reduce((agg, [key, entry]) => {
+      agg[key] = entry.earned;
+      return agg;
+    }, {}),
+    topEarnedChart,
+  );
 }, 1000);
