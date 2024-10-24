@@ -18,12 +18,12 @@ pub fn Header() -> impl IntoView {
             icon: NavIcon::Transactions,
             ..Default::default()
         },
-        NavEntry {
-            href: "/commands/zk-app".to_string(),
-            text: "zkApp Commands".to_string(),
-            icon: NavIcon::ZKApps,
-            ..Default::default()
-        },
+        // NavEntry {
+        //     href: "/commands/zk-app".to_string(),
+        //     text: "zkApp Commands".to_string(),
+        //     icon: NavIcon::ZKApps,
+        //     ..Default::default()
+        // },
     ]);
 
     let addr_entries = Some(vec![
@@ -33,18 +33,18 @@ pub fn Header() -> impl IntoView {
             icon: NavIcon::Accounts,
             ..Default::default()
         },
-        NavEntry {
-            href: "/addresses/tokens".to_string(),
-            text: "Tokens".to_string(),
-            icon: NavIcon::Tokens,
-            ..Default::default()
-        },
-        NavEntry {
-            href: "/addresses/zk-apps".to_string(),
-            text: "zk-apps".to_string(),
-            icon: NavIcon::ZKApps,
-            ..Default::default()
-        },
+        // NavEntry {
+        //     href: "/addresses/tokens".to_string(),
+        //     text: "Tokens".to_string(),
+        //     icon: NavIcon::Tokens,
+        //     ..Default::default()
+        // },
+        // NavEntry {
+        //     href: "/addresses/zk-apps".to_string(),
+        //     text: "zk-apps".to_string(),
+        //     icon: NavIcon::ZKApps,
+        //     ..Default::default()
+        // },
     ]);
 
     let nav_items = vec![

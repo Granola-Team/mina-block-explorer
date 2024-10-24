@@ -122,6 +122,7 @@ pub struct UrlParamSelectOptions {
     pub cases: Vec<String>,
 }
 
+#[allow(dead_code)]
 #[derive(Clone, PartialEq)]
 pub enum NavIcon {
     Blocks,

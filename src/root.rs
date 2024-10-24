@@ -23,11 +23,7 @@ use crate::{
     snarks::page::SnarksPage,
     stakes::page::StakesPage,
     summary::page::{SummaryLocalStorage, SummaryPage},
-    tokens::page::TokensPage,
     user_commands::page::{CommandSpotlightPage, CommandsTabbedPage, UserCommandsPage},
-    zk_apps::page::{
-        ZkAppSpotlight, ZkAppTransactionSpotlightPage, ZkAppTransactionsPage, ZkAppsPage,
-    },
 };
 use leptos::*;
 use leptos_router::*;
@@ -87,9 +83,9 @@ pub fn Root() -> impl IntoView {
                         <Route path="/block-production" view=AccountBlockProductionPage />
                         <Route path="/delegations" view=AccountDelegationsPage />
                     </Route>
-                    <Route path="/tokens" view=TokensPage />
-                    <Route path="/zk-apps" view=ZkAppsPage />
-                    <Route path="/zk-apps/:id" view=ZkAppSpotlight />
+                    // <Route path="/tokens" view=TokensPage />
+                    // <Route path="/zk-apps" view=ZkAppsPage />
+                    // <Route path="/zk-apps/:id" view=ZkAppSpotlight />
 
                     <Route path="/blocks" view=SummaryPage />
                     <Route path="/blocks/:id" view=BlockTabbedPage>
@@ -131,10 +127,10 @@ pub fn Root() -> impl IntoView {
                         />
                         <Route path="/user" view=UserCommandsPage />
                         <Route path="/internal" view=InternalCommandsTab />
-                        <Route path="/zk-app" view=ZkAppTransactionsPage />
+                    // <Route path="/zk-app" view=ZkAppTransactionsPage />
                     </Route>
                     <Route path="/commands/:id" view=CommandSpotlightPage />
-                    <Route path="/commands/zk-app/:id" view=ZkAppTransactionSpotlightPage />
+                    // <Route path="/commands/zk-app/:id" view=ZkAppTransactionSpotlightPage />
                     <Route path="/snarks" view=SnarksPage />
 
                     <Route path="/staking-ledgers" view=StakesPage />
