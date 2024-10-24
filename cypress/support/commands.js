@@ -70,6 +70,12 @@ Cypress.Commands.add(
   },
 );
 
+Cypress.Commands.add("assertStandardRowLimits", (tableHeading) => {
+  [25, 50, 100, 250, 500, 1000].forEach((l) => {
+    cy.assertRowLimitWorks(tableHeading, l);
+  });
+});
+
 Cypress.Commands.add("assertRowLimitWorks", (tableHeading, limit) => {
   cy.get("select#row-limit")
     .select("" + limit)

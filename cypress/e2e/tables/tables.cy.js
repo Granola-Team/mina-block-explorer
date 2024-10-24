@@ -165,9 +165,7 @@ let test_suite_data = [
     },
     tests: [
       () => {
-        [25, 50, 100, 250].forEach((l) => {
-          cy.assertRowLimitWorks("Blocks", l);
-        });
+        cy.assertStandardRowLimits("Blocks");
       },
     ],
   },
@@ -233,9 +231,7 @@ let test_suite_data = [
     },
     tests: [
       () => {
-        [25, 50, 100, 250].forEach((l) => {
-          cy.assertRowLimitWorks("User Commands", l);
-        });
+        cy.assertStandardRowLimits("User Commands");
       },
       () => {
         cy.get("select#txn-status").as("txn-applied");
@@ -467,9 +463,7 @@ let test_suite_data = [
     },
     tests: [
       () => {
-        [25, 50, 100, 250].forEach((l) => {
-          cy.assertRowLimitWorks("Accounts", l);
-        });
+        cy.assertStandardRowLimits("Accounts");
       },
     ],
   },
@@ -543,9 +537,7 @@ let test_suite_data = [
           });
       },
       () => {
-        [25, 50, 100, 250].forEach((l) => {
-          cy.assertRowLimitWorks("Staking Ledger - Epoch 1", l);
-        });
+        cy.assertStandardRowLimits("Staking Ledger - Epoch 1");
       },
     ],
   },
@@ -604,9 +596,7 @@ let test_suite_data = [
     },
     tests: [
       () => {
-        [25, 50, 100, 250].forEach((l) => {
-          cy.assertRowLimitWorks("Internal Commands", l);
-        });
+        cy.assertStandardRowLimits("Internal Commands");
       },
     ],
   },
@@ -653,9 +643,7 @@ let test_suite_data = [
     },
     tests: [
       () => {
-        [25, 50, 100, 250].forEach((l) => {
-          cy.assertRowLimitWorks("SNARKs", l);
-        });
+        cy.assertStandardRowLimits("SNARKs");
       },
     ],
   },

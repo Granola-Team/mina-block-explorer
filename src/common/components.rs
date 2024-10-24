@@ -12,6 +12,28 @@ use std::collections::HashMap;
 use web_sys::{window, Event, MouseEvent};
 
 #[component]
+pub fn RowLimit() -> impl IntoView {
+    view! {
+        <UrlParamSelectMenu
+            label="Rows"
+            id="row-limit"
+            query_str_key="row-limit"
+            labels=UrlParamSelectOptions {
+                is_boolean_option: false,
+                cases: vec![
+                    "25".to_string(),
+                    "50".to_string(),
+                    "100".to_string(),
+                    "250".to_string(),
+                    "500".to_string(),
+                    "1000".to_string(),
+                ],
+            }
+        />
+    }
+}
+
+#[component]
 pub fn Button<F>(
     on_click: F,
     #[prop(into)] text: String,
