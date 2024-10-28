@@ -28,7 +28,7 @@ impl TableData for Vec<Option<SnarksQuerySnarks>> {
                         format!("/blocks/{}/snark-jobs", get_block_state_hash(snark)),
                     ),
                     convert_to_title(
-                        print_time_since(&get_date_time(snark)),
+                        convert_to_local_timezone_formatted(&get_date_time(snark)),
                         get_date_time(snark),
                     ),
                     convert_to_link(

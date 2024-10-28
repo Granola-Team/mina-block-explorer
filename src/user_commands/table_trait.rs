@@ -78,7 +78,7 @@ impl TableData for Vec<Option<TransactionsQueryTransactions>> {
                         )
                     },
                     convert_to_title(
-                        print_time_since(&transaction.get_block_datetime()),
+                        convert_to_local_timezone_formatted(&transaction.get_block_datetime()),
                         transaction.get_block_datetime(),
                     ),
                     convert_to_pill(transaction.get_kind(), ColorVariant::Grey),

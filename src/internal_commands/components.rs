@@ -79,8 +79,8 @@ pub fn InternalCommandsTab() -> impl IntoView {
             ..Default::default()
         },
         TableColumn {
-            column: "Age".to_string(),
-            width: Some(String::from(TABLE_COL_SHORT_WIDTH)),
+            column: "Date".to_string(),
+            width: Some(String::from(TABLE_COL_DATE_WIDTH)),
             ..Default::default()
         },
     ];

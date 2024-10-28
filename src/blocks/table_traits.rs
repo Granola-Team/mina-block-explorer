@@ -59,7 +59,7 @@ impl TableData for Vec<Option<BlocksQueryBlocks>> {
                     ),
                     convert_to_pill(get_slot(block), ColorVariant::Grey),
                     convert_to_title(
-                        print_time_since(&get_date_time(block)),
+                        convert_to_local_timezone_formatted(&get_date_time(block)),
                         get_date_time(block),
                     ),
                     convert_to_link(
@@ -226,7 +226,7 @@ impl TableData for Vec<Option<BlocksQueryBlocksSnarkJobs>> {
                         format!("/blocks/{}", get_snark_block_state_hash(snark)),
                     ),
                     convert_to_title(
-                        print_time_since(&get_snark_date_time(snark)),
+                        convert_to_local_timezone_formatted(&get_snark_date_time(snark)),
                         get_snark_date_time(snark),
                     ),
                     convert_to_link(

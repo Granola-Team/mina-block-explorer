@@ -245,7 +245,11 @@ pub fn CommandSpotlightPage() -> impl IntoView {
                                     spotlight_items=spotlight_items
                                     id=Some(state_hash)
                                     meta=Some(
-                                        format!("{} ({})", date_time, print_time_since(&date_time)),
+                                        format!(
+                                            "{} ({})",
+                                            convert_to_local_timezone_formatted(&date_time),
+                                            print_time_since(&date_time),
+                                        ),
                                     )
                                 >
 

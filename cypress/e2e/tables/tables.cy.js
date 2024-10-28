@@ -112,7 +112,7 @@ let test_suite_data = [
         "Height",
         "State Hash",
         "Slot",
-        "Age",
+        "Date",
         "Block Producer",
         "Coinbase",
         "User Commands",
@@ -203,7 +203,7 @@ let test_suite_data = [
       columns: [
         "Height",
         "Txn Hash",
-        "Age",
+        "Date",
         "Type",
         "Status",
         "From",
@@ -297,7 +297,7 @@ let test_suite_data = [
         "Height",
         "Txn Hash",
         "Nonce",
-        "Age",
+        "Date",
         "Type",
         "Direction",
         "Counterparty",
@@ -365,7 +365,7 @@ let test_suite_data = [
     url: `/addresses/accounts/B62qiVr4Wy6yKhxNV49Npnpr2XF5AhsFejFWWQpWKARQpTYsb9snNZY/commands/internal`,
     table: {
       heading: "Internal Commands",
-      columns: ["Height", "State Hash", "Fee", "Type", "Age"],
+      columns: ["Height", "State Hash", "Fee", "Type", "Date"],
       filter_tests: [
         {
           column: "Height",
@@ -572,7 +572,7 @@ let test_suite_data = [
     url: "/commands/internal",
     table: {
       heading: "Internal Commands",
-      columns: ["Height", "State Hash", "Recipient", "Fee", "Type", "Age"],
+      columns: ["Height", "State Hash", "Recipient", "Fee", "Type", "Date"],
       filter_tests: [
         {
           column: "Height",
@@ -631,7 +631,7 @@ let test_suite_data = [
     url: "/snarks",
     table: {
       heading: "SNARKs",
-      columns: ["Height", "State Hash", "Age", "Prover", "Fee"],
+      columns: ["Height", "State Hash", "Date", "Prover", "Fee"],
       filter_tests: [
         {
           column: "Height",
@@ -694,6 +694,15 @@ test_suite_data.forEach((test_suite_datum) => {
         cy.intercept("GET", "/summary").as("summaryData");
         cy.wait("@summaryData").then(() => {
           cy.tableHasOrderedColumns(heading, columns);
+          if (columns.filter((c) => c === "Date").length > 0) {
+            cy.assertForEachColumnValue(heading, "Date", (dateText) => {
+              // Attempt to parse the date string
+              const parsedDate = new Date(dateText);
+
+              // Assert that the date is valid
+              expect(parsedDate.toString()).not.to.equal("Invalid Date");
+            });
+          }
           sorting_columns.forEach(({ column, type, sort_options }) => {
             sort_options.forEach((sort, i) => {
               if (sort != null) {

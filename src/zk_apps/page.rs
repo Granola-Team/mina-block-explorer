@@ -64,7 +64,9 @@ pub fn ZkAppSpotlight() -> impl IntoView {
                 meta=Some(
                     format!(
                         "Last Active: {}",
-                        print_time_since(&generate_random_datetime_within_days(1).to_string()),
+                        convert_to_local_timezone_formatted(
+                            &generate_random_datetime_within_days(1).to_string(),
+                        ),
                     ),
                 )
 
@@ -187,7 +189,7 @@ pub fn ZkAppSpotlight() -> impl IntoView {
                         ..Default::default()
                     },
                     TableColumn::<AnySort> {
-                        column: "Age".to_string(),
+                        column: "Date".to_string(),
                         ..Default::default()
                     },
                     TableColumn::<AnySort> {

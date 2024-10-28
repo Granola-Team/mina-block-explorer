@@ -49,8 +49,8 @@ pub fn AccountTransactionsSection(
             ..Default::default()
         },
         TableColumn {
-            column: "Age".to_string(),
-            width: Some(String::from(TABLE_COL_SHORT_WIDTH)),
+            column: "Date".to_string(),
+            width: Some(String::from(TABLE_COL_DATE_WIDTH)),
             ..Default::default()
         },
         TableColumn {
@@ -151,8 +151,8 @@ pub fn AccountInternalCommandsSection(
             ..Default::default()
         },
         TableColumn {
-            column: "Age".to_string(),
-            width: Some(String::from(TABLE_COL_SHORT_WIDTH)),
+            column: "Date".to_string(),
+            width: Some(String::from(TABLE_COL_DATE_WIDTH)),
             ..Default::default()
         },
     ];
@@ -291,8 +291,8 @@ pub fn AccountOverviewSnarkJobTable(
             ..Default::default()
         },
         TableColumn {
-            column: "Age".to_string(),
-            width: Some(String::from(TABLE_COL_SHORT_WIDTH)),
+            column: "Date".to_string(),
+            width: Some(String::from(TABLE_COL_DATE_WIDTH)),
             ..Default::default()
         },
         TableColumn {
@@ -392,8 +392,8 @@ pub fn AccountOverviewBlocksTable(
             ..Default::default()
         },
         TableColumn {
-            column: "Age".to_string(),
-            width: Some(String::from(TABLE_COL_SHORT_WIDTH)),
+            column: "Date".to_string(),
+            width: Some(String::from(TABLE_COL_DATE_WIDTH)),
             ..Default::default()
         },
         TableColumn {

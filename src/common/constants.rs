@@ -10,6 +10,7 @@ pub const COMMIT_HASH: &str = env!("COMMIT_HASH");
 pub const LINK_HOVER_STATE: &str = "hover:text-granola-orange hover:underline hover:decoration-2 ";
 pub const TABLE_COL_NUMERIC_WIDTH: &str = "150px";
 pub const TABLE_COL_SHORT_WIDTH: &str = "150px";
+pub const TABLE_COL_DATE_WIDTH: &str = "280px";
 pub const TABLE_COL_HASH_WIDTH: &str = "470px";
 pub const TABLE_COL_USERNAME_WIDTH: &str = "200rem";
 pub const TABLE_COL_LARGE_BALANCE: &str = "250px";

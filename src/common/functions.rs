@@ -12,8 +12,8 @@ use rand::{
 };
 use rust_decimal::prelude::*;
 use std::iter;
-use wasm_bindgen::prelude::*;
-use web_sys::js_sys::{Intl::NumberFormat, *};
+use wasm_bindgen::{prelude::*, JsValue};
+use web_sys::js_sys::{Date, Intl::NumberFormat, Object, Reflect, *};
 
 #[wasm_bindgen]
 #[allow(non_snake_case)]
@@ -26,6 +26,56 @@ extern "C" {
 #[wasm_bindgen]
 pub fn get_browser_locale() -> String {
     LANGUAGE.with(String::clone)
+}
+
+#[wasm_bindgen]
+pub fn convert_to_local_timezone_formatted(utc_date_str: &str) -> String {
+    // Create a JS Date object from the UTC date string
+    let date = Date::new(&JsValue::from_str(utc_date_str));
+
+    // Define options for the toLocaleString method to get YYYY-MM-DD HH:mm:ss
+    // format
+    let options = Object::new();
+    Reflect::set(
+        &options,
+        &JsValue::from_str("year"),
+        &JsValue::from_str("numeric"),
+    )
+    .unwrap();
+    Reflect::set(
+        &options,
+        &JsValue::from_str("month"),
+        &JsValue::from_str("2-digit"),
+    )
+    .unwrap();
+    Reflect::set(
+        &options,
+        &JsValue::from_str("day"),
+        &JsValue::from_str("2-digit"),
+    )
+    .unwrap();
+    Reflect::set(
+        &options,
+        &JsValue::from_str("hour"),
+        &JsValue::from_str("2-digit"),
+    )
+    .unwrap();
+    Reflect::set(
+        &options,
+        &JsValue::from_str("minute"),
+        &JsValue::from_str("2-digit"),
+    )
+    .unwrap();
+    Reflect::set(
+        &options,
+        &JsValue::from_str("second"),
+        &JsValue::from_str("2-digit"),
+    )
+    .unwrap();
+
+    // Use toLocaleString with the options to get the formatted string
+    date.to_locale_string(&get_browser_locale(), &options)
+        .into()
 }
 
 pub fn format_number_helper(number: &str, max_significant_digits: Option<u32>) -> String {

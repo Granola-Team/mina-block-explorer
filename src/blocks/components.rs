@@ -120,8 +120,8 @@ pub fn BlockSnarkJobs(block: BlocksQueryBlocks) -> impl IntoView {
             ..Default::default()
         },
         TableColumn {
-            column: "Age".to_string(),
-            width: Some(String::from(TABLE_COL_SHORT_WIDTH)),
+            column: "Date".to_string(),
+            width: Some(String::from(TABLE_COL_DATE_WIDTH)),
             ..Default::default()
         },
         TableColumn {
@@ -508,7 +508,9 @@ pub fn BlockSpotlight(block: BlocksQueryBlocks) -> impl IntoView {
             header="Block Spotlight".to_string()
             spotlight_items=spotlight_items
             id=Some(get_state_hash(&block))
-            meta=Some(format!("{} ({})", date_time, print_time_since(&date_time)))
+            meta=Some(
+                format!("{} ({})", date_time, convert_to_local_timezone_formatted(&date_time)),
+            )
         >
 
             <BlockIcon width=40 />
@@ -661,8 +663,8 @@ pub fn BlocksSection() -> impl IntoView {
             ..Default::default()
         },
         TableColumn {
-            column: "Age".to_string(),
-            width: Some(String::from("125px")),
+            column: "Date".to_string(),
+            width: Some(String::from(TABLE_COL_DATE_WIDTH)),
             ..Default::default()
         },
         TableColumn {

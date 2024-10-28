@@ -26,7 +26,7 @@ impl TableData for Vec<Option<ZkAppTransactionData>> {
                     convert_to_link(txn.prover.to_string(), "#".to_string()),
                     convert_to_link(txn.hash.to_string(), "#".to_string()),
                     convert_to_title(
-                        print_time_since(&txn.date_time.to_string()),
+                        convert_to_local_timezone_formatted(&txn.date_time.to_string()),
                         txn.date_time.to_string(),
                     ),
                     convert_to_pill(txn.updated_accounts.len().to_string(), ColorVariant::Blue),

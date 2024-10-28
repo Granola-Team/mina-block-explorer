@@ -68,7 +68,7 @@ impl TableData for Vec<Option<AccountActivityQueryDirectionalTransactions>> {
                     },
                     convert_to_pill(transaction.get_nonce(), ColorVariant::Grey),
                     convert_to_title(
-                        print_time_since(&transaction.get_date_time()),
+                        convert_to_local_timezone_formatted(&transaction.get_date_time()),
                         transaction.get_date_time(),
                     ),
                     convert_to_pill(transaction.get_kind(), ColorVariant::Grey),
@@ -122,7 +122,7 @@ impl TableData for Vec<Option<AccountActivityQuerySnarks>> {
                         format!("/blocks/{}/snark-jobs", snark.get_block_state_hash()),
                     ),
                     convert_to_title(
-                        print_time_since(&snark.get_date_time()),
+                        convert_to_local_timezone_formatted(&snark.get_date_time()),
                         snark.get_date_time(),
                     ),
                     convert_to_span(snark.get_prover()),
@@ -210,7 +210,7 @@ impl TableData for Vec<Option<AccountActivityQueryBlocks>> {
                     ),
                     convert_to_pill(block.get_slot(), ColorVariant::Grey),
                     convert_to_title(
-                        print_time_since(&block.get_date_time()),
+                        convert_to_local_timezone_formatted(&block.get_date_time()),
                         block.get_date_time(),
                     ),
                     convert_to_span(block.get_creator_account()),
@@ -334,7 +334,7 @@ impl TableData for Vec<Option<AccountActivityQueryFeetransfers>> {
                     decorate_with_mina_tag(internal_command.get_fee()),
                     convert_to_pill(internal_command.get_type(), ColorVariant::Grey),
                     convert_to_title(
-                        print_time_since(&internal_command.get_block_datetime()),
+                        convert_to_local_timezone_formatted(&internal_command.get_block_datetime()),
                         internal_command.get_block_datetime(),
                     ),
                 ],
