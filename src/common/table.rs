@@ -206,14 +206,12 @@ where
 
                 </Table>
                 {move || {
-                    if let Some(data) = data_sig.get() {
-                        if data.get_rows().is_empty() {
-                            view! { <EmptyTable message="No data for this view" /> }
-                        } else {
-                            ().into_view()
-                        }
-                    } else {
+                    if !is_loading.get()
+                        && data_sig.get().map(|v| v.get_rows().len()).unwrap_or_default() == 0
+                    {
                         view! { <EmptyTable message="No data for this view" /> }
+                    } else {
+                        ().into_view()
                     }
                 }}
 
