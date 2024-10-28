@@ -1,4 +1,4 @@
-use super::graphql::transactions_query;
+use super::graphql::transactions_query::{self, TransactionsQueryTransactions};
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
@@ -79,6 +79,31 @@ impl From<PooledUserCommand> for transactions_query::TransactionsQueryTransactio
                     None => None,
                 },
             }),
+        }
+    }
+}
+
+#[derive(Clone)]
+pub struct PendingTxn {
+    pub txn_hash: Option<String>,
+    pub kind: Option<String>,
+    pub from: Option<String>,
+    pub to: Option<String>,
+    pub nonce: Option<i64>,
+    pub fee: Option<f64>,
+    pub amount: Option<f64>,
+}
+
+impl From<TransactionsQueryTransactions> for PendingTxn {
+    fn from(value: TransactionsQueryTransactions) -> Self {
+        PendingTxn {
+            txn_hash: value.hash,
+            kind: value.kind,
+            from: value.from,
+            to: value.receiver.map(|r| r.public_key.unwrap_or_default()),
+            nonce: value.nonce,
+            fee: value.fee,
+            amount: value.amount,
         }
     }
 }

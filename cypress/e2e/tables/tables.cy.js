@@ -290,6 +290,16 @@ let test_suite_data = [
   },
   {
     tag: "@tier2",
+    url: "/commands/pending",
+    table: {
+      heading: "Pending Commands",
+      columns: ["Txn Hash", "Type", "From", "To", "Nonce", "Fee", "Amount"],
+      filter_tests: [],
+    },
+    tests: [],
+  },
+  {
+    tag: "@tier2",
     url: `/addresses/accounts/${ROMEK_ADDRESS}`,
     table: {
       heading: "User Commands",

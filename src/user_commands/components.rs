@@ -2,7 +2,7 @@ use super::functions::*;
 use crate::{
     common::{components::*, constants::*, models::*, table::*},
     summary::models::BlockchainSummary,
-    user_commands::graphql::transactions_query,
+    user_commands::{graphql::transactions_query, models::PendingTxn},
 };
 use codee::string::JsonSerdeCodec;
 use leptos::*;
@@ -94,7 +94,6 @@ pub fn TransactionsSection() -> impl IntoView {
             }
 
             let (canonical, load_fn) = match txn_type.as_deref() {
-                Some("Pending") => return load_pending_txn().await,
                 Some("Canonical") => (Some(true), load_data),
                 Some("Non-Canonical") => (Some(false), load_data),
                 _ => (Some(true), load_data),
@@ -226,15 +225,113 @@ pub fn TransactionsSection() -> impl IntoView {
                         query_str_key="txn-type"
                         labels=UrlParamSelectOptions {
                             is_boolean_option: false,
-                            cases: vec![
-                                "Canonical".to_string(),
-                                "Non-Canonical".to_string(),
-                                "Pending".to_string(),
-                            ],
+                            cases: vec!["Canonical".to_string(), "Non-Canonical".to_string()],
                         }
                     />
                 }
             }
+        />
+    }
+}
+
+#[component]
+pub fn PendingTransactionsSection() -> impl IntoView {
+    let visibility = use_document_visibility();
+    let (data_sig, set_data) = create_signal::<Option<Vec<Option<PendingTxn>>>>(None);
+    let query_params_map = use_query_map();
+    let UseIntervalReturn { counter, .. } = use_interval(LIVE_RELOAD_INTERVAL);
+
+    let resource = create_resource(
+        move || counter.get(),
+        move |_| async move {
+            if visibility.get() != VisibilityState::Visible {
+                logging::log!("Document not visible. Data polling skipped for user commands.");
+                return Ok(transactions_query::ResponseData {
+                    transactions: vec![],
+                    other_transactions: vec![],
+                });
+            }
+
+            load_pending_txn().await
+        },
+    );
+
+    let table_columns: Vec<TableColumn<AnySort>> = vec![
+        TableColumn {
+            column: "Txn Hash".to_string(),
+            is_searchable: true,
+            width: Some(String::from(TABLE_COL_HASH_WIDTH)),
+            ..Default::default()
+        },
+        TableColumn {
+            column: "Type".to_string(),
+            width: Some(String::from(TABLE_COL_SHORT_WIDTH)),
+            ..Default::default()
+        },
+        TableColumn {
+            column: "From".to_string(),
+            is_searchable: true,
+            width: Some(String::from(TABLE_COL_HASH_WIDTH)),
+            ..Default::default()
+        },
+        TableColumn {
+            column: "To".to_string(),
+            is_searchable: true,
+            width: Some(String::from(TABLE_COL_HASH_WIDTH)),
+            ..Default::default()
+        },
+        TableColumn {
+            column: "Nonce".to_string(),
+            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
+            alignment: Some(ColumnTextAlignment::Right),
+            ..Default::default()
+        },
+        TableColumn {
+            column: "Fee".to_string(),
+            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
+            ..Default::default()
+        },
+        TableColumn {
+            column: "Amount".to_string(),
+            width: Some(String::from(TABLE_COL_LARGE_BALANCE)),
+            ..Default::default()
+        },
+    ];
+    let get_data = move || resource.get().and_then(|res| res.ok());
+
+    create_effect(move |_| {
+        if let Some(data) = get_data() {
+            set_data.set(Some(
+                data.transactions
+                    .into_iter()
+                    .map(|opt_t| opt_t.map(PendingTxn::from))
+                    .collect::<Vec<Option<PendingTxn>>>(),
+            ))
+        }
+    });
+
+    view! {
+        <TableSectionTemplate
+            table_columns
+            data_sig
+            metadata=Signal::derive(move || {
+                let mut otherQps = query_params_map.get();
+                otherQps.remove(QP_TXN_TYPE);
+                otherQps.remove(QP_TXN_APPLIED);
+                otherQps.remove(QP_ROW_LIMIT);
+                Some(TableMetadata {
+                    total_records: None,
+                    available_records: None,
+                    displayed_records: u64::try_from(
+                            data_sig.get().map(|d| d.len()).unwrap_or_default(),
+                        )
+                        .unwrap_or_default(),
+                })
+            })
+
+            is_loading=resource.loading()
+            section_heading="Pending Commands"
+            controls=|| ().into_view()
         />
     }
 }

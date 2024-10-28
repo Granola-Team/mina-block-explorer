@@ -13,6 +13,12 @@ pub fn Header() -> impl IntoView {
             ..Default::default()
         },
         NavEntry {
+            href: "/commands/pending".to_string(),
+            text: "Pending Commands".to_string(),
+            icon: NavIcon::Transactions,
+            ..Default::default()
+        },
+        NavEntry {
             href: "/commands/internal".to_string(),
             text: "Internal Commands".to_string(),
             icon: NavIcon::Transactions,

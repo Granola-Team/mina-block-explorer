@@ -1,5 +1,8 @@
-use super::graphql::transactions_query::{
-    TransactionsQueryOtherTransactions, TransactionsQueryTransactions,
+use super::{
+    graphql::transactions_query::{
+        TransactionsQueryOtherTransactions, TransactionsQueryTransactions,
+    },
+    models::PendingTxn,
 };
 use crate::common::{
     constants::{LHS_MAX_DIGIT_PADDING, LHS_MAX_SPACE_FEES, TXN_STATUS_APPLIED, TXN_STATUS_FAILED},
@@ -108,6 +111,31 @@ impl TableData for Vec<Option<TransactionsQueryTransactions>> {
     }
 }
 
+impl TableData for Vec<Option<PendingTxn>> {
+    fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
+        self.iter()
+            .map(|opt_trans| match opt_trans {
+                Some(transaction) => vec![
+                    convert_to_span(transaction.get_hash()),
+                    convert_to_pill(transaction.get_kind(), ColorVariant::Grey),
+                    convert_to_link(
+                        transaction.get_from(),
+                        format!("/addresses/accounts/{}", transaction.get_from()),
+                    ),
+                    convert_to_link(
+                        transaction.get_to(),
+                        format!("/addresses/accounts/{}", transaction.get_to()),
+                    ),
+                    convert_to_pill(transaction.get_nonce(), ColorVariant::Grey),
+                    convert_to_span(transaction.get_fee()),
+                    convert_to_span(transaction.get_amount()),
+                ],
+                None => vec![],
+            })
+            .collect::<Vec<_>>()
+    }
+}
+
 pub trait TransactionsTrait {
     fn get_failure_reason(&self) -> Option<String>;
     fn get_block_datetime(&self) -> String;
@@ -194,6 +222,79 @@ impl TransactionsTrait for TransactionsQueryTransactions {
 
     fn get_hash(&self) -> String {
         self.hash
+            .as_ref()
+            .map_or_else(String::new, |o| o.to_string())
+    }
+
+    fn get_amount(&self) -> String {
+        self.amount
+            .map(|f| f.round() as u64)
+            .map(nanomina_to_mina)
+            .map(|number| format_number_for_html(&number, LHS_MAX_DIGIT_PADDING))
+            .unwrap_or_default()
+    }
+
+    fn get_to(&self) -> String {
+        self.to.as_ref().map_or_else(String::new, |o| o.to_string())
+    }
+}
+
+impl TransactionsTrait for PendingTxn {
+    fn get_failure_reason(&self) -> Option<String> {
+        None
+    }
+
+    fn get_block_datetime(&self) -> String {
+        String::new()
+    }
+
+    fn get_block_height(&self) -> String {
+        String::new()
+    }
+
+    fn get_canonical(&self) -> Option<bool> {
+        None
+    }
+
+    fn get_kind(&self) -> String {
+        self.kind.as_ref().map_or_else(String::new, |o| {
+            ToTitleCase::to_title_case(o.as_str()).to_string()
+        })
+    }
+
+    fn get_nonce(&self) -> String {
+        self.nonce
+            .map_or_else(String::new, |o| format_number(o.to_string()))
+    }
+
+    fn get_memo(&self) -> String {
+        String::new()
+    }
+
+    fn get_block_state_hash(&self) -> String {
+        String::new()
+    }
+
+    fn get_from(&self) -> String {
+        self.from
+            .as_ref()
+            .map_or_else(String::new, |o| o.to_string())
+    }
+
+    fn get_receiver_public_key(&self) -> String {
+        String::new()
+    }
+
+    fn get_fee(&self) -> String {
+        self.fee
+            .map(|f| f.round() as u64)
+            .map(nanomina_to_mina)
+            .map(|number| format_number_for_html(&number, LHS_MAX_SPACE_FEES))
+            .unwrap_or_default()
+    }
+
+    fn get_hash(&self) -> String {
+        self.txn_hash
             .as_ref()
             .map_or_else(String::new, |o| o.to_string())
     }

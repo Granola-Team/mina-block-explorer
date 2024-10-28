@@ -17,6 +17,12 @@ pub fn CommandsTabbedPage() -> impl IntoView {
             ..Default::default()
         },
         NavEntry {
+            href: "/commands/pending".to_string(),
+            text: "Pending Commands".to_string(),
+            icon: NavIcon::Transactions,
+            ..Default::default()
+        },
+        NavEntry {
             href: "/commands/internal".to_string(),
             text: "Internal Commands".to_string(),
             icon: NavIcon::Transactions,
@@ -39,6 +45,16 @@ pub fn UserCommandsPage() -> impl IntoView {
         <Title text="Commands | Search For Commands" />
         <PageContainer>
             <TransactionsSection />
+        </PageContainer>
+    }
+}
+
+#[component]
+pub fn PendingCommandsPage() -> impl IntoView {
+    view! {
+        <Title text="Commands | Search For Commands" />
+        <PageContainer>
+            <PendingTransactionsSection />
         </PageContainer>
     }
 }

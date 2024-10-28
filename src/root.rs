@@ -23,7 +23,9 @@ use crate::{
     snarks::page::SnarksPage,
     stakes::page::StakesPage,
     summary::page::{SummaryLocalStorage, SummaryPage},
-    user_commands::page::{CommandSpotlightPage, CommandsTabbedPage, UserCommandsPage},
+    user_commands::page::{
+        CommandSpotlightPage, CommandsTabbedPage, PendingCommandsPage, UserCommandsPage,
+    },
 };
 use leptos::*;
 use leptos_router::*;
@@ -126,6 +128,7 @@ pub fn Root() -> impl IntoView {
                             }
                         />
                         <Route path="/user" view=UserCommandsPage />
+                        <Route path="/pending" view=PendingCommandsPage />
                         <Route path="/internal" view=InternalCommandsTab />
                     // <Route path="/zk-app" view=ZkAppTransactionsPage />
                     </Route>
