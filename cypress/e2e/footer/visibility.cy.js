@@ -2,14 +2,16 @@ suite(["@tier2"], "footer content", () => {
   let footer_links = [
     { text: "Granola", selector: 'a[href="https://granola.team"]' },
     {
-      text: "Disclaimer",
-      selector:
-        'a[href="https://gist.github.com/robinbb/05ba138b080ff5a95dcf8bb2d6ae76c5"]',
+      text: "Docs",
+      selector: 'a[href="https://granola.gitbook.io/minasearch"]',
     },
     {
-      text: "Terms",
-      selector:
-        'a[href="https://gist.github.com/robinbb/15b67f5d39dd47d37ddb88e3201dc311"]',
+      text: "API",
+      selector: 'a[href="https://granola.gitbook.io/minasearch/apis"]',
+    },
+    {
+      text: "Discord",
+      selector: 'a[href="https://discord.gg/Zvu6XHNCxj"]',
     },
   ];
 

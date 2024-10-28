@@ -6,7 +6,8 @@ use serde::{Deserialize, Serialize};
 
 enum Icon {
     Docs,
-    Terms,
+    Api,
+    Discord,
 }
 pub struct Link<'a> {
     label: &'a str,
@@ -24,7 +25,7 @@ struct APIVersionResponse {
     pub data: VersionData,
 }
 
-const FOOTER_LINK_BASE_CLASS: &str = "ml-2 flex items-center text-white text-sm ";
+const FOOTER_LINK_BASE_CLASS: &str = "ml-4 flex items-center text-white text-sm ";
 const HIDE_ON_MOBILE: &str = "hidden sm:block ";
 
 #[component]
@@ -34,14 +35,19 @@ pub fn Footer() -> impl IntoView {
 
     let links = vec![
         Link {
-            label: "Disclaimer",
-            href: "https://gist.github.com/robinbb/05ba138b080ff5a95dcf8bb2d6ae76c5",
+            label: "Docs",
+            href: "https://granola.gitbook.io/minasearch",
             icon: Icon::Docs,
         },
         Link {
-            label: "Terms",
-            href: "https://gist.github.com/robinbb/15b67f5d39dd47d37ddb88e3201dc311",
-            icon: Icon::Terms,
+            label: "API",
+            href: "https://granola.gitbook.io/minasearch/apis",
+            icon: Icon::Api,
+        },
+        Link {
+            label: "Discord",
+            href: "https://discord.gg/Zvu6XHNCxj",
+            icon: Icon::Discord,
         },
     ];
     view! {
@@ -98,8 +104,9 @@ pub fn Footer() -> impl IntoView {
                                 href=link.href
                             >
                                 {match link.icon {
-                                    Icon::Docs => view! { <DocsIcon width=12 /> },
-                                    Icon::Terms => view! { <TermsIcon width=12 /> },
+                                    Icon::Docs => view! { <DocsIcon width=16 /> },
+                                    Icon::Api => view! { <ApiIcon width=16 /> },
+                                    Icon::Discord => view! { <DiscordIcon width=16 /> },
                                 }}
 
                                 <div class="ml-1">{link.label}</div>
