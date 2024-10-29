@@ -11,6 +11,29 @@ use std::collections::HashMap;
 use web_sys::{window, Event, MouseEvent};
 
 #[component]
+pub fn NextBlockPage<T: HasBlockHeight>(
+    data: Vec<Option<T>>,
+    row_limit: Option<u64>,
+) -> impl IntoView {
+    let (_, set_height) = create_query_signal::<i64>(QUERY_PARAM_HEIGHT);
+    let mut last_block_height = None;
+    if let Some(Some(last_row)) = data.last() {
+        last_block_height = last_row.block_height();
+    }
+    view! {
+        <div class="w-full flex justify-center items-center p-4">
+            <Button
+                style_variant=ButtonStyleVariant::Tertiary
+                text="Load Next"
+                on_click=move |_| { set_height.set(last_block_height) }
+                class_str="ml-2"
+                disabled=data.len() as u64 != row_limit.unwrap_or(TABLE_ROW_LIMIT)
+            />
+        </div>
+    }
+}
+
+#[component]
 pub fn RowLimit() -> impl IntoView {
     view! {
         <UrlParamSelectMenu

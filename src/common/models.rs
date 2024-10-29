@@ -146,3 +146,7 @@ pub enum NavIcon {
     Delegates,
     Leaderboard,
 }
+
+pub trait HasBlockHeight {
+    fn block_height(&self) -> Option<i64>;
+}

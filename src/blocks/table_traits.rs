@@ -283,3 +283,9 @@ impl FeeTransferTrait for BlocksQueryBlocksTransactionsFeeTransfer {
             .map_or_else(String::new, |t| t.to_string())
     }
 }
+
+impl HasBlockHeight for BlocksQueryBlocks {
+    fn block_height(&self) -> Option<i64> {
+        self.block_height
+    }
+}
