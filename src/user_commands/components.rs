@@ -207,6 +207,14 @@ pub fn TransactionsSection() -> impl IntoView {
 
             is_loading=resource.loading()
             section_heading="User Commands"
+            footer=move || {
+                view! {
+                    <NextBlockPage
+                        data=data_sig.get().unwrap_or(vec![])
+                        row_limit=row_limit_sig.get()
+                    />
+                }
+            }
             controls=move || {
                 view! {
                     <div class="hidden md:flex justify-center items-center">

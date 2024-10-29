@@ -193,6 +193,17 @@ let test_suite_data = [
           cy.get("@table-rows").find(".canonical").should("exist");
         });
       },
+      () => {
+        cy.intercept("POST", "/graphql").as("graphql");
+        cy.visit("/blocks?q-height=25");
+        cy.wait("@graphql").then(() => {
+          cy.wait(1000);
+          cy.assertLoadNextWorks("Blocks", "Height", {
+            button_text: "Load Next",
+            expected_button_state: "be.disabled",
+          });
+        });
+      },
     ],
   },
   {
@@ -288,10 +299,10 @@ let test_suite_data = [
       },
       () => {
         cy.intercept("POST", "/graphql").as("graphql");
-        cy.visit("/blocks?q-height=25");
+        cy.visit("/commands/user?q-height=25");
         cy.wait("@graphql").then(() => {
           cy.wait(1000);
-          cy.assertLoadNextWorks("Blocks", "Height", {
+          cy.assertLoadNextWorks("User Commands", "Height", {
             button_text: "Load Next",
             expected_button_state: "be.disabled",
           });

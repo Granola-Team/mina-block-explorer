@@ -7,7 +7,7 @@ use super::{
 use crate::common::{
     constants::{LHS_MAX_DIGIT_PADDING, LHS_MAX_SPACE_FEES, TXN_STATUS_APPLIED, TXN_STATUS_FAILED},
     functions::*,
-    models::ColorVariant,
+    models::{ColorVariant, HasBlockHeight},
     table::*,
 };
 use heck::ToTitleCase;
@@ -375,5 +375,11 @@ impl TransactionsTrait for TransactionsQueryOtherTransactions {
 
     fn get_to(&self) -> String {
         String::new()
+    }
+}
+
+impl HasBlockHeight for TransactionsQueryTransactions {
+    fn block_height(&self) -> Option<i64> {
+        self.block_height
     }
 }
