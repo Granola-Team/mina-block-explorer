@@ -191,7 +191,7 @@ where
                                     columns=table_columns.clone()
                                     data=vec![
                                         vec![LoadingPlaceholder; table_cols_length];
-                                        TABLE_ROW_LIMIT as usize
+                                        (TABLE_ROW_LIMIT / 2) as usize
                                     ]
                                 />
                             }

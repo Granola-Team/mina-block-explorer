@@ -15,7 +15,13 @@ pub fn NextBlockPage<T: HasBlockHeight>(
     data: Vec<Option<T>>,
     row_limit: Option<u64>,
 ) -> impl IntoView {
-    let (_, set_height) = create_query_signal::<i64>(QUERY_PARAM_HEIGHT);
+    let (_, set_height) = create_query_signal_with_options::<i64>(
+        QUERY_PARAM_HEIGHT,
+        NavigateOptions {
+            scroll: false,
+            ..Default::default()
+        },
+    );
     let mut last_block_height = None;
     if let Some(Some(last_row)) = data.last() {
         last_block_height = last_row.block_height();
