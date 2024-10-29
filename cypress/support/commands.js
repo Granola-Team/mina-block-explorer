@@ -71,7 +71,7 @@ Cypress.Commands.add(
 );
 
 Cypress.Commands.add("assertStandardRowLimits", (tableHeading) => {
-  [25, 50, 100, 250, 500, 1000].forEach((l) => {
+  [1000, 500, 250, 100, 50, 25].forEach((l) => {
     cy.assertRowLimitWorks(tableHeading, l);
   });
 });
