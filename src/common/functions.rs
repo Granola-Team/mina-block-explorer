@@ -2,7 +2,6 @@ use super::models::*;
 use crate::{
     common::{components::CopyToClipboard, constants::*},
     icons::HelpIcon,
-    stakes::models::EpochStyleVariant,
 };
 use chrono::{DateTime, Duration, LocalResult, TimeZone, Utc};
 use leptos::*;
@@ -1101,15 +1100,15 @@ extern "C" {
     pub fn get_unix_timestamp() -> f64;
 }
 
-pub fn get_button_style_variation(style_variant: &EpochStyleVariant) -> &str {
+pub fn get_button_style_variation(style_variant: &ButtonStyleVariant) -> &str {
     match style_variant {
-        EpochStyleVariant::Primary => {
+        ButtonStyleVariant::Primary => {
             "text-white bg-granola-orange"
         }
-        EpochStyleVariant::Secondary => {
+        ButtonStyleVariant::Secondary => {
             "text-granola-orange bg-white"
         }
-        EpochStyleVariant::Tertiary => {
+        ButtonStyleVariant::Tertiary => {
             "text-slate-500 bg-white border-slate-500 disabled:text-slate-300 disabled:border-slate-300"
         }
     }

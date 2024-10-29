@@ -1,6 +1,12 @@
 use graphql_client::Error;
 use serde::{Deserialize, Serialize};
 
+pub enum ButtonStyleVariant {
+    Primary,
+    Secondary,
+    Tertiary,
+}
+
 #[derive(Clone, Default, Debug)]
 pub struct TableMetadata {
     pub total_records: Option<u64>,

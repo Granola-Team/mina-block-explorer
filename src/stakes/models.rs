@@ -1,11 +1,6 @@
 use crate::common::table::{AnySort, CycleSort, SortDirection};
 use std::fmt;
 
-pub enum EpochStyleVariant {
-    Primary,
-    Secondary,
-}
-
 #[derive(Clone)]
 #[allow(dead_code)]
 pub enum StakesSort {

@@ -2,7 +2,6 @@ use super::models::*;
 use crate::{
     common::{constants::*, functions::*},
     icons::*,
-    stakes::models::EpochStyleVariant,
 };
 use leptos::{html::Div, *};
 use leptos_meta::Script;
@@ -37,7 +36,7 @@ pub fn RowLimit() -> impl IntoView {
 pub fn Button<F>(
     on_click: F,
     #[prop(into)] text: String,
-    #[prop(optional, default=EpochStyleVariant::Primary)] style_variant: EpochStyleVariant,
+    #[prop(optional, default=ButtonStyleVariant::Primary)] style_variant: ButtonStyleVariant,
     #[prop(optional, default = false)] disabled: bool,
     #[prop(optional, into, default=String::new())] class_str: String,
 ) -> impl IntoView
@@ -59,7 +58,7 @@ where
         false => button_variant_styles,
     };
     view! {
-        <button disabled on:click=on_click class=class_str + " " + &button_variant_styles>
+        <button disabled=disabled on:click=on_click class=class_str + " " + &button_variant_styles>
             {text}
         </button>
     }

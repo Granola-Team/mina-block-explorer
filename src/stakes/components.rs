@@ -169,13 +169,13 @@ pub fn StakesPageContents(
                                         .map(|prev_epoch| prev_epoch == 0)
                                         .unwrap_or_default()
                                     text="Previous"
-                                    style_variant=EpochStyleVariant::Secondary
+                                    style_variant=ButtonStyleVariant::Secondary
                                     epoch_target=prev_epoch_sig.get().unwrap_or_default()
                                 />
                                 <EpochButton
                                     disabled=next_epoch_opt.is_none()
                                     text="Next"
-                                    style_variant=EpochStyleVariant::Primary
+                                    style_variant=ButtonStyleVariant::Primary
                                     epoch_target=next_epoch_sig.get().unwrap_or_default()
                                 />
                             </div>
@@ -231,7 +231,7 @@ pub fn EpochButton(
     #[prop(into)] text: String,
     #[prop(optional)] epoch_target: u64,
     #[prop(default = false)] disabled: bool,
-    style_variant: EpochStyleVariant,
+    style_variant: ButtonStyleVariant,
     #[prop(default=String::new(), into)] href: String,
 ) -> impl IntoView {
     let button_base_styles = "text-sm rounded-md p-2 h-9 font-semibold ml-2 flex justify-center items-center border border-granola-orange border-[1px]";
