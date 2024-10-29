@@ -1,5 +1,10 @@
 use super::graphql::internal_commands_query::InternalCommandsQueryFeetransfers;
-use crate::common::{constants::LHS_MAX_SPACE_FEES, functions::*, models::ColorVariant, table::*};
+use crate::common::{
+    constants::LHS_MAX_SPACE_FEES,
+    functions::*,
+    models::{ColorVariant, HasBlockHeight},
+    table::*,
+};
 use leptos::*;
 
 impl TableData for Vec<Option<InternalCommandsQueryFeetransfers>> {
@@ -81,5 +86,11 @@ impl InternalCommandTrait for InternalCommandsQueryFeetransfers {
     }
     fn get_block_datetime(&self) -> String {
         self.date_time.map_or_else(String::new, |o| o.to_string())
+    }
+}
+
+impl HasBlockHeight for InternalCommandsQueryFeetransfers {
+    fn block_height(&self) -> Option<i64> {
+        self.block_height
     }
 }

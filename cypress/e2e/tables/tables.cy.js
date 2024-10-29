@@ -656,6 +656,17 @@ let test_suite_data = [
       () => {
         cy.assertStandardRowLimits("Internal Commands");
       },
+      () => {
+        cy.intercept("POST", "/graphql").as("graphql");
+        cy.visit("/commands/internal?q-height=25");
+        cy.wait("@graphql").then(() => {
+          cy.wait(1000);
+          cy.assertLoadNextWorks("Internal Commands", "Height", {
+            button_text: "Load Next",
+            expected_button_state: "be.disabled",
+          });
+        });
+      },
     ],
   },
   {
