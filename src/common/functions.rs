@@ -2,6 +2,7 @@ use super::models::*;
 use crate::{
     common::{components::CopyToClipboard, constants::*},
     icons::HelpIcon,
+    stakes::models::EpochStyleVariant,
 };
 use chrono::{DateTime, Duration, LocalResult, TimeZone, Utc};
 use leptos::*;
@@ -1098,4 +1099,18 @@ mod validate_block_height_range_tests {
 )]
 extern "C" {
     pub fn get_unix_timestamp() -> f64;
+}
+
+pub fn get_button_style_variation(style_variant: &EpochStyleVariant) -> &str {
+    match style_variant {
+        EpochStyleVariant::Primary => {
+            "text-white bg-granola-orange"
+        }
+        EpochStyleVariant::Secondary => {
+            "text-granola-orange bg-white"
+        }
+        EpochStyleVariant::Tertiary => {
+            "text-slate-500 bg-white border-slate-500 disabled:text-slate-300 disabled:border-slate-300"
+        }
+    }
 }

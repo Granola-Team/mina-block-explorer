@@ -45,14 +45,11 @@ where
     F: Fn(MouseEvent) + 'static,
 {
     let button_base_styles = "text-sm rounded-md p-2 h-9 font-semibold flex justify-center items-center border border-granola-orange border-[1px]";
-    let mut button_variant_styles = match style_variant {
-        EpochStyleVariant::Primary => {
-            format!("{} {}", button_base_styles, "text-white bg-granola-orange")
-        }
-        EpochStyleVariant::Secondary => {
-            format!("{} {}", button_base_styles, "text-granola-orange bg-white")
-        }
-    };
+    let mut button_variant_styles = format!(
+        "{} {}",
+        button_base_styles,
+        get_button_style_variation(&style_variant)
+    );
     button_variant_styles = match disabled {
         true => format!(
             "{} {}",
@@ -62,7 +59,7 @@ where
         false => button_variant_styles,
     };
     view! {
-        <button on:click=on_click class=class_str + " " + &button_variant_styles>
+        <button disabled on:click=on_click class=class_str + " " + &button_variant_styles>
             {text}
         </button>
     }
