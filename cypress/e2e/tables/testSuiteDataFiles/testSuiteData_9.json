@@ -1,0 +1,25 @@
+{
+  "tag": "@tier2",
+  "url": "/addresses/accounts/B62qiVr4Wy6yKhxNV49Npnpr2XF5AhsFejFWWQpWKARQpTYsb9snNZY/commands/internal",
+  "table": {
+    "heading": "Internal Commands",
+    "columns": [
+      "Height",
+      "State Hash",
+      "Fee",
+      "Type",
+      "Date"
+    ],
+    "filter_tests": [
+      {
+        "column": "Height",
+        "input": 5200
+      },
+      {
+        "column": "State Hash",
+        "input": "3NKq6mHhx31ikA9Gax1JcRuzTMp3tMudKfcwt3VxMDnvAeMYZGPA"
+      }
+    ]
+  },
+  "tests": []
+}

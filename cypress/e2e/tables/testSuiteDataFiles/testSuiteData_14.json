@@ -1,0 +1,31 @@
+{
+  "tag": "@tier2",
+  "url": "/snarks",
+  "table": {
+    "heading": "SNARKs",
+    "columns": [
+      "Height",
+      "State Hash",
+      "Date",
+      "Prover",
+      "Fee"
+    ],
+    "filter_tests": [
+      {
+        "column": "Height",
+        "input": 2000
+      },
+      {
+        "column": "State Hash",
+        "input": "3NKrxKGr3JpYT2CzAFUeUb89ae6MFMsVWFX1QLYqYNJp1ffHR4ej"
+      },
+      {
+        "column": "Prover",
+        "input": "B62qrQiw9JhUumq457sMxicgQ94Z1WD9JChzJu19kBE8Szb5T8tcUAC"
+      }
+    ]
+  },
+  "tests": [
+    null
+  ]
+}

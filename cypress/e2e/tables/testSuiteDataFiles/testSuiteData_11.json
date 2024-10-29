@@ -1,0 +1,46 @@
+{
+  "tag": "@tier2",
+  "url": "/addresses/accounts",
+  "table": {
+    "heading": "Accounts",
+    "columns": [
+      "Public Key",
+      "Username",
+      "Balance",
+      "Nonce",
+      "Delegate",
+      "Time Locked"
+    ],
+    "sorting_columns": [
+      {
+        "column": "Balance",
+        "type": "numeric",
+        "sort_options": [
+          "BALANCE_DESC",
+          "BALANCE_ASC"
+        ]
+      }
+    ],
+    "filter_tests": [
+      {
+        "column": "Balance",
+        "input": 5000
+      },
+      {
+        "column": "Public Key",
+        "input": "B62qpqCBExtxzfHUPkmrrfmYhXZyg3V7pSmwuxHMzTi8E6gBbopauJS"
+      },
+      {
+        "column": "Username",
+        "input": "Romek"
+      },
+      {
+        "column": "Delegate",
+        "input": "B62qpqCBExtxzfHUPkmrrfmYhXZyg3V7pSmwuxHMzTi8E6gBbopauJS"
+      }
+    ]
+  },
+  "tests": [
+    null
+  ]
+}

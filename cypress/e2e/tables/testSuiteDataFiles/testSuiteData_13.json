@@ -1,0 +1,32 @@
+{
+  "tag": "@tier2",
+  "url": "/commands/internal",
+  "table": {
+    "heading": "Internal Commands",
+    "columns": [
+      "Height",
+      "State Hash",
+      "Recipient",
+      "Fee",
+      "Type",
+      "Date"
+    ],
+    "filter_tests": [
+      {
+        "column": "Height",
+        "input": 2000
+      },
+      {
+        "column": "State Hash",
+        "input": "3NLgCqncc6Ct4dcuhaG3ANQbfWwQCxMXu4MJjwGgRKxs6p8vQsZf"
+      },
+      {
+        "column": "Recipient",
+        "input": "B62qnucUMHz7Dw2ReNgWhmR5XCvPeQjJWPReuQ8GwPyY4qj1otGBiKr"
+      }
+    ]
+  },
+  "tests": [
+    null
+  ]
+}

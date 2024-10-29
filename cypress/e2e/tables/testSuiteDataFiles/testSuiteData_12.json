@@ -1,0 +1,40 @@
+{
+  "tag": "@tier2",
+  "url": "/staking-ledgers?epoch=1",
+  "table": {
+    "columns": [
+      "Key",
+      "Username",
+      "Stake",
+      "Total Stake %",
+      "Block Win %",
+      "Delegate",
+      "Delegators"
+    ],
+    "sorting_columns": [
+      {
+        "column": "Total Stake %",
+        "type": "numeric",
+        "sort_options": [
+          "STAKE_DESC",
+          "STAKE_ASC"
+        ]
+      }
+    ],
+    "heading": "Staking Ledger - Epoch 1",
+    "filter_tests": [
+      {
+        "column": "Key",
+        "input": "B62qq3tqfdj19hqaVCozJFM2q9gT2WezQMaJMKD6wxyvK3fMpHiP9va"
+      },
+      {
+        "column": "Stake",
+        "input": "7,399,987.246422696"
+      }
+    ]
+  },
+  "tests": [
+    null,
+    null
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "tag": "@tier2",
+  "url": "/blocks",
+  "table": {
+    "heading": "Blocks",
+    "columns": [
+      "Height",
+      "State Hash",
+      "Slot",
+      "Date",
+      "Block Producer",
+      "Coinbase",
+      "User Commands",
+      "SNARKs",
+      "Coinbase Receiver"
+    ],
+    "filter_tests": [
+      {
+        "column": "Height",
+        "input": 2000
+      },
+      {
+        "column": "State Hash",
+        "input": "3NKeMoncuHab5ScarV5ViyF16cJPT4taWNSaTLS64Dp67wuXigPZ"
+      },
+      {
+        "column": "Slot",
+        "input": 90000
+      },
+      {
+        "column": "Block Producer",
+        "input": "B62qiy32p8kAKnny8ZFwoMhYpBppM1DWVCqAPBYNcXnsAHhnfAAuXgg"
+      }
+    ]
+  },
+  "tests": [
+    null,
+    null
+  ]
+}

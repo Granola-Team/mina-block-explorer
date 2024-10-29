@@ -1,0 +1,41 @@
+{
+  "tag": "@tier2",
+  "url": "/commands/user",
+  "table": {
+    "heading": "User Commands",
+    "columns": [
+      "Height",
+      "Txn Hash",
+      "Date",
+      "Type",
+      "Status",
+      "From",
+      "To",
+      "Nonce",
+      "Fee",
+      "Amount"
+    ],
+    "filter_tests": [
+      {
+        "column": "Height",
+        "input": 2000
+      },
+      {
+        "column": "Txn Hash",
+        "input": "CkpYyMV4jDtgKfbz6hCUVB6J8jYfJd85A7mvtVw7ydKLuoCK5GS25"
+      },
+      {
+        "column": "From",
+        "input": "B62qre3erTHfzQckNuibViWQGyyKwZseztqrjPZBv6SQF384Rg6ESAy"
+      },
+      {
+        "column": "To",
+        "input": "B62qjYanmV7y9njVeH5UHkz3GYBm7xKir1rAnoY4KsEYUGLMiU45FSM"
+      }
+    ]
+  },
+  "tests": [
+    null,
+    null
+  ]
+}

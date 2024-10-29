@@ -1,0 +1,14 @@
+{
+  "tag": "@tier2",
+  "url": "/analytics/snarks",
+  "table": {
+    "heading": "SNARK Fees Overview",
+    "columns": [
+      "Metric",
+      "All SNARKs",
+      "SNARKs with non-zero fees"
+    ],
+    "filter_tests": []
+  },
+  "tests": []
+}

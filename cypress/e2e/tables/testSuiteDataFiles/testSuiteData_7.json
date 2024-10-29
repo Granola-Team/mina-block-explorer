@@ -1,0 +1,18 @@
+{
+  "tag": "@tier2",
+  "url": "/commands/pending",
+  "table": {
+    "heading": "Pending Commands",
+    "columns": [
+      "Txn Hash",
+      "Type",
+      "From",
+      "To",
+      "Nonce",
+      "Fee",
+      "Amount"
+    ],
+    "filter_tests": []
+  },
+  "tests": []
+}

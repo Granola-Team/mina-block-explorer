@@ -1,0 +1,35 @@
+{
+  "tag": "@tier2",
+  "url": "/addresses/accounts/B62qpqCBExtxzfHUPkmrrfmYhXZyg3V7pSmwuxHMzTi8E6gBbopauJS",
+  "table": {
+    "heading": "User Commands",
+    "columns": [
+      "Height",
+      "Txn Hash",
+      "Nonce",
+      "Date",
+      "Type",
+      "Direction",
+      "Counterparty",
+      "Amount/Fee"
+    ],
+    "filter_tests": [
+      {
+        "column": "Height",
+        "input": 2500
+      },
+      {
+        "column": "Txn Hash",
+        "input": "CkpYyMV4jDtgKfbz6hCUVB6J8jYfJd85A7mvtVw7ydKLuoCK5GS25"
+      },
+      {
+        "column": "Counterparty",
+        "input": "B62qjzJvc59DdG9ahht9rwxkEz7GedKuUMsnaVTuXFUeANKqfBeWpRE"
+      }
+    ]
+  },
+  "tests": [
+    null,
+    null
+  ]
+}
