@@ -215,8 +215,7 @@ where
                         ().into_view()
                     }
                 }}
-                <div class="table-footer flex justify-end items-center">{footer.run()}</div>
-
+                {move || footer.run()}
             </div>
         </TableSection>
     }
