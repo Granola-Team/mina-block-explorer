@@ -157,6 +157,7 @@ pub fn TableSectionTemplate<T, F, E, S>(
     #[prop(into)] section_heading: String,
     #[prop(optional, into)] additional_info: View,
     controls: F,
+    #[prop(optional, into)] footer: ViewFn,
     #[prop(default = false)] half_width: bool,
 ) -> impl IntoView
 where
@@ -214,6 +215,7 @@ where
                         ().into_view()
                     }
                 }}
+                <div class="table-footer flex justify-end items-center">{footer.run()}</div>
 
             </div>
         </TableSection>
