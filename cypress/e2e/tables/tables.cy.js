@@ -286,6 +286,17 @@ let test_suite_data = [
           });
         });
       },
+      () => {
+        cy.intercept("POST", "/graphql").as("graphql");
+        cy.visit("/blocks?q-height=25");
+        cy.wait("@graphql").then(() => {
+          cy.wait(1000);
+          cy.assertLoadNextWorks("Blocks", "Height", {
+            button_text: "Load Next",
+            expected_button_state: "be.disabled",
+          });
+        });
+      },
     ],
   },
   {

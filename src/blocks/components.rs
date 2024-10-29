@@ -732,6 +732,11 @@ pub fn BlocksSection() -> impl IntoView {
             })
 
             is_loading=resource.loading()
+            footer=move || {
+                view! {
+                    <Footer data=data_sig.get().unwrap_or(vec![]) row_limit=row_limit_sig.get() />
+                }
+            }
             controls=move || {
                 view! {
                     <div class="hidden md:flex justify-center items-center">
@@ -754,5 +759,25 @@ pub fn BlocksSection() -> impl IntoView {
         />
 
         <Outlet />
+    }
+}
+
+#[component]
+fn Footer(data: Vec<Option<BlocksQueryBlocks>>, row_limit: Option<u64>) -> impl IntoView {
+    let (_, set_height) = create_query_signal::<i64>(QUERY_PARAM_HEIGHT);
+    let mut last_block_height = None;
+    if let Some(Some(last_row)) = data.last() {
+        last_block_height = last_row.block_height;
+    }
+    view! {
+        <div class="w-full flex justify-center items-center p-4">
+            <Button
+                style_variant=ButtonStyleVariant::Tertiary
+                text="Load Next"
+                on_click=move |_| { set_height.set(last_block_height) }
+                class_str="ml-2"
+                disabled=data.len() as u64 != row_limit.unwrap_or(TABLE_ROW_LIMIT)
+            />
+        </div>
     }
 }

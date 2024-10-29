@@ -165,6 +165,54 @@ Cypress.Commands.add(
 );
 
 Cypress.Commands.add(
+  "assertLoadNextWorks",
+  (
+    tableHeading,
+    column,
+    opts = { button_text: "Load Next", expected_button_state: "be.enabled" },
+  ) => {
+    cy.aliasTableRows(tableHeading, "table-rows");
+    cy.aliasTableHeaders(tableHeading, "columns");
+    let last_height = null;
+    cy.get("@columns")
+      .contains(column)
+      .invoke("index")
+      .then((columnIndex) => {
+        cy.get("@table-rows")
+          .last()
+          .find("td")
+          .eq(columnIndex)
+          .invoke("text")
+          .then((text) => {
+            cy.log("Last value: ", text);
+            last_height = text;
+          });
+      });
+    cy.intercept("POST", "/graphql").as("graphql");
+    cy.contains(opts.button_text).click();
+    cy.wait("@graphql").then(() => {
+      cy.wait(1000);
+      cy.contains(opts.button_text).should(opts.expected_button_state);
+      cy.get("@columns")
+        .contains(column)
+        .invoke("index")
+        .then((columnIndex) => {
+          cy.get("@table-rows")
+            .first()
+            .find("td")
+            .eq(columnIndex)
+            .invoke("text")
+            .then((text) => {
+              cy.log("This value: ", text);
+              expect(last_height).to.not.eq(null);
+              expect(text).to.eq(last_height);
+            });
+        });
+    });
+  },
+);
+
+Cypress.Commands.add(
   "clickLinkInTable",
   (nthRow, columnHeading, tableHeading, tableHeadingEl = "h1") => {
     cy.aliasTableHeaders(tableHeading, "columns", tableHeadingEl);
