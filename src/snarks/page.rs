@@ -134,6 +134,14 @@ fn SnarksPageContents() -> impl IntoView {
 
             is_loading=resource.loading()
             section_heading="SNARKs"
+            footer=move || {
+                view! {
+                    <NextBlockPage
+                        data=data_sig.get().unwrap_or(vec![])
+                        row_limit=row_limit_sig.get().map(|l| l as u64)
+                    />
+                }
+            }
             controls=move || {
                 view! {
                     <div class="hidden md:flex justify-center items-center">

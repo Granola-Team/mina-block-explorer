@@ -1,5 +1,5 @@
 use super::{functions::*, graphql::snarks_query};
-use crate::common::{functions::*, table::*};
+use crate::common::{functions::*, models::HasBlockHeight, table::*};
 use leptos::*;
 use snarks_query::SnarksQuerySnarks;
 
@@ -40,5 +40,11 @@ impl TableData for Vec<Option<SnarksQuerySnarks>> {
                 None => vec![],
             })
             .collect::<Vec<_>>()
+    }
+}
+
+impl HasBlockHeight for SnarksQuerySnarks {
+    fn block_height(&self) -> Option<i64> {
+        self.block_height
     }
 }

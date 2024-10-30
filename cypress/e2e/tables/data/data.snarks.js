@@ -1,22 +1,6 @@
 // Test suite data for: /snarks
 const { parseFormattedNumber } = require("../../helpers");
-const {
-  FIRST_BLOCK_PRODUCER_ADDRESS,
-  FIRST_RECIPIENT_ADDRESS,
-  FIRST_SENDER_ADDRESS,
-  GENESIS_BLOCK_BLOCK_HASH,
-  BLOCK_STATE_HASH_MIXED_USER_COMMANDS,
-  ROMEK_ADDRESS,
-  ROMEK_MINA_NAMING_SERVICE_TXN_HASH,
-  ROMEK_USERNAME,
-  SLOTS_PER_EPOCH,
-  MINA_NAMING_SERVICE_ADDRESS,
-  ROMEK_BLOCK_STATE_HASH,
-  VETAL_BLOCK_STATE_HASH,
-  ROMEK_NAMING_MEMO,
-  SNZ_USERNAME,
-  SNZPOOL_ADDRESS,
-} = require("../../constants");
+const { VETAL_BLOCK_STATE_HASH } = require("../../constants");
 
 module.exports = {
   tag: "@tier2",
@@ -62,6 +46,17 @@ module.exports = {
   tests: [
     () => {
       cy.assertStandardRowLimits("SNARKs");
+    },
+    () => {
+      cy.intercept("POST", "/graphql").as("graphql");
+      cy.visit("/snarks?row-limit=100&q-height=149");
+      cy.wait("@graphql").then(() => {
+        cy.wait(1000);
+        cy.assertLoadNextWorks("SNARKs", "Height", {
+          button_text: "Load Next",
+          expected_button_state: "be.disabled",
+        });
+      });
     },
   ],
 };
