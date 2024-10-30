@@ -1,22 +1,6 @@
 // Test suite data for: /addresses/accounts
 const { parseFormattedNumber } = require("../../helpers");
-const {
-  FIRST_BLOCK_PRODUCER_ADDRESS,
-  FIRST_RECIPIENT_ADDRESS,
-  FIRST_SENDER_ADDRESS,
-  GENESIS_BLOCK_BLOCK_HASH,
-  BLOCK_STATE_HASH_MIXED_USER_COMMANDS,
-  ROMEK_ADDRESS,
-  ROMEK_MINA_NAMING_SERVICE_TXN_HASH,
-  ROMEK_USERNAME,
-  SLOTS_PER_EPOCH,
-  MINA_NAMING_SERVICE_ADDRESS,
-  ROMEK_BLOCK_STATE_HASH,
-  VETAL_BLOCK_STATE_HASH,
-  ROMEK_NAMING_MEMO,
-  SNZ_USERNAME,
-  SNZPOOL_ADDRESS,
-} = require("../../constants");
+const { ROMEK_ADDRESS, ROMEK_USERNAME } = require("../../constants");
 
 module.exports = {
   tag: "@tier2",
@@ -48,6 +32,18 @@ module.exports = {
           cy.assertForEachColumnValue("Accounts", "Balance", (text) => {
             let balance = parseFormattedNumber(text);
             expect(balance).to.be.lte(5000);
+          });
+        },
+      },
+      {
+        column: "Balance",
+        input: "5000.1234",
+        assertion: function () {
+          cy.aliasTableRows("Accounts", "table-rows");
+          cy.get("@table-rows").should("have.lengthOf", 25);
+          cy.assertForEachColumnValue("Accounts", "Balance", (text) => {
+            let balance = parseFormattedNumber(text);
+            expect(balance).to.be.lte(5000.1234);
           });
         },
       },

@@ -27,7 +27,7 @@ fn AccountsPageContents() -> impl IntoView {
     let (data_sig, set_data) = create_signal(None);
     let (public_key_sig, _) = create_query_signal::<String>("q-public-key");
     let (username_sig, _) = create_query_signal::<String>("q-username");
-    let (balance_sig, _) = create_query_signal::<i64>("q-balance");
+    let (balance_sig, _) = create_query_signal::<f64>("q-balance");
     let (delegate_sig, _) = create_query_signal::<String>("q-delegate");
     let (row_limit_sig, _) = create_query_signal::<i64>("row-limit");
     let (sort_dir_sig, _) = create_query_signal::<String>("sort-dir");
@@ -56,7 +56,7 @@ fn AccountsPageContents() -> impl IntoView {
                 Some(*row_limit.get_or_insert(25i64)),
                 public_key,
                 username,
-                balance.map(|b| b * 1_000_000_000i64),
+                balance.map(|b| (b as i64) * 1_000_000_000i64),
                 delegate,
                 Some(sort_by),
             )
