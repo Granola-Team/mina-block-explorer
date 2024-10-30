@@ -61,6 +61,14 @@ pub fn get_username(stake: &StakingLedgersQueryStakes) -> String {
         .map_or_else(String::new, ToString::to_string)
 }
 
+pub fn get_balance(stake: &StakingLedgersQueryStakes) -> String {
+    stake
+        .balance
+        .map(|number| format!("{:.1}", number))
+        .map(|number| format_number_for_html(&number, 11))
+        .unwrap_or_default()
+}
+
 pub fn get_delegators_count(stake: &StakingLedgersQueryStakes) -> String {
     stake
         .delegation_totals
