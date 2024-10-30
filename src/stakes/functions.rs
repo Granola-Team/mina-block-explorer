@@ -17,7 +17,7 @@ pub fn get_stake(stake: &StakingLedgersQueryStakes) -> String {
         .as_ref()
         .and_then(|delegation_totals| delegation_totals.total_delegated_nanomina)
         .map(|stake| nanomina_to_mina(stake as u64))
-        .map(|number| format_number_for_html(&number, LHS_MAX_DIGIT_PADDING))
+        .map(|number| format_number_for_html(&number, 11))
         .unwrap_or("0".to_string())
 }
 
