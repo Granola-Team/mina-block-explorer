@@ -65,7 +65,7 @@ pub fn get_balance(stake: &StakingLedgersQueryStakes) -> String {
     stake
         .balance
         .map(|number| format!("{:.1}", number))
-        .map(|number| format_mina(number))
+        .map(format_mina)
         .map(|number| format_number_for_html(&number, 11))
         .unwrap_or_default()
 }
