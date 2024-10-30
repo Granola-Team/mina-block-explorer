@@ -49,6 +49,7 @@ pub fn StakesPageContents(
                 column: "Stake".to_string(),
                 width: Some(String::from(TABLE_COL_LARGE_BALANCE)),
                 is_searchable: true,
+                html_input_type: "number".to_string(),
                 ..Default::default()
             },
             TableColumn {
