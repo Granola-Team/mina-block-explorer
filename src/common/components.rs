@@ -22,16 +22,37 @@ pub fn NextBlockPage<T: HasBlockHeight>(
             ..Default::default()
         },
     );
+    let (row_limit_sig, set_row_limit) = create_query_signal_with_options::<u64>(
+        QUERY_PARAM_ROW_LIMIT,
+        NavigateOptions {
+            scroll: false,
+            ..Default::default()
+        },
+    );
     let mut last_block_height = None;
+    let mut first_block_height = None;
+    if let Some(Some(first_row)) = data.first() {
+        first_block_height = first_row.block_height();
+    }
     if let Some(Some(last_row)) = data.last() {
         last_block_height = last_row.block_height();
     }
+    let not_pageable = first_block_height
+        .zip(last_block_height)
+        .map(|(first_height, last_height)| last_height == first_height)
+        .unwrap_or_default();
     view! {
         <div class="w-full flex justify-center items-center p-4">
             <Button
                 style_variant=ButtonStyleVariant::Tertiary
                 text="Load Next"
-                on_click=move |_| { set_height.set(last_block_height) }
+                on_click=move |_| {
+                    if not_pageable {
+                        set_row_limit.set(row_limit_sig.get_untracked().map(|rl| rl * 2))
+                    } else {
+                        set_height.set(last_block_height)
+                    }
+                }
                 class_str="ml-2"
                 disabled=data.len() as u64 != row_limit.unwrap_or(TABLE_ROW_LIMIT)
             />
