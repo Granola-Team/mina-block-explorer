@@ -48,7 +48,7 @@ pub fn NextBlockPage<T: HasBlockHeight>(
                 text="Load Next"
                 on_click=move |_| {
                     if not_pageable {
-                        set_row_limit.set(row_limit_sig.get_untracked().map(|rl| rl * 2))
+                        set_row_limit.set(row_limit_sig.get().map(|rl| rl * 2).or(Some(50)))
                     } else {
                         set_height.set(last_block_height)
                     }
