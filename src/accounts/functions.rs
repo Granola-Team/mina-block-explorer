@@ -9,21 +9,26 @@ pub async fn load_data(
     limit: Option<i64>,
     public_key: Option<String>,
     username: Option<String>,
-    balance: Option<i64>,
+    mina_balance: Option<f64>,
     delegate: Option<String>,
     sort_by: Option<accounts_query::AccountSortByInput>,
 ) -> Result<accounts_query::ResponseData, MyError> {
-    let query =
-        if public_key.is_none() && username.is_none() && balance.is_none() && delegate.is_none() {
-            None
-        } else {
-            Some(accounts_query::AccountQueryInput {
-                public_key,
-                username,
-                balance_lte: balance,
-                delegate,
-            })
-        };
+    let query = if public_key.is_none()
+        && username.is_none()
+        && mina_balance.is_none()
+        && delegate.is_none()
+    {
+        None
+    } else {
+        Some(accounts_query::AccountQueryInput {
+            public_key,
+            username,
+            balance_lte: mina_balance
+                .map(|mb| mb * 1_000_000_000f64)
+                .map(|nmb| nmb as i64),
+            delegate,
+        })
+    };
 
     let variables = accounts_query::Variables {
         limit,

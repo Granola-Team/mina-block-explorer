@@ -87,5 +87,13 @@ module.exports = {
     () => {
       cy.assertStandardRowLimits("Accounts");
     },
+    () => {
+      cy.intercept("POST", "/graphql").as("graphql");
+      cy.visit("/addresses/accounts");
+      cy.wait("@graphql").then(() => {
+        cy.wait(1000);
+        cy.assertLoadNextWorks("Accounts", "Balance");
+      });
+    },
   ],
 };
