@@ -190,14 +190,24 @@ pub fn TransactionsSection() -> impl IntoView {
                 otherQps.remove(QP_TXN_TYPE);
                 otherQps.remove(QP_TXN_APPLIED);
                 otherQps.remove(QP_ROW_LIMIT);
-                Some(TableMetadata {
-                    total_records: u64::try_from(summary_sig.get().total_num_user_commands).ok(),
-                    available_records: get_available_records(
+                let mut available_records = None;
+                let url_query_map = query_params_map.get();
+                let from = url_query_map.get(QP_FROM).cloned();
+                let to = url_query_map.get(QP_TO).cloned();
+                let txn_hash = url_query_map.get(QP_TXN_HASH).cloned();
+                if block_height_sig.get().is_none() && from.is_none() && to.is_none()
+                    && txn_hash.is_none()
+                {
+                    available_records = get_available_records(
                         summary_sig.get(),
                         txn_type_qp.get(),
                         txn_applied_sig.get(),
                         !otherQps.to_query_string().is_empty(),
-                    ),
+                    );
+                }
+                Some(TableMetadata {
+                    total_records: u64::try_from(summary_sig.get().total_num_user_commands).ok(),
+                    available_records,
                     displayed_records: u64::try_from(
                             data_sig.get().map(|d| d.len()).unwrap_or_default(),
                         )

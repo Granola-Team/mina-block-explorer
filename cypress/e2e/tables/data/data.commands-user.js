@@ -29,6 +29,7 @@ module.exports = {
         column: "Height",
         input: 2000,
         assertion: function () {
+          cy.assertNumberOfTableMetadataDatum("User Commands", 2);
           cy.assertForEachColumnValue("User Commands", "Height", (text) => {
             let height = parseFormattedNumber(text);
             expect(height).to.be.lte(2000);
@@ -39,6 +40,7 @@ module.exports = {
         column: "Txn Hash",
         input: "CkpYyMV4jDtgKfbz6hCUVB6J8jYfJd85A7mvtVw7ydKLuoCK5GS25",
         assertion: function () {
+          cy.assertNumberOfTableMetadataDatum("User Commands", 2);
           cy.aliasTableRows("User Commands", "table-rows");
           cy.get("@table-rows").should("have.lengthOf", 1);
           cy.assertForEachColumnValue("User Commands", "Txn Hash", (text) => {
@@ -51,6 +53,7 @@ module.exports = {
         column: "From",
         input: "B62qre3erTHfzQckNuibViWQGyyKwZseztqrjPZBv6SQF384Rg6ESAy",
         assertion: function () {
+          cy.assertNumberOfTableMetadataDatum("User Commands", 2);
           cy.assertForEachColumnValue("User Commands", "From", (text) => {
             expect(text).to.equal(FIRST_SENDER_ADDRESS);
           });
@@ -60,6 +63,7 @@ module.exports = {
         column: "To",
         input: "B62qjYanmV7y9njVeH5UHkz3GYBm7xKir1rAnoY4KsEYUGLMiU45FSM",
         assertion: function () {
+          cy.assertNumberOfTableMetadataDatum("User Commands", 2);
           cy.assertForEachColumnValue("User Commands", "To", (text) => {
             expect(text).to.equal(FIRST_RECIPIENT_ADDRESS);
           });
