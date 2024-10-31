@@ -1,23 +1,19 @@
 use crate::common::table::{AnySort, CycleSort, SortDirection};
 use std::fmt;
 
-#[derive(Clone, Debug)]
+#[derive(Clone)]
 #[allow(dead_code)]
 pub enum StakesSort {
     StakeDesc,
     StakeAsc,
-    StakeNil,
-    BalanceDesc,
-    BalanceAsc,
-    BalanceNil,
 }
 
 impl SortDirection for StakesSort {
     fn is_desc(&self) -> bool {
-        matches!(self, StakesSort::StakeDesc) || matches!(self, StakesSort::BalanceDesc)
+        matches!(self, StakesSort::StakeDesc)
     }
     fn is_active(&self) -> bool {
-        !matches!(self, StakesSort::StakeNil) && !matches!(self, StakesSort::BalanceNil)
+        true
     }
 }
 
@@ -30,18 +26,6 @@ impl fmt::Display for StakesSort {
             StakesSort::StakeAsc => {
                 write!(f, "STAKE_ASC")
             }
-            StakesSort::BalanceDesc => {
-                write!(f, "BALANCE_DESC")
-            }
-            StakesSort::BalanceAsc => {
-                write!(f, "BALANCE_ASC")
-            }
-            StakesSort::StakeNil => {
-                write!(f, "")
-            }
-            StakesSort::BalanceNil => {
-                write!(f, "")
-            }
         }
     }
 }
@@ -51,10 +35,6 @@ impl CycleSort for StakesSort {
         match self {
             StakesSort::StakeDesc => AnySort::Stakes(StakesSort::StakeAsc),
             StakesSort::StakeAsc => AnySort::Stakes(StakesSort::StakeDesc),
-            StakesSort::BalanceDesc => AnySort::Stakes(StakesSort::BalanceAsc),
-            StakesSort::BalanceAsc => AnySort::Stakes(StakesSort::BalanceDesc),
-            StakesSort::BalanceNil => AnySort::Stakes(StakesSort::BalanceDesc),
-            StakesSort::StakeNil => AnySort::Stakes(StakesSort::StakeDesc),
         }
     }
 }
@@ -65,8 +45,6 @@ impl TryFrom<String> for StakesSort {
         match str.as_str() {
             "STAKE_ASC" => Ok(StakesSort::StakeAsc),
             "STAKE_DESC" => Ok(StakesSort::StakeDesc),
-            "BALANCE_DESC" => Ok(StakesSort::BalanceDesc),
-            "BALANCE_ASC" => Ok(StakesSort::BalanceAsc),
             _ => Err("Unable to parse the StakesSort from string"),
         }
     }

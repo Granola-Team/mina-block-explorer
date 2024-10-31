@@ -114,8 +114,6 @@ impl SortDirection for AnySort {
         !matches!(
             self,
             AnySort::None(_)
-                | AnySort::Stakes(StakesSort::StakeNil)
-                | AnySort::Stakes(StakesSort::BalanceNil)
                 | AnySort::SnarkerLeaderboardHighestFee(SnarkerLeaderboardHighestFees::Nil)
                 | AnySort::SnarkerLeaderboardTotalFees(SnarkerLeaderboardTotalFees::Nil)
         )

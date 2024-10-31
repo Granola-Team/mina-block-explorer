@@ -14,17 +14,7 @@ pub fn StakesPageContents(
     #[prop(into)] total_num_accounts: Option<u64>,
     selected_epoch: Option<u64>,
 ) -> impl IntoView {
-    fn create_table_columns(sort: AnySort) -> Vec<TableColumn<AnySort>> {
-        let stake_sort = match sort {
-            AnySort::Stakes(StakesSort::StakeAsc) => AnySort::Stakes(StakesSort::StakeAsc),
-            AnySort::Stakes(StakesSort::StakeDesc) => AnySort::Stakes(StakesSort::StakeDesc),
-            _ => AnySort::Stakes(StakesSort::StakeNil),
-        };
-        let balance_sort = match sort {
-            AnySort::Stakes(StakesSort::BalanceAsc) => AnySort::Stakes(StakesSort::BalanceAsc),
-            AnySort::Stakes(StakesSort::BalanceDesc) => AnySort::Stakes(StakesSort::BalanceDesc),
-            _ => AnySort::Stakes(StakesSort::BalanceNil),
-        };
+    fn create_table_columns(total_stake_percent_sort: AnySort) -> Vec<TableColumn<AnySort>> {
         vec![
             TableColumn {
                 column: "Key".to_string(),
@@ -40,8 +30,6 @@ pub fn StakesPageContents(
             TableColumn {
                 column: "Balance".to_string(),
                 width: Some(String::from(TABLE_COL_LARGE_BALANCE)),
-                is_sortable: true,
-                sort_direction: Some(balance_sort),
                 is_searchable: false,
                 ..Default::default()
             },
@@ -54,7 +42,7 @@ pub fn StakesPageContents(
             },
             TableColumn {
                 column: "Total Stake %".to_string(),
-                sort_direction: Some(stake_sort),
+                sort_direction: Some(total_stake_percent_sort),
                 is_sortable: true,
                 width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
                 alignment: Some(ColumnTextAlignment::Right),
@@ -117,16 +105,13 @@ pub fn StakesPageContents(
             let public_key = params_map.get("q-key").cloned();
             let delegate = params_map.get("q-delegate").cloned();
             let stake = params_map.get("q-stake").cloned();
-            let mut sort_by = StakeSortByInput::BALANCE_DESC;
+            let mut sort_by = StakeSortByInput::STAKE_DESC;
             if let Some(s_dir) = sort_dir {
                 match StakesSort::try_from(s_dir) {
                     Ok(StakesSort::StakeAsc) => {
                         sort_by = StakeSortByInput::STAKE_ASC;
                     }
                     Ok(StakesSort::StakeDesc) => sort_by = StakeSortByInput::STAKE_DESC,
-                    Ok(StakesSort::BalanceDesc) => sort_by = StakeSortByInput::BALANCE_DESC,
-                    Ok(StakesSort::BalanceAsc) => sort_by = StakeSortByInput::BALANCE_ASC,
-                    Ok(StakesSort::StakeNil) | Ok(StakesSort::BalanceNil) => (),
                     Err(_) => (),
                 };
             }
@@ -172,7 +157,7 @@ pub fn StakesPageContents(
             let s_dir = sort_dir
                 .get()
                 .and_then(|s| StakesSort::try_from(s).ok())
-                .unwrap_or(StakesSort::BalanceDesc);
+                .unwrap_or(StakesSort::StakeDesc);
             let table_columns = create_table_columns(AnySort::Stakes(s_dir));
             view! {
                 <TableSectionTemplate

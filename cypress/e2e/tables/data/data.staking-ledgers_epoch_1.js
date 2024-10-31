@@ -17,14 +17,9 @@ module.exports = {
     ],
     sorting_columns: [
       {
-        column: "Balance",
-        type: "numeric",
-        sort_options: ["BALANCE_DESC", "BALANCE_ASC"],
-      },
-      {
         column: "Total Stake %",
         type: "numeric",
-        sort_options: [null, "STAKE_DESC", "STAKE_ASC"],
+        sort_options: ["STAKE_DESC", "STAKE_ASC"],
       },
     ],
     heading: "Staking Ledger - Epoch 1",
