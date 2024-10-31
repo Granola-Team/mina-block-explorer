@@ -1,22 +1,10 @@
 // Test suite data for: /blocks
-const { parseFormattedNumber } = require("../../helpers");
-const {
+import { parseFormattedNumber } from "../../helpers";
+import {
   FIRST_BLOCK_PRODUCER_ADDRESS,
-  FIRST_RECIPIENT_ADDRESS,
-  FIRST_SENDER_ADDRESS,
   GENESIS_BLOCK_BLOCK_HASH,
-  BLOCK_STATE_HASH_MIXED_USER_COMMANDS,
-  ROMEK_ADDRESS,
-  ROMEK_MINA_NAMING_SERVICE_TXN_HASH,
-  ROMEK_USERNAME,
   SLOTS_PER_EPOCH,
-  MINA_NAMING_SERVICE_ADDRESS,
-  ROMEK_BLOCK_STATE_HASH,
-  VETAL_BLOCK_STATE_HASH,
-  ROMEK_NAMING_MEMO,
-  SNZ_USERNAME,
-  SNZPOOL_ADDRESS,
-} = require("../../constants");
+} from "../../constants";
 
 module.exports = {
   tag: "@tier2",
@@ -39,6 +27,7 @@ module.exports = {
         column: "Height",
         input: 2000,
         assertion: function () {
+          cy.assertNumberOfTableMetadataDatum("Blocks", 2);
           cy.assertForEachColumnValue("Blocks", "Height", (text) => {
             let height = parseFormattedNumber(text);
             expect(height).to.be.lte(2000);
@@ -49,6 +38,7 @@ module.exports = {
         column: "State Hash",
         input: "3NKeMoncuHab5ScarV5ViyF16cJPT4taWNSaTLS64Dp67wuXigPZ",
         assertion: function () {
+          cy.assertNumberOfTableMetadataDatum("Blocks", 2);
           cy.aliasTableRows("Blocks", "table-rows");
           cy.get("@table-rows").should("have.lengthOf", 1);
           cy.assertForEachColumnValue("Blocks", "State Hash", (text) => {
@@ -60,6 +50,7 @@ module.exports = {
         column: "Slot",
         input: 90000,
         assertion: function () {
+          cy.assertNumberOfTableMetadataDatum("Blocks", 2);
           cy.assertForEachColumnValue("Blocks", "Slot", (text) => {
             let height = parseFormattedNumber(text);
             expect(height).to.be.lte(90000);
@@ -71,6 +62,7 @@ module.exports = {
         column: "Block Producer",
         input: "B62qiy32p8kAKnny8ZFwoMhYpBppM1DWVCqAPBYNcXnsAHhnfAAuXgg",
         assertion: function () {
+          cy.assertNumberOfTableMetadataDatum("Blocks", 2);
           cy.assertForEachColumnValue("Blocks", "Block Producer", (text) => {
             expect(text).to.equal(FIRST_BLOCK_PRODUCER_ADDRESS);
           });

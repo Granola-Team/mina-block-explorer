@@ -265,7 +265,7 @@ Cypress.Commands.add(
 );
 
 Cypress.Commands.add("assertTableMetadataCorrect", (heading, metadata, ith) => {
-  cy.aliasTableMetadata(heading, "table-metdata");
+  cy.aliasTableMetadata(heading, "table-metadata");
   cy.get("@table-metadata")
     .invoke("text")
     .then((text) => {
@@ -274,6 +274,20 @@ Cypress.Commands.add("assertTableMetadataCorrect", (heading, metadata, ith) => {
       expect(parseFormattedNumber(parsed_metadata[ith])).to.equal(metadata);
     });
 });
+
+Cypress.Commands.add(
+  "assertNumberOfTableMetadataDatum",
+  (heading, expected_number_of_metadata) => {
+    cy.aliasTableMetadata(heading, "table-metadata");
+    cy.get("@table-metadata")
+      .invoke("text")
+      .then((text) => {
+        text = text.replace(/\+/g, ""); // remove + symbol
+        let parsed_metadata = text.split(" of ");
+        expect(parsed_metadata.length).to.equal(expected_number_of_metadata);
+      });
+  },
+);
 
 Cypress.Commands.add("assertTableRecordsCorrect", (heading) => {
   cy.aliasTableMetadata(heading, "table-metadata");
