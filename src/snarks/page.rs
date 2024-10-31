@@ -112,9 +112,14 @@ fn SnarksPageContents() -> impl IntoView {
             table_columns
             data_sig
             metadata=Signal::derive(move || {
-                Some(TableMetadata {
-                    total_records: u64::try_from(summary_sig.get().total_num_snarks).ok(),
-                    available_records: canonical_qp
+                let qp_map = query_params_map.get();
+                let prover = qp_map.get("q-prover");
+                let block_state_hash = qp_map.get("q-state-hash");
+                let mut available_records = None;
+                if prover.is_none() && block_state_hash.is_none()
+                    && block_height_sig.get().is_none()
+                {
+                    available_records = canonical_qp
                         .get()
                         .map(|c| {
                             if c {
@@ -124,7 +129,11 @@ fn SnarksPageContents() -> impl IntoView {
                                     .saturating_sub(summary_sig.get().total_num_canonical_snarks)
                             }
                         })
-                        .or_else(|| Some(summary_sig.get().total_num_canonical_snarks)),
+                        .or_else(|| Some(summary_sig.get().total_num_canonical_snarks));
+                }
+                Some(TableMetadata {
+                    total_records: u64::try_from(summary_sig.get().total_num_snarks).ok(),
+                    available_records,
                     displayed_records: u64::try_from(
                             data_sig.get().map(|d| d.len()).unwrap_or_default(),
                         )
