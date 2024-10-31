@@ -1,5 +1,5 @@
 // Test suite data for: /staking-ledgers?epoch=1
-const { SNZ_USERNAME, SNZPOOL_ADDRESS } = require("../../constants");
+import { SNZ_USERNAME, SNZPOOL_ADDRESS } from "../../constants";
 
 module.exports = {
   tag: "@tier2",
@@ -72,6 +72,17 @@ module.exports = {
     },
     () => {
       cy.assertStandardRowLimits("Staking Ledger - Epoch 1");
+    },
+    () => {
+      cy.intercept("POST", "/graphql").as("graphql");
+      cy.visit("/staking-ledgers?epoch=1&q-stake=66000.0&row-limit=275");
+      cy.wait("@graphql").then(() => {
+        cy.wait(1000);
+        cy.assertLoadNextWorks("Staking Ledger - Epoch 1", "Stake", {
+          button_text: "Load Next",
+          expected_button_state: "be.disabled",
+        });
+      });
     },
   ],
 };

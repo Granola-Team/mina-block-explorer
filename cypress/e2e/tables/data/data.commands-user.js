@@ -1,22 +1,11 @@
 // Test suite data for: /commands/user
-const { parseFormattedNumber } = require("../../helpers");
-const {
-  FIRST_BLOCK_PRODUCER_ADDRESS,
+import { parseFormattedNumber } from "../../helpers";
+import {
   FIRST_RECIPIENT_ADDRESS,
   FIRST_SENDER_ADDRESS,
-  GENESIS_BLOCK_BLOCK_HASH,
-  BLOCK_STATE_HASH_MIXED_USER_COMMANDS,
-  ROMEK_ADDRESS,
   ROMEK_MINA_NAMING_SERVICE_TXN_HASH,
-  ROMEK_USERNAME,
-  SLOTS_PER_EPOCH,
-  MINA_NAMING_SERVICE_ADDRESS,
-  ROMEK_BLOCK_STATE_HASH,
-  VETAL_BLOCK_STATE_HASH,
   ROMEK_NAMING_MEMO,
-  SNZ_USERNAME,
-  SNZPOOL_ADDRESS,
-} = require("../../constants");
+} from "../../constants";
 
 module.exports = {
   tag: "@tier2",

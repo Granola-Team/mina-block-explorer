@@ -28,3 +28,4 @@ pub const QUERY_PARAM_BLOCKHEIGHT_LTE: &str = "q-blockheight-lte";
 pub const QUERY_PARAM_HEIGHT: &str = "q-height";
 pub const QUERY_PARAM_ROW_LIMIT: &str = "row-limit";
 pub const QUERY_PARAM_BALANCE: &str = "q-balance";
+pub const QUERY_PARAM_STAKE: &str = "q-stake";

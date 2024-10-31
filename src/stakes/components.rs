@@ -1,7 +1,7 @@
 use super::{functions::*, models::*};
 use crate::{
     common::{components::*, constants::*, functions::*, models::*, table::*},
-    stakes::graphql::staking_ledgers_query::StakeSortByInput,
+    stakes::graphql::staking_ledgers_query::{StakeSortByInput, StakingLedgersQueryStakes},
 };
 use leptos::*;
 use leptos_router::*;
@@ -188,7 +188,14 @@ pub fn StakesPageContents(
                             </div>
                         }
                     }
-
+                    footer=move || {
+                        view! {
+                            <NextStakePage
+                                data=data_sig.get().unwrap_or(vec![])
+                                row_limit=row_limit_sig.get()
+                            />
+                        }
+                    }
                     additional_info=view! {
                         <div class="h-8 min-w-64 text-sm text-slate-500 ledger-hash">
                             {move || {
@@ -230,6 +237,43 @@ pub fn StakesPageContents(
                 />
             }
         }
+    }
+}
+
+#[component]
+pub fn NextStakePage(
+    data: Vec<Option<StakingLedgersQueryStakes>>,
+    row_limit: Option<i64>,
+) -> impl IntoView {
+    let (_, set_stake) = create_query_signal_with_options::<String>(
+        QUERY_PARAM_STAKE,
+        NavigateOptions {
+            scroll: false,
+            ..Default::default()
+        },
+    );
+    let mut last_stake = None;
+    if let Some(Some(last_row)) = data.last() {
+        last_stake = last_row
+            .delegation_totals
+            .as_ref()
+            .and_then(|delegation_totals| delegation_totals.total_delegated_nanomina)
+            .map(|stake| nanomina_to_mina(stake as u64))
+            .as_ref()
+            .and_then(|stake| normalize_number_format(stake).ok())
+    }
+    let last_stake_clone = last_stake.clone();
+    view! {
+        <div class="w-full flex justify-center items-center p-4">
+            <Button
+                style_variant=ButtonStyleVariant::Tertiary
+                text="Load Next"
+                on_click=move |_| { set_stake.set(last_stake.clone()) }
+                class_str="ml-2"
+                disabled=data.len() as i64 != row_limit.unwrap_or(TABLE_ROW_LIMIT as i64)
+                    || *"0.0" == last_stake_clone.unwrap_or("0.0".to_string())
+            />
+        </div>
     }
 }
 
