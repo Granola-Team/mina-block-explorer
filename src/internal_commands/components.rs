@@ -92,10 +92,11 @@ pub fn InternalCommandsTab() -> impl IntoView {
                 table_columns
                 data_sig
                 metadata=Signal::derive(move || {
-                    Some(TableMetadata {
-                        total_records: u64::try_from(summary_sig.get().total_num_internal_commands)
-                            .ok(),
-                        available_records: canonical_sig
+                    let mut available_records = None;
+                    if height_sig.get().is_none() && recipient.get().is_none()
+                        && state_hash_sig.get().is_none()
+                    {
+                        available_records = canonical_sig
                             .get()
                             .map(|c| {
                                 if c {
@@ -109,7 +110,12 @@ pub fn InternalCommandsTab() -> impl IntoView {
                             })
                             .or_else(|| Some(
                                 summary_sig.get().total_num_canonical_internal_commands,
-                            )),
+                            ));
+                    }
+                    Some(TableMetadata {
+                        total_records: u64::try_from(summary_sig.get().total_num_internal_commands)
+                            .ok(),
+                        available_records,
                         displayed_records: u64::try_from(
                                 data_sig.get().map(|d| d.len()).unwrap_or_default(),
                             )
