@@ -267,7 +267,7 @@ where
     let (value, set_value) = create_query_signal::<String>(id);
     let (_, set_sort_dir) = create_query_signal::<String>("sort-dir");
     let input_element: NodeRef<html::Input> = create_node_ref();
-    let mut th_class = " whitespace-nowrap h-12 bg-table-header-fill xl:sticky xl:top-16 z-20 text-table-header-text-color font-semibold uppercase text-xs text-left py-4 box-border ".to_string();
+    let mut th_class = " whitespace-nowrap h-12 bg-table-header-fill xl:sticky xl:top-16 z-[1] text-table-header-text-color font-semibold uppercase text-xs text-left py-4 box-border ".to_string();
     let mut input_class = " pointer-events-auto ".to_string();
     match column.alignment {
         Some(ColumnTextAlignment::Left) => {
