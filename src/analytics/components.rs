@@ -161,9 +161,6 @@ pub fn SnarkerLeaderboard() -> impl IntoView {
         use_local_storage::<BlockchainSummary, JsonSerdeCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
 
     let (sort_dir_sig, _) = create_query_signal::<String>("sort-dir");
-    if epoch_sig.get_untracked().is_none() {
-        set_epoch.set(Some(0u32));
-    }
     let resource = create_resource(
         move || (epoch_sig.get(), sort_dir_sig.get()),
         move |(epoch, sort_dir)| async move {
@@ -284,9 +281,8 @@ pub fn SnarkerLeaderboard() -> impl IntoView {
 #[component]
 pub fn StakerLeaderboard() -> impl IntoView {
     let (epoch_sig, set_epoch) = create_query_signal::<u32>("epoch");
-    if epoch_sig.get_untracked().is_none() {
-        set_epoch.set(Some(0u32));
-    }
+    let (summary_sig, _, _) =
+        use_local_storage::<BlockchainSummary, JsonSerdeCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
     let resource = create_resource(
         move || epoch_sig.get(),
         move |epoch| async move {
@@ -298,6 +294,12 @@ pub fn StakerLeaderboard() -> impl IntoView {
         },
     );
     let (data_sig, set_data) = create_signal(None);
+
+    create_effect(move |_| {
+        if epoch_sig.get_untracked().is_none() {
+            set_epoch.set(Some(summary_sig.get().epoch as u32));
+        }
+    });
 
     create_effect(move |_| {
         set_data.set(
