@@ -27,6 +27,16 @@ suite(["@tier2"], "account page", () => {
       column: "Coinbase Receiver",
       tableHeader: "Block Production",
     },
+    {
+      origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}/delegations`,
+      column: "Public Key",
+      tableHeader: "Delegations",
+    },
+    {
+      origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}/delegations`,
+      column: "Username",
+      tableHeader: "Delegations",
+    },
     { origin: "/snarks", column: "Prover", tableHeader: "SNARKs" },
     {
       origin: "/staking-ledgers?epoch=1",

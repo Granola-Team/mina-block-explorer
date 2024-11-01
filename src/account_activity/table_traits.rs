@@ -310,8 +310,14 @@ impl TableData for Vec<Option<AccountActivityQueryDelegatorExt>> {
         self.iter()
             .map(|opt_stake| match opt_stake {
                 Some(stake) => vec![
-                    convert_to_span(stake.get_public_key()),
-                    convert_to_span(stake.get_username()),
+                    convert_to_link(
+                        stake.get_public_key(),
+                        format!("/addresses/accounts/{}", stake.get_public_key()),
+                    ),
+                    convert_to_link(
+                        stake.get_username(),
+                        format!("/addresses/accounts/{}", stake.get_public_key()),
+                    ),
                     convert_to_span(stake.get_delegated_balance()),
                     convert_to_span(stake.get_percent_of_delegation()),
                 ],
