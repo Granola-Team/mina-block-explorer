@@ -28,6 +28,7 @@ module.exports = {
         column: "Key",
         input: "B62qq3tqfdj19hqaVCozJFM2q9gT2WezQMaJMKD6wxyvK3fMpHiP9va",
         assertion: function () {
+          cy.assertNumberOfTableMetadataDatum("Staking Ledger - Epoch 1", 2);
           cy.aliasTableRows("Staking Ledger - Epoch 1", "table-rows");
           cy.get("@table-rows").should("have.lengthOf", 1);
           cy.assertForEachColumnValue(
@@ -48,6 +49,7 @@ module.exports = {
         column: "Stake",
         input: "7,399,987.246422696",
         assertion: function () {
+          cy.assertNumberOfTableMetadataDatum("Staking Ledger - Epoch 1", 2);
           cy.aliasTableRows("Staking Ledger - Epoch 1", "table-rows");
           cy.assertForEachColumnValue(
             "Staking Ledger - Epoch 1",
@@ -60,15 +62,20 @@ module.exports = {
           );
         },
       },
+      {
+        column: "Delegate",
+        input: "B62qjCuPisQjLW7YkB22BR9KieSmUZTyApftqxsAuB3U21r3vj1YnaG",
+        assertion: function () {
+          cy.assertNumberOfTableMetadataDatum("Staking Ledger - Epoch 1", 2);
+        },
+      },
     ],
   },
   tests: [
     () => {
-      cy.get(".metadata")
-        .invoke("text")
-        .then((text) => {
-          expect(text.split(" of ").length).to.equal(3);
-        });
+      cy.visit("/staking-ledgers?epoch=1");
+      cy.wait(1000);
+      cy.assertNumberOfTableMetadataDatum("Staking Ledger - Epoch 1", 3);
     },
     () => {
       cy.assertStandardRowLimits("Staking Ledger - Epoch 1");

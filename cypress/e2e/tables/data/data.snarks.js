@@ -1,6 +1,6 @@
 // Test suite data for: /snarks
-const { parseFormattedNumber } = require("../../helpers");
-const { VETAL_BLOCK_STATE_HASH } = require("../../constants");
+import { parseFormattedNumber } from "../../helpers";
+import { VETAL_BLOCK_STATE_HASH } from "../../constants";
 
 module.exports = {
   tag: "@tier2",

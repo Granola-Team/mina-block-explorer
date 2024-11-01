@@ -144,9 +144,17 @@ pub fn StakesPageContents(
     });
 
     create_effect(move |_| {
+        let mut available_records = None;
+        let qp_map = query_params_map.get();
+        let public_key = qp_map.get("q-key").cloned();
+        let delegate = qp_map.get("q-delegate").cloned();
+        let stake = qp_map.get("q-stake").cloned();
+        if stake.is_none() && delegate.is_none() && public_key.is_none() {
+            available_records = epoch_num_accounts;
+        }
         set_metadata.set(Some(TableMetadata {
             total_records: total_num_accounts,
-            available_records: epoch_num_accounts,
+            available_records,
             displayed_records: u64::try_from(data_sig.get().map(|d| d.len()).unwrap_or_default())
                 .unwrap_or_default(),
         }));
