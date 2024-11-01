@@ -349,7 +349,6 @@ pub fn PendingTransactionsSection() -> impl IntoView {
 
             is_loading=resource.loading()
             section_heading="Pending Commands"
-            controls=|| ().into_view()
         />
     }
 }

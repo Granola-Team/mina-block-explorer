@@ -47,8 +47,8 @@ pub fn TokensPage() -> impl IntoView {
                 data_sig
                 is_loading=loading_sig.into()
                 section_heading="Tokens"
-                controls=|| ().into_view()
             />
+
         </PageContainer>
     }
 }

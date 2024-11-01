@@ -149,20 +149,18 @@ impl CycleSort for AnySort {
 }
 
 #[component]
-pub fn TableSectionTemplate<T, F, E, S>(
+pub fn TableSectionTemplate<T, S>(
     table_columns: Vec<TableColumn<S>>, // deprecated
     data_sig: ReadSignal<Option<T>>,
     is_loading: Signal<bool>,
     #[prop(optional)] metadata: Option<Signal<Option<TableMetadata>>>,
     #[prop(into)] section_heading: String,
-    #[prop(optional, into)] additional_info: View,
-    controls: F,
+    #[prop(optional, into)] additional_info: ViewFn,
+    #[prop(optional, into)] controls: ViewFn,
     #[prop(optional, into)] footer: ViewFn,
     #[prop(default = false)] half_width: bool,
 ) -> impl IntoView
 where
-    E: IntoView,
-    F: Fn() -> E + 'static,
     T: TableData + Clone + 'static,
     S: CycleSort + SortDirection + ToString + Clone + 'static,
 {
@@ -437,17 +435,13 @@ pub fn EmptyTable(#[prop(into)] message: String) -> impl IntoView {
 }
 
 #[component]
-pub fn TableSection<E, F>(
+pub fn TableSection(
     #[prop(into)] section_heading: String,
     children: Children,
-    #[prop(optional, into)] additional_info: View,
+    #[prop(optional, into)] additional_info: ViewFn,
     metadata: Signal<Option<TableMetadata>>,
-    controls: F,
-) -> impl IntoView
-where
-    E: IntoView,
-    F: Fn() -> E + 'static,
-{
+    #[prop(optional, into)] controls: ViewFn,
+) -> impl IntoView {
     let BASE_META_CLASS = "h-16 grow flex justify-start md:justify-center items-center text-slate-400 text-normal text-xs";
 
     view! {
@@ -469,11 +463,11 @@ where
 
                 </div>
                 <div class="grow md:grow-0 h-16 flex justify-end items-center flex-wrap pr-4">
-                    {controls()}
+                    {move || controls.run()}
                 </div>
             </span>
             <div class="additional-info hidden empty:hidden md:flex w-full pl-8 pr-4 h-10 grow flex justify-between items-start">
-                {additional_info}
+                {move || additional_info.run()}
             </div>
             {children()}
         </AppSection>

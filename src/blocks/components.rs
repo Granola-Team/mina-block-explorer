@@ -103,7 +103,6 @@ pub fn BlockUserCommands(block: BlocksQueryBlocks) -> impl IntoView {
             data_sig
             is_loading=loading_sig.into()
             section_heading="User Commands"
-            controls=|| ().into_view()
         />
     }
 }
@@ -142,7 +141,6 @@ pub fn BlockSnarkJobs(block: BlocksQueryBlocks) -> impl IntoView {
             data_sig
             is_loading=loading_sig.into()
             section_heading="SNARK Jobs"
-            controls=|| ().into_view()
         />
     }
 }
@@ -182,7 +180,6 @@ pub fn BlockInternalCommands(block: BlocksQueryBlocks) -> impl IntoView {
             data_sig
             is_loading=loading_sig.into()
             section_heading="Internal Commands"
-            controls=|| ().into_view()
         />
     }
 }
@@ -213,11 +210,8 @@ pub fn BlockAnalytics(block: BlocksQueryBlocks) -> impl IntoView {
     }));
 
     view! {
-        <TableSection
-            metadata=metadata.into()
-            section_heading="Analytics"
-            controls=|| ().into_view()
-        >
+        <TableSection metadata=metadata.into() section_heading="Analytics">
+
             <AnalyticsLayout>
                 <AnalyticsSmContainer>
                     <AnalyticsSimpleInfo

@@ -419,7 +419,6 @@ pub fn SnarkFees() -> impl IntoView {
                     data_sig
                     is_loading=resource.loading()
                     section_heading="SNARK Fees Overview"
-                    controls=|| ().into_view()
                 />
             }
         }

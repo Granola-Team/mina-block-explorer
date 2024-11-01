@@ -74,11 +74,8 @@ pub fn ZkAppSpotlight() -> impl IntoView {
             >
                 <ZKAppSymbol width=40 />
             </SpotlightSection>
-            <TableSection
-                metadata=metadata.into()
-                section_heading="ZK App Details".to_string()
-                controls=|| ().into_view()
-            >
+            <TableSection metadata=metadata.into() section_heading="ZK App Details".to_string()>
+
                 <SpotlightTable>
                     <ZkAppDetailTr>
                         <ZkAppDetailTh>"Permissions :"</ZkAppDetailTh>
@@ -176,8 +173,8 @@ pub fn ZkAppSpotlight() -> impl IntoView {
                 data_sig=txn_sig
                 is_loading=loading_sig.into()
                 section_heading="zkApp Commands"
-                controls=|| ().into_view()
             />
+
             <TableSectionTemplate
                 table_columns=vec![
                     TableColumn::<AnySort> {
@@ -209,8 +206,8 @@ pub fn ZkAppSpotlight() -> impl IntoView {
                 data_sig=fees_sig
                 is_loading=loading_sig.into()
                 section_heading="zkApp Internal Commands"
-                controls=|| ().into_view()
             />
+
         </PageContainer>
     }
 }
@@ -276,8 +273,8 @@ pub fn ZkAppTransactionsPage() -> impl IntoView {
                 data_sig
                 is_loading=loading_sig.into()
                 section_heading="Zk App Commands"
-                controls=|| ().into_view()
             />
+
         </PageContainer>
     }
 }
@@ -312,8 +309,8 @@ pub fn ZkAppsPage() -> impl IntoView {
                 data_sig
                 is_loading=loading_sig.into()
                 section_heading="Zk Apps"
-                controls=|| ().into_view()
             />
+
         </PageContainer>
     }
 }
@@ -405,11 +402,8 @@ pub fn ZkAppTransactionSpotlightPage() -> impl IntoView {
             >
                 <ZKAppSymbol width=40 />
             </SpotlightSection>
-            <TableSection
-                metadata=metadata.into()
-                section_heading="Account Update #1"
-                controls=|| ().into_view()
-            >
+            <TableSection metadata=metadata.into() section_heading="Account Update #1">
+
                 <SpotlightTable>
                     {account_updates_1
                         .into_iter()

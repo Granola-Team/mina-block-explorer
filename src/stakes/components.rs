@@ -204,43 +204,45 @@ pub fn StakesPageContents(
                             />
                         }
                     }
-                    additional_info=view! {
-                        <div class="h-8 min-w-64 text-sm text-slate-500 ledger-hash">
+                    additional_info=move || {
+                        view! {
+                            <div class="h-8 min-w-64 text-sm text-slate-500 ledger-hash">
+                                {move || {
+                                    ledger_hash
+                                        .get()
+                                        .map_or_else(
+                                            || data_placeholder().into_view(),
+                                            |lh| { convert_to_link(lh, "#".to_string()).into_view() },
+                                        )
+                                }}
+
+                            </div>
+
                             {move || {
-                                ledger_hash
+                                if next_epoch_sig
                                     .get()
-                                    .map_or_else(
-                                        || data_placeholder().into_view(),
-                                        |lh| { convert_to_link(lh, "#".to_string()).into_view() },
-                                    )
-                            }}
+                                    .map_or(false, |next_epoch| current_epoch == next_epoch - 1)
+                                {
+                                    view! {
+                                        <div class="text-sm text-slate-500 staking-ledger-percent-complete">
+                                            {format!(
+                                                "{:.2}% complete ({}/{} slots filled)",
+                                                format_number(
+                                                    ((slot_in_epoch as f64 / EPOCH_SLOTS as f64) * 100.0)
+                                                        .to_string(),
+                                                ),
+                                                format_number(slot_in_epoch.to_string()),
+                                                format_number(EPOCH_SLOTS.to_string()),
+                                            )}
 
-                        </div>
-
-                        {move || {
-                            if next_epoch_sig
-                                .get()
-                                .map_or(false, |next_epoch| current_epoch == next_epoch - 1)
-                            {
-                                view! {
-                                    <div class="text-sm text-slate-500 staking-ledger-percent-complete">
-                                        {format!(
-                                            "{:.2}% complete ({}/{} slots filled)",
-                                            format_number(
-                                                ((slot_in_epoch as f64 / EPOCH_SLOTS as f64) * 100.0)
-                                                    .to_string(),
-                                            ),
-                                            format_number(slot_in_epoch.to_string()),
-                                            format_number(EPOCH_SLOTS.to_string()),
-                                        )}
-
-                                    </div>
+                                        </div>
+                                    }
+                                        .into_view()
+                                } else {
+                                    ().into_view()
                                 }
-                                    .into_view()
-                            } else {
-                                ().into_view()
-                            }
-                        }}
+                            }}
+                        }
                     }
                 />
             }

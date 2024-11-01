@@ -276,7 +276,7 @@ pub fn CommandSpotlightPage() -> impl IntoView {
                                     data_sig=other_txns
                                     section_heading="In Other Blocks"
                                     is_loading=resource.loading()
-                                    controls=|| ().into_view()
+
                                     half_width=true
                                 />
                             }
