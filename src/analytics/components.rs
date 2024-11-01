@@ -157,6 +157,9 @@ pub fn AnalyticsFilters(#[prop(optional, default = false)] by_block: bool) -> im
 #[component]
 pub fn SnarkerLeaderboard() -> impl IntoView {
     let (epoch_sig, set_epoch) = create_query_signal::<u32>("epoch");
+    let (summary_sig, _, _) =
+        use_local_storage::<BlockchainSummary, JsonSerdeCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
+
     let (sort_dir_sig, _) = create_query_signal::<String>("sort-dir");
     if epoch_sig.get_untracked().is_none() {
         set_epoch.set(Some(0u32));
@@ -173,6 +176,12 @@ pub fn SnarkerLeaderboard() -> impl IntoView {
         },
     );
     let (data_sig, set_data) = create_signal(None);
+
+    create_effect(move |_| {
+        if epoch_sig.get_untracked().is_none() {
+            set_epoch.set(Some(summary_sig.get().epoch as u32));
+        }
+    });
 
     create_effect(move |_| {
         set_data.set(
