@@ -20,7 +20,7 @@ impl TableData for Vec<Option<AccountsQueryAccounts>> {
                         account.get_delegate(),
                         format!("/addresses/accounts/{}", account.get_delegate()),
                     ),
-                    convert_to_span(account.get_timelocked().to_string()),
+                    convert_to_span(account.get_timelocked()),
                 ],
                 None => vec![],
             })
@@ -34,7 +34,7 @@ pub trait AccountTrait {
     fn get_balance(&self) -> String;
     fn get_nonce(&self) -> String;
     fn get_delegate(&self) -> String;
-    fn get_timelocked(&self) -> bool;
+    fn get_timelocked(&self) -> String;
 }
 
 impl AccountTrait for AccountsQueryAccounts {
@@ -67,7 +67,9 @@ impl AccountTrait for AccountsQueryAccounts {
     fn get_delegate(&self) -> String {
         self.delegate.as_ref().cloned().unwrap_or_default()
     }
-    fn get_timelocked(&self) -> bool {
-        self.time_locked.unwrap_or(false)
+    fn get_timelocked(&self) -> String {
+        self.time_locked
+            .and_then(|tl| tl.then(|| "yes".to_string()).or(Some("no".to_string())))
+            .unwrap()
     }
 }
