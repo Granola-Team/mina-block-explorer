@@ -91,13 +91,16 @@ module.exports = {
             cy.assertForEachColumnValue("User Commands", "Status", (text) => {
               expect(text).to.be.eq(txnApplied);
             });
+            cy.intercept("POST", "/graphql").as("graphql2");
             cy.clickLinkInTable(0, "Txn Hash", "User Commands");
-            cy.testSpotlightValue("Status", txnApplied);
-            cy.testSpotlightValue(
-              "Canonical",
-              "" + (canonical === "Canonical"),
-            );
-            cy.go("back");
+            cy.wait("@graphql2").then(() => {
+              cy.testSpotlightValue("Status", txnApplied);
+              cy.testSpotlightValue(
+                "Canonical",
+                "" + (canonical === "Canonical"),
+              );
+              cy.go("back");
+            });
           });
         });
       });
