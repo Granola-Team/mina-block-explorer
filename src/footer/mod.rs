@@ -36,12 +36,12 @@ pub fn Footer() -> impl IntoView {
     let links = vec![
         Link {
             label: "Docs",
-            href: "https://granola.gitbook.io/minasearch",
+            href: "https://docs.minasearch.com",
             icon: Icon::Docs,
         },
         Link {
             label: "API",
-            href: "https://granola.gitbook.io/minasearch/apis",
+            href: "https://docs.minasearch.com/apis",
             icon: Icon::Api,
         },
         Link {

@@ -3,11 +3,11 @@ suite(["@tier2"], "footer content", () => {
     { text: "Granola", selector: 'a[href="https://granola.team"]' },
     {
       text: "Docs",
-      selector: 'a[href="https://granola.gitbook.io/minasearch"]',
+      selector: 'a[href="https://docs.minasearch.com"]',
     },
     {
       text: "API",
-      selector: 'a[href="https://granola.gitbook.io/minasearch/apis"]',
+      selector: 'a[href="https://docs.minasearch.com/apis"]',
     },
     {
       text: "Discord",
