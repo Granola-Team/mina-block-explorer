@@ -8,28 +8,38 @@ transactions, addresses, and validators.
 
 ## Development Environment
 
-This project uses Nix to ensure a consistent and reproducible development
-environment. This choice streamlines the development process, allowing focus on
-value delivery with minimal concern for varying system configurations or
+This project uses [Nix](https://nix.dev) (via [Flox](https://flox.dev) to ensure a consistent and reproducible development
+environment. This choice streamlines the development process, allowing focus on value delivery with minimal concern for varying system configurations or
 dependency conflicts.
+
+### Prerequisites
+
+[Install Flox](https://flox.dev/docs/install-flox/)
+
+Flox will install Nix for you (including `nix develop` and friends).
+__If you have previously installed Nix, you may need to uninstall it first:__
+
+- [The Determinate Nix Uninstaller](https://github.com/DeterminateSystems/nix-installer#uninstalling)
+- [Standard Nix uninstall process](https://nix.dev/manual/nix/2.24/installation/uninstall)
 
 ## Quick Start
 
-1. Install [Nix](https://nixos.org/download.html).
+1. You must first enter the Flox environment by using `flox activate`.
 
-2. Enable the [Nix Flakes](https://nixos.wiki/wiki/Flakes) feature.
+Running any [`just`](Justfile) task will automatically enter the Flox environment.
 
-3. Install [Direnv](https://direnv.net/).
-
-4. Start the Server: Execute `just dev` to start the server.
+2. Execute `just dev` to start the server
 
 ## Back-End Integration
 
 Integration with an [Indexer](https://github.com/Granola-Team/mina-indexer) is
 accomplished through GraphQL and REST endpoints. You must specify your
-own environment variables. This can be done through
+own environment variables via:
 
 - `.env` file
+
+or
+
 - Environment variables. See [`.env.example`](.env.example).
 
 Environment variables are bundled into the WASM file at compile time (see
@@ -53,4 +63,4 @@ This software is [licensed](LICENSE) under the Apache License, Version 2.0.
 This project uses [C4(Collective Code Construction
 Contract)](https://rfc.zeromq.org/spec/42/) process for contributions.
 Additionally, select members of Granola-Team are permitted to push directly to
-'main'.
+`main`.

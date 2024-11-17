@@ -19,7 +19,7 @@ RSpec.describe "ManageProcesses Integration" do
   describe "Script integration with real processes" do
     it "starts and stops processes, waits for the port, and handles SIGINT" do
       # Start a Netcat process to listen on the specified port (simulating a service)
-      nc_pid = Process.spawn("nc -l #{@port}", pgroup: true)
+      socat_pid = Process.spawn("socat TCP-LISTEN:#{@port},reuseaddr,fork -", pgroup: true)
 
       # Use Timeout to avoid waiting forever in case something goes wrong
       Timeout.timeout(10) do
@@ -50,8 +50,8 @@ RSpec.describe "ManageProcesses Integration" do
       end
     ensure
       # Ensure the Netcat process is killed at the end of the test
-      Process.kill("TERM", nc_pid) if nc_pid
-      Process.wait(nc_pid)
+      Process.kill("TERM", socat_pid) if socat_pid
+      Process.wait(socat_pid)
     end
   end
 end
