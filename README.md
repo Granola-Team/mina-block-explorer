@@ -30,10 +30,10 @@ accomplished through GraphQL and REST endpoints. You must specify your
 own environment variables. This can be done through
 
 - `.env` file
-- Environment variables. See `.env.example`.
+- Environment variables. See [`.env.example`](.env.example).
 
 Environment variables are bundled into the WASM file at compile time (see
-`build.rs`). With the intended environment variables specified at compile time,
+[`build.rs`](build.rs)). With the intended environment variables specified at compile time,
 the production WASM file may be deployed without any further configuration
 required.
 
