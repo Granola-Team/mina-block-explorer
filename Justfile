@@ -12,11 +12,15 @@ export CARGO_HOME := `pwd` + '/.cargo'
 
 set dotenv-load := true
 
-# Ensure rustfmt works in all environments
-# Nix environment has rustfmt nightly and won't work with +nightly
-# Non-Nix environment needs nightly toolchain installed and requires +nightly
-is_rustfmt_nightly := `rustfmt --version | grep stable || echo "true"`
-nightly_if_required := if is_rustfmt_nightly == "true" { "" } else { "+nightly" }
+# Setup block to check and activate Flox if necessary
+setup:
+    @if [ -z "$FLOX_ENV" ]; then \
+        flox activate; \
+        if [ $? -ne 0 ]; then \
+            echo "Failed to activate Flox environment. Is Flox installed? https://flox.dev/docs/install-flox/"; \
+            exit 1; \
+        fi; \
+    fi
 
 default:
   @echo "Topologically sorted recipes:"
@@ -53,10 +57,9 @@ clean:
 # Format rust and cypress source code
 format:
   pnpm exec prettier --write cypress/ src/scripts/
-  standardrb --fix ops/*.rb
-  cargo {{nightly_if_required}} fmt --all
+  standardrb --fix ops
+  cargo-fmt --all
   leptosfmt ./src
-  alejandra flake.nix
 
 # Perform unit tests
 test-unit:
@@ -70,7 +73,7 @@ test-unit:
 # Perform dependency audit
 audit:
   cargo-audit audit
-  cargo machete Cargo.toml
+  cargo machete
 
 # Install cypress dependencies
 pnpm-install:
@@ -127,11 +130,9 @@ lint: pnpm-install && audit
   pnpm exec prettier --check cypress/
   @echo "--- Linting ops scripts"
   ruby -cw ops/*.rb
-  standardrb --no-fix ops/*.rb
-  @echo "--- Linting Nix configs"
-  alejandra --check flake.nix
+  standardrb --no-fix ops
   @echo "--- Linting Rust code"
-  time cargo {{nightly_if_required}} fmt --all --check
+  time cargo-fmt --all --check
   leptosfmt --check ./src
   time cargo clippy --all-targets --all-features -- -D warnings
 
