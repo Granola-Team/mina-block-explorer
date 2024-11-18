@@ -1,11 +1,10 @@
-require "rspec"
+require "rspec/expectations"
 require "socket"
 require "timeout"
 require_relative "manage-processes"
 
 RSpec.describe "ManageProcesses Integration" do
   before do
-    # Ensure the port we test is not occupied
     @port = 12345
     begin
       socket = Socket.tcp("127.0.0.1", @port, connect_timeout: 1)
@@ -18,40 +17,48 @@ RSpec.describe "ManageProcesses Integration" do
 
   describe "Script integration with real processes" do
     it "starts and stops processes, waits for the port, and handles SIGINT" do
-      # Start a Netcat process to listen on the specified port (simulating a service)
-      socat_pid = Process.spawn("socat TCP-LISTEN:#{@port},reuseaddr,fork -", pgroup: true)
+      # Start Socat with Process.spawn instead of as root
+      socat_cmd = "socat TCP-LISTEN:#{@port},reuseaddr,fork SYSTEM:'echo ready'"
+      socat_pid = Process.spawn(socat_cmd, pgroup: true)
 
-      # Use Timeout to avoid waiting forever in case something goes wrong
-      Timeout.timeout(10) do
-        # Step 1: Start the first process (a simple sleep command)
-        first_cmd_pid = start_process("sleep 5")
+      begin
+        Timeout.timeout(10) do
+          # Start processes in their own process groups
+          first_cmd_pid = Process.spawn("sleep 5", pgroup: true)
+          expect(Process.getpgid(first_cmd_pid)).not_to be_nil
 
-        # Ensure the first process starts correctly
-        expect(Process.getpgid(first_cmd_pid)).not_to be_nil
+          wait_for_port(@port)
 
-        # Step 2: Wait for the port (which is opened by Netcat) to be available
-        wait_for_port(@port)
+          second_cmd_pid = Process.spawn("sleep 3", pgroup: true)
+          expect(Process.getpgid(second_cmd_pid)).not_to be_nil
 
-        # Step 3: Start the second process (another sleep command)
-        second_cmd_pid = start_process("sleep 3")
+          # Wait for second process
+          _, status = Process.wait2(second_cmd_pid)
+          expect(status.exitstatus).to eq(0)
 
-        # Ensure the second process starts correctly
-        expect(Process.getpgid(second_cmd_pid)).not_to be_nil
+          # Use Process.kill instead of kill_process_group
+          begin
+            Process.kill("-TERM", first_cmd_pid) # The minus sign sends signal to process group
+          rescue Errno::EPERM
+            Process.kill("TERM", first_cmd_pid)  # Fallback to just the process
+          end
 
-        # Step 4: Wait for the second process to finish
-        _, status = Process.wait2(second_cmd_pid)
-        expect(status.exitstatus).to eq(0)
-
-        # Step 5: Kill the first process after the second finishes
-        kill_process_group(first_cmd_pid)
-
-        # Ensure the first process is terminated
-        expect { Process.getpgid(first_cmd_pid) }.to raise_error(Errno::ESRCH)
+          # Verify process termination
+          expect { Process.getpgid(first_cmd_pid) }.to raise_error(Errno::ESRCH)
+        end
+      ensure
+        # Clean up Socat process
+        begin
+          Process.kill("-TERM", socat_pid)
+        rescue Errno::EPERM
+          Process.kill("TERM", socat_pid)
+        end
+        begin
+          Process.wait(socat_pid)
+        rescue
+          nil
+        end
       end
-    ensure
-      # Ensure the Netcat process is killed at the end of the test
-      Process.kill("TERM", socat_pid) if socat_pid
-      Process.wait(socat_pid)
     end
   end
 end

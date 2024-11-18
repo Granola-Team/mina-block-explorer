@@ -86,7 +86,7 @@
       }
     },
     "hook": {
-      "on-activate": "  # Install nodejs depedencies\n  pnpm install\n"
+      "on-activate": ""
     },
     "profile": {},
     "options": {
