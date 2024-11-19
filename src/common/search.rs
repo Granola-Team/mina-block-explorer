@@ -117,7 +117,7 @@ pub fn GlobalSearchBar() -> impl IntoView {
 
     create_effect(move |_| {
         ledger_resource.get().and_then(|res| res.ok()).map(|resp| {
-            if resp.data.stakes.first().is_some() {
+            if !resp.data.stakes.is_empty() {
                 if let Some(epoch) = epoch_sig.get() {
                     navigate_clone_2(
                         &format!("/staking-ledgers?epoch={}", epoch),
