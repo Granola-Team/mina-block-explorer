@@ -128,7 +128,6 @@ pub struct UrlParamSelectOptions {
     pub cases: Vec<String>,
 }
 
-#[allow(dead_code)]
 #[derive(Clone, PartialEq)]
 pub enum NavIcon {
     Blocks,
@@ -137,6 +136,7 @@ pub enum NavIcon {
     SNARKs,
     Staking,
     Send,
+    #[allow(dead_code)]
     ZKApps,
     Tokens,
     Addresses,
