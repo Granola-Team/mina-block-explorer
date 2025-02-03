@@ -65,6 +65,8 @@ pub fn Root() -> impl IntoView {
                     />
                     <Route path="/addresses/accounts" view=AccountsPage />
                     <Route path="/addresses/accounts/:id" view=AccountSpotlightTabbedPage>
+                    // <Route path="/addresses/zkapps" view=ZkAppsPage />
+                    // <Route path="/addresses/zkapps/:id" view=ZkAppSpotlight />
                         <Route
                             path="*"
                             view=move || {
@@ -86,8 +88,6 @@ pub fn Root() -> impl IntoView {
                         <Route path="/delegations" view=AccountDelegationsPage />
                     </Route>
                     // <Route path="/tokens" view=TokensPage />
-                    // <Route path="/zk-apps" view=ZkAppsPage />
-                    // <Route path="/zk-apps/:id" view=ZkAppSpotlight />
 
                     <Route path="/blocks" view=SummaryPage />
                     <Route path="/blocks/:id" view=BlockTabbedPage>
