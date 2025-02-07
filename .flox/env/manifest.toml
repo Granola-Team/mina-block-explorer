@@ -24,17 +24,10 @@ rspec.pkg-path = "rubyPackages.rspec"
 standard.pkg-path = "rubyPackages.standard"
 
 # Rust
-nightly-rust.flake = "github:nix-community/fenix/monthly#default.toolchain"
+nightly-rust.flake = "github:nix-community/fenix/monthly#complete.toolchain"
 wasm-target.flake = "github:nix-community/fenix/monthly#targets.wasm32-unknown-unknown.latest.rust-std"
-rust-lib-src.pkg-path = "rustPlatform.rustLibSrc"
-rust-lib-src.pkg-group = "rust-toolchain"
 libiconv.pkg-path = "libiconv"
 libiconv.systems = ["aarch64-darwin", "x86_64-darwin"]
-# rust-analyzer goes in its own group because it's updated
-# on a different cadence from the compiler and doesn't need
-# to match versions
-rust-analyzer.pkg-path = "rust-analyzer"
-rust-analyzer.pkg-group = "rust-analyzer"
 cargo-audit.pkg-path = "cargo-audit"
 cargo-machete.pkg-path = "cargo-machete"
 cargo-update.pkg-path = "cargo-update"
