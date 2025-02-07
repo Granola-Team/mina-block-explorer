@@ -11,7 +11,7 @@ leptos = { version = "0.6.15", features = ["csr"] }
 leptos_router = { version = "0.6.15", features = ["csr"] }
 chrono = { version = "0.4", features = ["serde"] }
 graphql_client = { version = "0.14", features = ["reqwest"] }
-url = "2.5.2"
+url = "2.5.4"
 leptos-use = { version = "0.13" }
 codee = { version = "0.2", features = ["json_serde"] }
 console_error_panic_hook = "0.1.7"

@@ -19,7 +19,7 @@ use web_sys::js_sys::{Date, Intl::NumberFormat, Object, Reflect, *};
 #[allow(non_snake_case)]
 extern "C" {
     #[wasm_bindgen(js_namespace = navigator, js_name = language)]
-    #[wasm_bindgen(thread_local)]
+    #[wasm_bindgen(thread_local_v2)]
     static LANGUAGE: String;
 }
 
