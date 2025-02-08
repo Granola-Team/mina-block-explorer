@@ -68,7 +68,7 @@
         "pkg-path": "ruby"
       },
       "rust": {
-        "flake": "path:.flox/env/rust"
+        "flake": "path:flakes/rust"
       },
       "socat": {
         "pkg-path": "socat"
@@ -2114,7 +2114,7 @@
     },
     {
       "install_id": "rust",
-      "locked-url": "path:.flox/env/rust?lastModified=1739038471&narHash=sha256-pwOOmfAMOaG3et7teJeGZIH/YaleLX2RyX/sCG1tP8U%3D",
+      "locked-url": "path:flakes/rust?lastModified=1739042430&narHash=sha256-pwOOmfAMOaG3et7teJeGZIH/YaleLX2RyX/sCG1tP8U%3D",
       "locked-flake-attr-path": "packages.aarch64-darwin.default",
       "derivation": "/nix/store/541pxjxlljd4m0j5qdyapznng5bvv516-rust-mixed.drv",
       "outputs": {
@@ -2136,7 +2136,7 @@
     },
     {
       "install_id": "rust",
-      "locked-url": "path:.flox/env/rust?lastModified=1739038471&narHash=sha256-pwOOmfAMOaG3et7teJeGZIH/YaleLX2RyX/sCG1tP8U%3D",
+      "locked-url": "path:flakes/rust?lastModified=1739042430&narHash=sha256-pwOOmfAMOaG3et7teJeGZIH/YaleLX2RyX/sCG1tP8U%3D",
       "locked-flake-attr-path": "packages.aarch64-linux.default",
       "derivation": "/nix/store/fpbrj8mhiajdli033w2amdcmnycfivir-rust-mixed.drv",
       "outputs": {
@@ -2158,7 +2158,7 @@
     },
     {
       "install_id": "rust",
-      "locked-url": "path:.flox/env/rust?lastModified=1739038471&narHash=sha256-pwOOmfAMOaG3et7teJeGZIH/YaleLX2RyX/sCG1tP8U%3D",
+      "locked-url": "path:flakes/rust?lastModified=1739042430&narHash=sha256-pwOOmfAMOaG3et7teJeGZIH/YaleLX2RyX/sCG1tP8U%3D",
       "locked-flake-attr-path": "packages.x86_64-darwin.default",
       "derivation": "/nix/store/lym09f1ampmiirx3a2y4nkjwc4nhdk32-rust-mixed.drv",
       "outputs": {
@@ -2180,7 +2180,7 @@
     },
     {
       "install_id": "rust",
-      "locked-url": "path:.flox/env/rust?lastModified=1739038471&narHash=sha256-pwOOmfAMOaG3et7teJeGZIH/YaleLX2RyX/sCG1tP8U%3D",
+      "locked-url": "path:flakes/rust?lastModified=1739042430&narHash=sha256-pwOOmfAMOaG3et7teJeGZIH/YaleLX2RyX/sCG1tP8U%3D",
       "locked-flake-attr-path": "packages.x86_64-linux.default",
       "derivation": "/nix/store/hsqan33m78wr5s6rrry2rxmp4hywg5ai-rust-mixed.drv",
       "outputs": {
