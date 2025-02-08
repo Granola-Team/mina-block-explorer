@@ -45,18 +45,12 @@ impl From<PooledUserCommand> for transactions_query::TransactionsQueryTransactio
             failure_reason: None,
             canonical: None,
             amount: if let Some(amount) = txn.amount {
-                match amount.parse() {
-                    Ok(parsed_num) => Some(parsed_num),
-                    Err(_) => None,
-                }
+                amount.parse().ok()
             } else {
                 None
             },
             fee: if let Some(fee) = txn.fee {
-                match fee.parse() {
-                    Ok(parsed_num) => Some(parsed_num),
-                    Err(_) => None,
-                }
+                fee.parse().ok()
             } else {
                 None
             },

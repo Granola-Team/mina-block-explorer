@@ -221,7 +221,7 @@ pub fn StakesPageContents(
                             {move || {
                                 if next_epoch_sig
                                     .get()
-                                    .map_or(false, |next_epoch| current_epoch == next_epoch - 1)
+                                    .is_some_and(|next_epoch| current_epoch == next_epoch - 1)
                                 {
                                     view! {
                                         <div class="text-sm text-slate-500 staking-ledger-percent-complete">
