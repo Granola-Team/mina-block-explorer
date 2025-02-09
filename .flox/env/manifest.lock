@@ -64,6 +64,9 @@
       "rspec": {
         "pkg-path": "rubyPackages.rspec"
       },
+      "rspec-expectations": {
+        "pkg-path": "rubyPackages.rspec-expectations"
+      },
       "ruby": {
         "pkg-path": "ruby"
       },
@@ -81,7 +84,7 @@
       }
     },
     "hook": {
-      "on-activate": "  export VERSION=\"$(git rev-parse --short=8 HEAD)\"\n  export CARGO_HOME=\"$(pwd)/.cargo\"\n\n  # Install nodejs depedencies\n  pnpm install\n"
+      "on-activate": "  export VERSION=\"$(git rev-parse --short=8 HEAD)\"\n  export CARGO_HOME=\"$(pwd)/.cargo\"\n\n  # Required for rspec-expectations gem to be properly recognized\n  RUBY_VERSION=$(ruby -e 'puts RbConfig::CONFIG[\"ruby_version\"]')\n\n  export GEM_PATH=\"$FLOX_ENV_DIRS/lib/ruby/gems/$RUBY_VERSION\"\n  export GEM_HOME=\"$GEM_PATH\"\n\n  # Add gem binaries to PATH if not already there\n  GEM_BIN=\"$GEM_HOME/bin\"\n  if [[ \":$PATH:\" != *\":$GEM_BIN:\"* ]]; then\n    export PATH=\"$GEM_BIN:$PATH\"\n  fi\n\n  # Install nodejs depedencies\n  pnpm install\n"
     },
     "profile": {},
     "options": {
@@ -1647,6 +1650,114 @@
       ],
       "outputs": {
         "out": "/nix/store/nkf3h10lmgyl9syx8ya4fiy9lbi8hlq7-ruby3.3-rspec-3.13.0"
+      },
+      "system": "x86_64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "rubyPackages.rspec-expectations",
+      "broken": false,
+      "derivation": "/nix/store/sbhddw6va66f0n9gkacfrpym8m6rpd3w-ruby3.3-rspec-expectations-3.13.0.drv",
+      "install_id": "rspec-expectations",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=550e11f27ba790351d390d9eca3b80ad0f0254e7",
+      "name": "ruby3.3-rspec-expectations-3.13.0",
+      "pname": "rspec-expectations",
+      "rev": "550e11f27ba790351d390d9eca3b80ad0f0254e7",
+      "rev_count": 749725,
+      "rev_date": "2025-02-06T06:43:42Z",
+      "scrape_date": "2025-02-08T05:15:26Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "ruby3.3-rspec-expectations-3.13.0",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/j6c9sggdy85q0c34xqssccmz8psf6mza-ruby3.3-rspec-expectations-3.13.0"
+      },
+      "system": "aarch64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "rubyPackages.rspec-expectations",
+      "broken": false,
+      "derivation": "/nix/store/yrkcnnxwwnirv4gnfsrsw84pjb3ffy45-ruby3.3-rspec-expectations-3.13.0.drv",
+      "install_id": "rspec-expectations",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=550e11f27ba790351d390d9eca3b80ad0f0254e7",
+      "name": "ruby3.3-rspec-expectations-3.13.0",
+      "pname": "rspec-expectations",
+      "rev": "550e11f27ba790351d390d9eca3b80ad0f0254e7",
+      "rev_count": 749725,
+      "rev_date": "2025-02-06T06:43:42Z",
+      "scrape_date": "2025-02-08T05:15:26Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "ruby3.3-rspec-expectations-3.13.0",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/lphyz15sc7wl35n7zmlqfjsjykp4p248-ruby3.3-rspec-expectations-3.13.0"
+      },
+      "system": "aarch64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "rubyPackages.rspec-expectations",
+      "broken": false,
+      "derivation": "/nix/store/h2qlx52mgk3n9zr9ilq81k4b2j2ja46x-ruby3.3-rspec-expectations-3.13.0.drv",
+      "install_id": "rspec-expectations",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=550e11f27ba790351d390d9eca3b80ad0f0254e7",
+      "name": "ruby3.3-rspec-expectations-3.13.0",
+      "pname": "rspec-expectations",
+      "rev": "550e11f27ba790351d390d9eca3b80ad0f0254e7",
+      "rev_count": 749725,
+      "rev_date": "2025-02-06T06:43:42Z",
+      "scrape_date": "2025-02-08T05:15:26Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "ruby3.3-rspec-expectations-3.13.0",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/481cd48y7md3rvj8qmhbrf78c9blvgm9-ruby3.3-rspec-expectations-3.13.0"
+      },
+      "system": "x86_64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "rubyPackages.rspec-expectations",
+      "broken": false,
+      "derivation": "/nix/store/r265lbsg745nyqcfxcn8k841h94v6jgv-ruby3.3-rspec-expectations-3.13.0.drv",
+      "install_id": "rspec-expectations",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=550e11f27ba790351d390d9eca3b80ad0f0254e7",
+      "name": "ruby3.3-rspec-expectations-3.13.0",
+      "pname": "rspec-expectations",
+      "rev": "550e11f27ba790351d390d9eca3b80ad0f0254e7",
+      "rev_count": 749725,
+      "rev_date": "2025-02-06T06:43:42Z",
+      "scrape_date": "2025-02-08T05:15:26Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "ruby3.3-rspec-expectations-3.13.0",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/p8lji73nll0wn1fvyln334cs6dmfppcz-ruby3.3-rspec-expectations-3.13.0"
       },
       "system": "x86_64-linux",
       "group": "toplevel",

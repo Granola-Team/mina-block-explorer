@@ -21,6 +21,7 @@ socat.pkg-path = "socat"
 # Ruby
 ruby.pkg-path = "ruby"
 rspec.pkg-path = "rubyPackages.rspec"
+rspec-expectations.pkg-path = "rubyPackages.rspec-expectations"
 standard.pkg-path = "rubyPackages.standard"
 
 # Rust
@@ -54,6 +55,18 @@ openssl.systems = ["aarch64-linux", "x86_64-linux"]
 on-activate = """
   export VERSION="$(git rev-parse --short=8 HEAD)"
   export CARGO_HOME="$(pwd)/.cargo"
+
+  # Required for rspec-expectations gem to be properly recognized
+  RUBY_VERSION=$(ruby -e 'puts RbConfig::CONFIG["ruby_version"]')
+
+  export GEM_PATH="$FLOX_ENV_DIRS/lib/ruby/gems/$RUBY_VERSION"
+  export GEM_HOME="$GEM_PATH"
+
+  # Add gem binaries to PATH if not already there
+  GEM_BIN="$GEM_HOME/bin"
+  if [[ ":$PATH:" != *":$GEM_BIN:"* ]]; then
+    export PATH="$GEM_BIN:$PATH"
+  fi
 
   # Install nodejs depedencies
   pnpm install

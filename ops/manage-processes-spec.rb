@@ -1,4 +1,4 @@
-require "rspec"
+require "rspec/expectations"
 require "socket"
 require "timeout"
 require_relative "manage-processes"
