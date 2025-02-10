@@ -11,13 +11,14 @@ use leptos_router::create_query_signal;
 pub fn TokensPage() -> impl IntoView {
     let (data_sig, set_data) = create_signal(None);
     let (row_limit_sig, _) = create_query_signal::<u64>("row-limit");
+    let (name_sig, _) = create_query_signal::<String>("q-name");
 
     let resource = create_resource(
-        || (),
-        move |_| async move {
+        move || name_sig.get(),
+        move |name_opt| async move {
             load_data(
                 row_limit_sig.get().unwrap_or(50),
-                None,
+                name_opt,
                 None,
                 None,
                 Some(TokenDataSortBy::Transactions),
@@ -37,6 +38,10 @@ pub fn TokensPage() -> impl IntoView {
     let table_columns: Vec<TableColumn<AnySort>> = vec![
         TableColumn {
             column: "Name".to_string(),
+            html_input_type: "text".to_string(),
+            is_searchable: true,
+            width: Some(String::from(TABLE_COL_USERNAME_WIDTH)),
+            alignment: Some(ColumnTextAlignment::Left),
             ..Default::default()
         },
         TableColumn {

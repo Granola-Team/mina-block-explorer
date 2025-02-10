@@ -24,7 +24,10 @@ pub async fn load_data(
 
     // Add search filters if provided
     if let Some(name) = name {
-        url.push_str(&format!("&name=eq.{}", name));
+        url.push_str(&format!(
+            "&name=ilike.{}",
+            urlencoding::encode(&format!("%{}%", name))
+        ));
     }
     if let Some(id) = id {
         url.push_str(&format!("&id=eq.{}", id));
