@@ -1,23 +1,22 @@
 use super::functions::*;
 use crate::{
-    common::{components::*, table::*},
+    common::{components::*, models::UrlParamSelectOptions, table::*},
     tokens::models::TokenDataSortBy,
 };
 use leptos::*;
 use leptos_meta::*;
-// use leptos_router::create_query_signal;
+use leptos_router::create_query_signal;
 
 #[component]
 pub fn TokensPage() -> impl IntoView {
     let (data_sig, set_data) = create_signal(None);
-    // let (row_limit_sig, _) = create_query_signal::<u64>("row-limit");
+    let (row_limit_sig, _) = create_query_signal::<u64>("row-limit");
 
     let resource = create_resource(
         || (),
-        |_| async move {
+        move |_| async move {
             load_data(
-                // row_limit_sig.get(),
-                Some(100),
+                row_limit_sig.get().unwrap_or(50),
                 None,
                 None,
                 None,
@@ -73,13 +72,29 @@ pub fn TokensPage() -> impl IntoView {
                 table_columns
                 data_sig
                 is_loading=loading_sig.into()
-                // controls=move || {
-                // view! {
-                // <div class="hidden md:flex justify-center items-center">
-                // <RowLimit />
-                // </div>
-                // }
-                // }
+                controls=move || {
+                    // Avoiding RowLimit component so we can set default
+                    view! {
+                        <div class="hidden md:flex justify-center items-center">
+
+                            <UrlParamSelectMenu
+                                label="Rows"
+                                id="row-limit"
+                                query_str_key="row-limit"
+                                labels=UrlParamSelectOptions {
+                                    is_boolean_option: false,
+                                    cases: vec![
+                                        "50".to_string(),
+                                        "100".to_string(),
+                                        "250".to_string(),
+                                        "500".to_string(),
+                                        "1000".to_string(),
+                                    ],
+                                }
+                            />
+                        </div>
+                    }
+                }
                 section_heading="Tokens"
             />
 

@@ -6,7 +6,7 @@ use reqwest::{
 };
 
 pub async fn load_data(
-    limit: Option<u64>,
+    limit: u64,
     name: Option<String>,
     id: Option<String>,
     owner: Option<String>,
@@ -20,7 +20,7 @@ pub async fn load_data(
         String::from("https://owdfifqnnanbqwbuyzsj.supabase.co/rest/v1/zkapp_tokens?select=*");
 
     // Add limit if provided
-    url.push_str(&format!("&limit={:?}", limit.map_or(50, |l| l)));
+    url.push_str(&format!("&limit={:?}", limit));
 
     // Add search filters if provided
     if let Some(name) = name {
