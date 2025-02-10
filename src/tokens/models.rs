@@ -1,12 +1,30 @@
-#[derive(Clone)]
+use serde::{Deserialize, Serialize};
+
+#[derive(Serialize, Deserialize, Clone)]
 pub struct TokenData {
-    pub token_id: String,
+    pub name: String,
+    pub id: String,
+    pub supply: f64,
+    pub owner: String,
+    pub holders: i32,
+    pub transactions: i32,
     pub locked: bool,
-    pub owner_pk: String,
-    pub _owner_token_id: String,
-    pub token_symbol: String,
-    pub token_holders_count: usize,
-    pub token_balance: usize,
-    pub txn_count: usize,
-    pub _unlock_percent: usize,
+}
+
+pub enum TokenDataSortBy {
+    // Name,
+    // Supply,
+    // Holders,
+    Transactions,
+}
+
+impl TokenDataSortBy {
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            // TokenDataSortBy::Name => "name",
+            // TokenDataSortBy::Supply => "supply",
+            // TokenDataSortBy::Holders => "holders",
+            TokenDataSortBy::Transactions => "transactions",
+        }
+    }
 }

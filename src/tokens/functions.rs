@@ -1,33 +1,66 @@
-use super::models::*;
-use crate::common::functions::generate_base58_string;
-use rand::Rng;
+use super::models::{TokenData, TokenDataSortBy};
+use crate::common::models::MyError;
+use reqwest::{
+    header::{HeaderMap, HeaderValue},
+    Client,
+};
 
-fn generate_random_string(len: usize) -> String {
-    let charset = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
-    let mut rng = rand::thread_rng();
-    (0..len)
-        .map(|_| {
-            let idx = rng.gen_range(0..charset.len());
-            charset.chars().nth(idx).unwrap()
-        })
-        .collect()
-}
+pub async fn load_data(
+    limit: Option<u64>,
+    name: Option<String>,
+    id: Option<String>,
+    owner: Option<String>,
+    sort_by: Option<TokenDataSortBy>,
+    ascending: bool,
+) -> Result<Vec<TokenData>, MyError> {
+    let client = Client::new();
 
-pub fn stub_token_data(size: u64) -> Vec<Option<TokenData>> {
-    let mut rng = rand::thread_rng();
-    (0..size)
-        .map(|_| {
-            Some(TokenData {
-                token_id: generate_random_string(10),
-                locked: rng.gen_bool(0.5), // 50% chance to be true or false
-                owner_pk: generate_base58_string(44),
-                _owner_token_id: generate_base58_string(10),
-                token_symbol: generate_random_string(5), // Shorter string for symbol
-                token_holders_count: rng.gen_range(1..=1000),
-                token_balance: rng.gen_range(1..=1000),
-                txn_count: rng.gen_range(1..=1000),
-                _unlock_percent: rng.gen_range(1..=100),
-            })
-        })
-        .collect()
+    // Build the base URL with select
+    let mut url =
+        String::from("https://owdfifqnnanbqwbuyzsj.supabase.co/rest/v1/zkapp_tokens?select=*");
+
+    // Add limit if provided
+    url.push_str(&format!("&limit={:?}", limit.map_or(50, |l| l)));
+
+    // Add search filters if provided
+    if let Some(name) = name {
+        url.push_str(&format!("&name=eq.{}", name));
+    }
+    if let Some(id) = id {
+        url.push_str(&format!("&id=eq.{}", id));
+    }
+    if let Some(owner) = owner {
+        url.push_str(&format!("&owner=eq.{}", owner));
+    }
+
+    // Add sorting if provided
+    if let Some(sort) = sort_by {
+        url.push_str(&format!(
+            "&order={}.{}",
+            sort.as_str(),
+            if ascending { "asc" } else { "desc" }
+        ));
+    }
+
+    // Set up headers
+    let mut headers = HeaderMap::new();
+    headers.insert(
+        "apikey",
+        // this is fine to be public
+        HeaderValue::from_str(
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im93ZGZpZnFubmFuYnF3YnV5enNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzc0NzMxMTEsImV4cCI6MjA1MzA0OTExMX0.i2FHhUUEZDbmAXSH3uz8Yt7D09PJvdFILlowrwbz5ro"
+        ).map_err(|e| MyError::UrlParseError(e.to_string()))?
+    );
+
+    // Make the request
+    let response = client
+        .get(&url)
+        .headers(headers)
+        .send()
+        .await?
+        .json::<Vec<TokenData>>()
+        .await
+        .map_err(|e| MyError::ParseError(e.to_string()))?;
+
+    Ok(response)
 }

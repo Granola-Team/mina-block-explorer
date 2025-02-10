@@ -40,12 +40,6 @@ pub fn Header() -> impl IntoView {
             ..Default::default()
         },
         // NavEntry {
-        //     href: "/addresses/tokens".to_string(),
-        //     text: "Tokens".to_string(),
-        //     icon: NavIcon::Tokens,
-        //     ..Default::default()
-        // },
-        // NavEntry {
         //     href: "/addresses/zkapps".to_string(),
         //     text: "zkApps".to_string(),
         //     icon: NavIcon::ZKApps,
@@ -102,6 +96,12 @@ pub fn Header() -> impl IntoView {
                     icon: NavIcon::Send,
                     disabled: false,
                     sub_entries: None,
+                    ..Default::default()
+                },
+                NavEntry {
+                    href: "/tokens".to_string(),
+                    text: "Tokens".to_string(),
+                    icon: NavIcon::Tokens,
                     ..Default::default()
                 },
                 NavEntry {

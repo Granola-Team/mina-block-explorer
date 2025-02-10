@@ -23,6 +23,7 @@ use crate::{
     snarks::page::SnarksPage,
     stakes::page::StakesPage,
     summary::page::{SummaryLocalStorage, SummaryPage},
+    tokens::page::TokensPage,
     user_commands::page::{
         CommandSpotlightPage, CommandsTabbedPage, PendingCommandsPage, UserCommandsPage,
     },
@@ -65,8 +66,8 @@ pub fn Root() -> impl IntoView {
                     />
                     <Route path="/addresses/accounts" view=AccountsPage />
                     <Route path="/addresses/accounts/:id" view=AccountSpotlightTabbedPage>
-                    // <Route path="/addresses/zkapps" view=ZkAppsPage />
-                    // <Route path="/addresses/zkapps/:id" view=ZkAppSpotlight />
+                        // <Route path="/addresses/zkapps" view=ZkAppsPage />
+                        // <Route path="/addresses/zkapps/:id" view=ZkAppSpotlight />
                         <Route
                             path="*"
                             view=move || {
@@ -87,7 +88,7 @@ pub fn Root() -> impl IntoView {
                         <Route path="/block-production" view=AccountBlockProductionPage />
                         <Route path="/delegations" view=AccountDelegationsPage />
                     </Route>
-                    // <Route path="/tokens" view=TokensPage />
+                    <Route path="/tokens" view=TokensPage />
 
                     <Route path="/blocks" view=SummaryPage />
                     <Route path="/blocks/:id" view=BlockTabbedPage>
