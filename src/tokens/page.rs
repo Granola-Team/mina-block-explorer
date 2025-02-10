@@ -73,8 +73,8 @@ pub fn TokensPage() -> impl IntoView {
                 data_sig
                 is_loading=loading_sig.into()
                 controls=move || {
-                    // Avoiding RowLimit component so we can set default
                     view! {
+                        // Avoiding RowLimit component so we can set default
                         <div class="hidden md:flex justify-center items-center">
 
                             <UrlParamSelectMenu
