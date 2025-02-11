@@ -6,7 +6,7 @@ use crate::{
         models::{TableMetadata, UrlParamSelectOptions},
         table::*,
     },
-    tokens::models::{TokenData, TokenDataSortBy},
+    tokens::models::TokenDataSortBy,
 };
 use leptos::*;
 use leptos_meta::*;
@@ -22,7 +22,9 @@ pub fn TokensPage() -> impl IntoView {
     // Get total unfiltered count on page load
     create_effect(move |_| {
         spawn_local(async move {
-            if let Ok((_, count)) = load_data(1, None, None, None, None, false).await {
+            if let Ok((_, count)) =
+                load_data(1, None, None, None, TokenDataSortBy::default(), false).await
+            {
                 set_total_count.set(Some(count));
             }
         });
@@ -36,7 +38,7 @@ pub fn TokensPage() -> impl IntoView {
                 name_opt,
                 None,
                 None,
-                Some(TokenDataSortBy::Transactions),
+                TokenDataSortBy::default(),
                 false,
             )
             .await
@@ -125,13 +127,16 @@ pub fn TokensPage() -> impl IntoView {
                 }
                 section_heading="Tokens"
                 metadata=Signal::derive(move || {
-                                    data_sig.get().map(|(data, _)| TableMetadata {
-                                        displayed_records: u64::try_from(data.len()).unwrap_or_default(),
-                                        available_records: u64::try_from(data.len()).ok(),
-                                        total_records: total_count_sig.get()
-                                            .map(|count| u64::try_from(count).unwrap_or_default()),
-                                    })
-                                })
+                    data_sig
+                        .get()
+                        .map(|(data, _)| TableMetadata {
+                            displayed_records: u64::try_from(data.len()).unwrap_or_default(),
+                            available_records: u64::try_from(data.len()).ok(),
+                            total_records: total_count_sig
+                                .get()
+                                .map(|count| u64::try_from(count).unwrap_or_default()),
+                        })
+                })
             />
 
         </PageContainer>

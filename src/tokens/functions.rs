@@ -10,7 +10,7 @@ pub async fn load_data(
     name: Option<String>,
     id: Option<String>,
     owner: Option<String>,
-    sort_by: Option<TokenDataSortBy>,
+    sort_by: TokenDataSortBy,
     ascending: bool,
 ) -> Result<(Vec<TokenData>, i64), MyError> {
     let client = Client::new();
@@ -36,14 +36,12 @@ pub async fn load_data(
         url.push_str(&format!("&owner=eq.{}", owner));
     }
 
-    // Add sorting if provided
-    if let Some(sort) = sort_by {
-        url.push_str(&format!(
-            "&order={}.{}",
-            sort.as_str(),
-            if ascending { "asc" } else { "desc" }
-        ));
-    }
+    // Add sorting
+    url.push_str(&format!(
+        "&order={}.{}",
+        sort_by.as_str(),
+        if ascending { "asc" } else { "desc" }
+    ));
 
     // Set up headers
     let mut headers = HeaderMap::new();
