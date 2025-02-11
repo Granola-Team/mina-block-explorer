@@ -3,8 +3,8 @@ use serde::{Deserialize, Serialize};
 #[derive(Serialize, Deserialize, Clone)]
 pub struct TokenData {
     pub name: String,
-    pub id: String,
     pub supply: f64,
+    pub id: String,
     pub owner: String,
     pub holders: i32,
     pub transactions: i32,

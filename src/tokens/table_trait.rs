@@ -8,8 +8,8 @@ impl TableData for Vec<TokenData> {
             .map(|token| {
                 vec![
                     convert_to_pill(token.name.to_string(), ColorVariant::Grey),
+                    convert_to_span(token.supply.to_string()),
                     convert_to_link(token.id.to_string(), "#".to_string()),
-                    decorate_with_currency_tag(token.supply.to_string(), token.name.to_string()),
                     convert_to_link(
                         token.owner.to_string(),
                         format!("/addresses/accounts/{}", token.owner),

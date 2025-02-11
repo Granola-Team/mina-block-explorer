@@ -7,8 +7,8 @@ module.exports = {
     heading: "Tokens",
     columns: [
       "Name",
-      "ID",
       "Supply",
+      "ID",
       "Owner",
       "Holders",
       "Transactions",

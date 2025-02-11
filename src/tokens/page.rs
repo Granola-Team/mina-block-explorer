@@ -74,17 +74,16 @@ pub fn TokensPage() -> impl IntoView {
             ..Default::default()
         },
         TableColumn {
-            column: "ID".to_string(),
-            is_sortable: true,
-            width: Some(String::from(TABLE_COL_HASH_WIDTH)),
+            column: "Supply".to_string(),
+            sort_direction: Some(AnySort::Tokens(sort_dir)),
+            width: Some(String::from(TABLE_COL_LARGE_BALANCE)),
             alignment: Some(ColumnTextAlignment::Left),
             ..Default::default()
         },
         TableColumn {
-            column: "Supply".to_string(),
-            is_sortable: true,
-            width: Some(String::from(TABLE_COL_LARGE_BALANCE)),
-            alignment: Some(ColumnTextAlignment::Right),
+            column: "ID".to_string(),
+            width: Some(String::from(TABLE_COL_HASH_WIDTH)),
+            alignment: Some(ColumnTextAlignment::Left),
             ..Default::default()
         },
         TableColumn {
