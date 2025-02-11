@@ -1,7 +1,12 @@
 use super::functions::*;
 use crate::{
-    common::{components::*, models::UrlParamSelectOptions, table::*},
-    tokens::models::TokenDataSortBy,
+    common::{
+        components::*,
+        constants::TABLE_COL_USERNAME_WIDTH,
+        models::{TableMetadata, UrlParamSelectOptions},
+        table::*,
+    },
+    tokens::models::{TokenData, TokenDataSortBy},
 };
 use leptos::*;
 use leptos_meta::*;
@@ -10,8 +15,18 @@ use leptos_router::create_query_signal;
 #[component]
 pub fn TokensPage() -> impl IntoView {
     let (data_sig, set_data) = create_signal(None);
+    let (total_count_sig, set_total_count) = create_signal(None::<i64>);
     let (row_limit_sig, _) = create_query_signal::<u64>("row-limit");
     let (name_sig, _) = create_query_signal::<String>("q-name");
+
+    // Get total unfiltered count on page load
+    create_effect(move |_| {
+        spawn_local(async move {
+            if let Ok((_, count)) = load_data(1, None, None, None, None, false).await {
+                set_total_count.set(Some(count));
+            }
+        });
+    });
 
     let resource = create_resource(
         move || name_sig.get(),
@@ -34,6 +49,14 @@ pub fn TokensPage() -> impl IntoView {
             .map(|data| set_data.set(Some(data)))
     });
     let (loading_sig, _) = create_signal(false);
+
+    // Create a signal for just the data part
+    let data_only = create_signal(None);
+    create_effect(move |_| {
+        if let Some((data, _)) = data_sig.get() {
+            data_only.1.set(Some(data));
+        }
+    });
 
     let table_columns: Vec<TableColumn<AnySort>> = vec![
         TableColumn {
@@ -75,7 +98,7 @@ pub fn TokensPage() -> impl IntoView {
         <PageContainer>
             <TableSectionTemplate
                 table_columns
-                data_sig
+                data_sig=data_only.0
                 is_loading=loading_sig.into()
                 controls=move || {
                     view! {
@@ -101,6 +124,14 @@ pub fn TokensPage() -> impl IntoView {
                     }
                 }
                 section_heading="Tokens"
+                metadata=Signal::derive(move || {
+                                    data_sig.get().map(|(data, _)| TableMetadata {
+                                        displayed_records: u64::try_from(data.len()).unwrap_or_default(),
+                                        available_records: u64::try_from(data.len()).ok(),
+                                        total_records: total_count_sig.get()
+                                            .map(|count| u64::try_from(count).unwrap_or_default()),
+                                    })
+                                })
             />
 
         </PageContainer>

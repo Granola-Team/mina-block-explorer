@@ -12,7 +12,7 @@ pub async fn load_data(
     owner: Option<String>,
     sort_by: Option<TokenDataSortBy>,
     ascending: bool,
-) -> Result<Vec<TokenData>, MyError> {
+) -> Result<(Vec<TokenData>, i64), MyError> {
     let client = Client::new();
 
     // Build the base URL with select
@@ -55,15 +55,31 @@ pub async fn load_data(
         ).map_err(|e| MyError::UrlParseError(e.to_string()))?
     );
 
+    // Add Prefer header for exact count
+    headers.insert("Prefer", HeaderValue::from_static("count=exact"));
+
     // Make the request
-    let response = client
-        .get(&url)
-        .headers(headers)
-        .send()
-        .await?
+    let response = client.get(&url).headers(headers).send().await?;
+
+    // Get total count from content-range header
+    let total_count = response
+        .headers()
+        .get("content-range")
+        .and_then(|h| h.to_str().ok())
+        .and_then(|range| {
+            range
+                .split('/')
+                .nth(1)
+                .and_then(|count| count.parse::<i64>().ok())
+        })
+        .unwrap_or(0);
+    println!("total_count: {total_count}");
+
+    // Parse the JSON response
+    let data = response
         .json::<Vec<TokenData>>()
         .await
         .map_err(|e| MyError::ParseError(e.to_string()))?;
 
-    Ok(response)
+    Ok((data, total_count))
 }
