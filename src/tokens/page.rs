@@ -2,7 +2,7 @@ use super::functions::*;
 use crate::{
     common::{
         components::*,
-        constants::TABLE_COL_USERNAME_WIDTH,
+        constants::{TABLE_COL_HASH_WIDTH, TABLE_COL_NUMERIC_WIDTH, TABLE_COL_USERNAME_WIDTH},
         models::{TableMetadata, UrlParamSelectOptions},
         table::*,
     },
@@ -65,32 +65,50 @@ pub fn TokensPage() -> impl IntoView {
             column: "Name".to_string(),
             html_input_type: "text".to_string(),
             is_searchable: true,
+            is_sortable: true,
             width: Some(String::from(TABLE_COL_USERNAME_WIDTH)),
             alignment: Some(ColumnTextAlignment::Left),
             ..Default::default()
         },
         TableColumn {
             column: "ID".to_string(),
+            is_sortable: true,
+            width: Some(String::from(TABLE_COL_HASH_WIDTH)),
+            alignment: Some(ColumnTextAlignment::Left),
             ..Default::default()
         },
         TableColumn {
             column: "Supply".to_string(),
+            is_sortable: true,
+            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
+            alignment: Some(ColumnTextAlignment::Right),
             ..Default::default()
         },
         TableColumn {
             column: "Owner".to_string(),
+            is_sortable: true,
+            width: Some(String::from(TABLE_COL_HASH_WIDTH)),
+            alignment: Some(ColumnTextAlignment::Left),
             ..Default::default()
         },
         TableColumn {
             column: "Holders".to_string(),
+            is_sortable: true,
+            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
+            alignment: Some(ColumnTextAlignment::Right),
             ..Default::default()
         },
         TableColumn {
             column: "Transactions".to_string(),
+            is_sortable: true,
+            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
+            alignment: Some(ColumnTextAlignment::Right),
             ..Default::default()
         },
         TableColumn {
             column: "Locked".to_string(),
+            is_sortable: true,
+            alignment: Some(ColumnTextAlignment::Left),
             ..Default::default()
         },
     ];
