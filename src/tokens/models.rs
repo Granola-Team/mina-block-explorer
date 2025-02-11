@@ -12,8 +12,8 @@ pub struct TokenData {
 }
 
 pub enum TokenDataSortBy {
-    // Name,
-    Supply,
+    Name,
+    //Supply,
     // Holders,
     // Transactions,
 }
@@ -21,8 +21,8 @@ pub enum TokenDataSortBy {
 impl TokenDataSortBy {
     pub fn as_str(&self) -> &'static str {
         match self {
-            // TokenDataSortBy::Name => "name",
-            TokenDataSortBy::Supply => "supply",
+            TokenDataSortBy::Name => "name",
+            // TokenDataSortBy::Supply => "supply",
             // TokenDataSortBy::Holders => "holders",
             // TokenDataSortBy::Transactions => "transactions",
         }
@@ -31,6 +31,6 @@ impl TokenDataSortBy {
 
 impl Default for TokenDataSortBy {
     fn default() -> Self {
-        TokenDataSortBy::Supply
+        TokenDataSortBy::Name
     }
 }

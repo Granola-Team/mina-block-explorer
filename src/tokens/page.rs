@@ -2,7 +2,10 @@ use super::functions::*;
 use crate::{
     common::{
         components::*,
-        constants::{TABLE_COL_HASH_WIDTH, TABLE_COL_NUMERIC_WIDTH, TABLE_COL_USERNAME_WIDTH},
+        constants::{
+            TABLE_COL_HASH_WIDTH, TABLE_COL_LARGE_BALANCE, TABLE_COL_NUMERIC_WIDTH,
+            TABLE_COL_USERNAME_WIDTH,
+        },
         models::{TableMetadata, UrlParamSelectOptions},
         table::*,
     },
@@ -23,7 +26,7 @@ pub fn TokensPage() -> impl IntoView {
     create_effect(move |_| {
         spawn_local(async move {
             if let Ok((_, count)) =
-                load_data(1, None, None, None, TokenDataSortBy::default(), false).await
+                load_data(1, None, None, None, TokenDataSortBy::default(), true).await
             {
                 set_total_count.set(Some(count));
             }
@@ -39,7 +42,7 @@ pub fn TokensPage() -> impl IntoView {
                 None,
                 None,
                 TokenDataSortBy::default(),
-                false,
+                true,
             )
             .await
         },
@@ -80,7 +83,7 @@ pub fn TokensPage() -> impl IntoView {
         TableColumn {
             column: "Supply".to_string(),
             is_sortable: true,
-            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
+            width: Some(String::from(TABLE_COL_LARGE_BALANCE)),
             alignment: Some(ColumnTextAlignment::Right),
             ..Default::default()
         },
