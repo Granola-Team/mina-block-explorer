@@ -16,7 +16,7 @@
     "mina-signer": "^3.0.7",
     "prettier": "^3.3.3",
     "tailwindcss": "^3.4.13",
-    "wrangler": "^3.78.9"
+    "wrangler": "^3.78.12"
   },
   "lint-staged": {
     "src/*,ops/*,cypress/*": "prettier --write --ignore-unknown"

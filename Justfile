@@ -119,7 +119,7 @@ publish: pre-publish clean pnpm-install
   @echo "--- Publishing"
   trunk build --release --filehash true
   @echo "Publishing version {{VERSION}}"
-  npx wrangler pages deploy --branch main
+  wrangler pages deploy --branch main
 
 # Check rust code
 check:
