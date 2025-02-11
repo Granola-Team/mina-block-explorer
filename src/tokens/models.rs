@@ -8,7 +8,7 @@ pub struct TokenData {
     pub owner: String,
     pub holders: i32,
     pub transactions: i32,
-    pub locked: bool,
+    pub unlock_percentage: f64,
 }
 
 #[derive(Default)]

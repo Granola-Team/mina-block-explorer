@@ -16,7 +16,7 @@ impl TableData for Vec<TokenData> {
                     ),
                     convert_to_pill(token.holders.to_string(), ColorVariant::Blue),
                     convert_to_pill(token.transactions.to_string(), ColorVariant::Blue),
-                    convert_to_span(token.locked.to_string()),
+                    convert_to_span(token.unlock_percentage.to_string()),
                 ]
             })
             .collect::<Vec<_>>()

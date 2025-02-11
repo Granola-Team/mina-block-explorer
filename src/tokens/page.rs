@@ -108,9 +108,9 @@ pub fn TokensPage() -> impl IntoView {
             ..Default::default()
         },
         TableColumn {
-            column: "Locked".to_string(),
+            column: "% Unlocked".to_string(),
             is_sortable: true,
-            alignment: Some(ColumnTextAlignment::Left),
+            alignment: Some(ColumnTextAlignment::Right),
             ..Default::default()
         },
     ];

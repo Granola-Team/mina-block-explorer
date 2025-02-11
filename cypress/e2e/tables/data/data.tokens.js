@@ -12,7 +12,7 @@ module.exports = {
       "Owner",
       "Holders",
       "Transactions",
-      "Locked",
+      "% Unlocked",
     ],
     // sorting_columns: [
     //   {
