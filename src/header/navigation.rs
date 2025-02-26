@@ -39,12 +39,12 @@ pub fn Header() -> impl IntoView {
             icon: NavIcon::Accounts,
             ..Default::default()
         },
-        // NavEntry {
-        //     href: "/addresses/zkapps".to_string(),
-        //     text: "zkApps".to_string(),
-        //     icon: NavIcon::ZKApps,
-        //     ..Default::default()
-        // },
+        NavEntry {
+            href: "/addresses/zkapps".to_string(),
+            text: "zkApps".to_string(),
+            icon: NavIcon::ZKApps,
+            ..Default::default()
+        },
     ]);
 
     let nav_items = vec![
