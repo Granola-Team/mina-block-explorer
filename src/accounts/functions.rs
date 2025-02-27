@@ -12,6 +12,7 @@ pub async fn load_data(
     mina_balance: Option<f64>,
     delegate: Option<String>,
     sort_by: Option<accounts_query::AccountSortByInput>,
+    is_zkapp: Option<bool>,
 ) -> Result<accounts_query::ResponseData, MyError> {
     let query = if public_key.is_none()
         && username.is_none()
@@ -27,6 +28,7 @@ pub async fn load_data(
                 .map(|mb| mb * 1_000_000_000f64)
                 .map(|nmb| nmb as i64),
             delegate,
+            zkapp: is_zkapp,
         })
     };
 

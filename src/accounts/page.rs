@@ -59,6 +59,7 @@ fn AccountsPageContents() -> impl IntoView {
                 balance,
                 delegate,
                 Some(sort_by),
+                None,
             )
             .await
         },

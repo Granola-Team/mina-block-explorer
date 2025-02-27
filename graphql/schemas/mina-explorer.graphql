@@ -21,6 +21,7 @@ input AccountQueryInput {
   username: String
   balance_lte: Int
   delegate: String
+  zkapp: Boolean
 }
 
 enum AccountSortByInput {
