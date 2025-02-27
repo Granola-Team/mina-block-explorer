@@ -11,7 +11,9 @@ pub struct TokenData {
     pub locked: bool,
 }
 
+#[derive(Default)]
 pub enum TokenDataSortBy {
+    #[default]
     Name,
     //Supply,
     // Holders,
@@ -26,11 +28,5 @@ impl TokenDataSortBy {
             // TokenDataSortBy::Holders => "holders",
             // TokenDataSortBy::Transactions => "transactions",
         }
-    }
-}
-
-impl Default for TokenDataSortBy {
-    fn default() -> Self {
-        TokenDataSortBy::Name
     }
 }
