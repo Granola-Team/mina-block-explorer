@@ -31,7 +31,7 @@ fn AccountsPageContents() -> impl IntoView {
     let (delegate_sig, _) = create_query_signal::<String>("q-delegate");
     let (row_limit_sig, _) = create_query_signal::<i64>("row-limit");
     let (sort_dir_sig, _) = create_query_signal::<String>("sort-dir");
-    let (is_standard_sig, _) = create_query_signal::<bool>("is-standard");
+    let (is_standard_sig, _) = create_query_signal::<bool>("q-is-all");
 
     let resource = create_resource(
         move || {
@@ -158,11 +158,11 @@ fn AccountsPageContents() -> impl IntoView {
                                 <RowLimit />
                             </div>
                             <UrlParamSelectMenu
-                                id="is-standard-selection"
-                                query_str_key="is-standard"
+                                id="is-all-selection"
+                                query_str_key="q-is-all"
                                 labels=UrlParamSelectOptions {
                                     is_boolean_option: true,
-                                    cases: vec!["Standard".to_string(), "zkApp".to_string()],
+                                    cases: vec!["All".to_string(), "zkApp".to_string()],
                                 }
                             />
                         }
