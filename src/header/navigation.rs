@@ -32,20 +32,12 @@ pub fn Header() -> impl IntoView {
         // },
     ]);
 
-    let addr_entries = Some(vec![
-        NavEntry {
-            href: "/addresses/accounts".to_string(),
-            text: "Accounts".to_string(),
-            icon: NavIcon::Accounts,
-            ..Default::default()
-        },
-        NavEntry {
-            href: "/addresses/accounts?is-standard=false".to_string(),
-            text: "zkApps".to_string(),
-            icon: NavIcon::ZKApps,
-            ..Default::default()
-        },
-    ]);
+    let addr_entries = Some(vec![NavEntry {
+        href: "/addresses/accounts".to_string(),
+        text: "Accounts".to_string(),
+        icon: NavIcon::Accounts,
+        ..Default::default()
+    }]);
 
     let nav_items = vec![
         NavEntry {
