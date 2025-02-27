@@ -31,6 +31,8 @@ fn AccountsPageContents() -> impl IntoView {
     let (delegate_sig, _) = create_query_signal::<String>("q-delegate");
     let (row_limit_sig, _) = create_query_signal::<i64>("row-limit");
     let (sort_dir_sig, _) = create_query_signal::<String>("sort-dir");
+    let (is_standard_sig, _) = create_query_signal::<bool>("is-standard");
+
     let resource = create_resource(
         move || {
             (
@@ -40,9 +42,10 @@ fn AccountsPageContents() -> impl IntoView {
                 delegate_sig.get(),
                 row_limit_sig.get(),
                 sort_dir_sig.get(),
+                is_standard_sig.get(),
             )
         },
-        |(public_key, username, balance, delegate, mut row_limit, sort_dir)| async move {
+        |(public_key, username, balance, delegate, mut row_limit, sort_dir, is_standard)| async move {
             let s_dir = if let Some(s) = sort_dir.and_then(|s| AccountsSort::try_from(s).ok()) {
                 s
             } else {
@@ -59,7 +62,7 @@ fn AccountsPageContents() -> impl IntoView {
                 balance,
                 delegate,
                 Some(sort_by),
-                None,
+                is_standard,
             )
             .await
         },
@@ -154,6 +157,14 @@ fn AccountsPageContents() -> impl IntoView {
                             <div class="hidden md:flex justify-center items-center">
                                 <RowLimit />
                             </div>
+                            <UrlParamSelectMenu
+                                id="is-standard-selection"
+                                query_str_key="is-standard"
+                                labels=UrlParamSelectOptions {
+                                    is_boolean_option: true,
+                                    cases: vec!["Standard".to_string(), "zkApp".to_string()],
+                                }
+                            />
                         }
                     }
                 />

@@ -27,7 +27,6 @@ use crate::{
     user_commands::page::{
         CommandSpotlightPage, CommandsTabbedPage, PendingCommandsPage, UserCommandsPage,
     },
-    zk_apps::page::ZkAppsPage,
 };
 use leptos::*;
 use leptos_router::*;
@@ -65,7 +64,6 @@ pub fn Root() -> impl IntoView {
                             }
                         }
                     />
-                    <Route path="/addresses/zkapps" view=ZkAppsPage />
                     // <Route path="/addresses/zkapps/:id" view=ZkAppSpotlight />
                     <Route path="/addresses/accounts" view=AccountsPage />
                     <Route path="/addresses/accounts/:id" view=AccountSpotlightTabbedPage>

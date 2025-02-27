@@ -40,7 +40,7 @@ pub fn Header() -> impl IntoView {
             ..Default::default()
         },
         NavEntry {
-            href: "/addresses/zkapps".to_string(),
+            href: "/addresses/accounts?is-standard=false".to_string(),
             text: "zkApps".to_string(),
             icon: NavIcon::ZKApps,
             ..Default::default()
