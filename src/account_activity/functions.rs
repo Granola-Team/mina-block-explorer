@@ -54,7 +54,7 @@ pub async fn load_data(
             username: None,
             balance_lte: None,
             delegate: None,
-            zkapp: Some(false),
+            zkapp: None,
         },
         blocks_query: account_activity_query::BlockQueryInput {
             block_height_lte: block_height,
