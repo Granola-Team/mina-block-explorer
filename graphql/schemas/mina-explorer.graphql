@@ -1,3 +1,7 @@
+type ZkappAccount {
+  zkappUri: String
+}
+
 type Account {
   publicKey: String
   username: String
@@ -6,6 +10,7 @@ type Account {
   delegate: String
   timeLocked: Boolean
   is_genesis_account: Boolean
+  zkapp: ZkappAccount
   pk_epoch_num_blocks: Int
   pk_total_num_blocks: Int
   pk_epoch_num_snarks: Int

@@ -131,6 +131,9 @@ query AccountActivityQuery(
     nonce
     delegate
     is_genesis_account
+    zkapp {
+      zkappUri
+    }
     pk_epoch_num_blocks
     pk_total_num_blocks
     pk_epoch_num_snarks
