@@ -1,5 +1,13 @@
+type VerificationKey {
+  hash: String
+}
+
 type ZkappAccount {
   zkappUri: String
+  zkappVersion: Int
+  verificationKey: VerificationKey
+  appState: [String]
+  actionState: [String]
 }
 
 type Account {

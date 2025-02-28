@@ -133,6 +133,12 @@ query AccountActivityQuery(
     is_genesis_account
     zkapp {
       zkappUri
+      zkappVersion
+      verificationKey {
+        hash
+      }
+      appState
+      actionState
     }
     pk_epoch_num_blocks
     pk_total_num_blocks
