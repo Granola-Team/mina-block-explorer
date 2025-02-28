@@ -244,6 +244,7 @@ impl Default for TransactionQueryInput {
             token_in: None,
             to_lt: None,
             to: None,
+            zkapp: None,
         }
     }
 }

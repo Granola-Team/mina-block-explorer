@@ -1402,6 +1402,7 @@ input TransactionQueryInput {
   token_in: [Int]
   to_lt: String
   to: String
+  zkapp: Boolean
 }
 
 enum NextstakeSortByInput {

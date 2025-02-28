@@ -39,6 +39,7 @@ pub async fn load_data(
         move || current_epoch_staking_ledger.and_then(|e| e.try_into().ok());
 
     let variables = account_activity_query::Variables {
+        zk_sort_by: account_activity_query::TransactionSortByInput::BLOCKHEIGHT_DESC,
         blocks_sort_by: account_activity_query::BlockSortByInput::BLOCKHEIGHT_DESC,
         snarks_sort_by: account_activity_query::SnarkSortByInput::BLOCKHEIGHT_DESC,
         trans_sort_by: account_activity_query::TransactionSortByInput::BLOCKHEIGHT_DESC,
@@ -129,19 +130,49 @@ pub async fn load_data(
             } else {
                 canonical
             },
+            zkapp: Some(false),
             ..Default::default()
         },
         incoming_trans_query: account_activity_query::TransactionQueryInput {
             block_height_lte: block_height,
-            hash: txn_hash,
+            hash: txn_hash.clone(),
             to: public_key.clone(),
-            from: counterparty,
+            from: counterparty.clone(),
             nonce,
             canonical: if canonical.is_none() {
                 Some(true)
             } else {
                 canonical
             },
+            zkapp: Some(false),
+            ..Default::default()
+        },
+        zk_incoming_trans_query: account_activity_query::TransactionQueryInput {
+            block_height_lte: block_height,
+            hash: txn_hash.clone(),
+            to: public_key.clone(),
+            from: counterparty.clone(),
+            nonce,
+            canonical: if canonical.is_none() {
+                Some(true)
+            } else {
+                canonical
+            },
+            zkapp: Some(true),
+            ..Default::default()
+        },
+        zk_outgoing_trans_query: account_activity_query::TransactionQueryInput {
+            block_height_lte: block_height,
+            hash: txn_hash,
+            from: public_key.clone(),
+            to: counterparty,
+            nonce,
+            canonical: if canonical.is_none() {
+                Some(true)
+            } else {
+                canonical
+            },
+            zkapp: Some(true),
             ..Default::default()
         },
         internal_commands_query: account_activity_query::FeetransferQueryInput {

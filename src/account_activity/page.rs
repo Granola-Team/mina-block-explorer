@@ -358,6 +358,14 @@ pub fn AccountSpotlightTabs() -> impl IntoView {
             ..Default::default()
         },
         NavEntry {
+            href: format!("/addresses/accounts/{}/zk-app-txn", id()),
+            text: "zkApp Commands".to_string(),
+            icon: NavIcon::Transactions, // Choose an appropriate icon
+            number_bubble: None,
+            disabled: true, // Example value, replace with your data
+            ..Default::default()
+        },
+        NavEntry {
             href: format!("/addresses/accounts/{}/commands/internal", id()),
             text: "Internal Commands".to_string(),
             icon: NavIcon::Transactions,

@@ -9,6 +9,9 @@ query AccountActivityQuery(
   $trans_sort_by: TransactionSortByInput!
   $outgoing_trans_query: TransactionQueryInput!
   $incoming_trans_query: TransactionQueryInput!
+  $zk_sort_by: TransactionSortByInput!
+  $zk_outgoing_trans_query: TransactionQueryInput!
+  $zk_incoming_trans_query: TransactionQueryInput!
   $account_query: AccountQueryInput!
   $internal_commands_limit: Int = 3
   $internal_commands_sort_by: FeetransferSortByInput!
@@ -42,6 +45,46 @@ query AccountActivityQuery(
     sortBy: $trans_sort_by
     limit: $trans_limit
     query: $outgoing_trans_query
+  ) {
+    canonical
+    fee
+    from
+    hash
+    to
+    amount
+    block {
+      dateTime
+    }
+    blockHeight
+    nonce
+    kind
+    failureReason
+    memo
+  }
+  outgoing_zk_txn: transactions(
+    sortBy: $zk_sort_by
+    limit: $trans_limit
+    query: $zk_outgoing_trans_query
+  ) {
+    canonical
+    fee
+    from
+    hash
+    to
+    amount
+    block {
+      dateTime
+    }
+    blockHeight
+    nonce
+    kind
+    failureReason
+    memo
+  }
+  incoming_zk_txn: transactions(
+    sortBy: $zk_sort_by
+    limit: $trans_limit
+    query: $zk_incoming_trans_query
   ) {
     canonical
     fee
