@@ -31,6 +31,7 @@ pub async fn load_data(
     block_producer: Option<String>,
     current_epoch_staking_ledger: Option<u64>,
     canonical: Option<bool>,
+    all_account_types: Option<bool>,
 ) -> Result<account_activity_query::ResponseData, MyError> {
     let block_height = block_height.map(|x| std::cmp::max(0i64, x));
     let nonce = nonce.map(|x| x as i64);
@@ -39,7 +40,6 @@ pub async fn load_data(
         move || current_epoch_staking_ledger.and_then(|e| e.try_into().ok());
 
     let variables = account_activity_query::Variables {
-        zk_sort_by: account_activity_query::TransactionSortByInput::BLOCKHEIGHT_DESC,
         blocks_sort_by: account_activity_query::BlockSortByInput::BLOCKHEIGHT_DESC,
         snarks_sort_by: account_activity_query::SnarkSortByInput::BLOCKHEIGHT_DESC,
         trans_sort_by: account_activity_query::TransactionSortByInput::BLOCKHEIGHT_DESC,
@@ -131,7 +131,11 @@ pub async fn load_data(
             } else {
                 canonical
             },
-            zkapp: Some(false),
+            zkapp: if all_account_types.unwrap_or(false) {
+                None
+            } else {
+                Some(true)
+            },
             ..Default::default()
         },
         incoming_trans_query: account_activity_query::TransactionQueryInput {
@@ -145,35 +149,7 @@ pub async fn load_data(
             } else {
                 canonical
             },
-            zkapp: Some(false),
-            ..Default::default()
-        },
-        zk_incoming_trans_query: account_activity_query::TransactionQueryInput {
-            block_height_lte: block_height,
-            hash: txn_hash.clone(),
-            to: public_key.clone(),
-            from: counterparty.clone(),
-            nonce,
-            canonical: if canonical.is_none() {
-                Some(true)
-            } else {
-                canonical
-            },
-            zkapp: Some(true),
-            ..Default::default()
-        },
-        zk_outgoing_trans_query: account_activity_query::TransactionQueryInput {
-            block_height_lte: block_height,
-            hash: txn_hash,
-            from: public_key.clone(),
-            to: counterparty,
-            nonce,
-            canonical: if canonical.is_none() {
-                Some(true)
-            } else {
-                canonical
-            },
-            zkapp: Some(true),
+            zkapp: None,
             ..Default::default()
         },
         internal_commands_query: account_activity_query::FeetransferQueryInput {

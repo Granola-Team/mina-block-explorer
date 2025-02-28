@@ -173,6 +173,7 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
     let (block_height_sig, _) = create_query_signal::<i64>("q-height");
     let (nonce_sig, _) = create_query_signal::<u64>("q-nonce");
     let (slot_sig, _) = create_query_signal::<u64>("q-slot");
+    let (is_all_sig, _) = create_query_signal::<bool>("q-is-all");
     let (row_limit_sig, _) = create_query_signal::<i64>("row-limit");
 
     let (summary_sig, _, _) =
@@ -190,6 +191,7 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
                 slot_sig.get(),
                 current_epoch_staking_ledger(),
                 row_limit_sig.get(),
+                is_all_sig.get(),
             )
         },
         |(
@@ -201,6 +203,7 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
             slot,
             current_epoch_staking_ledger,
             mut row_limit,
+            is_all,
         )| async move {
             let limit = *row_limit.get_or_insert(25i64);
             if let Some(id) = value.get("id").cloned() {
@@ -222,6 +225,7 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
                     Some(id),
                     current_epoch_staking_ledger,
                     canonical_opt,
+                    is_all,
                 )
                 .await
                 {
@@ -355,14 +359,6 @@ pub fn AccountSpotlightTabs() -> impl IntoView {
                 a.pk_total_num_user_commands
                     .and_then(|t| usize::try_from(t).ok())
             }),
-            ..Default::default()
-        },
-        NavEntry {
-            href: format!("/addresses/accounts/{}/zk-app-txn", id()),
-            text: "zkApp Commands".to_string(),
-            icon: NavIcon::Transactions, // Choose an appropriate icon
-            number_bubble: None,
-            disabled: true, // Example value, replace with your data
             ..Default::default()
         },
         NavEntry {

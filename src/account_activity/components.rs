@@ -110,6 +110,14 @@ pub fn AccountTransactionsSection(
                             cases: vec!["Canonical".to_string(), "Non-Canonical".to_string()],
                         }
                     />
+                    <UrlParamSelectMenu
+                        id="is-all-selection"
+                        query_str_key="q-is-all"
+                        labels=UrlParamSelectOptions {
+                            is_boolean_option: true,
+                            cases: vec!["All".to_string(), "zkApp".to_string()],
+                        }
+                    />
                 }
             }
         />
