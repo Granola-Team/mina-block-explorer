@@ -15,7 +15,7 @@ suite(["@tier2"], "account page", () => {
     {
       origin: `/addresses/accounts`,
       column: "Public Key",
-      tableHeader: "Accounts",
+      tableHeader: "Mina Accounts",
     },
     {
       origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,

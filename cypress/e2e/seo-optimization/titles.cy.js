@@ -13,7 +13,7 @@ suite(["@tier2"], "meta title", () => {
     },
     {
       url: "/addresses/accounts",
-      title: "Accounts | Search for accounts on Mina Blockchain",
+      title: "Mina Addresses | Search for Mina accounts on Mina Blockchain",
     },
     {
       url: `/analytics/commands/user`,

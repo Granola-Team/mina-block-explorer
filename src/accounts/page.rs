@@ -13,7 +13,7 @@ use leptos_use::storage::use_local_storage;
 #[component]
 pub fn AccountsPage() -> impl IntoView {
     view! {
-        <Title text="Accounts | Search for accounts on Mina Blockchain" />
+        <Title text="Mina Addresses | Search for Mina accounts on Mina Blockchain" />
         <PageContainer>
             <AccountsPageContents />
         </PageContainer>
@@ -142,7 +142,7 @@ fn AccountsPageContents() -> impl IntoView {
                         })
                     })
 
-                    section_heading="Accounts"
+                    section_heading="Mina Accounts"
                     is_loading=resource.loading()
                     footer=move || {
                         view! {

@@ -200,14 +200,14 @@ let pages = [
   {
     page: "/addresses/accounts",
     wait: () => {
-      cy.aliasTableRows("Accounts", "table-rows");
+      cy.aliasTableRows("Mina Accounts", "table-rows");
       cy.wait(100);
       cy.get("@table-rows").find(".loading-placeholder").should("not.exist");
       cy.get("th").contains("Balance").find("input").as("input");
       cy.get("@input").type("4000", { delay: 0 });
       cy.wait(1000);
       cy.get("@table-rows").find(".loading-placeholder").should("not.exist");
-      cy.aliasTableRows("Accounts", "table-rows");
+      cy.aliasTableRows("Mina Accounts", "table-rows");
     },
     tests: [
       {
