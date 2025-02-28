@@ -32,13 +32,6 @@ pub fn Header() -> impl IntoView {
         // },
     ]);
 
-    let addr_entries = Some(vec![NavEntry {
-        href: "/addresses/accounts".to_string(),
-        text: "Accounts".to_string(),
-        icon: NavIcon::Accounts,
-        ..Default::default()
-    }]);
-
     let nav_items = vec![
         NavEntry {
             href: "/blocks".to_string(),
@@ -57,9 +50,8 @@ pub fn Header() -> impl IntoView {
         },
         NavEntry {
             href: "/addresses/accounts".to_string(),
-            text: "Addresses".to_string(),
+            text: "Mina Accounts".to_string(),
             icon: NavIcon::Addresses,
-            sub_entries: addr_entries,
             match_type: Some(NavMatchType::Prefix),
             ..Default::default()
         },
