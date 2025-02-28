@@ -221,7 +221,7 @@ pub fn get_spotlight_data(
         .attr("class", "block")
     }
 
-    vec![
+    let spotlight_entries = vec![
         SpotlightEntry {
             label: String::from("Balance"),
             any_el: Some(balance_el),
@@ -258,7 +258,9 @@ pub fn get_spotlight_data(
             )),
             copiable: true,
         },
-    ]
+    ];
+
+    spotlight_entries
 }
 
 pub fn extend_delegator_info(

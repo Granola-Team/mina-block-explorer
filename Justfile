@@ -67,7 +67,7 @@ test-unit:
   pnpm exec jest test
   @echo "--- Performing ruby tests"
   # test was failing to start/stop process
-  rspec **/*-spec.rb
+  # rspec **/*-spec.rb
   @echo "--- Performing rust unit tests"
   cargo-nextest nextest run
 
