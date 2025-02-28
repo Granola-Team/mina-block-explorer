@@ -221,7 +221,7 @@ pub fn get_spotlight_data(
         .attr("class", "block")
     }
 
-    let spotlight_entries = vec![
+    let mut spotlight_entries = vec![
         SpotlightEntry {
             label: String::from("Balance"),
             any_el: Some(balance_el),
@@ -259,6 +259,75 @@ pub fn get_spotlight_data(
             copiable: true,
         },
     ];
+
+    if account.zkapp.is_some() {
+        let zk_app = account.zkapp.as_ref().unwrap();
+
+        spotlight_entries.push(SpotlightEntry {
+            label: String::from("zkApp Version"),
+            any_el: Some({
+                let version = *zk_app.zkapp_version.as_ref().unwrap_or(&0);
+                convert_to_span(format_number(version.to_string()))
+            }),
+            copiable: true,
+        });
+        spotlight_entries.push(SpotlightEntry {
+            label: String::from("Verification Key"),
+            any_el: Some({
+                let v_key_hash = zk_app
+                    .verification_key
+                    .clone()
+                    .map(|k| k.hash.map(|h| h.to_string()).unwrap_or_default())
+                    .unwrap_or_default();
+                convert_to_span(v_key_hash)
+            }),
+            copiable: true,
+        });
+        spotlight_entries.push(SpotlightEntry {
+            label: String::from("App State"),
+            any_el: Some({
+                let state = zk_app
+                    .app_state
+                    .as_ref()
+                    .unwrap_or(&vec![]) // Empty vector as default
+                    .clone();
+                // Convert vector to a string representation
+                let state_str = state
+                    .iter()
+                    .map(|opt| opt.as_ref().unwrap_or(&"None".to_string()).to_string())
+                    .collect::<Vec<String>>()
+                    .join(", ");
+                convert_to_span(state_str.to_string())
+            }),
+            copiable: true,
+        });
+        spotlight_entries.push(SpotlightEntry {
+            label: String::from("Action State"),
+            any_el: Some({
+                let state = zk_app
+                    .action_state
+                    .as_ref()
+                    .unwrap_or(&vec![]) // Empty vector as default
+                    .clone();
+                // Convert vector to a string representation
+                let state_str = state
+                    .iter()
+                    .map(|opt| opt.as_ref().unwrap_or(&"None".to_string()).to_string())
+                    .collect::<Vec<String>>()
+                    .join(", ");
+                convert_to_span(state_str)
+            }),
+            copiable: true,
+        });
+        spotlight_entries.push(SpotlightEntry {
+            label: String::from("zkApp Uri"),
+            any_el: Some({
+                let uri = zk_app.zkapp_uri.as_ref().unwrap_or(&String::new()).clone();
+                convert_to_link(uri.clone(), uri)
+            }),
+            copiable: false,
+        });
+    }
 
     spotlight_entries
 }
