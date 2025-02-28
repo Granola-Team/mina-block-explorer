@@ -35,6 +35,7 @@ input AccountQueryInput {
   balance_lte: Int
   delegate: String
   zkapp: Boolean
+  token: String
 }
 
 enum AccountSortByInput {

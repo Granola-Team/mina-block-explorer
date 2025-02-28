@@ -19,6 +19,7 @@ impl Default for accounts_query::AccountQueryInput {
             balance_lte: None,
             delegate: None,
             zkapp: None,
+            token: None,
         }
     }
 }

@@ -2,7 +2,10 @@ use super::graphql::{
     accounts_query::{self, AccountSortByInput},
     AccountsQuery,
 };
-use crate::common::{constants::GRAPHQL_ENDPOINT, models::*};
+use crate::common::{
+    constants::{GRAPHQL_ENDPOINT, MINA_TOKEN_ADDRESS},
+    models::*,
+};
 use graphql_client::reqwest::post_graphql;
 
 pub async fn load_data(
@@ -20,7 +23,10 @@ pub async fn load_data(
         && delegate.is_none()
         && (is_standard.is_none() || is_standard.is_some() && is_standard.unwrap())
     {
-        None
+        Some(accounts_query::AccountQueryInput {
+            token: Some(MINA_TOKEN_ADDRESS.to_string()),
+            ..Default::default()
+        })
     } else {
         Some(accounts_query::AccountQueryInput {
             public_key,
@@ -29,7 +35,8 @@ pub async fn load_data(
                 .map(|mb| mb * 1_000_000_000f64)
                 .map(|nmb| nmb as i64),
             delegate,
-            zkapp: is_standard.map(|is_standard| !is_standard),
+            zkapp: Some(true),
+            token: Some(MINA_TOKEN_ADDRESS.to_string()),
         })
     };
 
