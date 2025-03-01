@@ -2,7 +2,7 @@ use super::graphql::account_activity_query::{
     AccountActivityQueryIncomingTransactions, AccountActivityQueryOutgoingTransactions,
 };
 use crate::{
-    account_activity::graphql::account_activity_query::StakeQueryInput,
+    account_activity::graphql::account_activity_query::StakesQueryInput,
     common::{functions::*, table::SortDirection},
     Params,
 };
@@ -207,9 +207,9 @@ impl AccountActivityQueryDirectionalTransactionTrait
 }
 
 #[allow(clippy::derivable_impls)]
-impl Default for StakeQueryInput {
+impl Default for StakesQueryInput {
     fn default() -> Self {
-        StakeQueryInput {
+        StakesQueryInput {
             stake_lte: None,
             timing_exists: None,
             chain_id_gte: None,

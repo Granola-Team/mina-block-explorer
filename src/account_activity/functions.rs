@@ -44,7 +44,7 @@ pub async fn load_data(
         snarks_sort_by: account_activity_query::SnarkSortByInput::BLOCKHEIGHT_DESC,
         trans_sort_by: account_activity_query::TransactionSortByInput::BLOCKHEIGHT_DESC,
         internal_commands_sort_by: account_activity_query::FeetransferSortByInput::BLOCKHEIGHT_DESC,
-        delegators_sort_by: account_activity_query::StakeSortByInput::BALANCE_DESC,
+        delegators_sort_by: account_activity_query::StakesSortByInput::BALANCE_DESC,
         blocks_limit,
         snarks_limit,
         trans_limit,
@@ -166,12 +166,12 @@ pub async fn load_data(
             },
             ..Default::default()
         },
-        delegate_query: account_activity_query::StakeQueryInput {
+        delegate_query: account_activity_query::StakesQueryInput {
             public_key: public_key.clone(),
             epoch: get_current_epoch_staking_ledger(),
             ..Default::default()
         },
-        delegators_query: account_activity_query::StakeQueryInput {
+        delegators_query: account_activity_query::StakesQueryInput {
             delegate: public_key,
             epoch: get_current_epoch_staking_ledger(),
             ..Default::default()

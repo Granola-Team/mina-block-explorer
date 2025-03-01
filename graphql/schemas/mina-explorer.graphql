@@ -1547,11 +1547,11 @@ type Query {
     limit: Int = 100
     sortBy: SnarkSortByInput
   ): [Snark]!
-  stake(query: StakeQueryInput): Stake
+  stake(query: StakesQueryInput): Stake
   stakes(
-    query: StakeQueryInput
+    query: StakesQueryInput
     limit: Int = 100
-    sortBy: StakeSortByInput
+    sortBy: StakesSortByInput
   ): [Stake]!
   transaction(query: TransactionQueryInput): Transaction
   transactions(
@@ -1800,7 +1800,7 @@ type BlockTransactionUserCommandFromAccount {
   token: Int
 }
 
-enum StakeSortByInput {
+enum StakesSortByInput {
   CHAINID_ASC
   PK_DESC
   PUBLIC_KEY_ASC
@@ -2785,13 +2785,13 @@ type Mutation {
   deleteManyFeetransfers(query: FeetransferQueryInput): DeleteManyPayload
   deleteManyNextstakes(query: NextstakeQueryInput): DeleteManyPayload
   deleteManySnarks(query: SnarkQueryInput): DeleteManyPayload
-  deleteManyStakes(query: StakeQueryInput): DeleteManyPayload
+  deleteManyStakes(query: StakesQueryInput): DeleteManyPayload
   deleteManyTransactions(query: TransactionQueryInput): DeleteManyPayload
   deleteOneBlock(query: BlockQueryInput!): Block
   deleteOneFeetransfer(query: FeetransferQueryInput!): Feetransfer
   deleteOneNextstake(query: NextstakeQueryInput!): Nextstake
   deleteOneSnark(query: SnarkQueryInput!): Snark
-  deleteOneStake(query: StakeQueryInput!): Stake
+  deleteOneStake(query: StakesQueryInput!): Stake
   deleteOneTransaction(query: TransactionQueryInput!): Transaction
   insertManyBlocks(data: [BlockInsertInput!]!): InsertManyPayload
   insertManyFeetransfers(data: [FeetransferInsertInput!]!): InsertManyPayload
@@ -2815,7 +2815,7 @@ type Mutation {
     data: NextstakeInsertInput!
   ): Nextstake
   replaceOneSnark(query: SnarkQueryInput, data: SnarkInsertInput!): Snark
-  replaceOneStake(query: StakeQueryInput, data: StakeInsertInput!): Stake
+  replaceOneStake(query: StakesQueryInput, data: StakeInsertInput!): Stake
   replaceOneTransaction(
     query: TransactionQueryInput
     data: TransactionInsertInput!
@@ -2837,7 +2837,7 @@ type Mutation {
     query: SnarkQueryInput
   ): UpdateManyPayload
   updateManyStakes(
-    query: StakeQueryInput
+    query: StakesQueryInput
     set: StakeUpdateInput!
   ): UpdateManyPayload
   updateManyTransactions(
@@ -2854,7 +2854,7 @@ type Mutation {
     set: NextstakeUpdateInput!
   ): Nextstake
   updateOneSnark(query: SnarkQueryInput, set: SnarkUpdateInput!): Snark
-  updateOneStake(query: StakeQueryInput, set: StakeUpdateInput!): Stake
+  updateOneStake(query: StakesQueryInput, set: StakeUpdateInput!): Stake
   updateOneTransaction(
     query: TransactionQueryInput
     set: TransactionUpdateInput!
@@ -2869,7 +2869,7 @@ type Mutation {
     query: NextstakeQueryInput
   ): Nextstake
   upsertOneSnark(query: SnarkQueryInput, data: SnarkInsertInput!): Snark
-  upsertOneStake(query: StakeQueryInput, data: StakeInsertInput!): Stake
+  upsertOneStake(query: StakesQueryInput, data: StakeInsertInput!): Stake
   upsertOneTransaction(
     query: TransactionQueryInput
     data: TransactionInsertInput!
@@ -2916,7 +2916,7 @@ input StakeTimingUpdateInput {
   timed_epoch_end_unset: Boolean
 }
 
-input StakeQueryInput {
+input StakesQueryInput {
   stake_lte: String
   timing_exists: Boolean
   chainId_gte: String
@@ -2964,11 +2964,11 @@ input StakeQueryInput {
   balance_exists: Boolean
   voting_for_gte: String
   delegate: String
-  OR: [StakeQueryInput!]
+  OR: [StakesQueryInput!]
   balance_nin: [Float]
   epoch_ne: Int
   nonce_gte: Int
-  AND: [StakeQueryInput!]
+  AND: [StakesQueryInput!]
   voting_for_exists: Boolean
   public_key_exists: Boolean
   token_in: [Int]

@@ -1,7 +1,7 @@
 use super::{functions::*, models::*};
 use crate::{
     common::{components::*, constants::*, functions::*, models::*, table::*},
-    stakes::graphql::staking_ledgers_query::{StakeSortByInput, StakingLedgersQueryStakes},
+    stakes::graphql::staking_ledgers_query::{StakesSortByInput, StakingLedgersQueryStakes},
 };
 use leptos::*;
 use leptos_router::*;
@@ -105,13 +105,13 @@ pub fn StakesPageContents(
             let public_key = params_map.get("q-key").cloned();
             let delegate = params_map.get("q-delegate").cloned();
             let stake = params_map.get("q-stake").cloned();
-            let mut sort_by = StakeSortByInput::STAKE_DESC;
+            let mut sort_by = StakesSortByInput::STAKE_DESC;
             if let Some(s_dir) = sort_dir {
                 match StakesSort::try_from(s_dir) {
                     Ok(StakesSort::StakeAsc) => {
-                        sort_by = StakeSortByInput::STAKE_ASC;
+                        sort_by = StakesSortByInput::STAKE_ASC;
                     }
-                    Ok(StakesSort::StakeDesc) => sort_by = StakeSortByInput::STAKE_DESC,
+                    Ok(StakesSort::StakeDesc) => sort_by = StakesSortByInput::STAKE_DESC,
                     Err(_) => (),
                 };
             }

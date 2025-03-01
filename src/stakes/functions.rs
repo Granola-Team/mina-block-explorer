@@ -84,7 +84,7 @@ pub async fn load_data(
     public_key: Option<String>,
     delegate: Option<String>,
     stake: Option<String>,
-    sort_by: staking_ledgers_query::StakeSortByInput,
+    sort_by: staking_ledgers_query::StakesSortByInput,
 ) -> Result<staking_ledgers_query::ResponseData, MyError> {
     if stake.is_some() && normalize_number_format(stake.as_deref().unwrap()).is_err() {
         return Err(MyError::ParseError(
@@ -94,7 +94,7 @@ pub async fn load_data(
     let variables = staking_ledgers_query::Variables {
         sort_by,
         limit,
-        query: staking_ledgers_query::StakeQueryInput {
+        query: staking_ledgers_query::StakesQueryInput {
             stake_lte: stake
                 .as_deref()
                 .map(|num| normalize_number_format(num).ok().unwrap()),

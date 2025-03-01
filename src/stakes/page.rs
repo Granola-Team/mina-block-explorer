@@ -31,7 +31,7 @@ async fn load_epoch_summary(epoch: Option<u64>) -> Result<EpochSummaryResponse, 
         None => Err(MyError::ParseError("epoch not supplied".to_string())),
         Some(epoch) => {
             let query_body = format!(
-                r#"{{"query":"query StakingLedgersQuery($limit: Int = 1, $query: StakeQueryInput!) {{stakes(limit: $limit, query: $query) {{ epoch epoch_num_accounts  }}}}", "variables":{{"query": {{"epoch":{}}}, "limit":{}}},"operationName":"StakingLedgersQuery"}}"#,
+                r#"{{"query":"query StakingLedgersQuery($limit: Int = 1, $query: StakesQueryInput!) {{stakes(limit: $limit, query: $query) {{ epoch epoch_num_accounts  }}}}", "variables":{{"query": {{"epoch":{}}}, "limit":{}}},"operationName":"StakingLedgersQuery"}}"#,
                 epoch, 1
             );
             let client = reqwest::Client::new();

@@ -1,7 +1,7 @@
 query StakingLedgersQuery(
   $limit: Int = 10
-  $sort_by: StakeSortByInput!
-  $query: StakeQueryInput!
+  $sort_by: StakesSortByInput!
+  $query: StakesQueryInput!
 ) {
   stakes(limit: $limit, sortBy: $sort_by, query: $query) {
     balance

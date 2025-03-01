@@ -14,9 +14,9 @@ query AccountActivityQuery(
   $internal_commands_sort_by: FeetransferSortByInput!
   $internal_commands_query: FeetransferQueryInput!
   $delegators_limit: Int = 3
-  $delegators_sort_by: StakeSortByInput!
-  $delegators_query: StakeQueryInput!
-  $delegate_query: StakeQueryInput!
+  $delegators_sort_by: StakesSortByInput!
+  $delegators_query: StakesQueryInput!
+  $delegate_query: StakesQueryInput!
 ) {
   incoming_transactions: transactions(
     sortBy: $trans_sort_by
