@@ -462,7 +462,7 @@ pub fn TableSection(
                     }}
 
                 </div>
-                <div class="grow md:grow-0 h-16 flex justify-end items-center flex-wrap pr-4">
+                <div class="grow md:grow-0 min-h-16 flex justify-end items-center flex-wrap pr-4 pb-2">
                     {move || controls.run()}
                 </div>
             </span>
