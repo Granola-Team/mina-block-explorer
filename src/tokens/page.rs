@@ -75,7 +75,6 @@ pub fn TokensPage() -> impl IntoView {
         },
         TableColumn {
             column: "Supply".to_string(),
-            sort_direction: Some(AnySort::Tokens(sort_dir)),
             width: Some(String::from(TABLE_COL_LARGE_BALANCE)),
             alignment: Some(ColumnTextAlignment::Left),
             ..Default::default()
