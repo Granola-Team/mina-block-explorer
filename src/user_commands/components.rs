@@ -246,6 +246,14 @@ pub fn TransactionsSection() -> impl IntoView {
                             cases: vec!["Canonical".to_string(), "Non-Canonical".to_string()],
                         }
                     />
+                    <UrlParamSelectMenu
+                        id="user-command-selection"
+                        query_str_key="q-is-user-command"
+                        labels=UrlParamSelectOptions {
+                            is_boolean_option: true,
+                            cases: vec!["All Types".to_string(), "zkApps".to_string()],
+                        }
+                    />
                 }
             }
         />
