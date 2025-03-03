@@ -17,6 +17,7 @@ const QP_TXN_TYPE: &str = "txn-type";
 const QP_TXN_APPLIED: &str = "txn-applied";
 const QP_ROW_LIMIT: &str = "row-limit";
 const QP_HEIGHT: &str = "q-height";
+const QP_USER_COMMAND: &str = "q-all-user-commands";
 const QP_FROM: &str = "q-from";
 const QP_TO: &str = "q-to";
 const BACKSCAN_LIMIT: u64 = 2000;
@@ -71,6 +72,7 @@ pub fn TransactionsSection() -> impl IntoView {
     let (txn_applied_sig, _) = create_query_signal::<bool>(QP_TXN_APPLIED);
     let query_params_map = use_query_map();
     let (block_height_sig, _) = create_query_signal::<u64>(QP_HEIGHT);
+    let (is_all_user_commands_sig, _) = create_query_signal::<bool>(QP_USER_COMMAND);
     let UseIntervalReturn { counter, .. } = use_interval(LIVE_RELOAD_INTERVAL);
 
     let resource = create_resource(
@@ -82,9 +84,18 @@ pub fn TransactionsSection() -> impl IntoView {
                 block_height_sig.get(),
                 row_limit_sig.get(),
                 txn_applied_sig.get(),
+                is_all_user_commands_sig.get(),
             )
         },
-        move |(_, url_query_map, txn_type, block_height, row_limit, txn_applied)| async move {
+        move |(
+            _,
+            url_query_map,
+            txn_type,
+            block_height,
+            row_limit,
+            txn_applied,
+            is_all_user_commands,
+        )| async move {
             if visibility.get() != VisibilityState::Visible {
                 logging::log!("Document not visible. Data polling skipped for user commands.");
                 return Ok(transactions_query::ResponseData {
@@ -99,6 +110,8 @@ pub fn TransactionsSection() -> impl IntoView {
                 _ => (Some(true), load_data),
             };
 
+            let is_zk_app = is_all_user_commands.and_then(|is_all_uc| (!is_all_uc).then_some(true));
+
             load_fn(
                 row_limit,
                 url_query_map.get(QP_FROM).cloned(),
@@ -109,6 +122,7 @@ pub fn TransactionsSection() -> impl IntoView {
                 None,
                 canonical,
                 txn_applied,
+                is_zk_app,
             )
             .await
         },
@@ -248,10 +262,10 @@ pub fn TransactionsSection() -> impl IntoView {
                     />
                     <UrlParamSelectMenu
                         id="user-command-selection"
-                        query_str_key="q-is-user-command"
+                        query_str_key=QP_USER_COMMAND
                         labels=UrlParamSelectOptions {
                             is_boolean_option: true,
-                            cases: vec!["All Types".to_string(), "zkApps".to_string()],
+                            cases: vec!["All".to_string(), "zkApps".to_string()],
                         }
                     />
                 }
