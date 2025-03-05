@@ -14,8 +14,20 @@ impl TableData for Vec<TokenData> {
                         token.owner.to_string(),
                         format!("/addresses/accounts/{}", token.owner),
                     ),
-                    convert_to_pill(token.holders.to_string(), ColorVariant::Blue),
-                    convert_to_pill(token.transactions.to_string(), ColorVariant::Blue),
+                    wrap_in_pill(
+                        convert_to_link(
+                            token.holders.to_string(),
+                            format!("/addresses/accounts?token={}", token.id),
+                        ),
+                        ColorVariant::Blue,
+                    ),
+                    wrap_in_pill(
+                        convert_to_link(
+                            token.transactions.to_string(),
+                            format!("/commands/user?token={}", token.id),
+                        ),
+                        ColorVariant::Blue,
+                    ),
                     convert_to_span(token.unlock_percentage.to_string()),
                 ]
             })

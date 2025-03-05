@@ -553,6 +553,17 @@ pub fn convert_to_copy_link(data: String, href: String) -> HtmlElement<html::Any
     .into()
 }
 
+pub fn convert_to_link(data: String, href: String) -> HtmlElement<html::AnyElement> {
+    view! {
+        <span class="w-full text-ellipsis overflow-hidden">
+            <a href=href class=LINK_HOVER_STATE>
+                {convert_to_ellipsis(data)}
+            </a>
+        </span>
+    }
+    .into()
+}
+
 pub fn generate_random_string(len: usize) -> String {
     iter::repeat(())
         .map(|()| rand::thread_rng().sample(Alphanumeric))
