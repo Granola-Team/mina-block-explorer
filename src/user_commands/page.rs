@@ -168,7 +168,7 @@ pub fn CommandSpotlightPage() -> impl IntoView {
                                 SpotlightEntry {
                                     label: "Block State Hash".to_string(),
                                     any_el: Some(
-                                        convert_to_clickable_link(
+                                        convert_to_copy_link(
                                             transaction.get_block_state_hash(),
                                             format!("/blocks/{}", transaction.get_block_state_hash()),
                                         ),
@@ -206,7 +206,7 @@ pub fn CommandSpotlightPage() -> impl IntoView {
                                 SpotlightEntry {
                                     label: "From/Fee Payer".to_string(),
                                     any_el: Some(
-                                        convert_to_clickable_link(
+                                        convert_to_copy_link(
                                             transaction.get_from(),
                                             format!("/addresses/accounts/{}", transaction.get_from()),
                                         ),
@@ -216,7 +216,7 @@ pub fn CommandSpotlightPage() -> impl IntoView {
                                 SpotlightEntry {
                                     label: "To".to_string(),
                                     any_el: Some(
-                                        convert_to_clickable_link(
+                                        convert_to_copy_link(
                                             transaction.get_to(),
                                             format!("/addresses/accounts/{}", transaction.get_to()),
                                         ),

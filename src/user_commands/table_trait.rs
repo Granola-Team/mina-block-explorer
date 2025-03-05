@@ -21,7 +21,7 @@ impl TableData for Vec<Option<TransactionsQueryOtherTransactions>> {
                     convert_to_span(transaction.get_block_height()),
                     if !transaction.get_memo().is_empty() {
                         convert_array_to_span(vec![
-                            convert_to_clickable_link(
+                            convert_to_copy_link(
                                 transaction.get_hash(),
                                 format!(
                                     "/commands/{}?q-state-hash={}",
@@ -34,7 +34,7 @@ impl TableData for Vec<Option<TransactionsQueryOtherTransactions>> {
                         ])
                         .attr("class", "block")
                     } else {
-                        convert_to_clickable_link(
+                        convert_to_copy_link(
                             transaction.get_hash(),
                             format!(
                                 "/commands/{}?q-state-hash={}",
@@ -58,7 +58,7 @@ impl TableData for Vec<Option<TransactionsQueryTransactions>> {
                     convert_to_span(transaction.get_block_height()),
                     if !transaction.get_memo().is_empty() {
                         convert_array_to_span(vec![
-                            convert_to_clickable_link(
+                            convert_to_copy_link(
                                 transaction.get_hash(),
                                 format!(
                                     "/commands/{}?q-state-hash={}",
@@ -71,7 +71,7 @@ impl TableData for Vec<Option<TransactionsQueryTransactions>> {
                         ])
                         .attr("class", "block")
                     } else {
-                        convert_to_clickable_link(
+                        convert_to_copy_link(
                             transaction.get_hash(),
                             format!(
                                 "/commands/{}?q-state-hash={}",
@@ -90,11 +90,11 @@ impl TableData for Vec<Option<TransactionsQueryTransactions>> {
                     } else {
                         convert_to_pill(TXN_STATUS_FAILED.to_string(), ColorVariant::Orange)
                     },
-                    convert_to_clickable_link(
+                    convert_to_copy_link(
                         transaction.get_from(),
                         format!("/addresses/accounts/{}", transaction.get_from()),
                     ),
-                    convert_to_clickable_link(
+                    convert_to_copy_link(
                         transaction.get_receiver_public_key(),
                         format!(
                             "/addresses/accounts/{}",
@@ -118,11 +118,11 @@ impl TableData for Vec<Option<PendingTxn>> {
                 Some(transaction) => vec![
                     convert_to_span(transaction.get_hash()),
                     convert_to_pill(transaction.get_kind(), ColorVariant::Grey),
-                    convert_to_clickable_link(
+                    convert_to_copy_link(
                         transaction.get_from(),
                         format!("/addresses/accounts/{}", transaction.get_from()),
                     ),
-                    convert_to_clickable_link(
+                    convert_to_copy_link(
                         transaction.get_to(),
                         format!("/addresses/accounts/{}", transaction.get_to()),
                     ),

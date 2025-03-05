@@ -52,7 +52,7 @@ impl TableData for Vec<Option<AccountActivityQueryDirectionalTransactions>> {
                     convert_to_span(transaction.get_height()),
                     if !transaction.get_memo().is_empty() {
                         convert_array_to_span(vec![
-                            convert_to_clickable_link(
+                            convert_to_copy_link(
                                 transaction.get_hash(),
                                 format!("/commands/{}", transaction.get_hash()),
                             ),
@@ -61,7 +61,7 @@ impl TableData for Vec<Option<AccountActivityQueryDirectionalTransactions>> {
                         ])
                         .attr("class", "block")
                     } else {
-                        convert_to_clickable_link(
+                        convert_to_copy_link(
                             transaction.get_hash(),
                             format!("/commands/{}", transaction.get_hash()),
                         )
@@ -80,7 +80,7 @@ impl TableData for Vec<Option<AccountActivityQueryDirectionalTransactions>> {
                             ColorVariant::DarkBlue
                         },
                     ),
-                    convert_to_clickable_link(
+                    convert_to_copy_link(
                         transaction.get_counterparty(),
                         format!("/addresses/accounts/{}", transaction.get_counterparty()),
                     ),
@@ -117,7 +117,7 @@ impl TableData for Vec<Option<AccountActivityQuerySnarks>> {
             .map(|opt_snark| match opt_snark {
                 Some(snark) => vec![
                     convert_to_span(snark.get_block_height()),
-                    convert_to_clickable_link(
+                    convert_to_copy_link(
                         snark.get_block_state_hash(),
                         format!("/blocks/{}/snark-jobs", snark.get_block_state_hash()),
                     ),
@@ -204,7 +204,7 @@ impl TableData for Vec<Option<AccountActivityQueryBlocks>> {
             .map(|opt_blocks| match opt_blocks {
                 Some(block) => vec![
                     convert_to_span(block.get_block_height()),
-                    convert_to_clickable_link(
+                    convert_to_copy_link(
                         block.get_state_hash(),
                         format!("/blocks/{}/spotlight", block.get_state_hash()),
                     ),
@@ -217,7 +217,7 @@ impl TableData for Vec<Option<AccountActivityQueryBlocks>> {
                     decorate_with_mina_tag(block.get_coinbase()),
                     convert_to_pill(block.get_transaction_count(), ColorVariant::Blue),
                     convert_to_pill(block.get_snark_job_count(), ColorVariant::Blue),
-                    convert_to_clickable_link(
+                    convert_to_copy_link(
                         block.get_coinbase_receiver(),
                         format!("/addresses/accounts/{}", block.get_coinbase_receiver()),
                     ),
@@ -310,11 +310,11 @@ impl TableData for Vec<Option<AccountActivityQueryDelegatorExt>> {
         self.iter()
             .map(|opt_stake| match opt_stake {
                 Some(stake) => vec![
-                    convert_to_clickable_link(
+                    convert_to_copy_link(
                         stake.get_public_key(),
                         format!("/addresses/accounts/{}", stake.get_public_key()),
                     ),
-                    convert_to_clickable_link(
+                    convert_to_copy_link(
                         stake.get_username(),
                         format!("/addresses/accounts/{}", stake.get_public_key()),
                     ),
@@ -333,7 +333,7 @@ impl TableData for Vec<Option<AccountActivityQueryFeetransfers>> {
             .map(|opt_internal_command| match opt_internal_command {
                 Some(internal_command) => vec![
                     convert_to_span(internal_command.get_height()),
-                    convert_to_clickable_link(
+                    convert_to_copy_link(
                         internal_command.get_state_hash(),
                         format!("/blocks/{}", internal_command.get_state_hash()),
                     ),

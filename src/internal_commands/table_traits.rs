@@ -27,11 +27,11 @@ impl TableData for Vec<Option<InternalCommandsQueryFeetransfers>> {
             .map(|opt_internal_command| match opt_internal_command {
                 Some(internal_command) => vec![
                     convert_to_span(internal_command.get_height()),
-                    convert_to_clickable_link(
+                    convert_to_copy_link(
                         internal_command.get_state_hash(),
                         format!("/blocks/{}", internal_command.get_state_hash()),
                     ),
-                    convert_to_clickable_link(
+                    convert_to_copy_link(
                         internal_command.get_receipient(),
                         format!("/addresses/accounts/{}", internal_command.get_receipient()),
                     ),

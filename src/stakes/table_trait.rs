@@ -8,7 +8,7 @@ impl TableData for Vec<Option<StakingLedgersQueryStakes>> {
         self.iter()
             .map(|opt_stake| match opt_stake {
                 Some(stake) => vec![
-                    convert_to_clickable_link(
+                    convert_to_copy_link(
                         get_public_key(stake),
                         format!("/addresses/accounts/{}", get_public_key(stake)),
                     ),
@@ -17,7 +17,7 @@ impl TableData for Vec<Option<StakingLedgersQueryStakes>> {
                     convert_to_span(get_stake(stake)),
                     convert_to_span(get_stake_percentage(stake)),
                     convert_to_span(get_block_win_percentage(stake)),
-                    convert_to_clickable_link(
+                    convert_to_copy_link(
                         if get_public_key(stake) == get_delegate(stake) {
                             "Self".to_string()
                         } else {

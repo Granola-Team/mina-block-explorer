@@ -7,10 +7,10 @@ impl TableData for Vec<Option<ZkAppData>> {
         self.iter()
             .map(|opt_app| match opt_app {
                 Some(zk_app) => vec![
-                    convert_to_clickable_link(zk_app.validator_pk.to_string(), "#".to_string()),
+                    convert_to_copy_link(zk_app.validator_pk.to_string(), "#".to_string()),
                     decorate_with_mina_tag(zk_app.balance.to_string()),
                     convert_to_pill(format_number(zk_app.nonce.to_string()), ColorVariant::Blue),
-                    convert_to_clickable_link(zk_app.delegate.to_string(), "#".to_string()),
+                    convert_to_copy_link(zk_app.delegate.to_string(), "#".to_string()),
                 ],
                 None => vec![],
             })
@@ -23,8 +23,8 @@ impl TableData for Vec<Option<ZkAppTransactionData>> {
         self.iter()
             .map(|opt_txn| match opt_txn {
                 Some(txn) => vec![
-                    convert_to_clickable_link(txn.prover.to_string(), "#".to_string()),
-                    convert_to_clickable_link(txn.hash.to_string(), "#".to_string()),
+                    convert_to_copy_link(txn.prover.to_string(), "#".to_string()),
+                    convert_to_copy_link(txn.hash.to_string(), "#".to_string()),
                     convert_to_title(
                         convert_to_local_timezone_formatted(&txn.date_time.to_string()),
                         txn.date_time.to_string(),
@@ -33,7 +33,7 @@ impl TableData for Vec<Option<ZkAppTransactionData>> {
                     convert_array_to_span(
                         txn.updated_accounts
                             .iter()
-                            .map(|ua| convert_to_clickable_link(ua.to_string(), "#".to_string()))
+                            .map(|ua| convert_to_copy_link(ua.to_string(), "#".to_string()))
                             .collect::<Vec<_>>(),
                     )
                     .attr("class", "block"),
