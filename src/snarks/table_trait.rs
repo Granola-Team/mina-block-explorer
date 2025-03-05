@@ -23,7 +23,7 @@ impl TableData for Vec<Option<SnarksQuerySnarks>> {
             .map(|opt_snark| match opt_snark {
                 Some(snark) => vec![
                     convert_to_span(get_block_height(snark)),
-                    convert_to_link(
+                    convert_to_clickable_link(
                         get_block_state_hash(snark),
                         format!("/blocks/{}/snark-jobs", get_block_state_hash(snark)),
                     ),
@@ -31,7 +31,7 @@ impl TableData for Vec<Option<SnarksQuerySnarks>> {
                         convert_to_local_timezone_formatted(&get_date_time(snark)),
                         get_date_time(snark),
                     ),
-                    convert_to_link(
+                    convert_to_clickable_link(
                         get_prover(snark),
                         format!("/addresses/accounts/{}", get_prover(snark)),
                     ),

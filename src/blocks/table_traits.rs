@@ -53,7 +53,7 @@ impl TableData for Vec<Option<BlocksQueryBlocks>> {
                         get_block_height(block),
                         block.canonical.unwrap_or_default(),
                     ),
-                    convert_to_link(
+                    convert_to_clickable_link(
                         get_state_hash(block),
                         format!("/blocks/{}/spotlight", get_state_hash(block)),
                     ),
@@ -62,7 +62,7 @@ impl TableData for Vec<Option<BlocksQueryBlocks>> {
                         convert_to_local_timezone_formatted(&get_date_time(block)),
                         get_date_time(block),
                     ),
-                    convert_to_link(
+                    convert_to_clickable_link(
                         get_creator_account(block),
                         format!("/addresses/accounts/{}", get_creator_account(block)),
                     ),
@@ -75,7 +75,7 @@ impl TableData for Vec<Option<BlocksQueryBlocks>> {
                         get_snark_job_count(block).map_or_else(String::new, |o| o.to_string()),
                         ColorVariant::Blue,
                     ),
-                    convert_to_link(
+                    convert_to_clickable_link(
                         get_coinbase_receiver(block),
                         format!("/addresses/accounts/{}", get_coinbase_receiver(block)),
                     ),
@@ -93,7 +93,7 @@ impl TableData for Vec<Option<BlocksQueryBlocksTransactionsUserCommandsExt>> {
                 Some(user_command) => vec![
                     if !user_command.get_memo().is_empty() {
                         convert_array_to_span(vec![
-                            convert_to_link(
+                            convert_to_clickable_link(
                                 user_command.get_txn_hash(),
                                 format!(
                                     "/commands/{}?q-state-hash={}",
@@ -106,7 +106,7 @@ impl TableData for Vec<Option<BlocksQueryBlocksTransactionsUserCommandsExt>> {
                         ])
                         .attr("class", "block")
                     } else {
-                        convert_to_link(
+                        convert_to_clickable_link(
                             user_command.get_txn_hash(),
                             format!(
                                 "/commands/{}?q-state-hash={}",
@@ -128,11 +128,11 @@ impl TableData for Vec<Option<BlocksQueryBlocksTransactionsUserCommandsExt>> {
                             ColorVariant::Orange
                         },
                     ),
-                    convert_to_link(
+                    convert_to_clickable_link(
                         user_command.get_from(),
                         format!("/addresses/accounts/{}", user_command.get_from()),
                     ),
-                    convert_to_link(
+                    convert_to_clickable_link(
                         user_command.get_to(),
                         format!("/addresses/accounts/{}", user_command.get_to()),
                     ),
@@ -221,7 +221,7 @@ impl TableData for Vec<Option<BlocksQueryBlocksSnarkJobs>> {
         self.iter()
             .map(|opt_snark| match opt_snark {
                 Some(snark) => vec![
-                    convert_to_link(
+                    convert_to_clickable_link(
                         get_snark_block_state_hash(snark),
                         format!("/blocks/{}", get_snark_block_state_hash(snark)),
                     ),
@@ -229,7 +229,7 @@ impl TableData for Vec<Option<BlocksQueryBlocksSnarkJobs>> {
                         convert_to_local_timezone_formatted(&get_snark_date_time(snark)),
                         get_snark_date_time(snark),
                     ),
-                    convert_to_link(
+                    convert_to_clickable_link(
                         get_snark_prover(snark),
                         format!("/addresses/accounts/{}", get_snark_prover(snark)),
                     ),
@@ -246,7 +246,7 @@ impl TableData for Vec<Option<BlocksQueryBlocksTransactionsFeeTransfer>> {
         self.iter()
             .map(|opt_fee_transfer| match opt_fee_transfer {
                 Some(fee_transfer) => vec![
-                    convert_to_link(
+                    convert_to_clickable_link(
                         fee_transfer.get_receipient(),
                         format!("/addresses/accounts/{}", fee_transfer.get_receipient()),
                     ),

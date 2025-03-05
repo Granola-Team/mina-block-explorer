@@ -407,7 +407,7 @@ pub fn BlockSpotlight(block: BlocksQueryBlocks) -> impl IntoView {
     let spotlight_items = vec![
         SpotlightEntry {
             label: "State Hash".to_string(),
-            any_el: Some(convert_to_link(
+            any_el: Some(convert_to_clickable_link(
                 state_hash.clone(),
                 format!("/blocks/{}", state_hash),
             )),
@@ -417,7 +417,7 @@ pub fn BlockSpotlight(block: BlocksQueryBlocks) -> impl IntoView {
             label: "Previous State Hash".to_string(),
             any_el: Some({
                 let prev_state_hash = get_previous_state_hash(&block);
-                convert_to_link(
+                convert_to_clickable_link(
                     prev_state_hash.clone(),
                     format!("/blocks/{}", prev_state_hash),
                 )
@@ -443,7 +443,7 @@ pub fn BlockSpotlight(block: BlocksQueryBlocks) -> impl IntoView {
             label: "Coinbase Receiver".to_string(),
             any_el: Some({
                 let coinbase_receiver = get_coinbase_receiver(&block);
-                convert_to_link(
+                convert_to_clickable_link(
                     coinbase_receiver.clone(),
                     format!("/addresses/accounts/{}", coinbase_receiver),
                 )

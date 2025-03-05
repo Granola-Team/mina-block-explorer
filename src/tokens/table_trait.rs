@@ -9,8 +9,8 @@ impl TableData for Vec<TokenData> {
                 vec![
                     convert_to_pill(token.name.to_string(), ColorVariant::Grey),
                     convert_to_span(token.supply.to_string()),
-                    convert_to_link(token.id.to_string(), "#".to_string()),
-                    convert_to_link(
+                    convert_to_clickable_link(token.id.to_string(), "#".to_string()),
+                    convert_to_clickable_link(
                         token.owner.to_string(),
                         format!("/addresses/accounts/{}", token.owner),
                     ),

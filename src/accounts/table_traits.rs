@@ -9,14 +9,14 @@ impl TableData for Vec<Option<AccountsQueryAccounts>> {
         self.iter()
             .map(|acct_opt| match acct_opt {
                 Some(account) => vec![
-                    convert_to_link(
+                    convert_to_clickable_link(
                         account.get_public_key(),
                         format!("/addresses/accounts/{}", account.get_public_key()),
                     ),
                     convert_to_span(account.get_username()),
                     convert_to_span(account.get_balance()),
                     convert_to_pill(account.get_nonce(), ColorVariant::Grey),
-                    convert_to_link(
+                    convert_to_clickable_link(
                         account.get_delegate(),
                         format!("/addresses/accounts/{}", account.get_delegate()),
                     ),

@@ -212,7 +212,7 @@ pub fn StakesPageContents(
                                         .get()
                                         .map_or_else(
                                             || data_placeholder().into_view(),
-                                            |lh| { convert_to_link(lh, "#".to_string()).into_view() },
+                                            |lh| { convert_to_clickable_link(lh, "#".to_string()).into_view() },
                                         )
                                 }}
 

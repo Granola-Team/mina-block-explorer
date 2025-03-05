@@ -540,7 +540,7 @@ pub fn nanomina_to_mina(num: u64) -> String {
     format_mina(num_str)
 }
 
-pub fn convert_to_link(data: String, href: String) -> HtmlElement<html::AnyElement> {
+pub fn convert_to_clickable_link(data: String, href: String) -> HtmlElement<html::AnyElement> {
     view! {
         <span class="w-full text-ellipsis overflow-hidden">
             <CopyToClipboard>

@@ -8,7 +8,7 @@ impl TableData for Vec<StakerStats> {
             .map(|stat| {
                 vec![
                     convert_to_span(stat.username.clone()),
-                    convert_to_link(
+                    convert_to_clickable_link(
                         stat.public_key.clone(),
                         format!("/addresses/accounts/{}/spotlight", stat.public_key),
                     ),
@@ -35,7 +35,7 @@ impl TableData for Vec<TopSnarkerStat> {
             .map(|stat| {
                 vec![
                     convert_to_span(stat.username.clone().unwrap_or("Unknown".to_string())),
-                    convert_to_link(
+                    convert_to_clickable_link(
                         stat.public_key.clone(),
                         format!("/addresses/accounts/{}/spotlight", stat.public_key),
                     ),

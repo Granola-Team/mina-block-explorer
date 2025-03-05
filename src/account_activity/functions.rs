@@ -254,7 +254,10 @@ pub fn get_spotlight_data(
                     .clone()
                     .map(|b| b.to_string())
                     .unwrap_or_default();
-                convert_to_link(account.clone(), format!("/addresses/accounts/{}", account))
+                convert_to_clickable_link(
+                    account.clone(),
+                    format!("/addresses/accounts/{}", account),
+                )
             }),
             copiable: true,
         },
@@ -331,7 +334,7 @@ pub fn get_spotlight_data(
             label: String::from("zkApp Uri"),
             any_el: Some({
                 let uri = zk_app.zkapp_uri.as_ref().unwrap_or(&String::new()).clone();
-                convert_to_link(uri.clone(), uri)
+                convert_to_clickable_link(uri.clone(), uri)
             }),
             copiable: false,
         });
