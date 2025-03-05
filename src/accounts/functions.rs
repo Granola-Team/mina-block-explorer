@@ -2,12 +2,10 @@ use super::graphql::{
     accounts_query::{self, AccountSortByInput},
     AccountsQuery,
 };
-use crate::common::{
-    constants::{GRAPHQL_ENDPOINT, MINA_TOKEN_ADDRESS},
-    models::*,
-};
+use crate::common::{constants::GRAPHQL_ENDPOINT, models::*};
 use graphql_client::reqwest::post_graphql;
 
+#[allow(clippy::too_many_arguments)]
 pub async fn load_data(
     limit: Option<i64>,
     public_key: Option<String>,
@@ -15,28 +13,27 @@ pub async fn load_data(
     mina_balance: Option<f64>,
     delegate: Option<String>,
     sort_by: Option<accounts_query::AccountSortByInput>,
-    is_standard: Option<bool>,
+    zk_app: Option<bool>,
+    token: Option<String>,
 ) -> Result<accounts_query::ResponseData, MyError> {
     let query = if public_key.is_none()
         && username.is_none()
         && mina_balance.is_none()
         && delegate.is_none()
-        && (is_standard.is_none() || is_standard.is_some() && is_standard.unwrap())
+        && token.is_none()
+        && zk_app.is_none()
     {
-        Some(accounts_query::AccountQueryInput {
-            token: Some(MINA_TOKEN_ADDRESS.to_string()),
-            ..Default::default()
-        })
+        None
     } else {
         Some(accounts_query::AccountQueryInput {
             public_key,
             username,
+            token,
             balance_lte: mina_balance
                 .map(|mb| mb * 1_000_000_000f64)
                 .map(|nmb| nmb as i64),
             delegate,
-            zkapp: Some(true),
-            token: Some(MINA_TOKEN_ADDRESS.to_string()),
+            zkapp: zk_app,
         })
     };
 
