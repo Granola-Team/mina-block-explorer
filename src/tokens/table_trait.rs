@@ -1,5 +1,5 @@
 use super::models::TokenData;
-use crate::common::{functions::*, models::*, table::TableData};
+use crate::common::{constants::QUERY_PARAM_TOKEN, functions::*, models::*, table::TableData};
 use leptos::{html, HtmlElement};
 
 impl TableData for Vec<TokenData> {
@@ -17,14 +17,14 @@ impl TableData for Vec<TokenData> {
                     wrap_in_pill(
                         convert_to_link(
                             token.holders.to_string(),
-                            format!("/addresses/accounts?token={}", token.id),
+                            format!("/addresses/accounts?{}={}", QUERY_PARAM_TOKEN, token.id),
                         ),
                         ColorVariant::Blue,
                     ),
                     wrap_in_pill(
                         convert_to_link(
                             token.transactions.to_string(),
-                            format!("/commands/user?token={}", token.id),
+                            format!("/commands/user?{}={}", QUERY_PARAM_TOKEN, token.id),
                         ),
                         ColorVariant::Blue,
                     ),
