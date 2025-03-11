@@ -1,19 +1,16 @@
 type Token {
-  token: String!
-  supply: Int!
-  owner: String
-  symbol: String
-  num_holders: Int!
-  holders: [String!]
-  total_num_tokens: Int!
+    token: String!
+    supply: Int!
+    owner: String
+    symbol: String
+    num_holders: Int!
+    holders: [String!]
+    total_num_tokens: Int!
 }
 
 input TokensQueryInput {
-  token: String
-  owner: String
-  symbol: String
-  supply: Int
-  fetch_all_holders: Boolean
+  token: String!
+  holder: String
 }
 
 enum TokensSortByInput {
