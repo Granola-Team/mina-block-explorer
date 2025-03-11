@@ -9,7 +9,7 @@ use crate::{
         models::{TableMetadata, UrlParamSelectOptions},
         table::*,
     },
-    tokens::graphql::tokens_query,
+    tokens::models::TokenDataSortBy,
 };
 use leptos::*;
 use leptos_meta::*;
@@ -19,36 +19,47 @@ use leptos_router::create_query_signal;
 pub fn TokensPage() -> impl IntoView {
     let (data_sig, set_data) = create_signal(None);
     let (total_count_sig, set_total_count) = create_signal(None::<i64>);
-    let (row_limit_sig, _) = create_query_signal::<i64>("row-limit");
+    let (row_limit_sig, _) = create_query_signal::<u64>("row-limit");
     let (name_sig, _) = create_query_signal::<String>("q-name");
+
+    // Get total unfiltered count on page load
+    create_effect(move |_| {
+        spawn_local(async move {
+            if let Ok((_, count)) =
+                load_data(1, None, None, None, TokenDataSortBy::default(), true).await
+            {
+                set_total_count.set(Some(count));
+            }
+        });
+    });
 
     let resource = create_resource(
         move || name_sig.get(),
         move |name_opt| async move {
             load_data(
-                row_limit_sig.get().or(Some(50)),
+                row_limit_sig.get().unwrap_or(50),
                 name_opt,
-                Some(tokens_query::TokensSortByInput::SUPPLY_DESC),
+                None,
+                None,
+                TokenDataSortBy::default(),
+                true,
             )
             .await
         },
     );
-    let get_data = move || resource.get().and_then(|res| res.ok());
-
     create_effect(move |_| {
-        if let Some(data) = get_data() {
-            set_data.set(Some(data.tokens.clone()));
-            if let Some(first_token) = data.tokens.first().cloned().flatten() {
-                set_total_count.set(Some(first_token.total_num_tokens));
-            }
-        };
+        resource
+            .get()
+            .and_then(|res| res.ok())
+            .map(|data| set_data.set(Some(data)))
     });
+    let (loading_sig, _) = create_signal(false);
 
+    // Create a signal for just the data part
+    let data_only = create_signal(None);
     create_effect(move |_| {
-        if let Some(res) = get_data() {
-            if let Some(first_token) = res.tokens.first().cloned().flatten() {
-                set_total_count.set(Some(first_token.total_num_tokens));
-            }
+        if let Some((data, _)) = data_sig.get() {
+            data_only.1.set(Some(data));
         }
     });
 
@@ -88,19 +99,19 @@ pub fn TokensPage() -> impl IntoView {
             alignment: Some(ColumnTextAlignment::Right),
             ..Default::default()
         },
-        // TableColumn {
-        //     column: "Transactions".to_string(),
-        //     is_sortable: true,
-        //     width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
-        //     alignment: Some(ColumnTextAlignment::Right),
-        //     ..Default::default()
-        // },
-        // TableColumn {
-        //     column: "% Unlocked".to_string(),
-        //     is_sortable: true,
-        //     alignment: Some(ColumnTextAlignment::Right),
-        //     ..Default::default()
-        // },
+        TableColumn {
+            column: "Transactions".to_string(),
+            is_sortable: true,
+            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
+            alignment: Some(ColumnTextAlignment::Right),
+            ..Default::default()
+        },
+        TableColumn {
+            column: "% Unlocked".to_string(),
+            is_sortable: true,
+            alignment: Some(ColumnTextAlignment::Right),
+            ..Default::default()
+        },
     ];
 
     view! {
@@ -108,8 +119,8 @@ pub fn TokensPage() -> impl IntoView {
         <PageContainer>
             <TableSectionTemplate
                 table_columns
-                data_sig
-                is_loading=resource.loading()
+                data_sig=data_only.0
+                is_loading=loading_sig.into()
                 controls=move || {
                     view! {
                         // Avoiding RowLimit component so we can set default
@@ -137,7 +148,7 @@ pub fn TokensPage() -> impl IntoView {
                 metadata=Signal::derive(move || {
                     data_sig
                         .get()
-                        .map(|data| TableMetadata {
+                        .map(|(data, _)| TableMetadata {
                             displayed_records: u64::try_from(data.len()).unwrap_or_default(),
                             available_records: u64::try_from(data.len()).ok(),
                             total_records: total_count_sig

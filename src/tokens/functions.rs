@@ -1,38 +1,83 @@
-use super::graphql::{
-    tokens_query::{self, TokensSortByInput},
-    TokensQuery,
+use super::models::{TokenData, TokenDataSortBy};
+use crate::common::models::MyError;
+use reqwest::{
+    header::{HeaderMap, HeaderValue},
+    Client,
 };
-use crate::common::{constants::GRAPHQL_ENDPOINT, models::MyError};
-use graphql_client::reqwest::post_graphql;
 
 pub async fn load_data(
-    limit: Option<i64>,
+    limit: u64,
     name: Option<String>,
-    sort_by: Option<TokensSortByInput>,
-) -> Result<tokens_query::ResponseData, MyError> {
-    let query = name.map(|name| tokens_query::TokensQueryInput {
-        token: Some(name),
-        fetch_all_holders: Some(true),
-        ..Default::default()
-    });
+    id: Option<String>,
+    owner: Option<String>,
+    sort_by: TokenDataSortBy,
+    ascending: bool,
+) -> Result<(Vec<TokenData>, i64), MyError> {
+    let client = Client::new();
 
-    let variables = tokens_query::Variables {
-        limit,
-        query,
-        sort_by,
-    };
+    // Build the base URL with select
+    let mut url =
+        String::from("https://owdfifqnnanbqwbuyzsj.supabase.co/rest/v1/zkapp_tokens?select=*");
 
-    let client = reqwest::Client::new();
+    // Add limit if provided
+    url.push_str(&format!("&limit={:?}", limit));
 
-    let response = post_graphql::<TokensQuery, _>(&client, GRAPHQL_ENDPOINT, variables)
-        .await
-        .map_err(|e| MyError::NetworkError(e.to_string()))?;
-
-    if let Some(errors) = response.errors {
-        return Err(MyError::GraphQLError(errors));
+    // Add search filters if provided
+    if let Some(name) = name {
+        url.push_str(&format!(
+            "&name=ilike.{}",
+            urlencoding::encode(&format!("%{}%", name))
+        ));
+    }
+    if let Some(id) = id {
+        url.push_str(&format!("&id=eq.{}", id));
+    }
+    if let Some(owner) = owner {
+        url.push_str(&format!("&owner=eq.{}", owner));
     }
 
-    response
-        .data
-        .ok_or(MyError::GraphQLEmpty("No data available".to_string()))
+    // Add sorting
+    url.push_str(&format!(
+        "&order={}.{}",
+        sort_by.as_str(),
+        if ascending { "asc" } else { "desc" }
+    ));
+
+    // Set up headers
+    let mut headers = HeaderMap::new();
+    headers.insert(
+        "apikey",
+        // this is fine to be public
+        HeaderValue::from_str(
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im93ZGZpZnFubmFuYnF3YnV5enNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzc0NzMxMTEsImV4cCI6MjA1MzA0OTExMX0.i2FHhUUEZDbmAXSH3uz8Yt7D09PJvdFILlowrwbz5ro"
+        ).map_err(|e| MyError::UrlParseError(e.to_string()))?
+    );
+
+    // Add Prefer header for exact count
+    headers.insert("Prefer", HeaderValue::from_static("count=exact"));
+
+    // Make the request
+    let response = client.get(&url).headers(headers).send().await?;
+
+    // Get total count from content-range header
+    let total_count = response
+        .headers()
+        .get("content-range")
+        .and_then(|h| h.to_str().ok())
+        .and_then(|range| {
+            range
+                .split('/')
+                .nth(1)
+                .and_then(|count| count.parse::<i64>().ok())
+        })
+        .unwrap_or(0);
+    println!("total_count: {total_count}");
+
+    // Parse the JSON response
+    let data = response
+        .json::<Vec<TokenData>>()
+        .await
+        .map_err(|e| MyError::ParseError(e.to_string()))?;
+
+    Ok((data, total_count))
 }
