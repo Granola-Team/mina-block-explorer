@@ -1124,3 +1124,38 @@ pub fn get_button_style_variation(style_variant: &ButtonStyleVariant) -> &str {
         }
     }
 }
+
+pub const TOKEN_ID_KEY: u8 = 0x1c;
+pub const U64_LEN: usize = size_of::<u64>();
+pub fn convert_token_id_to_token_int(token_id: &str) -> u64 {
+    let bs58_bytes = token_id.as_bytes();
+    let big_int = bs58::decode(bs58_bytes)
+        .with_check(Some(TOKEN_ID_KEY))
+        .into_vec()
+        .expect("valid base58 check");
+
+    // drop version byte
+    let mut le_bytes = [0; U64_LEN];
+    le_bytes.copy_from_slice(&big_int[1..=U64_LEN]);
+    u64::from_le_bytes(le_bytes)
+}
+
+#[cfg(test)]
+mod token_tests {
+    use super::convert_token_id_to_token_int;
+    use crate::common::functions::MINA_TOKEN_ADDRESS;
+
+    #[test]
+    fn test_convert_token_id_to_token_int() {
+        // Test case 1: Known token ID
+        let result = convert_token_id_to_token_int(MINA_TOKEN_ADDRESS);
+        assert_eq!(result, 1, "Default token ID should convert to 1");
+    }
+
+    #[test]
+    #[should_panic(expected = "valid base58 check")]
+    fn test_invalid_token_id() {
+        let invalid_token_id = "invalid!!@@";
+        convert_token_id_to_token_int(invalid_token_id);
+    }
+}
