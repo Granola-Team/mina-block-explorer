@@ -26,18 +26,18 @@ impl TableData for Vec<Option<TokensQueryTokens>> {
                             ),
                             ColorVariant::Blue,
                         ),
-                        // wrap_in_pill(
-                        //     convert_to_link(
-                        //         "0".to_string(),
-                        //         format!(
-                        //             "/commands/user?{}={}",
-                        //             QUERY_PARAM_TOKEN,
-                        //             token.get_token()
-                        //         ),
-                        //     ),
-                        //     ColorVariant::Blue,
-                        // ),
-                        // convert_to_span("0".to_string()),
+                        wrap_in_pill(
+                            convert_to_link(
+                                "0".to_string(),
+                                format!(
+                                    "/commands/user?{}={}",
+                                    QUERY_PARAM_TOKEN,
+                                    token.get_token()
+                                ),
+                            ),
+                            ColorVariant::Blue,
+                        ),
+                        convert_to_span("0".to_string()),
                     ]
                 } else {
                     vec![]

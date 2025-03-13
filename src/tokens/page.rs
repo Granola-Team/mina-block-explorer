@@ -88,19 +88,19 @@ pub fn TokensPage() -> impl IntoView {
             alignment: Some(ColumnTextAlignment::Right),
             ..Default::default()
         },
-        // TableColumn {
-        //     column: "Transactions".to_string(),
-        //     is_sortable: true,
-        //     width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
-        //     alignment: Some(ColumnTextAlignment::Right),
-        //     ..Default::default()
-        // },
-        // TableColumn {
-        //     column: "% Unlocked".to_string(),
-        //     is_sortable: true,
-        //     alignment: Some(ColumnTextAlignment::Right),
-        //     ..Default::default()
-        // },
+        TableColumn {
+            column: "Transactions".to_string(),
+            is_sortable: true,
+            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
+            alignment: Some(ColumnTextAlignment::Right),
+            ..Default::default()
+        },
+        TableColumn {
+            column: "% Unlocked".to_string(),
+            is_sortable: true,
+            alignment: Some(ColumnTextAlignment::Right),
+            ..Default::default()
+        },
     ];
 
     view! {
