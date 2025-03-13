@@ -8,3 +8,16 @@ use graphql_client::GraphQLQuery;
     skip_serializing_none
 )]
 pub struct TokensQuery;
+
+#[allow(clippy::derivable_impls)]
+impl Default for tokens_query::TokensQueryInput {
+    fn default() -> Self {
+        tokens_query::TokensQueryInput {
+            token: None,
+            owner: None,
+            symbol: None,
+            supply: None,
+            fetch_all_holders: None,
+        }
+    }
+}
