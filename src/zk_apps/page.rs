@@ -213,15 +213,6 @@ pub fn ZkAppSpotlight() -> impl IntoView {
 }
 
 #[component]
-fn ZkAppDetailTd(children: Children) -> impl IntoView {
-    view! {
-        <td class="flex justify-start items-center m-1 p-1 text-left text-xs md:text-sm whitespace-nowrap">
-            {children()}
-        </td>
-    }
-}
-
-#[component]
 pub fn ZkAppTransactionsPage() -> impl IntoView {
     let (data_sig, _) = create_signal(Some(stub_zk_app_txn_data(TABLE_ROW_LIMIT)));
     let (loading_sig, _) = create_signal(false);

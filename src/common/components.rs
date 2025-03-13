@@ -630,3 +630,12 @@ pub fn ZkAppDetailTh(children: Children) -> impl IntoView {
         </th>
     }
 }
+
+#[component]
+pub fn ZkAppDetailTd(children: Children) -> impl IntoView {
+    view! {
+        <td class="flex justify-start items-center m-1 p-1 text-left text-xs md:text-sm whitespace-nowrap">
+            {children()}
+        </td>
+    }
+}
