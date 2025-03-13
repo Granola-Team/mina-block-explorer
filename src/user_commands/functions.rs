@@ -41,6 +41,7 @@ pub async fn load_data(
     canonical: Option<bool>,
     is_applied: Option<bool>,
     is_zk_app: Option<bool>,
+    token: Option<String>,
 ) -> Result<transactions_query::ResponseData, MyError> {
     let variables = transactions_query::Variables {
         sort_by: transactions_query::TransactionSortByInput::BLOCKHEIGHT_DESC,
@@ -62,6 +63,7 @@ pub async fn load_data(
                     ..Default::default()
                 }),
             zkapp: is_zk_app,
+            token,
             ..Default::default()
         },
         other_txn_query: Some(transactions_query::TransactionQueryInput {

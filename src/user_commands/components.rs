@@ -20,6 +20,7 @@ const QP_HEIGHT: &str = "q-height";
 const QP_USER_COMMAND: &str = "q-all-user-commands";
 const QP_FROM: &str = "q-from";
 const QP_TO: &str = "q-to";
+const QP_TOKEN: &str = "q-token";
 const BACKSCAN_LIMIT: u64 = 2000;
 
 fn get_available_records(
@@ -91,6 +92,7 @@ pub fn TransactionsSection() -> impl IntoView {
     let (txn_applied_sig, _) = create_query_signal::<bool>(QP_TXN_APPLIED);
     let query_params_map = use_query_map();
     let (block_height_sig, _) = create_query_signal::<u64>(QP_HEIGHT);
+    let (token_sig, _) = create_query_signal::<String>(QP_TOKEN);
     let (is_all_user_commands_sig, _) = create_query_signal::<bool>(QP_USER_COMMAND);
     let UseIntervalReturn { counter, .. } = use_interval(LIVE_RELOAD_INTERVAL);
 
@@ -104,6 +106,7 @@ pub fn TransactionsSection() -> impl IntoView {
                 row_limit_sig.get(),
                 txn_applied_sig.get(),
                 is_all_user_commands_sig.get(),
+                token_sig.get(),
             )
         },
         move |(
@@ -114,6 +117,7 @@ pub fn TransactionsSection() -> impl IntoView {
             row_limit,
             txn_applied,
             is_all_user_commands,
+            token,
         )| async move {
             if visibility.get() != VisibilityState::Visible {
                 logging::log!("Document not visible. Data polling skipped for user commands.");
@@ -142,6 +146,7 @@ pub fn TransactionsSection() -> impl IntoView {
                 canonical,
                 txn_applied,
                 is_zk_app,
+                token,
             )
             .await
         },

@@ -79,6 +79,7 @@ pub fn CommandSpotlightPage() -> impl IntoView {
                 None,
                 None,
                 None,
+                None,
             )
             .await
         },

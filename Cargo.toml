@@ -22,8 +22,6 @@ rand = "0.8.5"
 indoc = "2"
 heck = "0.5.0"
 statrs = "0.17.1"
-urlencoding = "2.1.3"
-bs58 = { version ="0.5.1", features = ["check", "std"] }
 
 [dependencies.web-sys]
 version = "0.3"
