@@ -11,6 +11,7 @@ use rand::{
     Rng,
 };
 use rust_decimal::prelude::*;
+use serde_json::Value;
 use std::iter;
 use wasm_bindgen::{prelude::*, JsValue};
 use web_sys::js_sys::{Date, Intl::NumberFormat, Object, Reflect, *};
@@ -1123,4 +1124,22 @@ pub fn get_button_style_variation(style_variant: &ButtonStyleVariant) -> &str {
             "text-slate-500 bg-white border-slate-500 disabled:text-slate-300 disabled:border-slate-300"
         }
     }
+}
+
+pub fn format_json_array_pretty(vec: Vec<Option<String>>) -> Result<String, serde_json::Error> {
+    // Convert Vec<Option<String>> into a Vec<Value> where None becomes null
+    let json_array: Vec<Value> = vec
+        .into_iter()
+        .map(|opt| match opt {
+            Some(s) => Value::String(s),
+            None => Value::Null,
+        })
+        .collect();
+
+    // Wrap it as a serde_json::Value::Array
+    let json_value = Value::Array(json_array);
+
+    // Serialize to pretty-printed string
+    let pretty = serde_json::to_string_pretty(&json_value)?;
+    Ok(pretty)
 }

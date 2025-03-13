@@ -18,8 +18,9 @@ use crate::{
     common::{
         components::*,
         constants::*,
-        models::{MyError, NavEntry, NavIcon},
+        models::{MyError, NavEntry, NavIcon, TableMetadata},
         spotlight::*,
+        table::TableSection,
     },
     icons::*,
     summary::models::BlockchainSummary,
@@ -32,6 +33,7 @@ use leptos_use::storage::use_local_storage;
 
 #[component]
 fn AccountSpotlightPage() -> impl IntoView {
+    let (metadata, _) = create_signal::<Option<TableMetadata>>(None);
     let memo_params_map = use_params_map();
     let (summary_sig, _, _) =
         use_local_storage::<BlockchainSummary, JsonSerdeCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
@@ -51,11 +53,13 @@ fn AccountSpotlightPage() -> impl IntoView {
         <PageContainer>
             {move || match account.get() {
                 Some(acc) => {
+                    let acct_clone_1 = acc.clone();
+                    let acct_clone_2 = acc.clone();
                     view! {
                         <SpotlightSection
                             header="Account Spotlight"
                             spotlight_items=get_spotlight_data(
-                                &acc,
+                                &acc.clone(),
                                 summary_sig.get().blockchain_length,
                             )
 
@@ -65,6 +69,37 @@ fn AccountSpotlightPage() -> impl IntoView {
                         >
                             <WalletIcon width=40 />
                         </SpotlightSection>
+                        <TableSection
+                            metadata=metadata.into()
+                            section_heading="ZKApp Details".to_string()
+                        >
+                            <SpotlightTable>
+                                <ZkAppDetailTr>
+                                    <ZkAppDetailTh>"App State:"</ZkAppDetailTh>
+                                    <ZkAppDetailTd>
+                                        <CopyToClipboard>
+                                            <CodeBlock>
+                                                {get_app_state(&acct_clone_1)
+                                                    .ok()
+                                                    .unwrap_or("Unable to serialize app state".to_string())};
+                                            </CodeBlock>
+                                        </CopyToClipboard>
+                                    </ZkAppDetailTd>
+                                </ZkAppDetailTr>
+                                <ZkAppDetailTr>
+                                    <ZkAppDetailTh>"Action State:"</ZkAppDetailTh>
+                                    <ZkAppDetailTd>
+                                        <CopyToClipboard>
+                                            <CodeBlock>
+                                                {get_action_state(&acct_clone_2)
+                                                    .ok()
+                                                    .unwrap_or("Unable to serialize action state".to_string())};
+                                            </CodeBlock>
+                                        </CopyToClipboard>
+                                    </ZkAppDetailTd>
+                                </ZkAppDetailTr>
+                            </SpotlightTable>
+                        </TableSection>
                     }
                         .into_view()
                 }

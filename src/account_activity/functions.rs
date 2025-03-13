@@ -292,42 +292,6 @@ pub fn get_spotlight_data(
             copiable: true,
         });
         spotlight_entries.push(SpotlightEntry {
-            label: String::from("App State"),
-            any_el: Some({
-                let state = zk_app
-                    .app_state
-                    .as_ref()
-                    .unwrap_or(&vec![]) // Empty vector as default
-                    .clone();
-                // Convert vector to a string representation
-                let state_str = state
-                    .iter()
-                    .map(|opt| opt.as_ref().unwrap_or(&"None".to_string()).to_string())
-                    .collect::<Vec<String>>()
-                    .join(", ");
-                convert_to_span(state_str.to_string())
-            }),
-            copiable: true,
-        });
-        spotlight_entries.push(SpotlightEntry {
-            label: String::from("Action State"),
-            any_el: Some({
-                let state = zk_app
-                    .action_state
-                    .as_ref()
-                    .unwrap_or(&vec![]) // Empty vector as default
-                    .clone();
-                // Convert vector to a string representation
-                let state_str = state
-                    .iter()
-                    .map(|opt| opt.as_ref().unwrap_or(&"None".to_string()).to_string())
-                    .collect::<Vec<String>>()
-                    .join(", ");
-                convert_to_span(state_str)
-            }),
-            copiable: true,
-        });
-        spotlight_entries.push(SpotlightEntry {
             label: String::from("zkApp Uri"),
             any_el: Some({
                 let uri = zk_app.zkapp_uri.as_ref().unwrap_or(&String::new()).clone();
@@ -363,6 +327,30 @@ pub fn extend_delegator_info(
         delegated_balance,
         percent_of_delegation,
     }
+}
+
+pub fn get_app_state(account: &AccountActivityQueryAccounts) -> Result<String, serde_json::Error> {
+    let zk_app = account.zkapp.as_ref().unwrap();
+    let json_arr = zk_app
+        .app_state
+        .as_ref()
+        .unwrap_or(&vec![]) // Empty vector as default
+        .clone();
+
+    format_json_array_pretty(json_arr)
+}
+
+pub fn get_action_state(
+    account: &AccountActivityQueryAccounts,
+) -> Result<String, serde_json::Error> {
+    let zk_app = account.zkapp.as_ref().unwrap();
+    let json_arr = zk_app
+        .action_state
+        .as_ref()
+        .unwrap_or(&vec![]) // Empty vector as default
+        .clone();
+
+    format_json_array_pretty(json_arr)
 }
 
 #[cfg(test)]
