@@ -1,0 +1,15 @@
+query TokensQuery(
+  $query: TokensQueryInput
+  $sort_by: TokensSortByInput
+  $limit: Int
+) {
+  tokens(query: $query, sortBy: $sort_by, limit: $limit) {
+    token
+    supply
+    owner
+    symbol
+    num_holders
+    holders
+    total_num_tokens
+  }
+}

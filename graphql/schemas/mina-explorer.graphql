@@ -1,19 +1,21 @@
-type TokenHolder {
-  token: String!
-  supply: Int!
-  owner: String
-  symbol: String
-  account: Account!
+type Token {
+    token: String!
+    supply: Int!
+    owner: String
+    symbol: String
+    num_holders: Int!
+    holders: [String!]
+    total_num_tokens: Int!
 }
 
-input TokenHoldersQueryInput {
+input TokensQueryInput {
   token: String!
   holder: String
 }
 
-enum TokenHoldersSortByInput {
-  BALANCE_ASC
-  BALANCE_DESC
+enum TokensSortByInput {
+  SUPPLY_ASC
+  SUPPLY_DESC
 }
 
 type VerificationKey {
@@ -1577,12 +1579,12 @@ type Query {
     limit: Int = 100
     sortBy: TransactionSortByInput
   ): [Transaction]!
-  tokenholder(query: TokenHoldersQueryInput): TokenHolder
-  tokenholders(
-    query: TokenHoldersQueryInput
+  token(query: TokensQueryInput): Token
+  tokens(
+    query: TokensQueryInput
     limit: Int = 100
-    sortBy: TokenHoldersSortByInput
-  ): [TokenHolder]!
+    sortBy: TokensSortByInput
+  ): [Token]!
 }
 
 scalar Long
