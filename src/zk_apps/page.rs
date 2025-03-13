@@ -222,20 +222,6 @@ fn ZkAppDetailTd(children: Children) -> impl IntoView {
 }
 
 #[component]
-fn ZkAppDetailTr(children: Children) -> impl IntoView {
-    view! { <tr class="w-full flex flex-col lg:flex-row justify-start">{children()}</tr> }
-}
-
-#[component]
-fn ZkAppDetailTh(children: Children) -> impl IntoView {
-    view! {
-        <th class="flex justify-start items-start m-1 p-1 text-xs md:text-sm whitespace-nowrap w-36 md:w-40 min-w-36 md:min-w-40 font-normal text-slate-400">
-            {children()}
-        </th>
-    }
-}
-
-#[component]
 pub fn ZkAppTransactionsPage() -> impl IntoView {
     let (data_sig, _) = create_signal(Some(stub_zk_app_txn_data(TABLE_ROW_LIMIT)));
     let (loading_sig, _) = create_signal(false);

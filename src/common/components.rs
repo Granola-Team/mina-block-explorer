@@ -616,3 +616,17 @@ pub fn NotFound(message: Option<String>) -> impl IntoView {
         </div>
     }
 }
+
+#[component]
+pub fn ZkAppDetailTr(children: Children) -> impl IntoView {
+    view! { <tr class="w-full flex flex-col lg:flex-row justify-start">{children()}</tr> }
+}
+
+#[component]
+pub fn ZkAppDetailTh(children: Children) -> impl IntoView {
+    view! {
+        <th class="flex justify-start items-start m-1 p-1 text-xs md:text-sm whitespace-nowrap w-36 md:w-40 min-w-36 md:min-w-40 font-normal text-slate-400">
+            {children()}
+        </th>
+    }
+}
