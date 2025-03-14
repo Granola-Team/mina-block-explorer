@@ -41,6 +41,7 @@ pub struct PooledUserCommands {
 impl From<PooledUserCommand> for transactions_query::TransactionsQueryTransactions {
     fn from(txn: PooledUserCommand) -> Self {
         transactions_query::TransactionsQueryTransactions {
+            zkapp: None,
             block_height: None,
             failure_reason: None,
             canonical: None,

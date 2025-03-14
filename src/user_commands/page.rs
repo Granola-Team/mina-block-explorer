@@ -61,6 +61,7 @@ pub fn PendingCommandsPage() -> impl IntoView {
 
 #[component]
 pub fn CommandSpotlightPage() -> impl IntoView {
+    let (metadata, _) = create_signal::<Option<TableMetadata>>(None);
     let memo_params_map = use_params_map();
     let (state_hash_sig, _) = create_query_signal::<String>("q-state-hash");
     let (txn_memo, set_txn_memo) = create_signal("No Memo".to_string());
@@ -126,8 +127,10 @@ pub fn CommandSpotlightPage() -> impl IntoView {
         <PageContainer>
             {move || match resource.get() {
                 Some(Ok(data)) => {
-                    match data.transactions.first() {
+                    match data.transactions.first().cloned() {
                         Some(Some(transaction)) => {
+                            let txn_clone_1 = transaction.clone();
+                            let txn_clone_2 = transaction.clone();
                             let state_hash = transaction.get_hash();
                             let date_time = transaction.get_block_datetime();
                             let has_succeeded = transaction.get_failure_reason().is_none();
@@ -279,6 +282,40 @@ pub fn CommandSpotlightPage() -> impl IntoView {
 
                                     <TransactionIcon width=40 />
                                 </SpotlightSection>
+                                {transaction.zkapp.map(|_| view! {
+                                    <TableSection
+                                        metadata=metadata.into()
+                                        section_heading="ZKApp Details"
+                                    >
+                                        <SpotlightTable>
+                                        <ZkAppDetailTr>
+                                            <ZkAppDetailTh>"Actions:"</ZkAppDetailTh>
+                                            <ZkAppDetailTd>
+                                                <CopyToClipboard>
+                                                    <CodeBlock>
+                                                        {get_actions(&txn_clone_1)
+                                                            .ok()
+                                                            .unwrap_or("Unable to serialize actions".to_string())};
+                                                    </CodeBlock>
+                                                </CopyToClipboard>
+                                            </ZkAppDetailTd>
+                                        </ZkAppDetailTr>
+                                        <ZkAppDetailTr>
+                                            <ZkAppDetailTh>"Events:"</ZkAppDetailTh>
+                                            <ZkAppDetailTd>
+                                                <CopyToClipboard>
+                                                    <CodeBlock>
+                                                        {get_events(&txn_clone_2)
+                                                            .ok()
+                                                            .unwrap_or("Unable to serialize events".to_string())};
+                                                    </CodeBlock>
+                                                </CopyToClipboard>
+                                            </ZkAppDetailTd>
+                                        </ZkAppDetailTr>
+                                        </SpotlightTable>
+                                    </TableSection>
+                                })}
+
                                 {other_txns
                                     .get()
                                     .map(|_| {

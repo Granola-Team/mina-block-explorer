@@ -1,5 +1,8 @@
-use super::{graphql::*, models::PooledUserCommandsResponse};
-use crate::common::{constants::*, models::MyError};
+use super::{
+    graphql::{transactions_query::TransactionsQueryTransactions, *},
+    models::PooledUserCommandsResponse,
+};
+use crate::common::{constants::*, functions::format_json_array_pretty, models::MyError};
 use graphql_client::reqwest::post_graphql;
 
 pub async fn load_pending_txn() -> Result<transactions_query::ResponseData, MyError> {
@@ -85,4 +88,28 @@ pub async fn load_data(
     response
         .data
         .ok_or(MyError::GraphQLEmpty("No data available".to_string()))
+}
+
+pub fn get_actions(txn: &TransactionsQueryTransactions) -> Result<String, serde_json::Error> {
+    let json_arr = txn
+        .zkapp
+        .as_ref()
+        .map(|zkapp| zkapp.actions.clone().into_iter().map(|a| Some(a)).collect())
+        .as_ref()
+        .unwrap_or(&vec![]) // Empty vector as default
+        .clone();
+
+    format_json_array_pretty(json_arr)
+}
+
+pub fn get_events(txn: &TransactionsQueryTransactions) -> Result<String, serde_json::Error> {
+    let json_arr = txn
+        .zkapp
+        .as_ref()
+        .map(|zkapp| zkapp.events.clone().into_iter().map(|a| Some(a)).collect())
+        .as_ref()
+        .unwrap_or(&vec![]) // Empty vector as default
+        .clone();
+
+    format_json_array_pretty(json_arr)
 }
