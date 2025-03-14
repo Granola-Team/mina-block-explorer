@@ -6,7 +6,6 @@ query StakingLedgersQuery(
   stakes(limit: $limit, sortBy: $sort_by, query: $query) {
     balance
     username
-    chainId
     delegate
     epoch
     ledgerHash
