@@ -1,3 +1,14 @@
+type TokenAccount {
+  pk: String!
+  token: String!
+}
+
+type TransactionZkapp {
+  accounts_updated: [TokenAccount!]!
+  actions: [String!]!
+  events: [String!]!
+}
+
 type Token {
   token: String!
   supply: Int!
@@ -1903,6 +1914,7 @@ type Transaction {
   to: String
   toAccount: TransactionToAccount
   token: Int
+  zkapp: TransactionZkapp
 }
 
 type BlockTransactionUserCommandFeePayer {

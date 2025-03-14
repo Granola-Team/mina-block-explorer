@@ -16,6 +16,14 @@ query TransactionsQuery(
     nonce
     memo
     hash
+    zkapp {
+      accounts_updated {
+        pk
+        token
+      }
+      actions
+      events
+    }
     block {
       dateTime
       stateHash
