@@ -9,7 +9,8 @@ query TokensQuery(
     owner
     symbol
     num_holders
-    holders
+    total_num_txns
     total_num_tokens
+    total_num_locked
   }
 }

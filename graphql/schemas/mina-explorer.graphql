@@ -4,8 +4,9 @@ type Token {
   owner: String
   symbol: String
   num_holders: Int!
-  holders: [String!]
   total_num_tokens: Int!
+  total_num_txns: Int!
+  total_num_locked: Int!
 }
 
 input TokensQueryInput {

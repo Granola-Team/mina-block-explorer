@@ -28,7 +28,7 @@ impl TableData for Vec<Option<TokensQueryTokens>> {
                         ),
                         wrap_in_pill(
                             convert_to_link(
-                                "0".to_string(),
+                                token.get_number_of_txn(),
                                 format!(
                                     "/commands/user?{}={}",
                                     QUERY_PARAM_TOKEN,
@@ -37,7 +37,7 @@ impl TableData for Vec<Option<TokensQueryTokens>> {
                             ),
                             ColorVariant::Blue,
                         ),
-                        convert_to_span("0".to_string()),
+                        convert_to_span(token.get_percent_unlocked().unwrap()),
                     ]
                 } else {
                     vec![]
@@ -53,6 +53,8 @@ pub trait TokensTrait {
     fn get_symbol(&self) -> String;
     fn get_supply(&self) -> String;
     fn get_number_of_holders(&self) -> String;
+    fn get_number_of_txn(&self) -> String;
+    fn get_percent_unlocked(&self) -> Result<String, String>;
 }
 
 impl TokensTrait for TokensQueryTokens {
@@ -74,5 +76,22 @@ impl TokensTrait for TokensQueryTokens {
     }
     fn get_number_of_holders(&self) -> String {
         format_number(self.num_holders.to_string())
+    }
+    fn get_number_of_txn(&self) -> String {
+        format_number(self.total_num_txns.to_string())
+    }
+    fn get_percent_unlocked(&self) -> Result<String, String> {
+        if self.total_num_tokens == 0 {
+            return Err("n/a".to_string());
+        }
+
+        // Convert to f64 for floating-point division
+        let locked = self.total_num_locked as f64;
+        let total = self.total_num_tokens as f64;
+        let percent_locked = locked / total;
+        let percent_unlocked = 1.0 - percent_locked;
+
+        // Format as a percentage string (e.g., "75.00%")
+        Ok(format!("{:.2}%", percent_unlocked * 100.0))
     }
 }
