@@ -92,24 +92,20 @@ pub async fn load_data(
 
 pub fn get_actions(txn: &TransactionsQueryTransactions) -> Result<String, serde_json::Error> {
     let json_arr = txn
+        .clone()
         .zkapp
-        .as_ref()
-        .map(|zkapp| zkapp.actions.clone().into_iter().map(|a| Some(a)).collect())
-        .as_ref()
-        .unwrap_or(&vec![]) // Empty vector as default
-        .clone();
+        .map(|zkapp| zkapp.actions.into_iter().map(Some).collect())
+        .unwrap_or_default();
 
     format_json_array_pretty(json_arr)
 }
 
 pub fn get_events(txn: &TransactionsQueryTransactions) -> Result<String, serde_json::Error> {
     let json_arr = txn
+        .clone()
         .zkapp
-        .as_ref()
-        .map(|zkapp| zkapp.events.clone().into_iter().map(|a| Some(a)).collect())
-        .as_ref()
-        .unwrap_or(&vec![]) // Empty vector as default
-        .clone();
+        .map(|zkapp| zkapp.events.into_iter().map(Some).collect())
+        .unwrap_or_default();
 
     format_json_array_pretty(json_arr)
 }

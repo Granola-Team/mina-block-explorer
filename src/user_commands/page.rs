@@ -282,39 +282,43 @@ pub fn CommandSpotlightPage() -> impl IntoView {
 
                                     <TransactionIcon width=40 />
                                 </SpotlightSection>
-                                {transaction.zkapp.map(|_| view! {
-                                    <TableSection
-                                        metadata=metadata.into()
-                                        section_heading="ZKApp Details"
-                                    >
-                                        <SpotlightTable>
-                                        <ZkAppDetailTr>
-                                            <ZkAppDetailTh>"Actions:"</ZkAppDetailTh>
-                                            <ZkAppDetailTd>
-                                                <CopyToClipboard>
-                                                    <CodeBlock>
-                                                        {get_actions(&txn_clone_1)
-                                                            .ok()
-                                                            .unwrap_or("Unable to serialize actions".to_string())};
-                                                    </CodeBlock>
-                                                </CopyToClipboard>
-                                            </ZkAppDetailTd>
-                                        </ZkAppDetailTr>
-                                        <ZkAppDetailTr>
-                                            <ZkAppDetailTh>"Events:"</ZkAppDetailTh>
-                                            <ZkAppDetailTd>
-                                                <CopyToClipboard>
-                                                    <CodeBlock>
-                                                        {get_events(&txn_clone_2)
-                                                            .ok()
-                                                            .unwrap_or("Unable to serialize events".to_string())};
-                                                    </CodeBlock>
-                                                </CopyToClipboard>
-                                            </ZkAppDetailTd>
-                                        </ZkAppDetailTr>
-                                        </SpotlightTable>
-                                    </TableSection>
-                                })}
+                                {transaction
+                                    .zkapp
+                                    .map(|_| {
+                                        view! {
+                                            <TableSection
+                                                metadata=metadata.into()
+                                                section_heading="ZKApp Details"
+                                            >
+                                                <SpotlightTable>
+                                                    <ZkAppDetailTr>
+                                                        <ZkAppDetailTh>"Actions:"</ZkAppDetailTh>
+                                                        <ZkAppDetailTd>
+                                                            <CopyToClipboard>
+                                                                <CodeBlock>
+                                                                    {get_actions(&txn_clone_1)
+                                                                        .ok()
+                                                                        .unwrap_or("Unable to serialize actions".to_string())};
+                                                                </CodeBlock>
+                                                            </CopyToClipboard>
+                                                        </ZkAppDetailTd>
+                                                    </ZkAppDetailTr>
+                                                    <ZkAppDetailTr>
+                                                        <ZkAppDetailTh>"Events:"</ZkAppDetailTh>
+                                                        <ZkAppDetailTd>
+                                                            <CopyToClipboard>
+                                                                <CodeBlock>
+                                                                    {get_events(&txn_clone_2)
+                                                                        .ok()
+                                                                        .unwrap_or("Unable to serialize events".to_string())};
+                                                                </CodeBlock>
+                                                            </CopyToClipboard>
+                                                        </ZkAppDetailTd>
+                                                    </ZkAppDetailTr>
+                                                </SpotlightTable>
+                                            </TableSection>
+                                        }
+                                    })}
 
                                 {other_txns
                                     .get()
