@@ -97,7 +97,7 @@ pub fn CommandSpotlightPage() -> impl IntoView {
     let get_data = move || resource.get().and_then(|res| res.ok());
 
     create_effect(move |_| {
-        set_other_txns.set(get_data().map(|data| {
+        let txns_in_other_blocks = get_data().map(|data| {
             data.other_transactions
                 .into_iter()
                 .filter(|txn_opt| {
@@ -109,7 +109,13 @@ pub fn CommandSpotlightPage() -> impl IntoView {
                         .unwrap_or_default()
                 })
                 .collect::<Vec<_>>()
-        }));
+        });
+        if txns_in_other_blocks
+            .as_ref()
+            .is_some_and(|resp| !resp.is_empty())
+        {
+            set_other_txns.set(txns_in_other_blocks);
+        }
     });
 
     view! {
@@ -273,14 +279,19 @@ pub fn CommandSpotlightPage() -> impl IntoView {
 
                                     <TransactionIcon width=40 />
                                 </SpotlightSection>
-                                <TableSectionTemplate
-                                    table_columns
-                                    data_sig=other_txns
-                                    section_heading="In Other Blocks"
-                                    is_loading=resource.loading()
-
-                                    half_width=true
-                                />
+                                {other_txns
+                                    .get()
+                                    .map(|_| {
+                                        view! {
+                                            <TableSectionTemplate
+                                                table_columns
+                                                data_sig=other_txns
+                                                section_heading="In Other Blocks"
+                                                is_loading=resource.loading()
+                                                half_width=true
+                                            />
+                                        }
+                                    })}
                             }
                                 .into_view()
                         }
