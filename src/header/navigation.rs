@@ -24,12 +24,6 @@ pub fn Header() -> impl IntoView {
             icon: NavIcon::Transactions,
             ..Default::default()
         },
-        // NavEntry {
-        //     href: "/commands/zk-app".to_string(),
-        //     text: "zkApp Commands".to_string(),
-        //     icon: NavIcon::ZKApps,
-        //     ..Default::default()
-        // },
     ]);
 
     let nav_items = vec![
@@ -56,9 +50,9 @@ pub fn Header() -> impl IntoView {
             ..Default::default()
         },
         NavEntry {
-            href: "/snarks".to_string(),
-            text: "SNARKs".to_string(),
-            icon: NavIcon::SNARKs,
+            href: "/tokens".to_string(),
+            text: "Tokens".to_string(),
+            icon: NavIcon::Tokens,
             ..Default::default()
         },
         NavEntry {
@@ -83,9 +77,9 @@ pub fn Header() -> impl IntoView {
                     ..Default::default()
                 },
                 NavEntry {
-                    href: "/tokens".to_string(),
-                    text: "Tokens".to_string(),
-                    icon: NavIcon::Tokens,
+                    href: "/snarks".to_string(),
+                    text: "SNARKs".to_string(),
+                    icon: NavIcon::SNARKs,
                     ..Default::default()
                 },
                 NavEntry {
