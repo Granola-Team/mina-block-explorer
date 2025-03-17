@@ -1,15 +1,24 @@
-use crate::common::{components::*, models::*};
+use crate::common::{components::*, constants::QUERY_PARAM_USER_COMMAND, models::*};
 use leptos::*;
 
 #[component]
 pub fn Header() -> impl IntoView {
     let (open, set_open) = create_signal(false);
 
+    let zk_app_commands = Some(vec![NavEntry {
+        href: format!("/commands/user?{}={}", QUERY_PARAM_USER_COMMAND, "false"),
+        text: "ZKApp Commands".to_string(),
+        icon: NavIcon::Transactions,
+        sub_entries: None,
+        ..Default::default()
+    }]);
+
     let txn_entries = Some(vec![
         NavEntry {
             href: "/commands/user".to_string(),
             text: "User Commands".to_string(),
             icon: NavIcon::Transactions,
+            sub_entries: zk_app_commands,
             ..Default::default()
         },
         NavEntry {
@@ -131,9 +140,25 @@ pub fn Header() -> impl IntoView {
                                                     {s_entries
                                                         .into_iter()
                                                         .map(|sub_entry| {
+                                                            let sub_entries = sub_entry.sub_entries.clone();
                                                             view! {
                                                                 <li class="ml-4">
                                                                     <NavLink nav_entry=sub_entry on_click=toggle />
+                                                                    <ul>
+                                                                        {sub_entries
+                                                                            .map(|entries| {
+                                                                                entries
+                                                                                    .into_iter()
+                                                                                    .map(|sub_entry| {
+                                                                                        view! {
+                                                                                            <li class="ml-4">
+                                                                                                <NavLink nav_entry=sub_entry on_click=toggle />
+                                                                                            </li>
+                                                                                        }
+                                                                                    })
+                                                                                    .collect::<Vec<_>>()
+                                                                            })}
+                                                                    </ul>
                                                                 </li>
                                                             }
                                                         })
