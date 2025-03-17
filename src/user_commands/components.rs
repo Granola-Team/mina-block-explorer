@@ -14,10 +14,8 @@ use web_sys::VisibilityState;
 
 const QP_TXN_HASH: &str = "q-txn-hash";
 const QP_TXN_TYPE: &str = "txn-type";
-const QP_TXN_APPLIED: &str = "txn-applied";
 const QP_ROW_LIMIT: &str = "row-limit";
 const QP_HEIGHT: &str = "q-height";
-const QP_USER_COMMAND: &str = "q-all-user-commands";
 const QP_FROM: &str = "q-from";
 const QP_TO: &str = "q-to";
 const QP_TOKEN: &str = "q-token";
@@ -89,11 +87,11 @@ pub fn TransactionsSection() -> impl IntoView {
     let (data_sig, set_data) = create_signal(None);
     let (txn_type_qp, _) = create_query_signal::<String>(QP_TXN_TYPE);
     let (row_limit_sig, _) = create_query_signal::<u64>(QP_ROW_LIMIT);
-    let (txn_applied_sig, _) = create_query_signal::<bool>(QP_TXN_APPLIED);
+    let (txn_applied_sig, _) = create_query_signal::<bool>(QUERY_PARAM_TXN_APPLIED);
     let query_params_map = use_query_map();
     let (block_height_sig, _) = create_query_signal::<u64>(QP_HEIGHT);
     let (token_sig, _) = create_query_signal::<String>(QP_TOKEN);
-    let (is_all_user_commands_sig, _) = create_query_signal::<bool>(QP_USER_COMMAND);
+    let (is_all_user_commands_sig, _) = create_query_signal::<bool>(QUERY_PARAM_USER_COMMAND);
     let UseIntervalReturn { counter, .. } = use_interval(LIVE_RELOAD_INTERVAL);
 
     let resource = create_resource(
@@ -226,9 +224,9 @@ pub fn TransactionsSection() -> impl IntoView {
             metadata=Signal::derive(move || {
                 let mut otherQps = query_params_map.get();
                 otherQps.remove(QP_TXN_TYPE);
-                otherQps.remove(QP_TXN_APPLIED);
+                otherQps.remove(QUERY_PARAM_TXN_APPLIED);
                 otherQps.remove(QP_ROW_LIMIT);
-                otherQps.remove(QP_USER_COMMAND);
+                otherQps.remove(QUERY_PARAM_USER_COMMAND);
                 let mut available_records = None;
                 let url_query_map = query_params_map.get();
                 let from = url_query_map.get(QP_FROM).cloned();
@@ -291,7 +289,7 @@ pub fn TransactionsSection() -> impl IntoView {
                     />
                     <UrlParamSelectMenu
                         id="user-command-selection"
-                        query_str_key=QP_USER_COMMAND
+                        query_str_key=QUERY_PARAM_USER_COMMAND
                         labels=UrlParamSelectOptions {
                             is_boolean_option: true,
                             cases: vec!["All".to_string(), "zkApps".to_string()],
@@ -386,7 +384,7 @@ pub fn PendingTransactionsSection() -> impl IntoView {
             metadata=Signal::derive(move || {
                 let mut otherQps = query_params_map.get();
                 otherQps.remove(QP_TXN_TYPE);
-                otherQps.remove(QP_TXN_APPLIED);
+                otherQps.remove(QUERY_PARAM_TXN_APPLIED);
                 otherQps.remove(QP_ROW_LIMIT);
                 Some(TableMetadata {
                     total_records: None,

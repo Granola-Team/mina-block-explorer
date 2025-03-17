@@ -1,5 +1,5 @@
 use super::graphql::tokens_query::TokensQueryTokens;
-use crate::common::{constants::QUERY_PARAM_TOKEN, functions::*, models::*, table::TableData};
+use crate::common::{constants::*, functions::*, models::*, table::TableData};
 use leptos::{html, HtmlElement};
 
 impl TableData for Vec<Option<TokensQueryTokens>> {
@@ -30,9 +30,13 @@ impl TableData for Vec<Option<TokensQueryTokens>> {
                             convert_to_link(
                                 token.get_number_of_txn(),
                                 format!(
-                                    "/commands/user?{}={}",
+                                    "/commands/user?{}={}&{}={}&{}={}",
                                     QUERY_PARAM_TOKEN,
-                                    token.get_token()
+                                    token.get_token(),
+                                    QUERY_PARAM_USER_COMMAND,
+                                    "false",
+                                    QUERY_PARAM_TXN_APPLIED,
+                                    "true"
                                 ),
                             ),
                             ColorVariant::Blue,
