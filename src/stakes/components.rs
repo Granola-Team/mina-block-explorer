@@ -12,6 +12,7 @@ pub fn StakesPageContents(
     #[prop(into)] slot_in_epoch: u64,
     #[prop(into)] epoch_num_accounts: Option<u64>,
     #[prop(into)] total_num_accounts: Option<u64>,
+    #[prop(into)] genesis_state_hash: Option<String>,
     selected_epoch: Option<u64>,
 ) -> impl IntoView {
     fn create_table_columns(total_stake_percent_sort: AnySort) -> Vec<TableColumn<AnySort>> {
@@ -89,6 +90,7 @@ pub fn StakesPageContents(
     let (data_sig, set_data) = create_signal(None);
     let query_params_map = use_query_map();
     let (row_limit_sig, _) = create_query_signal::<i64>("row-limit");
+    let (genesis_state_hash_sig, _) = create_signal(genesis_state_hash);
 
     let (ledger_hash, set_ledger_hash) = create_signal(None::<String>);
 
@@ -99,9 +101,10 @@ pub fn StakesPageContents(
                 query_params_map.get(),
                 row_limit_sig.get(),
                 sort_dir.get(),
+                genesis_state_hash_sig.get(),
             )
         },
-        move |(epoch_opt, params_map, mut row_limit, sort_dir)| async move {
+        move |(epoch_opt, params_map, mut row_limit, sort_dir, genesis_state_hash)| async move {
             let public_key = params_map.get("q-key").cloned();
             let delegate = params_map.get("q-delegate").cloned();
             let stake = params_map.get("q-stake").cloned();
@@ -123,6 +126,7 @@ pub fn StakesPageContents(
                 delegate,
                 stake,
                 sort_by,
+                genesis_state_hash,
             )
             .await
         },
@@ -178,6 +182,14 @@ pub fn StakesPageContents(
                         view! {
                             <div class="hidden md:flex justify-center items-center space-x-4">
                                 <RowLimit />
+                                <UrlParamSelectMenu
+                                    id="berkeley_selection"
+                                    query_str_key="is-berkeley"
+                                    labels=UrlParamSelectOptions {
+                                        is_boolean_option: true,
+                                        cases: vec!["a7351a (Berkeley)".to_string(), "5f704c".to_string()],
+                                    }
+                                />
                                 <EpochButton
                                     disabled=prev_epoch_sig
                                         .get()

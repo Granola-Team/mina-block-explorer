@@ -58,6 +58,7 @@ async fn load_epoch_summary(epoch: Option<u64>) -> Result<EpochSummaryResponse, 
 #[component]
 pub fn StakesPage() -> impl IntoView {
     let epoch_sig = create_query_signal::<u64>("epoch");
+    let (is_berkeley_sig, _) = create_query_signal::<bool>("is-berkeley");
     let (summary_sig, _, _) =
         use_local_storage::<BlockchainSummary, JsonSerdeCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
 
@@ -95,6 +96,13 @@ pub fn StakesPage() -> impl IntoView {
                             .and_then(|res| res.ok())
                             .and_then(|s| s.data.stakes.first().cloned())
                             .map(|s| s.epoch_num_accounts)
+                        genesis_state_hash=is_berkeley_sig.get().and_then(|is_berkeley| {
+                            if is_berkeley {
+                                Some(HARDFORK_STATE_HASH.to_string())
+                            } else {
+                                Some(MAINNET_STATE_HASH.to_string())
+                            }
+                        })
                     />
                 }
             }}

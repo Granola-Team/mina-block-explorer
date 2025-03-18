@@ -210,6 +210,7 @@ impl AccountActivityQueryDirectionalTransactionTrait
 impl Default for StakesQueryInput {
     fn default() -> Self {
         StakesQueryInput {
+            genesis_state_hash: None,
             stake_lte: None,
             timing_exists: None,
             chain_id_gte: None,

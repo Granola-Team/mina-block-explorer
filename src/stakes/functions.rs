@@ -85,6 +85,7 @@ pub async fn load_data(
     delegate: Option<String>,
     stake: Option<String>,
     sort_by: staking_ledgers_query::StakesSortByInput,
+    genesis_state_hash: Option<String>,
 ) -> Result<staking_ledgers_query::ResponseData, MyError> {
     if stake.is_some() && normalize_number_format(stake.as_deref().unwrap()).is_err() {
         return Err(MyError::ParseError(
@@ -100,6 +101,7 @@ pub async fn load_data(
                 .map(|num| normalize_number_format(num).ok().unwrap()),
             public_key,
             delegate,
+            genesis_state_hash,
             epoch: epoch.map(|x| x as i64),
             ..Default::default()
         },

@@ -2959,6 +2959,7 @@ input StakeTimingUpdateInput {
 }
 
 input StakesQueryInput {
+  genesisStateHash: String
   stake_lte: String
   timing_exists: Boolean
   chainId_gte: String
