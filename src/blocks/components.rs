@@ -11,11 +11,11 @@ use charming::{
     Chart, WasmRenderer,
 };
 use codee::string::JsonSerdeCodec;
-use gloo_timers::future::TimeoutFuture;
 use leptos::*;
 use leptos_router::*;
 use leptos_use::{
-    storage::use_local_storage, use_document_visibility, use_interval, UseIntervalReturn,
+    storage::use_local_storage, use_document_visibility, use_interval, use_timeout_fn,
+    UseIntervalReturn, UseTimeoutFnReturn,
 };
 use std::collections::HashMap;
 use web_sys::VisibilityState;
@@ -295,9 +295,16 @@ pub fn BlockSpotlightFeeTransferAnalytics(block: BlocksQueryBlocks) -> impl Into
         }
     });
 
+    let UseTimeoutFnReturn { start, .. } = use_timeout_fn(
+        |data: HashMap<String, i32>| {
+            setup_and_render_chart(&data, "chart", "Top Internal Transfers");
+        },
+        1000.0,
+    );
     create_effect(move |_| {
         if !data.get().is_empty() {
-            setup_and_render_chart(&data.get(), "chart", "Top Internal Transfers");
+            let chart_data = data.get().clone(); // Clone the data to own it
+            start(chart_data);
         }
     });
 
@@ -396,7 +403,6 @@ where
         .series(series);
     let renderer = WasmRenderer::new(375, 375);
 
-    TimeoutFuture::new(1_000).await;
     renderer.render(chart_id, &chart).unwrap();
 }
 

@@ -23,12 +23,6 @@ pub enum MyError {
     UrlParseError(String),
 }
 
-impl From<url::ParseError> for MyError {
-    fn from(err: url::ParseError) -> MyError {
-        MyError::UrlParseError(err.to_string())
-    }
-}
-
 impl From<reqwest::Error> for MyError {
     fn from(err: reqwest::Error) -> Self {
         MyError::NetworkError(err.to_string())

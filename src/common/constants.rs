@@ -16,7 +16,6 @@ pub const TABLE_COL_USERNAME_WIDTH: &str = "200rem";
 pub const TABLE_COL_LARGE_BALANCE: &str = "250px";
 pub const BLOCKCHAIN_SUMMARY_STORAGE_KEY: &str = "blockchain-summary";
 pub const BLOCKS_STORAGE_KEY: &str = "blocks";
-pub const PAYMENT_TYPE: &str = "Payment";
 pub const STAKE_DELEGATION_TYPE: &str = "Stake Delegation";
 pub const LHS_MAX_DIGIT_PADDING: usize = 3;
 pub const LHS_MAX_SPACE_FEES: usize = 2;
