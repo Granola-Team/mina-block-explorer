@@ -187,7 +187,10 @@ pub fn StakesPageContents(
                                     query_str_key="is-berkeley"
                                     labels=UrlParamSelectOptions {
                                         is_boolean_option: true,
-                                        cases: vec!["a7351a (Berkeley)".to_string(), "5f704c".to_string()],
+                                        cases: vec![
+                                            "a7351a (Berkeley)".to_string(),
+                                            "5f704c".to_string(),
+                                        ],
                                     }
                                 />
                                 <EpochButton

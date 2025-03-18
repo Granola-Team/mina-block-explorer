@@ -96,13 +96,15 @@ pub fn StakesPage() -> impl IntoView {
                             .and_then(|res| res.ok())
                             .and_then(|s| s.data.stakes.first().cloned())
                             .map(|s| s.epoch_num_accounts)
-                        genesis_state_hash=is_berkeley_sig.get().and_then(|is_berkeley| {
-                            if is_berkeley {
-                                Some(HARDFORK_STATE_HASH.to_string())
-                            } else {
-                                Some(MAINNET_STATE_HASH.to_string())
-                            }
-                        })
+                        genesis_state_hash=is_berkeley_sig
+                            .get()
+                            .map(|is_berkeley| {
+                                if is_berkeley {
+                                    HARDFORK_STATE_HASH.to_string()
+                                } else {
+                                    MAINNET_STATE_HASH.to_string()
+                                }
+                            })
                     />
                 }
             }}

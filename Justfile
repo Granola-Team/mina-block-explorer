@@ -82,7 +82,7 @@ pnpm-install:
   pnpm install
 
 # Serve application on localhost
-dev: pnpm-install deploy-mina-indexer
+dev: pnpm-install
   trap 'just shutdown-mina-indexer' INT; \
   trunk serve --port="{{trunk_port}}" --open
 
