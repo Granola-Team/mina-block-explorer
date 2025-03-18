@@ -12,6 +12,10 @@ export CARGO_HOME := `pwd` + '/.cargo'
 
 set dotenv-load := true
 
+default:
+  @echo "Topologically sorted recipes:"
+  @just --list --unsorted --list-heading '' --justfile {{justfile()}}
+
 # Setup block to check and activate Flox if necessary
 setup:
     @if [ -z "$FLOX_ENV" ]; then \
@@ -21,10 +25,6 @@ setup:
             exit 1; \
         fi; \
     fi
-
-default:
-  @echo "Topologically sorted recipes:"
-  @just --list --unsorted --list-heading '' --justfile {{justfile()}}
 
 # Deploys the mina-indexer locally
 deploy-mina-indexer:
