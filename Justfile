@@ -88,7 +88,7 @@ dev: pnpm-install
 
 
 # Run tier2 tests
-t2: pnpm-install deploy-mina-indexer && shutdown-mina-indexer
+t2: pnpm-install
   @echo "--- Performing end-to-end @tier2 tests"
   ruby ops/validate-env.rb GRAPHQL_URL REST_URL
   CYPRESS_tags="@tier2" \
