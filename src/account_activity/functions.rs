@@ -330,12 +330,17 @@ pub fn extend_delegator_info(
 }
 
 pub fn get_app_state(account: &AccountActivityQueryAccounts) -> Result<String, serde_json::Error> {
-    let zk_app = account.zkapp.as_ref().unwrap();
-    let json_arr = zk_app
-        .app_state
+    let json_arr = account
+        .zkapp
         .as_ref()
-        .unwrap_or(&vec![]) // Empty vector as default
-        .clone();
+        .map(|zkapp| {
+            zkapp
+                .app_state
+                .as_ref()
+                .unwrap_or(&vec![]) // Empty vector as default
+                .clone()
+        })
+        .unwrap_or_default();
 
     format_json_array_pretty(json_arr)
 }
@@ -343,12 +348,17 @@ pub fn get_app_state(account: &AccountActivityQueryAccounts) -> Result<String, s
 pub fn get_action_state(
     account: &AccountActivityQueryAccounts,
 ) -> Result<String, serde_json::Error> {
-    let zk_app = account.zkapp.as_ref().unwrap();
-    let json_arr = zk_app
-        .action_state
+    let json_arr = account
+        .zkapp
         .as_ref()
-        .unwrap_or(&vec![]) // Empty vector as default
-        .clone();
+        .map(|zkapp| {
+            zkapp
+                .action_state
+                .as_ref()
+                .unwrap_or(&vec![]) // Empty vector as default
+                .clone()
+        })
+        .unwrap_or_default();
 
     format_json_array_pretty(json_arr)
 }
