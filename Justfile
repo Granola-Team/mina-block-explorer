@@ -29,18 +29,15 @@ setup:
 # Deploys the mina-indexer locally
 deploy-mina-indexer:
   @echo "--- Deploying mina-indexer at {{INDEXER_VERSION}}"
-  ruby ops/validate-env.rb VOLUMES_DIR INDEXER_PORT
+  # ruby ops/validate-env.rb VOLUMES_DIR INDEXER_PORT
   mkdir -p $VOLUMES_DIR/mina-indexer-prod
-  cd lib/mina-indexer && VOLUMES_DIR=$VOLUMES_DIR nix develop --command just deploy-local-prod 10000 $INDEXER_PORT
+  cd lib/mina-indexer && VOLUMES_DIR=$VOLUMES_DIR nix develop --command just deploy-local-prod-dev 10000 $INDEXER_PORT
 
 # Shuts down the locally running mina-indexer
 shutdown-mina-indexer:
   @echo "--- Shutting down mina-indexer"
   ruby ops/validate-env.rb VOLUMES_DIR
-  $VOLUMES_DIR/mina-indexer-prod/bin/mina-indexer-{{INDEXER_VERSION}} \
-    --socket $VOLUMES_DIR/mina-indexer-prod/mina-indexer-{{INDEXER_VERSION}}.sock \
-    server \
-    shutdown
+  cd lib/mina-indexer && nix develop --command just shutdown prod
 
 # Remove build and test artifacts
 clean:
@@ -82,13 +79,13 @@ pnpm-install:
   pnpm install
 
 # Serve application on localhost
-dev: pnpm-install
+dev: pnpm-install deploy-mina-indexer
   trap 'just shutdown-mina-indexer' INT; \
   trunk serve --port="{{trunk_port}}" --open
 
 
 # Run tier2 tests
-t2: pnpm-install
+t2: pnpm-install deploy-mina-indexer
   @echo "--- Performing end-to-end @tier2 tests"
   ruby ops/validate-env.rb GRAPHQL_URL REST_URL
   CYPRESS_tags="@tier2" \
