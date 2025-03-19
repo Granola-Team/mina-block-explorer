@@ -144,7 +144,7 @@ pub fn CommandSpotlightPage() -> impl IntoView {
                             } else {
                                 ColorVariant::Orange
                             };
-                            let spotlight_items = vec![
+                            let mut spotlight_items = vec![
                                 SpotlightEntry {
                                     label: "Status".to_string(),
                                     any_el: Some(convert_to_pill(status.to_string(), status_color)),
@@ -255,6 +255,31 @@ pub fn CommandSpotlightPage() -> impl IntoView {
                                     ..Default::default()
                                 },
                             ];
+                            if transaction.zkapp.is_some() {
+                                spotlight_items
+                                    .push(SpotlightEntry {
+                                        label: "Tokens".to_string(),
+                                        any_el: Some(
+                                            convert_to_pill(
+                                                transaction
+                                                    .zkapp
+                                                    .as_ref()
+                                                    .map(|zkapp| {
+                                                        zkapp
+                                                            .accounts_updated
+                                                            .iter()
+                                                            .map(|au| au.token.clone())
+                                                            .collect::<std::collections::HashSet<_>>()
+                                                            .len()
+                                                            .to_string()
+                                                    })
+                                                    .unwrap_or("0".to_string()),
+                                                ColorVariant::Grey,
+                                            ),
+                                        ),
+                                        ..Default::default()
+                                    })
+                            }
                             let table_columns: Vec<TableColumn<AnySort>> = vec![
                                 TableColumn {
                                     column: "Height".to_string(),
