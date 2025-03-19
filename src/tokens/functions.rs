@@ -13,7 +13,6 @@ pub async fn load_data(
 ) -> Result<tokens_query::ResponseData, MyError> {
     let query = name.map(|name| tokens_query::TokensQueryInput {
         token: Some(name),
-        fetch_all_holders: Some(true),
         ..Default::default()
     });
 

@@ -25,7 +25,6 @@ input TokensQueryInput {
   owner: String
   symbol: String
   supply: Int
-  fetch_all_holders: Boolean
 }
 
 enum TokensSortByInput {

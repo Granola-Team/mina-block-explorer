@@ -17,7 +17,6 @@ impl Default for tokens_query::TokensQueryInput {
             owner: None,
             symbol: None,
             supply: None,
-            fetch_all_holders: None,
         }
     }
 }
