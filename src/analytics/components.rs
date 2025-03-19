@@ -6,7 +6,7 @@ use crate::{
 use codee::string::JsonSerdeCodec;
 use leptos::*;
 use leptos_router::{create_query_signal, use_location, use_navigate, ParamsMap};
-use leptos_use::storage::use_local_storage;
+use leptos_use::{storage::use_local_storage, use_timeout_fn, UseTimeoutFnReturn};
 use std::collections::HashMap;
 
 const INPUT_STYLES: &str =
@@ -174,10 +174,21 @@ pub fn SnarkerLeaderboard() -> impl IntoView {
     );
     let (data_sig, set_data) = create_signal(None);
 
+    let UseTimeoutFnReturn { start, .. } = use_timeout_fn(
+        |(epoch, e, set_epoch): (Option<u32>, u64, SignalSetter<Option<u32>>)| {
+            if epoch.is_none() {
+                set_epoch.clone().set(Some(e as u32));
+            }
+        },
+        1000.0,
+    );
+
     create_effect(move |_| {
-        if epoch_sig.get_untracked().is_none() {
-            set_epoch.set(Some(summary_sig.get().epoch as u32));
-        }
+        start((
+            epoch_sig.get_untracked(),
+            summary_sig.get().epoch,
+            set_epoch,
+        ));
     });
 
     create_effect(move |_| {
