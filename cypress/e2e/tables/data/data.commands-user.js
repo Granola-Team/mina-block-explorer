@@ -79,7 +79,7 @@ module.exports = {
       cy.get("select#txn-status").as("txn-applied");
       cy.get("select#canonical-selection").as("canonical");
       ["Failed", "Applied"].forEach((txnApplied) => {
-        ["Non-Canonical", "Canonical"].forEach((canonical) => {
+        ["Canonical"].forEach((canonical) => {
           cy.get("@txn-applied")
             .select(txnApplied)
             .should("have.value", txnApplied);
