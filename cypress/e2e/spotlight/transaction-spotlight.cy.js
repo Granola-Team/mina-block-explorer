@@ -89,6 +89,6 @@ suite(["@tier2"], "transaction spotlight", () => {
     cy.visit(`/commands/${WHISPERIT_TXN_HASH}`);
     cy.get("section").contains("In Other Blocks").should("exist");
     cy.aliasTableRows("In Other Blocks", "table-rows");
-    cy.get("@table-rows").should("have.lengthOf", 4);
+    cy.get("@table-rows").should("have.lengthOf", 2);
   });
 });

@@ -131,11 +131,7 @@ pub async fn load_data(
             } else {
                 canonical
             },
-            zkapp: if all_account_types.unwrap_or(false) {
-                None
-            } else {
-                Some(true)
-            },
+            zkapp: all_account_types.filter(|&b| !b).map(|_| true),
             ..Default::default()
         },
         incoming_trans_query: account_activity_query::TransactionQueryInput {
@@ -149,7 +145,7 @@ pub async fn load_data(
             } else {
                 canonical
             },
-            zkapp: None,
+            zkapp: all_account_types.filter(|&b| !b).map(|_| true),
             ..Default::default()
         },
         internal_commands_query: account_activity_query::FeetransferQueryInput {
