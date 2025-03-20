@@ -54,6 +54,8 @@ suite(["@tier2"], "number bubble in tab", () => {
       cy.intercept("POST", "/graphql").as("graphql");
       cy.wait("@graphql");
 
+      cy.wait(250);
+
       cy.contains("a.tab", tab).find(".number-bubble").as("bubble");
 
       cy.get("@bubble")
