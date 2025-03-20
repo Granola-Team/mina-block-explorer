@@ -24,12 +24,12 @@ module.exports = {
     filter_tests: [
       {
         column: "Name",
-        input: "PUN",
+        input: "MINA",
         assertion: function () {
           cy.aliasTableRows("Tokens", "table-rows");
           cy.get("@table-rows").should("have.lengthOf", 1);
           cy.assertForEachColumnValue("Tokens", "Name", (text) => {
-            expect(text).to.be.eq("PUNK");
+            expect(text).to.be.eq("MINA");
           });
         },
       },

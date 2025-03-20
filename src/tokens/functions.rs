@@ -4,7 +4,6 @@ use super::graphql::{
 };
 use crate::common::{constants::GRAPHQL_ENDPOINT, models::MyError};
 use graphql_client::reqwest::post_graphql;
-use leptos::logging;
 
 pub async fn load_data(
     limit: Option<i64>,
@@ -15,8 +14,6 @@ pub async fn load_data(
         token: Some(name),
         ..Default::default()
     });
-
-    logging::log!("query: {:?}", query.is_none());
 
     let variables = tokens_query::Variables {
         limit,
