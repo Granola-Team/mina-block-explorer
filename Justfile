@@ -109,7 +109,7 @@ t2-i: pnpm-install deploy-mina-indexer
 pre-publish:
   @echo "--- Validating environment variables for publishing"
   ruby ops/validate-env.rb GRAPHQL_URL REST_URL
-  ruby -e '["GRAPHQL_URL", "REST_URL"].each { |var| exit 1 if ENV[var].include?("localhost") || ENV[var].include?("127.0.0.1") }; exit 0'
+  ruby -e 'exit !["GRAPHQL_URL", "REST_URL"].any? { |var| ["localhost", "127.0.0.1"].any? { |str| ENV[var]&.include?(str) } }'
 
 # Publish application
 publish: pre-publish clean pnpm-install
