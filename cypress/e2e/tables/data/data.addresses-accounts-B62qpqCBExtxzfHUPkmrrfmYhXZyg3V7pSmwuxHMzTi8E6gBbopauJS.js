@@ -20,7 +20,7 @@ const {
 
 module.exports = {
   tag: "@tier2",
-  url: "/addresses/accounts/B62qpqCBExtxzfHUPkmrrfmYhXZyg3V7pSmwuxHMzTi8E6gBbopauJS",
+  url: `/addresses/accounts/${ROMEK_ADDRESS}`,
   table: {
     heading: "User Commands",
     columns: [

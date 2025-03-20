@@ -47,9 +47,10 @@ export function runTestSuite(testSuiteData) {
           });
           filter_tests.forEach(({ column, input, assertion }) => {
             cy.get("th").contains(column).find("input").as("input");
-            cy.wait(1000);
             cy.get("@input").type(input, { delay: 0 });
-            cy.wait(2000);
+            cy.intercept("POST", "/graphql").as("graphql");
+            cy.wait("@graphql", { timeout: 15000 });
+            cy.wait(1000);
             assertion();
             if (heading != "Staking Ledger - Epoch 1") {
               cy.assertTableRecordsCorrect(heading);
