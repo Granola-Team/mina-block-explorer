@@ -12,7 +12,6 @@ query StakingLedgersQuery(
     nonce
     pk
     public_key
-    token
     voting_for
     delegationTotals {
       totalStakePercentage
