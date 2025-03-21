@@ -11,7 +11,7 @@ pub async fn load_data(
     sort_by: Option<TokensSortByInput>,
 ) -> Result<tokens_query::ResponseData, MyError> {
     let query = name.map(|name| tokens_query::TokensQueryInput {
-        token: Some(name),
+        symbol: Some(name),
         ..Default::default()
     });
 

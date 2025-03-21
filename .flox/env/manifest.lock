@@ -25,6 +25,9 @@
           "x86_64-linux"
         ]
       },
+      "dotenv": {
+        "pkg-path": "rubyPackages.dotenv"
+      },
       "git-lfs": {
         "pkg-path": "git-lfs"
       },
@@ -749,6 +752,114 @@
       ],
       "outputs": {
         "out": "/nix/store/ls0g67nsklb2vn3vc9dnksa1adfgq32a-clang-wrapper-19.1.7"
+      },
+      "system": "x86_64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "rubyPackages.dotenv",
+      "broken": false,
+      "derivation": "/nix/store/1spy8dq190d79f0wzadp3ikmbjv4ja75-ruby3.3-dotenv-3.1.0.drv",
+      "install_id": "dotenv",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=6313551cd05425cd5b3e63fe47dbc324eabb15e4",
+      "name": "ruby3.3-dotenv-3.1.0",
+      "pname": "dotenv",
+      "rev": "6313551cd05425cd5b3e63fe47dbc324eabb15e4",
+      "rev_count": 760502,
+      "rev_date": "2025-02-27T22:35:51Z",
+      "scrape_date": "2025-03-02T00:31:11Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "3.1.0",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/izmkahlq8iw2h789v0gp6iz6jqjrxvky-ruby3.3-dotenv-3.1.0"
+      },
+      "system": "aarch64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "rubyPackages.dotenv",
+      "broken": false,
+      "derivation": "/nix/store/ba0jhjxvnikric9by4bvdr2kiyynpajw-ruby3.3-dotenv-3.1.0.drv",
+      "install_id": "dotenv",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=6313551cd05425cd5b3e63fe47dbc324eabb15e4",
+      "name": "ruby3.3-dotenv-3.1.0",
+      "pname": "dotenv",
+      "rev": "6313551cd05425cd5b3e63fe47dbc324eabb15e4",
+      "rev_count": 760502,
+      "rev_date": "2025-02-27T22:35:51Z",
+      "scrape_date": "2025-03-02T00:31:11Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "3.1.0",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/g3yginv0qjdw8p0gy9ckphk9kfxidwb9-ruby3.3-dotenv-3.1.0"
+      },
+      "system": "aarch64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "rubyPackages.dotenv",
+      "broken": false,
+      "derivation": "/nix/store/0spgqkfin7djbzsaw8hjk3ripcqbfha8-ruby3.3-dotenv-3.1.0.drv",
+      "install_id": "dotenv",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=6313551cd05425cd5b3e63fe47dbc324eabb15e4",
+      "name": "ruby3.3-dotenv-3.1.0",
+      "pname": "dotenv",
+      "rev": "6313551cd05425cd5b3e63fe47dbc324eabb15e4",
+      "rev_count": 760502,
+      "rev_date": "2025-02-27T22:35:51Z",
+      "scrape_date": "2025-03-02T00:31:11Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "3.1.0",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/ch8gsn9l4dxmwx655dd9v3lwrlfjyf2d-ruby3.3-dotenv-3.1.0"
+      },
+      "system": "x86_64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "rubyPackages.dotenv",
+      "broken": false,
+      "derivation": "/nix/store/i9bgqgvkczys4a0agf6z18v3f8yy1wba-ruby3.3-dotenv-3.1.0.drv",
+      "install_id": "dotenv",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=6313551cd05425cd5b3e63fe47dbc324eabb15e4",
+      "name": "ruby3.3-dotenv-3.1.0",
+      "pname": "dotenv",
+      "rev": "6313551cd05425cd5b3e63fe47dbc324eabb15e4",
+      "rev_count": 760502,
+      "rev_date": "2025-02-27T22:35:51Z",
+      "scrape_date": "2025-03-02T00:31:11Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "3.1.0",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/mqgcyg4m9wvplzxnic5r0brkh9yaylsd-ruby3.3-dotenv-3.1.0"
       },
       "system": "x86_64-linux",
       "group": "toplevel",
