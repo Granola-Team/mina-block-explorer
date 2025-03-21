@@ -15,6 +15,7 @@ ENV['VERSION'] = `git rev-parse --short=8 HEAD`.chomp
 ENV['INDEXER_VERSION'] = `cd lib/mina-indexer && git rev-parse --short=8 HEAD`.chomp
 ENV['CARGO_HOME'] = "#{Dir.pwd}/.cargo"
 RUST_SRC_FILES = Dir.glob('src/**/*.rs')
+CARGO_DEPS = RUST_SRC_FILES + ['Cargo.toml', 'Cargo.lock', 'build.rs']
 
 # Helper method for shell commands
 def sh(cmd)
@@ -88,10 +89,12 @@ task :'test-unit' do
   sh "cargo-nextest nextest run"
 end
 
-# Audit task
-task :audit do
-  sh "cargo-audit audit"
-  sh "cargo machete"
+# Audit taskd
+task :audit => '.build/audit'
+file '.build/audit' => CARGO_DEPS do |t|
+  audit_output = `cargo-audit audit`
+  machete_output = `cargo machete`
+  File.write(t.name, [audit_output, machete_output].join("\n"))
 end
 
 # Fix linting errors
@@ -151,7 +154,7 @@ end
 # Check task
 task :check => '.build/check'
 
-file '.build/check' => RUST_SRC_FILES + ['.build','Cargo.toml', 'Cargo.lock', 'build.rs'] do |t|
+file '.build/check' => CARGO_DEPS + ['.build'] do |t|
   sh "cargo check 2>&1 | tee #{t.name}"
 end
 
