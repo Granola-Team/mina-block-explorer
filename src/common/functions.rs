@@ -552,7 +552,7 @@ pub fn convert_to_link(data: String, href: String) -> HtmlElement<html::AnyEleme
     view! {
         <span class="w-full text-ellipsis overflow-hidden">
             <a href=href class=LINK_HOVER_STATE>
-                {convert_to_ellipsis(data)}
+                {data}
             </a>
         </span>
     }
