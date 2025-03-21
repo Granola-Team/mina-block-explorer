@@ -107,7 +107,8 @@ task :'build-docs' do
 end
 
 # PNPM install
-task :'pnpm-install' do
+task :'pnpm-install' => 'node_modules'
+file 'node_modules' => ['pnpm-lock.yaml', 'package.json'] do
   puts "--- Installing NPM dependencies"
   sh "pnpm install"
 end
