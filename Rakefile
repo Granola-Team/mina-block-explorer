@@ -70,6 +70,7 @@ task :clean do
     .husky/_
     .wrangler
     src/dist
+    .build
   ]
 end
 
@@ -91,7 +92,7 @@ end
 
 # Audit taskd
 task :audit => '.build/audit'
-file '.build/audit' => CARGO_DEPS do |t|
+file '.build/audit' => CARGO_DEPS + ['.build'] do |t|
   audit_output = `cargo-audit audit`
   machete_output = `cargo machete`
   File.write(t.name, [audit_output, machete_output].join("\n"))
@@ -126,7 +127,7 @@ end
 task :t2 => [:'pnpm-install', :'deploy-mina-indexer'] do
   puts "--- Performing end-to-end @tier2 tests"
   sh "ruby ops/validate-env.rb GRAPHQL_URL REST_URL"
-  sh "CYPRESS_tags='@tier2' GRAPHQL_URL='$GRAPHQL_URL' REST_URL='$REST_URL' time ruby ./ops/manage-processes.rb --port=#{TRUNK_PORT} --first-cmd='trunk serve --no-autoreload --port=#{TRUNK_PORT}' --second-cmd='pnpm exec cypress run -r list -q'"
+  sh "CYPRESS_tags='@tier2' GRAPHQL_URL=#{ENV['GRAPHQL_URL']} REST_URL=#{ENV['REST_URL']} time ruby ./ops/manage-processes.rb --port=#{TRUNK_PORT} --first-cmd='trunk serve --no-autoreload --port=#{TRUNK_PORT}' --second-cmd='pnpm exec cypress run -r list -q'"
 end
 
 # Interactive Tier2 tests
