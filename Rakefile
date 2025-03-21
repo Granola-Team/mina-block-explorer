@@ -14,7 +14,7 @@ ENV['CYPRESS_BASE_URL'] = "http://localhost:#{TRUNK_PORT}"
 ENV['VERSION'] = `git rev-parse --short=8 HEAD`.chomp
 ENV['INDEXER_VERSION'] = `cd lib/mina-indexer && git rev-parse --short=8 HEAD`.chomp
 ENV['CARGO_HOME'] = "#{Dir.pwd}/.cargo"
-RUST_SRC_FILES = Dir.glob('src/**/*.rs')
+RUST_SRC_FILES = Dir.glob('src/**/*.rs') + Dir.glob('graphql/**/*.graphql')
 CARGO_DEPS = RUST_SRC_FILES + ['Cargo.toml', 'Cargo.lock', 'build.rs']
 
 # Helper method for shell commands
