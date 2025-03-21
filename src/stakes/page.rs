@@ -62,9 +62,40 @@ pub fn StakesPage() -> impl IntoView {
     let (summary_sig, _, _) =
         use_local_storage::<BlockchainSummary, JsonSerdeCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
 
+    let get_current_chain_info = move || {
+        summary_sig.get().chain.and_then(|c| {
+            let chain_id = if is_berkeley_sig.get().unwrap_or(true) {
+                BERKELEY_CHAIN_ID
+            } else {
+                MAINNET_CHAIN_ID
+            };
+            c.clone().get(chain_id).cloned()
+        })
+    };
+
+    // on first load, set the lastest epoch from berkeley chain
     if epoch_sig.0.get_untracked().is_none() {
-        epoch_sig.1.set(Some(summary_sig.get().epoch));
+        logging::log!("Setting latest epoch on first load, once");
+        epoch_sig
+            .1
+            .set(get_current_chain_info().map(|chain| chain.latest_epoch));
     }
+
+    create_effect(move |last_berkeley_flag| {
+        let current = is_berkeley_sig.get();
+        let epoch = get_current_chain_info()
+            .map(|chain| chain.latest_epoch)
+            .unwrap_or_default();
+
+        if let (Some(curr), Some(last)) = (current, last_berkeley_flag) {
+            if curr != last {
+                epoch_sig.1.set(Some(epoch));
+            }
+            curr
+        } else {
+            current.unwrap_or(true)
+        }
+    });
 
     let resource = create_resource(
         move || epoch_sig.0.get(),
@@ -88,8 +119,12 @@ pub fn StakesPage() -> impl IntoView {
                 view! {
                     <StakesPageContents
                         selected_epoch=epoch_sig.0.get()
-                        current_epoch=summary_sig.get().epoch
-                        slot_in_epoch=summary_sig.get().slot
+                        current_epoch=get_current_chain_info()
+                            .map(|chain| chain.latest_epoch)
+                            .unwrap_or_default()
+                        slot_in_epoch=get_current_chain_info()
+                            .map(|chain| chain.latest_slot)
+                            .unwrap_or_default()
                         total_num_accounts=Some(summary_sig.get().total_num_accounts)
                         epoch_num_accounts=resource
                             .get()

@@ -1,4 +1,8 @@
-use super::{components::*, functions::*, models::BlockchainSummary};
+use super::{
+    components::*,
+    functions::*,
+    models::{BlockchainSummary, ChainSummary},
+};
 use crate::{
     blocks::components::BlocksSection,
     common::{components::*, constants::*},
@@ -8,6 +12,7 @@ use codee::string::JsonSerdeCodec;
 use leptos::*;
 use leptos_meta::Title;
 use leptos_use::{storage::*, use_document_visibility, use_interval, UseIntervalReturn};
+use std::collections::HashMap;
 use web_sys::VisibilityState;
 
 #[component]
@@ -60,17 +65,42 @@ pub fn SummaryLocalStorage() -> impl IntoView {
         },
     );
 
+    let get_data = move || resource.get().and_then(|res| res.ok());
+    let augment_data = move || {
+        get_data().map(|data: BlockchainSummary| {
+            let mut chain = HashMap::new();
+            chain.insert(
+                BERKELEY_CHAIN_ID.to_string(),
+                ChainSummary {
+                    #[allow(deprecated)]
+                    latest_epoch: data.epoch,
+                    #[allow(deprecated)]
+                    latest_slot: data.slot,
+                },
+            );
+            chain.insert(
+                MAINNET_CHAIN_ID.to_string(),
+                ChainSummary {
+                    latest_epoch: 79,
+                    latest_slot: EPOCH_SLOTS as u64,
+                },
+            );
+            BlockchainSummary {
+                chain: Some(chain),
+                ..data
+            }
+        })
+    };
+
     create_effect(move |_| {
-        if let Some(blockchain_summary) = resource.get().and_then(|res| res.ok()) {
+        if let Some(blockchain_summary) = augment_data() {
             set_summary.set(blockchain_summary);
         }
         if let Some(blockchain_stat) = unique_blocks_producers_resource
             .get()
             .and_then(|res| res.ok())
         {
-            logging::log!("{:#?}", blockchain_stat);
             if let Some(block) = blockchain_stat.data.blocks.first() {
-                logging::log!("{:#?}", block.clone());
                 set_stat.set(block.clone());
             }
         }

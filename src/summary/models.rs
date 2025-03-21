@@ -1,11 +1,20 @@
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
+
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq, Default)]
+pub struct ChainSummary {
+    pub latest_epoch: u64,
+    pub latest_slot: u64,
+}
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct BlockchainSummary {
     pub blockchain_length: u64,
     pub circulating_supply: String,
+    #[deprecated(note = "use chain.latest_epoch instead")]
     pub epoch: u64,
+    #[deprecated(note = "use chain.latest_slot instead")]
     pub slot: u64,
     pub global_slot: i64,
     pub staking_epoch_ledger_hash: String,
@@ -32,6 +41,7 @@ pub struct BlockchainSummary {
     pub total_num_failed_canonical_zkapp_commands: u64,
     pub total_num_accounts: u64,
     pub indexer_version: String,
+    pub chain: Option<HashMap<String, ChainSummary>>, // Keyed by chain ID hash
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq, Default)]

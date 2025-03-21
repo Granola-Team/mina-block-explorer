@@ -34,3 +34,5 @@ pub const QUERY_PARAM_TXN_APPLIED: &str = "txn-applied";
 pub const MINA_TOKEN_ADDRESS: &str = "wSHV2S4qX9jFsLjQo8r1BsMLH2ZRKsZx6EJd1sbozGPieEC4Jf";
 pub const MAINNET_STATE_HASH: &str = "3NKeMoncuHab5ScarV5ViyF16cJPT4taWNSaTLS64Dp67wuXigPZ";
 pub const HARDFORK_STATE_HASH: &str = "3NK4BpDSekaqsG6tx8Nse2zJchRft2JpnbvMiog55WCr5xJZaKeP";
+pub const BERKELEY_CHAIN_ID: &str = "a7351a";
+pub const MAINNET_CHAIN_ID: &str = "5f704c";

@@ -186,7 +186,13 @@ pub fn SnarkerLeaderboard() -> impl IntoView {
     create_effect(move |_| {
         start((
             epoch_sig.get_untracked(),
-            summary_sig.get().epoch,
+            summary_sig
+                .get()
+                .chain
+                .as_ref()
+                .and_then(|c| c.get(BERKELEY_CHAIN_ID))
+                .map(|c| c.latest_epoch)
+                .unwrap_or_default(),
             set_epoch,
         ));
     });
@@ -318,7 +324,13 @@ pub fn StakerLeaderboard() -> impl IntoView {
     create_effect(move |_| {
         start((
             epoch_sig.get_untracked(),
-            summary_sig.get().epoch,
+            summary_sig
+                .get()
+                .chain
+                .as_ref()
+                .and_then(|c| c.get(BERKELEY_CHAIN_ID))
+                .map(|c| c.latest_epoch)
+                .unwrap_or_default(),
             set_epoch,
         ));
     });

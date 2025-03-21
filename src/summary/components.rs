@@ -1,5 +1,5 @@
 use crate::{
-    common::{components::*, functions::*},
+    common::{components::*, constants::BERKELEY_CHAIN_ID, functions::*},
     summary::models::*,
 };
 use leptos::*;
@@ -15,7 +15,14 @@ pub fn SummaryGrid(
             <SummaryItem
                 id="epoch"
                 label="Epoch"
-                value=summary.as_ref().map(|s| format_number(s.epoch.to_string()))
+                value=format_number(
+                    summary
+                        .as_ref()
+                        .and_then(|s| s.chain.as_ref())
+                        .and_then(|c| c.get(BERKELEY_CHAIN_ID))
+                        .map(|c| c.latest_epoch.to_string())
+                        .unwrap_or_default(),
+                )
             />
             <SummaryItem
                 id="uniqueBlockProducers"

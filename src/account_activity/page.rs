@@ -214,7 +214,14 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
     let (summary_sig, _, _) =
         use_local_storage::<BlockchainSummary, JsonSerdeCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
 
-    let current_epoch_staking_ledger = move || Some(summary_sig.get().epoch);
+    let current_epoch_staking_ledger = move || {
+        summary_sig
+            .get()
+            .chain
+            .as_ref()
+            .and_then(|c| c.get(BERKELEY_CHAIN_ID))
+            .map(|c| c.latest_epoch)
+    };
     let activity_resource = create_resource(
         move || {
             (
