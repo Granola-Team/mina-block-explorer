@@ -32,10 +32,12 @@ suite(["@tier2"], "transaction spotlight", () => {
     cy.visit(
       `/commands/${FIRST_TXN_HASH}?q-state-hash=${FIRST_INTERNAL_TXN_HASH}`,
     );
+    cy.wait(100);
     cy.testSpotlightValue("Status", "Failed");
     cy.visit(
       `/commands/${WHISPERIT_TXN_HASH}?q-state-hash=${WHISPERIT_BLOCK_STATE_HASH}`,
     );
+    cy.wait(100);
     cy.testSpotlightValue("Status", "Applied");
   });
 
