@@ -1,6 +1,7 @@
 # Rakefile
 require 'open3'
 require 'dotenv'  # Add this line to require dotenv
+require 'fileutils'
 
 # Load environment variables from .env file
 Dotenv.load       # Add this line to load .env file
@@ -13,6 +14,7 @@ ENV['CYPRESS_BASE_URL'] = "http://localhost:#{TRUNK_PORT}"
 ENV['VERSION'] = `git rev-parse --short=8 HEAD`.chomp
 ENV['INDEXER_VERSION'] = `cd lib/mina-indexer && git rev-parse --short=8 HEAD`.chomp
 ENV['CARGO_HOME'] = "#{Dir.pwd}/.cargo"
+RUST_SRC_FILES = Dir.glob('src/**/*.rs')
 
 # Helper method for shell commands
 def sh(cmd)
@@ -45,6 +47,10 @@ task :'deploy-mina-indexer' => :setup do
   end
 end
 
+file '.build' do |t|
+  mkdir_p t.name # Creates the 'build' directory if it doesn’t exist
+end
+
 # Shutdown mina-indexer
 task :'shutdown-mina-indexer' => :setup do
   puts "--- Shutting down mina-indexer"
@@ -55,15 +61,15 @@ end
 
 # Clean task
 task :clean do
-  sh "trunk clean"
-  sh "rm -fr cypress/screenshots/"
-  sh "find cypress -name '__diff_output__' -prune -execdir rm -rf {} +"
-  sh "rm -fr node_modules/"
-  sh "rm -f pnpm-lock.json"
-  sh "rm -fr cypress/snapshots/"
-  sh "rm -fr .husky/_"
-  sh "rm -fr .wrangler"
-  sh "rm -fr src/dist"
+  sh 'trunk clean'
+
+  FileUtils.rm_rf %w[
+    cypress/screenshots
+    node_modules
+    .husky/_
+    .wrangler
+    src/dist
+  ]
 end
 
 # Format task
@@ -108,7 +114,7 @@ end
 
 # Dev task
 task :dev => [:'pnpm-install', :'deploy-mina-indexer'] do
-  trap("INT") { sh "just shutdown-mina-indexer" }
+  trap("INT") { sh "rake shutdown-mina-indexer" }
   sh "trunk serve --port=#{TRUNK_PORT} --open"
 end
 
@@ -142,8 +148,10 @@ task :publish => [:'pre-publish', :clean, :'pnpm-install'] do
 end
 
 # Check task
-task :check do
-  sh "cargo check"
+task :check => '.build/check'
+
+file '.build/check' => RUST_SRC_FILES + ['.build','Cargo.toml', 'Cargo.lock', 'build.rs'] do |t|
+  sh "cargo check 2>&1 | tee #{t.name}"
 end
 
 # Lint task
@@ -163,4 +171,4 @@ end
 task :tier1 => [:lint, :'test-unit']
 
 # Tier2 regression suite
-task :tier2 => [:lint, :'test-unit', :t2]
+task :tier2 => [:tier1, :t2]

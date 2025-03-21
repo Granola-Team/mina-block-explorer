@@ -222,3 +222,4 @@ test-results/
 .cargo/
 !./cargo/config.toml
 !./cargo/audit.toml
+/.build
