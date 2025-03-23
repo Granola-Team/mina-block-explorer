@@ -8,7 +8,7 @@ transactions, addresses, and validators.
 
 ## Development Environment
 
-This project uses [Nix](https://nix.dev) (via [Flox](https://flox.dev) to ensure a consistent and reproducible development
+This project uses [Nix](https://nix.dev) (via [Flox](https://flox.dev)) to ensure a consistent and reproducible development
 environment. This choice streamlines the development process, allowing focus on value delivery with minimal concern for varying system configurations or
 dependency conflicts.
 
@@ -26,9 +26,9 @@ __If you have previously installed Nix, you may need to uninstall it first:__
 
 1. You must first enter the Flox environment by using `flox activate`.
 
-Running any [`just`](Justfile) task will automatically enter the Flox environment.
+Running any [`rake`](Rakefile) task will automatically enter the Flox environment.
 
-2. Execute `just dev` to start the server
+2. Execute `rake dev` to start the server
 
 ## Back-End Integration
 
@@ -49,7 +49,7 @@ required.
 
 Note that the `mina-indexer` is a git submodule and is integrated at a specific version
 for tier2 tests. Tier2 tests are coded to work against the first 10000 blocks in the
-Mina Blockchain. Running `just tier2` the first time will incur a one-time penalty as the
+Mina Blockchain. Running `rake tier2` the first time will incur a one-time penalty as the
 indexer will be setup on localhost against which tier2 tests are run.
 
 ## License
