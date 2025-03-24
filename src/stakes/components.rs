@@ -236,28 +236,27 @@ pub fn StakesPageContents(
                             </div>
 
                             {move || {
-                                if next_epoch_sig
+                                let resolved_slot_in_epoch = if next_epoch_sig
                                     .get()
                                     .is_some_and(|next_epoch| current_epoch == next_epoch - 1)
                                 {
-                                    view! {
-                                        <div class="text-sm text-slate-500 staking-ledger-percent-complete">
-                                            {format!(
-                                                "{:.2}% complete ({}/{} slots filled)",
-                                                format_number(
-                                                    ((slot_in_epoch as f64 / EPOCH_SLOTS as f64) * 100.0)
-                                                        .to_string(),
-                                                ),
-                                                format_number(slot_in_epoch.to_string()),
-                                                format_number(EPOCH_SLOTS.to_string()),
-                                            )}
-
-                                        </div>
-                                    }
-                                        .into_view()
+                                    slot_in_epoch
                                 } else {
-                                    ().into_view()
+                                    EPOCH_SLOTS as u64
+                                };
+                                view! {
+                                    <div class="text-sm text-slate-500 staking-ledger-percent-complete">
+                                        {format!(
+                                            "{:.0}% complete ({}/{} slots filled)",
+                                            (resolved_slot_in_epoch as f64 / EPOCH_SLOTS as f64)
+                                                * 100.0,
+                                            format_number(resolved_slot_in_epoch.to_string()),
+                                            format_number(EPOCH_SLOTS.to_string()),
+                                        )}
+
+                                    </div>
                                 }
+                                    .into_view()
                             }}
                         }
                     }
