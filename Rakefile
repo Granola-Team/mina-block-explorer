@@ -119,7 +119,7 @@ end
 
 # Dev task
 task dev: [:pnpm_install, :deploy_mina_indexer] do
-  trap("INT") { shutdown_mina_indexer }
+  trap("INT") { Rake::Task["shutdown_mina_indexer"].invoke }
   sh "trunk serve --port=#{TRUNK_PORT} --open"
 end
 
