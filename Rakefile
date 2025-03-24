@@ -32,18 +32,8 @@ task :default do
   Rake.application.tasks.each { |t| puts "  #{t.name}" }
 end
 
-# Setup task
-task :setup do
-  unless ENV["FLOX_ENV"]
-    sh "flox activate"
-  end
-rescue
-  puts "Failed to activate Flox environment. Is Flox installed? https://flox.dev/docs/install-flox/"
-  exit 1
-end
-
 # Deploy mina-indexer
-task "deploy-mina-indexer": :setup do
+task :deploy_mina_indexer do
   puts "--- Deploying mina-indexer at #{ENV["INDEXER_VERSION"]}"
   sh "mkdir -p $VOLUMES_DIR/mina-indexer-prod"
   Dir.chdir("lib/mina-indexer") do
@@ -56,7 +46,7 @@ file ".build" do |t|
 end
 
 # Shutdown mina-indexer
-task "shutdown-mina-indexer": :setup do
+task :shutdown_mina_indexer do
   puts "--- Shutting down mina-indexer"
   Dir.chdir("lib/mina-indexer") do
     sh "nix develop --command just shutdown prod"
@@ -109,13 +99,13 @@ file ".build/audit" => CARGO_DEPS + [".build"] do |t|
 end
 
 # Fix linting errors
-task :"lint-fix" do
+task :lint_fix do
   sh "standardrb --fix ops/*.rb Rakefile"
   sh "cargo clippy --fix --allow-dirty --allow-staged"
 end
 
 # Builds documentation in the home directory
-task :"build-docs" do
+task :build_docs do
   sh "rm -rf $HOME/mina_block_explorer_docs/"
   sh "cargo doc --document-private-items --target-dir $HOME/mina_block_explorer_docs/"
 end
@@ -128,13 +118,13 @@ file "node_modules" => ["pnpm-lock.yaml", "package.json"] do
 end
 
 # Dev task
-task dev: [:pnpm_install, :"deploy-mina-indexer"] do
-  trap("INT") { sh "rake shutdown-mina-indexer" }
+task dev: [:pnpm_install, :deploy_mina_indexer] do
+  trap("INT") { shutdown_mina_indexer }
   sh "trunk serve --port=#{TRUNK_PORT} --open"
 end
 
 # Tier2 tests
-task t2: [:pnpm_install, :"deploy-mina-indexer"] do
+task t2: [:pnpm_install, :build, :deploy_mina_indexer] do
   puts "--- Performing end-to-end @tier2 tests"
   raise "Error: Neither GRAPHQL_URL nor REST_URL contains 'localhost' or '127.0.0.1'" unless
     ["GRAPHQL_URL", "REST_URL"].any? { |var| ["localhost", "127.0.0.1"].any? { |str| ENV[var]&.include?(str) } }
@@ -142,10 +132,10 @@ task t2: [:pnpm_install, :"deploy-mina-indexer"] do
 end
 
 # Interactive Tier2 tests
-task t2_i: [:pnpm_install, :"deploy-mina-indexer"] do
+task t2_i: [:pnpm_install, :build, :deploy_mina_indexer] do
   raise "Error: Neither GRAPHQL_URL nor REST_URL contains 'localhost' or '127.0.0.1'" unless
     ["GRAPHQL_URL", "REST_URL"].any? { |var| ["localhost", "127.0.0.1"].any? { |str| ENV[var]&.include?(str) } }
-  trap("INT") { sh "just shutdown-mina-indexer" }
+  trap("INT") { shutdown_mina_indexer }
   sh "ruby ./ops/manage-processes.rb --port=#{TRUNK_PORT} --first-cmd='trunk serve --no-autoreload --port=#{TRUNK_PORT}' --second-cmd='pnpm exec cypress open'"
 end
 
@@ -158,9 +148,8 @@ task :pre_publish do
 end
 
 # Publish task
-task publish: [:tier1, :pre_publish, :clean, :pnpm_install] do
+task publish: [:tier1, :pre_publish, :clean, :pnpm_install, :build] do
   puts "--- Publishing"
-  sh "trunk build --release --filehash true"
   puts "Publishing version #{ENV["VERSION"]}"
   sh "pnpx wrangler pages deploy --branch main"
 end
@@ -195,11 +184,16 @@ file ".build/lint-rust" => RUST_SRC_FILES + [".build", "rustfmt.toml"] do |t|
   File.write(t.name, [cargo_fmt_out, leptos_fmt_out, clippy_out].join("\n"))
 end
 
+task build: 'dist'
+file 'dist' => CARGO_DEPS + ['Trunk.toml', 'tailwind.config.js'] do
+  sh "trunk build --release --filehash true"
+end
+
 # Lint task
 task lint: [:pnpm_install, :audit, :lint_javascript, :lint_ruby, :lint_rust]
 
 # Tier1 tests
-task tier1: [:lint, :test_unit]
+task tier1: [:lint, :test_unit, :build]
 
 # Tier2 regression suite
 task tier2: [:tier1, :t2]
