@@ -16,6 +16,8 @@ ENV["INDEXER_VERSION"] = `cd lib/mina-indexer && git rev-parse --short=8 HEAD`.c
 ENV["CARGO_HOME"] = "#{Dir.pwd}/.cargo"
 RUST_SRC_FILES = Dir.glob("src/**/*.rs") + Dir.glob("graphql/**/*.graphql")
 CARGO_DEPS = RUST_SRC_FILES + ["Cargo.toml", "Cargo.lock", "build.rs"]
+CYPRESS_FILES = Dir.glob("cypress/**/*.js")
+RUBY_SRC_FILES = Dir.glob("**/*.rb").reject { |file| file.start_with?("lib/") } + [ 'Rakefile']
 
 # Helper method for shell commands
 def sh(cmd)
@@ -159,17 +161,30 @@ file ".build/check" => CARGO_DEPS + [".build"] do |t|
   sh "cargo check 2>&1 | tee #{t.name}"
 end
 
-# Lint task
-task lint: [:"pnpm-install", :audit] do
+task lint_javascript: '.build/lint-javascript'
+file '.build/lint-javascript' => CYPRESS_FILES + ['.build'] do |t|
   puts "--- Linting JS/TS"
-  sh "pnpm exec prettier --check cypress/"
-  puts "--- Linting ops scripts"
-  sh "ruby -cw ops/*.rb"
-  sh "standardrb --no-fix ops/*.rb Rakefile"
+  sh "pnpm exec prettier --check cypress/ 2>&1 | tee #{t.name}"
+end
+
+task lint_ruby: '.build/lint-ruby'
+file '.build/lint-ruby' => RUBY_SRC_FILES + ['.build'] do |t|
+  puts "--- Linting ruby scripts"
+  ruby_cw_output = `ruby -cw #{RUBY_SRC_FILES.join(' ')}`
+  ruby_std_output = `standardrb --no-fix #{RUBY_SRC_FILES.join(' ')} Rakefile`
+  File.write(t.name, [ruby_cw_output, ruby_std_output].join("\n"))
+end
+
+task :lint_rust do
   puts "--- Linting Rust code"
   sh "time cargo-fmt --all --check"
   sh "leptosfmt --check ./src"
   sh "time cargo clippy --all-targets --all-features -- -D warnings"
+end
+
+# Lint task
+task lint: [:"pnpm-install", :audit, :lint_javascript, :lint_ruby, :lint_rust ] do
+
 end
 
 # Tier1 tests
