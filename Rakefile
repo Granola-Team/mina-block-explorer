@@ -175,11 +175,13 @@ file '.build/lint-ruby' => RUBY_SRC_FILES + ['.build'] do |t|
   File.write(t.name, [ruby_cw_output, ruby_std_output].join("\n"))
 end
 
-task :lint_rust do
+task lint_rust: '.build/lint-rust'
+file '.build/lint-rust'  => RUST_SRC_FILES + ['.build', 'rustfmt.toml'] do |t|
   puts "--- Linting Rust code"
-  sh "time cargo-fmt --all --check"
-  sh "leptosfmt --check ./src"
-  sh "time cargo clippy --all-targets --all-features -- -D warnings"
+  cargo_fmt_out = `cargo-fmt --all --check`
+  leptos_fmt_out = `leptosfmt --check ./src`
+  clippy_out = `cargo clippy --all-targets --all-features -- -D warnings`
+  File.write(t.name, [cargo_fmt_out, leptos_fmt_out, clippy_out].join("\n"))
 end
 
 # Lint task
