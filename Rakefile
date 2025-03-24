@@ -17,7 +17,7 @@ ENV["CARGO_HOME"] = "#{Dir.pwd}/.cargo"
 RUST_SRC_FILES = Dir.glob("src/**/*.rs") + Dir.glob("graphql/**/*.graphql")
 CARGO_DEPS = RUST_SRC_FILES + ["Cargo.toml", "Cargo.lock", "build.rs"]
 CYPRESS_FILES = Dir.glob("cypress/**/*.js")
-RUBY_SRC_FILES = Dir.glob("**/*.rb").reject { |file| file.start_with?("lib/") } + [ 'Rakefile']
+RUBY_SRC_FILES = Dir.glob("**/*.rb").reject { |file| file.start_with?("lib/") } + ["Rakefile"]
 JAVASCRIPT_SRC_FILES = Dir.glob("src/scripts_tests/**")
 
 # Helper method for shell commands
@@ -78,28 +78,27 @@ task :clean do
 end
 
 # Format task
-task format: :"pnpm-install" do
+task format: :pnpm_install do
   sh "pnpm exec prettier --write cypress/ src/scripts/"
   sh "standardrb --fix ops/*.rb Rakefile"
   sh "cargo-fmt --all"
   sh "leptosfmt ./src"
 end
 
-
-task jest_test: '.build/jest-test'
-file '.build/jest-test' => JAVASCRIPT_SRC_FILES + ['.build', 'jest.config.js'] do |t|
+task jest_test: ".build/jest-test"
+file ".build/jest-test" => JAVASCRIPT_SRC_FILES + [".build", "jest.config.js"] do |t|
   puts "--- Performing jest unit tests"
   sh "pnpm exec jest test 2>&1 | tee #{t.name}"
 end
 
-task rust_test: '.build/rust-test'
-file '.build/rust-test' => CARGO_DEPS + ['.build'] do |t|
+task rust_test: ".build/rust-test"
+file ".build/rust-test" => CARGO_DEPS + [".build"] do |t|
   puts "--- Performing rust unit tests"
   sh "cargo-nextest nextest run 2>&1 | tee #{t.name}"
 end
 
 # Test unit
-task :test_unit => [:jest_test, :rust_test]
+task test_unit: [:jest_test, :rust_test]
 
 # Audit taskd
 task audit: ".build/audit"
@@ -122,41 +121,44 @@ task :"build-docs" do
 end
 
 # PNPM install
-task "pnpm-install": "node_modules"
+task pnpm_install: "node_modules"
 file "node_modules" => ["pnpm-lock.yaml", "package.json"] do
   puts "--- Installing NPM dependencies"
   sh "pnpm install"
 end
 
 # Dev task
-task dev: [:"pnpm-install", :"deploy-mina-indexer"] do
+task dev: [:pnpm_install, :"deploy-mina-indexer"] do
   trap("INT") { sh "rake shutdown-mina-indexer" }
   sh "trunk serve --port=#{TRUNK_PORT} --open"
 end
 
 # Tier2 tests
-task t2: [:"pnpm-install", :"deploy-mina-indexer"] do
+task t2: [:pnpm_install, :"deploy-mina-indexer"] do
   puts "--- Performing end-to-end @tier2 tests"
-  sh "ruby ops/validate-env.rb GRAPHQL_URL REST_URL"
+  raise "Error: Neither GRAPHQL_URL nor REST_URL contains 'localhost' or '127.0.0.1'" unless
+    ["GRAPHQL_URL", "REST_URL"].any? { |var| ["localhost", "127.0.0.1"].any? { |str| ENV[var]&.include?(str) } }
   sh "CYPRESS_tags='@tier2' GRAPHQL_URL=#{ENV["GRAPHQL_URL"]} REST_URL=#{ENV["REST_URL"]} time ruby ./ops/manage-processes.rb --port=#{TRUNK_PORT} --first-cmd='trunk serve --no-autoreload --port=#{TRUNK_PORT}' --second-cmd='pnpm exec cypress run -r list -q'"
 end
 
 # Interactive Tier2 tests
-task "t2-i": [:"pnpm-install", :"deploy-mina-indexer"] do
-  sh "ruby ops/validate-env.rb GRAPHQL_URL REST_URL"
+task t2_i: [:pnpm_install, :"deploy-mina-indexer"] do
+  raise "Error: Neither GRAPHQL_URL nor REST_URL contains 'localhost' or '127.0.0.1'" unless
+    ["GRAPHQL_URL", "REST_URL"].any? { |var| ["localhost", "127.0.0.1"].any? { |str| ENV[var]&.include?(str) } }
   trap("INT") { sh "just shutdown-mina-indexer" }
   sh "ruby ./ops/manage-processes.rb --port=#{TRUNK_PORT} --first-cmd='trunk serve --no-autoreload --port=#{TRUNK_PORT}' --second-cmd='pnpm exec cypress open'"
 end
 
 # Pre-publish validation
-task :"pre-publish" do
+task :pre_publish do
   puts "--- Validating environment variables for publishing"
   sh "ruby ops/validate-env.rb GRAPHQL_URL REST_URL"
-  sh "ruby -e 'exit ![\"GRAPHQL_URL\", \"REST_URL\"].any? { |var| [\"localhost\", \"127.0.0.1\"].any? { |str| ENV[var]&.include?(str) } }'"
+  raise "GRAPHQL_URL or REST_URL contains 'localhost' or '127.0.0.1'" if
+    ["GRAPHQL_URL", "REST_URL"].any? { |var| ["localhost", "127.0.0.1"].any? { |str| ENV[var]&.include?(str) } }
 end
 
 # Publish task
-task publish: [:"pre-publish", :clean, :"pnpm-install"] do
+task publish: [:tier1, :pre_publish, :clean, :pnpm_install] do
   puts "--- Publishing"
   sh "trunk build --release --filehash true"
   puts "Publishing version #{ENV["VERSION"]}"
@@ -170,22 +172,22 @@ file ".build/check" => CARGO_DEPS + [".build"] do |t|
   sh "cargo check 2>&1 | tee #{t.name}"
 end
 
-task lint_javascript: '.build/lint-javascript'
-file '.build/lint-javascript' => CYPRESS_FILES + ['.build'] do |t|
+task lint_javascript: ".build/lint-javascript"
+file ".build/lint-javascript" => CYPRESS_FILES + [".build"] do |t|
   puts "--- Linting JS/TS"
   sh "pnpm exec prettier --check cypress/ 2>&1 | tee #{t.name}"
 end
 
-task lint_ruby: '.build/lint-ruby'
-file '.build/lint-ruby' => RUBY_SRC_FILES + ['.build'] do |t|
+task lint_ruby: ".build/lint-ruby"
+file ".build/lint-ruby" => RUBY_SRC_FILES + [".build"] do |t|
   puts "--- Linting ruby scripts"
-  ruby_cw_output = `ruby -cw #{RUBY_SRC_FILES.join(' ')}`
-  ruby_std_output = `standardrb --no-fix #{RUBY_SRC_FILES.join(' ')} Rakefile`
+  ruby_cw_output = `ruby -cw #{RUBY_SRC_FILES.join(" ")}`
+  ruby_std_output = `standardrb --no-fix #{RUBY_SRC_FILES.join(" ")} Rakefile`
   File.write(t.name, [ruby_cw_output, ruby_std_output].join("\n"))
 end
 
-task lint_rust: '.build/lint-rust'
-file '.build/lint-rust'  => RUST_SRC_FILES + ['.build', 'rustfmt.toml'] do |t|
+task lint_rust: ".build/lint-rust"
+file ".build/lint-rust" => RUST_SRC_FILES + [".build", "rustfmt.toml"] do |t|
   puts "--- Linting Rust code"
   cargo_fmt_out = `cargo-fmt --all --check`
   leptos_fmt_out = `leptosfmt --check ./src`
@@ -194,7 +196,7 @@ file '.build/lint-rust'  => RUST_SRC_FILES + ['.build', 'rustfmt.toml'] do |t|
 end
 
 # Lint task
-task lint: [:"pnpm-install", :audit, :lint_javascript, :lint_ruby, :lint_rust ]
+task lint: [:pnpm_install, :audit, :lint_javascript, :lint_ruby, :lint_rust]
 
 # Tier1 tests
 task tier1: [:lint, :test_unit]
