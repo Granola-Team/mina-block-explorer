@@ -74,7 +74,7 @@
         "pkg-path": "ruby"
       },
       "rust": {
-        "flake": "github:nix-community/fenix/monthly#complete.toolchain"
+        "flake": "path:flakes/rust"
       },
       "socat": {
         "pkg-path": "socat"
@@ -2324,12 +2324,11 @@
     },
     {
       "install_id": "rust",
-      "locked-url": "github:nix-community/fenix/f44d7c3596ff028ad9f7fcc31d1941ed585f11b3?narHash=sha256-6RzWfxENGlO73jQb3uQNgOvubUFwvveeIg%2BPZxhAu6s%3D",
-      "flake-description": "Rust toolchains and rust analyzer nightly for nix",
-      "locked-flake-attr-path": "packages.aarch64-darwin.complete.toolchain",
-      "derivation": "/nix/store/j4h88g3h16k05n26f6ra514f7igvxnwi-rust-nightly-complete-2025-03-01.drv",
+      "locked-url": "path:flakes/rust?lastModified=1739136343&narHash=sha256-pwOOmfAMOaG3et7teJeGZIH/YaleLX2RyX/sCG1tP8U%3D",
+      "locked-flake-attr-path": "packages.aarch64-darwin.default",
+      "derivation": "/nix/store/7srcmb5n0vbhj10j8wvalgp1psc4p5l1-rust-mixed.drv",
       "outputs": {
-        "out": "/nix/store/ciksz4pgcdw1s3bj2hdkqj9xlnimi652-rust-nightly-complete-2025-03-01"
+        "out": "/nix/store/q66xk6nvkr5v1km1i1nr8amn75204vs3-rust-mixed"
       },
       "output-names": [
         "out"
@@ -2340,19 +2339,18 @@
       "requested-outputs-to-install": [],
       "package-system": "aarch64-darwin",
       "system": "aarch64-darwin",
-      "name": "rust-nightly-complete-2025-03-01",
+      "name": "rust-mixed",
       "broken": false,
       "unfree": false,
       "priority": 5
     },
     {
       "install_id": "rust",
-      "locked-url": "github:nix-community/fenix/f44d7c3596ff028ad9f7fcc31d1941ed585f11b3?narHash=sha256-6RzWfxENGlO73jQb3uQNgOvubUFwvveeIg%2BPZxhAu6s%3D",
-      "flake-description": "Rust toolchains and rust analyzer nightly for nix",
-      "locked-flake-attr-path": "packages.aarch64-linux.complete.toolchain",
-      "derivation": "/nix/store/cfagm1zgmidg1nyyri7khsr04m1liz57-rust-nightly-complete-2025-03-01.drv",
+      "locked-url": "path:flakes/rust?lastModified=1739136343&narHash=sha256-pwOOmfAMOaG3et7teJeGZIH/YaleLX2RyX/sCG1tP8U%3D",
+      "locked-flake-attr-path": "packages.aarch64-linux.default",
+      "derivation": "/nix/store/rvifg87k8rjvs2c94mgmzhwfxjh1l9bc-rust-mixed.drv",
       "outputs": {
-        "out": "/nix/store/9pnd89kjdq05s4gbgkazlx09cf420i71-rust-nightly-complete-2025-03-01"
+        "out": "/nix/store/mfcs6ki4ihkb5aca6rd22jszil0c2c3p-rust-mixed"
       },
       "output-names": [
         "out"
@@ -2363,19 +2361,18 @@
       "requested-outputs-to-install": [],
       "package-system": "aarch64-linux",
       "system": "aarch64-linux",
-      "name": "rust-nightly-complete-2025-03-01",
+      "name": "rust-mixed",
       "broken": false,
       "unfree": false,
       "priority": 5
     },
     {
       "install_id": "rust",
-      "locked-url": "github:nix-community/fenix/f44d7c3596ff028ad9f7fcc31d1941ed585f11b3?narHash=sha256-6RzWfxENGlO73jQb3uQNgOvubUFwvveeIg%2BPZxhAu6s%3D",
-      "flake-description": "Rust toolchains and rust analyzer nightly for nix",
-      "locked-flake-attr-path": "packages.x86_64-darwin.complete.toolchain",
-      "derivation": "/nix/store/nr0lhmyki13smg4vjyjv7vlh7l2lzdiz-rust-nightly-complete-2025-03-01.drv",
+      "locked-url": "path:flakes/rust?lastModified=1739136343&narHash=sha256-pwOOmfAMOaG3et7teJeGZIH/YaleLX2RyX/sCG1tP8U%3D",
+      "locked-flake-attr-path": "packages.x86_64-darwin.default",
+      "derivation": "/nix/store/4kh9glbb0hfmgd4vyqar029x6hy95sfl-rust-mixed.drv",
       "outputs": {
-        "out": "/nix/store/47dcqyhasx18vy4bpdsyrkckbx55i30f-rust-nightly-complete-2025-03-01"
+        "out": "/nix/store/lw3phqvd09nhiswb1l2p6y1hda803bng-rust-mixed"
       },
       "output-names": [
         "out"
@@ -2386,19 +2383,18 @@
       "requested-outputs-to-install": [],
       "package-system": "x86_64-darwin",
       "system": "x86_64-darwin",
-      "name": "rust-nightly-complete-2025-03-01",
+      "name": "rust-mixed",
       "broken": false,
       "unfree": false,
       "priority": 5
     },
     {
       "install_id": "rust",
-      "locked-url": "github:nix-community/fenix/f44d7c3596ff028ad9f7fcc31d1941ed585f11b3?narHash=sha256-6RzWfxENGlO73jQb3uQNgOvubUFwvveeIg%2BPZxhAu6s%3D",
-      "flake-description": "Rust toolchains and rust analyzer nightly for nix",
-      "locked-flake-attr-path": "packages.x86_64-linux.complete.toolchain",
-      "derivation": "/nix/store/x3l6710i0igvdnjbcsx83hfmp0ggnsmm-rust-nightly-complete-2025-03-01.drv",
+      "locked-url": "path:flakes/rust?lastModified=1739136343&narHash=sha256-pwOOmfAMOaG3et7teJeGZIH/YaleLX2RyX/sCG1tP8U%3D",
+      "locked-flake-attr-path": "packages.x86_64-linux.default",
+      "derivation": "/nix/store/425zmfydqf9ilsl7m45zi507q66ygzzw-rust-mixed.drv",
       "outputs": {
-        "out": "/nix/store/rc6sq5drpsr4rsm2vz6g3ncgl75ycvla-rust-nightly-complete-2025-03-01"
+        "out": "/nix/store/33vcfs9anrij871jq3p11751b7zlpnv0-rust-mixed"
       },
       "output-names": [
         "out"
@@ -2409,7 +2405,7 @@
       "requested-outputs-to-install": [],
       "package-system": "x86_64-linux",
       "system": "x86_64-linux",
-      "name": "rust-nightly-complete-2025-03-01",
+      "name": "rust-mixed",
       "broken": false,
       "unfree": false,
       "priority": 5

@@ -24,7 +24,7 @@ rspec-expectations.pkg-path = "rubyPackages.rspec-expectations"
 standard.pkg-path = "rubyPackages.standard"
 
 # Rust
-rust.flake = "github:nix-community/fenix/monthly#complete.toolchain"
+rust.flake = "path:flakes/rust"
 libiconv.pkg-path = "libiconv"
 libiconv.systems = ["aarch64-darwin", "x86_64-darwin"]
 cargo-audit.pkg-path = "cargo-audit"
