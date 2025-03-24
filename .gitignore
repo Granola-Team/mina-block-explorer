@@ -223,3 +223,4 @@ test-results/
 !./cargo/config.toml
 !./cargo/audit.toml
 /.build
+/cypress/screenshots
