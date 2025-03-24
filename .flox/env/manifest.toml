@@ -37,6 +37,7 @@ clang.pkg-path = "clang"
 clang.systems = ["aarch64-linux", "x86_64-linux"]
 openssl.pkg-path = "openssl"
 openssl.systems = ["aarch64-linux", "x86_64-linux"]
+git-lfs.pkg-path = "git-lfs"
 dotenv.pkg-path = "rubyPackages.dotenv"
 
 # Set environment variables in the `[vars]` section. These variables may not
