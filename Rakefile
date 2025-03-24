@@ -18,6 +18,7 @@ RUST_SRC_FILES = Dir.glob("src/**/*.rs") + Dir.glob("graphql/**/*.graphql")
 CARGO_DEPS = RUST_SRC_FILES + ["Cargo.toml", "Cargo.lock", "build.rs"]
 CYPRESS_FILES = Dir.glob("cypress/**/*.js")
 RUBY_SRC_FILES = Dir.glob("**/*.rb").reject { |file| file.start_with?("lib/") } + [ 'Rakefile']
+JAVASCRIPT_SRC_FILES = Dir.glob("src/scripts_tests/**")
 
 # Helper method for shell commands
 def sh(cmd)
@@ -84,13 +85,21 @@ task format: :"pnpm-install" do
   sh "leptosfmt ./src"
 end
 
-# Test unit
-task :"test-unit" do
+
+task jest_test: '.build/jest-test'
+file '.build/jest-test' => JAVASCRIPT_SRC_FILES + ['.build', 'jest.config.js'] do |t|
   puts "--- Performing jest unit tests"
-  sh "pnpm exec jest test"
-  puts "--- Performing rust unit tests"
-  sh "cargo-nextest nextest run"
+  sh "pnpm exec jest test 2>&1 | tee #{t.name}"
 end
+
+task rust_test: '.build/rust-test'
+file '.build/rust-test' => CARGO_DEPS + ['.build'] do |t|
+  puts "--- Performing rust unit tests"
+  sh "cargo-nextest nextest run 2>&1 | tee #{t.name}"
+end
+
+# Test unit
+task :test_unit => [:jest_test, :rust_test]
 
 # Audit taskd
 task audit: ".build/audit"
@@ -185,12 +194,10 @@ file '.build/lint-rust'  => RUST_SRC_FILES + ['.build', 'rustfmt.toml'] do |t|
 end
 
 # Lint task
-task lint: [:"pnpm-install", :audit, :lint_javascript, :lint_ruby, :lint_rust ] do
-
-end
+task lint: [:"pnpm-install", :audit, :lint_javascript, :lint_ruby, :lint_rust ]
 
 # Tier1 tests
-task tier1: [:lint, :"test-unit"]
+task tier1: [:lint, :test_unit]
 
 # Tier2 regression suite
 task tier2: [:tier1, :t2]
