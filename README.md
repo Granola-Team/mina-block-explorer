@@ -14,7 +14,7 @@ dependency conflicts.
 
 ### Prerequisites
 
-[Install Flox](https://flox.dev/docs/install-flox/)
+[Install Flox](https://flox.dev/docs/install-flox/) (use `Nix-Generic` method)
 
 Flox will install Nix for you (including `nix develop` and friends).
 __If you have previously installed Nix, you may need to uninstall it first:__
