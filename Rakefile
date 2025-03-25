@@ -8,7 +8,7 @@ Dotenv.load       # Add this line to load .env file
 
 # Constants and environment variables
 SPEC = "cypress/e2e/"
-TRUNK_PORT = `echo $((5170 + $RANDOM % 10))`.chomp
+TRUNK_PORT = "#{5170 + rand(10)}"
 ENV["RUSTFLAGS"] = "--cfg=web_sys_unstable_apis"
 ENV["CYPRESS_BASE_URL"] = "http://localhost:#{TRUNK_PORT}"
 ENV["VERSION"] = `git rev-parse --short=8 HEAD`.chomp
@@ -35,9 +35,8 @@ end
 # Deploy mina-indexer
 task :deploy_mina_indexer do
   puts "--- Deploying mina-indexer at #{ENV["INDEXER_VERSION"]}"
-  sh "mkdir -p $VOLUMES_DIR/mina-indexer-prod"
   Dir.chdir("lib/mina-indexer") do
-    sh "VOLUMES_DIR=$VOLUMES_DIR nix develop --command just deploy-local-prod-dev 10000 $INDEXER_PORT"
+    sh "nix develop --command just deploy-local-prod-dev 10000 $INDEXER_PORT"
   end
 end
 
