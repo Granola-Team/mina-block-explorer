@@ -98,24 +98,20 @@ pub fn CommandSpotlightPage() -> impl IntoView {
     let get_data = move || resource.get().and_then(|res| res.ok());
 
     create_effect(move |_| {
-        let txns_in_other_blocks = get_data().map(|data| {
-            data.other_transactions
-                .into_iter()
-                .filter(|txn_opt| {
-                    txn_opt
-                        .clone()
-                        .map(|txn| {
-                            txn.get_block_state_hash() != state_hash_sig.get().unwrap_or_default()
-                        })
-                        .unwrap_or_default()
-                })
-                .collect::<Vec<_>>()
-        });
-        if txns_in_other_blocks
-            .as_ref()
-            .is_some_and(|resp| !resp.is_empty())
-        {
-            set_other_txns.set(txns_in_other_blocks);
+        let Some(data) = get_data() else { return; };
+        let Some(spotlight_txn) = data.transactions.first().cloned().flatten() else { return; };
+
+        let txns_in_other_blocks = data.other_transactions
+            .into_iter()
+            .filter(|txn_opt| {
+                txn_opt
+                    .as_ref()
+                    .is_some_and(|txn| txn.get_block_state_hash() != spotlight_txn.get_block_state_hash())
+            })
+            .collect::<Vec<_>>();
+
+        if !txns_in_other_blocks.is_empty() {
+            set_other_txns.set(Some(txns_in_other_blocks));
         }
     });
 
