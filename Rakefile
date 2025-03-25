@@ -132,19 +132,16 @@ task t2_i: [:pnpm_install, :build, :deploy_mina_indexer] do
   sh "ruby ./ops/manage-processes.rb --port=#{TRUNK_PORT} --first-cmd='trunk serve --no-autoreload --port=#{TRUNK_PORT}' --second-cmd='pnpm exec cypress open'"
 end
 
-# Pre-publish validation
-task :pre_publish do
-  puts "--- Validating environment variables for publishing"
-  sh "ruby ops/validate-env.rb GRAPHQL_URL REST_URL"
-  raise "GRAPHQL_URL or REST_URL contains 'localhost' or '127.0.0.1'" if
-    ["GRAPHQL_URL", "REST_URL"].any? { |var| ["localhost", "127.0.0.1"].any? { |str| ENV[var]&.include?(str) } }
-end
 
 desc "Publish the website to production"
-task publish: [:tier1, :pre_publish, :clean, :pnpm_install, :build] do
+task publish: [:tier1, :clean, :pnpm_install, :build] do
   puts "--- Publishing"
   puts "Publishing version #{ENV["VERSION"]}"
-  sh "pnpx wrangler pages deploy --branch main"
+  sh %W[
+    GRAPHQL_URL=https://api.minasearch.com/graphql
+    REST_URL=https://api.minasearch.com
+    pnpx wrangler pages deploy --branch main
+  ].join(" ")
 end
 
 desc "Use 'cargo check' to verify buildability"
@@ -199,7 +196,7 @@ task tier1: [:lint, :test_unit, :build]
 desc "Invoke the Tier2 regression suite"
 task tier2: [:tier1, :pnpm_install, :deploy_mina_indexer] do
   puts "--- Performing end-to-end @tier2 tests"
-  unless ["GRAPHQL_URL", "REST_URL"].any? do |v| 
+  unless ["GRAPHQL_URL", "REST_URL"].any? do |v|
            ENV[v]&.match?(/localhost|127\.0\.0\.1/)
          end
     raise "Neither GRAPHQL_URL nor REST_URL contains 'localhost' or '127.0.0.1'"
