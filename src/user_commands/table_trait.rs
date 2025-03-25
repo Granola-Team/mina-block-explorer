@@ -35,7 +35,7 @@ impl TableData for Vec<Option<TransactionsQueryOtherTransactions>> {
                         .attr("class", "block")
                     } else {
                         convert_to_copy_link(
-                            transaction.get_hash(),
+                            transaction.get_block_state_hash(),
                             format!(
                                 "/commands/{}?q-state-hash={}",
                                 transaction.get_hash(),

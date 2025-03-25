@@ -287,7 +287,7 @@ pub fn CommandSpotlightPage() -> impl IntoView {
                                     ..Default::default()
                                 },
                                 TableColumn {
-                                    column: "Hash".to_string(),
+                                    column: "Block State Hash".to_string(),
                                     ..Default::default()
                                 },
                             ];
