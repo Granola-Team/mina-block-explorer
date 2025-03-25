@@ -60,7 +60,6 @@ task :clean do
   FileUtils.rm_rf %w[
     cypress/screenshots
     node_modules
-    .husky/_
     .wrangler
     src/dist
     .build
