@@ -32,16 +32,6 @@ Running any [`rake`](Rakefile) task will automatically enter the Flox environmen
 
 ## Back-End Integration
 
-Integration with an [Indexer](https://github.com/Granola-Team/mina-indexer) is
-accomplished through GraphQL and REST endpoints. You must specify your
-own environment variables via:
-
-- `.env` file
-
-or
-
-- Environment variables. See [`.env.example`](.env.example).
-
 Environment variables are bundled into the WASM file at compile time (see
 [`build.rs`](build.rs)). With the intended environment variables specified at compile time,
 the production WASM file may be deployed without any further configuration

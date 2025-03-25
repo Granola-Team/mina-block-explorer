@@ -1,24 +1,32 @@
 # Rakefile
 require "open3"
-require "dotenv"  # Add this line to require dotenv
 require "fileutils"
-
-# Load environment variables from .env file
-Dotenv.load       # Add this line to load .env file
 
 # Constants and environment variables
 SPEC = "cypress/e2e/"
-TRUNK_PORT = "#{5170 + rand(10)}"
+TRUNK_PORT = rand(5170..5179).to_s
 ENV["RUSTFLAGS"] = "--cfg=web_sys_unstable_apis"
 ENV["CYPRESS_BASE_URL"] = "http://localhost:#{TRUNK_PORT}"
 ENV["VERSION"] = `git rev-parse --short=8 HEAD`.chomp
 ENV["INDEXER_VERSION"] = `cd lib/mina-indexer && git rev-parse --short=8 HEAD`.chomp
 ENV["CARGO_HOME"] = "#{Dir.pwd}/.cargo"
-RUST_SRC_FILES = Dir.glob("src/**/*.rs") + Dir.glob("graphql/**/*.graphql")
+GRAPHQL_SRC_FILES = Dir.glob("graphql/**/*.graphql")
+RUST_SRC_FILES = Dir.glob("src/**/*.rs") + GRAPHQL_SRC_FILES
 CARGO_DEPS = RUST_SRC_FILES + ["Cargo.toml", "Cargo.lock", "build.rs"]
 CYPRESS_FILES = Dir.glob("cypress/**/*.js")
 RUBY_SRC_FILES = Dir.glob("**/*.rb").reject { |file| file.start_with?("lib/") } + ["Rakefile"]
 JAVASCRIPT_SRC_FILES = Dir.glob("src/scripts_tests/**")
+
+def ensure_env_vars(required_vars, error_context = "Task failed")
+  missing_vars = required_vars.reject { |var| ENV[var] && !ENV[var].empty? }
+  unless missing_vars.empty?
+    abort(
+      "Error: #{error_context}. The following required environment variables are missing or empty:\n" +
+      missing_vars.map { |var| "  - #{var}" }.join("\n") +
+      "\nPlease set these variables and try again."
+    )
+  end
+end
 
 # Helper method for shell commands
 def sh(cmd)
@@ -33,9 +41,14 @@ end
 
 desc "Deploy mina-indexer"
 task :deploy_mina_indexer do
+  ensure_env_vars(%w[VOLUMES_DIR], "Cannot deploy mina indexer")
   puts "--- Deploying mina-indexer at #{ENV["INDEXER_VERSION"]}"
   Dir.chdir("lib/mina-indexer") do
-    sh "nix develop --command just deploy-local-prod-dev 10000 $INDEXER_PORT"
+    sh %W[
+      GRAPHQL_URL=http://localhost:8080/graphql
+      REST_URL=http://localhost:8080
+      nix develop --command just deploy-local-prod-dev 10000 8080
+    ].join(" ")
   end
 end
 
@@ -53,6 +66,7 @@ end
 
 desc "Clean the repo of built artifacts"
 task :clean do
+  puts "--- Cleaning"
   sh "trunk clean"
 
   FileUtils.rm_rf %w[
@@ -65,7 +79,7 @@ task :clean do
 end
 
 desc "Format the source code"
-task format: :pnpm_install do
+task format: [:pnpm_install] do
   sh "pnpm exec prettier --write cypress/ src/scripts/"
   sh "standardrb --fix ops/*.rb Rakefile"
   sh "cargo-fmt --all"
@@ -105,10 +119,11 @@ task :lint_fix do
   sh "cargo clippy --fix --allow-dirty --allow-staged"
 end
 
-desc "Build documentation in the home directory"
-task :build_docs do
-  sh "rm -rf $HOME/mina_block_explorer_docs/"
-  sh "cargo doc --document-private-items --target-dir $HOME/mina_block_explorer_docs/"
+desc "Build documentation in the build directory"
+task build_docs: ".build/docs"
+
+file ".build/docs" => GRAPHQL_SRC_FILES + [".build"] do |t|
+  sh "cargo doc --document-private-items --target-dir #{t.name}"
 end
 
 desc "Install the JavaScript dependencies with 'pnpm'"
@@ -120,28 +135,33 @@ end
 
 desc "Serve the built website locally"
 task dev: [:pnpm_install, :deploy_mina_indexer] do
+  ensure_env_vars(%w[GRAPHQL_URL REST_URL], "Cannot start dev")
   trap("INT") { Rake::Task["shutdown_mina_indexer"].invoke }
   sh "trunk serve --port=#{TRUNK_PORT} --open"
 end
 
 desc "Invoke the interactive Tier2 tests"
-task t2_i: [:pnpm_install, :build, :deploy_mina_indexer] do
-  raise "Error: Neither GRAPHQL_URL nor REST_URL contains 'localhost' or '127.0.0.1'" unless
-    ["GRAPHQL_URL", "REST_URL"].any? { |var| ["localhost", "127.0.0.1"].any? { |str| ENV[var]&.include?(str) } }
-  trap("INT") { shutdown_mina_indexer }
-  sh "ruby ./ops/manage-processes.rb --port=#{TRUNK_PORT} --first-cmd='trunk serve --no-autoreload --port=#{TRUNK_PORT}' --second-cmd='pnpm exec cypress open'"
+task t2_i: [:pnpm_install, :dev_build, :deploy_mina_indexer] do
+  trap("INT") { Rake::Task["shutdown_mina_indexer"].invoke }
+  sh %W[
+    GRAPHQL_URL=http://localhost:8080/graphql
+    REST_URL=http://localhost:8080
+    ruby ./ops/manage-processes.rb
+    --port=#{TRUNK_PORT}
+    --first-cmd='trunk serve
+    --no-autoreload
+    --port=#{TRUNK_PORT}'
+    --second-cmd='pnpm exec cypress open'
+  ].join(" ")
 end
 
-
 desc "Publish the website to production"
-task publish: [:tier1, :clean, :pnpm_install, :build] do
+task publish: [:clean, :pnpm_install, :release_build] do
+  ensure_env_vars(%w[CLOUDFLARE_ACCOUNT_ID CLOUDFLARE_API_TOKEN], "Cannot publish")
+
   puts "--- Publishing"
   puts "Publishing version #{ENV["VERSION"]}"
-  sh %W[
-    GRAPHQL_URL=https://api.minasearch.com/graphql
-    REST_URL=https://api.minasearch.com
-    pnpx wrangler pages deploy --branch main
-  ].join(" ")
+  sh "pnpx wrangler pages deploy --branch main"
 end
 
 desc "Use 'cargo check' to verify buildability"
@@ -180,10 +200,22 @@ file ".build/lint-rust" => RUST_SRC_FILES + [".build", "rustfmt.toml"] do |t|
   File.write(t.name, [cargo_fmt_out, leptos_fmt_out, clippy_out].join("\n"))
 end
 
-desc "Build the front-end WASM bundle"
-task build: 'dist'
+desc "Build the dev version for front-end WASM bundle"
+task :dev_build do
+  ENV['GRAPHQL_URL'] = "http://localhost:8080/graphql"
+  ENV['REST_URL'] = "https://localhost:8080"
+  Rake::Task["dist"].invoke
+end
 
-file 'dist' => CARGO_DEPS + ['Trunk.toml', 'tailwind.config.js'] do
+desc "Build the release version for front-end WASM bundle"
+task :release_build do
+  ENV['GRAPHQL_URL'] = "https://api.minasearch.com/graphql"
+  ENV['REST_URL'] = "https://api.minasearch.com"
+  Rake::Task["dist"].invoke
+end
+
+file "dist" => CARGO_DEPS + ["Trunk.toml", "tailwind.config.js"] do
+  ensure_env_vars(%w[GRAPHQL_URL REST_URL], "Cannot build dist folder")
   sh "trunk build --release --filehash true"
 end
 
@@ -191,23 +223,20 @@ desc "Lint all source code"
 task lint: [:pnpm_install, :audit, :lint_javascript, :lint_ruby, :lint_rust]
 
 desc "Run the Tier1 tests"
-task tier1: [:lint, :test_unit, :build]
+task tier1: [:lint, :test_unit, :dev_build]
 
 desc "Invoke the Tier2 regression suite"
 task tier2: [:tier1, :pnpm_install, :deploy_mina_indexer] do
   puts "--- Performing end-to-end @tier2 tests"
-  unless ["GRAPHQL_URL", "REST_URL"].any? do |v|
-           ENV[v]&.match?(/localhost|127\.0\.0\.1/)
-         end
-    raise "Neither GRAPHQL_URL nor REST_URL contains 'localhost' or '127.0.0.1'"
-  end
   sh %W[
     CYPRESS_tags=@tier2
-    GRAPHQL_URL=#{ENV["GRAPHQL_URL"]}
-    REST_URL=#{ENV["REST_URL"]}
+    GRAPHQL_URL=http://localhost:8080/graphql
+    REST_URL=http://localhost:8080
     time ruby ./ops/manage-processes.rb
     --port=#{TRUNK_PORT}
-    --first-cmd='trunk serve --no-autoreload --port=#{TRUNK_PORT}'
+    --first-cmd='trunk serve
+    --no-autoreload
+    --port=#{TRUNK_PORT}'
     --second-cmd='pnpm exec cypress run -r list -q'
   ].join(" ")
 end
