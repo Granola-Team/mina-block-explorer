@@ -92,6 +92,9 @@ suite(["@tier2"], "transaction spotlight", () => {
     cy.get("section").contains("In Other Blocks").should("exist");
     cy.aliasTableRows("In Other Blocks", "table-rows");
     cy.get("@table-rows").should("have.lengthOf", 2);
-    cy.tableHasOrderedColumns("In Other Blocks", ["Height", "Block State Hash"]);
+    cy.tableHasOrderedColumns("In Other Blocks", [
+      "Height",
+      "Block State Hash",
+    ]);
   });
 });
