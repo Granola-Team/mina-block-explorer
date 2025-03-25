@@ -202,15 +202,15 @@ end
 
 desc "Build the dev version for front-end WASM bundle"
 task :dev_build do
-  ENV['GRAPHQL_URL'] = "http://localhost:8080/graphql"
-  ENV['REST_URL'] = "https://localhost:8080"
+  ENV["GRAPHQL_URL"] = "http://localhost:8080/graphql"
+  ENV["REST_URL"] = "https://localhost:8080"
   Rake::Task["dist"].invoke
 end
 
 desc "Build the release version for front-end WASM bundle"
 task :release_build do
-  ENV['GRAPHQL_URL'] = "https://api.minasearch.com/graphql"
-  ENV['REST_URL'] = "https://api.minasearch.com"
+  ENV["GRAPHQL_URL"] = "https://api.minasearch.com/graphql"
+  ENV["REST_URL"] = "https://api.minasearch.com"
   Rake::Task["dist"].invoke
 end
 

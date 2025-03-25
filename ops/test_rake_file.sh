@@ -6,7 +6,8 @@ set -e
 # Run commands in sequence, stopping on first failure
 rake clean                  # Clean the repo of built artifacts
 rake audit                  # Audit the Rust code with cargo-audit
-rake build                  # Build the front-end WASM bundle
+rake release_build                  # Build the front-end WASM bundle
+rake dev_build                  # Build the front-end WASM bundle
 rake build_docs             # Build documentation in the home directory
 rake check                  # Use 'cargo check' to verify buildability
 rake default                # Default task - print the menu of targets
