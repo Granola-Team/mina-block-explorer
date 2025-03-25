@@ -26,13 +26,12 @@ def sh(cmd)
   system(cmd) or raise "Command failed: #{cmd}"
 end
 
-# Default task
+desc "Default task - print the menu of targets"
 task :default do
-  puts "Available tasks:"
-  Rake.application.tasks.each { |t| puts "  #{t.name}" }
+  system("rake -T")
 end
 
-# Deploy mina-indexer
+desc "Deploy mina-indexer"
 task :deploy_mina_indexer do
   puts "--- Deploying mina-indexer at #{ENV["INDEXER_VERSION"]}"
   Dir.chdir("lib/mina-indexer") do
@@ -44,7 +43,7 @@ file ".build" do |t|
   mkdir_p t.name # Creates the 'build' directory if it doesn’t exist
 end
 
-# Shutdown mina-indexer
+desc "Shut down mina-indexer"
 task :shutdown_mina_indexer do
   puts "--- Shutting down mina-indexer"
   Dir.chdir("lib/mina-indexer") do
@@ -52,7 +51,7 @@ task :shutdown_mina_indexer do
   end
 end
 
-# Clean task
+desc "Clean the repo of built artifacts"
 task :clean do
   sh "trunk clean"
 
@@ -65,7 +64,7 @@ task :clean do
   ]
 end
 
-# Format task
+desc "Format the source code"
 task format: :pnpm_install do
   sh "pnpm exec prettier --write cypress/ src/scripts/"
   sh "standardrb --fix ops/*.rb Rakefile"
@@ -73,63 +72,59 @@ task format: :pnpm_install do
   sh "leptosfmt ./src"
 end
 
+desc "Run the Jest tests"
 task jest_test: ".build/jest-test"
 file ".build/jest-test" => JAVASCRIPT_SRC_FILES + [".build", "jest.config.js"] do |t|
   puts "--- Performing jest unit tests"
   sh "pnpm exec jest test 2>&1 | tee #{t.name}"
 end
 
+desc "Test the Rust code"
 task rust_test: ".build/rust-test"
+
 file ".build/rust-test" => CARGO_DEPS + [".build"] do |t|
   puts "--- Performing rust unit tests"
   sh "cargo-nextest nextest run 2>&1 | tee #{t.name}"
 end
 
-# Test unit
+desc "Run the unit tests"
 task test_unit: [:jest_test, :rust_test]
 
-# Audit taskd
+desc "Audit the Rust code with cargo-audit"
 task audit: ".build/audit"
+
 file ".build/audit" => CARGO_DEPS + [".build"] do |t|
   audit_output = `cargo-audit audit`
   machete_output = `cargo machete`
   File.write(t.name, [audit_output, machete_output].join("\n"))
 end
 
-# Fix linting errors
+desc "Fix linting errors"
 task :lint_fix do
   sh "standardrb --fix ops/*.rb Rakefile"
   sh "cargo clippy --fix --allow-dirty --allow-staged"
 end
 
-# Builds documentation in the home directory
+desc "Build documentation in the home directory"
 task :build_docs do
   sh "rm -rf $HOME/mina_block_explorer_docs/"
   sh "cargo doc --document-private-items --target-dir $HOME/mina_block_explorer_docs/"
 end
 
-# PNPM install
+desc "Install the JavaScript dependencies with 'pnpm'"
 task pnpm_install: "node_modules"
 file "node_modules" => ["pnpm-lock.yaml", "package.json"] do
   puts "--- Installing NPM dependencies"
   sh "pnpm install"
 end
 
-# Dev task
+desc "Serve the built website locally"
 task dev: [:pnpm_install, :deploy_mina_indexer] do
   trap("INT") { Rake::Task["shutdown_mina_indexer"].invoke }
   sh "trunk serve --port=#{TRUNK_PORT} --open"
 end
 
-# Tier2 tests
-task t2: [:pnpm_install, :build, :deploy_mina_indexer] do
-  puts "--- Performing end-to-end @tier2 tests"
-  raise "Error: Neither GRAPHQL_URL nor REST_URL contains 'localhost' or '127.0.0.1'" unless
-    ["GRAPHQL_URL", "REST_URL"].any? { |var| ["localhost", "127.0.0.1"].any? { |str| ENV[var]&.include?(str) } }
-  sh "CYPRESS_tags='@tier2' GRAPHQL_URL=#{ENV["GRAPHQL_URL"]} REST_URL=#{ENV["REST_URL"]} time ruby ./ops/manage-processes.rb --port=#{TRUNK_PORT} --first-cmd='trunk serve --no-autoreload --port=#{TRUNK_PORT}' --second-cmd='pnpm exec cypress run -r list -q'"
-end
-
-# Interactive Tier2 tests
+desc "Invoke the interactive Tier2 tests"
 task t2_i: [:pnpm_install, :build, :deploy_mina_indexer] do
   raise "Error: Neither GRAPHQL_URL nor REST_URL contains 'localhost' or '127.0.0.1'" unless
     ["GRAPHQL_URL", "REST_URL"].any? { |var| ["localhost", "127.0.0.1"].any? { |str| ENV[var]&.include?(str) } }
@@ -145,27 +140,31 @@ task :pre_publish do
     ["GRAPHQL_URL", "REST_URL"].any? { |var| ["localhost", "127.0.0.1"].any? { |str| ENV[var]&.include?(str) } }
 end
 
-# Publish task
+desc "Publish the website to production"
 task publish: [:tier1, :pre_publish, :clean, :pnpm_install, :build] do
   puts "--- Publishing"
   puts "Publishing version #{ENV["VERSION"]}"
   sh "pnpx wrangler pages deploy --branch main"
 end
 
-# Check task
+desc "Use 'cargo check' to verify buildability"
 task check: ".build/check"
 
 file ".build/check" => CARGO_DEPS + [".build"] do |t|
   sh "cargo check 2>&1 | tee #{t.name}"
 end
 
+desc "Lint the Cypress test code (JavaScript)"
 task lint_javascript: ".build/lint-javascript"
+
 file ".build/lint-javascript" => CYPRESS_FILES + [".build"] do |t|
   puts "--- Linting JS/TS"
   sh "pnpm exec prettier --check cypress/ 2>&1 | tee #{t.name}"
 end
 
+desc "Lint the Ruby code"
 task lint_ruby: ".build/lint-ruby"
+
 file ".build/lint-ruby" => RUBY_SRC_FILES + [".build"] do |t|
   puts "--- Linting ruby scripts"
   ruby_cw_output = `ruby -cw #{RUBY_SRC_FILES.join(" ")}`
@@ -173,7 +172,9 @@ file ".build/lint-ruby" => RUBY_SRC_FILES + [".build"] do |t|
   File.write(t.name, [ruby_cw_output, ruby_std_output].join("\n"))
 end
 
+desc "Lint the Rust code"
 task lint_rust: ".build/lint-rust"
+
 file ".build/lint-rust" => RUST_SRC_FILES + [".build", "rustfmt.toml"] do |t|
   puts "--- Linting Rust code"
   cargo_fmt_out = `cargo-fmt --all --check`
@@ -182,16 +183,34 @@ file ".build/lint-rust" => RUST_SRC_FILES + [".build", "rustfmt.toml"] do |t|
   File.write(t.name, [cargo_fmt_out, leptos_fmt_out, clippy_out].join("\n"))
 end
 
+desc "Build the front-end WASM bundle"
 task build: 'dist'
+
 file 'dist' => CARGO_DEPS + ['Trunk.toml', 'tailwind.config.js'] do
   sh "trunk build --release --filehash true"
 end
 
-# Lint task
+desc "Lint all source code"
 task lint: [:pnpm_install, :audit, :lint_javascript, :lint_ruby, :lint_rust]
 
-# Tier1 tests
+desc "Run the Tier1 tests"
 task tier1: [:lint, :test_unit, :build]
 
-# Tier2 regression suite
-task tier2: [:tier1, :t2]
+desc "Invoke the Tier2 regression suite"
+task tier2: [:tier1, :pnpm_install, :deploy_mina_indexer] do
+  puts "--- Performing end-to-end @tier2 tests"
+  unless ["GRAPHQL_URL", "REST_URL"].any? do |v| 
+           ENV[v]&.match?(/localhost|127\.0\.0\.1/)
+         end
+    raise "Neither GRAPHQL_URL nor REST_URL contains 'localhost' or '127.0.0.1'"
+  end
+  sh %W[
+    CYPRESS_tags=@tier2
+    GRAPHQL_URL=#{ENV["GRAPHQL_URL"]}
+    REST_URL=#{ENV["REST_URL"]}
+    time ruby ./ops/manage-processes.rb
+    --port=#{TRUNK_PORT}
+    --first-cmd='trunk serve --no-autoreload --port=#{TRUNK_PORT}'
+    --second-cmd='pnpm exec cypress run -r list -q'
+  ].join(" ")
+end
