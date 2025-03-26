@@ -84,7 +84,7 @@
       }
     },
     "hook": {
-      "on-activate": "  export VERSION=\"$(git rev-parse --short=8 HEAD)\"\n  export CARGO_HOME=\"$(pwd)/.cargo\"\n\n  # Required for rspec-expectations gem to be properly recognized\n  RUBY_VERSION=$(ruby -e 'puts RbConfig::CONFIG[\"ruby_version\"]')\n\n  export GEM_PATH=\"$FLOX_ENV_DIRS/lib/ruby/gems/$RUBY_VERSION\"\n  export GEM_HOME=\"$GEM_PATH\"\n\n  # Add gem binaries to PATH if not already there\n  GEM_BIN=\"$GEM_HOME/bin\"\n  if [[ \":$PATH:\" != *\":$GEM_BIN:\"* ]]; then\n    export PATH=\"$GEM_BIN:$PATH\"\n  fi\n\n  # Install nodejs depedencies\n  pnpm install\n"
+      "on-activate": "  export CARGO_HOME=\"$(pwd)/.cargo\"\n\n  # Required for rspec-expectations gem to be properly recognized\n  RUBY_VERSION=$(ruby -e 'puts RbConfig::CONFIG[\"ruby_version\"]')\n\n  export GEM_PATH=\"$FLOX_ENV_DIRS/lib/ruby/gems/$RUBY_VERSION\"\n  export GEM_HOME=\"$GEM_PATH\"\n\n  # Add gem binaries to PATH if not already there\n  GEM_BIN=\"$GEM_HOME/bin\"\n  if [[ \":$PATH:\" != *\":$GEM_BIN:\"* ]]; then\n    export PATH=\"$GEM_BIN:$PATH\"\n  fi\n\n  # Install nodejs depedencies\n  pnpm install\n"
     },
     "profile": {},
     "options": {
