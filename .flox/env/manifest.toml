@@ -66,9 +66,6 @@ on-activate = """
   if [[ ":$PATH:" != *":$GEM_BIN:"* ]]; then
     export PATH="$GEM_BIN:$PATH"
   fi
-
-  # Install nodejs depedencies
-  pnpm install
 """
 
 # Scripts defined in the `[profile]` section are *sourced* by *your shell* and
