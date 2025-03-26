@@ -9,6 +9,7 @@ ENV["CYPRESS_BASE_URL"] = "http://localhost:#{TRUNK_PORT}"
 ENV["VERSION"] = `git rev-parse --short=8 HEAD`.chomp
 ENV["INDEXER_VERSION"] = `cd lib/mina-indexer && git rev-parse --short=8 HEAD`.chomp
 ENV["CARGO_HOME"] = "#{Dir.pwd}/.cargo"
+ENV["VOLUMES_DIR"] ||= "/mnt" if Dir.exist?("/mnt")
 GRAPHQL_SRC_FILES = Dir.glob("graphql/**/*.graphql")
 RUST_SRC_FILES = Dir.glob("src/**/*.rs") + GRAPHQL_SRC_FILES
 CARGO_DEPS = RUST_SRC_FILES + ["Cargo.toml", "Cargo.lock", "build.rs"]
