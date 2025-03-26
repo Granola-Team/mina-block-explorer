@@ -13,6 +13,11 @@ suite(["@tier2"], "transaction spotlight", () => {
       column: "Txn Hash",
       tableHeader: "User Commands",
     },
+    {
+      origin: `/tokens`,
+      column: "Transactions",
+      tableHeader: "Tokens",
+    }
   ];
 
   pages.forEach(

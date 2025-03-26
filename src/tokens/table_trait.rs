@@ -34,7 +34,7 @@ impl TableData for Vec<Option<TokensQueryTokens>> {
                                     QUERY_PARAM_TOKEN,
                                     token.get_token(),
                                     QUERY_PARAM_USER_COMMAND,
-                                    "false",
+                                    if token.get_token() == MINA_TOKEN_ADDRESS { "true" } else { "false" },
                                     QUERY_PARAM_TXN_APPLIED,
                                     "true"
                                 ),
