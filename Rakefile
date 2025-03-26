@@ -240,3 +240,43 @@ task tier2: [:tier1, :pnpm_install, :deploy_mina_indexer] do
     --second-cmd='pnpm exec cypress run -r list -q'
   ].join(" ")
 end
+
+desc "Print all tasks and their dependencies as a tree"
+task :print_tree do
+  def print_task_tree(task, prefix = "", is_last = true, visited = Set.new)
+    task_name = task.name
+    return if visited.include?(task_name)
+
+    visited.add(task_name)
+    puts "#{prefix}#{is_last ? '└── ' : '├── '}#{task_name}"
+
+    prereqs = task.prerequisites
+    prereqs.each_with_index do |prereq, index|
+      next unless Rake::Task.task_defined?(prereq)
+      is_last_prereq = (index == prereqs.size - 1)
+      new_prefix = prefix + (is_last ? "    " : "│   ")
+      print_task_tree(Rake::Task[prereq], new_prefix, is_last_prereq, visited)
+    end
+  end
+
+  all_tasks = Rake.application.tasks
+  all_prereqs = all_tasks.flat_map(&:prerequisites).uniq
+  root_tasks = all_tasks.reject { |t| all_prereqs.include?(t.name) }
+
+  puts "Task Dependency Tree (All Root Tasks):"
+  if root_tasks.empty?
+    puts "No root tasks found."
+  else
+    root_tasks.each_with_index do |task, index|
+      is_last_root = (index == root_tasks.size - 1)
+      puts "\nRoot Task ##{index + 1}:" unless root_tasks.size == 1
+      print_task_tree(task, "", is_last_root)
+    end
+  end
+
+  orphaned_tasks = all_tasks - root_tasks - all_tasks.flat_map { |t| t.prerequisites.map { |p| Rake::Task[p] rescue nil } }.compact
+  unless orphaned_tasks.empty?
+    puts "\nOrphaned Tasks (no dependencies or dependents):"
+    orphaned_tasks.each { |task| puts "  - #{task.name} (#{task.full_comment || 'No description'})" }
+  end
+end
