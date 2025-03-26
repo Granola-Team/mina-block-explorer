@@ -1,4 +1,3 @@
-# Rakefile
 require "open3"
 require "fileutils"
 
@@ -81,7 +80,7 @@ end
 desc "Format the source code"
 task format: [:pnpm_install] do
   sh "pnpm exec prettier --write cypress/ src/scripts/"
-  sh "standardrb --fix ops/*.rb Rakefile"
+  sh "standardrb --fix #{RUBY_SRC_FILES.join(" ")}"
   sh "cargo-fmt --all"
   sh "leptosfmt ./src"
 end
@@ -115,7 +114,7 @@ end
 
 desc "Fix linting errors"
 task :lint_fix do
-  sh "standardrb --fix ops/*.rb Rakefile"
+  sh "standardrb --fix #{RUBY_SRC_FILES.join(" ")}"
   sh "cargo clippy --fix --allow-dirty --allow-staged"
 end
 
@@ -185,7 +184,7 @@ task lint_ruby: ".build/lint-ruby"
 file ".build/lint-ruby" => RUBY_SRC_FILES + [".build"] do |t|
   puts "--- Linting ruby scripts"
   ruby_cw_output = `ruby -cw #{RUBY_SRC_FILES.join(" ")}`
-  ruby_std_output = `standardrb --no-fix #{RUBY_SRC_FILES.join(" ")} Rakefile`
+  ruby_std_output = `standardrb --no-fix #{RUBY_SRC_FILES.join(" ")}`
   File.write(t.name, [ruby_cw_output, ruby_std_output].join("\n"))
 end
 
