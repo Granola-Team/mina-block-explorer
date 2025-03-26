@@ -1,9 +1,35 @@
-use super::graphql::{
+use super::{graphql::{
     accounts_query::{self, AccountSortByInput},
     AccountsQuery,
-};
+}, models::TokenSymbolResponse};
 use crate::common::{constants::GRAPHQL_ENDPOINT, models::*};
 use graphql_client::reqwest::post_graphql;
+
+pub async fn load_token_symbol(token_id: Option<String>) -> Result<TokenSymbolResponse, MyError> {
+    if token_id.is_none() {
+        return Err(MyError::ParseError("token id must be set".into()));
+    }
+    let query_body = format!(
+        r#"{{"query": "{{ tokens(limit: 1, query: {{ token: \"{}\" }}) {{ symbol }} }}"}}"#,
+        token_id.unwrap(),
+    );
+    let client = reqwest::Client::new();
+    let response = client
+        .post(GRAPHQL_ENDPOINT)
+        .body(query_body)
+        .send()
+        .await
+        .map_err(|e| MyError::NetworkError(e.to_string()))?;
+
+    if response.status().is_success() {
+        Ok(response
+            .json::<TokenSymbolResponse>()
+            .await
+            .map_err(|e| MyError::ParseError(e.to_string()))?)
+    } else {
+        Err(MyError::NetworkError("Failed to fetch data".into()))
+    }
+}
 
 #[allow(clippy::too_many_arguments)]
 pub async fn load_data(

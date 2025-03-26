@@ -33,6 +33,7 @@ fn AccountsPageContents() -> impl IntoView {
     let (row_limit_sig, _) = create_query_signal::<i64>("row-limit");
     let (sort_dir_sig, _) = create_query_signal::<String>("sort-dir");
     let (is_standard_sig, _) = create_query_signal::<bool>("q-is-all");
+    let (section_heading_sig, set_section_heading) = create_signal::<String>("MINA Accounts".to_string());
 
     let resource = create_resource(
         move || {
@@ -72,13 +73,22 @@ fn AccountsPageContents() -> impl IntoView {
             .await
         },
     );
+    let token_symbol_resource = create_resource(move || token_sig.get(), |token_id| async move { load_token_symbol(token_id).await });
+
     let get_data = move || resource.get().and_then(|res| res.ok());
+    let get_token_symbol_resp = move || token_symbol_resource.get().and_then(|res| res.ok());
 
     create_effect(move |_| {
         if let Some(data) = get_data() {
             set_data.set(Some(data.accounts))
         } else {
             set_data.set(Some(vec![]))
+        }
+    });
+
+    create_effect(move |_| {
+        if let Some(token) = get_token_symbol_resp().and_then(|token_resp| token_resp.data.tokens.first().cloned()) {
+            set_section_heading.set(format!("{} Token Accounts", token.symbol));
         }
     });
 
@@ -147,7 +157,7 @@ fn AccountsPageContents() -> impl IntoView {
                         })
                     })
 
-                    section_heading="Mina Accounts"
+                    section_heading=section_heading_sig.get()
                     is_loading=resource.loading()
                     footer=move || {
                         view! {

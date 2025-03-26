@@ -6,7 +6,7 @@ module.exports = {
   tag: "@tier2",
   url: "/addresses/accounts",
   table: {
-    heading: "Mina Accounts",
+    heading: "MINA Accounts",
     columns: [
       "Public Key",
       "Username",
@@ -27,9 +27,9 @@ module.exports = {
         column: "Balance",
         input: 5000,
         assertion: function () {
-          cy.aliasTableRows("Mina Accounts", "table-rows");
+          cy.aliasTableRows("MINA Accounts", "table-rows");
           cy.get("@table-rows").should("have.lengthOf", 25);
-          cy.assertForEachColumnValue("Mina Accounts", "Balance", (text) => {
+          cy.assertForEachColumnValue("MINA Accounts", "Balance", (text) => {
             let balance = parseFormattedNumber(text);
             expect(balance).to.be.lte(5000);
           });
@@ -39,9 +39,9 @@ module.exports = {
         column: "Balance",
         input: "5000.1234",
         assertion: function () {
-          cy.aliasTableRows("Mina Accounts", "table-rows");
+          cy.aliasTableRows("MINA Accounts", "table-rows");
           cy.get("@table-rows").should("have.lengthOf", 25);
-          cy.assertForEachColumnValue("Mina Accounts", "Balance", (text) => {
+          cy.assertForEachColumnValue("MINA Accounts", "Balance", (text) => {
             let balance = parseFormattedNumber(text);
             expect(balance).to.be.lte(5000.1234);
           });
@@ -51,13 +51,13 @@ module.exports = {
         column: "Public Key",
         input: "B62qpqCBExtxzfHUPkmrrfmYhXZyg3V7pSmwuxHMzTi8E6gBbopauJS",
         assertion: function () {
-          cy.aliasTableRows("Mina Accounts", "table-rows");
+          cy.aliasTableRows("MINA Accounts", "table-rows");
           cy.get("@table-rows").should("have.lengthOf", 1);
-          cy.assertForEachColumnValue("Mina Accounts", "Public Key", (text) => {
+          cy.assertForEachColumnValue("MINA Accounts", "Public Key", (text) => {
             expect(text).to.equal(ROMEK_ADDRESS);
           });
           cy.tableColumnValuesEqual(
-            "Mina Accounts",
+            "MINA Accounts",
             "Username",
             ROMEK_USERNAME,
           );
@@ -67,13 +67,13 @@ module.exports = {
         column: "Username",
         input: "Romek",
         assertion: function () {
-          cy.aliasTableRows("Mina Accounts", "table-rows");
+          cy.aliasTableRows("MINA Accounts", "table-rows");
           cy.get("@table-rows").should("have.lengthOf", 1);
-          cy.assertForEachColumnValue("Mina Accounts", "Username", (text) => {
+          cy.assertForEachColumnValue("MINA Accounts", "Username", (text) => {
             expect(text).to.equal(ROMEK_USERNAME);
           });
           cy.tableColumnValuesEqual(
-            "Mina Accounts",
+            "MINA Accounts",
             "Username",
             ROMEK_USERNAME,
           );
@@ -83,8 +83,8 @@ module.exports = {
         column: "Delegate",
         input: "B62qpqCBExtxzfHUPkmrrfmYhXZyg3V7pSmwuxHMzTi8E6gBbopauJS",
         assertion: function () {
-          cy.aliasTableRows("Mina Accounts", "table-rows");
-          cy.assertForEachColumnValue("Mina Accounts", "Delegate", (text) => {
+          cy.aliasTableRows("MINA Accounts", "table-rows");
+          cy.assertForEachColumnValue("MINA Accounts", "Delegate", (text) => {
             expect(text).to.equal(ROMEK_ADDRESS);
           });
         },
@@ -93,14 +93,14 @@ module.exports = {
   },
   tests: [
     () => {
-      cy.assertStandardRowLimits("Mina Accounts");
+      cy.assertStandardRowLimits("MINA Accounts");
     },
     () => {
       cy.intercept("POST", "/graphql").as("graphql");
       cy.visit("/addresses/accounts");
       cy.wait("@graphql").then(() => {
         cy.wait(1000);
-        cy.assertLoadNextWorks("Mina Accounts", "Balance");
+        cy.assertLoadNextWorks("MINA Accounts", "Balance");
       });
     },
   ],

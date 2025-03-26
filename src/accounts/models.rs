@@ -2,6 +2,21 @@ use crate::common::table::*;
 use serde::*;
 use std::fmt;
 
+#[derive(Deserialize, Serialize, Debug, Clone)]
+pub struct TokenSymbolResponse {
+    pub data: TokensData,
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone)]
+pub struct TokensData {
+    pub tokens: Vec<TokenData>,
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone)]
+pub struct TokenData {
+    pub symbol: String,
+}
+
 #[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct AllAccountResponse {
     pub data: Vec<AllAccountSummary>,
