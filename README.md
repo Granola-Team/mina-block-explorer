@@ -26,16 +26,12 @@ __If you have previously installed Nix, you may need to uninstall it first:__
 
 1. You must first enter the Flox environment by using `flox activate`.
 
-Running any [`rake`](Rakefile) task will automatically enter the Flox environment.
-
-2. Execute `rake dev` to start the server
+2. Execute `rake dev` to start the server.
 
 ## Back-End Integration
 
 Environment variables are bundled into the WASM file at compile time (see
-[`build.rs`](build.rs)). With the intended environment variables specified at compile time,
-the production WASM file may be deployed without any further configuration
-required.
+[`build.rs`](build.rs)). With the intended environment variables specified at compile time, the production WASM file may be deployed without any further configuration required.
 
 Note that the `mina-indexer` is a git submodule and is integrated at a specific version
 for tier2 tests. Tier2 tests are coded to work against the first 10000 blocks in the
