@@ -8,5 +8,4 @@ tailwindcss = "3.4.1"
 target = "index.html"
 
 [clean]
-dist = "dist"
 cargo = true

@@ -66,9 +66,9 @@ end
 desc "Clean the repo of built artifacts"
 task :clean do
   puts "--- Cleaning"
-  sh "trunk clean"
-
   FileUtils.rm_rf %w[
+    dist
+    target
     cypress/screenshots
     node_modules
     .wrangler
