@@ -69,19 +69,6 @@ suite(["@tier2"], "staking ledger", () => {
     cy.get("section").contains("Staking Ledger - Epoch 1");
   });
 
-  // more than current + next staking ledger needs
-  // to be ingested to make this work
-  xit("does not show slot progress message", () => {
-    cy.get(".staking-ledger-percent-complete").as("slot-info");
-
-    cy.get("@slot-info").should("exist");
-    cy.get("section").contains("button", "Next").click();
-    cy.get("@slot-info").should("not.exist");
-    cy.get("section").contains("button", "Prev").click();
-    cy.get("section").contains("button", "Prev").click();
-    cy.get("@slot-info").should("not.exist");
-  });
-
   it("disables 'Next' button appropriately", () => {
     cy.wait(500);
     cy.get("section").contains("button", "Next").click();
