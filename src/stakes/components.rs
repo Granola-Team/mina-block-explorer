@@ -14,6 +14,7 @@ pub fn StakesPageContents(
     #[prop(into)] total_num_accounts: Option<u64>,
     #[prop(into)] genesis_state_hash: Option<String>,
     selected_epoch: Option<u64>,
+    #[prop(into, optional)] chain_id: String,
 ) -> impl IntoView {
     fn create_table_columns(total_stake_percent_sort: AnySort) -> Vec<TableColumn<AnySort>> {
         vec![
@@ -166,6 +167,7 @@ pub fn StakesPageContents(
 
     {
         move || {
+            let chain_id_clone = chain_id.to_string();
             let s_dir = sort_dir
                 .get()
                 .and_then(|s| StakesSort::try_from(s).ok())
@@ -204,6 +206,11 @@ pub fn StakesPageContents(
                                 />
                                 <EpochButton
                                     disabled=next_epoch_opt.is_none()
+                                        || next_epoch_opt
+                                            .is_some_and(|ne| {
+                                                ne == LAST_EPOCH_OF_MAINNET_CHAIN
+                                                    && chain_id_clone == MAINNET_CHAIN_ID
+                                            })
                                     text="Next"
                                     style_variant=ButtonStyleVariant::Primary
                                     epoch_target=next_epoch_sig.get().unwrap_or_default()

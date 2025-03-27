@@ -62,13 +62,16 @@ pub fn StakesPage() -> impl IntoView {
     let (summary_sig, _, _) =
         use_local_storage::<BlockchainSummary, JsonSerdeCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
 
+    let get_chain_id = move || {
+        if is_berkeley_sig.get().unwrap_or(true) {
+            BERKELEY_CHAIN_ID
+        } else {
+            MAINNET_CHAIN_ID
+        }
+    };
     let get_current_chain_info = move || {
         summary_sig.get().chain.and_then(|c| {
-            let chain_id = if is_berkeley_sig.get().unwrap_or(true) {
-                BERKELEY_CHAIN_ID
-            } else {
-                MAINNET_CHAIN_ID
-            };
+            let chain_id = get_chain_id();
             c.clone().get(chain_id).cloned()
         })
     };
@@ -140,6 +143,7 @@ pub fn StakesPage() -> impl IntoView {
                                     MAINNET_STATE_HASH.to_string()
                                 }
                             })
+                        chain_id=get_chain_id().to_string()
                     />
                 }
             }}

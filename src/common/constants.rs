@@ -36,3 +36,4 @@ pub const MAINNET_STATE_HASH: &str = "3NKeMoncuHab5ScarV5ViyF16cJPT4taWNSaTLS64D
 pub const HARDFORK_STATE_HASH: &str = "3NK4BpDSekaqsG6tx8Nse2zJchRft2JpnbvMiog55WCr5xJZaKeP";
 pub const BERKELEY_CHAIN_ID: &str = "a7351a";
 pub const MAINNET_CHAIN_ID: &str = "5f704c";
+pub const LAST_EPOCH_OF_MAINNET_CHAIN: u64 = 80;
