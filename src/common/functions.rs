@@ -124,7 +124,6 @@ pub fn format_metadata<F>(meta: &TableMetadata, format_number: F) -> String
 where
     F: Fn(String) -> String,
 {
-    logging::log!("TableMetadata: {:#?}", meta);
     let displayed = format_number(meta.displayed_records.to_string());
     let total = match meta.total_records {
         Some(records) => format_number(records.to_string()),
