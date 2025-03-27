@@ -5,7 +5,6 @@ suite(["@tier2"], "accounts listing page", () => {
       column: "Holders",
       tableHeader: "Tokens",
     },
-
   ];
 
   pages.forEach(

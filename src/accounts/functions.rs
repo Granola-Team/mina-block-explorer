@@ -1,7 +1,10 @@
-use super::{graphql::{
-    accounts_query::{self, AccountSortByInput},
-    AccountsQuery,
-}, models::TokenSymbolResponse};
+use super::{
+    graphql::{
+        accounts_query::{self, AccountSortByInput},
+        AccountsQuery,
+    },
+    models::TokenSymbolResponse,
+};
 use crate::common::{constants::GRAPHQL_ENDPOINT, models::*};
 use graphql_client::reqwest::post_graphql;
 

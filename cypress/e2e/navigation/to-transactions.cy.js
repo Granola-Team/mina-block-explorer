@@ -17,7 +17,7 @@ suite(["@tier2"], "transaction spotlight", () => {
       origin: `/tokens`,
       column: "Transactions",
       tableHeader: "Tokens",
-    }
+    },
   ];
 
   pages.forEach(
