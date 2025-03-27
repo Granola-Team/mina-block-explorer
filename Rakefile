@@ -248,7 +248,7 @@ task :print_tree do
     return if visited.include?(task_name)
 
     visited.add(task_name)
-    puts "#{prefix}#{is_last ? '└── ' : '├── '}#{task_name}"
+    puts "#{prefix}#{is_last ? "└── " : "├── "}#{task_name}"
 
     prereqs = task.prerequisites
     prereqs.each_with_index do |prereq, index|
@@ -274,9 +274,17 @@ task :print_tree do
     end
   end
 
-  orphaned_tasks = all_tasks - root_tasks - all_tasks.flat_map { |t| t.prerequisites.map { |p| Rake::Task[p] rescue nil } }.compact
+  orphaned_tasks = all_tasks - root_tasks - all_tasks.flat_map { |t|
+                                              t.prerequisites.map { |p|
+                                                begin
+                                                  Rake::Task[p]
+                                                rescue
+                                                  nil
+                                                end
+                                              }
+                                            }.compact
   unless orphaned_tasks.empty?
     puts "\nOrphaned Tasks (no dependencies or dependents):"
-    orphaned_tasks.each { |task| puts "  - #{task.name} (#{task.full_comment || 'No description'})" }
+    orphaned_tasks.each { |task| puts "  - #{task.name} (#{task.full_comment || "No description"})" }
   end
 end
