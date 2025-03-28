@@ -52,68 +52,76 @@ fn AccountSpotlightPage() -> impl IntoView {
     view! {
         <Title formatter=move |text| format!("Account Overview | {text}") text=username />
         <PageContainer>
-            {move || match account.get() {
-                Some(acc) => {
-                    let acct_clone_1 = acc.clone();
-                    let acct_clone_2 = acc.clone();
-                    view! {
-                        <SpotlightSection
-                            header="Account Spotlight"
-                            spotlight_items=get_spotlight_data(
-                                &acc.clone(),
-                                summary_sig.get().blockchain_length,
-                            )
-
-                            meta=Some(format!("Username: {}", username()))
-
-                            id=memo_params_map.get().get("id").cloned()
-                        >
-                            <WalletIcon width=40 />
-                        </SpotlightSection>
-                        <TableSection
-                            metadata=metadata.into()
-                            section_heading="ZKApp Details".to_string()
-                        >
-                            <SpotlightTable>
-                                <ZkAppDetailTr>
-                                    <ZkAppDetailTh>"App State:"</ZkAppDetailTh>
-                                    <ZkAppDetailTd>
-                                        <CopyToClipboard>
-                                            <CodeBlock>
-                                                {get_app_state(&acct_clone_1)
-                                                    .ok()
-                                                    .unwrap_or("Unable to serialize app state".to_string())};
-                                            </CodeBlock>
-                                        </CopyToClipboard>
-                                    </ZkAppDetailTd>
-                                </ZkAppDetailTr>
-                                <ZkAppDetailTr>
-                                    <ZkAppDetailTh>"Action State:"</ZkAppDetailTh>
-                                    <ZkAppDetailTd>
-                                        <CopyToClipboard>
-                                            <CodeBlock>
-                                                {get_action_state(&acct_clone_2)
-                                                    .ok()
-                                                    .unwrap_or("Unable to serialize action state".to_string())};
-                                            </CodeBlock>
-                                        </CopyToClipboard>
-                                    </ZkAppDetailTd>
-                                </ZkAppDetailTr>
-                            </SpotlightTable>
-                        </TableSection>
+            {move || {
+                match account.get() {
+                    Some(acc) => {
+                        view! {
+                            <SpotlightSection
+                                header="Account Spotlight"
+                                spotlight_items=get_spotlight_data(
+                                    &acc,
+                                    summary_sig.get().blockchain_length,
+                                )
+                                meta=Some(format!("Username: {}", username()))
+                                id=memo_params_map.get().get("id").cloned()
+                            >
+                                <WalletIcon width=40 />
+                            </SpotlightSection>
+                            {acc
+                                .zkapp
+                                .map(|zkapp| {
+                                    let zkapp_clone = zkapp.clone();
+                                    view! {
+                                        <TableSection
+                                            metadata=metadata.into()
+                                            section_heading="ZKApp Details".to_string()
+                                        >
+                                            <SpotlightTable>
+                                                <ZkAppDetailTr>
+                                                    <ZkAppDetailTh>"App State:"</ZkAppDetailTh>
+                                                    <ZkAppDetailTd>
+                                                        <CopyToClipboard>
+                                                            <CodeBlock>
+                                                                {get_app_state(&zkapp)
+                                                                    .ok()
+                                                                    .unwrap_or("Unable to serialize app state".to_string())}
+                                                            </CodeBlock>
+                                                        </CopyToClipboard>
+                                                    </ZkAppDetailTd>
+                                                </ZkAppDetailTr>
+                                                <ZkAppDetailTr>
+                                                    <ZkAppDetailTh>"Action State:"</ZkAppDetailTh>
+                                                    <ZkAppDetailTd>
+                                                        <CopyToClipboard>
+                                                            <CodeBlock>
+                                                                {get_action_state(&zkapp_clone)
+                                                                    .ok()
+                                                                    .unwrap_or("Unable to serialize action state".to_string())}
+                                                            </CodeBlock>
+                                                        </CopyToClipboard>
+                                                    </ZkAppDetailTd>
+                                                </ZkAppDetailTr>
+                                            </SpotlightTable>
+                                        </TableSection>
+                                    }
+                                        .into_view()
+                                })
+                                .unwrap_or(().into_view())}
+                        }
+                            .into_view()
                     }
-                        .into_view()
-                }
-                None => {
-                    view! {
-                        <SpotlightSection
-                            header="Account Spotlight"
-                            spotlight_items=get_spotlight_loading_data()
-                            meta=None
-                            id=None
-                        >
-                            <WalletIcon width=40 />
-                        </SpotlightSection>
+                    None => {
+                        view! {
+                            <SpotlightSection
+                                header="Account Spotlight"
+                                spotlight_items=get_spotlight_loading_data()
+                                meta=None
+                                id=None
+                            >
+                                <WalletIcon width=40 />
+                            </SpotlightSection>
+                        }
+                            .into_view()
                     }
                 }
             }} <Outlet />

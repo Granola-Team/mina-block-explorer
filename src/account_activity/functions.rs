@@ -1,4 +1,7 @@
-use super::graphql::{account_activity_query, AccountActivityQuery};
+use super::graphql::{
+    account_activity_query::{self, AccountActivityQueryAccountsZkapp},
+    AccountActivityQuery,
+};
 use crate::{
     account_activity::{
         graphql::account_activity_query::{
@@ -329,36 +332,26 @@ pub fn extend_delegator_info(
     }
 }
 
-pub fn get_app_state(account: &AccountActivityQueryAccounts) -> Result<String, serde_json::Error> {
-    let json_arr = account
-        .zkapp
+pub fn get_app_state(
+    zkapp: &AccountActivityQueryAccountsZkapp,
+) -> Result<String, serde_json::Error> {
+    let json_arr = zkapp
+        .app_state
         .as_ref()
-        .map(|zkapp| {
-            zkapp
-                .app_state
-                .as_ref()
-                .unwrap_or(&vec![]) // Empty vector as default
-                .clone()
-        })
-        .unwrap_or_default();
+        .unwrap_or(&vec![]) // Empty vector as default
+        .clone();
 
     format_json_array_pretty(json_arr)
 }
 
 pub fn get_action_state(
-    account: &AccountActivityQueryAccounts,
+    zkapp: &AccountActivityQueryAccountsZkapp,
 ) -> Result<String, serde_json::Error> {
-    let json_arr = account
-        .zkapp
+    let json_arr = zkapp
+        .action_state
         .as_ref()
-        .map(|zkapp| {
-            zkapp
-                .action_state
-                .as_ref()
-                .unwrap_or(&vec![]) // Empty vector as default
-                .clone()
-        })
-        .unwrap_or_default();
+        .unwrap_or(&vec![]) // Empty vector as default
+        .clone();
 
     format_json_array_pretty(json_arr)
 }
