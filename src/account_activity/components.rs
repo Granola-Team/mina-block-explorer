@@ -6,6 +6,7 @@ use crate::{
     account_activity::{
         graphql::account_activity_query::{
             AccountActivityQueryAccounts, AccountActivityQueryFeetransfers,
+            AccountActivityQueryTokenHolders,
         },
         models::AccountActivityQueryDelegatorExt,
     },
@@ -472,5 +473,41 @@ pub fn AccountOverviewBlocksTable(
                     }
                 })
         }}
+    }
+}
+
+#[component]
+pub fn AccountOverviewTokensTable(
+    tokens_sig: ReadSignal<Option<Vec<Option<AccountActivityQueryTokenHolders>>>>,
+    is_loading: Signal<bool>,
+) -> impl IntoView {
+    let table_columns: Vec<TableColumn<AnySort>> = vec![
+        TableColumn {
+            column: "Token Symbol".to_string(),
+            width: Some(String::from(TABLE_COL_HASH_WIDTH)),
+            ..Default::default()
+        },
+        TableColumn {
+            column: "Balance".to_string(),
+            width: Some(String::from(TABLE_COL_LARGE_BALANCE)),
+            ..Default::default()
+        },
+        TableColumn {
+            column: "Nonce".to_string(),
+            width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
+            ..Default::default()
+        },
+    ];
+
+    view! {
+        <TableSectionTemplate
+            table_columns
+            data_sig=tokens_sig
+            metadata=Signal::derive(move || { None })
+
+            section_heading="Tokens"
+            is_loading
+            controls=|| ().into_view()
+        />
     }
 }

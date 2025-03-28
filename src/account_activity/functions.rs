@@ -168,9 +168,13 @@ pub async fn load_data(
             ..Default::default()
         },
         delegators_query: account_activity_query::StakesQueryInput {
-            delegate: public_key,
+            delegate: public_key.clone(),
             epoch: get_current_epoch_staking_ledger(),
             ..Default::default()
+        },
+        token_holders_query: account_activity_query::TokenHoldersQueryInput {
+            holder: public_key,
+            token: None,
         },
     };
 

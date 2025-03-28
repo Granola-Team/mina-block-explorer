@@ -9,6 +9,23 @@ type TransactionZkapp {
   events: [String!]!
 }
 
+type TokenHolderAccount {
+    publicKey: String!
+    balance: Int!
+    nonce: Int!
+}
+
+type TokenHolder {
+    token: String!
+    symbol: String!
+    account: TokenHolderAccount!
+}
+
+input TokenHoldersQueryInput{
+    token: String
+    holder: String
+}
+
 type Token {
   token: String!
   supply: Int!
@@ -1599,6 +1616,10 @@ type Query {
     limit: Int = 100
     sortBy: TokensSortByInput
   ): [Token]!
+  tokenHolders(
+      query: TokenHoldersQueryInput
+      limit: Int = 100
+  ): [TokenHolder]!
 }
 
 scalar Long

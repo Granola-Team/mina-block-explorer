@@ -1,5 +1,7 @@
 use super::{
-    graphql::account_activity_query::AccountActivityQuerySnarks,
+    graphql::account_activity_query::{
+        AccountActivityQuerySnarks, AccountActivityQueryTokenHolders,
+    },
     models::AccountActivityQueryDelegatorExt,
 };
 use crate::{
@@ -13,7 +15,7 @@ use crate::{
         },
     },
     common::{
-        constants::{LHS_MAX_DIGIT_PADDING, LHS_MAX_SPACE_FEES},
+        constants::{LHS_MAX_DIGIT_PADDING, LHS_MAX_SPACE_FEES, QUERY_PARAM_TOKEN},
         functions::*,
         models::*,
         table::TableData,
@@ -127,6 +129,28 @@ impl TableData for Vec<Option<AccountActivityQuerySnarks>> {
                     ),
                     convert_to_span(snark.get_prover()),
                     decorate_with_mina_tag(snark.get_fee()),
+                ],
+                None => vec![],
+            })
+            .collect::<Vec<_>>()
+    }
+}
+
+impl TableData for Vec<Option<AccountActivityQueryTokenHolders>> {
+    fn get_exact_search_columns(&self) -> Vec<String> {
+        vec![]
+    }
+
+    fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
+        self.iter()
+            .map(|opt_token| match opt_token {
+                Some(token) => vec![
+                    convert_to_link(
+                        token.symbol.to_string(),
+                        format!("tokens?{}={}", QUERY_PARAM_TOKEN, token.token),
+                    ),
+                    convert_to_pill(token.account.balance.to_string(), ColorVariant::Grey),
+                    convert_to_pill(token.account.nonce.to_string(), ColorVariant::Grey),
                 ],
                 None => vec![],
             })

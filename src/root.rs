@@ -1,7 +1,8 @@
 use crate::{
     account_activity::page::{
         AccountBlockProductionPage, AccountDelegationsPage, AccountInternalCommandsPage,
-        AccountSnarkWorkPage, AccountSpotlightTabbedPage, AccountUserCommandsPage,
+        AccountSnarkWorkPage, AccountSpotlightTabbedPage, AccountTokensPage,
+        AccountUserCommandsPage,
     },
     accounts::page::AccountsPage,
     analytics::page::{
@@ -86,6 +87,7 @@ pub fn Root() -> impl IntoView {
                         <Route path="/snark-jobs" view=AccountSnarkWorkPage />
                         <Route path="/block-production" view=AccountBlockProductionPage />
                         <Route path="/delegations" view=AccountDelegationsPage />
+                        <Route path="/tokens" view=AccountTokensPage />
                     </Route>
                     <Route path="/tokens" view=TokensPage />
 

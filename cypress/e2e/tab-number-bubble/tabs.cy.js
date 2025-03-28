@@ -33,6 +33,10 @@ suite(["@tier2"], "number bubble in tab", () => {
       url: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}/delegations`,
       tab: "Delegations",
     },
+    // {
+    //   url: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}/tokens`,
+    //   tab: "Tokens",
+    // },
     {
       url: `/addresses/accounts/${ADDRESS_WITH_SNARK_AND_BLOCK_PRODUCTION}/snark-jobs`,
       tab: "SNARK Jobs",

@@ -17,6 +17,7 @@ query AccountActivityQuery(
   $delegators_sort_by: StakesSortByInput!
   $delegators_query: StakesQueryInput!
   $delegate_query: StakesQueryInput!
+  $token_holders_query: TokenHoldersQueryInput!
 ) {
   incoming_transactions: transactions(
     sortBy: $trans_sort_by
@@ -123,6 +124,15 @@ query AccountActivityQuery(
       coinbaseReceiverAccount {
         publicKey
       }
+    }
+  }
+  tokenHolders(query: $token_holders_query) {
+     token
+     symbol
+     account {
+       publicKey
+       balance
+       nonce
     }
   }
   accounts(limit: 1, query: $account_query) {

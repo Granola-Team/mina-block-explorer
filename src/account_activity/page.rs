@@ -6,12 +6,13 @@ use crate::{
     account_activity::{
         components::{
             AccountDelegationsSection, AccountInternalCommandsSection, AccountOverviewBlocksTable,
-            AccountOverviewSnarkJobTable, AccountTransactionsSection,
+            AccountOverviewSnarkJobTable, AccountOverviewTokensTable, AccountTransactionsSection,
         },
         graphql::account_activity_query::{
             AccountActivityQueryAccounts, AccountActivityQueryBlocks,
             AccountActivityQueryFeetransfers, AccountActivityQueryIncomingTransactions,
             AccountActivityQueryOutgoingTransactions, AccountActivityQuerySnarks,
+            AccountActivityQueryTokenHolders,
         },
         models::AccountActivityQueryDirectionalTransactions,
     },
@@ -159,6 +160,18 @@ pub fn AccountBlockProductionPage() -> impl IntoView {
 }
 
 #[component]
+pub fn AccountTokensPage() -> impl IntoView {
+    let tokens = use_context::<ReadSignal<Option<Vec<Option<AccountActivityQueryTokenHolders>>>>>()
+        .expect("there to be an optional AccountActivityQueryTokenHolders signal provided");
+    view! {
+        <AccountOverviewTokensTable
+            tokens_sig=tokens
+            is_loading=Signal::derive(move || tokens.get().is_none())
+        />
+    }
+}
+
+#[component]
 pub fn AccountInternalCommandsPage() -> impl IntoView {
     let txn: ReadSignal<Option<Vec<Option<_>>>> =
         use_context::<ReadSignal<Option<Vec<Option<AccountActivityQueryFeetransfers>>>>>()
@@ -168,6 +181,27 @@ pub fn AccountInternalCommandsPage() -> impl IntoView {
             txn_sig=txn
             is_loading=Signal::derive(move || txn.get().is_none())
         />
+    }
+}
+
+#[component]
+pub fn AccountAccountTokensPageDelegationsPage() -> impl IntoView {
+    let delegations_sig: ReadSignal<Option<Vec<Option<AccountActivityQueryDelegatorExt>>>> =
+        use_context::<ReadSignal<Option<Vec<Option<AccountActivityQueryDelegatorExt>>>>>()
+            .expect("there to be an optional AccountActivityQueryFeetransfers signal provided");
+    let delegator_count: ReadSignal<Option<DelegateCount>> =
+        use_context::<ReadSignal<Option<DelegateCount>>>()
+            .expect("there to be an optional delegator count signal provided");
+    {
+        move || {
+            view! {
+                <AccountDelegationsSection
+                    delegations_sig=delegations_sig
+                    delegator_count=delegator_count.get().map(|c| c.0)
+                    is_loading=Signal::derive(move || delegations_sig.get().is_none())
+                />
+            }
+        }
     }
 }
 
@@ -202,6 +236,7 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
     let (blocks, set_blocks) = create_signal(None);
     let (delegators, set_delegators) = create_signal(None);
     let (delegators_count, set_delegators_counts) = create_signal(None);
+    let (tokens, set_tokens) = create_signal(None);
 
     let query_params_map = use_query_map();
     let (canonical_sig, _) = create_query_signal::<bool>("canonical");
@@ -346,6 +381,7 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
                         .unwrap_or_default(),
                 )));
             }
+            set_tokens.set(Some(res.token_holders));
         }
     });
 
@@ -355,6 +391,7 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
         set_snarks.set(None);
         set_blocks.set(None);
         set_int_txn.set(None);
+        set_tokens.set(None);
     });
 
     provide_context(transactions);
@@ -364,6 +401,7 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
     provide_context(account);
     provide_context(delegators);
     provide_context(delegators_count);
+    provide_context(tokens);
 
     view! {
         {move || {
@@ -374,6 +412,7 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
             account.get();
             delegators.get();
             delegators_count.get();
+            tokens.get();
             view! { <AccountSpotlightTabs /> }
         }}
         <AccountSpotlightPage />
@@ -391,6 +430,9 @@ pub fn AccountSpotlightTabs() -> impl IntoView {
 
     let account = use_context::<ReadSignal<Option<AccountActivityQueryAccounts>>>()
         .expect("there to be an optional account provided");
+
+    let tokens = use_context::<ReadSignal<Option<Vec<Option<AccountActivityQueryTokenHolders>>>>>()
+        .expect("there to be an optional tokens provided");
 
     let tabs = vec![
         NavEntry {
@@ -436,6 +478,13 @@ pub fn AccountSpotlightTabs() -> impl IntoView {
             text: "Delegations".to_string(),
             icon: NavIcon::Delegates,
             number_bubble: Some(delegator_count.get().map(|c| c.0).unwrap_or(0)), // Wrap in Some
+            ..Default::default()
+        },
+        NavEntry {
+            href: format!("/addresses/accounts/{}/tokens", id()),
+            text: "Tokens".to_string(),
+            icon: NavIcon::Tokens,
+            number_bubble: tokens.get().map(|tokens| tokens.len()), // Wrap in Some
             ..Default::default()
         },
     ];
