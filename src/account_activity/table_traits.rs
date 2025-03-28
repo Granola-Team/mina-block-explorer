@@ -149,7 +149,10 @@ impl TableData for Vec<Option<AccountActivityQueryTokenHolders>> {
                         token.symbol.to_string(),
                         format!("tokens?{}={}", QUERY_PARAM_TOKEN, token.token),
                     ),
-                    convert_to_pill(token.account.balance.to_string(), ColorVariant::Grey),
+                    convert_to_span(format_number_helper(
+                        &token.account.balance.to_string(),
+                        Some(0),
+                    )),
                     convert_to_pill(token.account.nonce.to_string(), ColorVariant::Grey),
                 ],
                 None => vec![],
