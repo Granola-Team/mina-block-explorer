@@ -3,8 +3,8 @@ use crate::{
     common::{
         components::*,
         constants::{
-            TABLE_COL_HASH_WIDTH, TABLE_COL_LARGE_BALANCE, TABLE_COL_NUMERIC_WIDTH,
-            TABLE_COL_USERNAME_WIDTH,
+            QUERY_PARAM_TOKEN_SYMBOL, TABLE_COL_HASH_WIDTH, TABLE_COL_LARGE_BALANCE,
+            TABLE_COL_NUMERIC_WIDTH, TABLE_COL_USERNAME_WIDTH,
         },
         models::{TableMetadata, UrlParamSelectOptions},
         table::*,
@@ -20,7 +20,7 @@ pub fn TokensPage() -> impl IntoView {
     let (data_sig, set_data) = create_signal(None);
     let (total_count_sig, set_total_count) = create_signal(None::<i64>);
     let (row_limit_sig, _) = create_query_signal::<i64>("row-limit");
-    let (name_sig, _) = create_query_signal::<String>("q-name");
+    let (name_sig, _) = create_query_signal::<String>(QUERY_PARAM_TOKEN_SYMBOL);
 
     let resource = create_resource(
         move || name_sig.get(),
