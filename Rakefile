@@ -134,10 +134,14 @@ file "node_modules" => ["pnpm-lock.yaml", "package.json"] do
 end
 
 desc "Serve the built website locally"
-task dev: [:pnpm_install, :deploy_mina_indexer] do
-  ensure_env_vars(%w[GRAPHQL_URL REST_URL], "Cannot start dev")
+task dev: [:dev_build, :deploy_mina_indexer] do
   trap("INT") { Rake::Task["shutdown_mina_indexer"].invoke }
   sh "trunk serve --port=#{TRUNK_PORT} --open"
+end
+
+desc "Serve the built website locally against prod indexer"
+task dev_prod: [:release_build] do
+  sh "trunk serve --release --port=#{TRUNK_PORT} --open"
 end
 
 desc "Invoke the interactive Tier2 tests"
@@ -156,7 +160,7 @@ task t2_i: [:pnpm_install, :dev_build, :deploy_mina_indexer] do
 end
 
 desc "Publish the website to production"
-task publish: [:clean, :pnpm_install, :release_build] do
+task publish: [:pnpm_install, :release_build] do
   ensure_env_vars(%w[CLOUDFLARE_ACCOUNT_ID CLOUDFLARE_API_TOKEN], "Cannot publish")
 
   puts "--- Publishing"
@@ -201,21 +205,18 @@ file ".build/lint-rust" => RUST_SRC_FILES + [".build", "rustfmt.toml"] do |t|
 end
 
 desc "Build the dev version for front-end WASM bundle"
-task :dev_build do
+task dev_build: "target/debug"
+file "target/debug" => CARGO_DEPS + ["Trunk.toml", "tailwind.config.js"] do
   ENV["GRAPHQL_URL"] = "http://localhost:8080/graphql"
   ENV["REST_URL"] = "https://localhost:8080"
-  Rake::Task["dist"].invoke
+  sh "trunk build"
 end
 
 desc "Build the release version for front-end WASM bundle"
-task :release_build do
+task release_build: "target/release"
+file "target/release" => CARGO_DEPS + ["Trunk.toml", "tailwind.config.js"] do
   ENV["GRAPHQL_URL"] = "https://api.minasearch.com/graphql"
   ENV["REST_URL"] = "https://api.minasearch.com"
-  Rake::Task["dist"].invoke
-end
-
-file "dist" => CARGO_DEPS + ["Trunk.toml", "tailwind.config.js"] do
-  ensure_env_vars(%w[GRAPHQL_URL REST_URL], "Cannot build dist folder")
   sh "trunk build --release --filehash true"
 end
 
