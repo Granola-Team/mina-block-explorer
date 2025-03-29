@@ -63,12 +63,28 @@ def run_tier_task(cypress_cmd, wait_for_cypress: true)
   trap("INT") do
     puts "\nReceived SIGINT, terminating running processes..."
     if cypress_pid
-      Process.kill("TERM", -cypress_pid) rescue nil
-      Process.wait(cypress_pid) rescue nil
+      begin
+        Process.kill("TERM", -cypress_pid)
+      rescue
+        nil
+      end
+      begin
+        Process.wait(cypress_pid)
+      rescue
+        nil
+      end
     end
     if server_pid
-      Process.kill("TERM", -server_pid) rescue nil
-      Process.wait(server_pid) rescue nil
+      begin
+        Process.kill("TERM", -server_pid)
+      rescue
+        nil
+      end
+      begin
+        Process.wait(server_pid)
+      rescue
+        nil
+      end
     end
     exit 1
   end
@@ -91,8 +107,16 @@ def run_tier_task(cypress_cmd, wait_for_cypress: true)
 
     # Kill the server after Cypress finishes
     puts "Killing trunk server..."
-    Process.kill("TERM", -server_pid) rescue nil
-    Process.wait(server_pid) rescue nil
+    begin
+      Process.kill("TERM", -server_pid)
+    rescue
+      nil
+    end
+    begin
+      Process.wait(server_pid)
+    rescue
+      nil
+    end
 
     # Exit with Cypress’s status
     exit(cypress_status.exitstatus)
@@ -290,7 +314,7 @@ desc "Run the Tier1 tests"
 task tier1: [:lint, :test_unit, :dev_build]
 
 desc "Invoke the Tier2 regression suite (non-interactive)"
-task :tier2 => [:tier1, :pnpm_install, :deploy_mina_indexer] do
+task tier2: [:tier1, :pnpm_install, :deploy_mina_indexer] do
   run_tier_task("pnpm exec cypress run -r list -q", wait_for_cypress: true)
 end
 
