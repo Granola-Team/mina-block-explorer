@@ -1,16 +1,19 @@
 use super::{
-    graphql::account_activity_query::{AccountActivityQueryBlocks, AccountActivityQuerySnarks},
+    graphql::account_activity_query::{
+        AccountActivityQueryAccountsZkapp, AccountActivityQueryBlocks, AccountActivityQuerySnarks,
+    },
     models::*,
 };
 use crate::{
     account_activity::{
+        functions::*,
         graphql::account_activity_query::{
             AccountActivityQueryAccounts, AccountActivityQueryFeetransfers,
             AccountActivityQueryTokenHolders,
         },
         models::AccountActivityQueryDelegatorExt,
     },
-    common::{components::*, constants::*, models::*, table::*},
+    common::{components::*, constants::*, models::*, spotlight::SpotlightTable, table::*},
     icons::*,
     summary::models::BlockchainSummary,
 };
@@ -18,6 +21,47 @@ use codee::string::JsonSerdeCodec;
 use leptos::*;
 use leptos_router::use_params_map;
 use leptos_use::storage::use_local_storage;
+
+#[component]
+pub fn ZkAppDetailsSection(zkapp: Option<AccountActivityQueryAccountsZkapp>) -> impl IntoView {
+    let (metadata, _) = create_signal::<Option<TableMetadata>>(None);
+
+    if let Some(zkapp) = zkapp {
+        let zkapp_clone = zkapp.clone();
+        view! {
+            <TableSection metadata=metadata.into() section_heading="ZKApp Details".to_string()>
+                <SpotlightTable>
+                    <ZkAppDetailTr>
+                        <ZkAppDetailTh>"App State:"</ZkAppDetailTh>
+                        <ZkAppDetailTd>
+                            <CopyToClipboard>
+                                <CodeBlock>
+                                    {get_app_state(&zkapp)
+                                        .ok()
+                                        .unwrap_or("Unable to serialize app state".to_string())}
+                                </CodeBlock>
+                            </CopyToClipboard>
+                        </ZkAppDetailTd>
+                    </ZkAppDetailTr>
+                    <ZkAppDetailTr>
+                        <ZkAppDetailTh>"Action State:"</ZkAppDetailTh>
+                        <ZkAppDetailTd>
+                            <CopyToClipboard>
+                                <CodeBlock>
+                                    {get_action_state(&zkapp_clone)
+                                        .ok()
+                                        .unwrap_or("Unable to serialize action state".to_string())}
+                                </CodeBlock>
+                            </CopyToClipboard>
+                        </ZkAppDetailTd>
+                    </ZkAppDetailTr>
+                </SpotlightTable>
+            </TableSection>
+        }
+    } else {
+        ().into_view()
+    }
+}
 
 #[component]
 pub fn AccountTransactionsSection(

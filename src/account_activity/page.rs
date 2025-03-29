@@ -7,6 +7,7 @@ use crate::{
         components::{
             AccountDelegationsSection, AccountInternalCommandsSection, AccountOverviewBlocksTable,
             AccountOverviewSnarkJobTable, AccountOverviewTokensTable, AccountTransactionsSection,
+            ZkAppDetailsSection,
         },
         graphql::account_activity_query::{
             AccountActivityQueryAccounts, AccountActivityQueryBlocks,
@@ -19,9 +20,8 @@ use crate::{
     common::{
         components::*,
         constants::*,
-        models::{MyError, NavEntry, NavIcon, TableMetadata},
+        models::{MyError, NavEntry, NavIcon},
         spotlight::*,
-        table::TableSection,
     },
     icons::*,
     summary::models::BlockchainSummary,
@@ -34,7 +34,6 @@ use leptos_use::storage::use_local_storage;
 
 #[component]
 fn AccountSpotlightPage() -> impl IntoView {
-    let (metadata, _) = create_signal::<Option<TableMetadata>>(None);
     let memo_params_map = use_params_map();
     let (summary_sig, _, _) =
         use_local_storage::<BlockchainSummary, JsonSerdeCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
@@ -67,46 +66,7 @@ fn AccountSpotlightPage() -> impl IntoView {
                             >
                                 <WalletIcon width=40 />
                             </SpotlightSection>
-                            {acc
-                                .zkapp
-                                .map(|zkapp| {
-                                    let zkapp_clone = zkapp.clone();
-                                    view! {
-                                        <TableSection
-                                            metadata=metadata.into()
-                                            section_heading="ZKApp Details".to_string()
-                                        >
-                                            <SpotlightTable>
-                                                <ZkAppDetailTr>
-                                                    <ZkAppDetailTh>"App State:"</ZkAppDetailTh>
-                                                    <ZkAppDetailTd>
-                                                        <CopyToClipboard>
-                                                            <CodeBlock>
-                                                                {get_app_state(&zkapp)
-                                                                    .ok()
-                                                                    .unwrap_or("Unable to serialize app state".to_string())}
-                                                            </CodeBlock>
-                                                        </CopyToClipboard>
-                                                    </ZkAppDetailTd>
-                                                </ZkAppDetailTr>
-                                                <ZkAppDetailTr>
-                                                    <ZkAppDetailTh>"Action State:"</ZkAppDetailTh>
-                                                    <ZkAppDetailTd>
-                                                        <CopyToClipboard>
-                                                            <CodeBlock>
-                                                                {get_action_state(&zkapp_clone)
-                                                                    .ok()
-                                                                    .unwrap_or("Unable to serialize action state".to_string())}
-                                                            </CodeBlock>
-                                                        </CopyToClipboard>
-                                                    </ZkAppDetailTd>
-                                                </ZkAppDetailTr>
-                                            </SpotlightTable>
-                                        </TableSection>
-                                    }
-                                        .into_view()
-                                })
-                                .unwrap_or(().into_view())}
+                            <ZkAppDetailsSection zkapp=acc.zkapp />
                         }
                             .into_view()
                     }
