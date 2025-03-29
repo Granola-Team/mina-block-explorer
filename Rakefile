@@ -291,7 +291,7 @@ end
 desc "Build the dev version for front-end WASM bundle"
 task :dev_build do
   ENV["GRAPHQL_URL"] = "http://localhost:8080/graphql"
-  ENV["REST_URL"] = "https://localhost:8080"
+  ENV["REST_URL"] = "http://localhost:8080"
   Rake::Task["dist"].invoke
 end
 
