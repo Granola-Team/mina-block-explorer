@@ -1,5 +1,6 @@
 require "open3"
 require "fileutils"
+require "socket"
 
 # Constants and environment variables
 SPEC = "cypress/e2e/"
@@ -32,6 +33,76 @@ end
 def sh(cmd)
   puts cmd
   system(cmd) or raise "Command failed: #{cmd}"
+end
+
+# Check if port is open
+def port_open?(port, host = "127.0.0.1")
+  Socket.tcp(host, port, connect_timeout: 1).close
+  true
+rescue Errno::ECONNREFUSED, Errno::EHOSTUNREACH, SocketError
+  false
+end
+
+# Wait for port to become available
+def wait_for_port(port, interval = 5)
+  puts "Waiting for port #{port} to become available..."
+  until port_open?(port)
+    puts "Port #{port} is not available, retrying in #{interval} seconds..."
+    sleep interval
+  end
+  puts "Port #{port} is now available."
+end
+
+# Helper to run a task with server and Cypress
+def run_tier_task(cypress_cmd, wait_for_cypress: true)
+  puts "--- Performing end-to-end @tier2 tests"
+  server_pid = nil
+  cypress_pid = nil
+
+  # Early trap to handle SIGINT
+  trap("INT") do
+    puts "\nReceived SIGINT, terminating running processes..."
+    if cypress_pid
+      Process.kill("TERM", -cypress_pid) rescue nil
+      Process.wait(cypress_pid) rescue nil
+    end
+    if server_pid
+      Process.kill("TERM", -server_pid) rescue nil
+      Process.wait(server_pid) rescue nil
+    end
+    exit 1
+  end
+
+  # Start the server
+  server_pid = Process.spawn("trunk serve --no-autoreload --port=#{TRUNK_PORT}", pgroup: true)
+  puts "Started trunk server with PID: #{server_pid}"
+
+  # Wait for port
+  wait_for_port(TRUNK_PORT.to_i)
+
+  # Run Cypress
+  cypress_pid = Process.spawn(cypress_cmd, pgroup: true)
+  puts "Started Cypress with PID: #{cypress_pid}"
+
+  if wait_for_cypress
+    # Wait for Cypress to finish and capture exit status
+    _, cypress_status = Process.wait2(cypress_pid)
+    puts "Cypress finished with exit code: #{cypress_status.exitstatus}"
+
+    # Kill the server after Cypress finishes
+    puts "Killing trunk server..."
+    Process.kill("TERM", -server_pid) rescue nil
+    Process.wait(server_pid) rescue nil
+
+    # Exit with Cypress’s status
+    exit(cypress_status.exitstatus)
+  else
+    # For non-terminating Cypress (e.g., cypress open), just let it run
+    # Server and Cypress will be killed via SIGINT when user is done
+    puts "Cypress is running interactively. Press Ctrl+C to stop."
+    # Wait indefinitely for SIGINT
+    sleep
+  end
 end
 
 desc "Default task - print the menu of targets"
@@ -134,25 +205,18 @@ file "node_modules" => ["pnpm-lock.yaml", "package.json"] do
 end
 
 desc "Serve the built website locally"
-task dev: [:pnpm_install, :deploy_mina_indexer] do
-  ensure_env_vars(%w[GRAPHQL_URL REST_URL], "Cannot start dev")
+task dev: [:deploy_mina_indexer] do
+  ENV["GRAPHQL_URL"] = "http://localhost:8080/graphql"
+  ENV["REST_URL"] = "http://localhost:8080"
   trap("INT") { Rake::Task["shutdown_mina_indexer"].invoke }
   sh "trunk serve --port=#{TRUNK_PORT} --open"
 end
 
-desc "Invoke the interactive Tier2 tests"
-task t2_i: [:pnpm_install, :dev_build, :deploy_mina_indexer] do
-  trap("INT") { Rake::Task["shutdown_mina_indexer"].invoke }
-  sh %W[
-    GRAPHQL_URL=http://localhost:8080/graphql
-    REST_URL=http://localhost:8080
-    ruby ./ops/manage-processes.rb
-    --port=#{TRUNK_PORT}
-    --first-cmd='trunk serve
-    --no-autoreload
-    --port=#{TRUNK_PORT}'
-    --second-cmd='pnpm exec cypress open'
-  ].join(" ")
+desc "Serve the built website locally against prod indexer"
+task :dev_prod do
+  ENV["GRAPHQL_URL"] = "https://api.minasearch.com/graphql"
+  ENV["REST_URL"] = "https://api.minasearch.com"
+  sh "trunk serve --port=#{TRUNK_PORT} --open"
 end
 
 desc "Publish the website to production"
@@ -225,20 +289,14 @@ task lint: [:pnpm_install, :audit, :lint_javascript, :lint_ruby, :lint_rust]
 desc "Run the Tier1 tests"
 task tier1: [:lint, :test_unit, :dev_build]
 
-desc "Invoke the Tier2 regression suite"
-task tier2: [:tier1, :pnpm_install, :deploy_mina_indexer] do
-  puts "--- Performing end-to-end @tier2 tests"
-  sh %W[
-    CYPRESS_tags=@tier2
-    GRAPHQL_URL=http://localhost:8080/graphql
-    REST_URL=http://localhost:8080
-    time ruby ./ops/manage-processes.rb
-    --port=#{TRUNK_PORT}
-    --first-cmd='trunk serve
-    --no-autoreload
-    --port=#{TRUNK_PORT}'
-    --second-cmd='pnpm exec cypress run -r list -q'
-  ].join(" ")
+desc "Invoke the Tier2 regression suite (non-interactive)"
+task :tier2 => [:tier1, :pnpm_install, :deploy_mina_indexer] do
+  run_tier_task("pnpm exec cypress run -r list -q", wait_for_cypress: true)
+end
+
+desc "Invoke the Tier2 regression suite (interactive)"
+task :t2_i do
+  run_tier_task("pnpm exec cypress open", wait_for_cypress: false)
 end
 
 desc "Print all tasks and their dependencies as a tree"
