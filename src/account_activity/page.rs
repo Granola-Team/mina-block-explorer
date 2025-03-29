@@ -39,7 +39,10 @@ fn AccountSpotlightPage() -> impl IntoView {
         use_local_storage::<BlockchainSummary, JsonSerdeCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
 
     let account = use_context::<ReadSignal<Option<AccountActivityQueryAccounts>>>()
-        .expect("there to be an optional account provided");
+        .expect("Expected an optional account provided");
+
+    let is_loading_sig = use_context::<ReadSignal<Option<bool>>>()
+        .expect("Expected a bool signal to detect if resource is loading");
 
     let username = move || {
         account
@@ -52,8 +55,8 @@ fn AccountSpotlightPage() -> impl IntoView {
         <Title formatter=move |text| format!("Account Overview | {text}") text=username />
         <PageContainer>
             {move || {
-                match account.get() {
-                    Some(acc) => {
+                match (account.get(), is_loading_sig.get()) {
+                    (Some(acc), _) => {
                         view! {
                             <SpotlightSection
                                 header="Account Spotlight"
@@ -70,13 +73,26 @@ fn AccountSpotlightPage() -> impl IntoView {
                         }
                             .into_view()
                     }
-                    None => {
+                    (None, Some(true)) | (None, None) => {
                         view! {
                             <SpotlightSection
                                 header="Account Spotlight"
                                 spotlight_items=get_spotlight_loading_data()
                                 meta=None
                                 id=None
+                            >
+                                <WalletIcon width=40 />
+                            </SpotlightSection>
+                        }
+                            .into_view()
+                    }
+                    (None, Some(false)) => {
+                        view! {
+                            <SpotlightSection
+                                header="Account Spotlight"
+                                spotlight_items=vec![]
+                                meta=Some("No MINA activity for this account.".to_string())
+                                id=memo_params_map.get().get("id").cloned()
                             >
                                 <WalletIcon width=40 />
                             </SpotlightSection>
@@ -205,6 +221,7 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
     let (delegators, set_delegators) = create_signal(None);
     let (delegators_count, set_delegators_counts) = create_signal(None);
     let (tokens, set_tokens) = create_signal(None);
+    let (is_loading_sig, set_is_loading) = create_signal(None);
 
     let query_params_map = use_query_map();
     let (canonical_sig, _) = create_query_signal::<bool>("canonical");
@@ -290,6 +307,10 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
     );
 
     create_effect(move |_| {
+        set_is_loading.set(Some(activity_resource.loading().get()));
+    });
+
+    create_effect(move |_| {
         if let Some(res) = activity_resource.get().and_then(|res| res.ok()) {
             let mut transactions: Vec<Option<AccountActivityQueryDirectionalTransactions>> = res
                 .incoming_transactions
@@ -370,6 +391,7 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
     provide_context(delegators);
     provide_context(delegators_count);
     provide_context(tokens);
+    provide_context(is_loading_sig);
 
     view! {
         {move || {
