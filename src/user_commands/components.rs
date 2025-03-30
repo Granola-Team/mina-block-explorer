@@ -1,6 +1,9 @@
 use super::functions::*;
 use crate::{
-    common::{components::*, constants::*, models::*, table::*},
+    common::{
+        components::*, constants::*, functions::convert_to_copy_link, models::*,
+        spotlight::SpotlightTable, table::*,
+    },
     summary::models::BlockchainSummary,
     user_commands::{graphql::transactions_query, models::PendingTxn},
 };
@@ -76,6 +79,43 @@ fn get_available_records(
 
             _ => None,
         }
+    }
+}
+
+#[component]
+pub fn AccountsUpdatedSection(
+    zkapp: Option<transactions_query::TransactionsQueryTransactionsZkapp>,
+) -> impl IntoView {
+    let (metadata, _) = create_signal::<Option<TableMetadata>>(None);
+    if let Some(zkapp) = zkapp {
+        view! {
+            <TableSection metadata=metadata.into() section_heading="Updated Accounts">
+                <SpotlightTable>
+                    {zkapp
+                        .accounts_updated
+                        .into_iter()
+                        .enumerate()
+                        .map(|(index, account)| {
+                            view! {
+                                <ZkAppDetailTr>
+                                    <ZkAppDetailTh>
+                                        {format!("Updated Account #{}", index + 1)}
+                                    </ZkAppDetailTh>
+                                    <ZkAppDetailTd>
+                                        {convert_to_copy_link(
+                                            account.pk.to_string(),
+                                            format!("/addresses/accounts/{}", account.pk),
+                                        )}
+                                    </ZkAppDetailTd>
+                                </ZkAppDetailTr>
+                            }
+                        })
+                        .collect::<Vec<_>>()}
+                </SpotlightTable>
+            </TableSection>
+        }
+    } else {
+        ().into_view()
     }
 }
 
