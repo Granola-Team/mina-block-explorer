@@ -25,9 +25,6 @@
           "x86_64-linux"
         ]
       },
-      "git-lfs": {
-        "pkg-path": "git-lfs"
-      },
       "leptosfmt": {
         "pkg-path": "leptosfmt"
       },
@@ -740,122 +737,6 @@
       ],
       "outputs": {
         "out": "/nix/store/q87df3dw0x7r1k9gagir9a5sdi3gmw4a-clang-wrapper-19.1.7"
-      },
-      "system": "x86_64-linux",
-      "group": "toplevel",
-      "priority": 5
-    },
-    {
-      "attr_path": "git-lfs",
-      "broken": false,
-      "derivation": "/nix/store/8p820ln9aifwh36798pzvxi7ycx20y0x-git-lfs-3.6.1.drv",
-      "description": "Git extension for versioning large files",
-      "install_id": "git-lfs",
-      "license": "MIT",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
-      "name": "git-lfs-3.6.1",
-      "pname": "git-lfs",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T01:13:29.264181Z",
-      "stabilities": [
-        "unstable"
-      ],
-      "unfree": false,
-      "version": "3.6.1",
-      "outputs_to_install": [
-        "out"
-      ],
-      "outputs": {
-        "out": "/nix/store/iv00ymrzmk8q8f67iq2065x9njh256hi-git-lfs-3.6.1"
-      },
-      "system": "aarch64-darwin",
-      "group": "toplevel",
-      "priority": 5
-    },
-    {
-      "attr_path": "git-lfs",
-      "broken": false,
-      "derivation": "/nix/store/j9bgdjxs3wjaxi574sn7792q1yg3dra6-git-lfs-3.6.1.drv",
-      "description": "Git extension for versioning large files",
-      "install_id": "git-lfs",
-      "license": "MIT",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
-      "name": "git-lfs-3.6.1",
-      "pname": "git-lfs",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T01:35:00.614887Z",
-      "stabilities": [
-        "unstable"
-      ],
-      "unfree": false,
-      "version": "3.6.1",
-      "outputs_to_install": [
-        "out"
-      ],
-      "outputs": {
-        "out": "/nix/store/g1sr0palcw94jd93dq72ch6crg0m7mpf-git-lfs-3.6.1"
-      },
-      "system": "aarch64-linux",
-      "group": "toplevel",
-      "priority": 5
-    },
-    {
-      "attr_path": "git-lfs",
-      "broken": false,
-      "derivation": "/nix/store/94zsqzpjis3d3p3kl7dmdm2jmq2pnjd5-git-lfs-3.6.1.drv",
-      "description": "Git extension for versioning large files",
-      "install_id": "git-lfs",
-      "license": "MIT",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
-      "name": "git-lfs-3.6.1",
-      "pname": "git-lfs",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T01:54:13.115996Z",
-      "stabilities": [
-        "unstable"
-      ],
-      "unfree": false,
-      "version": "3.6.1",
-      "outputs_to_install": [
-        "out"
-      ],
-      "outputs": {
-        "out": "/nix/store/537wr9shlywj10cjngc47j6dis3ch8wb-git-lfs-3.6.1"
-      },
-      "system": "x86_64-darwin",
-      "group": "toplevel",
-      "priority": 5
-    },
-    {
-      "attr_path": "git-lfs",
-      "broken": false,
-      "derivation": "/nix/store/zrwbik70xc95q8wdsl50lrvy707fg1i0-git-lfs-3.6.1.drv",
-      "description": "Git extension for versioning large files",
-      "install_id": "git-lfs",
-      "license": "MIT",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
-      "name": "git-lfs-3.6.1",
-      "pname": "git-lfs",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T02:16:50.143760Z",
-      "stabilities": [
-        "unstable"
-      ],
-      "unfree": false,
-      "version": "3.6.1",
-      "outputs_to_install": [
-        "out"
-      ],
-      "outputs": {
-        "out": "/nix/store/fxkw93ljlxz5zy9jsn65wyjmlgchxiar-git-lfs-3.6.1"
       },
       "system": "x86_64-linux",
       "group": "toplevel",
