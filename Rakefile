@@ -129,6 +129,24 @@ def run_tier_task(cypress_cmd, wait_for_cypress: true)
   end
 end
 
+def cmd_capture(command)
+  output = ""
+
+  IO.popen(command, err: [:child, :out]) do |io|
+    io.each_line do |line|
+      print line
+      output << line
+    end
+  end
+
+  # In Ruby, $? contains the status of the last executed child process
+  unless $?.success?
+    raise "Command '#{command}' failed with exit status: #{$?.exitstatus}\nOutput: #{output}"
+  end
+
+  output
+end
+
 desc "Default task - print the menu of targets"
 task :default do
   system("rake -T")
@@ -145,10 +163,6 @@ task :deploy_mina_indexer do
       nix develop --command just deploy-local-prod-dev 10000 8080
     ].join(" ")
   end
-end
-
-file ".build" do |t|
-  mkdir_p t.name # Creates the 'build' directory if it doesn’t exist
 end
 
 desc "Shut down mina-indexer"
@@ -183,17 +197,22 @@ end
 
 desc "Run the Jest tests"
 task jest_test: ".build/jest-test"
-file ".build/jest-test" => JAVASCRIPT_SRC_FILES + [".build", "jest.config.js"] do |t|
+
+file ".build/jest-test" => JAVASCRIPT_SRC_FILES + ["jest.config.js"] do |t|
   puts "--- Performing jest unit tests"
-  sh "pnpm exec jest test 2>&1 | tee #{t.name}"
+  jest_output = cmd_capture("pnpm exec jest test")
+  mkdir_p(".build")
+  File.write(t.name, jest_output)
 end
 
 desc "Test the Rust code"
 task rust_test: ".build/rust-test"
 
-file ".build/rust-test" => CARGO_DEPS + [".build"] do |t|
+file ".build/rust-test" => CARGO_DEPS do |t|
   puts "--- Performing rust unit tests"
-  sh "cargo-nextest nextest run 2>&1 | tee #{t.name}"
+  nextest_output = cmd_capture("cargo-nextest nextest run")
+  mkdir_p(".build")
+  File.write(t.name, nextest_output)
 end
 
 desc "Run the unit tests"
@@ -202,9 +221,10 @@ task test_unit: [:jest_test, :rust_test]
 desc "Audit the Rust code with cargo-audit"
 task audit: ".build/audit"
 
-file ".build/audit" => CARGO_DEPS + [".build"] do |t|
-  audit_output = `cargo-audit audit`
-  machete_output = `cargo machete`
+file ".build/audit" => CARGO_DEPS do |t|
+  audit_output = cmd_capture("cargo-audit audit")
+  machete_output = cmd_capture("cargo machete")
+  mkdir_p(".build")
   File.write(t.name, [audit_output, machete_output].join("\n"))
 end
 
@@ -217,12 +237,14 @@ end
 desc "Build documentation in the build directory"
 task build_docs: ".build/docs"
 
-file ".build/docs" => GRAPHQL_SRC_FILES + [".build"] do |t|
+file ".build/docs" => GRAPHQL_SRC_FILES do |t|
+  mkdir_p(".build")
   sh "cargo doc --document-private-items --target-dir #{t.name}"
 end
 
 desc "Install the JavaScript dependencies with 'pnpm'"
 task pnpm_install: "node_modules"
+
 file "node_modules" => ["pnpm-lock.yaml", "package.json"] do
   puts "--- Installing NPM dependencies"
   sh "pnpm install"
@@ -255,36 +277,42 @@ end
 desc "Use 'cargo check' to verify buildability"
 task check: ".build/check"
 
-file ".build/check" => CARGO_DEPS + [".build"] do |t|
-  sh "cargo check 2>&1 | tee #{t.name}"
+file ".build/check" => CARGO_DEPS do |t|
+  check_output = cmd_capture("cargo check")
+  mkdir_p(".build")
+  File.write(t.name, check_output)
 end
 
 desc "Lint the Cypress test code (JavaScript)"
 task lint_javascript: ".build/lint-javascript"
 
-file ".build/lint-javascript" => CYPRESS_FILES + [".build"] do |t|
+file ".build/lint-javascript" => CYPRESS_FILES + ["node_modules"] do |t|
   puts "--- Linting JS/TS"
-  sh "pnpm exec prettier --check cypress/ 2>&1 | tee #{t.name}"
+  prettier_output = cmd_capture("pnpm exec prettier --check cypress/")
+  mkdir_p(".build")
+  File.write(t.name, prettier_output)
 end
 
 desc "Lint the Ruby code"
 task lint_ruby: ".build/lint-ruby"
 
-file ".build/lint-ruby" => RUBY_SRC_FILES + [".build"] do |t|
+file ".build/lint-ruby" => RUBY_SRC_FILES do |t|
   puts "--- Linting ruby scripts"
-  ruby_cw_output = `ruby -cw #{RUBY_SRC_FILES.join(" ")}`
-  ruby_std_output = `standardrb --no-fix #{RUBY_SRC_FILES.join(" ")}`
+  ruby_cw_output = cmd_capture("ruby -cw #{RUBY_SRC_FILES.join(" ")}")
+  ruby_std_output = cmd_capture("standardrb --no-fix #{RUBY_SRC_FILES.join(" ")}")
+  mkdir_p(".build")
   File.write(t.name, [ruby_cw_output, ruby_std_output].join("\n"))
 end
 
 desc "Lint the Rust code"
 task lint_rust: ".build/lint-rust"
 
-file ".build/lint-rust" => RUST_SRC_FILES + [".build", "rustfmt.toml"] do |t|
+file ".build/lint-rust" => RUST_SRC_FILES + ["rustfmt.toml"] do |t|
   puts "--- Linting Rust code"
-  cargo_fmt_out = `cargo-fmt --all --check`
-  leptos_fmt_out = `leptosfmt --check ./src`
-  clippy_out = `cargo clippy --all-targets --all-features -- -D warnings`
+  cargo_fmt_out = cmd_capture("cargo-fmt --all --check")
+  leptos_fmt_out = cmd_capture("leptosfmt --check ./src")
+  clippy_out = cmd_capture("cargo clippy --all-targets --all-features -- -D warnings")
+  mkdir_p(".build")
   File.write(t.name, [cargo_fmt_out, leptos_fmt_out, clippy_out].join("\n"))
 end
 
