@@ -1,6 +1,7 @@
 use super::{
     graphql::transactions_query::{
         TransactionsQueryOtherTransactions, TransactionsQueryTransactions,
+        TransactionsQueryTransactionsZkappAccountsUpdated,
     },
     models::PendingTxn,
 };
@@ -45,6 +46,23 @@ impl TableData for Vec<Option<TransactionsQueryOtherTransactions>> {
                     },
                 ],
                 None => vec![],
+            })
+            .collect::<Vec<_>>()
+    }
+}
+
+impl TableData for Vec<TransactionsQueryTransactionsZkappAccountsUpdated> {
+    fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
+        self.iter()
+            .map(|au| {
+                vec![
+                    convert_to_copy_link(
+                        au.pk.to_string(),
+                        format!("/addresses/accounts/{}", au.pk),
+                    ),
+                    convert_to_span(au.balance_change.to_string()),
+                    convert_to_span(au.token.to_string()),
+                ]
             })
             .collect::<Vec<_>>()
     }

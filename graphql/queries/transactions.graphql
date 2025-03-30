@@ -20,6 +20,7 @@ query TransactionsQuery(
       accounts_updated {
         pk
         token
+        balance_change
       }
       actions
       events

@@ -1,11 +1,11 @@
 use super::functions::*;
 use crate::{
-    common::{
-        components::*, constants::*, functions::convert_to_copy_link, models::*,
-        spotlight::SpotlightTable, table::*,
-    },
+    common::{components::*, constants::*, models::*, table::*},
     summary::models::BlockchainSummary,
-    user_commands::{graphql::transactions_query, models::PendingTxn},
+    user_commands::{
+        graphql::transactions_query::{self, TransactionsQueryTransactionsZkappAccountsUpdated},
+        models::PendingTxn,
+    },
 };
 use codee::string::JsonSerdeCodec;
 use leptos::*;
@@ -86,36 +86,40 @@ fn get_available_records(
 pub fn AccountsUpdatedSection(
     zkapp: Option<transactions_query::TransactionsQueryTransactionsZkapp>,
 ) -> impl IntoView {
+    let (account_updates_sig, _) = create_signal::<
+        Option<Vec<TransactionsQueryTransactionsZkappAccountsUpdated>>,
+    >(zkapp.map(|zk| zk.accounts_updated.clone()));
     let (metadata, _) = create_signal::<Option<TableMetadata>>(None);
-    if let Some(zkapp) = zkapp {
-        view! {
-            <TableSection metadata=metadata.into() section_heading="Updated Accounts">
-                <SpotlightTable>
-                    {zkapp
-                        .accounts_updated
-                        .into_iter()
-                        .enumerate()
-                        .map(|(index, account)| {
-                            view! {
-                                <ZkAppDetailTr>
-                                    <ZkAppDetailTh>
-                                        {format!("Updated Account #{}", index + 1)}
-                                    </ZkAppDetailTh>
-                                    <ZkAppDetailTd>
-                                        {convert_to_copy_link(
-                                            account.pk.to_string(),
-                                            format!("/addresses/accounts/{}", account.pk),
-                                        )}
-                                    </ZkAppDetailTd>
-                                </ZkAppDetailTr>
-                            }
-                        })
-                        .collect::<Vec<_>>()}
-                </SpotlightTable>
-            </TableSection>
-        }
-    } else {
-        ().into_view()
+    let table_columns: Vec<TableColumn<AnySort>> = vec![
+        TableColumn {
+            column: "Account".to_string(),
+            alignment: Some(ColumnTextAlignment::Left),
+            width: Some(String::from(TABLE_COL_HASH_WIDTH)),
+            ..Default::default()
+        },
+        TableColumn {
+            column: "Balance Change".to_string(),
+            alignment: Some(ColumnTextAlignment::Right),
+            width: Some(String::from(TABLE_COL_LARGE_BALANCE)),
+            ..Default::default()
+        },
+        TableColumn {
+            column: "Token ID".to_string(),
+            alignment: Some(ColumnTextAlignment::Right),
+            width: Some(String::from(TABLE_COL_HASH_WIDTH)),
+            ..Default::default()
+        },
+    ];
+
+    view! {
+        <TableSectionTemplate
+            table_columns
+            data_sig=account_updates_sig
+            metadata=metadata.into()
+            section_heading="Accounts Updated"
+            is_loading=Signal::derive(move || account_updates_sig.get().is_none())
+            controls=|| ().into_view()
+        />
     }
 }
 
