@@ -29,10 +29,15 @@ def ensure_env_vars(required_vars, error_context = "Task failed")
   end
 end
 
-# Helper method for shell commands
 def sh(cmd)
   puts cmd
   system(cmd) or raise "Command failed: #{cmd}"
+end
+
+def record_output(task, outputs)
+  outputs = outputs.is_a?(String) ? [outputs] : outputs
+  FileUtils.mkdir_p(".build")
+  File.write(task.name, outputs.join("\n"))
 end
 
 # Check if port is open
@@ -201,8 +206,7 @@ task jest_test: ".build/jest-test"
 file ".build/jest-test" => JAVASCRIPT_SRC_FILES + ["jest.config.js"] do |t|
   puts "--- Performing jest unit tests"
   jest_output = cmd_capture("pnpm exec jest test")
-  mkdir_p(".build")
-  File.write(t.name, jest_output)
+  record_output(t, jest_output)
 end
 
 desc "Test the Rust code"
@@ -211,8 +215,7 @@ task rust_test: ".build/rust-test"
 file ".build/rust-test" => CARGO_DEPS do |t|
   puts "--- Performing rust unit tests"
   nextest_output = cmd_capture("cargo-nextest nextest run")
-  mkdir_p(".build")
-  File.write(t.name, nextest_output)
+  record_output(t, nextest_output)
 end
 
 desc "Run the unit tests"
@@ -224,8 +227,7 @@ task audit: ".build/audit"
 file ".build/audit" => CARGO_DEPS do |t|
   audit_output = cmd_capture("cargo-audit audit")
   machete_output = cmd_capture("cargo machete")
-  mkdir_p(".build")
-  File.write(t.name, [audit_output, machete_output].join("\n"))
+  record_output(t, [audit_output, machete_output])
 end
 
 desc "Fix linting errors"
@@ -279,8 +281,7 @@ task check: ".build/check"
 
 file ".build/check" => CARGO_DEPS do |t|
   check_output = cmd_capture("cargo check")
-  mkdir_p(".build")
-  File.write(t.name, check_output)
+  record_output(t, check_output)
 end
 
 desc "Lint the Cypress test code (JavaScript)"
@@ -289,8 +290,7 @@ task lint_javascript: ".build/lint-javascript"
 file ".build/lint-javascript" => CYPRESS_FILES + ["node_modules"] do |t|
   puts "--- Linting JS/TS"
   prettier_output = cmd_capture("pnpm exec prettier --check cypress/")
-  mkdir_p(".build")
-  File.write(t.name, prettier_output)
+  record_output(t, prettier_output)
 end
 
 desc "Lint the Ruby code"
@@ -300,8 +300,7 @@ file ".build/lint-ruby" => RUBY_SRC_FILES do |t|
   puts "--- Linting ruby scripts"
   ruby_cw_output = cmd_capture("ruby -cw #{RUBY_SRC_FILES.join(" ")}")
   ruby_std_output = cmd_capture("standardrb --no-fix #{RUBY_SRC_FILES.join(" ")}")
-  mkdir_p(".build")
-  File.write(t.name, [ruby_cw_output, ruby_std_output].join("\n"))
+  record_output(t, [ruby_cw_output, ruby_std_output])
 end
 
 desc "Lint the Rust code"
@@ -312,8 +311,7 @@ file ".build/lint-rust" => RUST_SRC_FILES + ["rustfmt.toml"] do |t|
   cargo_fmt_out = cmd_capture("cargo-fmt --all --check")
   leptos_fmt_out = cmd_capture("leptosfmt --check ./src")
   clippy_out = cmd_capture("cargo clippy --all-targets --all-features -- -D warnings")
-  mkdir_p(".build")
-  File.write(t.name, [cargo_fmt_out, leptos_fmt_out, clippy_out].join("\n"))
+  record_output(t, [cargo_fmt_out, leptos_fmt_out, clippy_out])
 end
 
 desc "Build the dev version for front-end WASM bundle"
