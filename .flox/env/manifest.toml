@@ -22,7 +22,6 @@ ruby.pkg-path = "ruby"
 standard.pkg-path = "rubyPackages.standard"
 
 # Rust
-rust.flake = "github:Granola-Team/mina-block-explorer/main?dir=flakes/rust"
 libiconv.pkg-path = "libiconv"
 libiconv.systems = ["aarch64-darwin", "x86_64-darwin"]
 cargo-audit.pkg-path = "cargo-audit"
@@ -35,6 +34,10 @@ clang.pkg-path = "clang"
 clang.systems = ["aarch64-linux", "x86_64-linux"]
 openssl.pkg-path = "openssl"
 openssl.systems = ["aarch64-linux", "x86_64-linux"]
+cargo.pkg-path = "cargo"
+rustfmt.pkg-path = "rustfmt"
+clippy.pkg-path = "clippy"
+lld.pkg-path = "lld"
 
 # Set environment variables in the `[vars]` section. These variables may not
 # reference one another, and are added to the environment without first
