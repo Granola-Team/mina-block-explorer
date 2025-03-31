@@ -17,6 +17,8 @@ CARGO_DEPS = RUST_SRC_FILES + ["Cargo.toml", "Cargo.lock", "build.rs"]
 CYPRESS_FILES = Dir.glob("cypress/**/*.js")
 RUBY_SRC_FILES = Dir.glob("**/*.rb").reject { |file| file.start_with?("lib/") } + ["Rakefile"]
 JAVASCRIPT_SRC_FILES = Dir.glob("src/scripts_tests/**")
+MINASEARCH_GRAPHQL = "https://api.minasearch.com/graphql"
+MINASEARCH_REST = "https://api.minasearch.com/rest"
 
 def ensure_env_vars(required_vars, error_context = "Task failed")
   missing_vars = required_vars.reject { |var| ENV[var] && !ENV[var].empty? }
@@ -187,7 +189,6 @@ task :clean do
     cypress/screenshots
     node_modules
     .wrangler
-    src/dist
     .build
   ]
 end
@@ -262,8 +263,8 @@ end
 
 desc "Serve the built website locally against prod indexer"
 task :dev_prod do
-  ENV["GRAPHQL_URL"] = "https://api.minasearch.com/graphql"
-  ENV["REST_URL"] = "https://api.minasearch.com"
+  ENV["GRAPHQL_URL"] = MINASEARCH_GRAPHQL
+  ENV["REST_URL"] = MINASEARCH_REST
   sh "trunk serve --port=#{TRUNK_PORT} --open"
 end
 
@@ -315,22 +316,21 @@ file ".build/lint-rust" => RUST_SRC_FILES + ["rustfmt.toml"] do |t|
 end
 
 desc "Build the dev version for front-end WASM bundle"
-task :dev_build do
+task dev_build: "target/debug"
+file "target/debug" => CARGO_DEPS + ["Trunk.toml", "tailwind.config.js"] do
+  puts "--- Building dev version"
   ENV["GRAPHQL_URL"] = "http://localhost:8080/graphql"
   ENV["REST_URL"] = "http://localhost:8080"
-  Rake::Task["dist"].invoke
+  cmd_capture("trunk build")
 end
 
 desc "Build the release version for front-end WASM bundle"
-task :release_build do
-  ENV["GRAPHQL_URL"] = "https://api.minasearch.com/graphql"
-  ENV["REST_URL"] = "https://api.minasearch.com"
-  Rake::Task["dist"].invoke
-end
-
-file "dist" => CARGO_DEPS + ["Trunk.toml", "tailwind.config.js"] do
-  ensure_env_vars(%w[GRAPHQL_URL REST_URL], "Cannot build dist folder")
-  sh "trunk build --release --filehash true"
+task release_build: "target/release"
+file "target/release" => CARGO_DEPS + ["Trunk.toml", "tailwind.config.js"] do
+  puts "--- Building release version"
+  ENV["GRAPHQL_URL"] = MINASEARCH_GRAPHQL
+  ENV["REST_URL"] = MINASEARCH_REST
+  cmd_capture("trunk build --release --filehash true")
 end
 
 desc "Lint all source code"
