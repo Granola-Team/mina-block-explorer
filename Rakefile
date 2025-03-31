@@ -71,7 +71,7 @@ def run_tier_task(cypress_cmd, wait_for_cypress: true)
     puts "\nReceived SIGINT, terminating running processes..."
     if cypress_pid
       begin
-        Process.kill("TERM", -cypress_pid)
+        Process.kill("INT", -cypress_pid)
       rescue
         nil
       end
