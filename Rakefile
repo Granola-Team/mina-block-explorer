@@ -18,7 +18,7 @@ CYPRESS_FILES = Dir.glob("cypress/**/*.js")
 RUBY_SRC_FILES = Dir.glob("**/*.rb").reject { |file| file.start_with?("lib/") } + ["Rakefile"]
 JAVASCRIPT_SRC_FILES = Dir.glob("src/scripts_tests/**")
 MINASEARCH_GRAPHQL = "https://api.minasearch.com/graphql"
-MINASEARCH_REST = "https://api.minasearch.com/rest"
+MINASEARCH_REST = "https://api.minasearch.com"
 
 def ensure_env_vars(required_vars, error_context = "Task failed")
   missing_vars = required_vars.reject { |var| ENV[var] && !ENV[var].empty? }
