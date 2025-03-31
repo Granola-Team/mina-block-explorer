@@ -54,7 +54,7 @@ pub fn TokensPage() -> impl IntoView {
 
     let table_columns: Vec<TableColumn<AnySort>> = vec![
         TableColumn {
-            column: "Name".to_string(),
+            column: "Symbol".to_string(),
             html_input_type: "text".to_string(),
             is_searchable: true,
             is_sortable: true,
