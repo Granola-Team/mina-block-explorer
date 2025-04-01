@@ -308,9 +308,9 @@ pub fn CommandSpotlightPage() -> impl IntoView {
 
                                     <TransactionIcon width=40 />
                                 </SpotlightSection>
-                                <AccountsUpdatedSection zkapp=transaction.zkapp.clone() />
                                 {if transaction.zkapp.is_some() {
                                     view! {
+                                        <AccountsUpdatedSection zkapp=transaction.zkapp.clone() />
                                         <TableSection
                                             metadata=metadata.into()
                                             section_heading="Actions & Events"
@@ -344,6 +344,7 @@ pub fn CommandSpotlightPage() -> impl IntoView {
                                             </SpotlightTable>
                                         </TableSection>
                                     }
+                                        .into_view()
                                 } else {
                                     ().into_view()
                                 }}
