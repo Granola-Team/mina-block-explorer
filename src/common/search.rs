@@ -146,7 +146,7 @@ pub fn GlobalSearchBar() -> impl IntoView {
                 navigate(&format!("/blocks/{}", val), Default::default());
                 set_value.set("".to_string());
             }
-            val if val.starts_with("Ckp") => {
+            val if val.starts_with("5J") | val.starts_with("Ckp") => {
                 navigate(&format!("/commands/{}", val), Default::default());
                 set_value.set("".to_string());
             }
