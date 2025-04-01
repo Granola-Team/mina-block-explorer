@@ -321,7 +321,7 @@ file "target/debug" => CARGO_DEPS + ["Trunk.toml", "tailwind.config.js"] do
   puts "--- Building dev version"
   ENV["GRAPHQL_URL"] = "http://localhost:8080/graphql"
   ENV["REST_URL"] = "http://localhost:8080"
-  cmd_capture("trunk build")
+  sh "trunk build"
 end
 
 desc "Build the release version for front-end WASM bundle"
@@ -330,14 +330,14 @@ file "target/release" => CARGO_DEPS + ["Trunk.toml", "tailwind.config.js"] do
   puts "--- Building release version"
   ENV["GRAPHQL_URL"] = MINASEARCH_GRAPHQL
   ENV["REST_URL"] = MINASEARCH_REST
-  cmd_capture("trunk build --release --filehash true")
+  sh "trunk build --release --filehash true"
 end
 
 desc "Lint all source code"
 task lint: [:pnpm_install, :audit, :lint_javascript, :lint_ruby, :lint_rust]
 
 desc "Run the Tier1 tests"
-task tier1: [:lint, :test_unit, :dev_build]
+task tier1: [:dev_build, :lint, :test_unit]
 
 desc "Invoke the Tier2 regression suite (non-interactive)"
 task tier2: [:tier1, :pnpm_install, :deploy_mina_indexer] do
@@ -345,7 +345,7 @@ task tier2: [:tier1, :pnpm_install, :deploy_mina_indexer] do
 end
 
 desc "Invoke the Tier2 regression suite (interactive)"
-task :t2_i do
+task t2_i: [:pnpm_install] do
   run_tier_task("pnpm exec cypress open", wait_for_cypress: false)
 end
 
