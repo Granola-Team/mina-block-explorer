@@ -99,13 +99,19 @@ pub fn AccountsUpdatedSection(
         },
         TableColumn {
             column: "Balance Change".to_string(),
-            alignment: Some(ColumnTextAlignment::Right),
+            alignment: Some(ColumnTextAlignment::Left),
             width: Some(String::from(TABLE_COL_LARGE_BALANCE)),
             ..Default::default()
         },
         TableColumn {
+            column: "Increment Nonce".to_string(),
+            alignment: Some(ColumnTextAlignment::Left),
+            width: Some(String::from(TABLE_COL_SHORT_WIDTH)),
+            ..Default::default()
+        },
+        TableColumn {
             column: "Token ID".to_string(),
-            alignment: Some(ColumnTextAlignment::Right),
+            alignment: Some(ColumnTextAlignment::Left),
             width: Some(String::from(TABLE_COL_HASH_WIDTH)),
             ..Default::default()
         },

@@ -2,6 +2,8 @@ type TokenAccount {
   pk: String!
   token: String!
   balance_change: Int!
+  symbol: String!
+  increment_nonce: Boolean!
 }
 
 type TransactionZkapp {

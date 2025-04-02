@@ -167,7 +167,7 @@ task :deploy_mina_indexer do
     sh %W[
       GRAPHQL_URL=http://localhost:8080/graphql
       REST_URL=http://localhost:8080
-      nix develop --command just deploy-local-prod-dev 10000 8080
+      nix develop --command rake "deploy:local_prod_dev[10000,8080]"
     ].join(" ")
   end
 end
@@ -176,7 +176,7 @@ desc "Shut down mina-indexer"
 task :shutdown_mina_indexer do
   puts "--- Shutting down mina-indexer"
   Dir.chdir("lib/mina-indexer") do
-    sh "nix develop --command just shutdown prod"
+    sh "nix develop --command rake shutdown prod"
   end
 end
 

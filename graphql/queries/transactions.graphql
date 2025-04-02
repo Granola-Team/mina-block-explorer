@@ -20,6 +20,7 @@ query TransactionsQuery(
       accounts_updated {
         pk
         token
+        increment_nonce
         balance_change
       }
       actions
