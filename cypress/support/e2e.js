@@ -32,7 +32,7 @@ addMatchImageSnapshotCommand({
 });
 
 function suite(tags, suiteName, callback) {
-  Cypress.on("uncaught:exception", (err, runnable) => {
+  Cypress.on("uncaught:exception", () => {
     // if (err.message.includes("ResizeObserver")) {
     return false;
     // }
