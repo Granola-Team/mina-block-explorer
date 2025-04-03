@@ -34,6 +34,18 @@ Cypress.Commands.add("assertAnalyticsSimplValueEquals", (label, value) => {
     .should("have.text", value);
 });
 
+Cypress.Commands.add("checkNumeric", { prevSubject: true }, (subject) => {
+  cy.wrap(subject)
+    .invoke("text")
+    .should((text) => {
+      expect(!isNaN(parseFloat(text)) && isFinite(text)).to.be.true;
+    });
+});
+
+Cypress.Commands.add("getBySel", (selector, ...args) => {
+  return cy.get(`[data-test=${selector}]`, ...args);
+});
+
 Cypress.Commands.add(
   "assertSortOrder",
   (
