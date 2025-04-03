@@ -38,7 +38,18 @@ Cypress.Commands.add("checkNumeric", { prevSubject: true }, (subject) => {
   cy.wrap(subject)
     .invoke("text")
     .should((text) => {
-      expect(!isNaN(parseFloat(text)) && isFinite(text)).to.be.true;
+      const cleanText = text.replace(/,/g, "");
+      const numericValue = parseFloat(cleanText);
+
+      console.log("Numeric Value is:", {
+        original: text,
+        cleaned: cleanText,
+        parsed: numericValue,
+        isNaN: isNaN(numericValue),
+        isFinite: isFinite(numericValue),
+      });
+
+      expect(!isNaN(numericValue) && isFinite(numericValue)).to.be.true;
     });
 });
 
