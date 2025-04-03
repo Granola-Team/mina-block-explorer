@@ -586,6 +586,7 @@ pub fn AnalyticsSimpleInfo(
                     })}
             </div>
             <div
+                data-test="analytics-simple-info"
                 class="w-full md:w-1/2 flex grow-0 justify-center md:justify-start items-center mx-4 text-6xl font-bold"
                 id=id.unwrap_or("simple-info".to_string())
             >

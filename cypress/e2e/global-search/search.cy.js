@@ -1,4 +1,9 @@
-import { DEFAULT_ACCOUNT_PK, GENESIS_BLOCK_BLOCK_HASH } from "../constants";
+import {
+  DEFAULT_ACCOUNT_PK,
+  EPOCH_ONE_STAKING_LEDGER_HASH,
+  FIRST_TXN_HASH,
+  GENESIS_BLOCK_BLOCK_HASH,
+} from "../constants";
 
 suite(["@tier2"], "global search", () => {
   it("has visible placeholder text", () => {
@@ -9,19 +14,17 @@ suite(["@tier2"], "global search", () => {
     );
   });
 
-  let state_hash = "CkpYspKDV9mpSyZLczMYG8kr4CZYAXxXPH3VM9txYwRXdyyaCDfzL";
-
   let pages = [
     {
       input: 30000,
       expectedUrl: "/blocks?q-height=30000",
     },
     {
-      input: "      jx7buQVWFLsXTtzRgSxbYcT8EYLS8KCZbLrfDcJxMtyy4thw2Ee     ",
+      input: `      ${EPOCH_ONE_STAKING_LEDGER_HASH}     `,
       expectedUrl: "/staking-ledgers?epoch=1",
     },
     {
-      input: "jx7buQVWFLsXTtzRgSxbYcT8EYLS8KCZbLrfDcJxMtyy4thw2Ee",
+      input: EPOCH_ONE_STAKING_LEDGER_HASH,
       expectedUrl: "/staking-ledgers?epoch=1",
     },
     {
@@ -33,8 +36,8 @@ suite(["@tier2"], "global search", () => {
       expectedUrl: "/blocks/" + GENESIS_BLOCK_BLOCK_HASH,
     },
     {
-      input: state_hash,
-      expectedUrl: "/commands/" + state_hash,
+      input: FIRST_TXN_HASH,
+      expectedUrl: "/commands/" + FIRST_TXN_HASH,
     },
     {
       input: "1",
