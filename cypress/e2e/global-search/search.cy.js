@@ -4,7 +4,6 @@ import {
   FIRST_TXN_HASH,
   GENESIS_BLOCK_BLOCK_HASH,
 } from "../constants";
-
 suite(["@tier2"], "global search", () => {
   it("has visible placeholder text", () => {
     cy.viewport("iphone-xr");
@@ -13,7 +12,6 @@ suite(["@tier2"], "global search", () => {
       "be.visible",
     );
   });
-
   let pages = [
     {
       input: 30000,
@@ -44,16 +42,13 @@ suite(["@tier2"], "global search", () => {
       expectedUrl: "/staking-ledgers?epoch=1",
     },
   ];
-
   pages.forEach(({ input, expectedUrl }) =>
     it(`works for input ${input}`, () => {
       cy.visit("/");
       cy.get("input#searchbar").as("input");
       cy.get("@input").parent("form").as("form");
-
       cy.get("@input").type(input);
       cy.get("@form").submit();
-
       cy.url().should("include", expectedUrl);
       cy.get("@input").should("not.have.value", input);
     }),

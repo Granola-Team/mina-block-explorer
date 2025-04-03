@@ -7,7 +7,6 @@ import {
   COMMAND_SNARK_BLOCK_ACTIVITY_ADDRESS,
 } from "../constants";
 import { parseFormattedNumber } from "../helpers";
-
 let pages = [
   {
     page: "/blocks",
@@ -375,7 +374,6 @@ let pages = [
     ],
   },
 ];
-
 pages.forEach(({ tests, page, wait = () => {} }) => {
   suite(["@tier2"], "number or currency", () => {
     it(`on page ${page} is formatted correctly for '${tests.map((t) => t.name).join("', '")}'`, () => {

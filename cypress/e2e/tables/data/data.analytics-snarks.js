@@ -1,6 +1,5 @@
-// Test suite data for: /analytics/snarks
-const { parseFormattedNumber } = require("../../helpers");
-const {
+import { parseFormattedNumber } from "../../helpers.js";
+import {
   FIRST_BLOCK_PRODUCER_ADDRESS,
   FIRST_RECIPIENT_ADDRESS,
   FIRST_SENDER_ADDRESS,
@@ -16,15 +15,18 @@ const {
   ROMEK_NAMING_MEMO,
   SNZ_USERNAME,
   SNZPOOL_ADDRESS,
-} = require("../../constants");
-
-module.exports = {
-  tag: "@tier2",
-  url: "/analytics/snarks",
-  table: {
-    heading: "SNARK Fees Overview",
-    columns: ["Metric", "All SNARKs", "SNARKs with non-zero fees"],
-    filter_tests: [],
-  },
-  tests: [],
+} from "../../constants.js";
+export const tag = "@tier2";
+export const url = "/analytics/snarks";
+export const table = {
+  heading: "SNARK Fees Overview",
+  columns: ["Metric", "All SNARKs", "SNARKs with non-zero fees"],
+  filter_tests: [],
+};
+export const tests = [];
+export default {
+  tag,
+  url,
+  table,
+  tests,
 };

@@ -1,6 +1,5 @@
-const pages = require("../../pages.json");
-const devices = require("../../devices.json");
-
+let devices = ["iphone-xr", "macbook-11"];
+let pages = ["/blocks", "/commands", "/snarks", "/staking-ledgers"];
 suite(["@tier2"], "desktop footer", () => {
   devices.forEach((device) => {
     pages.forEach((page) => {

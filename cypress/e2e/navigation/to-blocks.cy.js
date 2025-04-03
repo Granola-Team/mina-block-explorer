@@ -1,5 +1,4 @@
 import { ADDRESS_WITH_SNARK_AND_BLOCK_PRODUCTION } from "../constants";
-
 suite(["@tier2"], "block page", () => {
   [
     {

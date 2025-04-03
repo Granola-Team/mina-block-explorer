@@ -12,7 +12,6 @@ suite(["@tier2"], "header", () => {
         "match",
         /https:\/\/github\.com\/Granola-Team\/mina-block-explorer\/commit\/[a-f0-9]{8}$/,
       );
-
     cy.wait("@summaryData").then(() => {
       cy.wait(100);
       cy.get("footer")

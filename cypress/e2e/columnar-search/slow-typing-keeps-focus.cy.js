@@ -1,5 +1,4 @@
 import { kebabCase } from "../helpers";
-
 suite(["@tier2"], "input", () => {
   let slow_input_searches = [
     {
@@ -23,7 +22,6 @@ suite(["@tier2"], "input", () => {
       column: "Height",
     },
   ];
-
   slow_input_searches.forEach(({ origin, input, column }) =>
     it(`remains focused as user types slowly into ${column} on page ${origin}`, () => {
       cy.visit(origin);

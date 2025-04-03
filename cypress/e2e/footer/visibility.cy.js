@@ -14,21 +14,17 @@ suite(["@tier2"], "footer content", () => {
       selector: 'a[href="https://discord.gg/Zvu6XHNCxj"]',
     },
   ];
-
   it("is present and visible on mobile", () => {
     cy.visit("/");
     cy.viewport("iphone-xr");
     cy.scrollTo("bottom");
-
     footer_links.forEach(({ text, selector }) => {
       cy.get("footer").contains(selector, text).should("be.visible");
     });
   });
-
   it("is present and visible on desktop", () => {
     cy.visit("/");
     cy.scrollTo("bottom");
-
     footer_links.forEach(({ text, selector }) => {
       cy.get("footer").contains(selector, text).should("be.visible");
     });

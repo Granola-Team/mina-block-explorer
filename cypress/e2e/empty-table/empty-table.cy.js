@@ -1,5 +1,4 @@
 import { DEFAULT_ACCOUNT_PK } from "../constants";
-
 suite(["@tier2"], "empty table", () => {
   let pages = [
     "/addresses/accounts?q-public-key=B62fake",
@@ -11,7 +10,6 @@ suite(["@tier2"], "empty table", () => {
     "/analytics/staker-leaderboard?epoch=100000",
     "/analytics/snarker-leaderboard?epoch=100000",
   ];
-
   pages.forEach((page) =>
     it(`on ${page} shows as having zero records`, () => {
       cy.visit(page);

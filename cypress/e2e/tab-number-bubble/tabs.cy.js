@@ -3,7 +3,6 @@ import {
   DEFAULT_ACCOUNT_PK,
   VETAL_BLOCK_STATE_HASH,
 } from "../constants";
-
 suite(["@tier2"], "number bubble in tab", () => {
   let tabs = [
     {
@@ -46,27 +45,21 @@ suite(["@tier2"], "number bubble in tab", () => {
       tab: "Internal Commands",
     },
   ];
-
   tabs.forEach(({ url, tab, comparison_method }) =>
     it(`matches row count on tab '${tab}' at ${url}`, () => {
       cy.visit(url);
-
       // There are a few graphql resources that load on this page; wait
       // for them all to complete
       cy.intercept("POST", "/graphql").as("graphql");
       cy.wait("@graphql");
       cy.intercept("POST", "/graphql").as("graphql");
       cy.wait("@graphql");
-
       cy.wait(250);
-
       cy.contains("a.tab", tab).find(".number-bubble").as("bubble");
-
       cy.get("@bubble")
         .invoke("text")
         .then((text) => {
           let number = parseInt(text);
-
           if (comparison_method == "rows") {
             cy.aliasTableRows(tab, "tr");
             cy.get("@tr").should("have.lengthOf", number);

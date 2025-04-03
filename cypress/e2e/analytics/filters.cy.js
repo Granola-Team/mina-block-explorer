@@ -22,13 +22,11 @@ suite(["@tier2"], "block height filters", () => {
         .next()
         .as("end-block-height");
       cy.get("button").contains("Apply").as("submit");
-
       cy.get("@submit").click();
       cy.get("#input-validation").should(
         "have.text",
         "Missing start block height",
       );
-
       cy.get("@start-block-height").clear().type(9000);
       cy.get("#input-validation").should("not.exist");
       cy.get("@submit").click();
@@ -36,7 +34,6 @@ suite(["@tier2"], "block height filters", () => {
         "have.text",
         "Missing end block height",
       );
-
       cy.get("@end-block-height").clear().type(9000);
       cy.get("#input-validation").should("not.exist");
       cy.get("@submit").click();
@@ -44,12 +41,10 @@ suite(["@tier2"], "block height filters", () => {
         "have.text",
         "End block must be larger than start block",
       );
-
       cy.get("@end-block-height").clear().type(9001);
       cy.get("#input-validation").should("not.exist");
       cy.get("@submit").click();
       cy.get("#input-validation").should("not.exist");
-
       cy.get("@start-block-height").clear().type(6000);
       cy.get("#input-validation").should("not.exist");
       cy.get("@submit").click();
@@ -60,7 +55,6 @@ suite(["@tier2"], "block height filters", () => {
     }),
   );
 });
-
 suite(["@tier2"], "block height filter url params", () => {
   let cases = [
     {
@@ -79,7 +73,6 @@ suite(["@tier2"], "block height filter url params", () => {
       expected_lte_input: 9050,
     },
   ];
-
   cases.forEach(({ url, expected_gte_input, expected_lte_input }) =>
     it(`work for ${url}`, () => {
       cy.visit(url);
@@ -91,13 +84,11 @@ suite(["@tier2"], "block height filter url params", () => {
         .contains("End Block Height")
         .next()
         .as("end-block-height");
-
       if (expected_gte_input == null) {
         cy.get("@start-block-height").should("not.have.value");
       } else {
         cy.get("@start-block-height").should("have.value", expected_gte_input);
       }
-
       if (expected_lte_input == null) {
         cy.get("@end-block-height").should("not.have.value");
       } else {

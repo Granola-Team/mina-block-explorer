@@ -1,6 +1,5 @@
-// Test suite data for: /analytics/staker-leaderboard?epoch=0
-const { parseFormattedNumber } = require("../../helpers");
-const {
+import { parseFormattedNumber } from "../../helpers.js";
+import {
   FIRST_BLOCK_PRODUCER_ADDRESS,
   FIRST_RECIPIENT_ADDRESS,
   FIRST_SENDER_ADDRESS,
@@ -16,22 +15,25 @@ const {
   ROMEK_NAMING_MEMO,
   SNZ_USERNAME,
   SNZPOOL_ADDRESS,
-} = require("../../constants");
-
-module.exports = {
-  tag: "@tier2",
-  url: "/analytics/staker-leaderboard?epoch=0",
-  table: {
-    heading: "Staker Leaderboard",
-    columns: [
-      "Username",
-      "Public Key",
-      "Canonical Blocks Produced",
-      "Supercharged Blocks Produced",
-      "Slots Produced",
-      "Orphan Rate",
-    ],
-    filter_tests: [],
-  },
-  tests: [],
+} from "../../constants.js";
+export const tag = "@tier2";
+export const url = "/analytics/staker-leaderboard?epoch=0";
+export const table = {
+  heading: "Staker Leaderboard",
+  columns: [
+    "Username",
+    "Public Key",
+    "Canonical Blocks Produced",
+    "Supercharged Blocks Produced",
+    "Slots Produced",
+    "Orphan Rate",
+  ],
+  filter_tests: [],
+};
+export const tests = [];
+export default {
+  tag,
+  url,
+  table,
+  tests,
 };

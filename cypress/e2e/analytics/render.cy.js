@@ -32,7 +32,6 @@ suite(["@tier2"], "chart", () => {
       ],
     },
   ];
-
   analytics_pages.forEach(({ page, chart_ids }) =>
     it(`renders on page ${page}`, () => {
       cy.visit(page);

@@ -12,25 +12,18 @@
 // You can read more here:
 // https://on.cypress.io/configuration
 // ***********************************************************
-
 // Import commands.js using ES2015 syntax:
 import "./commands";
-
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
-
 // cypress/support/e2e.ts
-
 import { addMatchImageSnapshotCommand } from "@simonsmith/cypress-image-snapshot/command";
-
 addMatchImageSnapshotCommand();
-
 // can also add any default options to be used
 // by all instances of `matchImageSnapshot`
 addMatchImageSnapshotCommand({
   failureThreshold: 0.2,
 });
-
 function suite(tags, suiteName, callback) {
   Cypress.on("uncaught:exception", () => {
     // if (err.message.includes("ResizeObserver")) {
@@ -44,12 +37,10 @@ function suite(tags, suiteName, callback) {
     Cypress.env("tags") &&
     !tags.some((tag) => Cypress.env("tags").includes(tag));
   let tagsStr = tags.join(", ");
-
   if (!shouldSkip) {
     describe(`[Tags: ${tagsStr}] ${suiteName}`, callback);
   } else {
     it.skip(`Skipped suite: [Tags: ${tagsStr}] ${suiteName}`, () => {});
   }
 }
-
 global.suite = suite;

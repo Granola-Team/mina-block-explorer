@@ -1,5 +1,4 @@
 import { ROMEK_ADDRESS, WHISPERIT_BLOCK_STATE_HASH } from "../constants";
-
 suite(["@tier2"], "transaction spotlight", () => {
   let pages = [
     { origin: "/commands", column: "Hash", tableHeader: "User Commands" },
@@ -19,7 +18,6 @@ suite(["@tier2"], "transaction spotlight", () => {
       tableHeader: "Tokens",
     },
   ];
-
   pages.forEach(
     ({ origin, column, tableHeader, tableHeaderEl = "h1", transposed }) =>
       it(`is navigated to from ${origin} by clicking link in '${column}'`, () => {

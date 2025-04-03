@@ -4,7 +4,6 @@ suite(["@tier2"], "broadcast page", () => {
     { text: "Delegation", heading: "Broadcast Signed Delegation" },
     { text: "Ledger", heading: "Broadcast Signed Transaction From Ledger" },
   ];
-
   it(`contains a tab menu with ${tabs.length} tabs`, () => {
     cy.visit("/broadcast/transaction");
     cy.get("menu#tabs li a").should("have.lengthOf", tabs.length);

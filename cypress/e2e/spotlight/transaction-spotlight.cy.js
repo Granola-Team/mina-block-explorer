@@ -1,5 +1,5 @@
-const devices = require("../../devices.json");
-const {
+let devices = ["iphone-xr", "macbook-11"];
+import {
   FIRST_TXN_HASH,
   FIRST_NON_CANONICAL_TXN_HASH,
   STAKE_DELEGATION_HASH,
@@ -8,8 +8,7 @@ const {
   WHISPERIT_BLOCK_STATE_HASH,
   ROMEK_NAMING_MEMO,
   FIRST_INTERNAL_TXN_HASH,
-} = require("../constants");
-
+} from "../constants.js";
 suite(["@tier2"], "transaction spotlight", () => {
   let expected_fields = [
     "Status",
@@ -27,7 +26,6 @@ suite(["@tier2"], "transaction spotlight", () => {
     "Memo",
   ];
   let mobile = devices[0];
-
   it("displays proper status", () => {
     cy.visit(
       `/commands/${FIRST_TXN_HASH}?q-state-hash=${FIRST_INTERNAL_TXN_HASH}`,
@@ -40,13 +38,11 @@ suite(["@tier2"], "transaction spotlight", () => {
     cy.wait(100);
     cy.testSpotlightValue("Status", "Applied");
   });
-
   it("displays complete information", () => {
     cy.viewport(mobile);
     cy.visit(`/commands/${FIRST_TXN_HASH}`);
     cy.testSpotlight("Command Spotlight", FIRST_TXN_HASH, expected_fields);
   });
-
   it("displays non-canonical command", () => {
     cy.visit(`/commands/${FIRST_NON_CANONICAL_TXN_HASH}`);
     cy.testSpotlight(
@@ -55,12 +51,10 @@ suite(["@tier2"], "transaction spotlight", () => {
       expected_fields,
     );
   });
-
   it("displays memo", () => {
     cy.visit(`/commands/${ROMEK_MINA_NAMING_SERVICE_TXN_HASH}`);
     cy.contains(ROMEK_NAMING_MEMO).should("exist");
   });
-
   it("renders the tooltip for stake delegations", () => {
     cy.visit(`/commands/${STAKE_DELEGATION_HASH}`);
     cy.get("section#spotlight-section table").within(() => {
@@ -75,7 +69,6 @@ suite(["@tier2"], "transaction spotlight", () => {
       });
     });
   });
-
   it("does not render the tooltip for regular payments", () => {
     cy.visit(`/commands/${FIRST_TXN_HASH}`);
     cy.get("section#spotlight-section table").within(() => {
@@ -86,7 +79,6 @@ suite(["@tier2"], "transaction spotlight", () => {
       });
     });
   });
-
   it("displays other blocks containing the same txn", () => {
     cy.visit(`/commands/${WHISPERIT_TXN_HASH}`);
     cy.get("section").contains("In Other Blocks").should("exist");

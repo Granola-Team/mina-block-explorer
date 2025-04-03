@@ -1,5 +1,4 @@
 import { parseFormattedNumber } from "../helpers";
-
 suite(["@tier2"], "blockchain overview", () => {
   it("displays non-zero metrics", async () => {
     cy.visit("/blocks");

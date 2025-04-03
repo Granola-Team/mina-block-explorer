@@ -6,7 +6,6 @@ export function runTestSuite(testSuiteData) {
     table: { heading, filter_tests, columns, sorting_columns = [] },
     tests,
   } = testSuiteData;
-
   suite([tag], `table on ${url}`, () => {
     if (disabled) {
       xit("has standard functionality", () => {});
@@ -21,7 +20,6 @@ export function runTestSuite(testSuiteData) {
             cy.assertForEachColumnValue(heading, "Date", (dateText) => {
               // Attempt to parse the date string
               const parsedDate = new Date(dateText);
-
               // Assert that the date is valid
               expect(parsedDate.toString()).not.to.equal("Invalid Date");
             });
@@ -57,7 +55,6 @@ export function runTestSuite(testSuiteData) {
             }
             cy.get("@input").clear();
           });
-
           tests.forEach((test) => test());
         });
       });

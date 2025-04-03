@@ -15,7 +15,6 @@ suite(["@tier2"], "back navigation from redirection", () => {
     ["/blocks", "/broadcast", "/broadcast/transaction"],
     ["/blocks", "/analytics", "/analytics/blocks"],
   ];
-
   navigations.forEach(([origin, destination, redirection]) => {
     it(`works when navigating from "${origin}" to "${destination}"`, () => {
       cy.visit(origin);

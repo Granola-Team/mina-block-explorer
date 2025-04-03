@@ -1,5 +1,4 @@
 import { DEFAULT_ACCOUNT_PK } from "../constants";
-
 suite(["@tier2"], "block spotlight", () => {
   [
     {

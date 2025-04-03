@@ -1,5 +1,4 @@
 import { DEFAULT_ACCOUNT_PK, FIRST_BLOCK_WITH_SNARK_WORK } from "../constants";
-
 suite(["@tier2"], "account page", () => {
   let pages = [
     {
@@ -79,7 +78,6 @@ suite(["@tier2"], "account page", () => {
       tableHeader: "Internal Commands",
     },
   ];
-
   pages.forEach(
     ({ origin, column, tableHeader, tableHeaderEl = "h1", transposed }) =>
       it(`is navigated to from ${origin} by clicking link in '${column}'`, () => {
@@ -89,7 +87,6 @@ suite(["@tier2"], "account page", () => {
         } else {
           cy.clickLinkInTable(0, column, tableHeader, tableHeaderEl);
         }
-
         cy.url().should("include", "/accounts/");
       }),
   );

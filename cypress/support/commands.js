@@ -22,9 +22,7 @@
 //
 //
 // -- This will overwrite an existing command --
-
 import { parseFormattedNumber } from "../e2e/helpers";
-
 Cypress.Commands.add("assertAnalyticsSimplValueEquals", (label, value) => {
   cy.get("span")
     .contains(label)
@@ -33,14 +31,12 @@ Cypress.Commands.add("assertAnalyticsSimplValueEquals", (label, value) => {
     .siblings()
     .should("have.text", value);
 });
-
 Cypress.Commands.add("checkNumeric", { prevSubject: true }, (subject) => {
   cy.wrap(subject)
     .invoke("text")
     .should((text) => {
       const cleanText = text.replace(/,/g, "");
       const numericValue = parseFloat(cleanText);
-
       console.log("Numeric Value is:", {
         original: text,
         cleaned: cleanText,
@@ -48,15 +44,12 @@ Cypress.Commands.add("checkNumeric", { prevSubject: true }, (subject) => {
         isNaN: isNaN(numericValue),
         isFinite: isFinite(numericValue),
       });
-
       expect(!isNaN(numericValue) && isFinite(numericValue)).to.be.true;
     });
 });
-
 Cypress.Commands.add("getBySel", (selector, ...args) => {
   return cy.get(`[data-test=${selector}]`, ...args);
 });
-
 Cypress.Commands.add(
   "assertSortOrder",
   (
@@ -92,20 +85,17 @@ Cypress.Commands.add(
     lastNumber = null;
   },
 );
-
 Cypress.Commands.add("assertStandardRowLimits", (tableHeading) => {
   [1000, 500, 250, 100, 50, 25].forEach((l) => {
     cy.assertRowLimitWorks(tableHeading, l);
   });
 });
-
 Cypress.Commands.add("assertRowLimitWorks", (tableHeading, limit) => {
   cy.get("select#row-limit").select("" + limit);
   cy.get("select#row-limit").should("have.value", "" + limit);
   cy.aliasTableRows(tableHeading, "table-rows");
   cy.get("@table-rows").should("have.lengthOf", limit);
 });
-
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 Cypress.Commands.add(
   "aliasTableRows",
@@ -118,7 +108,6 @@ Cypress.Commands.add(
       .as(alias);
   },
 );
-
 Cypress.Commands.add(
   "aliasTransposedTableRows",
   (tableHeading, alias, tableHeaderEl = "h1") => {
@@ -130,7 +119,6 @@ Cypress.Commands.add(
       .as(alias);
   },
 );
-
 Cypress.Commands.add(
   "aliasTableHeaders",
   (tableHeading, alias, tableHeadingEl = "h1") => {
@@ -142,12 +130,10 @@ Cypress.Commands.add(
       .as(alias);
   },
 );
-
 Cypress.Commands.add("closeAccountDialog", () => {
   cy.get("dialog button#closedialog a").click();
   cy.get("dialog").should("not.exist");
 });
-
 Cypress.Commands.add(
   "openAccountDialog",
   (nthRow, columnHeading, tableHeading) => {
@@ -155,13 +141,11 @@ Cypress.Commands.add(
     cy.get("dialog").should("be.visible");
   },
 );
-
 Cypress.Commands.add("openMobileMenu", () => {
   cy.get("nav").should("not.be.visible");
   cy.get('label[for="nav-toggle"]').click();
   cy.get("nav").should("be.visible");
 });
-
 Cypress.Commands.add(
   "tableHasOrderedColumns",
   (tableHeading, columns, tableHeaderEl = "h1") => {
@@ -172,7 +156,6 @@ Cypress.Commands.add(
     });
   },
 );
-
 Cypress.Commands.add(
   "clickLinkInTransposedTable",
   (columnHeading, tableHeading, tableHeadingEl = "h1") => {
@@ -185,7 +168,6 @@ Cypress.Commands.add(
       .click({ force: true });
   },
 );
-
 Cypress.Commands.add(
   "assertLoadNextWorks",
   (
@@ -233,7 +215,6 @@ Cypress.Commands.add(
     });
   },
 );
-
 Cypress.Commands.add(
   "clickLinkInTable",
   (nthRow, columnHeading, tableHeading, tableHeadingEl = "h1") => {
@@ -252,14 +233,12 @@ Cypress.Commands.add(
       });
   },
 );
-
 Cypress.Commands.add("tableHasMoreThanNRows", (tableHeading, n) => {
   cy.aliasTableRows(tableHeading, "table-rows");
   cy.get(`@table-rows`).should(($tr) => {
     expect($tr).to.have.length.of.at.least(n);
   });
 });
-
 Cypress.Commands.add("testSpotlight", (heading, id, expected_fields) => {
   cy.get("section#spotlight-section h1").contains(heading);
   cy.get("#spotlight-id").contains(id);
@@ -269,13 +248,11 @@ Cypress.Commands.add("testSpotlight", (heading, id, expected_fields) => {
     });
   });
 });
-
 Cypress.Commands.add("testSpotlightValue", (key, value) => {
   cy.get("section#spotlight-section table").within(() => {
     cy.get("th").contains(key).parents("tr").find("td").contains(value);
   });
 });
-
 Cypress.Commands.add(
   "aliasTableMetadata",
   (heading, alias = "table-metadata") => {
@@ -285,7 +262,6 @@ Cypress.Commands.add(
     });
   },
 );
-
 Cypress.Commands.add("assertTableMetadataCorrect", (heading, metadata, ith) => {
   cy.aliasTableMetadata(heading, "table-metadata");
   cy.get("@table-metadata")
@@ -296,7 +272,6 @@ Cypress.Commands.add("assertTableMetadataCorrect", (heading, metadata, ith) => {
       expect(parseFormattedNumber(parsed_metadata[ith])).to.equal(metadata);
     });
 });
-
 Cypress.Commands.add(
   "assertNumberOfTableMetadataDatum",
   (heading, expected_number_of_metadata) => {
@@ -310,7 +285,6 @@ Cypress.Commands.add(
       });
   },
 );
-
 Cypress.Commands.add("assertTableRecordsCorrect", (heading) => {
   cy.aliasTableMetadata(heading, "table-metadata");
   cy.aliasTableRows(heading, "table-rows");
@@ -336,7 +310,6 @@ Cypress.Commands.add("assertTableRecordsCorrect", (heading) => {
       });
   });
 });
-
 Cypress.Commands.add(
   "assertForEachColumnValue",
   (heading, column, assertion, limit = 5) => {
@@ -359,7 +332,6 @@ Cypress.Commands.add(
       });
   },
 );
-
 Cypress.Commands.add(
   "aliasTableColumnValue",
   (columnHeading, column, alias = "table-column-values") => {
@@ -373,7 +345,6 @@ Cypress.Commands.add(
       });
   },
 );
-
 Cypress.Commands.add(
   "tableColumnValuesEqual",
   (columnHeading, column, value) => {
