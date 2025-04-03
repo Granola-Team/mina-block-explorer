@@ -100,9 +100,8 @@ Cypress.Commands.add("assertStandardRowLimits", (tableHeading) => {
 });
 
 Cypress.Commands.add("assertRowLimitWorks", (tableHeading, limit) => {
-  cy.get("select#row-limit")
-    .select("" + limit)
-    .should("have.value", "" + limit);
+  cy.get("select#row-limit").select("" + limit);
+  cy.get("select#row-limit").should("have.value", "" + limit);
   cy.aliasTableRows(tableHeading, "table-rows");
   cy.get("@table-rows").should("have.lengthOf", limit);
 });
