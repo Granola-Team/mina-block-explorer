@@ -19,6 +19,8 @@ RUBY_SRC_FILES = Dir.glob("**/*.rb").reject { |file| file.start_with?("lib/") } 
 JAVASCRIPT_SRC_FILES = Dir.glob("src/scripts_tests/**")
 MINASEARCH_GRAPHQL = "https://api.minasearch.com/graphql"
 MINASEARCH_REST = "https://api.minasearch.com"
+ENV["GRAPHQL_URL"] = "http://localhost:8080/graphql"
+ENV["REST_URL"] = "http://localhost:8080"
 
 def ensure_env_vars(required_vars, error_context = "Task failed")
   missing_vars = required_vars.reject { |var| ENV[var] && !ENV[var].empty? }
@@ -255,8 +257,6 @@ end
 
 desc "Serve the built website locally"
 task dev: [:deploy_mina_indexer] do
-  ENV["GRAPHQL_URL"] = "http://localhost:8080/graphql"
-  ENV["REST_URL"] = "http://localhost:8080"
   trap("INT") { Rake::Task["shutdown_mina_indexer"].invoke }
   sh "trunk serve --port=#{TRUNK_PORT} --open"
 end
@@ -268,10 +268,13 @@ task :dev_prod do
   sh "trunk serve --port=#{TRUNK_PORT} --open"
 end
 
-desc "Publish the website to production"
-task publish: [:clean, :pnpm_install, :release_build] do
+task :check_tokens do
+  puts "--- Checking presence of tokens"
   ensure_env_vars(%w[CLOUDFLARE_ACCOUNT_ID CLOUDFLARE_API_TOKEN], "Cannot publish")
+end
 
+desc "Publish the website to production"
+task publish: [:check_tokens, :clean, :pnpm_install, :release_build] do
   puts "--- Publishing"
   puts "Publishing version #{ENV["VERSION"]}"
   sh "pnpx wrangler pages deploy --branch main"
@@ -319,8 +322,6 @@ desc "Build the dev version for front-end WASM bundle"
 task dev_build: "target/debug"
 file "target/debug" => CARGO_DEPS + ["Trunk.toml", "tailwind.config.js"] do
   puts "--- Building dev version"
-  ENV["GRAPHQL_URL"] = "http://localhost:8080/graphql"
-  ENV["REST_URL"] = "http://localhost:8080"
   sh "trunk build"
 end
 
