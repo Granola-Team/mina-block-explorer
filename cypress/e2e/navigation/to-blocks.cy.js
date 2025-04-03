@@ -6,7 +6,7 @@ suite(["@tier2"], "block page", () => {
       dest: "blocks",
       href: `/blocks?q-block-producer=${ADDRESS_WITH_SNARK_AND_BLOCK_PRODUCTION}`,
     },
-  ].forEach(({ origin, dest, href }) =>
+  ].forEach(({ origin, href }) =>
     it(`is navigated to from ${origin}`, () => {
       cy.visit(origin);
       cy.get("a").contains("See all block production").click();

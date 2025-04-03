@@ -236,6 +236,7 @@ desc "Fix linting errors"
 task :lint_fix do
   sh "standardrb --fix #{RUBY_SRC_FILES.join(" ")}"
   sh "cargo clippy --fix --allow-dirty --allow-staged"
+  sh "pnpm exec eslint --fix cypress/"
 end
 
 desc "Build documentation in the build directory"
@@ -291,7 +292,8 @@ task lint_javascript: ".build/lint-javascript"
 file ".build/lint-javascript" => CYPRESS_FILES + ["node_modules"] do |t|
   puts "--- Linting JS/TS"
   prettier_output = cmd_capture("pnpm exec prettier --check cypress/")
-  record_output(t, prettier_output)
+  eslint_output = cmd_capture("pnpm exec eslint cypress/")
+  record_output(t, [prettier_output, eslint_output])
 end
 
 desc "Lint the Ruby code"

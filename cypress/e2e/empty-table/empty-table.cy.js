@@ -1,4 +1,3 @@
-import { DEFAULT_ACCOUNT_PK } from "../constants";
 suite(["@tier2"], "empty table", () => {
   let pages = [
     "/addresses/accounts?q-public-key=B62fake",
