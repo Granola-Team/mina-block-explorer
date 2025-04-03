@@ -11,6 +11,8 @@ ENV["VERSION"] = `git rev-parse --short=8 HEAD`.chomp
 ENV["INDEXER_VERSION"] = `cd lib/mina-indexer && git rev-parse --short=8 HEAD`.chomp
 ENV["CARGO_HOME"] = "#{Dir.pwd}/.cargo"
 ENV["VOLUMES_DIR"] ||= "/mnt" if Dir.exist?("/mnt")
+ENV["GRAPHQL_URL"] = "http://localhost:8080/graphql"
+ENV["REST_URL"] = "http://localhost:8080"
 GRAPHQL_SRC_FILES = Dir.glob("graphql/**/*.graphql")
 RUST_SRC_FILES = Dir.glob("src/**/*.rs") + GRAPHQL_SRC_FILES
 CARGO_DEPS = RUST_SRC_FILES + ["Cargo.toml", "Cargo.lock", "build.rs"]
@@ -19,8 +21,8 @@ RUBY_SRC_FILES = Dir.glob("**/*.rb").reject { |file| file.start_with?("lib/") } 
 JAVASCRIPT_SRC_FILES = Dir.glob("src/scripts_tests/**")
 MINASEARCH_GRAPHQL = "https://api.minasearch.com/graphql"
 MINASEARCH_REST = "https://api.minasearch.com"
-ENV["GRAPHQL_URL"] = "http://localhost:8080/graphql"
-ENV["REST_URL"] = "http://localhost:8080"
+DEV_BUILD_TARGET = ".build/dev_build"
+RELEASE_BUILD_TARGET = ".build/release_build"
 
 def ensure_env_vars(required_vars, error_context = "Task failed")
   missing_vars = required_vars.reject { |var| ENV[var] && !ENV[var].empty? }
@@ -167,8 +169,6 @@ task :deploy_mina_indexer do
   puts "--- Deploying mina-indexer at #{ENV["INDEXER_VERSION"]}"
   Dir.chdir("lib/mina-indexer") do
     sh %W[
-      GRAPHQL_URL=http://localhost:8080/graphql
-      REST_URL=http://localhost:8080
       nix develop --command rake "deploy:local_prod_dev[10000,8080]"
     ].join(" ")
   end
@@ -186,7 +186,6 @@ desc "Clean the repo of built artifacts"
 task :clean do
   puts "--- Cleaning"
   FileUtils.rm_rf %w[
-    dist
     target
     cypress/screenshots
     node_modules
@@ -256,16 +255,14 @@ file "node_modules" => ["pnpm-lock.yaml", "package.json"] do
 end
 
 desc "Serve the built website locally"
-task dev: [:deploy_mina_indexer] do
+task dev: [:deploy_mina_indexer, :dev_build] do
   trap("INT") { Rake::Task["shutdown_mina_indexer"].invoke }
-  sh "trunk serve --port=#{TRUNK_PORT} --open"
+  sh "trunk serve --port=#{TRUNK_PORT} --open --dist=#{DEV_BUILD_TARGET}"
 end
 
 desc "Serve the built website locally against prod indexer"
-task :dev_prod do
-  ENV["GRAPHQL_URL"] = MINASEARCH_GRAPHQL
-  ENV["REST_URL"] = MINASEARCH_REST
-  sh "trunk serve --port=#{TRUNK_PORT} --open"
+task dev_prod: [:release_build] do
+  sh "trunk serve --port=#{TRUNK_PORT} --open --dist=#{RELEASE_BUILD_TARGET}"
 end
 
 task :check_tokens do
@@ -274,7 +271,7 @@ task :check_tokens do
 end
 
 desc "Publish the website to production"
-task publish: [:check_tokens, :clean, :pnpm_install, :release_build] do
+task publish: [:check_tokens, :pnpm_install, :release_build] do
   puts "--- Publishing"
   puts "Publishing version #{ENV["VERSION"]}"
   sh "pnpx wrangler pages deploy --branch main"
@@ -319,19 +316,19 @@ file ".build/lint-rust" => RUST_SRC_FILES + ["rustfmt.toml"] do |t|
 end
 
 desc "Build the dev version for front-end WASM bundle"
-task dev_build: "target/debug"
-file "target/debug" => CARGO_DEPS + ["Trunk.toml", "tailwind.config.js"] do
+task dev_build: DEV_BUILD_TARGET.to_s
+file DEV_BUILD_TARGET.to_s => CARGO_DEPS + ["Trunk.toml", "tailwind.config.js"] do |t|
   puts "--- Building dev version"
-  sh "trunk build"
+  sh "trunk build --dist=#{t.name}"
 end
 
 desc "Build the release version for front-end WASM bundle"
-task release_build: "target/release"
-file "target/release" => CARGO_DEPS + ["Trunk.toml", "tailwind.config.js"] do
+task release_build: RELEASE_BUILD_TARGET.to_s
+file RELEASE_BUILD_TARGET.to_s => CARGO_DEPS + ["Trunk.toml", "tailwind.config.js"] do |t|
   puts "--- Building release version"
   ENV["GRAPHQL_URL"] = MINASEARCH_GRAPHQL
   ENV["REST_URL"] = MINASEARCH_REST
-  sh "trunk build --release --filehash true"
+  sh "trunk build --release --filehash true --dist=#{t.name}"
 end
 
 desc "Lint all source code"
@@ -346,7 +343,7 @@ task tier2: [:tier1, :pnpm_install, :deploy_mina_indexer] do
 end
 
 desc "Invoke the Tier2 regression suite (interactive)"
-task t2_i: [:pnpm_install] do
+task t2_i: [:pnpm_install, :deploy_mina_indexer, :dev_build] do
   run_tier_task("pnpm exec cypress open", wait_for_cypress: false)
 end
 
