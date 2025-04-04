@@ -10,6 +10,8 @@ pub struct ChainSummary {
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct BlockchainSummary {
+    pub chain_id: String,
+    pub genesis_state_hash: Option<String>,
     pub blockchain_length: u64,
     pub circulating_supply: String,
     #[deprecated(note = "use chain.latest_epoch instead")]

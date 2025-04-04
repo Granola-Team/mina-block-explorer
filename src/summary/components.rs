@@ -1,5 +1,9 @@
 use crate::{
-    common::{components::*, constants::BERKELEY_CHAIN_ID, functions::*},
+    common::{
+        components::*,
+        constants::{BERKELEY_CHAIN_ID, HARDFORK_STATE_HASH},
+        functions::*,
+    },
     summary::models::*,
 };
 use leptos::*;
@@ -10,7 +14,7 @@ pub fn SummaryGrid(
     stat: Option<BlockchainStat>,
 ) -> impl IntoView {
     view! {
-        <section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 auto-rows-min gap-4 p-4 pt-0">
+        <section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-6 auto-rows-min gap-4 p-4 pt-0">
             <h2 class="h-0 w-0 overflow-hidden absolute">"Summary"</h2>
             <SummaryItem
                 id="epoch"
@@ -89,6 +93,25 @@ pub fn SummaryGrid(
                 id="totalSnarks"
                 label="Total SNARKs"
                 value=summary.as_ref().map(|s| format_number(s.total_num_snarks.to_string()))
+            />
+            <SummaryItem
+                id="chainId"
+                label="Chain ID"
+                value=summary.as_ref().map(|s| s.chain_id.chars().take(7).collect())
+            />
+            <SummaryItem
+                id="genesisStateHash"
+                label="Genesis State Hash"
+                value=summary
+                    .as_ref()
+                    .map(|s| {
+                        s.genesis_state_hash
+                            .clone()
+                            .unwrap_or(HARDFORK_STATE_HASH.to_string())
+                            .chars()
+                            .take(7)
+                            .collect()
+                    })
             />
         </section>
     }
