@@ -1,5 +1,4 @@
 import {
-  BLOCK_WITH_ALL_ACTIVITY,
   DEFAULT_ACCOUNT_PK,
   FIRST_BLOCK_PRODUCER_ADDRESS,
   FIRST_BLOCK_WITH_SNARK_WORK,
@@ -65,12 +64,12 @@ suite(["@tier2"], "account page", () => {
       tableHeader: "User Commands",
     },
     {
-      origin: `/blocks/${BLOCK_WITH_ALL_ACTIVITY}/commands/user`,
+      origin: `/blocks/${FIRST_BLOCK_WITH_SNARK_WORK}/commands/user`,
       column: "From",
       tableHeader: "User Commands",
     },
     {
-      origin: `/blocks/${BLOCK_WITH_ALL_ACTIVITY}/commands/user`,
+      origin: `/blocks/${FIRST_BLOCK_WITH_SNARK_WORK}/commands/user`,
       column: "To",
       tableHeader: "User Commands",
     },
@@ -80,7 +79,7 @@ suite(["@tier2"], "account page", () => {
       tableHeader: "SNARK Jobs",
     },
     {
-      origin: `/blocks/${BLOCK_WITH_ALL_ACTIVITY}/commands/internal`,
+      origin: `/blocks/${FIRST_BLOCK_WITH_SNARK_WORK}/commands/internal`,
       column: "Recipient",
       tableHeader: "Internal Commands",
     },
@@ -89,12 +88,15 @@ suite(["@tier2"], "account page", () => {
     ({ origin, column, tableHeader, tableHeaderEl = "h1", transposed }) =>
       it(`is navigated to from ${origin} by clicking link in '${column}'`, () => {
         cy.visit(origin);
+        cy.waitUntilTableLoads(tableHeader);
         if (transposed) {
           cy.clickLinkInTransposedTable(column, tableHeader, tableHeaderEl);
         } else {
           cy.clickLinkInTable(0, column, tableHeader, tableHeaderEl);
         }
         cy.url().should("include", "/accounts/");
+        // to avoid errors
+        cy.wait(150);
       }),
   );
 });

@@ -345,6 +345,10 @@ Cypress.Commands.add(
       });
   },
 );
+Cypress.Commands.add("waitUntilTableLoads", (tableHeading) => {
+  cy.aliasTableRows(tableHeading, "table-rows");
+  cy.get("@table-rows").find(".loading-placeholder").should("not.exist");
+});
 Cypress.Commands.add(
   "tableColumnValuesEqual",
   (columnHeading, column, value) => {
