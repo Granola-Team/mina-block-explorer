@@ -85,7 +85,7 @@ pub fn StakesPageContents(
 
     let section_heading = format!("Staking Ledger - Epoch {}", header_epoch);
     let (section_heading_sig, _) = create_signal(section_heading);
-    let (next_epoch_sig, _) = create_signal(next_epoch_opt);
+    let (next_epoch_sig, _) = create_signal(Some(next_epoch));
     let (prev_epoch_sig, _) = create_signal(prev_epoch_opt);
     let (sort_dir, _) = create_query_signal::<String>("sort-dir");
     let (data_sig, set_data) = create_signal(None);
@@ -243,13 +243,15 @@ pub fn StakesPageContents(
                             </div>
 
                             {move || {
-                                let resolved_slot_in_epoch = if next_epoch_sig
-                                    .get()
-                                    .is_some_and(|next_epoch| current_epoch == next_epoch - 1)
-                                {
-                                    slot_in_epoch
-                                } else {
-                                    EPOCH_SLOTS as u64
+                                let resolved_slot_in_epoch = match next_epoch_opt {
+                                    Some(next_epoch) => {
+                                        if current_epoch == next_epoch - 1 {
+                                            slot_in_epoch
+                                        } else {
+                                            EPOCH_SLOTS as u64
+                                        }
+                                    }
+                                    None => 0_u64,
                                 };
                                 view! {
                                     <div class="text-sm text-slate-500 staking-ledger-percent-complete">

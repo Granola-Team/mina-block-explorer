@@ -103,7 +103,7 @@ def run_tier_task(cypress_cmd, wait_for_cypress: true)
   end
 
   # Start the server
-  server_pid = Process.spawn("trunk serve --no-autoreload --port=#{TRUNK_PORT}", pgroup: true)
+  server_pid = Process.spawn("trunk serve --no-autoreload --port=#{TRUNK_PORT} --dist=#{DEV_BUILD_TARGET}", pgroup: true)
   puts "Started trunk server with PID: #{server_pid}"
 
   # Wait for port

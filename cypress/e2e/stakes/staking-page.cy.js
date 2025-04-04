@@ -73,4 +73,10 @@ suite(["@tier2"], "staking ledger", () => {
       .contains("Next")
       .should("exist");
   });
+  it("displays 0% complete for the next epoch", () => {
+    cy.visit("/staking-ledgers?epoch=0");
+    cy.contains("40% complete");
+    cy.contains("Next").click();
+    cy.contains("0% complete");
+  });
 });

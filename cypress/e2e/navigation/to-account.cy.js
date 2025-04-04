@@ -1,8 +1,4 @@
-import {
-  DEFAULT_ACCOUNT_PK,
-  FIRST_BLOCK_PRODUCER_ADDRESS,
-  FIRST_BLOCK_WITH_SNARK_WORK,
-} from "../constants";
+import { DEFAULT_ACCOUNT_PK, FIRST_BLOCK_WITH_SNARK_WORK } from "../constants";
 suite(["@tier2"], "account page", () => {
   let pages = [
     // TODO: Enable when there is some data to display
@@ -28,7 +24,7 @@ suite(["@tier2"], "account page", () => {
       tableHeader: "User Commands",
     },
     {
-      origin: `/addresses/accounts/${FIRST_BLOCK_PRODUCER_ADDRESS}/block-production`,
+      origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}/block-production`,
       column: "Coinbase Receiver",
       tableHeader: "Block Production",
     },
