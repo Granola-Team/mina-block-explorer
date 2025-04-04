@@ -56,25 +56,28 @@ export const table = {
         cy.tableColumnValuesEqual("MINA Accounts", "Username", ROMEK_USERNAME);
       },
     },
-    {
-      column: "Username",
-      input: "Romek",
-      assertion: function () {
-        cy.aliasTableRows("MINA Accounts", "table-rows");
-        cy.get("@table-rows").should("have.lengthOf", 1);
-        cy.assertForEachColumnValue("MINA Accounts", "Username", (text) => {
-          expect(text).to.equal(ROMEK_USERNAME);
-        });
-        cy.tableColumnValuesEqual("MINA Accounts", "Username", ROMEK_USERNAME);
-      },
-    },
+    // TODO: commented out due to lack of txn to MINA NAMING SERVICE post-hardfork
+    // {
+    //   column: "Username",
+    //   input: ROMEK_USERNAME,
+    //   assertion: function () {
+    //     cy.aliasTableRows("MINA Accounts", "table-rows");
+    //     cy.get("@table-rows").should("have.lengthOf", 1);
+    //     cy.assertForEachColumnValue("MINA Accounts", "Username", (text) => {
+    //       expect(text).to.equal(ROMEK_USERNAME);
+    //     });
+    //     cy.tableColumnValuesEqual("MINA Accounts", "Username", ROMEK_USERNAME);
+    //   },
+    // },
     {
       column: "Delegate",
-      input: "B62qpqCBExtxzfHUPkmrrfmYhXZyg3V7pSmwuxHMzTi8E6gBbopauJS",
+      input: "B62qrQKS9ghd91shs73TCmBJRW9GzvTJK443DPx2YbqcyoLc56g1ny9",
       assertion: function () {
         cy.aliasTableRows("MINA Accounts", "table-rows");
         cy.assertForEachColumnValue("MINA Accounts", "Delegate", (text) => {
-          expect(text).to.equal(ROMEK_ADDRESS);
+          expect(text).to.equal(
+            "B62qrQKS9ghd91shs73TCmBJRW9GzvTJK443DPx2YbqcyoLc56g1ny9",
+          );
         });
       },
     },

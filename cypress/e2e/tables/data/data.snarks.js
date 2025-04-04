@@ -1,6 +1,6 @@
 // Test suite data for: /snarks
 import { parseFormattedNumber } from "../../helpers";
-import { VETAL_BLOCK_STATE_HASH } from "../../constants";
+import { BLOCK_WITH_ALL_ACTIVITY } from "../../constants";
 export const tag = "@tier2";
 export const url = "/snarks";
 export const table = {
@@ -9,24 +9,24 @@ export const table = {
   filter_tests: [
     {
       column: "Height",
-      input: 2000,
+      input: 360100,
       assertion: function () {
         cy.assertNumberOfTableMetadataDatum("SNARKs", 2);
         cy.assertForEachColumnValue("SNARKs", "Height", (text) => {
           let height = parseFormattedNumber(text);
-          expect(height).to.be.lte(2000);
+          expect(height).to.be.lte(360100);
         });
       },
     },
     {
       column: "State Hash",
-      input: "3NKrxKGr3JpYT2CzAFUeUb89ae6MFMsVWFX1QLYqYNJp1ffHR4ej",
+      input: BLOCK_WITH_ALL_ACTIVITY,
       assertion: function () {
         cy.assertNumberOfTableMetadataDatum("SNARKs", 2);
         cy.aliasTableRows("SNARKs", "table-rows");
         cy.get("@table-rows").should("have.length.greaterThan", 1);
         cy.assertForEachColumnValue("SNARKs", "State Hash", (text) => {
-          expect(text).to.equal(VETAL_BLOCK_STATE_HASH);
+          expect(text).to.equal(BLOCK_WITH_ALL_ACTIVITY);
         });
       },
     },
@@ -50,7 +50,7 @@ export const tests = [
   },
   () => {
     cy.intercept("POST", "/graphql").as("graphql");
-    cy.visit("/snarks?row-limit=100&q-height=149");
+    cy.visit("/snarks?row-limit=50&q-height=359630");
     cy.wait("@graphql").then(() => {
       cy.wait(1000);
       cy.assertLoadNextWorks("SNARKs", "Height", {

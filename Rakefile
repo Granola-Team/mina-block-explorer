@@ -5,14 +5,15 @@ require "socket"
 # Constants and environment variables
 SPEC = "cypress/e2e/"
 TRUNK_PORT = rand(5170..5179).to_s
+IDXR_PORT = rand(8090..8099).to_s
 ENV["RUSTFLAGS"] = "--cfg=web_sys_unstable_apis"
 ENV["CYPRESS_BASE_URL"] = "http://localhost:#{TRUNK_PORT}"
 ENV["VERSION"] = `git rev-parse --short=8 HEAD`.chomp
 ENV["INDEXER_VERSION"] = `cd lib/mina-indexer && git rev-parse --short=8 HEAD`.chomp
 ENV["CARGO_HOME"] = "#{Dir.pwd}/.cargo"
 ENV["VOLUMES_DIR"] ||= "/mnt" if Dir.exist?("/mnt")
-ENV["GRAPHQL_URL"] = "http://localhost:8080/graphql"
-ENV["REST_URL"] = "http://localhost:8080"
+ENV["GRAPHQL_URL"] = "http://localhost:#{IDXR_PORT}/graphql"
+ENV["REST_URL"] = "http://localhost:#{IDXR_PORT}"
 GRAPHQL_SRC_FILES = Dir.glob("graphql/**/*.graphql")
 RUST_SRC_FILES = Dir.glob("src/**/*.rs") + GRAPHQL_SRC_FILES
 CARGO_DEPS = RUST_SRC_FILES + ["Cargo.toml", "Cargo.lock", "build.rs"]
@@ -168,31 +169,35 @@ task :deploy_mina_indexer do
   ensure_env_vars(%w[VOLUMES_DIR], "Cannot deploy mina indexer")
   puts "--- Deploying mina-indexer at #{ENV["INDEXER_VERSION"]}"
   Dir.chdir("lib/mina-indexer") do
-    sh %W[
-      nix develop --command rake "deploy:local_prod_dev[10000,8080]"
-    ].join(" ")
+    sh "nix develop --command rake build:dev"
+    sh "nix develop --command rake \"bin:stage_and_start_v2[#{Dir.pwd}/rust/target/debug/mina-indexer,361000,#{IDXR_PORT}]\""
   end
 end
 
 desc "Shut down mina-indexer"
 task :shutdown_mina_indexer do
   puts "--- Shutting down mina-indexer"
-  Dir.chdir("lib/mina-indexer") do
-    sh "nix develop --command rake shutdown prod"
-  end
+  sh "pkill mina-indexer"
+end
+
+task :clean_cypress do
+  FileUtils.rm_rf "cypress/screenshots"
+end
+
+task :clean_node_modules do
+  FileUtils.rm_rf "node_modules"
+end
+
+task :clean_build do
+  FileUtils.rm_rf ".build"
+end
+
+task :clean_target do
+  FileUtils.rm_rf "target"
 end
 
 desc "Clean the repo of built artifacts"
-task :clean do
-  puts "--- Cleaning"
-  FileUtils.rm_rf %w[
-    target
-    cypress/screenshots
-    node_modules
-    .wrangler
-    .build
-  ]
-end
+task clean: [:clean_cypress, :clean_node_modules, :clean_build, :clean_target]
 
 desc "Format the source code"
 task format: [:pnpm_install] do
@@ -340,7 +345,8 @@ desc "Run the Tier1 tests"
 task tier1: [:dev_build, :lint, :test_unit]
 
 desc "Invoke the Tier2 regression suite (non-interactive)"
-task tier2: [:tier1, :pnpm_install, :deploy_mina_indexer] do
+task tier2: [:clean_cypress, :tier1, :pnpm_install, :deploy_mina_indexer] do
+  trap("INT") { Rake::Task["shutdown_mina_indexer"].invoke }
   run_tier_task("pnpm exec cypress run -r list -q", wait_for_cypress: true)
 end
 

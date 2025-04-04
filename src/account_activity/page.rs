@@ -48,7 +48,7 @@ fn AccountSpotlightPage() -> impl IntoView {
         account
             .get()
             .and_then(|acc| acc.username)
-            .unwrap_or_default()
+            .unwrap_or("Unknown".to_string())
     };
 
     view! {

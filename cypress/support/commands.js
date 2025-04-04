@@ -195,7 +195,7 @@ Cypress.Commands.add(
     cy.intercept("POST", "/graphql").as("graphql");
     cy.contains(opts.button_text).click();
     cy.wait("@graphql").then(() => {
-      cy.wait(1000);
+      cy.get("@table-rows").find(".loading-placeholder").should("not.exist");
       cy.contains(opts.button_text).should(opts.expected_button_state);
       cy.get("@columns")
         .contains(column)

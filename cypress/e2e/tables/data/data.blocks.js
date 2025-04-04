@@ -23,18 +23,18 @@ export const table = {
   filter_tests: [
     {
       column: "Height",
-      input: 2000,
+      input: 359900,
       assertion: function () {
         cy.assertNumberOfTableMetadataDatum("Blocks", 2);
         cy.assertForEachColumnValue("Blocks", "Height", (text) => {
           let height = parseFormattedNumber(text);
-          expect(height).to.be.lte(2000);
+          expect(height).to.be.lte(359900);
         });
       },
     },
     {
       column: "State Hash",
-      input: "3NKeMoncuHab5ScarV5ViyF16cJPT4taWNSaTLS64Dp67wuXigPZ",
+      input: GENESIS_BLOCK_BLOCK_HASH,
       assertion: function () {
         cy.assertNumberOfTableMetadataDatum("Blocks", 2);
         cy.aliasTableRows("Blocks", "table-rows");
@@ -46,12 +46,12 @@ export const table = {
     },
     {
       column: "Slot",
-      input: 90000,
+      input: 565000,
       assertion: function () {
         cy.assertNumberOfTableMetadataDatum("Blocks", 2);
         cy.assertForEachColumnValue("Blocks", "Slot", (text) => {
           let height = parseFormattedNumber(text);
-          expect(height).to.be.lte(90000);
+          expect(height).to.be.lte(565000);
           expect(height).to.be.gt(SLOTS_PER_EPOCH);
         });
       },
@@ -98,7 +98,7 @@ export const tests = [
   },
   () => {
     cy.intercept("POST", "/graphql").as("graphql");
-    cy.visit("/blocks?q-height=25");
+    cy.visit("/blocks?q-height=359613");
     cy.wait("@graphql").then(() => {
       cy.wait(1000);
       cy.assertLoadNextWorks("Blocks", "Height", {

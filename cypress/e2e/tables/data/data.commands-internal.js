@@ -1,6 +1,5 @@
 // Test suite data for: /commands/internal
 import { parseFormattedNumber } from "../../helpers";
-import { ROMEK_BLOCK_STATE_HASH } from "../../constants";
 export const tag = "@tier2";
 export const url = "/commands/internal";
 export const table = {
@@ -9,18 +8,18 @@ export const table = {
   filter_tests: [
     {
       column: "Height",
-      input: 2000,
+      input: 359610,
       assertion: function () {
         cy.assertNumberOfTableMetadataDatum("Internal Commands", 2);
         cy.assertForEachColumnValue("Internal Commands", "Height", (text) => {
           let height = parseFormattedNumber(text);
-          expect(height).to.be.lte(2000);
+          expect(height).to.be.lte(359610);
         });
       },
     },
     {
       column: "State Hash",
-      input: "3NLgCqncc6Ct4dcuhaG3ANQbfWwQCxMXu4MJjwGgRKxs6p8vQsZf",
+      input: "3NLCZXPQH8WwSXUtrCHHz3n78RQJxNYUyn4uyx6JyTo4THApAbZd",
       assertion: function () {
         cy.assertNumberOfTableMetadataDatum("Internal Commands", 2);
         cy.aliasTableRows("Internal Commands", "table-rows");
@@ -29,14 +28,16 @@ export const table = {
           "Internal Commands",
           "State Hash",
           (text) => {
-            expect(text).to.equal(ROMEK_BLOCK_STATE_HASH);
+            expect(text).to.equal(
+              "3NLCZXPQH8WwSXUtrCHHz3n78RQJxNYUyn4uyx6JyTo4THApAbZd",
+            );
           },
         );
       },
     },
     {
       column: "Recipient",
-      input: "B62qnucUMHz7Dw2ReNgWhmR5XCvPeQjJWPReuQ8GwPyY4qj1otGBiKr",
+      input: "B62qioAD9geuKsffk9gXSgHf18riNEB9NmR4Zyuo2fvWd5WWYTg4WHB",
       assertion: function () {
         cy.assertNumberOfTableMetadataDatum("Internal Commands", 2);
         cy.assertForEachColumnValue(
@@ -44,7 +45,7 @@ export const table = {
           "Recipient",
           (text) => {
             expect(text).to.equal(
-              "B62qnucUMHz7Dw2ReNgWhmR5XCvPeQjJWPReuQ8GwPyY4qj1otGBiKr",
+              "B62qioAD9geuKsffk9gXSgHf18riNEB9NmR4Zyuo2fvWd5WWYTg4WHB",
             );
           },
         );
@@ -58,7 +59,7 @@ export const tests = [
   },
   () => {
     cy.intercept("POST", "/graphql").as("graphql");
-    cy.visit("/commands/internal?q-height=25");
+    cy.visit("/commands/internal?q-height=359618");
     cy.wait("@graphql").then(() => {
       cy.wait(1000);
       cy.assertLoadNextWorks("Internal Commands", "Height", {

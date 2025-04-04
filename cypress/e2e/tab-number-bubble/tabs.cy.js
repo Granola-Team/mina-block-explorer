@@ -1,22 +1,18 @@
-import {
-  ADDRESS_WITH_SNARK_AND_BLOCK_PRODUCTION,
-  DEFAULT_ACCOUNT_PK,
-  VETAL_BLOCK_STATE_HASH,
-} from "../constants";
+import { BLOCK_WITH_ALL_ACTIVITY, DEFAULT_ACCOUNT_PK } from "../constants";
 suite(["@tier2"], "number bubble in tab", () => {
   let tabs = [
     {
-      url: `/blocks/${VETAL_BLOCK_STATE_HASH}/commands/user`,
+      url: `/blocks/${BLOCK_WITH_ALL_ACTIVITY}/commands/user`,
       tab: "User Commands",
       comparison_method: "rows",
     },
     {
-      url: `/blocks/${VETAL_BLOCK_STATE_HASH}/snark-jobs`,
+      url: `/blocks/${BLOCK_WITH_ALL_ACTIVITY}/snark-jobs`,
       tab: "SNARK Jobs",
       comparison_method: "rows",
     },
     {
-      url: `/blocks/${VETAL_BLOCK_STATE_HASH}/commands/internal`,
+      url: `/blocks/${BLOCK_WITH_ALL_ACTIVITY}/commands/internal`,
       tab: "Internal Commands",
       comparison_method: "rows",
     },
@@ -37,11 +33,11 @@ suite(["@tier2"], "number bubble in tab", () => {
     //   tab: "Tokens",
     // },
     {
-      url: `/addresses/accounts/${ADDRESS_WITH_SNARK_AND_BLOCK_PRODUCTION}/snark-jobs`,
+      url: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}/snark-jobs`,
       tab: "SNARK Jobs",
     },
     {
-      url: `/addresses/accounts/${ADDRESS_WITH_SNARK_AND_BLOCK_PRODUCTION}/commands/internal`,
+      url: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}/commands/internal`,
       tab: "Internal Commands",
     },
   ];

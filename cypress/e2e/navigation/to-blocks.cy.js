@@ -1,10 +1,10 @@
-import { ADDRESS_WITH_SNARK_AND_BLOCK_PRODUCTION } from "../constants";
+import { FIRST_BLOCK_PRODUCER_ADDRESS } from "../constants";
 suite(["@tier2"], "block page", () => {
   [
     {
-      origin: `/addresses/accounts/${ADDRESS_WITH_SNARK_AND_BLOCK_PRODUCTION}/block-production`,
+      origin: `/addresses/accounts/${FIRST_BLOCK_PRODUCER_ADDRESS}/block-production`,
       dest: "blocks",
-      href: `/blocks?q-block-producer=${ADDRESS_WITH_SNARK_AND_BLOCK_PRODUCTION}`,
+      href: `/blocks?q-block-producer=${FIRST_BLOCK_PRODUCER_ADDRESS}`,
     },
   ].forEach(({ origin, href }) =>
     it(`is navigated to from ${origin}`, () => {
@@ -14,7 +14,7 @@ suite(["@tier2"], "block page", () => {
       cy.tableColumnValuesEqual(
         "Blocks",
         "Block Producer",
-        ADDRESS_WITH_SNARK_AND_BLOCK_PRODUCTION,
+        FIRST_BLOCK_PRODUCER_ADDRESS,
       );
     }),
   );

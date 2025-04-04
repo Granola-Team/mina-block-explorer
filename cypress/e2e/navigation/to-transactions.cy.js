@@ -1,14 +1,14 @@
-import { ROMEK_ADDRESS, WHISPERIT_BLOCK_STATE_HASH } from "../constants";
+import { DEFAULT_ACCOUNT_PK, APPLIED_TXN_BLOCK_STATE_HASH } from "../constants";
 suite(["@tier2"], "transaction spotlight", () => {
   let pages = [
     { origin: "/commands", column: "Hash", tableHeader: "User Commands" },
     {
-      origin: `/blocks/${WHISPERIT_BLOCK_STATE_HASH}/commands/user`,
+      origin: `/blocks/${APPLIED_TXN_BLOCK_STATE_HASH}/commands/user`,
       column: "Hash",
       tableHeader: "User Commands",
     },
     {
-      origin: `/addresses/accounts/${ROMEK_ADDRESS}`,
+      origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
       column: "Txn Hash",
       tableHeader: "User Commands",
     },

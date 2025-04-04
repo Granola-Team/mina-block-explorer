@@ -1,65 +1,59 @@
 export const DEFAULT_ACCOUNT_PK =
-  "B62qre3erTHfzQckNuibViWQGyyKwZseztqrjPZBv6SQF384Rg6ESAy";
+  "B62qrQiw9JhUumq457sMxicgQ94Z1WD9JChzJu19kBE8Szb5T8tcUAC";
 export const DEFAULT_NON_CANONICAL_BLOCK_HASH =
-  "3NK5vbcACcrrNL4SsJAbjJGirW1kfLLTZpU3W4ubvR54RsQj3G9t";
+  "3NLuXDW1EZV1GpV1rkLTptvBQiyGm8Lreavr1cs1SfJzwtJiETJ8";
 export const DEFAULT_RECIPIENT =
   "B62qjpvd42ctrFxmdHCCSGenEuhRQLv3QTLCaH8UYbHPJQDPCpphaka";
 export const GENESIS_BLOCK_BLOCK_HASH =
-  "3NKeMoncuHab5ScarV5ViyF16cJPT4taWNSaTLS64Dp67wuXigPZ";
+  "3NK4BpDSekaqsG6tx8Nse2zJchRft2JpnbvMiog55WCr5xJZaKeP";
 export const FIRST_SENDER_ADDRESS =
-  "B62qre3erTHfzQckNuibViWQGyyKwZseztqrjPZBv6SQF384Rg6ESAy";
+  "B62qpjxUpgdjzwQfd8q2gzxi99wN7SCgmofpvw27MBkfNHfHoY2VH32";
 export const FIRST_RECIPIENT_ADDRESS =
-  "B62qjYanmV7y9njVeH5UHkz3GYBm7xKir1rAnoY4KsEYUGLMiU45FSM";
+  "B62qpjxUpgdjzwQfd8q2gzxi99wN7SCgmofpvw27MBkfNHfHoY2VH32";
 export const FIRST_FEE_PAYER =
-  "B62qjWwDxk5nGMXN32ffuMpMSp3wPa7BLB3AXHH5EYiczcRxDTF9uP4";
+  "B62qpjxUpgdjzwQfd8q2gzxi99wN7SCgmofpvw27MBkfNHfHoY2VH32";
 export const FIRST_BLOCK_PRODUCER_ADDRESS =
   "B62qiy32p8kAKnny8ZFwoMhYpBppM1DWVCqAPBYNcXnsAHhnfAAuXgg";
 export const FIRST_TXN_HASH =
-  "CkpZirFuoLVVab6x2ry4j8Ld5gMmQdak7VHW6f5C7VJYE34WAEWqa";
+  "5JuJ1eRNWdE8jSMmCDoHnAdBGhLyBnCk2gkcvkfCZ7WvrKtGuWHB";
+export const FAILED_TXN_HASH =
+  "5JvLp2s2v1KuoiwG499nCwfSJkm6oSr6iBtrE25TPqZ8xsPZKz8b";
+export const TXN_HASH_IN_OTHER_BLOCKS =
+  "5JvHQGPog8UnmaMSBjuYNnCGZEkZj6yRnrHgrz5cRVnsYJwrVGXh";
 export const STAKE_DELEGATION_HASH =
-  "CkpaHRvXWHzc7E8FAV5DbcXLoRgf2G1HWz76QLrkWgeFntNqA17V4";
+  "5Jts5hbefD7NDXwY9qFLDdQ83QExEUKbL8uCg9pRduPiqoGGwTLd";
 export const FIRST_NON_CANONICAL_TXN_HASH =
-  "CkpZrxGwdxH2CL8wGTF3B9BgJcc5xyfiF8iyzNvTYMALccvmNcNSN";
+  "5JurAvgK6MAjZ9EMsV11dxQTef7TX5KLKnJzwRXEtD7HUoscww38";
 export const FIRST_INTERNAL_TXN_HASH =
-  "3NKd5So3VNqGZtRZiWsti4yaEe1fX79yz5TbfG6jBZqgMnCQQp3R";
+  "3NK7T1MeiFA4ALVxqZLuGrWr1PeufYQAm9i1TfMnN9Cu6U5crhot";
 export const FIRST_BLOCK_WITH_SNARK_WORK =
-  "3NL33j16AWm3Jhjj1Ud25E54hu7HpUq4WBQcAiijEKMfXqwFJwzK";
+  "3NLjRmTyUzeA7meRAT3Yjqxzfe95GKBgkLPD2iLeVE5RMCFcw8eL";
 export const FIRST_NON_CANONICAL_BLOCK_WITH_SNARK_WORK =
-  "3NLj4yaEa4kGamq93k8ZMqbiZWuR26USzzndXVGoBupEZRQ6zJjm";
+  "3NLxHssUobbtV7QkmKJpbCpi5dHMFRM4ENvCphaSwm1kms8NXuUr";
 export const ADDRESS_WITH_SNARK_AND_BLOCK_PRODUCTION =
-  "B62qqSvXBa1cdTsARTVZrnJreCDdEy162q7axsf3QfjWzZCKfrU6JoM";
-export const WHISPERIT_TXN_HASH =
-  "CkpZhvEYxb9YFZULWEw61khrHAqGZhTktZSiGQ1CKfe6n2TcnxdgD";
-export const WHISPERIT_BLOCK_STATE_HASH =
-  "3NLjanAoyqjqmPsQHafJcvQiGW2xbvyXANHxEyNwPwan2eUoZBV9";
-export const LONG_LIVE_SNZ_HASH =
-  "CkpYebtjxHNdhLt1u88uNBzdRsvDYMqXmeeHGYWmbAKV7wFpwkcFy";
+  "3NKgJBsyECQga3PSKvJRSWq1we8GgE4gawMTZv4eH6ebk8ZTxL34";
+export const APPLIED_TXN_HASH =
+  "5JvJnTKVwsxupNzXpRs5D3uQMsYSFE7NetN9o1KzbDAMjxFYziUg";
+export const APPLIED_TXN_BLOCK_STATE_HASH =
+  "3NLCZXPQH8WwSXUtrCHHz3n78RQJxNYUyn4uyx6JyTo4THApAbZd";
 export const SNZPOOL_ADDRESS =
   "B62qq3tqfdj19hqaVCozJFM2q9gT2WezQMaJMKD6wxyvK3fMpHiP9va";
-export const SNZ_USERNAME = "SNZPool";
-export const BLOCK_STATE_HASH_MIXED_USER_COMMANDS =
-  "3NKR3LoD3TLQ4Gotmhg59xUYcuq9hwVMuEujT99QywJhkDTYWwDy";
+export const SNZ_USERNAME = "Unknown";
 export const DEFAULT_LOCALE = "en-US";
 export const ROMEK_ADDRESS =
   "B62qpqCBExtxzfHUPkmrrfmYhXZyg3V7pSmwuxHMzTi8E6gBbopauJS";
 export const ROMEK_MINA_NAMING_SERVICE_TXN_HASH =
   "CkpYyMV4jDtgKfbz6hCUVB6J8jYfJd85A7mvtVw7ydKLuoCK5GS25";
-export const ROMEK_USERNAME = "Romek";
+export const ROMEK_USERNAME = "Unknown";
 export const ROMEK_BLOCK_STATE_HASH =
   "3NLgCqncc6Ct4dcuhaG3ANQbfWwQCxMXu4MJjwGgRKxs6p8vQsZf";
-export const MINA_NAMING_SERVICE_ADDRESS =
-  "B62qjzJvc59DdG9ahht9rwxkEz7GedKuUMsnaVTuXFUeANKqfBeWpRE";
 export const ROMEK_NAMING_MEMO = "Name: Romek";
-export const VETAL_BLOCK_STATE_HASH =
-  "3NKrxKGr3JpYT2CzAFUeUb89ae6MFMsVWFX1QLYqYNJp1ffHR4ej";
+export const BLOCK_WITH_ALL_ACTIVITY =
+  "3NKAtvhURsCvBiH1xcDqBDTnV1YXiTzNXfpYkVgrUX4pg4G9DZCh";
 export const COMMAND_SNARK_BLOCK_ACTIVITY_ADDRESS =
   "B62qrQiw9JhUumq457sMxicgQ94Z1WD9JChzJu19kBE8Szb5T8tcUAC";
 export const SLOTS_PER_EPOCH = 7140;
-export const CI_TEST_ACCOUNT_PUBLIC_KEY =
-  "B62qkTZ15WrTzzAFDdMxivfMdcmTjAp2T6pHacEwUpQyobvFNXmFB96";
-export const CI_TEST_ACCOUNT_PRIVATE_KEY =
-  "EKE31PekdFTHmwSnuR5CEmbkJvBFqhS6J3fPXb67FLYfPB9wbCDp";
 export const MINA_TOKEN_ID =
   "wSHV2S4qX9jFsLjQo8r1BsMLH2ZRKsZx6EJd1sbozGPieEC4Jf";
-export const EPOCH_ONE_STAKING_LEDGER_HASH =
-  "jx7buQVWFLsXTtzRgSxbYcT8EYLS8KCZbLrfDcJxMtyy4thw2Ee";
+export const EPOCH_ZERO_STAKING_LEDGER_HASH =
+  "jxsAidvKvEQJMC7Z2wkLrFGzCqUxpFMRhAj4K5o49eiFLhKSyXL";

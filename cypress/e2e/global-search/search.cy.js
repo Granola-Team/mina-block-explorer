@@ -1,6 +1,6 @@
 import {
   DEFAULT_ACCOUNT_PK,
-  EPOCH_ONE_STAKING_LEDGER_HASH,
+  EPOCH_ZERO_STAKING_LEDGER_HASH,
   FIRST_TXN_HASH,
   GENESIS_BLOCK_BLOCK_HASH,
 } from "../constants";
@@ -14,16 +14,16 @@ suite(["@tier2"], "global search", () => {
   });
   let pages = [
     {
-      input: 30000,
-      expectedUrl: "/blocks?q-height=30000",
+      input: 359617,
+      expectedUrl: "/blocks?q-height=359617",
     },
     {
-      input: `      ${EPOCH_ONE_STAKING_LEDGER_HASH}     `,
-      expectedUrl: "/staking-ledgers?epoch=1",
+      input: `      ${EPOCH_ZERO_STAKING_LEDGER_HASH}     `,
+      expectedUrl: "/staking-ledgers?epoch=0",
     },
     {
-      input: EPOCH_ONE_STAKING_LEDGER_HASH,
-      expectedUrl: "/staking-ledgers?epoch=1",
+      input: EPOCH_ZERO_STAKING_LEDGER_HASH,
+      expectedUrl: "/staking-ledgers?epoch=0",
     },
     {
       input: DEFAULT_ACCOUNT_PK,

@@ -21,12 +21,12 @@ export const table = {
   filter_tests: [
     {
       column: "Symbol",
-      input: "MINA",
+      input: "MINU",
       assertion: function () {
         cy.aliasTableRows("Tokens", "table-rows");
         cy.get("@table-rows").should("have.lengthOf", 1);
         cy.assertForEachColumnValue("Tokens", "Symbol", (text) => {
-          expect(text).to.be.eq("MINA");
+          expect(text).to.be.eq("MINU");
         });
       },
     },

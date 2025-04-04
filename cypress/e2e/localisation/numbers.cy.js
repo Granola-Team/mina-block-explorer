@@ -1,9 +1,8 @@
 import {
   DEFAULT_LOCALE,
   GENESIS_BLOCK_BLOCK_HASH,
-  ROMEK_BLOCK_STATE_HASH,
   ROMEK_ADDRESS,
-  VETAL_BLOCK_STATE_HASH,
+  BLOCK_WITH_ALL_ACTIVITY,
   COMMAND_SNARK_BLOCK_ACTIVITY_ADDRESS,
 } from "../constants";
 import { parseFormattedNumber } from "../helpers";
@@ -80,7 +79,7 @@ let pages = [
     ],
   },
   {
-    page: `/blocks/${ROMEK_BLOCK_STATE_HASH}/commands/user`,
+    page: `/blocks/${BLOCK_WITH_ALL_ACTIVITY}/commands/user`,
     wait: () => {
       cy.intercept("GET", "/summary").as("summaryData");
       cy.wait("@summaryData");
@@ -104,7 +103,7 @@ let pages = [
     ],
   },
   {
-    page: `/blocks/${ROMEK_BLOCK_STATE_HASH}/commands/internal`,
+    page: `/blocks/${BLOCK_WITH_ALL_ACTIVITY}/commands/internal`,
     wait: () => {
       cy.aliasTableRows("Internal Commands", "table-rows");
     },
@@ -119,7 +118,7 @@ let pages = [
     ],
   },
   {
-    page: `/blocks/${VETAL_BLOCK_STATE_HASH}/snark-jobs`,
+    page: `/blocks/${BLOCK_WITH_ALL_ACTIVITY}/snark-jobs`,
     wait: () => {
       cy.aliasTableRows("SNARK Jobs", "table-rows");
     },
@@ -357,10 +356,9 @@ let pages = [
     ],
   },
   {
-    page: `/staking-ledgers?epoch=20&q-key=${ROMEK_ADDRESS}`,
+    page: `/staking-ledgers?epoch=0&q-key=${ROMEK_ADDRESS}`,
     wait: () => {
-      cy.aliasTableRows("Staking Ledger - Epoch 20", "table-rows");
-      cy.wait(100);
+      cy.aliasTableRows("Staking Ledger - Epoch 0", "table-rows");
       cy.get(".loading-placeholder").should("not.exist");
     },
     tests: [

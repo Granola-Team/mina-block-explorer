@@ -1,11 +1,18 @@
-import { DEFAULT_ACCOUNT_PK, FIRST_BLOCK_WITH_SNARK_WORK } from "../constants";
+import {
+  BLOCK_WITH_ALL_ACTIVITY,
+  DEFAULT_ACCOUNT_PK,
+  FIRST_BLOCK_PRODUCER_ADDRESS,
+  FIRST_BLOCK_WITH_SNARK_WORK,
+} from "../constants";
 suite(["@tier2"], "account page", () => {
   let pages = [
-    {
-      origin: `/analytics/snarker-leaderboard`,
-      column: "Public Key",
-      tableHeader: "Snarker Leaderboard",
-    },
+    // TODO: Enable when there is some data to display
+    // {
+    //   origin: `/analytics/snarker-leaderboard`,
+    //   column: "Public Key",
+    //   tableHeader: "Snarker Leaderboard",
+    // },
+    // TODO: no staking data to display ATM
     {
       origin: `/analytics/staker-leaderboard`,
       column: "Public Key",
@@ -22,7 +29,7 @@ suite(["@tier2"], "account page", () => {
       tableHeader: "User Commands",
     },
     {
-      origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}/block-production`,
+      origin: `/addresses/accounts/${FIRST_BLOCK_PRODUCER_ADDRESS}/block-production`,
       column: "Coinbase Receiver",
       tableHeader: "Block Production",
     },
@@ -58,12 +65,12 @@ suite(["@tier2"], "account page", () => {
       tableHeader: "User Commands",
     },
     {
-      origin: `/blocks/${FIRST_BLOCK_WITH_SNARK_WORK}/commands/user`,
+      origin: `/blocks/${BLOCK_WITH_ALL_ACTIVITY}/commands/user`,
       column: "From",
       tableHeader: "User Commands",
     },
     {
-      origin: `/blocks/${FIRST_BLOCK_WITH_SNARK_WORK}/commands/user`,
+      origin: `/blocks/${BLOCK_WITH_ALL_ACTIVITY}/commands/user`,
       column: "To",
       tableHeader: "User Commands",
     },
@@ -73,7 +80,7 @@ suite(["@tier2"], "account page", () => {
       tableHeader: "SNARK Jobs",
     },
     {
-      origin: `/blocks/${FIRST_BLOCK_WITH_SNARK_WORK}/commands/internal`,
+      origin: `/blocks/${BLOCK_WITH_ALL_ACTIVITY}/commands/internal`,
       column: "Recipient",
       tableHeader: "Internal Commands",
     },
