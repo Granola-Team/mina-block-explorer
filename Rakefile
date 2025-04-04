@@ -14,7 +14,7 @@ ENV["CARGO_HOME"] = "#{Dir.pwd}/.cargo"
 ENV["VOLUMES_DIR"] ||= "/mnt" if Dir.exist?("/mnt")
 ENV["GRAPHQL_URL"] = "http://localhost:#{IDXR_PORT}/graphql"
 ENV["REST_URL"] = "http://localhost:#{IDXR_PORT}"
-GRAPHQL_SRC_FILES = Dir.glob("graphql/**/*.graphql")
+GRAPHQL_SRC_FILES = Dir.glob("graphql/{e2e,support}/**/*.graphql")
 RUST_SRC_FILES = Dir.glob("src/**/*.rs") + GRAPHQL_SRC_FILES
 CARGO_DEPS = RUST_SRC_FILES + ["Cargo.toml", "Cargo.lock", "build.rs"]
 CYPRESS_FILES = Dir.glob("cypress/**/*.js")
@@ -24,6 +24,7 @@ MINASEARCH_GRAPHQL = "https://api.minasearch.com/graphql"
 MINASEARCH_REST = "https://api.minasearch.com"
 DEV_BUILD_TARGET = ".build/dev_build"
 RELEASE_BUILD_TARGET = ".build/release_build"
+IDXR_FOLDER = "lib/mina-indexer"
 
 def ensure_env_vars(required_vars, error_context = "Task failed")
   missing_vars = required_vars.reject { |var| ENV[var] && !ENV[var].empty? }
@@ -164,8 +165,14 @@ task :default do
   system("rake -T")
 end
 
+task clone_mina_indexer: IDXR_FOLDER.to_s
+file IDXR_FOLDER.to_s do
+  puts "--- Cloning indexer"
+  sh "git submodule update --init"
+end
+
 desc "Deploy mina-indexer"
-task :deploy_mina_indexer do
+task deploy_mina_indexer: [:clone_mina_indexer] do
   ensure_env_vars(%w[VOLUMES_DIR], "Cannot deploy mina indexer")
   puts "--- Deploying mina-indexer at #{ENV["INDEXER_VERSION"]}"
   Dir.chdir("lib/mina-indexer") do
@@ -177,7 +184,9 @@ end
 desc "Shut down mina-indexer"
 task :shutdown_mina_indexer do
   puts "--- Shutting down mina-indexer"
-  sh "pkill mina-indexer"
+  Dir.chdir("lib/mina-indexer") do
+    sh "nix develop --command rake shutdown"
+  end
 end
 
 task :clean_cypress do
