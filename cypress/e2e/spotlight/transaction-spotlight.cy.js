@@ -7,6 +7,7 @@ import {
   APPLIED_TXN_BLOCK_STATE_HASH,
   FAILED_TXN_HASH,
   TXN_HASH_IN_OTHER_BLOCKS,
+  ZK_APP_TXN_HASH,
 } from "../constants.js";
 suite(["@tier2"], "transaction spotlight", () => {
   let expected_fields = [
@@ -81,5 +82,18 @@ suite(["@tier2"], "transaction spotlight", () => {
       "Height",
       "Block State Hash",
     ]);
+  });
+  it("displays zk app sections for zk app txn", () => {
+    cy.visit(`/commands/${ZK_APP_TXN_HASH}`);
+    cy.aliasTableRows("Accounts Updated", "table-rows");
+    cy.get("@table-rows").should("have.length.gt", 0);
+
+    cy.aliasTransposedTableRows("Actions & Events", "table-rows");
+    cy.get("@table-rows").should("have.lengthOf", 2);
+  });
+  it("should not display zk app sections for standard txn", () => {
+    cy.visit(`/commands/${FIRST_TXN_HASH}`);
+    cy.contains("Accounts Updated").should("not.exist");
+    cy.contains("Actions & Events").should("not.exist");
   });
 });
