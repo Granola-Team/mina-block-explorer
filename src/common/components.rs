@@ -250,7 +250,8 @@ pub fn UrlParamSelectMenu(
             .unwrap_or_else(|| ().into_view())}
         <select
             class="ml-5 sm:ml-2 w-full sm:w-fit border-2 border-slate-200 focus:border-granola-orange focus:outline-none focus-visible:border-granola-orange active:border-granola-orange rounded-xl text-xs font-medium text-black p-2"
-            id=id
+            id=id.to_string()
+            data-test=id
             on:change=move |ev| {
                 if labels.is_boolean_option {
                     match event_target_value(&ev) {

@@ -57,3 +57,5 @@ export const MINA_TOKEN_ID =
   "wSHV2S4qX9jFsLjQo8r1BsMLH2ZRKsZx6EJd1sbozGPieEC4Jf";
 export const EPOCH_ZERO_STAKING_LEDGER_HASH =
   "jxsAidvKvEQJMC7Z2wkLrFGzCqUxpFMRhAj4K5o49eiFLhKSyXL";
+export const ZK_APP_TXN_HASH =
+  "5Jv4ApbKjvTbdrFkwNyJnZPiNCyai1ftvaCMjGuFbVyVyTxKhe82";

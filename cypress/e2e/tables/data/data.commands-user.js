@@ -99,6 +99,26 @@ export const tests = [
     });
   },
   () => {
+    cy.getBySel("user-command-selection").as("select");
+
+    // Select just zkApps
+    cy.get("@select").select("zkApps").should("have.value", "zkApps");
+    cy.wait(500); // small delay to let the request fire
+    cy.waitUntilTableLoads("User Commands");
+    cy.assertForEachColumnValue("User Commands", "Type", (text) => {
+      expect(text).to.be.eq("Zkapp");
+    });
+
+    // Select all (both payments and zkapps)
+    cy.get("@select").select("All").should("have.value", "All");
+    cy.wait(500); // small delay to let the request fire
+    cy.waitUntilTableLoads("User Commands");
+    cy.assertForEachColumnValue("User Commands", "Type", (text) => {
+      let result = text == "Zkapp" || text == "Payment";
+      expect(result).to.be.true;
+    });
+  },
+  () => {
     cy.intercept("POST", "/graphql").as("graphql");
     cy.visit("/commands/user?q-height=359611&row-limit=50");
     cy.wait("@graphql").then(() => {
