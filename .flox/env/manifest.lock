@@ -84,11 +84,7 @@
         "aarch64-linux",
         "x86_64-darwin",
         "x86_64-linux"
-      ],
-      "allow": {
-        "licenses": []
-      },
-      "semver": {}
+      ]
     }
   },
   "packages": [
@@ -99,13 +95,13 @@
       "description": "Bundle of X.509 certificates of public Certificate Authorities (CA)",
       "install_id": "cacert",
       "license": "MPL-2.0",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
       "name": "nss-cacert-3.108",
       "pname": "cacert",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T01:13:28.732075Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:11:35.707736Z",
       "stabilities": [
         "unstable"
       ],
@@ -131,13 +127,13 @@
       "description": "Bundle of X.509 certificates of public Certificate Authorities (CA)",
       "install_id": "cacert",
       "license": "MPL-2.0",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
       "name": "nss-cacert-3.108",
       "pname": "cacert",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T01:34:59.654463Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:30:11.796664Z",
       "stabilities": [
         "unstable"
       ],
@@ -163,13 +159,13 @@
       "description": "Bundle of X.509 certificates of public Certificate Authorities (CA)",
       "install_id": "cacert",
       "license": "MPL-2.0",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
       "name": "nss-cacert-3.108",
       "pname": "cacert",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T01:54:12.588844Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:46:42.117622Z",
       "stabilities": [
         "unstable"
       ],
@@ -195,13 +191,13 @@
       "description": "Bundle of X.509 certificates of public Certificate Authorities (CA)",
       "install_id": "cacert",
       "license": "MPL-2.0",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
       "name": "nss-cacert-3.108",
       "pname": "cacert",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T02:16:49.109890Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T02:06:54.363258Z",
       "stabilities": [
         "unstable"
       ],
@@ -223,17 +219,17 @@
     {
       "attr_path": "cargo-audit",
       "broken": false,
-      "derivation": "/nix/store/1qfbndhcbk09fqd28h0y1gdfprqxxb6i-cargo-audit-0.21.2.drv",
+      "derivation": "/nix/store/88lfbxsn5g5lahdjhj3rl0nyclidixln-cargo-audit-0.21.2.drv",
       "description": "Audit Cargo.lock files for crates with security vulnerabilities",
       "install_id": "cargo-audit",
       "license": "[ MIT, Apache-2.0 ]",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
       "name": "cargo-audit-0.21.2",
       "pname": "cargo-audit",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T01:13:28.736792Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:11:35.714860Z",
       "stabilities": [
         "unstable"
       ],
@@ -252,17 +248,17 @@
     {
       "attr_path": "cargo-audit",
       "broken": false,
-      "derivation": "/nix/store/0yzzbymj4dg491gd4cvx2kj78gxxf643-cargo-audit-0.21.2.drv",
+      "derivation": "/nix/store/fbrxxw3570jlcddpwjpmrnvg64j324kp-cargo-audit-0.21.2.drv",
       "description": "Audit Cargo.lock files for crates with security vulnerabilities",
       "install_id": "cargo-audit",
       "license": "[ MIT, Apache-2.0 ]",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
       "name": "cargo-audit-0.21.2",
       "pname": "cargo-audit",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T01:34:59.664542Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:30:11.815819Z",
       "stabilities": [
         "unstable"
       ],
@@ -281,17 +277,17 @@
     {
       "attr_path": "cargo-audit",
       "broken": false,
-      "derivation": "/nix/store/9apfjspa0v4vfxlpllk2ffiva7yik93d-cargo-audit-0.21.2.drv",
+      "derivation": "/nix/store/pjjnyhk7ag82zjjxw5anj1v6fgrcrir7-cargo-audit-0.21.2.drv",
       "description": "Audit Cargo.lock files for crates with security vulnerabilities",
       "install_id": "cargo-audit",
       "license": "[ MIT, Apache-2.0 ]",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
       "name": "cargo-audit-0.21.2",
       "pname": "cargo-audit",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T01:54:12.593690Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:46:42.124968Z",
       "stabilities": [
         "unstable"
       ],
@@ -310,17 +306,17 @@
     {
       "attr_path": "cargo-audit",
       "broken": false,
-      "derivation": "/nix/store/hbqiq8jm2343hqlhv2nnsk4sq52kgarp-cargo-audit-0.21.2.drv",
+      "derivation": "/nix/store/fmbblz4j0jw617imgm0ydsw1l60wah9q-cargo-audit-0.21.2.drv",
       "description": "Audit Cargo.lock files for crates with security vulnerabilities",
       "install_id": "cargo-audit",
       "license": "[ MIT, Apache-2.0 ]",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
       "name": "cargo-audit-0.21.2",
       "pname": "cargo-audit",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T02:16:49.120486Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T02:06:54.378507Z",
       "stabilities": [
         "unstable"
       ],
@@ -339,27 +335,27 @@
     {
       "attr_path": "cargo-machete",
       "broken": false,
-      "derivation": "/nix/store/avn133473lxm3ndf93kyhlwc65z7nm4k-cargo-machete-0.7.0.drv",
+      "derivation": "/nix/store/znjpqz7h2y82nj593gbhlgrivdp14ha9-cargo-machete-0.8.0.drv",
       "description": "Cargo tool that detects unused dependencies in Rust projects",
       "install_id": "cargo-machete",
       "license": "MIT",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
-      "name": "cargo-machete-0.7.0",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
+      "name": "cargo-machete-0.8.0",
       "pname": "cargo-machete",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T01:13:28.741292Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:11:35.721571Z",
       "stabilities": [
         "unstable"
       ],
       "unfree": false,
-      "version": "0.7.0",
+      "version": "0.8.0",
       "outputs_to_install": [
         "out"
       ],
       "outputs": {
-        "out": "/nix/store/42h7d9d9a991rhgdjjpvr6f095kyvkpl-cargo-machete-0.7.0"
+        "out": "/nix/store/9ps1yvzi5rplcl2xg1w9j5103pcarcfm-cargo-machete-0.8.0"
       },
       "system": "aarch64-darwin",
       "group": "toplevel",
@@ -368,27 +364,27 @@
     {
       "attr_path": "cargo-machete",
       "broken": false,
-      "derivation": "/nix/store/0j080c12h69fvppdjmbx4p158bb6wwma-cargo-machete-0.7.0.drv",
+      "derivation": "/nix/store/icrw9wgg0001dzmsw19dbjja2rl7v14j-cargo-machete-0.8.0.drv",
       "description": "Cargo tool that detects unused dependencies in Rust projects",
       "install_id": "cargo-machete",
       "license": "MIT",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
-      "name": "cargo-machete-0.7.0",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
+      "name": "cargo-machete-0.8.0",
       "pname": "cargo-machete",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T01:34:59.670336Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:30:11.823636Z",
       "stabilities": [
         "unstable"
       ],
       "unfree": false,
-      "version": "0.7.0",
+      "version": "0.8.0",
       "outputs_to_install": [
         "out"
       ],
       "outputs": {
-        "out": "/nix/store/0m588pdjb06x9qym5jzghx420pxkdnxv-cargo-machete-0.7.0"
+        "out": "/nix/store/0dshihcdr95ccprgqffbv7j9kvc9caa7-cargo-machete-0.8.0"
       },
       "system": "aarch64-linux",
       "group": "toplevel",
@@ -397,27 +393,27 @@
     {
       "attr_path": "cargo-machete",
       "broken": false,
-      "derivation": "/nix/store/2w3rybzcqzc0f2hbrp85s6vz1h358qfp-cargo-machete-0.7.0.drv",
+      "derivation": "/nix/store/fdhj4453ygnvhv3ga6hiq0zkj1i4pbx9-cargo-machete-0.8.0.drv",
       "description": "Cargo tool that detects unused dependencies in Rust projects",
       "install_id": "cargo-machete",
       "license": "MIT",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
-      "name": "cargo-machete-0.7.0",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
+      "name": "cargo-machete-0.8.0",
       "pname": "cargo-machete",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T01:54:12.598282Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:46:42.131799Z",
       "stabilities": [
         "unstable"
       ],
       "unfree": false,
-      "version": "0.7.0",
+      "version": "0.8.0",
       "outputs_to_install": [
         "out"
       ],
       "outputs": {
-        "out": "/nix/store/55g0a38c51pm869mj933pnrpf85d2mwk-cargo-machete-0.7.0"
+        "out": "/nix/store/5va986h61ci22l7sjwnjc5xlnnh5g608-cargo-machete-0.8.0"
       },
       "system": "x86_64-darwin",
       "group": "toplevel",
@@ -426,27 +422,27 @@
     {
       "attr_path": "cargo-machete",
       "broken": false,
-      "derivation": "/nix/store/pf01lpbx1fynrh1mgx9dwzrp2075ra9j-cargo-machete-0.7.0.drv",
+      "derivation": "/nix/store/3jdsfj5xavg5db1q09xpkaywhxvl1rs4-cargo-machete-0.8.0.drv",
       "description": "Cargo tool that detects unused dependencies in Rust projects",
       "install_id": "cargo-machete",
       "license": "MIT",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
-      "name": "cargo-machete-0.7.0",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
+      "name": "cargo-machete-0.8.0",
       "pname": "cargo-machete",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T02:16:49.126598Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T02:06:54.387283Z",
       "stabilities": [
         "unstable"
       ],
       "unfree": false,
-      "version": "0.7.0",
+      "version": "0.8.0",
       "outputs_to_install": [
         "out"
       ],
       "outputs": {
-        "out": "/nix/store/dzyqwgprb312swfdsdxwybgp2wj3mgfg-cargo-machete-0.7.0"
+        "out": "/nix/store/b6i348pvhwvs89saww9cn98fyi3aqq77-cargo-machete-0.8.0"
       },
       "system": "x86_64-linux",
       "group": "toplevel",
@@ -455,27 +451,27 @@
     {
       "attr_path": "cargo-nextest",
       "broken": false,
-      "derivation": "/nix/store/zdljqa3jmja91z60arjr653vgqxzlnzs-cargo-nextest-0.9.92.drv",
+      "derivation": "/nix/store/8085xcw1r4g5h4hkb9vfyr0qnsf9viap-cargo-nextest-0.9.93.drv",
       "description": "Next-generation test runner for Rust projects",
       "install_id": "cargo-nextest",
       "license": "[ MIT, Apache-2.0 ]",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
-      "name": "cargo-nextest-0.9.92",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
+      "name": "cargo-nextest-0.9.93",
       "pname": "cargo-nextest",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T01:13:28.741858Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:11:35.722468Z",
       "stabilities": [
         "unstable"
       ],
       "unfree": false,
-      "version": "0.9.92",
+      "version": "0.9.93",
       "outputs_to_install": [
         "out"
       ],
       "outputs": {
-        "out": "/nix/store/kaclx75j6lyag53hq5m74k45knf4lc3c-cargo-nextest-0.9.92"
+        "out": "/nix/store/nrzm4808fs6kd35sbv6bmawin0kkxg1n-cargo-nextest-0.9.93"
       },
       "system": "aarch64-darwin",
       "group": "toplevel",
@@ -484,27 +480,27 @@
     {
       "attr_path": "cargo-nextest",
       "broken": false,
-      "derivation": "/nix/store/s4mzbf5ikdbph17pqgnkaddkbfk8zlmr-cargo-nextest-0.9.92.drv",
+      "derivation": "/nix/store/sv1g76qy3wwl5dg215yii8gmr8yc27ng-cargo-nextest-0.9.93.drv",
       "description": "Next-generation test runner for Rust projects",
       "install_id": "cargo-nextest",
       "license": "[ MIT, Apache-2.0 ]",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
-      "name": "cargo-nextest-0.9.92",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
+      "name": "cargo-nextest-0.9.93",
       "pname": "cargo-nextest",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T01:34:59.671074Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:30:11.824616Z",
       "stabilities": [
         "unstable"
       ],
       "unfree": false,
-      "version": "0.9.92",
+      "version": "0.9.93",
       "outputs_to_install": [
         "out"
       ],
       "outputs": {
-        "out": "/nix/store/gia6hvmfhqwzndr7vlikg4d4bg84v803-cargo-nextest-0.9.92"
+        "out": "/nix/store/iyk8dsfd14iqz19nrdldhavwbqn402qv-cargo-nextest-0.9.93"
       },
       "system": "aarch64-linux",
       "group": "toplevel",
@@ -513,27 +509,27 @@
     {
       "attr_path": "cargo-nextest",
       "broken": false,
-      "derivation": "/nix/store/sl8wxfccbkdyqq6miajwaxrqmlk95dhd-cargo-nextest-0.9.92.drv",
+      "derivation": "/nix/store/91z97iayjqqm6rymx6rq128yxniilfiz-cargo-nextest-0.9.93.drv",
       "description": "Next-generation test runner for Rust projects",
       "install_id": "cargo-nextest",
       "license": "[ MIT, Apache-2.0 ]",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
-      "name": "cargo-nextest-0.9.92",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
+      "name": "cargo-nextest-0.9.93",
       "pname": "cargo-nextest",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T01:54:12.598862Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:46:42.132654Z",
       "stabilities": [
         "unstable"
       ],
       "unfree": false,
-      "version": "0.9.92",
+      "version": "0.9.93",
       "outputs_to_install": [
         "out"
       ],
       "outputs": {
-        "out": "/nix/store/qmx9qjicwjcing15hj95bb9fdm0l6kvq-cargo-nextest-0.9.92"
+        "out": "/nix/store/sclbq8dhmb0mmwdfi37v5jip41rphqkz-cargo-nextest-0.9.93"
       },
       "system": "x86_64-darwin",
       "group": "toplevel",
@@ -542,27 +538,27 @@
     {
       "attr_path": "cargo-nextest",
       "broken": false,
-      "derivation": "/nix/store/dri9rv2csqykvr50vlii51j03z0qbhwv-cargo-nextest-0.9.92.drv",
+      "derivation": "/nix/store/w4qx12wsfrs8wm93xihy2ahsd531flfk-cargo-nextest-0.9.93.drv",
       "description": "Next-generation test runner for Rust projects",
       "install_id": "cargo-nextest",
       "license": "[ MIT, Apache-2.0 ]",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
-      "name": "cargo-nextest-0.9.92",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
+      "name": "cargo-nextest-0.9.93",
       "pname": "cargo-nextest",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T02:16:49.127366Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T02:06:54.388362Z",
       "stabilities": [
         "unstable"
       ],
       "unfree": false,
-      "version": "0.9.92",
+      "version": "0.9.93",
       "outputs_to_install": [
         "out"
       ],
       "outputs": {
-        "out": "/nix/store/lzd9sfhl8zzyp901ng32pdy7mggdqqi4-cargo-nextest-0.9.92"
+        "out": "/nix/store/d1g0ypv08a50016f8r8ix8bwxad9zany-cargo-nextest-0.9.93"
       },
       "system": "x86_64-linux",
       "group": "toplevel",
@@ -571,17 +567,17 @@
     {
       "attr_path": "cargo-update",
       "broken": false,
-      "derivation": "/nix/store/wrbqmmwqgbvdbfyxy4jzwmm1aal8gap7-cargo-update-16.2.1.drv",
+      "derivation": "/nix/store/w4cgwsvcvxdvsc0rhm4kdc94pbwq0xma-cargo-update-16.2.1.drv",
       "description": "Cargo subcommand for checking and applying updates to installed executables",
       "install_id": "cargo-update",
       "license": "MIT",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
       "name": "cargo-update-16.2.1",
       "pname": "cargo-update",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T01:13:28.744597Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:11:35.726530Z",
       "stabilities": [
         "unstable"
       ],
@@ -600,17 +596,17 @@
     {
       "attr_path": "cargo-update",
       "broken": false,
-      "derivation": "/nix/store/krnkjng8d1ipyi6d1yqcxwdi9gr81v0x-cargo-update-16.2.1.drv",
+      "derivation": "/nix/store/xl9g0c1245mvnl91jj5jhkia0ibipqw1-cargo-update-16.2.1.drv",
       "description": "Cargo subcommand for checking and applying updates to installed executables",
       "install_id": "cargo-update",
       "license": "MIT",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
       "name": "cargo-update-16.2.1",
       "pname": "cargo-update",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T01:34:59.674673Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:30:11.829451Z",
       "stabilities": [
         "unstable"
       ],
@@ -629,17 +625,17 @@
     {
       "attr_path": "cargo-update",
       "broken": false,
-      "derivation": "/nix/store/8fa7wkqhavva3dcwxlzpr9w0hgj1dxzx-cargo-update-16.2.1.drv",
+      "derivation": "/nix/store/6bdzr68ihbkj7rvracdqpf3w00i6j34a-cargo-update-16.2.1.drv",
       "description": "Cargo subcommand for checking and applying updates to installed executables",
       "install_id": "cargo-update",
       "license": "MIT",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
       "name": "cargo-update-16.2.1",
       "pname": "cargo-update",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T01:54:12.601646Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:46:42.136812Z",
       "stabilities": [
         "unstable"
       ],
@@ -658,17 +654,17 @@
     {
       "attr_path": "cargo-update",
       "broken": false,
-      "derivation": "/nix/store/masbrjb8cbzjjs8c0j0gn78ns0s0g6dl-cargo-update-16.2.1.drv",
+      "derivation": "/nix/store/cjbawr0nwl9kyvc7wyy5gwjy2jgxlvv6-cargo-update-16.2.1.drv",
       "description": "Cargo subcommand for checking and applying updates to installed executables",
       "install_id": "cargo-update",
       "license": "MIT",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
       "name": "cargo-update-16.2.1",
       "pname": "cargo-update",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T02:16:49.131109Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T02:06:54.393665Z",
       "stabilities": [
         "unstable"
       ],
@@ -691,13 +687,13 @@
       "description": "C language family frontend for LLVM (wrapper script)",
       "install_id": "clang",
       "license": "[ NCSA, Apache-2.0, LLVM-exception ]",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
       "name": "clang-wrapper-19.1.7",
       "pname": "clang",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T01:34:59.787209Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:30:11.978593Z",
       "stabilities": [
         "unstable"
       ],
@@ -720,13 +716,13 @@
       "description": "C language family frontend for LLVM (wrapper script)",
       "install_id": "clang",
       "license": "[ NCSA, Apache-2.0, LLVM-exception ]",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
       "name": "clang-wrapper-19.1.7",
       "pname": "clang",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T02:16:49.267390Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T02:06:54.556903Z",
       "stabilities": [
         "unstable"
       ],
@@ -745,27 +741,27 @@
     {
       "attr_path": "leptosfmt",
       "broken": false,
-      "derivation": "/nix/store/p3nfhba1g65plw0lws621smmy9x8xj8b-leptosfmt-0.1.30.drv",
+      "derivation": "/nix/store/kn8ba3mc2n763dg5bmfrg195fph1jp39-leptosfmt-0.1.33.drv",
       "description": "Formatter for the leptos view! macro",
       "install_id": "leptosfmt",
       "license": "[ Apache-2.0, MIT ]",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
-      "name": "leptosfmt-0.1.30",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
+      "name": "leptosfmt-0.1.33",
       "pname": "leptosfmt",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T01:13:29.906985Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:11:37.114549Z",
       "stabilities": [
         "unstable"
       ],
       "unfree": false,
-      "version": "0.1.30",
+      "version": "0.1.33",
       "outputs_to_install": [
         "out"
       ],
       "outputs": {
-        "out": "/nix/store/7yis7yyhp1jiycv2h29p27k7k7zy0h8s-leptosfmt-0.1.30"
+        "out": "/nix/store/kyxpccx9k176x02xjmsb80h90kldg1s3-leptosfmt-0.1.33"
       },
       "system": "aarch64-darwin",
       "group": "toplevel",
@@ -774,27 +770,27 @@
     {
       "attr_path": "leptosfmt",
       "broken": false,
-      "derivation": "/nix/store/gfwys1pc9l0priwykg7i9c55zzhhq1dn-leptosfmt-0.1.30.drv",
+      "derivation": "/nix/store/yxipj9zq5iw71dnhaxaq8qi1s9ck81bj-leptosfmt-0.1.33.drv",
       "description": "Formatter for the leptos view! macro",
       "install_id": "leptosfmt",
       "license": "[ Apache-2.0, MIT ]",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
-      "name": "leptosfmt-0.1.30",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
+      "name": "leptosfmt-0.1.33",
       "pname": "leptosfmt",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T01:35:02.675016Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:30:15.183634Z",
       "stabilities": [
         "unstable"
       ],
       "unfree": false,
-      "version": "0.1.30",
+      "version": "0.1.33",
       "outputs_to_install": [
         "out"
       ],
       "outputs": {
-        "out": "/nix/store/39cc7ipjsvzw8bpsm7j9wj23n37221hc-leptosfmt-0.1.30"
+        "out": "/nix/store/7rfvhmpj24g1bn862v1nynjiw4xb7awd-leptosfmt-0.1.33"
       },
       "system": "aarch64-linux",
       "group": "toplevel",
@@ -803,27 +799,27 @@
     {
       "attr_path": "leptosfmt",
       "broken": false,
-      "derivation": "/nix/store/s9ilhwnkh5k2ims0n7z4fhrg4q2jx0rd-leptosfmt-0.1.30.drv",
+      "derivation": "/nix/store/9275l20fjkf7jyy2wn9xw1a6ghrgzrkz-leptosfmt-0.1.33.drv",
       "description": "Formatter for the leptos view! macro",
       "install_id": "leptosfmt",
       "license": "[ Apache-2.0, MIT ]",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
-      "name": "leptosfmt-0.1.30",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
+      "name": "leptosfmt-0.1.33",
       "pname": "leptosfmt",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T01:54:13.788238Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:46:43.572439Z",
       "stabilities": [
         "unstable"
       ],
       "unfree": false,
-      "version": "0.1.30",
+      "version": "0.1.33",
       "outputs_to_install": [
         "out"
       ],
       "outputs": {
-        "out": "/nix/store/52a66jr17j1hmn8rfpham14j9zmd123a-leptosfmt-0.1.30"
+        "out": "/nix/store/kr4y59cn862jh7s9ad9ppl7ak3dvpxka-leptosfmt-0.1.33"
       },
       "system": "x86_64-darwin",
       "group": "toplevel",
@@ -832,27 +828,27 @@
     {
       "attr_path": "leptosfmt",
       "broken": false,
-      "derivation": "/nix/store/i9ayi9fyjswkwmmy5w311cnckxfldhjr-leptosfmt-0.1.30.drv",
+      "derivation": "/nix/store/j8x32qxrby5rsmgv0ar4gbmjcb9j9r47-leptosfmt-0.1.33.drv",
       "description": "Formatter for the leptos view! macro",
       "install_id": "leptosfmt",
       "license": "[ Apache-2.0, MIT ]",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
-      "name": "leptosfmt-0.1.30",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
+      "name": "leptosfmt-0.1.33",
       "pname": "leptosfmt",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T02:16:52.387791Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T02:06:58.218185Z",
       "stabilities": [
         "unstable"
       ],
       "unfree": false,
-      "version": "0.1.30",
+      "version": "0.1.33",
       "outputs_to_install": [
         "out"
       ],
       "outputs": {
-        "out": "/nix/store/dcrxx4vicbc963kkaigzbq7fqmkb504x-leptosfmt-0.1.30"
+        "out": "/nix/store/y1if2nywf5cq01x9k4sdv3ypwh9k3lp4-leptosfmt-0.1.33"
       },
       "system": "x86_64-linux",
       "group": "toplevel",
@@ -865,13 +861,13 @@
       "description": "Iconv(3) implementation",
       "install_id": "libiconv",
       "license": "[ BSD-2-Clause, BSD-3-Clause, APSL-1.0 ]",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
       "name": "libiconv-109",
       "pname": "libiconv",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T01:13:29.986383Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:11:37.204540Z",
       "stabilities": [
         "unstable"
       ],
@@ -895,13 +891,13 @@
       "description": "Iconv(3) implementation",
       "install_id": "libiconv",
       "license": "[ BSD-2-Clause, BSD-3-Clause, APSL-1.0 ]",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
       "name": "libiconv-109",
       "pname": "libiconv",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T01:54:13.869573Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:46:43.664759Z",
       "stabilities": [
         "unstable"
       ],
@@ -925,13 +921,13 @@
       "description": "Faster drop-in replacement for existing Unix linkers (unwrapped) (wrapper script)",
       "install_id": "mold",
       "license": "MIT",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
       "name": "mold-wrapper-2.37.1",
       "pname": "mold-wrapped",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T01:35:08.594242Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:30:21.324430Z",
       "stabilities": [
         "unstable"
       ],
@@ -954,13 +950,13 @@
       "description": "Faster drop-in replacement for existing Unix linkers (unwrapped) (wrapper script)",
       "install_id": "mold",
       "license": "MIT",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
       "name": "mold-wrapper-2.37.1",
       "pname": "mold-wrapped",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T02:16:59.709839Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T02:07:06.065173Z",
       "stabilities": [
         "unstable"
       ],
@@ -983,13 +979,13 @@
       "description": "Event-driven I/O framework for the V8 JavaScript engine",
       "install_id": "nodejs_23",
       "license": "MIT",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
       "name": "nodejs-23.10.0",
       "pname": "nodejs_23",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T01:13:31.469429Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:11:38.752198Z",
       "stabilities": [
         "unstable"
       ],
@@ -1013,13 +1009,13 @@
       "description": "Event-driven I/O framework for the V8 JavaScript engine",
       "install_id": "nodejs_23",
       "license": "MIT",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
       "name": "nodejs-23.10.0",
       "pname": "nodejs_23",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T01:35:09.469953Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:30:22.238648Z",
       "stabilities": [
         "unstable"
       ],
@@ -1043,13 +1039,13 @@
       "description": "Event-driven I/O framework for the V8 JavaScript engine",
       "install_id": "nodejs_23",
       "license": "MIT",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
       "name": "nodejs-23.10.0",
       "pname": "nodejs_23",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T01:54:15.285245Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:46:45.242978Z",
       "stabilities": [
         "unstable"
       ],
@@ -1073,13 +1069,13 @@
       "description": "Event-driven I/O framework for the V8 JavaScript engine",
       "install_id": "nodejs_23",
       "license": "MIT",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
       "name": "nodejs-23.10.0",
       "pname": "nodejs_23",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T02:17:00.699663Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T02:07:07.134223Z",
       "stabilities": [
         "unstable"
       ],
@@ -1103,13 +1099,13 @@
       "description": "Cryptographic library that implements the SSL and TLS protocols",
       "install_id": "openssl",
       "license": "Apache-2.0",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
       "name": "openssl-3.4.1",
       "pname": "openssl",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T01:35:10.972973Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:30:23.796437Z",
       "stabilities": [
         "unstable"
       ],
@@ -1138,13 +1134,13 @@
       "description": "Cryptographic library that implements the SSL and TLS protocols",
       "install_id": "openssl",
       "license": "Apache-2.0",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
       "name": "openssl-3.4.1",
       "pname": "openssl",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T02:17:02.392524Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T02:07:08.959055Z",
       "stabilities": [
         "unstable"
       ],
@@ -1173,13 +1169,13 @@
       "description": "Tool that allows packages to find out information about other packages (wrapper script)",
       "install_id": "pkg-config",
       "license": "GPL-2.0-or-later",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
       "name": "pkg-config-wrapper-0.29.2",
       "pname": "pkg-config",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T01:13:36.042186Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:11:43.663651Z",
       "stabilities": [
         "unstable"
       ],
@@ -1205,13 +1201,13 @@
       "description": "Tool that allows packages to find out information about other packages (wrapper script)",
       "install_id": "pkg-config",
       "license": "GPL-2.0-or-later",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
       "name": "pkg-config-wrapper-0.29.2",
       "pname": "pkg-config",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T01:35:17.969148Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:30:31.019238Z",
       "stabilities": [
         "unstable"
       ],
@@ -1237,13 +1233,13 @@
       "description": "Tool that allows packages to find out information about other packages (wrapper script)",
       "install_id": "pkg-config",
       "license": "GPL-2.0-or-later",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
       "name": "pkg-config-wrapper-0.29.2",
       "pname": "pkg-config",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T01:54:19.882036Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:46:50.187275Z",
       "stabilities": [
         "unstable"
       ],
@@ -1269,13 +1265,13 @@
       "description": "Tool that allows packages to find out information about other packages (wrapper script)",
       "install_id": "pkg-config",
       "license": "GPL-2.0-or-later",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
       "name": "pkg-config-wrapper-0.29.2",
       "pname": "pkg-config",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T02:17:09.941922Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T02:07:17.054251Z",
       "stabilities": [
         "unstable"
       ],
@@ -1297,27 +1293,27 @@
     {
       "attr_path": "pnpm",
       "broken": false,
-      "derivation": "/nix/store/1b8vlspmd2b5fkv0qk441v8an43l0f05-pnpm-10.6.5.drv",
+      "derivation": "/nix/store/jj2pg47j1sqf8qlg3kznsm5yikf8x2d7-pnpm-10.7.0.drv",
       "description": "Fast, disk space efficient package manager for JavaScript",
       "install_id": "pnpm",
       "license": "MIT",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
-      "name": "pnpm-10.6.5",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
+      "name": "pnpm-10.7.0",
       "pname": "pnpm",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T01:13:36.231092Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:11:43.864882Z",
       "stabilities": [
         "unstable"
       ],
       "unfree": false,
-      "version": "10.6.5",
+      "version": "10.7.0",
       "outputs_to_install": [
         "out"
       ],
       "outputs": {
-        "out": "/nix/store/3mvfs924rkwslbghxpj7nj85mm7dr154-pnpm-10.6.5"
+        "out": "/nix/store/x76wprx01q04cinshnm1133yg1ypsj3a-pnpm-10.7.0"
       },
       "system": "aarch64-darwin",
       "group": "toplevel",
@@ -1326,27 +1322,27 @@
     {
       "attr_path": "pnpm",
       "broken": false,
-      "derivation": "/nix/store/2z8wigxbsnp1kxxk35s12jbbx5dgqx6a-pnpm-10.6.5.drv",
+      "derivation": "/nix/store/5cfd03d2ay95fh385n6wcppbyccwjp25-pnpm-10.7.0.drv",
       "description": "Fast, disk space efficient package manager for JavaScript",
       "install_id": "pnpm",
       "license": "MIT",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
-      "name": "pnpm-10.6.5",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
+      "name": "pnpm-10.7.0",
       "pname": "pnpm",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T01:35:18.697038Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:30:31.768351Z",
       "stabilities": [
         "unstable"
       ],
       "unfree": false,
-      "version": "10.6.5",
+      "version": "10.7.0",
       "outputs_to_install": [
         "out"
       ],
       "outputs": {
-        "out": "/nix/store/nk5an4k7dc4y6lagis6qf8h2jy3z0alf-pnpm-10.6.5"
+        "out": "/nix/store/bnarmhxsz8msrpsn96di6vb2ng3idaxj-pnpm-10.7.0"
       },
       "system": "aarch64-linux",
       "group": "toplevel",
@@ -1355,27 +1351,27 @@
     {
       "attr_path": "pnpm",
       "broken": false,
-      "derivation": "/nix/store/3fjp9q7jlcbgak7r34nlbfdv1pi3awbv-pnpm-10.6.5.drv",
+      "derivation": "/nix/store/n9idzbv815z0hzhdfbz5x122h9z6zw9f-pnpm-10.7.0.drv",
       "description": "Fast, disk space efficient package manager for JavaScript",
       "install_id": "pnpm",
       "license": "MIT",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
-      "name": "pnpm-10.6.5",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
+      "name": "pnpm-10.7.0",
       "pname": "pnpm",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T01:54:20.072748Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:46:50.389624Z",
       "stabilities": [
         "unstable"
       ],
       "unfree": false,
-      "version": "10.6.5",
+      "version": "10.7.0",
       "outputs_to_install": [
         "out"
       ],
       "outputs": {
-        "out": "/nix/store/y7izrrg5k2jr8y1pmg67mypdndkj758g-pnpm-10.6.5"
+        "out": "/nix/store/0pz2nz0r1rwmyqg1kczs4wwxhnx6xn86-pnpm-10.7.0"
       },
       "system": "x86_64-darwin",
       "group": "toplevel",
@@ -1384,27 +1380,27 @@
     {
       "attr_path": "pnpm",
       "broken": false,
-      "derivation": "/nix/store/zc8l988zcwyn5saixbg3kc6dqqpa92aa-pnpm-10.6.5.drv",
+      "derivation": "/nix/store/3434syzdi8b9gg3mbj411hbvm4ybxwv1-pnpm-10.7.0.drv",
       "description": "Fast, disk space efficient package manager for JavaScript",
       "install_id": "pnpm",
       "license": "MIT",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
-      "name": "pnpm-10.6.5",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
+      "name": "pnpm-10.7.0",
       "pname": "pnpm",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T02:17:10.724942Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T02:07:17.889828Z",
       "stabilities": [
         "unstable"
       ],
       "unfree": false,
-      "version": "10.6.5",
+      "version": "10.7.0",
       "outputs_to_install": [
         "out"
       ],
       "outputs": {
-        "out": "/nix/store/f0h5wr87cj838jn7zwybs5z7xq5wb3rw-pnpm-10.6.5"
+        "out": "/nix/store/ywwl1rqzh8ivxz9skyyswqf56hsdp4gg-pnpm-10.7.0"
       },
       "system": "x86_64-linux",
       "group": "toplevel",
@@ -1417,13 +1413,13 @@
       "description": "Object-oriented language for quick and easy programming",
       "install_id": "ruby",
       "license": "Ruby",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
       "name": "ruby-3.3.6",
       "pname": "ruby",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T01:13:55.874043Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:12:04.251990Z",
       "stabilities": [
         "unstable"
       ],
@@ -1447,13 +1443,13 @@
       "description": "Object-oriented language for quick and easy programming",
       "install_id": "ruby",
       "license": "Ruby",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
       "name": "ruby-3.3.6",
       "pname": "ruby",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T01:35:48.629941Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:31:02.546747Z",
       "stabilities": [
         "unstable"
       ],
@@ -1477,13 +1473,13 @@
       "description": "Object-oriented language for quick and easy programming",
       "install_id": "ruby",
       "license": "Ruby",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
       "name": "ruby-3.3.6",
       "pname": "ruby",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T01:54:39.452452Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:47:10.721139Z",
       "stabilities": [
         "unstable"
       ],
@@ -1507,13 +1503,13 @@
       "description": "Object-oriented language for quick and easy programming",
       "install_id": "ruby",
       "license": "Ruby",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
       "name": "ruby-3.3.6",
       "pname": "ruby",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T02:17:42.483030Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T02:07:51.797016Z",
       "stabilities": [
         "unstable"
       ],
@@ -1537,13 +1533,13 @@
       "description": "Utility for bidirectional data transfer between two independent data channels",
       "install_id": "socat",
       "license": "[ GPL-2.0-only ]",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
       "name": "socat-1.8.0.3",
       "pname": "socat",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T01:14:06.235261Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:12:14.974801Z",
       "stabilities": [
         "unstable"
       ],
@@ -1566,13 +1562,13 @@
       "description": "Utility for bidirectional data transfer between two independent data channels",
       "install_id": "socat",
       "license": "[ GPL-2.0-only ]",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
       "name": "socat-1.8.0.3",
       "pname": "socat",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T01:36:02.809374Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:31:17.047644Z",
       "stabilities": [
         "unstable"
       ],
@@ -1595,13 +1591,13 @@
       "description": "Utility for bidirectional data transfer between two independent data channels",
       "install_id": "socat",
       "license": "[ GPL-2.0-only ]",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
       "name": "socat-1.8.0.3",
       "pname": "socat",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T01:54:49.788177Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:47:21.455564Z",
       "stabilities": [
         "unstable"
       ],
@@ -1624,13 +1620,13 @@
       "description": "Utility for bidirectional data transfer between two independent data channels",
       "install_id": "socat",
       "license": "[ GPL-2.0-only ]",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
       "name": "socat-1.8.0.3",
       "pname": "socat",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T02:17:57.385075Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T02:08:07.602594Z",
       "stabilities": [
         "unstable"
       ],
@@ -1651,13 +1647,13 @@
       "broken": false,
       "derivation": "/nix/store/6z0idngwg6cqw87lgxr5s2zcxsaysffi-ruby3.3-standard-1.40.0.drv",
       "install_id": "standard",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
       "name": "ruby3.3-standard-1.40.0",
       "pname": "standard",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T01:13:56.340934Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:12:04.734226Z",
       "stabilities": [
         "unstable"
       ],
@@ -1678,13 +1674,13 @@
       "broken": false,
       "derivation": "/nix/store/65vj2svy07vcas1ziik8fn3k05r1ck6n-ruby3.3-standard-1.40.0.drv",
       "install_id": "standard",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
       "name": "ruby3.3-standard-1.40.0",
       "pname": "standard",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T01:35:49.262103Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:31:03.192747Z",
       "stabilities": [
         "unstable"
       ],
@@ -1705,13 +1701,13 @@
       "broken": false,
       "derivation": "/nix/store/iv0wm0q11fxh52iw3sr6j2vfqxn9kish-ruby3.3-standard-1.40.0.drv",
       "install_id": "standard",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
       "name": "ruby3.3-standard-1.40.0",
       "pname": "standard",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T01:54:39.917502Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:47:11.204513Z",
       "stabilities": [
         "unstable"
       ],
@@ -1732,13 +1728,13 @@
       "broken": false,
       "derivation": "/nix/store/jy1zc32qly890wkh1a9l1wa8g3iydd8f-ruby3.3-standard-1.40.0.drv",
       "install_id": "standard",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
       "name": "ruby3.3-standard-1.40.0",
       "pname": "standard",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T02:17:43.142682Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T02:07:52.494521Z",
       "stabilities": [
         "unstable"
       ],
@@ -1757,17 +1753,17 @@
     {
       "attr_path": "trunk",
       "broken": false,
-      "derivation": "/nix/store/kicpdddqz9hcrf5sid5lvzsahlg7f57f-trunk-0.21.9.drv",
+      "derivation": "/nix/store/v7720p5kwaf0144j321gw1qlssmkzv4j-trunk-0.21.9.drv",
       "description": "Build, bundle & ship your Rust WASM application to the web",
       "install_id": "trunk",
       "license": "[ Apache-2.0 ]",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
       "name": "trunk-0.21.9",
       "pname": "trunk",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T01:14:16.223853Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:12:25.360770Z",
       "stabilities": [
         "unstable"
       ],
@@ -1786,17 +1782,17 @@
     {
       "attr_path": "trunk",
       "broken": false,
-      "derivation": "/nix/store/499dmss0z8sy1w2vrn4pxdsl63n5hpgg-trunk-0.21.9.drv",
+      "derivation": "/nix/store/s1n2avpzss5vahdb8xxl8gs56vqhhcp4-trunk-0.21.9.drv",
       "description": "Build, bundle & ship your Rust WASM application to the web",
       "install_id": "trunk",
       "license": "[ Apache-2.0 ]",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
       "name": "trunk-0.21.9",
       "pname": "trunk",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T01:36:16.707775Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:31:31.331214Z",
       "stabilities": [
         "unstable"
       ],
@@ -1815,17 +1811,17 @@
     {
       "attr_path": "trunk",
       "broken": false,
-      "derivation": "/nix/store/9nbx4fgfz5kn4qk9kz8824azxqhcyq6g-trunk-0.21.9.drv",
+      "derivation": "/nix/store/ccxypx3x1anxbcy3f5f01xrqipjf8dkm-trunk-0.21.9.drv",
       "description": "Build, bundle & ship your Rust WASM application to the web",
       "install_id": "trunk",
       "license": "[ Apache-2.0 ]",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
       "name": "trunk-0.21.9",
       "pname": "trunk",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T01:54:59.741730Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:47:31.854602Z",
       "stabilities": [
         "unstable"
       ],
@@ -1844,17 +1840,17 @@
     {
       "attr_path": "trunk",
       "broken": false,
-      "derivation": "/nix/store/7w2478fn2vc8m8magd4g2g8zw1q9rkpa-trunk-0.21.9.drv",
+      "derivation": "/nix/store/0gxswy33f8cm3zm3xxfls6bghbnd651s-trunk-0.21.9.drv",
       "description": "Build, bundle & ship your Rust WASM application to the web",
       "install_id": "trunk",
       "license": "[ Apache-2.0 ]",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=1e5b653dff12029333a6546c11e108ede13052eb",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
       "name": "trunk-0.21.9",
       "pname": "trunk",
-      "rev": "1e5b653dff12029333a6546c11e108ede13052eb",
-      "rev_count": 772522,
-      "rev_date": "2025-03-22T18:57:23Z",
-      "scrape_date": "2025-03-24T02:18:12.060278Z",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T02:08:23.246353Z",
       "stabilities": [
         "unstable"
       ],
@@ -1872,11 +1868,11 @@
     },
     {
       "install_id": "rust",
-      "locked-url": "github:Granola-Team/mina-block-explorer/9c37db8a9433c09e23eab6cd78f2dc1a1b2a7391?dir=flakes/rust&narHash=sha256-diB2blpbQ7uV0Ne6uPTqxFbf7KxigO5DY5GajMmHGBQ%3D",
+      "locked-url": "github:Granola-Team/mina-block-explorer/7ddad2f8789b94489efb318957018b16d43624ce?dir=flakes/rust&narHash=sha256-Wplte/YMUw4jLZBAWquAe7tvrq14OJYBp2ICx5ujnm4%3D",
       "locked-flake-attr-path": "packages.aarch64-darwin.default",
-      "derivation": "/nix/store/yr9hhj7b3sixkrdp3lc71x0fqap69ig5-rust-mixed.drv",
+      "derivation": "/nix/store/5qwiiqi3ravzi89xsz4v6sfahdd898rk-rust-mixed.drv",
       "outputs": {
-        "out": "/nix/store/fxggv0cixncz0dkybpcnmhbbcxmj4c7m-rust-mixed"
+        "out": "/nix/store/2ibl8iakcih0098mqwhba3lydjim2pxi-rust-mixed"
       },
       "output-names": [
         "out"
@@ -1894,11 +1890,11 @@
     },
     {
       "install_id": "rust",
-      "locked-url": "github:Granola-Team/mina-block-explorer/9c37db8a9433c09e23eab6cd78f2dc1a1b2a7391?dir=flakes/rust&narHash=sha256-diB2blpbQ7uV0Ne6uPTqxFbf7KxigO5DY5GajMmHGBQ%3D",
+      "locked-url": "github:Granola-Team/mina-block-explorer/7ddad2f8789b94489efb318957018b16d43624ce?dir=flakes/rust&narHash=sha256-Wplte/YMUw4jLZBAWquAe7tvrq14OJYBp2ICx5ujnm4%3D",
       "locked-flake-attr-path": "packages.aarch64-linux.default",
-      "derivation": "/nix/store/wqdmdx177pcaw1k12fpn8sd83hmdnj72-rust-mixed.drv",
+      "derivation": "/nix/store/y1sx38c6ndl9dlwf9df1vv7kvjs32zhj-rust-mixed.drv",
       "outputs": {
-        "out": "/nix/store/ax3pa29b94yg1i8ribcgrknswclxbl08-rust-mixed"
+        "out": "/nix/store/283ylxzcjy0dhj0hl1zcficp3w28v537-rust-mixed"
       },
       "output-names": [
         "out"
@@ -1916,11 +1912,11 @@
     },
     {
       "install_id": "rust",
-      "locked-url": "github:Granola-Team/mina-block-explorer/9c37db8a9433c09e23eab6cd78f2dc1a1b2a7391?dir=flakes/rust&narHash=sha256-diB2blpbQ7uV0Ne6uPTqxFbf7KxigO5DY5GajMmHGBQ%3D",
+      "locked-url": "github:Granola-Team/mina-block-explorer/7ddad2f8789b94489efb318957018b16d43624ce?dir=flakes/rust&narHash=sha256-Wplte/YMUw4jLZBAWquAe7tvrq14OJYBp2ICx5ujnm4%3D",
       "locked-flake-attr-path": "packages.x86_64-darwin.default",
-      "derivation": "/nix/store/yxnhswi3rkmj4q22kl5w7gmvzi0zj7ig-rust-mixed.drv",
+      "derivation": "/nix/store/4bvi96h26w8i0swia3zsf5fyvvfw30jn-rust-mixed.drv",
       "outputs": {
-        "out": "/nix/store/zaj8kazc1f2117qhy2p7balz08qihjb2-rust-mixed"
+        "out": "/nix/store/04h1hgj2a8k7m6ahz06jvh31fqvkiiqz-rust-mixed"
       },
       "output-names": [
         "out"
@@ -1938,11 +1934,11 @@
     },
     {
       "install_id": "rust",
-      "locked-url": "github:Granola-Team/mina-block-explorer/9c37db8a9433c09e23eab6cd78f2dc1a1b2a7391?dir=flakes/rust&narHash=sha256-diB2blpbQ7uV0Ne6uPTqxFbf7KxigO5DY5GajMmHGBQ%3D",
+      "locked-url": "github:Granola-Team/mina-block-explorer/7ddad2f8789b94489efb318957018b16d43624ce?dir=flakes/rust&narHash=sha256-Wplte/YMUw4jLZBAWquAe7tvrq14OJYBp2ICx5ujnm4%3D",
       "locked-flake-attr-path": "packages.x86_64-linux.default",
-      "derivation": "/nix/store/hli44d192z6y6dqx86i35n4dp49yaja2-rust-mixed.drv",
+      "derivation": "/nix/store/a7wg3vm71m6vmc7d8rr7l2rz7fiisliy-rust-mixed.drv",
       "outputs": {
-        "out": "/nix/store/76zmhgx9iicsm4l4c4qcp8cn6q2is53d-rust-mixed"
+        "out": "/nix/store/wziz2xddh6yjwyghqj69n812p7v9qcd2-rust-mixed"
       },
       "output-names": [
         "out"
