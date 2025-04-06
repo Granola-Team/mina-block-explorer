@@ -33,3 +33,20 @@ suite(["@tier2"], "transaction spotlight", () => {
       }),
   );
 });
+
+suite(["@tier2"], "user commands page", () => {
+  [
+    {
+      origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}/user-commands`,
+      dest: "user commands",
+      href: `/commands/user?q-to=${DEFAULT_ACCOUNT_PK}`,
+    },
+  ].forEach(({ origin, dest, href }) =>
+    it(`is navigated to from ${dest}`, () => {
+      cy.visit(origin);
+      cy.contains("See all user commands").click();
+      cy.url().should("contain", href);
+      cy.tableColumnValuesEqual("User Commands", "To", DEFAULT_ACCOUNT_PK);
+    }),
+  );
+});
