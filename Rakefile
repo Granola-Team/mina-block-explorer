@@ -17,7 +17,7 @@ ENV["REST_URL"] = "http://localhost:#{IDXR_PORT}"
 GRAPHQL_SRC_FILES = Dir.glob("graphql/{e2e,support}/**/*.graphql")
 RUST_SRC_FILES = Dir.glob("src/**/*.rs") + GRAPHQL_SRC_FILES
 CARGO_DEPS = RUST_SRC_FILES + ["Cargo.toml", "Cargo.lock", "build.rs"]
-CYPRESS_FILES = Dir.glob("cypress/**/*.js")
+CYPRESS_FILES = Dir.glob("cypress/{e2e,support}/*.js")
 RUBY_SRC_FILES = Dir.glob("**/*.rb").reject { |file| file.start_with?("lib/") } + ["Rakefile"]
 JAVASCRIPT_SRC_FILES = Dir.glob("src/scripts_tests/**")
 MINASEARCH_GRAPHQL = "https://api.minasearch.com/graphql"
@@ -185,7 +185,7 @@ desc "Shut down mina-indexer"
 task :shutdown_mina_indexer do
   puts "--- Shutting down mina-indexer"
   Dir.chdir("lib/mina-indexer") do
-    sh "nix develop --command rake shutdown"
+    sh "nix develop --command rake shutdown:test"
   end
 end
 
@@ -302,7 +302,6 @@ end
 
 desc "Lint the Cypress test code (JavaScript)"
 task lint_javascript: ".build/lint-javascript"
-
 file ".build/lint-javascript" => CYPRESS_FILES + ["node_modules"] do |t|
   puts "--- Linting JS/TS"
   prettier_output = cmd_capture("pnpm exec prettier --check cypress/")
