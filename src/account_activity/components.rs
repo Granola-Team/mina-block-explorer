@@ -178,6 +178,7 @@ pub fn AccountInternalCommandsSection(
         .expect("there to be an optional account provided");
     let (summary_sig, _, _) =
         use_local_storage::<BlockchainSummary, JsonSerdeCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
+    let memo_params_map = use_params_map();
     let table_columns: Vec<TableColumn<AnySort>> = vec![
         TableColumn {
             column: "Height".to_string(),
@@ -248,6 +249,25 @@ pub fn AccountInternalCommandsSection(
                 }
             }
         />
+        {move || {
+            txn_sig
+                .get()
+                .filter(|d| !d.is_empty())
+                .map(|_| {
+                    view! {
+                        <TableLink
+                            href=format!(
+                                "/commands/internal?{}={}",
+                                QUERY_PARAM_RECEIPIENT,
+                                memo_params_map.get().get("id").cloned().unwrap_or_default(),
+                            )
+                            text="See all internal commands"
+                        >
+                            <CheckCircleIcon />
+                        </TableLink>
+                    }
+                })
+        }}
     }
 }
 

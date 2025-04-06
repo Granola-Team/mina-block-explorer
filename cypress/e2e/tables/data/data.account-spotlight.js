@@ -36,7 +36,20 @@ export const table = {
     },
   ],
 };
-export const tests = [];
+export const tests = [
+  () => {
+    cy.get("a").contains("See all internal commands").click();
+    cy.url().should(
+      "contain",
+      `/commands/internal?q-recipient=${DEFAULT_ACCOUNT_PK}`,
+    );
+    cy.tableColumnValuesEqual(
+      "Internal Commands",
+      "Recipient",
+      DEFAULT_ACCOUNT_PK,
+    );
+  },
+];
 export default {
   tag,
   url,
