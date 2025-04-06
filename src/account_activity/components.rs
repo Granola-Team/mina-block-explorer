@@ -277,6 +277,7 @@ pub fn AccountDelegationsSection(
     delegator_count: Option<usize>,
     is_loading: Signal<bool>,
 ) -> impl IntoView {
+    let memo_params_map = use_params_map();
     let table_columns: Vec<TableColumn<AnySort>> = vec![
         TableColumn {
             column: "Public Key".to_string(),
@@ -326,6 +327,25 @@ pub fn AccountDelegationsSection(
                 }
             }
         />
+        {move || {
+            delegations_sig
+                .get()
+                .filter(|d| !d.is_empty())
+                .map(|_| {
+                    view! {
+                        <TableLink
+                            href=format!(
+                                "/staking-ledgers?{}={}",
+                                QUERY_PARAM_DELEGATE,
+                                memo_params_map.get().get("id").cloned().unwrap_or_default(),
+                            )
+                            text="See all delegators"
+                        >
+                            <CheckCircleIcon />
+                        </TableLink>
+                    }
+                })
+        }}
     }
 }
 

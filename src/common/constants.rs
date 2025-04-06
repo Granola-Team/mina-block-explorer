@@ -30,6 +30,7 @@ pub const QUERY_PARAM_ROW_LIMIT: &str = "row-limit";
 pub const QUERY_PARAM_BALANCE: &str = "q-balance";
 pub const QUERY_PARAM_TOKEN: &str = "q-token";
 pub const QUERY_PARAM_STAKE: &str = "q-stake";
+pub const QUERY_PARAM_DELEGATE: &str = "q-delegate";
 pub const QUERY_PARAM_TOKEN_SYMBOL: &str = "q-symbol";
 pub const QUERY_PARAM_USER_COMMAND: &str = "q-all-user-commands";
 pub const QUERY_PARAM_TXN_APPLIED: &str = "txn-applied";
