@@ -1,4 +1,4 @@
-import { BLOCK_WITH_ALL_ACTIVITY, DEFAULT_ACCOUNT_PK } from "../constants";
+import { BLOCK_WITH_ALL_ACTIVITY, GENESIS_ACCOUNT_PK } from "../constants";
 suite(["@tier2"], "number bubble in tab", () => {
   let tabs = [
     {
@@ -17,27 +17,27 @@ suite(["@tier2"], "number bubble in tab", () => {
       comparison_method: "rows",
     },
     {
-      url: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}/commands/user`,
+      url: `/addresses/accounts/${GENESIS_ACCOUNT_PK}/commands/user`,
       tab: "User Commands",
     },
     {
-      url: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}/block-production`,
+      url: `/addresses/accounts/${GENESIS_ACCOUNT_PK}/block-production`,
       tab: "Block Production",
     },
     {
-      url: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}/delegations`,
+      url: `/addresses/accounts/${GENESIS_ACCOUNT_PK}/delegations`,
       tab: "Delegations",
     },
     // {
-    //   url: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}/tokens`,
+    //   url: `/addresses/accounts/${GENESIS_ACCOUNT_PK}/tokens`,
     //   tab: "Tokens",
     // },
     {
-      url: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}/snark-jobs`,
+      url: `/addresses/accounts/${GENESIS_ACCOUNT_PK}/snark-jobs`,
       tab: "SNARK Jobs",
     },
     {
-      url: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}/commands/internal`,
+      url: `/addresses/accounts/${GENESIS_ACCOUNT_PK}/commands/internal`,
       tab: "Internal Commands",
     },
   ];

@@ -7,7 +7,6 @@ use crate::{
         components::{
             AccountDelegationsSection, AccountInternalCommandsSection, AccountOverviewBlocksTable,
             AccountOverviewSnarkJobTable, AccountOverviewTokensTable, AccountTransactionsSection,
-            ZkAppDetailsSection,
         },
         graphql::account_activity_query::{
             AccountActivityQueryAccounts, AccountActivityQueryBlocks,
@@ -20,6 +19,7 @@ use crate::{
     common::{
         components::*,
         constants::*,
+        functions::{decorate_with_mina_tag, nanomina_to_mina},
         models::{MyError, NavEntry, NavIcon},
         spotlight::*,
     },
@@ -55,8 +55,38 @@ fn AccountSpotlightPage() -> impl IntoView {
         <Title formatter=move |text| format!("Account Overview | {text}") text=username />
         <PageContainer>
             {move || {
-                match (account.get(), is_loading_sig.get()) {
-                    (Some(acc), _) => {
+                let account_data = account.get();
+                let is_loading = is_loading_sig.get();
+                let genesis_balance = account_data.as_ref().and_then(|a| a.genesis_account);
+                match (account_data, is_loading, genesis_balance) {
+                    (None, Some(false), Some(balance)) => {
+
+                        // No account, not loading, with genesis balance
+                        view! {
+                            <SpotlightSection
+                                header="Account Spotlight"
+                                spotlight_items=vec![
+                                    SpotlightEntry {
+                                        label: String::from("Genesis Balance"),
+                                        any_el: Some(
+                                            decorate_with_mina_tag(
+                                                nanomina_to_mina(balance.try_into().unwrap()),
+                                            ),
+                                        ),
+                                        copiable: false,
+                                    },
+                                ]
+                                meta=Some(format!("Username: {}", username()))
+                                id=memo_params_map.get().get("id").cloned()
+                            >
+                                <WalletIcon width=40 />
+                            </SpotlightSection>
+                        }
+                            .into_view()
+                    }
+                    (Some(acc), Some(false), Some(_) | None) => {
+
+                        // Account, not loading, unconcerned with genesis balance
                         view! {
                             <SpotlightSection
                                 header="Account Spotlight"
@@ -69,24 +99,12 @@ fn AccountSpotlightPage() -> impl IntoView {
                             >
                                 <WalletIcon width=40 />
                             </SpotlightSection>
-                            <ZkAppDetailsSection zkapp=acc.zkapp />
                         }
                             .into_view()
                     }
-                    (None, Some(true)) | (None, None) => {
-                        view! {
-                            <SpotlightSection
-                                header="Account Spotlight"
-                                spotlight_items=get_spotlight_loading_data()
-                                meta=None
-                                id=None
-                            >
-                                <WalletIcon width=40 />
-                            </SpotlightSection>
-                        }
-                            .into_view()
-                    }
-                    (None, Some(false)) => {
+                    (None, Some(false), None) => {
+
+                        // No account, not loading, no genesis balance
                         view! {
                             <SpotlightSection
                                 header="Account Spotlight"
@@ -96,6 +114,21 @@ fn AccountSpotlightPage() -> impl IntoView {
                                         .to_string(),
                                 )
                                 id=memo_params_map.get().get("id").cloned()
+                            >
+                                <WalletIcon width=40 />
+                            </SpotlightSection>
+                        }
+                            .into_view()
+                    }
+                    (_, _, _) => {
+
+                        // Loading or unknown state
+                        view! {
+                            <SpotlightSection
+                                header="Account Spotlight"
+                                spotlight_items=get_spotlight_loading_data()
+                                meta=None
+                                id=None
                             >
                                 <WalletIcon width=40 />
                             </SpotlightSection>

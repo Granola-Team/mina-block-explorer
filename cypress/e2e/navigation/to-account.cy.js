@@ -1,4 +1,4 @@
-import { DEFAULT_ACCOUNT_PK, FIRST_BLOCK_WITH_SNARK_WORK } from "../constants";
+import { GENESIS_ACCOUNT_PK, FIRST_BLOCK_WITH_SNARK_WORK } from "../constants";
 suite(["@tier2"], "account page", () => {
   let pages = [
     // TODO: Enable when there is some data to display
@@ -19,22 +19,22 @@ suite(["@tier2"], "account page", () => {
       tableHeader: "MINA Accounts",
     },
     {
-      origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
+      origin: `/addresses/accounts/${GENESIS_ACCOUNT_PK}`,
       column: "Counterparty",
       tableHeader: "User Commands",
     },
     {
-      origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}/block-production`,
+      origin: `/addresses/accounts/${GENESIS_ACCOUNT_PK}/block-production`,
       column: "Coinbase Receiver",
       tableHeader: "Block Production",
     },
     {
-      origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}/delegations`,
+      origin: `/addresses/accounts/${GENESIS_ACCOUNT_PK}/delegations`,
       column: "Public Key",
       tableHeader: "Delegations",
     },
     {
-      origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}/delegations`,
+      origin: `/addresses/accounts/${GENESIS_ACCOUNT_PK}/delegations`,
       column: "Username",
       tableHeader: "Delegations",
     },

@@ -1,4 +1,4 @@
-import { DEFAULT_ACCOUNT_PK } from "../constants";
+import { GENESIS_ACCOUNT_PK } from "../constants";
 suite(["@tier2"], "tab", () => {
   let tabs = [
     {
@@ -12,24 +12,24 @@ suite(["@tier2"], "tab", () => {
       expectedUrl: "/commands/internal",
     },
     {
-      page: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}/snark-jobs`,
+      page: `/addresses/accounts/${GENESIS_ACCOUNT_PK}/snark-jobs`,
       tab: "User Commands",
-      expectedUrl: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}/commands/user`,
+      expectedUrl: `/addresses/accounts/${GENESIS_ACCOUNT_PK}/commands/user`,
     },
     {
-      page: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
+      page: `/addresses/accounts/${GENESIS_ACCOUNT_PK}`,
       tab: "SNARK Jobs",
-      expectedUrl: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}/snark-jobs`,
+      expectedUrl: `/addresses/accounts/${GENESIS_ACCOUNT_PK}/snark-jobs`,
     },
     {
-      page: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
+      page: `/addresses/accounts/${GENESIS_ACCOUNT_PK}`,
       tab: "Block Production",
-      expectedUrl: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}/block-production`,
+      expectedUrl: `/addresses/accounts/${GENESIS_ACCOUNT_PK}/block-production`,
     },
     {
-      page: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
+      page: `/addresses/accounts/${GENESIS_ACCOUNT_PK}`,
       tab: "Internal Commands",
-      expectedUrl: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}/commands/internal`,
+      expectedUrl: `/addresses/accounts/${GENESIS_ACCOUNT_PK}/commands/internal`,
     },
   ];
   tabs.forEach(({ page, tab, expectedUrl }) =>

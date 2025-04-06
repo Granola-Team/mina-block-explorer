@@ -1,8 +1,8 @@
 // Test suite data for: /addresses/accounts/B62qiVr4Wy6yKhxNV49Npnpr2XF5AhsFejFWWQpWKARQpTYsb9snNZY/commands/internal
-import { DEFAULT_ACCOUNT_PK } from "../../constants";
+import { GENESIS_ACCOUNT_PK } from "../../constants";
 import { parseFormattedNumber } from "../../helpers";
 export const tag = "@tier2";
-export const url = `/addresses/accounts/${DEFAULT_ACCOUNT_PK}/commands/internal`;
+export const url = `/addresses/accounts/${GENESIS_ACCOUNT_PK}/commands/internal`;
 export const table = {
   heading: "Internal Commands",
   columns: ["Height", "State Hash", "Fee", "Type", "Date"],
@@ -41,12 +41,12 @@ export const tests = [
     cy.get("a").contains("See all internal commands").click();
     cy.url().should(
       "contain",
-      `/commands/internal?q-recipient=${DEFAULT_ACCOUNT_PK}`,
+      `/commands/internal?q-recipient=${GENESIS_ACCOUNT_PK}`,
     );
     cy.tableColumnValuesEqual(
       "Internal Commands",
       "Recipient",
-      DEFAULT_ACCOUNT_PK,
+      GENESIS_ACCOUNT_PK,
     );
   },
 ];

@@ -1,0 +1,36 @@
+import {
+  GENESIS_ACCOUNT_PK,
+  TOKEN_ACTIVITY_ONLY_ADDRESS,
+  GENESIS_ACCOUNT_PK_ZERO_GENESIS,
+  STANDARD_ACCOUNT_PK,
+} from "../constants.js";
+suite(["@tier2"], "account spotlight", () => {
+  it("displays appropriately for standard accounts", () => {
+    cy.visit("/addresses/accounts/" + STANDARD_ACCOUNT_PK);
+    cy.contains("Includes 1 MINA account creation fee").should("exist");
+  });
+  it("displays appropriately for genesis accounst with zero balance", () => {
+    cy.visit("/addresses/accounts/" + GENESIS_ACCOUNT_PK_ZERO_GENESIS);
+    cy.contains("Includes 1 MINA account creation fee").should("not.exist");
+    cy.contains("Includes balance from genesis ledger").should("not.exist");
+    cy.contains(
+      "This account only has custom tokens and no MINA balance.",
+    ).should("not.exist");
+  });
+  it("displays appropriately for genesis accounts with positive balances", () => {
+    cy.visit("/addresses/accounts/" + GENESIS_ACCOUNT_PK);
+    cy.contains("Includes balance from genesis ledger").should("exist");
+    cy.testSpotlightValue("Genesis Balance", "108,536.109082914MINA");
+  });
+  it("displays appropriately for token-only accounts", () => {
+    cy.visit("/addresses/accounts/" + TOKEN_ACTIVITY_ONLY_ADDRESS);
+    cy.contains(
+      "This account only has custom tokens and no MINA balance.",
+    ).should("exist");
+    cy.aliasTableRows("User Commands", "table-rows");
+    cy.get("@table-rows").should("have.length.gte", 0);
+    cy.assertForEachColumnValue("User Commands", "Type", (text) => {
+      expect(text).equal("Zkapp");
+    });
+  });
+});

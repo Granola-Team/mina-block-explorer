@@ -141,6 +141,7 @@ query AccountActivityQuery(
     nonce
     delegate
     is_genesis_account
+    genesis_account
     zkapp {
       zkappUri
       zkappVersion

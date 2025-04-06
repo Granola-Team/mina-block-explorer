@@ -72,6 +72,7 @@ type Account {
   delegate: String
   timeLocked: Boolean
   is_genesis_account: Boolean
+  genesis_account: Int
   zkapp: ZkappAccount
   pk_epoch_num_blocks: Int
   pk_total_num_blocks: Int

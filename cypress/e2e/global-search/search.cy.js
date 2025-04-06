@@ -1,5 +1,5 @@
 import {
-  DEFAULT_ACCOUNT_PK,
+  GENESIS_ACCOUNT_PK,
   EPOCH_ZERO_STAKING_LEDGER_HASH,
   FIRST_TXN_HASH,
   GENESIS_BLOCK_BLOCK_HASH,
@@ -26,8 +26,8 @@ suite(["@tier2"], "global search", () => {
       expectedUrl: "/staking-ledgers?epoch=0",
     },
     {
-      input: DEFAULT_ACCOUNT_PK,
-      expectedUrl: "/addresses/accounts/" + DEFAULT_ACCOUNT_PK,
+      input: GENESIS_ACCOUNT_PK,
+      expectedUrl: "/addresses/accounts/" + GENESIS_ACCOUNT_PK,
     },
     {
       input: GENESIS_BLOCK_BLOCK_HASH,

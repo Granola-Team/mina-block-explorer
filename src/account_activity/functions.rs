@@ -15,6 +15,7 @@ use crate::{
     common::{constants::*, functions::*, models::*, spotlight::*},
 };
 use graphql_client::reqwest::post_graphql;
+use rust_decimal::prelude::ToPrimitive;
 
 #[allow(clippy::too_many_arguments)]
 pub async fn load_data(
@@ -220,17 +221,53 @@ pub fn get_spotlight_data(
     let mut balance_el = decorate_with_mina_tag(
         account
             .balance
-            .map(|b| nanomina_to_mina(b.try_into().unwrap()))
+            .map(|b| nanomina_to_mina(b.try_into().unwrap_or_default()))
             .unwrap_or_default(),
     );
-    if let Some(false) = account.is_genesis_account {
-        balance_el = convert_array_to_span(vec![
+    crate::logging::log!("account: {:#?}", account);
+    balance_el = match (
+        account.is_genesis_account.unwrap_or(false), // false if None
+        account.genesis_account.unwrap_or(0_i64),    // 0 if None
+    ) {
+        // Not a genesis account, no genesis balance, add creation fee note
+        (false, 0) => convert_array_to_span(vec![
             balance_el,
             convert_to_span("Includes 1 MINA account creation fee".to_string())
                 .attr("class", "block text-xs font-light text-slate-400"),
         ])
-        .attr("class", "block")
-    }
+        .attr("class", "block"),
+
+        // Not a genesis account, but has a genesis balance (unexpected case, treat as regular
+        // balance)
+        (false, genesis_balance) if genesis_balance != 0 => balance_el,
+
+        // Genesis account with positive genesis balance
+        (true, genesis_balance) if genesis_balance > 0 => {
+            let adjusted_balance = account
+                .balance
+                .map(|balance| {
+                    nanomina_to_mina(
+                        balance
+                            .checked_add(genesis_balance)
+                            .and_then(|x| x.to_u64())
+                            .expect("Expected genesis balance to be positive and within range"),
+                    )
+                })
+                .unwrap_or_default();
+
+            convert_array_to_span(vec![
+                decorate_with_mina_tag(adjusted_balance),
+                convert_to_span("Includes balance from genesis ledger".to_string())
+                    .attr("class", "block text-xs font-light text-slate-400"),
+            ])
+            .attr("class", "block")
+        }
+
+        // Genesis account with zero or negative genesis balance
+        (true, genesis_balance) if genesis_balance <= 0 => balance_el,
+
+        (_, _) => balance_el,
+    };
 
     let mut spotlight_entries = vec![
         SpotlightEntry {
@@ -271,9 +308,7 @@ pub fn get_spotlight_data(
         },
     ];
 
-    if account.zkapp.is_some() {
-        let zk_app = account.zkapp.as_ref().unwrap();
-
+    if let Some(zk_app) = account.zkapp.as_ref() {
         spotlight_entries.push(SpotlightEntry {
             label: String::from("zkApp Version"),
             any_el: Some({
@@ -302,6 +337,22 @@ pub fn get_spotlight_data(
             }),
             copiable: false,
         });
+    }
+
+    if let (Some(genesis_balance), Some(true)) =
+        (account.genesis_account, account.is_genesis_account)
+    {
+        if genesis_balance > 0 {
+            spotlight_entries.push(SpotlightEntry {
+                label: String::from("Genesis Balance"),
+                any_el: Some(decorate_with_mina_tag(nanomina_to_mina(
+                    genesis_balance
+                        .try_into()
+                        .expect("Expected to convert genesis balance to u64"),
+                ))),
+                copiable: false,
+            });
+        }
     }
 
     spotlight_entries

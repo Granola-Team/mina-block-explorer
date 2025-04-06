@@ -1,4 +1,4 @@
-import { DEFAULT_ACCOUNT_PK, APPLIED_TXN_BLOCK_STATE_HASH } from "../constants";
+import { GENESIS_ACCOUNT_PK, APPLIED_TXN_BLOCK_STATE_HASH } from "../constants";
 suite(["@tier2"], "transaction spotlight", () => {
   let pages = [
     { origin: "/commands", column: "Hash", tableHeader: "User Commands" },
@@ -8,7 +8,7 @@ suite(["@tier2"], "transaction spotlight", () => {
       tableHeader: "User Commands",
     },
     {
-      origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}`,
+      origin: `/addresses/accounts/${GENESIS_ACCOUNT_PK}`,
       column: "Txn Hash",
       tableHeader: "User Commands",
     },
@@ -37,16 +37,16 @@ suite(["@tier2"], "transaction spotlight", () => {
 suite(["@tier2"], "user commands page", () => {
   [
     {
-      origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}/user-commands`,
+      origin: `/addresses/accounts/${GENESIS_ACCOUNT_PK}/user-commands`,
       dest: "user commands",
-      href: `/commands/user?q-to=${DEFAULT_ACCOUNT_PK}`,
+      href: `/commands/user?q-to=${GENESIS_ACCOUNT_PK}`,
     },
   ].forEach(({ origin, dest, href }) =>
     it(`is navigated to from ${dest}`, () => {
       cy.visit(origin);
       cy.contains("See all user commands").click();
       cy.url().should("contain", href);
-      cy.tableColumnValuesEqual("User Commands", "To", DEFAULT_ACCOUNT_PK);
+      cy.tableColumnValuesEqual("User Commands", "To", GENESIS_ACCOUNT_PK);
     }),
   );
 });

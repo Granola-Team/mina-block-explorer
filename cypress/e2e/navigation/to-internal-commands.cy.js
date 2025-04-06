@@ -1,10 +1,10 @@
-import { DEFAULT_ACCOUNT_PK } from "../constants";
+import { GENESIS_ACCOUNT_PK } from "../constants";
 suite(["@tier2"], "internal commands page", () => {
   [
     {
-      origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}/commands/internal`,
+      origin: `/addresses/accounts/${GENESIS_ACCOUNT_PK}/commands/internal`,
       dest: "internal commands",
-      href: `/commands/internal?q-recipient=${DEFAULT_ACCOUNT_PK}`,
+      href: `/commands/internal?q-recipient=${GENESIS_ACCOUNT_PK}`,
     },
   ].forEach(({ origin, href }) =>
     it(`is navigated to from ${origin}`, () => {
@@ -14,7 +14,7 @@ suite(["@tier2"], "internal commands page", () => {
       cy.tableColumnValuesEqual(
         "Internal Commands",
         "Recipient",
-        DEFAULT_ACCOUNT_PK,
+        GENESIS_ACCOUNT_PK,
       );
     }),
   );

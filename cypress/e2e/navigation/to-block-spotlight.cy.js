@@ -1,4 +1,4 @@
-import { DEFAULT_ACCOUNT_PK } from "../constants";
+import { GENESIS_ACCOUNT_PK } from "../constants";
 suite(["@tier2"], "block spotlight", () => {
   [
     {
@@ -14,7 +14,7 @@ suite(["@tier2"], "block spotlight", () => {
       selector: 'a[href^="/blocks/"]:not(a[href^="/blocks/account"])',
     },
     {
-      origin: `/addresses/accounts/${DEFAULT_ACCOUNT_PK}/block-production`,
+      origin: `/addresses/accounts/${GENESIS_ACCOUNT_PK}/block-production`,
       selector: 'a[href^="/blocks/"]:not(a[href^="/blocks/account"])',
     },
   ].forEach(({ origin, selector }) =>
