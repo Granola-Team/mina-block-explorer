@@ -16,7 +16,7 @@ ENV["GRAPHQL_URL"] = "http://localhost:#{IDXR_PORT}/graphql"
 ENV["REST_URL"] = "http://localhost:#{IDXR_PORT}"
 GRAPHQL_SRC_FILES = Dir.glob("graphql/{e2e,support}/**/*.graphql")
 RUST_SRC_FILES = Dir.glob("src/**/*.rs") + GRAPHQL_SRC_FILES
-CARGO_DEPS = RUST_SRC_FILES + ["Cargo.toml", "Cargo.lock", "build.rs"]
+CARGO_DEPS = RUST_SRC_FILES + ["Cargo.toml", "Cargo.lock", "build.rs", ".cargo/audit.toml"]
 CYPRESS_FILES = Dir.glob("cypress/{e2e,support}/*.js")
 RUBY_SRC_FILES = Dir.glob("**/*.rb").reject { |file| file.start_with?("lib/") } + ["Rakefile"]
 JAVASCRIPT_SRC_FILES = Dir.glob("src/scripts_tests/**")
@@ -185,7 +185,7 @@ desc "Shut down mina-indexer"
 task :shutdown_mina_indexer do
   puts "--- Shutting down mina-indexer"
   Dir.chdir("lib/mina-indexer") do
-    sh "nix develop --command rake shutdown:test"
+    sh "nix develop --command rake shutdown"
   end
 end
 
@@ -247,7 +247,7 @@ file ".build/audit" => CARGO_DEPS do |t|
 end
 
 desc "Fix linting errors"
-task :lint_fix do
+task lint_fix: [:pnpm_install] do
   sh "standardrb --fix #{RUBY_SRC_FILES.join(" ")}"
   sh "cargo clippy --fix --allow-dirty --allow-staged"
   sh "pnpm exec eslint --fix cypress/"
