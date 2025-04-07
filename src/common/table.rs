@@ -143,6 +143,7 @@ impl CycleSort for AnySort {
             AnySort::Accounts(sort) => sort.cycle(),
             AnySort::SnarkerLeaderboardHighestFee(sort) => sort.cycle(),
             AnySort::SnarkerLeaderboardTotalFees(sort) => sort.cycle(),
+            AnySort::StakerLeaderboardCanonicalBlocks(sort) => sort.cycle(),
             _ => AnySort::None(Nil),
         }
     }

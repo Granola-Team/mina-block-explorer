@@ -298,14 +298,19 @@ pub fn SnarkerLeaderboard() -> impl IntoView {
 #[component]
 pub fn StakerLeaderboard() -> impl IntoView {
     let (epoch_sig, set_epoch) = create_query_signal::<u32>("epoch");
+    let (sort_dir_sig, _) = create_query_signal::<String>("sort-dir");
     let (summary_sig, _, _) =
         use_local_storage::<BlockchainSummary, JsonSerdeCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
     let resource = create_resource(
-        move || epoch_sig.get(),
-        move |epoch| async move {
+        move || (epoch_sig.get(), sort_dir_sig.get()),
+        move |(epoch, sort_dir)| async move {
             load_staker_leaderboard_data(
                 epoch,
-                StakerLeaderboardSort::NumCanonicalBlocksProducedDesc,
+                sort_dir
+                    .and_then(|dir| StakerLeaderboardCanonicalBlocks::try_from(dir).ok())
+                    .unwrap_or(
+                        StakerLeaderboardCanonicalBlocks::NumberOfCanonicalBlocksProducedDesc,
+                    ),
             )
             .await
         },
@@ -357,10 +362,12 @@ pub fn StakerLeaderboard() -> impl IntoView {
                 },
                 TableColumn {
                     column: "Canonical Blocks Produced".to_string(),
-                    sort_direction: Some(AnySort::StakerLeaderboardCanonicalBlocks(
-                        StakerLeaderboardCanonicalBlocks::NumberOfCanonicalBlocksProducedDesc,
-                    )),
+                    sort_direction: Some(AnySort::StakerLeaderboardCanonicalBlocks(sort_dir_sig
+                        .get()
+                        .and_then(|dir| StakerLeaderboardCanonicalBlocks::try_from(dir).ok())
+                        .unwrap_or(StakerLeaderboardCanonicalBlocks::NumberOfCanonicalBlocksProducedDesc))),
                     alignment: Some(ColumnTextAlignment::Right),
+                    is_sortable: true,
                     ..Default::default()
                 },
                 TableColumn {

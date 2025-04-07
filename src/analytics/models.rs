@@ -130,19 +130,13 @@ pub struct StakerLeaderboardResponse {
     pub data: TopStakers,
 }
 
-#[allow(dead_code)]
-pub enum StakerLeaderboardSort {
-    NumCanonicalBlocksProducedAsc,
-    NumCanonicalBlocksProducedDesc,
-}
-
-impl fmt::Display for StakerLeaderboardSort {
+impl fmt::Display for StakerLeaderboardCanonicalBlocks {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            StakerLeaderboardSort::NumCanonicalBlocksProducedAsc => {
+            StakerLeaderboardCanonicalBlocks::NumberOfCanonicalBlocksProducedAsc => {
                 write!(f, "NUM_CANONICAL_BLOCKS_PRODUCED_ASC")
             }
-            StakerLeaderboardSort::NumCanonicalBlocksProducedDesc => {
+            StakerLeaderboardCanonicalBlocks::NumberOfCanonicalBlocksProducedDesc => {
                 write!(f, "NUM_CANONICAL_BLOCKS_PRODUCED_DESC")
             }
         }
@@ -304,6 +298,7 @@ impl TryFrom<String> for SnarkerLeaderboardHighestFees {
 #[allow(dead_code)]
 pub enum StakerLeaderboardCanonicalBlocks {
     NumberOfCanonicalBlocksProducedDesc,
+    NumberOfCanonicalBlocksProducedAsc,
 }
 
 impl SortDirection for StakerLeaderboardCanonicalBlocks {
@@ -318,12 +313,34 @@ impl SortDirection for StakerLeaderboardCanonicalBlocks {
     }
 }
 
-impl fmt::Display for StakerLeaderboardCanonicalBlocks {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+impl CycleSort for StakerLeaderboardCanonicalBlocks {
+    fn cycle(&self) -> AnySort {
         match self {
             StakerLeaderboardCanonicalBlocks::NumberOfCanonicalBlocksProducedDesc => {
-                write!(f, "NUM_CANONICAL_BLOCKS_PRODUCED_DESC")
+                AnySort::StakerLeaderboardCanonicalBlocks(
+                    StakerLeaderboardCanonicalBlocks::NumberOfCanonicalBlocksProducedAsc,
+                )
             }
+            StakerLeaderboardCanonicalBlocks::NumberOfCanonicalBlocksProducedAsc => {
+                AnySort::StakerLeaderboardCanonicalBlocks(
+                    StakerLeaderboardCanonicalBlocks::NumberOfCanonicalBlocksProducedDesc,
+                )
+            }
+        }
+    }
+}
+
+impl TryFrom<String> for StakerLeaderboardCanonicalBlocks {
+    type Error = &'static str;
+    fn try_from(str: String) -> Result<StakerLeaderboardCanonicalBlocks, Self::Error> {
+        match str.as_str() {
+            "NUM_CANONICAL_BLOCKS_PRODUCED_ASC" => {
+                Ok(StakerLeaderboardCanonicalBlocks::NumberOfCanonicalBlocksProducedAsc)
+            }
+            "NUM_CANONICAL_BLOCKS_PRODUCED_DESC" => {
+                Ok(StakerLeaderboardCanonicalBlocks::NumberOfCanonicalBlocksProducedDesc)
+            }
+            _ => Err("Unable to parse the StakerLeaderboardCanonicalBlocks from string"),
         }
     }
 }

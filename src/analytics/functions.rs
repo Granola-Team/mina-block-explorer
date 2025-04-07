@@ -67,7 +67,7 @@ pub async fn load_snarker_leaderboard_data(
 
 pub async fn load_staker_leaderboard_data(
     epoch: Option<u32>,
-    sort_by: StakerLeaderboardSort,
+    sort_by: StakerLeaderboardCanonicalBlocks,
 ) -> Result<StakerLeaderboardResponse, MyError> {
     if epoch.is_none() {
         return Err(MyError::ParseError("Epoch must not be None".into()));
