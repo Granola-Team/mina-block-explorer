@@ -24,6 +24,7 @@ use crate::{
     snarks::page::SnarksPage,
     stakes::page::StakesPage,
     summary::page::{SummaryLocalStorage, SummaryPage},
+    token_holders::page::TokenHolderPage,
     tokens::page::TokensPage,
     user_commands::page::{
         CommandSpotlightPage, CommandsTabbedPage, PendingCommandsPage, UserCommandsPage,
@@ -90,6 +91,7 @@ pub fn Root() -> impl IntoView {
                         <Route path="/tokens" view=AccountTokensPage />
                     </Route>
                     <Route path="/tokens" view=TokensPage />
+                    <Route path="/tokens/:id" view=TokenHolderPage />
 
                     <Route path="/blocks" view=SummaryPage />
                     <Route path="/blocks/:id" view=BlockTabbedPage>
