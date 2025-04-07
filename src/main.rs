@@ -13,6 +13,7 @@ mod root;
 mod snarks;
 mod stakes;
 mod summary;
+mod token_holders;
 mod tokens;
 mod user_commands;
 

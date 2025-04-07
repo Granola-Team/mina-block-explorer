@@ -14,12 +14,17 @@ type TransactionZkapp {
 
 type TokenHolderAccount {
   publicKey: String!
+  delegate: String!
   balance: Int!
   nonce: Int!
+  token: String!
+  zkapp: ZkappAccount!
 }
 
 type TokenHolder {
   token: String!
+  supply: Int!
+  owner: String
   symbol: String!
   account: TokenHolderAccount!
 }
