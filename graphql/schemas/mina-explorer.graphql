@@ -13,20 +13,20 @@ type TransactionZkapp {
 }
 
 type TokenHolderAccount {
-    publicKey: String!
-    balance: Int!
-    nonce: Int!
+  publicKey: String!
+  balance: Int!
+  nonce: Int!
 }
 
 type TokenHolder {
-    token: String!
-    symbol: String!
-    account: TokenHolderAccount!
+  token: String!
+  symbol: String!
+  account: TokenHolderAccount!
 }
 
-input TokenHoldersQueryInput{
-    token: String
-    holder: String
+input TokenHoldersQueryInput {
+  token: String
+  holder: String
 }
 
 type Token {
@@ -35,8 +35,8 @@ type Token {
   owner: String
   symbol: String
   num_holders: Int!
-  total_num_tokens: Int!
   total_num_txns: Int!
+  total_num_tokens: Int!
   total_num_locked: Int!
 }
 
@@ -98,104 +98,10 @@ enum AccountSortByInput {
   BALANCE_ASC
 }
 
-input BlockTransactionUserCommandFromAccountInsertInput {
-  token: Int
-}
-
 type BlockTransactionFeeTransfer {
   fee: String
   recipient: String
   type: String
-}
-
-type TransactionFromAccount {
-  token: Int
-}
-
-input BlockCreatorAccountInsertInput {
-  publicKey: String
-}
-
-input BlockTransactionUserCommandSourceUpdateInput {
-  publicKey_unset: Boolean
-  publicKey: String
-}
-
-type BlockProtocolStateBlockchainState {
-  date: Long
-  snarkedLedgerHash: String
-  stagedLedgerHash: String
-  utcDate: Long
-}
-
-type UpdateManyPayload {
-  matchedCount: Int!
-  modifiedCount: Int!
-}
-
-input BlockTransactionUserCommandReceiverUpdateInput {
-  publicKey_unset: Boolean
-  publicKey: String
-}
-
-input TransactionSourceQueryInput {
-  publicKey_nin: [String]
-  OR: [TransactionSourceQueryInput!]
-  publicKey_lte: String
-  publicKey_exists: Boolean
-  publicKey_ne: String
-  AND: [TransactionSourceQueryInput!]
-  publicKey_in: [String]
-  publicKey: String
-  publicKey_gt: String
-  publicKey_gte: String
-  publicKey_lt: String
-}
-
-type StakeTiming {
-  cliff_amount: Float
-  cliff_time: Int
-  initial_minimum_balance: Float
-  timed_epoch_end: Boolean
-  timed_in_epoch: Boolean
-  timed_weighting: Float
-  untimed_slot: Int
-  vesting_increment: Float
-  vesting_period: Int
-}
-
-type NextDelegationTotal {
-  totalStakePercentage: String
-  countDelegates: Int
-  totalDelegatedNanomina: Int
-}
-
-input TransactionFromAccountQueryInput {
-  token_nin: [Int]
-  token_in: [Int]
-  OR: [TransactionFromAccountQueryInput!]
-  token: Int
-  token_gte: Int
-  token_gt: Int
-  token_lt: Int
-  token_lte: Int
-  token_ne: Int
-  AND: [TransactionFromAccountQueryInput!]
-  token_exists: Boolean
-}
-
-input BlockTransactionUserCommandReceiverQueryInput {
-  publicKey_lte: String
-  OR: [BlockTransactionUserCommandReceiverQueryInput!]
-  publicKey: String
-  publicKey_lt: String
-  publicKey_in: [String]
-  AND: [BlockTransactionUserCommandReceiverQueryInput!]
-  publicKey_nin: [String]
-  publicKey_exists: Boolean
-  publicKey_ne: String
-  publicKey_gt: String
-  publicKey_gte: String
 }
 
 type BlockTransaction {
@@ -212,184 +118,15 @@ type BlockTransactionCoinbaseReceiverAccount {
 type BlockTransactionUserCommand {
   amount: Float
   blockHeight: Int
-  blockStateHash: String
   dateTime: DateTime
   failureReason: String
   fee: Float
-  feePayer: BlockTransactionUserCommandFeePayer
-  feeToken: Int
   from: String
-  fromAccount: BlockTransactionUserCommandFromAccount
   hash: String
-  id: String
-  isDelegation: Boolean
   kind: String
   memo: String
   nonce: Int
-  receiver: BlockTransactionUserCommandReceiver
-  source: BlockTransactionUserCommandSource
   to: String
-  toAccount: BlockTransactionUserCommandToAccount
-  token: Int
-}
-
-input StakeTimingQueryInput {
-  untimed_slot_ne: Int
-  vesting_period_ne: Int
-  timed_weighting_gt: Float
-  vesting_increment_gt: Float
-  initial_minimum_balance_nin: [Float]
-  vesting_period_in: [Int]
-  untimed_slot_gt: Int
-  vesting_period_exists: Boolean
-  untimed_slot_nin: [Int]
-  vesting_period_gte: Int
-  cliff_amount: Float
-  cliff_amount_exists: Boolean
-  initial_minimum_balance_gt: Float
-  timed_in_epoch: Boolean
-  timed_epoch_end_ne: Boolean
-  untimed_slot_in: [Int]
-  initial_minimum_balance_exists: Boolean
-  cliff_amount_in: [Float]
-  cliff_time_gt: Int
-  untimed_slot: Int
-  vesting_period_lte: Int
-  initial_minimum_balance_in: [Float]
-  initial_minimum_balance_ne: Float
-  untimed_slot_exists: Boolean
-  untimed_slot_gte: Int
-  cliff_time_exists: Boolean
-  vesting_period_nin: [Int]
-  untimed_slot_lt: Int
-  initial_minimum_balance_lte: Float
-  timed_weighting: Float
-  vesting_increment_exists: Boolean
-  cliff_time_gte: Int
-  vesting_increment: Float
-  untimed_slot_lte: Int
-  cliff_time_nin: [Int]
-  timed_epoch_end_exists: Boolean
-  cliff_amount_gte: Float
-  cliff_time_in: [Int]
-  vesting_period: Int
-  vesting_increment_lt: Float
-  vesting_increment_in: [Float]
-  cliff_time_lte: Int
-  vesting_increment_lte: Float
-  AND: [StakeTimingQueryInput!]
-  initial_minimum_balance_lt: Float
-  cliff_time_lt: Int
-  cliff_amount_lt: Float
-  cliff_time_ne: Int
-  cliff_amount_nin: [Float]
-  vesting_increment_ne: Float
-  cliff_amount_gt: Float
-  vesting_increment_gte: Float
-  timed_weighting_gte: Float
-  timed_weighting_lt: Float
-  cliff_amount_lte: Float
-  timed_weighting_in: [Float]
-  vesting_increment_nin: [Float]
-  vesting_period_lt: Int
-  OR: [StakeTimingQueryInput!]
-  timed_in_epoch_exists: Boolean
-  cliff_amount_ne: Float
-  timed_weighting_ne: Float
-  timed_in_epoch_ne: Boolean
-  cliff_time: Int
-  timed_weighting_exists: Boolean
-  timed_epoch_end: Boolean
-  timed_weighting_nin: [Float]
-  vesting_period_gt: Int
-  initial_minimum_balance: Float
-  initial_minimum_balance_gte: Float
-  timed_weighting_lte: Float
-}
-
-input NextstakePermissionQueryInput {
-  OR: [NextstakePermissionQueryInput!]
-  send_gt: String
-  set_verification_key_lte: String
-  set_verification_key_gte: String
-  set_delegate_exists: Boolean
-  send_exists: Boolean
-  set_verification_key_ne: String
-  set_permissions_nin: [String]
-  send_in: [String]
-  edit_state_gte: String
-  edit_state: String
-  edit_state_nin: [String]
-  set_verification_key_lt: String
-  set_permissions_lte: String
-  edit_state_lte: String
-  set_delegate_gte: String
-  edit_state_ne: String
-  edit_state_gt: String
-  set_delegate_in: [String]
-  stake: Boolean
-  stake_ne: Boolean
-  send_lte: String
-  set_delegate_ne: String
-  send_nin: [String]
-  set_verification_key_gt: String
-  send_ne: String
-  send_gte: String
-  send_lt: String
-  set_delegate_gt: String
-  set_delegate_nin: [String]
-  set_delegate: String
-  set_verification_key_in: [String]
-  edit_state_exists: Boolean
-  set_verification_key_nin: [String]
-  set_permissions_exists: Boolean
-  edit_state_in: [String]
-  send: String
-  set_verification_key_exists: Boolean
-  set_permissions: String
-  set_permissions_gt: String
-  set_delegate_lte: String
-  set_verification_key: String
-  edit_state_lt: String
-  set_permissions_gte: String
-  set_delegate_lt: String
-  set_permissions_lt: String
-  AND: [NextstakePermissionQueryInput!]
-  set_permissions_in: [String]
-  stake_exists: Boolean
-  set_permissions_ne: String
-}
-
-input BlockTransactionFeeTransferQueryInput {
-  type_ne: String
-  recipient: String
-  recipient_nin: [String]
-  recipient_gt: String
-  type_lt: String
-  fee_gt: Long
-  fee_nin: [Long]
-  fee_lte: Long
-  type_gte: String
-  recipient_gte: String
-  fee_exists: Boolean
-  OR: [BlockTransactionFeeTransferQueryInput!]
-  type_gt: String
-  fee_in: [Long]
-  type: String
-  fee_gte: Long
-  type_in: [String]
-  recipient_lt: String
-  recipient_lte: String
-  type_lte: String
-  fee: Long
-  recipient_in: [String]
-  recipient_ne: String
-  type_nin: [String]
-  fee_lt: Long
-  fee_ne: Long
-  type_exists: Boolean
-  recipient_exists: Boolean
-  AND: [BlockTransactionFeeTransferQueryInput!]
 }
 
 input BlockTransactionUserCommandQueryInput {
@@ -545,6 +282,352 @@ input BlockTransactionUserCommandQueryInput {
   failureReason_lt: String
 }
 
+type DelegationTotal {
+  totalStakePercentage: String
+  countDelegates: Int
+  totalDelegatedNanomina: Int
+}
+
+input BlockTransactionQueryInput {
+  userCommands_exists: Boolean
+  userCommands: [BlockTransactionUserCommandQueryInput]
+  coinbase_gte: Long
+  coinbaseReceiverAccount: BlockTransactionCoinbaseReceiverAccountQueryInput
+  feeTransfer: [BlockTransactionFeeTransferQueryInput]
+  coinbase_nin: [Long]
+  coinbase_lt: Long
+  feeTransfer_exists: Boolean
+  userCommands_in: [BlockTransactionUserCommandQueryInput]
+  feeTransfer_in: [BlockTransactionFeeTransferQueryInput]
+  userCommands_nin: [BlockTransactionUserCommandQueryInput]
+  AND: [BlockTransactionQueryInput!]
+  coinbase_gt: Long
+  coinbase_in: [Long]
+  coinbase: Long
+  coinbase_ne: Long
+  coinbaseReceiverAccount_exists: Boolean
+  coinbase_exists: Boolean
+  coinbase_lte: Long
+  feeTransfer_nin: [BlockTransactionFeeTransferQueryInput]
+  OR: [BlockTransactionQueryInput!]
+}
+
+input BlockTransactionCoinbaseReceiverAccountQueryInput {
+  publicKey_gt: String
+  publicKey_gte: String
+  publicKey_lte: String
+  publicKey_exists: Boolean
+  OR: [BlockTransactionCoinbaseReceiverAccountQueryInput!]
+  publicKey_in: [String]
+  publicKey_nin: [String]
+  publicKey_ne: String
+  publicKey: String
+  publicKey_lt: String
+  AND: [BlockTransactionCoinbaseReceiverAccountQueryInput!]
+}
+
+input BlockTransactionFeeTransferQueryInput {
+  type_ne: String
+  recipient: String
+  recipient_nin: [String]
+  recipient_gt: String
+  type_lt: String
+  fee_gt: Long
+  fee_nin: [Long]
+  fee_lte: Long
+  type_gte: String
+  recipient_gte: String
+  fee_exists: Boolean
+  OR: [BlockTransactionFeeTransferQueryInput!]
+  type_gt: String
+  fee_in: [Long]
+  type: String
+  fee_gte: Long
+  type_in: [String]
+  recipient_lt: String
+  recipient_lte: String
+  type_lte: String
+  fee: Long
+  recipient_in: [String]
+  recipient_ne: String
+  type_nin: [String]
+  fee_lt: Long
+  fee_ne: Long
+  type_exists: Boolean
+  recipient_exists: Boolean
+  AND: [BlockTransactionFeeTransferQueryInput!]
+}
+
+type BlockWinnerAccount {
+  publicKey: String
+}
+
+type TransactionReceiver {
+  publicKey: String
+}
+
+type Stake {
+  balance: Float
+  username: String
+  delegate: String
+  delegationTotals: DelegationTotal
+  balanceNanomina: Int
+  epoch: Int
+  ledgerHash: String
+  nonce: Int
+  pk: String
+  public_key: String
+  voting_for: String
+  pk_epoch_num_blocks: Int
+  epoch_num_blocks: Int
+  epoch_num_accounts: Int
+}
+
+input StakesQueryInput {
+  genesisStateHash: String
+  stake_lte: String
+  timing_exists: Boolean
+  chainId_gte: String
+  balance_ne: Float
+  nonce: Int
+  delegate_gte: String
+  epoch_nin: [Int]
+  public_key_gt: String
+  ledgerHash_nin: [String]
+  ledgerHash_lt: String
+  chainId_in: [String]
+  delegate_nin: [String]
+  token_nin: [Int]
+  token_lt: Int
+  pk_gte: String
+  balance_gt: Float
+  ledgerHash_lte: String
+  epoch_in: [Int]
+  ledgerHash_gt: String
+  delegate_gt: String
+  pk_nin: [String]
+  balance_lte: Float
+  public_key_nin: [String]
+  ledgerHash_ne: String
+  voting_for: String
+  nonce_in: [Int]
+  permissions_exists: Boolean
+  permissions: StakePermissionQueryInput
+  chainId_nin: [String]
+  token_gte: Int
+  chainId_gt: String
+  nonce_lt: Int
+  pk_gt: String
+  voting_for_lte: String
+  receipt_chain_hash_in: [String]
+  public_key_gte: String
+  ledgerHash: String
+  chainId_lte: String
+  ledgerHash_in: [String]
+  receipt_chain_hash_lt: String
+  voting_for_gt: String
+  balance_lt: Float
+  token_ne: Int
+  pk_in: [String]
+  balance_exists: Boolean
+  voting_for_gte: String  # Fixed typo from 'voting_for_g isoform'
+  delegate: String
+  OR: [StakesQueryInput!]
+  balance_nin: [Float]
+  epoch_ne: Int
+  nonce_gte: Int
+  AND: [StakesQueryInput!]
+  voting_for_exists: Boolean
+  public_key_exists: Boolean
+  token_in: [Int]
+  receipt_chain_hash_lte: String
+  epoch_lte: Int
+  balance_gte: Float
+  voting_for_lt: String
+  chainId: String
+  delegate_ne: String
+  public_key_in: [String]
+  delegate_lte: String
+  pk_lte: String
+  receipt_chain_hash_ne: String
+  voting_for_in: [String]
+  public_key_lte: String
+  receipt_chain_hash: String
+  voting_for_ne: String
+  token: Int
+  public_key: String
+  balance_in: [Float]
+  public_key_lt: String
+  chainId_exists: Boolean
+  token_lte: Int
+  delegate_exists: Boolean
+  balance: Float
+  receipt_chain_hash_gte: String
+  epoch_exists: Boolean
+  nonce_nin: [Int]
+  chainId_ne: String
+  epoch_gte: Int
+  epoch_gt: Int
+  voting_for_nin: [String]
+  pk: String
+  pk_ne: String
+  nonce_exists: Boolean
+  receipt_chain_hash_exists: Boolean
+  token_exists: Boolean
+  epoch: Int
+  receipt_chain_hash_gt: String
+  chainId_lt: String
+  token_gt: Int
+  nonce_gt: Int
+  receipt_chain_hash_nin: [String]
+  timing: StakeTimingQueryInput
+  pk_lt: String
+  public_key_ne: String
+  nonce_ne: Int
+  epoch_lt: Int
+  nonce_lte: Int
+  delegate_in: [String]
+  ledgerHash_gte: String
+  ledgerHash_exists: Boolean
+  pk_exists: Boolean
+  delegate_lt: String
+}
+
+type Snark {
+  block: Block
+  blockHeight: Int
+  canonical: Boolean
+  dateTime: DateTime
+  fee: Float
+  prover: String
+}
+
+input SnarkQueryInput {
+  blockHeight_lt: Int
+  fee_in: [Float]
+  prover_gte: String
+  fee_lt: Float
+  dateTime_nin: [DateTime]
+  prover_in: [String]
+  prover_ne: String
+  blockHeight_gt: Int
+  prover: String
+  block_exists: Boolean
+  dateTime_lte: DateTime
+  dateTime: DateTime
+  fee_gt: Float
+  dateTime_exists: Boolean
+  workIds_exists: Boolean
+  prover_lte: String
+  dateTime_in: [DateTime]
+  blockHeight_nin: [Int]
+  fee_exists: Boolean
+  canonical: Boolean
+  canonical_ne: Boolean
+  dateTime_gt: DateTime
+  blockHeight_exists: Boolean
+  block: BlockQueryInput
+  blockHeight_ne: Int
+  blockHeight_gte: Int
+  workIds_in: [Int]
+  fee: Float
+  fee_gte: Float
+  prover_nin: [String]
+  AND: [SnarkQueryInput!]
+  prover_exists: Boolean
+  OR: [SnarkQueryInput!]
+  dateTime_ne: DateTime
+  workIds: [Int]
+  dateTime_lt: DateTime
+  blockHeight_in: [Int]
+  fee_nin: [Float]
+  workIds_nin: [Int]
+  prover_lt: String
+  prover_gt: String
+  blockHeight_lte: Int
+  fee_lte: Float
+  dateTime_gte: DateTime
+  fee_ne: Float
+  blockHeight: Int
+  canonical_exists: Boolean
+}
+
+type BlockSnarkJob {
+  blockHeight: Int
+  blockStateHash: String
+  dateTime: DateTime
+  fee: Int
+  prover: String
+}
+
+scalar DateTime
+
+type Query {
+  accounts(
+    limit: Int = 100
+    query: AccountQueryInput
+    sortBy: AccountSortByInput
+  ): [Account]!
+  blocks(
+    limit: Int = 100
+    sortBy: BlockSortByInput
+    query: BlockQueryInput
+  ): [Block]!
+  feetransfers(
+    query: FeetransferQueryInput
+    limit: Int = 100
+    sortBy: FeetransferSortByInput
+  ): [Feetransfer]!
+  snarks(
+    query: SnarkQueryInput
+    limit: Int = 100
+    sortBy: SnarkSortByInput
+  ): [Snark]!
+  stakes(
+    query: StakesQueryInput
+    limit: Int = 100
+    sortBy: StakesSortByInput
+  ): [Stake]!
+  transactions(
+    query: TransactionQueryInput
+    limit: Int = 100
+    sortBy: TransactionSortByInput
+  ): [Transaction]!
+  tokens(
+    query: TokensQueryInput
+    limit: Int = 100
+    sortBy: TokensSortByInput
+  ): [Token]!
+  tokenHolders(
+    query: TokenHoldersQueryInput
+    limit: Int = 100
+  ): [TokenHolder]!
+}
+
+scalar Long
+
+type BlockProtocolStateBlockchainState {
+  snarkedLedgerHash: String
+  stagedLedgerHash: String
+}
+
+type BlockProtocolStateConsensusState {
+  epoch: Int
+  slot: Int
+  slotSinceGenesis: Int
+  totalCurrency: Float
+}
+
+type Feetransfer {
+  blockHeight: Int
+  blockStateHash: Block
+  canonical: Boolean
+  dateTime: DateTime
+  fee: Int
+  recipient: String
+  type: String
+}
+
 input FeetransferQueryInput {
   dateTime_nin: [DateTime]
   recipient: String
@@ -600,714 +683,28 @@ input FeetransferQueryInput {
   recipient_gt: String
 }
 
-input NextstakeTimingInsertInput {
-  vesting_period: Int
-  cliff_amount: Float
-  cliff_time: Int
-  initial_minimum_balance: Float
-  vesting_increment: Float
+type BlockProtocolState {
+  blockchainState: BlockProtocolStateBlockchainState
+  consensusState: BlockProtocolStateConsensusState
+  previousStateHash: String
 }
 
-input BlockUpdateInput {
-  winnerAccount: BlockWinnerAccountUpdateInput
-  snarkJobs: [BlockSnarkJobUpdateInput]
-  protocolState: BlockProtocolStateUpdateInput
-  blockHeight: Int
-  blockHeight_inc: Int
-  creatorAccount: BlockCreatorAccountUpdateInput
-  transactions_unset: Boolean
-  winnerAccount_unset: Boolean
-  creator_unset: Boolean
-  creator: String
-  snarkJobs_unset: Boolean
-  dateTime_unset: Boolean
-  stateHashField: String
-  dateTime: DateTime
-  creatorAccount_unset: Boolean
-  receivedTime_unset: Boolean
-  stateHashField_unset: Boolean
-  transactions: BlockTransactionUpdateInput
-  canonical_unset: Boolean
-  protocolState_unset: Boolean
-  receivedTime: DateTime
-  blockHeight_unset: Boolean
-  canonical: Boolean
-  stateHash: String
-  stateHash_unset: Boolean
-}
-
-input BlockTransactionUserCommandFeePayerUpdateInput {
-  token: Int
-  token_inc: Int
-  token_unset: Boolean
-}
-
-type DelegationTotal {
-  totalStakePercentage: String
-  countDelegates: Int
-  totalDelegatedNanomina: Int
-}
-
-input BlockTransactionQueryInput {
-  userCommands_exists: Boolean
-  userCommands: [BlockTransactionUserCommandQueryInput]
-  coinbase_gte: Long
-  coinbaseReceiverAccount: BlockTransactionCoinbaseReceiverAccountQueryInput
-  feeTransfer: [BlockTransactionFeeTransferQueryInput]
-  coinbase_nin: [Long]
-  coinbase_lt: Long
-  feeTransfer_exists: Boolean
-  userCommands_in: [BlockTransactionUserCommandQueryInput]
-  feeTransfer_in: [BlockTransactionFeeTransferQueryInput]
-  userCommands_nin: [BlockTransactionUserCommandQueryInput]
-  AND: [BlockTransactionQueryInput!]
-  coinbase_gt: Long
-  coinbase_in: [Long]
-  coinbase: Long
-  coinbase_ne: Long
-  coinbaseReceiverAccount_exists: Boolean
-  coinbase_exists: Boolean
-  coinbase_lte: Long
-  feeTransfer_nin: [BlockTransactionFeeTransferQueryInput]
-  OR: [BlockTransactionQueryInput!]
-}
-
-input FeetransferInsertInput {
-  recipient: String
-  type: String
-  blockHeight: Int
-  blockStateHash: FeetransferBlockStateHashRelationInput
-  canonical: Boolean
-  dateTime: DateTime
-  fee: Int
-}
-
-input BlockProtocolStateConsensusStateStakingEpochDatumInsertInput {
-  ledger: BlockProtocolStateConsensusStateStakingEpochDatumLedgerInsertInput
-  lockCheckpoint: String
-  seed: String
-  startCheckpoint: String
-  epochLength: Int
-}
-
-input TransactionBlockStateHashRelationInput {
-  create: BlockInsertInput
-  link: String
-}
-
-input TransactionReceiverInsertInput {
-  publicKey: String
-}
-
-input NextstakePermissionUpdateInput {
-  send: String
-  set_delegate_unset: Boolean
-  set_permissions_unset: Boolean
-  edit_state_unset: Boolean
-  set_delegate: String
-  edit_state: String
-  set_verification_key_unset: Boolean
-  stake: Boolean
-  stake_unset: Boolean
-  send_unset: Boolean
-  set_permissions: String
-  set_verification_key: String
-}
-
-input BlockTransactionUpdateInput {
-  coinbase_unset: Boolean
-  coinbaseReceiverAccount: BlockTransactionCoinbaseReceiverAccountUpdateInput
-  coinbaseReceiverAccount_unset: Boolean
-  feeTransfer: [BlockTransactionFeeTransferUpdateInput]
-  feeTransfer_unset: Boolean
-  userCommands: [BlockTransactionUserCommandUpdateInput]
-  userCommands_unset: Boolean
-  coinbase: Long
-}
-
-input BlockWinnerAccountBalanceQueryInput {
-  blockHeight_in: [Int]
-  stateHash_gte: String
-  liquid_lt: Int
-  total_gt: Long
-  liquid_exists: Boolean
-  unknown_in: [Long]
-  liquid_in: [Int]
-  total_gte: Long
-  stateHash_gt: String
-  stateHash_lt: String
-  liquid_ne: Int
-  locked_lte: Long
-  unknown_gt: Long
-  total_nin: [Long]
-  locked_exists: Boolean
-  total_lte: Long
-  unknown_nin: [Long]
-  total_lt: Long
-  blockHeight_lte: Int
-  stateHash_in: [String]
-  stateHash: String
-  blockHeight_exists: Boolean
-  unknown_lt: Long
-  liquid_gte: Int
-  locked_ne: Long
-  stateHash_lte: String
-  unknown_lte: Long
-  liquid_gt: Int
-  blockHeight_lt: Int
-  locked_in: [Long]
-  locked_nin: [Long]
-  blockHeight_gte: Int
-  locked_lt: Long
-  AND: [BlockWinnerAccountBalanceQueryInput!]
-  unknown_ne: Long
-  total_exists: Boolean
-  liquid_lte: Int
-  liquid: Int
-  stateHash_nin: [String]
-  blockHeight: Int
-  locked_gt: Long
-  OR: [BlockWinnerAccountBalanceQueryInput!]
-  locked_gte: Long
-  total_ne: Long
-  stateHash_exists: Boolean
-  blockHeight_gt: Int
-  blockHeight_ne: Int
-  stateHash_ne: String
-  unknown: Long
-  liquid_nin: [Int]
-  locked: Long
-  blockHeight_nin: [Int]
-  total_in: [Long]
-  unknown_gte: Long
-  total: Long
-  unknown_exists: Boolean
-}
-
-input BlockTransactionFeeTransferUpdateInput {
-  recipient: String
-  recipient_unset: Boolean
-  type: String
-  type_unset: Boolean
-  fee: Long
-  fee_unset: Boolean
-}
-
-input BlockProtocolStateConsensusStateNextEpochDatumInsertInput {
-  lockCheckpoint: String
-  seed: String
-  startCheckpoint: String
-  epochLength: Int
-  ledger: BlockProtocolStateConsensusStateNextEpochDatumLedgerInsertInput
-}
-
-type BlockWinnerAccount {
-  balance: BlockWinnerAccountBalance
-  publicKey: String
-}
-
-type TransactionReceiver {
-  publicKey: String
-}
-
-input BlockTransactionInsertInput {
-  coinbaseReceiverAccount: BlockTransactionCoinbaseReceiverAccountInsertInput
-  feeTransfer: [BlockTransactionFeeTransferInsertInput]
-  userCommands: [BlockTransactionUserCommandInsertInput]
-  coinbase: Long
-}
-
-input BlockTransactionUserCommandToAccountInsertInput {
-  token: Int
-}
-
-type InsertManyPayload {
-  insertedIds: [ObjectId]!
-}
-
-input BlockTransactionUserCommandFromAccountUpdateInput {
-  token_unset: Boolean
-  token: Int
-  token_inc: Int
-}
-
-input BlockProtocolStateConsensusStateStakingEpochDatumLedgerUpdateInput {
-  totalCurrency_inc: Float
-  totalCurrency_unset: Boolean
-  hash: String
-  hash_unset: Boolean
-  totalCurrency: Float
-}
-
-input BlockProtocolStateConsensusStateNextEpochDatumLedgerUpdateInput {
-  hash: String
-  hash_unset: Boolean
-  totalCurrency: Float
-  totalCurrency_inc: Float
-  totalCurrency_unset: Boolean
-}
-
-type Stake {
-  balance: Float
-  username: String
-  chainId: String
-  delegate: String
-  delegationTotals: DelegationTotal
-  balanceNanomina: Int
-  epoch: Int
-  ledgerHash: String
-  nonce: Int
-  permissions: StakePermission
-  pk: String
-  public_key: String
-  receipt_chain_hash: String
-  timing: StakeTiming
-  token: Int
-  voting_for: String
-  pk_epoch_num_blocks: Int
-  epoch_num_blocks: Int
-  epoch_num_accounts: Int
-}
-
-input BlockTransactionUserCommandInsertInput {
-  token: Int
-  blockHeight: Int
-  kind: String
-  isDelegation: Boolean
-  memo: String
-  receiver: BlockTransactionUserCommandReceiverInsertInput
+type Transaction {
   amount: Float
-  dateTime: DateTime
-  failureReason: String
-  source: BlockTransactionUserCommandSourceInsertInput
-  to: String
-  fee: Float
-  feePayer: BlockTransactionUserCommandFeePayerInsertInput
-  id: String
-  from: String
-  toAccount: BlockTransactionUserCommandToAccountInsertInput
-  blockStateHash: String
-  feeToken: Int
-  nonce: Int
-  hash: String
-  fromAccount: BlockTransactionUserCommandFromAccountInsertInput
-}
-
-input BlockCreatorAccountUpdateInput {
-  publicKey_unset: Boolean
-  publicKey: String
-}
-
-input StakePermissionQueryInput {
-  set_delegate_ne: String
-  set_verification_key_gte: String
-  send_gt: String
-  send_exists: Boolean
-  set_delegate_lte: String
-  set_delegate_lt: String
-  set_permissions_lte: String
-  edit_state_nin: [String]
-  send_nin: [String]
-  edit_state_exists: Boolean
-  edit_state_gt: String
-  set_permissions_nin: [String]
-  set_verification_key_gt: String
-  OR: [StakePermissionQueryInput!]
-  edit_state_lte: String
-  set_permissions_lt: String
-  set_verification_key_lt: String
-  send: String
-  set_permissions: String
-  set_delegate: String
-  set_delegate_exists: Boolean
-  set_verification_key_nin: [String]
-  set_delegate_gte: String
-  edit_state: String
-  edit_state_in: [String]
-  stake_ne: Boolean
-  stake_exists: Boolean
-  set_delegate_in: [String]
-  set_permissions_gte: String
-  set_verification_key_lte: String
-  edit_state_ne: String
-  send_ne: String
-  set_verification_key_ne: String
-  send_lte: String
-  set_delegate_gt: String
-  send_in: [String]
-  send_lt: String
-  AND: [StakePermissionQueryInput!]
-  set_permissions_exists: Boolean
-  set_delegate_nin: [String]
-  set_verification_key_in: [String]
-  stake: Boolean
-  set_permissions_in: [String]
-  set_permissions_gt: String
-  set_permissions_ne: String
-  send_gte: String
-  set_verification_key: String
-  set_verification_key_exists: Boolean
-  edit_state_gte: String
-  edit_state_lt: String
-}
-
-input TransactionReceiverQueryInput {
-  publicKey_lte: String
-  publicKey_gte: String
-  publicKey_lt: String
-  OR: [TransactionReceiverQueryInput!]
-  publicKey_nin: [String]
-  publicKey_exists: Boolean
-  publicKey: String
-  publicKey_gt: String
-  publicKey_in: [String]
-  publicKey_ne: String
-  AND: [TransactionReceiverQueryInput!]
-}
-
-type TransactionFeePayer {
-  token: Int
-}
-
-input BlockProtocolStateConsensusStateUpdateInput {
-  minWindowDensity_inc: Int
-  nextEpochData_unset: Boolean
-  epoch_unset: Boolean
-  slotSinceGenesis_inc: Int
-  epochCount_unset: Boolean
-  slotSinceGenesis_unset: Boolean
-  epoch_inc: Int
-  epochCount_inc: Int
-  stakingEpochData: BlockProtocolStateConsensusStateStakingEpochDatumUpdateInput
-  minWindowDensity_unset: Boolean
-  blockchainLength: Int
-  blockchainLength_inc: Int
-  lastVrfOutput_unset: Boolean
-  hasAncestorInSameCheckpointWindow_unset: Boolean
-  slot_unset: Boolean
-  totalCurrency_unset: Boolean
-  stakingEpochData_unset: Boolean
-  epochCount: Int
-  lastVrfOutput: String
-  blockHeight: Int
-  epoch: Int
-  hasAncestorInSameCheckpointWindow: Boolean
-  minWindowDensity: Int
-  blockchainLength_unset: Boolean
-  blockHeight_inc: Int
-  slotSinceGenesis: Int
-  blockHeight_unset: Boolean
-  totalCurrency_inc: Float
-  slot_inc: Int
-  totalCurrency: Float
-  nextEpochData: BlockProtocolStateConsensusStateNextEpochDatumUpdateInput
-  slot: Int
-}
-
-input BlockProtocolStateConsensusStateStakingEpochDatumUpdateInput {
-  startCheckpoint_unset: Boolean
-  startCheckpoint: String
-  epochLength_unset: Boolean
-  lockCheckpoint_unset: Boolean
-  seed_unset: Boolean
-  epochLength: Int
-  ledger: BlockProtocolStateConsensusStateStakingEpochDatumLedgerUpdateInput
-  ledger_unset: Boolean
-  lockCheckpoint: String
-  epochLength_inc: Int
-  seed: String
-}
-
-type Nextstake {
-  balance: Float
-  delegate: String
-  ledgerHash: String
-  nextDelegationTotals: NextDelegationTotal
-  nonce: Int
-  permissions: NextstakePermission
-  pk: String
-  public_key: String
-  receipt_chain_hash: String
-  timing: NextstakeTiming
-  token: Int
-  voting_for: String
-}
-
-input BlockTransactionUserCommandFromAccountQueryInput {
-  token_in: [Int]
-  token_nin: [Int]
-  token_lt: Int
-  token_lte: Int
-  token_gt: Int
-  token: Int
-  OR: [BlockTransactionUserCommandFromAccountQueryInput!]
-  token_exists: Boolean
-  token_ne: Int
-  token_gte: Int
-  AND: [BlockTransactionUserCommandFromAccountQueryInput!]
-}
-
-type Snark {
   block: Block
   blockHeight: Int
   canonical: Boolean
   dateTime: DateTime
-  fee: Float
-  prover: String
-  workIds: [Int]
-}
-
-input BlockProtocolStateInsertInput {
-  blockchainState: BlockProtocolStateBlockchainStateInsertInput
-  consensusState: BlockProtocolStateConsensusStateInsertInput
-  previousStateHash: String
-}
-
-input BlockTransactionUserCommandUpdateInput {
-  memo: String
-  fromAccount: BlockTransactionUserCommandFromAccountUpdateInput
-  kind_unset: Boolean
-  feePayer_unset: Boolean
-  source: BlockTransactionUserCommandSourceUpdateInput
-  to: String
-  blockStateHash_unset: Boolean
-  feePayer: BlockTransactionUserCommandFeePayerUpdateInput
-  fee_unset: Boolean
-  failureReason_unset: Boolean
-  blockHeight_inc: Int
-  hash: String
-  hash_unset: Boolean
-  feeToken_unset: Boolean
-  receiver: BlockTransactionUserCommandReceiverUpdateInput
-  isDelegation: Boolean
-  dateTime: DateTime
-  toAccount: BlockTransactionUserCommandToAccountUpdateInput
-  isDelegation_unset: Boolean
-  feeToken: Int
-  blockHeight_unset: Boolean
-  nonce_unset: Boolean
-  amount_inc: Float
-  blockStateHash: String
-  memo_unset: Boolean
-  dateTime_unset: Boolean
-  nonce: Int
-  token_inc: Int
-  feeToken_inc: Int
-  fee_inc: Float
-  token_unset: Boolean
-  amount_unset: Boolean
-  id_unset: Boolean
-  from_unset: Boolean
-  kind: String
-  blockHeight: Int
-  fee: Float
-  token: Int
-  from: String
-  amount: Float
   failureReason: String
-  receiver_unset: Boolean
-  source_unset: Boolean
-  fromAccount_unset: Boolean
-  nonce_inc: Int
-  toAccount_unset: Boolean
-  to_unset: Boolean
-  id: String
-}
-
-input BlockProtocolStateBlockchainStateQueryInput {
-  stagedLedgerHash: String
-  snarkedLedgerHash_lt: String
-  stagedLedgerHash_lt: String
-  date_lte: Long
-  snarkedLedgerHash_lte: String
-  utcDate_exists: Boolean
-  stagedLedgerHash_gt: String
-  utcDate_lte: Long
-  snarkedLedgerHash_gte: String
-  snarkedLedgerHash_exists: Boolean
-  utcDate_gte: Long
-  date_ne: Long
-  stagedLedgerHash_in: [String]
-  AND: [BlockProtocolStateBlockchainStateQueryInput!]
-  stagedLedgerHash_ne: String
-  utcDate_ne: Long
-  snarkedLedgerHash_in: [String]
-  date_gte: Long
-  snarkedLedgerHash: String
-  stagedLedgerHash_gte: String
-  utcDate: Long
-  utcDate_nin: [Long]
-  stagedLedgerHash_nin: [String]
-  snarkedLedgerHash_ne: String
-  stagedLedgerHash_exists: Boolean
-  snarkedLedgerHash_nin: [String]
-  date_gt: Long
-  utcDate_gt: Long
-  date_lt: Long
-  stagedLedgerHash_lte: String
-  OR: [BlockProtocolStateBlockchainStateQueryInput!]
-  date: Long
-  snarkedLedgerHash_gt: String
-  date_nin: [Long]
-  date_in: [Long]
-  date_exists: Boolean
-  utcDate_lt: Long
-  utcDate_in: [Long]
-}
-
-type BlockTransactionUserCommandToAccount {
-  token: Int
-}
-
-input BlockProtocolStateConsensusStateStakingEpochDatumLedgerInsertInput {
-  totalCurrency: Float
+  fee: Float
+  from: String
   hash: String
-}
-
-input BlockTransactionUserCommandFeePayerInsertInput {
-  token: Int
-}
-
-input TransactionFeePayerInsertInput {
-  token: Int
-}
-
-input TransactionSourceUpdateInput {
-  publicKey: String
-  publicKey_unset: Boolean
-}
-
-input BlockProtocolStateConsensusStateStakingEpochDatumQueryInput {
-  startCheckpoint_gt: String
-  epochLength_lte: Int
-  lockCheckpoint_ne: String
-  lockCheckpoint_gte: String
-  seed: String
-  startCheckpoint_ne: String
-  epochLength_exists: Boolean
-  lockCheckpoint_lt: String
-  startCheckpoint_lt: String
-  epochLength_gte: Int
-  epochLength_lt: Int
-  lockCheckpoint_gt: String
-  seed_nin: [String]
-  epochLength_ne: Int
-  epochLength_gt: Int
-  epochLength_in: [Int]
-  startCheckpoint_gte: String
-  OR: [BlockProtocolStateConsensusStateStakingEpochDatumQueryInput!]
-  lockCheckpoint_in: [String]
-  startCheckpoint_in: [String]
-  ledger_exists: Boolean
-  seed_in: [String]
-  lockCheckpoint_exists: Boolean
-  ledger: BlockProtocolStateConsensusStateStakingEpochDatumLedgerQueryInput
-  lockCheckpoint_nin: [String]
-  startCheckpoint_exists: Boolean
-  seed_exists: Boolean
-  lockCheckpoint_lte: String
-  AND: [BlockProtocolStateConsensusStateStakingEpochDatumQueryInput!]
-  startCheckpoint: String
-  startCheckpoint_lte: String
-  seed_lte: String
-  seed_lt: String
-  seed_gt: String
-  epochLength: Int
-  seed_gte: String
-  epochLength_nin: [Int]
-  lockCheckpoint: String
-  seed_ne: String
-  startCheckpoint_nin: [String]
-}
-
-input BlockProtocolStateBlockchainStateInsertInput {
-  snarkedLedgerHash: String
-  stagedLedgerHash: String
-  utcDate: Long
-  date: Long
-}
-
-scalar ObjectId
-
-input TransactionToAccountInsertInput {
-  token: Int
-}
-
-input StakePermissionUpdateInput {
-  set_permissions_unset: Boolean
-  send: String
-  set_delegate: String
-  set_delegate_unset: Boolean
-  stake_unset: Boolean
-  edit_state: String
-  send_unset: Boolean
-  set_permissions: String
-  set_verification_key: String
-  set_verification_key_unset: Boolean
-  edit_state_unset: Boolean
-  stake: Boolean
-}
-
-input NextstakeUpdateInput {
-  delegate_unset: Boolean
-  public_key_unset: Boolean
-  delegate: String
-  ledgerHash_unset: Boolean
-  nonce_inc: Int
-  nonce_unset: Boolean
-  pk: String
-  balance_inc: Float
-  token_unset: Boolean
-  pk_unset: Boolean
-  timing_unset: Boolean
-  public_key: String
-  ledgerHash: String
+  kind: String
+  memo: String
   nonce: Int
-  token: Int
-  token_inc: Int
-  timing: NextstakeTimingUpdateInput
-  permissions: NextstakePermissionUpdateInput
-  permissions_unset: Boolean
-  balance: Float
-  receipt_chain_hash: String
-  receipt_chain_hash_unset: Boolean
-  voting_for_unset: Boolean
-  balance_unset: Boolean
-  voting_for: String
-}
-
-input BlockWinnerAccountBalanceUpdateInput {
-  blockHeight_inc: Int
-  stateHash: String
-  unknown: Long
-  blockHeight: Int
-  locked: Long
-  stateHash_unset: Boolean
-  unknown_unset: Boolean
-  blockHeight_unset: Boolean
-  liquid_inc: Int
-  total: Long
-  liquid: Int
-  total_unset: Boolean
-  liquid_unset: Boolean
-  locked_unset: Boolean
-}
-
-type NextstakePermission {
-  edit_state: String
-  send: String
-  set_delegate: String
-  set_permissions: String
-  set_verification_key: String
-  stake: Boolean
-}
-
-type BlockTransactionUserCommandSource {
-  publicKey: String
-}
-
-type BlockCreatorAccount {
-  publicKey: String
+  receiver: TransactionReceiver
+  to: String
+  zkapp: TransactionZkapp
 }
 
 input TransactionQueryInput {
@@ -1461,576 +858,8 @@ input TransactionQueryInput {
   zkapp: Boolean
 }
 
-enum NextstakeSortByInput {
-  BALANCE_DESC
-  DELEGATE_ASC
-  NONCE_DESC
-  RECEIPT_CHAIN_HASH_ASC
-  NONCE_ASC
-  PUBLIC_KEY_DESC
-  RECEIPT_CHAIN_HASH_DESC
-  TOKEN_ASC
-  BALANCE_ASC
-  PUBLIC_KEY_ASC
-  TOKEN_DESC
-  VOTING_FOR_DESC
-  DELEGATE_DESC
-  LEDGERHASH_ASC
-  LEDGERHASH_DESC
-  PK_ASC
-  PK_DESC
-  VOTING_FOR_ASC
-  STAKE_DESC
-}
-
-input FeetransferBlockStateHashRelationInput {
-  link: String
-  create: BlockInsertInput
-}
-
-input BlockInsertInput {
-  stateHashField: String
-  receivedTime: DateTime
-  stateHash: String
-  transactions: BlockTransactionInsertInput
-  creator: String
-  winnerAccount: BlockWinnerAccountInsertInput
-  canonical: Boolean
-  dateTime: DateTime
-  creatorAccount: BlockCreatorAccountInsertInput
-  protocolState: BlockProtocolStateInsertInput
-  blockHeight: Int
-  snarkJobs: [BlockSnarkJobInsertInput]
-}
-
-input TransactionReceiverUpdateInput {
+type BlockCreatorAccount {
   publicKey: String
-  publicKey_unset: Boolean
-}
-
-input SnarkBlockStateHashRelationInput {
-  create: BlockInsertInput
-  link: String
-}
-
-input BlockTransactionUserCommandToAccountQueryInput {
-  token_in: [Int]
-  token_lte: Int
-  token_exists: Boolean
-  AND: [BlockTransactionUserCommandToAccountQueryInput!]
-  token_gt: Int
-  token_ne: Int
-  token_gte: Int
-  token: Int
-  token_lt: Int
-  OR: [BlockTransactionUserCommandToAccountQueryInput!]
-  token_nin: [Int]
-}
-
-type BlockProtocolStateConsensusStateStakingEpochDatum {
-  epochLength: Int
-  ledger: BlockProtocolStateConsensusStateStakingEpochDatumLedger
-  lockCheckpoint: String
-  seed: String
-  startCheckpoint: String
-}
-
-enum FeetransferSortByInput {
-  RECIPIENT_ASC
-  RECIPIENT_DESC
-  TYPE_ASC
-  BLOCKHEIGHT_DESC
-  BLOCKSTATEHASH_ASC
-  DATETIME_DESC
-  FEE_ASC
-  FEE_DESC
-  BLOCKHEIGHT_ASC
-  BLOCKSTATEHASH_DESC
-  DATETIME_ASC
-  TYPE_DESC
-}
-
-input BlockProtocolStateConsensusStateNextEpochDatumLedgerInsertInput {
-  hash: String
-  totalCurrency: Float
-}
-
-input BlockTransactionUserCommandSourceInsertInput {
-  publicKey: String
-}
-
-input BlockTransactionCoinbaseReceiverAccountInsertInput {
-  publicKey: String
-}
-
-input StakePermissionInsertInput {
-  edit_state: String
-  send: String
-  set_delegate: String
-  set_permissions: String
-  set_verification_key: String
-  stake: Boolean
-}
-
-type Query {
-  accounts(
-    limit: Int = 100
-    query: AccountQueryInput
-    sortBy: AccountSortByInput
-  ): [Account]!
-  block(query: BlockQueryInput): Block
-  blocks(
-    limit: Int = 100
-    sortBy: BlockSortByInput
-    query: BlockQueryInput
-  ): [Block]!
-  feetransfer(query: FeetransferQueryInput): Feetransfer
-  feetransfers(
-    query: FeetransferQueryInput
-    limit: Int = 100
-    sortBy: FeetransferSortByInput
-  ): [Feetransfer]!
-  nextstake(query: NextstakeQueryInput): Nextstake
-  nextstakes(
-    sortBy: NextstakeSortByInput
-    query: NextstakeQueryInput
-    limit: Int = 100
-  ): [Nextstake]!
-  snark(query: SnarkQueryInput): Snark
-  snarks(
-    query: SnarkQueryInput
-    limit: Int = 100
-    sortBy: SnarkSortByInput
-  ): [Snark]!
-  stake(query: StakesQueryInput): Stake
-  stakes(
-    query: StakesQueryInput
-    limit: Int = 100
-    sortBy: StakesSortByInput
-  ): [Stake]!
-  transaction(query: TransactionQueryInput): Transaction
-  transactions(
-    query: TransactionQueryInput
-    limit: Int = 100
-    sortBy: TransactionSortByInput
-  ): [Transaction]!
-  token(query: TokensQueryInput): Token
-  tokens(
-    query: TokensQueryInput
-    limit: Int = 100
-    sortBy: TokensSortByInput
-  ): [Token]!
-  tokenHolders(
-      query: TokenHoldersQueryInput
-      limit: Int = 100
-  ): [TokenHolder]!
-}
-
-scalar Long
-
-type BlockSnarkJob {
-  blockHeight: Int
-  blockStateHash: String
-  dateTime: DateTime
-  fee: Int
-  prover: String
-  workIds: [Int]
-}
-
-input BlockProtocolStateConsensusStateInsertInput {
-  minWindowDensity: Int
-  blockchainLength: Int
-  epoch: Int
-  stakingEpochData: BlockProtocolStateConsensusStateStakingEpochDatumInsertInput
-  epochCount: Int
-  hasAncestorInSameCheckpointWindow: Boolean
-  lastVrfOutput: String
-  slot: Int
-  blockHeight: Int
-  nextEpochData: BlockProtocolStateConsensusStateNextEpochDatumInsertInput
-  slotSinceGenesis: Int
-  totalCurrency: Float
-}
-
-input NextstakePermissionInsertInput {
-  set_delegate: String
-  set_permissions: String
-  set_verification_key: String
-  stake: Boolean
-  edit_state: String
-  send: String
-}
-
-scalar DateTime
-
-input TransactionFromAccountInsertInput {
-  token: Int
-}
-
-input NextstakeInsertInput {
-  permissions: NextstakePermissionInsertInput
-  ledgerHash: String
-  pk: String
-  receipt_chain_hash: String
-  token: Int
-  timing: NextstakeTimingInsertInput
-  nonce: Int
-  voting_for: String
-  balance: Float
-  delegate: String
-  public_key: String
-}
-
-input StakeUpdateInput {
-  chainId_unset: Boolean
-  chainId: String
-  permissions: StakePermissionUpdateInput
-  nonce_unset: Boolean
-  delegate: String
-  nonce_inc: Int
-  token_unset: Boolean
-  balance: Float
-  receipt_chain_hash_unset: Boolean
-  pk_unset: Boolean
-  balance_inc: Float
-  nonce: Int
-  receipt_chain_hash: String
-  delegate_unset: Boolean
-  token: Int
-  permissions_unset: Boolean
-  token_inc: Int
-  ledgerHash_unset: Boolean
-  epoch_unset: Boolean
-  ledgerHash: String
-  voting_for: String
-  public_key: String
-  timing: StakeTimingUpdateInput
-  voting_for_unset: Boolean
-  epoch: Int
-  timing_unset: Boolean
-  pk: String
-  epoch_inc: Int
-  public_key_unset: Boolean
-  balance_unset: Boolean
-}
-
-input NextstakeTimingUpdateInput {
-  vesting_period_unset: Boolean
-  initial_minimum_balance_inc: Float
-  vesting_increment_inc: Float
-  cliff_time_inc: Int
-  vesting_increment_unset: Boolean
-  cliff_amount_unset: Boolean
-  cliff_time: Int
-  cliff_amount: Float
-  initial_minimum_balance: Float
-  vesting_period_inc: Int
-  cliff_time_unset: Boolean
-  vesting_increment: Float
-  cliff_amount_inc: Float
-  initial_minimum_balance_unset: Boolean
-  vesting_period: Int
-}
-
-input StakeTimingInsertInput {
-  timed_epoch_end: Boolean
-  initial_minimum_balance: Float
-  untimed_slot: Int
-  vesting_period: Int
-  cliff_amount: Float
-  timed_weighting: Float
-  cliff_time: Int
-  timed_in_epoch: Boolean
-  vesting_increment: Float
-}
-
-input BlockTransactionCoinbaseReceiverAccountUpdateInput {
-  publicKey_unset: Boolean
-  publicKey: String
-}
-
-input BlockProtocolStateConsensusStateNextEpochDatumUpdateInput {
-  startCheckpoint: String
-  epochLength_unset: Boolean
-  lockCheckpoint_unset: Boolean
-  startCheckpoint_unset: Boolean
-  ledger_unset: Boolean
-  seed: String
-  epochLength: Int
-  lockCheckpoint: String
-  seed_unset: Boolean
-  epochLength_inc: Int
-  ledger: BlockProtocolStateConsensusStateNextEpochDatumLedgerUpdateInput
-}
-
-input BlockWinnerAccountInsertInput {
-  balance: BlockWinnerAccountBalanceInsertInput
-  publicKey: String
-}
-
-type Feetransfer {
-  blockHeight: Int
-  blockStateHash: Block
-  canonical: Boolean
-  dateTime: DateTime
-  fee: Int
-  recipient: String
-  type: String
-}
-
-input BlockSnarkJobUpdateInput {
-  blockHeight_inc: Int
-  blockHeight_unset: Boolean
-  prover: String
-  fee_unset: Boolean
-  dateTime_unset: Boolean
-  prover_unset: Boolean
-  blockStateHash: String
-  fee: Int
-  workIds_unset: Boolean
-  dateTime: DateTime
-  workIds: [Int]
-  fee_inc: Int
-  blockStateHash_unset: Boolean
-  blockHeight: Int
-}
-
-type StakePermission {
-  edit_state: String
-  send: String
-  set_delegate: String
-  set_permissions: String
-  set_verification_key: String
-  stake: Boolean
-}
-
-input BlockCreatorAccountQueryInput {
-  publicKey_exists: Boolean
-  publicKey_ne: String
-  publicKey_lte: String
-  OR: [BlockCreatorAccountQueryInput!]
-  publicKey_gte: String
-  publicKey_lt: String
-  publicKey_in: [String]
-  AND: [BlockCreatorAccountQueryInput!]
-  publicKey: String
-  publicKey_nin: [String]
-  publicKey_gt: String
-}
-
-input BlockProtocolStateConsensusStateNextEpochDatumQueryInput {
-  lockCheckpoint: String
-  seed_gte: String
-  ledger: BlockProtocolStateConsensusStateNextEpochDatumLedgerQueryInput
-  epochLength_ne: Int
-  lockCheckpoint_nin: [String]
-  seed_exists: Boolean
-  lockCheckpoint_lt: String
-  seed_nin: [String]
-  lockCheckpoint_exists: Boolean
-  seed: String
-  lockCheckpoint_in: [String]
-  startCheckpoint_nin: [String]
-  lockCheckpoint_ne: String
-  epochLength: Int
-  startCheckpoint_lte: String
-  AND: [BlockProtocolStateConsensusStateNextEpochDatumQueryInput!]
-  seed_ne: String
-  seed_lt: String
-  lockCheckpoint_lte: String
-  ledger_exists: Boolean
-  startCheckpoint_exists: Boolean
-  epochLength_exists: Boolean
-  lockCheckpoint_gt: String
-  epochLength_lte: Int
-  seed_in: [String]
-  lockCheckpoint_gte: String
-  startCheckpoint_ne: String
-  epochLength_gte: Int
-  startCheckpoint_gte: String
-  startCheckpoint_in: [String]
-  seed_lte: String
-  startCheckpoint: String
-  startCheckpoint_lt: String
-  epochLength_gt: Int
-  startCheckpoint_gt: String
-  epochLength_lt: Int
-  seed_gt: String
-  OR: [BlockProtocolStateConsensusStateNextEpochDatumQueryInput!]
-  epochLength_nin: [Int]
-  epochLength_in: [Int]
-}
-
-type BlockTransactionUserCommandFromAccount {
-  token: Int
-}
-
-enum StakesSortByInput {
-  CHAINID_ASC
-  PK_DESC
-  PUBLIC_KEY_ASC
-  BALANCE_DESC
-  DELEGATE_ASC
-  NONCE_DESC
-  RECEIPT_CHAIN_HASH_ASC
-  RECEIPT_CHAIN_HASH_DESC
-  VOTING_FOR_DESC
-  TOKEN_DESC
-  VOTING_FOR_ASC
-  CHAINID_DESC
-  DELEGATE_DESC
-  EPOCH_ASC
-  PK_ASC
-  LEDGERHASH_DESC
-  TOKEN_ASC
-  BALANCE_ASC
-  EPOCH_DESC
-  NONCE_ASC
-  PUBLIC_KEY_DESC
-  LEDGERHASH_ASC
-  STAKE_DESC
-  STAKE_ASC
-}
-
-input BlockProtocolStateConsensusStateNextEpochDatumLedgerQueryInput {
-  hash_gt: String
-  totalCurrency_gt: Float
-  hash: String
-  totalCurrency_lt: Float
-  totalCurrency_exists: Boolean
-  hash_exists: Boolean
-  hash_ne: String
-  totalCurrency_in: [Float]
-  totalCurrency_nin: [Float]
-  totalCurrency_lte: Float
-  totalCurrency_ne: Float
-  hash_in: [String]
-  AND: [BlockProtocolStateConsensusStateNextEpochDatumLedgerQueryInput!]
-  totalCurrency_gte: Float
-  hash_lt: String
-  hash_gte: String
-  hash_lte: String
-  OR: [BlockProtocolStateConsensusStateNextEpochDatumLedgerQueryInput!]
-  hash_nin: [String]
-  totalCurrency: Float
-}
-
-type Transaction {
-  amount: Float
-  block: Block
-  blockHeight: Int
-  canonical: Boolean
-  dateTime: DateTime
-  failureReason: String
-  fee: Float
-  feePayer: TransactionFeePayer
-  feeToken: Int
-  from: String
-  fromAccount: TransactionFromAccount
-  hash: String
-  id: String
-  isDelegation: Boolean
-  kind: String
-  memo: String
-  nonce: Int
-  receiver: TransactionReceiver
-  source: TransactionSource
-  to: String
-  toAccount: TransactionToAccount
-  token: Int
-  zkapp: TransactionZkapp
-}
-
-type BlockTransactionUserCommandFeePayer {
-  token: Int
-}
-
-type BlockWinnerAccountBalance {
-  blockHeight: Int
-  liquid: Int
-  locked: Long
-  stateHash: String
-  total: String
-  unknown: Long
-}
-
-input TransactionInsertInput {
-  from: String
-  kind: String
-  receiver: TransactionReceiverInsertInput
-  feePayer: TransactionFeePayerInsertInput
-  failureReason: String
-  isDelegation: Boolean
-  block: TransactionBlockStateHashRelationInput
-  dateTime: DateTime
-  feeToken: Int
-  to: String
-  canonical: Boolean
-  amount: Float
-  toAccount: TransactionToAccountInsertInput
-  token: Int
-  fee: Float
-  fromAccount: TransactionFromAccountInsertInput
-  hash: String
-  id: String
-  memo: String
-  source: TransactionSourceInsertInput
-  blockHeight: Int
-  nonce: Int
-}
-
-input BlockSnarkJobQueryInput {
-  prover: String
-  workIds_in: [Int]
-  fee_gt: Int
-  blockStateHash_exists: Boolean
-  prover_ne: String
-  blockHeight: Int
-  dateTime: DateTime
-  AND: [BlockSnarkJobQueryInput!]
-  blockHeight_lt: Int
-  dateTime_lt: DateTime
-  dateTime_ne: DateTime
-  prover_lte: String
-  dateTime_exists: Boolean
-  fee: Int
-  prover_exists: Boolean
-  dateTime_lte: DateTime
-  blockStateHash_lte: String
-  dateTime_gte: DateTime
-  dateTime_gt: DateTime
-  fee_ne: Int
-  fee_in: [Int]
-  blockHeight_ne: Int
-  prover_in: [String]
-  fee_exists: Boolean
-  workIds_exists: Boolean
-  blockHeight_in: [Int]
-  blockHeight_gte: Int
-  prover_nin: [String]
-  fee_nin: [Int]
-  fee_lt: Int
-  OR: [BlockSnarkJobQueryInput!]
-  workIds: [Int]
-  blockHeight_lte: Int
-  blockStateHash_nin: [String]
-  blockHeight_exists: Boolean
-  blockStateHash_ne: String
-  prover_lt: String
-  dateTime_nin: [DateTime]
-  blockStateHash_gt: String
-  blockHeight_gt: Int
-  blockStateHash_in: [String]
-  prover_gt: String
-  blockStateHash_gte: String
-  blockStateHash_lt: String
-  dateTime_in: [DateTime]
-  fee_lte: Int
-  prover_gte: String
-  workIds_nin: [Int]
-  blockStateHash: String
-  fee_gte: Int
-  blockHeight_nin: [Int]
 }
 
 input BlockQueryInput {
@@ -2107,80 +936,72 @@ input BlockQueryInput {
   stateHash_gt: String
 }
 
-input SnarkInsertInput {
-  fee: Float
-  prover: String
-  workIds: [Int]
-  blockHeight: Int
-  block: SnarkBlockStateHashRelationInput
-  canonical: Boolean
-  dateTime: DateTime
-}
-
-input BlockWinnerAccountUpdateInput {
-  balance: BlockWinnerAccountBalanceUpdateInput
-  balance_unset: Boolean
+input BlockCreatorAccountQueryInput {
+  publicKey_exists: Boolean
+  publicKey_ne: String
+  publicKey_lte: String
+  OR: [BlockCreatorAccountQueryInput!]
+  publicKey_gte: String
+  publicKey_lt: String
+  publicKey_in: [String]
+  AND: [BlockCreatorAccountQueryInput!]
   publicKey: String
-  publicKey_unset: Boolean
+  publicKey_nin: [String]
+  publicKey_gt: String
 }
 
-input BlockProtocolStateUpdateInput {
-  consensusState: BlockProtocolStateConsensusStateUpdateInput
-  consensusState_unset: Boolean
-  previousStateHash: String
-  previousStateHash_unset: Boolean
-  blockchainState: BlockProtocolStateBlockchainStateUpdateInput
-  blockchainState_unset: Boolean
-}
-
-input NextstakeTimingQueryInput {
-  cliff_time_in: [Int]
-  cliff_time_gt: Int
-  initial_minimum_balance: Float
-  cliff_amount_in: [Float]
-  vesting_period_ne: Int
-  vesting_increment: Float
-  vesting_period_gt: Int
-  initial_minimum_balance_nin: [Float]
-  vesting_increment_lt: Float
-  cliff_time_ne: Int
-  vesting_period_in: [Int]
-  initial_minimum_balance_lt: Float
-  initial_minimum_balance_gt: Float
-  initial_minimum_balance_lte: Float
-  cliff_time_lte: Int
-  cliff_time_lt: Int
-  cliff_amount_nin: [Float]
-  vesting_period_gte: Int
-  vesting_increment_lte: Float
-  initial_minimum_balance_ne: Float
-  initial_minimum_balance_exists: Boolean
-  vesting_increment_in: [Float]
-  initial_minimum_balance_gte: Float
-  vesting_period_nin: [Int]
-  vesting_period_exists: Boolean
-  vesting_increment_gte: Float
-  cliff_amount: Float
-  cliff_time_gte: Int
-  cliff_amount_ne: Float
-  vesting_period: Int
-  vesting_period_lte: Int
-  AND: [NextstakeTimingQueryInput!]
-  vesting_period_lt: Int
-  cliff_time_nin: [Int]
-  initial_minimum_balance_in: [Float]
-  cliff_time: Int
-  cliff_amount_gte: Float
-  vesting_increment_nin: [Float]
-  vesting_increment_gt: Float
-  cliff_amount_lt: Float
-  vesting_increment_exists: Boolean
-  cliff_amount_gt: Float
-  cliff_amount_lte: Float
-  cliff_time_exists: Boolean
-  cliff_amount_exists: Boolean
-  vesting_increment_ne: Float
-  OR: [NextstakeTimingQueryInput!]
+input BlockSnarkJobQueryInput {
+  prover: String
+  workIds_in: [Int]
+  fee_gt: Int
+  blockStateHash_exists: Boolean
+  prover_ne: String
+  blockHeight: Int
+  dateTime: DateTime
+  AND: [BlockSnarkJobQueryInput!]
+  blockHeight_lt: Int
+  dateTime_lt: DateTime
+  dateTime_ne: DateTime
+  prover_lte: String
+  dateTime_exists: Boolean
+  fee: Int
+  prover_exists: Boolean
+  dateTime_lte: DateTime
+  blockStateHash_lte: String
+  dateTime_gte: DateTime
+  dateTime_gt: DateTime
+  fee_ne: Int
+  fee_in: [Int]
+  blockHeight_ne: Int
+  prover_in: [String]
+  fee_exists: Boolean
+  workIds_exists: Boolean
+  blockHeight_in: [Int]
+  blockHeight_gte: Int
+  prover_nin: [String]
+  fee_nin: [Int]
+  fee_lt: Int
+  OR: [BlockSnarkJobQueryInput!]
+  workIds: [Int]
+  blockHeight_lte: Int
+  blockStateHash_nin: [String]
+  blockHeight_exists: Boolean
+  blockStateHash_ne: String
+  prover_lt: String
+  dateTime_nin: [DateTime]
+  blockStateHash_gt: String
+  blockHeight_gt: Int
+  blockStateHash_in: [String]
+  prover_gt: String
+  blockStateHash_gte: String
+  blockStateHash_lt: String
+  dateTime_in: [DateTime]
+  fee_lte: Int
+  prover_gte: String
+  workIds_nin: [Int]
+  blockStateHash: String
+  fee_gte: Int
+  blockHeight_nin: [Int]
 }
 
 input BlockProtocolStateQueryInput {
@@ -2201,506 +1022,45 @@ input BlockProtocolStateQueryInput {
   previousStateHash: String
 }
 
-input BlockProtocolStateConsensusStateStakingEpochDatumLedgerQueryInput {
-  hash_in: [String]
-  hash_exists: Boolean
-  totalCurrency: Float
-  hash_gte: String
-  totalCurrency_lt: Float
-  totalCurrency_nin: [Float]
-  hash: String
-  hash_lte: String
-  totalCurrency_exists: Boolean
-  totalCurrency_gt: Float
-  OR: [BlockProtocolStateConsensusStateStakingEpochDatumLedgerQueryInput!]
-  hash_gt: String
-  AND: [BlockProtocolStateConsensusStateStakingEpochDatumLedgerQueryInput!]
-  hash_ne: String
-  hash_nin: [String]
-  totalCurrency_gte: Float
-  totalCurrency_in: [Float]
-  totalCurrency_ne: Float
-  hash_lt: String
-  totalCurrency_lte: Float
-}
-
-type BlockProtocolState {
-  blockchainState: BlockProtocolStateBlockchainState
-  consensusState: BlockProtocolStateConsensusState
-  previousStateHash: String
-}
-
-type BlockProtocolStateConsensusStateNextEpochDatum {
-  epochLength: Int
-  ledger: BlockProtocolStateConsensusStateNextEpochDatumLedger
-  lockCheckpoint: String
-  seed: String
-  startCheckpoint: String
-}
-
-type DeleteManyPayload {
-  deletedCount: Int!
-}
-
-input SnarkUpdateInput {
-  block_unset: Boolean
-  fee_inc: Float
-  blockHeight: Int
-  blockHeight_inc: Int
-  dateTime_unset: Boolean
-  prover: String
-  dateTime: DateTime
-  blockHeight_unset: Boolean
-  workIds: [Int]
-  fee_unset: Boolean
-  workIds_unset: Boolean
-  canonical: Boolean
-  fee: Float
-  prover_unset: Boolean
-  block: SnarkBlockStateHashRelationInput
-  canonical_unset: Boolean
-}
-
-input TransactionSourceInsertInput {
-  publicKey: String
-}
-
-type BlockProtocolStateConsensusState {
-  blockHeight: Int
-  blockchainLength: Int
-  epoch: Int
-  epochCount: Int
-  hasAncestorInSameCheckpointWindow: Boolean
-  lastVrfOutput: String
-  minWindowDensity: Int
-  nextEpochData: BlockProtocolStateConsensusStateNextEpochDatum
-  slot: Int
-  slotSinceGenesis: Int
-  stakingEpochData: BlockProtocolStateConsensusStateStakingEpochDatum
-  totalCurrency: Float
-}
-
-input TransactionUpdateInput {
-  from_unset: Boolean
-  kind_unset: Boolean
-  id_unset: Boolean
-  token_unset: Boolean
-  memo_unset: Boolean
-  feeToken: Int
-  source: TransactionSourceUpdateInput
-  canonical_unset: Boolean
-  from: String
-  hash_unset: Boolean
-  nonce: Int
-  feePayer_unset: Boolean
-  memo: String
-  kind: String
-  failureReason_unset: Boolean
-  blockHeight: Int
-  dateTime: DateTime
-  blockHeight_inc: Int
-  block: TransactionBlockStateHashRelationInput
-  fee_inc: Float
-  isDelegation_unset: Boolean
-  feePayer: TransactionFeePayerUpdateInput
-  canonical: Boolean
-  toAccount_unset: Boolean
-  id: String
-  toAccount: TransactionToAccountUpdateInput
-  dateTime_unset: Boolean
-  fee: Float
-  fee_unset: Boolean
-  fromAccount_unset: Boolean
-  nonce_inc: Int
-  amount_unset: Boolean
-  isDelegation: Boolean
-  block_unset: Boolean
-  feeToken_inc: Int
-  failureReason: String
-  token_inc: Int
-  hash: String
-  amount: Float
-  blockHeight_unset: Boolean
-  source_unset: Boolean
-  to: String
-  nonce_unset: Boolean
-  fromAccount: TransactionFromAccountUpdateInput
-  token: Int
-  feeToken_unset: Boolean
-  receiver_unset: Boolean
-  to_unset: Boolean
-  amount_inc: Float
-  receiver: TransactionReceiverUpdateInput
-}
-
-input TransactionToAccountUpdateInput {
-  token_unset: Boolean
-  token: Int
-  token_inc: Int
-}
-
-type TransactionSource {
-  publicKey: String
-}
-
-input BlockTransactionUserCommandSourceQueryInput {
-  publicKey_gte: String
-  publicKey_exists: Boolean
-  publicKey_lte: String
-  AND: [BlockTransactionUserCommandSourceQueryInput!]
-  publicKey: String
-  publicKey_nin: [String]
-  publicKey_lt: String
-  publicKey_in: [String]
-  OR: [BlockTransactionUserCommandSourceQueryInput!]
-  publicKey_gt: String
-  publicKey_ne: String
-}
-
-type TransactionToAccount {
-  token: Int
-}
-
-enum BlockSortByInput {
-  DATETIME_ASC
-  RECEIVEDTIME_DESC
-  STATEHASHFIELD_ASC
-  STATEHASHFIELD_DESC
-  CREATOR_ASC
-  BLOCKHEIGHT_DESC
-  CREATOR_DESC
-  DATETIME_DESC
-  RECEIVEDTIME_ASC
-  STATEHASH_ASC
-  STATEHASH_DESC
-  BLOCKHEIGHT_ASC
-}
-
-enum SnarkSortByInput {
-  PROVER_ASC
-  BLOCKHEIGHT_ASC
-  BLOCKSTATEHASH_DESC
-  DATETIME_ASC
-  DATETIME_DESC
-  FEE_ASC
-  FEE_DESC
-  BLOCKHEIGHT_DESC
-  BLOCKSTATEHASH_ASC
-  PROVER_DESC
-}
-
-input BlockWinnerAccountBalanceInsertInput {
-  blockHeight: Int
-  liquid: Int
-  locked: Long
-  stateHash: String
-  total: Long
-  unknown: Long
-}
-
-input StakeInsertInput {
-  nonce: Int
-  pk: String
-  public_key: String
-  timing: StakeTimingInsertInput
-  token: Int
-  delegate: String
-  voting_for: String
-  receipt_chain_hash: String
-  ledgerHash: String
-  balance: Float
-  chainId: String
-  epoch: Int
-  permissions: StakePermissionInsertInput
-}
-
-input BlockWinnerAccountQueryInput {
-  balance: BlockWinnerAccountBalanceQueryInput
-  publicKey_in: [String]
-  publicKey_ne: String
-  publicKey_gt: String
-  AND: [BlockWinnerAccountQueryInput!]
-  publicKey_lt: String
-  publicKey_nin: [String]
-  OR: [BlockWinnerAccountQueryInput!]
-  publicKey_lte: String
-  publicKey_exists: Boolean
-  publicKey_gte: String
-  publicKey: String
-  balance_exists: Boolean
-}
-
-enum TransactionSortByInput {
-  DATETIME_ASC
-  FAILUREREASON_ASC
-  FROM_DESC
-  NONCE_DESC
-  TO_ASC
-  FAILUREREASON_DESC
-  HASH_DESC
-  KIND_ASC
-  MEMO_DESC
-  ID_DESC
-  KIND_DESC
-  MEMO_ASC
-  TO_DESC
-  BLOCKHEIGHT_ASC
-  FROM_ASC
-  HASH_ASC
-  ID_ASC
-  AMOUNT_ASC
-  AMOUNT_DESC
-  BLOCKSTATEHASH_ASC
-  FEETOKEN_DESC
-  TOKEN_DESC
-  BLOCKSTATEHASH_DESC
-  DATETIME_DESC
-  FEETOKEN_ASC
-  NONCE_ASC
-  BLOCKHEIGHT_DESC
-  FEE_ASC
-  FEE_DESC
-  TOKEN_ASC
-}
-
-input FeetransferUpdateInput {
-  fee: Int
-  canonical: Boolean
-  type: String
-  fee_inc: Int
-  blockStateHash_unset: Boolean
-  blockHeight_inc: Int
-  blockHeight_unset: Boolean
-  blockStateHash: FeetransferBlockStateHashRelationInput
-  dateTime: DateTime
-  fee_unset: Boolean
-  recipient: String
-  canonical_unset: Boolean
-  dateTime_unset: Boolean
-  type_unset: Boolean
-  recipient_unset: Boolean
-  blockHeight: Int
-}
-
-type NextstakeTiming {
-  cliff_amount: Float
-  cliff_time: Int
-  initial_minimum_balance: Float
-  vesting_increment: Float
-  vesting_period: Int
-}
-
-input BlockTransactionUserCommandFeePayerQueryInput {
-  token_lt: Int
-  token_lte: Int
-  token_in: [Int]
-  token_nin: [Int]
-  token: Int
-  token_ne: Int
-  token_exists: Boolean
-  token_gt: Int
-  token_gte: Int
-  AND: [BlockTransactionUserCommandFeePayerQueryInput!]
-  OR: [BlockTransactionUserCommandFeePayerQueryInput!]
-}
-
-type Block {
-  blockHeight: Int
-  canonical: Boolean
-  creator: String
-  creatorAccount: BlockCreatorAccount
-  dateTime: DateTime
-  protocolState: BlockProtocolState
-  receivedTime: DateTime
-  snarkFees: String
-  snarkJobs: [BlockSnarkJob]
-  stateHash: String
-  stateHashField: String
-  transactions: BlockTransaction
-  txFees: String
-  winnerAccount: BlockWinnerAccount
-}
-
-input BlockSnarkJobInsertInput {
-  fee: Int
-  prover: String
-  workIds: [Int]
-  blockHeight: Int
-  blockStateHash: String
-  dateTime: DateTime
-}
-
-input BlockProtocolStateBlockchainStateUpdateInput {
-  utcDate_unset: Boolean
-  date: Long
-  date_unset: Boolean
-  snarkedLedgerHash: String
-  snarkedLedgerHash_unset: Boolean
+input BlockProtocolStateBlockchainStateQueryInput {
   stagedLedgerHash: String
-  stagedLedgerHash_unset: Boolean
+  snarkedLedgerHash_lt: String
+  stagedLedgerHash_lt: String
+  date_lte: Long
+  snarkedLedgerHash_lte: String
+  utcDate_exists: Boolean
+  stagedLedgerHash_gt: String
+  utcDate_lte: Long
+  snarkedLedgerHash_gte: String
+  snarkedLedgerHash_exists: Boolean
+  utcDate_gte: Long
+  date_ne: Long
+  stagedLedgerHash_in: [String]
+  AND: [BlockProtocolStateBlockchainStateQueryInput!]
+  stagedLedgerHash_ne: String
+  utcDate_ne: Long
+  snarkedLedgerHash_in: [String]
+  date_gte: Long
+  snarkedLedgerHash: String
+  stagedLedgerHash_gte: String
   utcDate: Long
-}
-
-input BlockTransactionCoinbaseReceiverAccountQueryInput {
-  publicKey_gt: String
-  publicKey_gte: String
-  publicKey_lte: String
-  publicKey_exists: Boolean
-  OR: [BlockTransactionCoinbaseReceiverAccountQueryInput!]
-  publicKey_in: [String]
-  publicKey_nin: [String]
-  publicKey_ne: String
-  publicKey: String
-  publicKey_lt: String
-  AND: [BlockTransactionCoinbaseReceiverAccountQueryInput!]
-}
-
-type BlockTransactionUserCommandReceiver {
-  publicKey: String
-}
-
-input TransactionToAccountQueryInput {
-  OR: [TransactionToAccountQueryInput!]
-  token_nin: [Int]
-  AND: [TransactionToAccountQueryInput!]
-  token: Int
-  token_gt: Int
-  token_gte: Int
-  token_lt: Int
-  token_lte: Int
-  token_in: [Int]
-  token_exists: Boolean
-  token_ne: Int
-}
-
-type BlockProtocolStateConsensusStateNextEpochDatumLedger {
-  hash: String
-  totalCurrency: Float
-}
-
-input BlockTransactionFeeTransferInsertInput {
-  fee: Long
-  recipient: String
-  type: String
-}
-
-input BlockTransactionUserCommandToAccountUpdateInput {
-  token: Int
-  token_inc: Int
-  token_unset: Boolean
-}
-
-input TransactionFeePayerQueryInput {
-  token_exists: Boolean
-  token_lte: Int
-  AND: [TransactionFeePayerQueryInput!]
-  OR: [TransactionFeePayerQueryInput!]
-  token_ne: Int
-  token_lt: Int
-  token_nin: [Int]
-  token: Int
-  token_gt: Int
-  token_gte: Int
-  token_in: [Int]
-}
-
-type BlockProtocolStateConsensusStateStakingEpochDatumLedger {
-  hash: String
-  totalCurrency: Float
-}
-
-input BlockTransactionUserCommandReceiverInsertInput {
-  publicKey: String
-}
-
-input NextstakeQueryInput {
-  receipt_chain_hash_gte: String
-  public_key_in: [String]
-  receipt_chain_hash_exists: Boolean
-  public_key_exists: Boolean
-  balance_in: [Float]
-  nonce_gte: Int
-  ledgerHash_in: [String]
-  pk_lte: String
-  receipt_chain_hash_lt: String
-  permissions_exists: Boolean
-  pk_lt: String
-  timing: NextstakeTimingQueryInput
-  voting_for: String
-  delegate_in: [String]
-  pk_ne: String
-  public_key_nin: [String]
-  delegate_lt: String
-  pk_gt: String
-  ledgerHash_gte: String
-  nonce_in: [Int]
-  voting_for_in: [String]
-  delegate_lte: String
-  delegate_gt: String
-  receipt_chain_hash_ne: String
-  pk_nin: [String]
-  public_key_lt: String
-  nonce_nin: [Int]
-  nonce_ne: Int
-  delegate: String
-  voting_for_exists: Boolean
-  voting_for_lt: String
-  ledgerHash: String
-  voting_for_lte: String
-  pk_exists: Boolean
-  receipt_chain_hash_nin: [String]
-  delegate_exists: Boolean
-  public_key_lte: String
-  balance_gte: Float
-  voting_for_gte: String
-  token_lt: Int
-  timing_exists: Boolean
-  delegate_nin: [String]
-  receipt_chain_hash_gt: String
-  ledgerHash_gt: String
-  token_lte: Int
-  pk_in: [String]
-  nonce_lte: Int
-  delegate_ne: String
-  public_key_gte: String
-  balance_exists: Boolean
-  ledgerHash_lte: String
-  delegate_gte: String
-  token: Int
-  receipt_chain_hash_in: [String]
-  ledgerHash_nin: [String]
-  token_in: [Int]
-  nonce_exists: Boolean
-  ledgerHash_exists: Boolean
-  nonce_gt: Int
-  public_key: String
-  balance: Float
-  receipt_chain_hash_lte: String
-  balance_gt: Float
-  ledgerHash_ne: String
-  public_key_ne: String
-  token_ne: Int
-  ledgerHash_lt: String
-  balance_lt: Float
-  nonce_lt: Int
-  voting_for_nin: [String]
-  pk_gte: String
-  voting_for_ne: String
-  token_nin: [Int]
-  voting_for_gt: String
-  token_exists: Boolean
-  balance_lte: Float
-  receipt_chain_hash: String
-  balance_nin: [Float]
-  OR: [NextstakeQueryInput!]
-  balance_ne: Float
-  permissions: NextstakePermissionQueryInput
-  public_key_gt: String
-  token_gte: Int
-  AND: [NextstakeQueryInput!]
-  nonce: Int
-  pk: String
-  token_gt: Int
+  utcDate_nin: [Long]
+  stagedLedgerHash_nin: [String]
+  snarkedLedgerHash_ne: String
+  stagedLedgerHash_exists: Boolean
+  snarkedLedgerHash_nin: [String]
+  date_gt: Long
+  utcDate_gt: Long
+  date_lt: Long
+  stagedLedgerHash_lte: String
+  OR: [BlockProtocolStateBlockchainStateQueryInput!]
+  date: Long
+  snarkedLedgerHash_gt: String
+  date_nin: [Long]
+  date_in: [Long]
+  date_exists: Boolean
+  utcDate_lt: Long
+  utcDate_in: [Long]
 }
 
 input BlockProtocolStateConsensusStateQueryInput {
@@ -2796,298 +1156,592 @@ input BlockProtocolStateConsensusStateQueryInput {
   totalCurrency: Float
 }
 
-input SnarkQueryInput {
-  blockHeight_lt: Int
-  fee_in: [Float]
-  prover_gte: String
-  fee_lt: Float
-  dateTime_nin: [DateTime]
-  prover_in: [String]
-  prover_ne: String
-  blockHeight_gt: Int
-  prover: String
-  block_exists: Boolean
-  dateTime_lte: DateTime
-  dateTime: DateTime
-  fee_gt: Float
-  dateTime_exists: Boolean
-  workIds_exists: Boolean
-  prover_lte: String
-  dateTime_in: [DateTime]
-  blockHeight_nin: [Int]
-  fee_exists: Boolean
-  canonical: Boolean
-  canonical_ne: Boolean
-  dateTime_gt: DateTime
-  blockHeight_exists: Boolean
-  block: BlockQueryInput
-  blockHeight_ne: Int
-  blockHeight_gte: Int
-  workIds_in: [Int]
-  fee: Float
-  fee_gte: Float
-  prover_nin: [String]
-  AND: [SnarkQueryInput!]
-  prover_exists: Boolean
-  OR: [SnarkQueryInput!]
-  dateTime_ne: DateTime
-  workIds: [Int]
-  dateTime_lt: DateTime
-  blockHeight_in: [Int]
-  fee_nin: [Float]
-  workIds_nin: [Int]
-  prover_lt: String
-  prover_gt: String
-  blockHeight_lte: Int
-  fee_lte: Float
-  dateTime_gte: DateTime
-  fee_ne: Float
+enum BlockSortByInput {
+  DATETIME_ASC
+  RECEIVEDTIME_DESC
+  STATEHASHFIELD_ASC
+  STATEHASHFIELD_DESC
+  CREATOR_ASC
+  BLOCKHEIGHT_DESC
+  CREATOR_DESC
+  DATETIME_DESC
+  RECEIVEDTIME_ASC
+  STATEHASH_ASC
+  STATEHASH_DESC
+  BLOCKHEIGHT_ASC
+}
+
+enum SnarkSortByInput {
+  PROVER_ASC
+  BLOCKHEIGHT_ASC
+  BLOCKSTATEHASH_DESC
+  DATETIME_ASC
+  DATETIME_DESC
+  FEE_ASC
+  FEE_DESC
+  BLOCKHEIGHT_DESC
+  BLOCKSTATEHASH_ASC
+  PROVER_DESC
+}
+
+enum TransactionSortByInput {
+  DATETIME_ASC
+  FAILUREREASON_ASC
+  FROM_DESC
+  NONCE_DESC
+  TO_ASC
+  FAILUREREASON_DESC
+  HASH_DESC
+  KIND_ASC
+  MEMO_DESC
+  ID_DESC
+  KIND_DESC
+  MEMO_ASC
+  TO_DESC
+  BLOCKHEIGHT_ASC
+  FROM_ASC
+  HASH_ASC
+  ID_ASC
+  AMOUNT_ASC
+  AMOUNT_DESC
+  BLOCKSTATEHASH_ASC
+  FEETOKEN_DESC
+  TOKEN_DESC
+  BLOCKSTATEHASH_DESC
+  DATETIME_DESC
+  FEETOKEN_ASC
+  NONCE_ASC
+  BLOCKHEIGHT_DESC
+  FEE_ASC
+  FEE_DESC
+  TOKEN_ASC
+}
+
+enum FeetransferSortByInput {
+  RECIPIENT_ASC
+  RECIPIENT_DESC
+  TYPE_ASC
+  BLOCKHEIGHT_DESC
+  BLOCKSTATEHASH_ASC
+  DATETIME_DESC
+  FEE_ASC
+  FEE_DESC
+  BLOCKHEIGHT_ASC
+  BLOCKSTATEHASH_DESC
+  DATETIME_ASC
+  TYPE_DESC
+}
+
+enum StakesSortByInput {
+  CHAINID_ASC
+  PK_DESC
+  PUBLIC_KEY_ASC
+  BALANCE_DESC
+  DELEGATE_ASC
+  NONCE_DESC
+  RECEIPT_CHAIN_HASH_ASC
+  RECEIPT_CHAIN_HASH_DESC
+  VOTING_FOR_DESC
+  TOKEN_DESC
+  VOTING_FOR_ASC
+  CHAINID_DESC
+  DELEGATE_DESC
+  EPOCH_ASC
+  PK_ASC
+  LEDGERHASH_DESC
+  TOKEN_ASC
+  BALANCE_ASC
+  EPOCH_DESC
+  NONCE_ASC
+  PUBLIC_KEY_DESC
+  LEDGERHASH_ASC
+  STAKE_DESC
+  STAKE_ASC
+}
+
+type Block {
   blockHeight: Int
-  canonical_exists: Boolean
+  canonical: Boolean
+  creatorAccount: BlockCreatorAccount
+  dateTime: DateTime
+  protocolState: BlockProtocolState
+  snarkFees: String
+  snarkJobs: [BlockSnarkJob]
+  stateHash: String
+  transactions: BlockTransaction
+  txFees: String
+  winnerAccount: BlockWinnerAccount
 }
 
-type Mutation {
-  deleteManyBlocks(query: BlockQueryInput): DeleteManyPayload
-  deleteManyFeetransfers(query: FeetransferQueryInput): DeleteManyPayload
-  deleteManyNextstakes(query: NextstakeQueryInput): DeleteManyPayload
-  deleteManySnarks(query: SnarkQueryInput): DeleteManyPayload
-  deleteManyStakes(query: StakesQueryInput): DeleteManyPayload
-  deleteManyTransactions(query: TransactionQueryInput): DeleteManyPayload
-  deleteOneBlock(query: BlockQueryInput!): Block
-  deleteOneFeetransfer(query: FeetransferQueryInput!): Feetransfer
-  deleteOneNextstake(query: NextstakeQueryInput!): Nextstake
-  deleteOneSnark(query: SnarkQueryInput!): Snark
-  deleteOneStake(query: StakesQueryInput!): Stake
-  deleteOneTransaction(query: TransactionQueryInput!): Transaction
-  insertManyBlocks(data: [BlockInsertInput!]!): InsertManyPayload
-  insertManyFeetransfers(data: [FeetransferInsertInput!]!): InsertManyPayload
-  insertManyNextstakes(data: [NextstakeInsertInput!]!): InsertManyPayload
-  insertManySnarks(data: [SnarkInsertInput!]!): InsertManyPayload
-  insertManyStakes(data: [StakeInsertInput!]!): InsertManyPayload
-  insertManyTransactions(data: [TransactionInsertInput!]!): InsertManyPayload
-  insertOneBlock(data: BlockInsertInput!): Block
-  insertOneFeetransfer(data: FeetransferInsertInput!): Feetransfer
-  insertOneNextstake(data: NextstakeInsertInput!): Nextstake
-  insertOneSnark(data: SnarkInsertInput!): Snark
-  insertOneStake(data: StakeInsertInput!): Stake
-  insertOneTransaction(data: TransactionInsertInput!): Transaction
-  replaceOneBlock(query: BlockQueryInput, data: BlockInsertInput!): Block
-  replaceOneFeetransfer(
-    query: FeetransferQueryInput
-    data: FeetransferInsertInput!
-  ): Feetransfer
-  replaceOneNextstake(
-    query: NextstakeQueryInput
-    data: NextstakeInsertInput!
-  ): Nextstake
-  replaceOneSnark(query: SnarkQueryInput, data: SnarkInsertInput!): Snark
-  replaceOneStake(query: StakesQueryInput, data: StakeInsertInput!): Stake
-  replaceOneTransaction(
-    query: TransactionQueryInput
-    data: TransactionInsertInput!
-  ): Transaction
-  updateManyBlocks(
-    query: BlockQueryInput
-    set: BlockUpdateInput!
-  ): UpdateManyPayload
-  updateManyFeetransfers(
-    set: FeetransferUpdateInput!
-    query: FeetransferQueryInput
-  ): UpdateManyPayload
-  updateManyNextstakes(
-    query: NextstakeQueryInput
-    set: NextstakeUpdateInput!
-  ): UpdateManyPayload
-  updateManySnarks(
-    set: SnarkUpdateInput!
-    query: SnarkQueryInput
-  ): UpdateManyPayload
-  updateManyStakes(
-    query: StakesQueryInput
-    set: StakeUpdateInput!
-  ): UpdateManyPayload
-  updateManyTransactions(
-    query: TransactionQueryInput
-    set: TransactionUpdateInput!
-  ): UpdateManyPayload
-  updateOneBlock(query: BlockQueryInput, set: BlockUpdateInput!): Block
-  updateOneFeetransfer(
-    set: FeetransferUpdateInput!
-    query: FeetransferQueryInput
-  ): Feetransfer
-  updateOneNextstake(
-    query: NextstakeQueryInput
-    set: NextstakeUpdateInput!
-  ): Nextstake
-  updateOneSnark(query: SnarkQueryInput, set: SnarkUpdateInput!): Snark
-  updateOneStake(query: StakesQueryInput, set: StakeUpdateInput!): Stake
-  updateOneTransaction(
-    query: TransactionQueryInput
-    set: TransactionUpdateInput!
-  ): Transaction
-  upsertOneBlock(query: BlockQueryInput, data: BlockInsertInput!): Block
-  upsertOneFeetransfer(
-    query: FeetransferQueryInput
-    data: FeetransferInsertInput!
-  ): Feetransfer
-  upsertOneNextstake(
-    data: NextstakeInsertInput!
-    query: NextstakeQueryInput
-  ): Nextstake
-  upsertOneSnark(query: SnarkQueryInput, data: SnarkInsertInput!): Snark
-  upsertOneStake(query: StakesQueryInput, data: StakeInsertInput!): Stake
-  upsertOneTransaction(
-    query: TransactionQueryInput
-    data: TransactionInsertInput!
-  ): Transaction
+input BlockTransactionUserCommandReceiverQueryInput {
+  publicKey_lte: String
+  OR: [BlockTransactionUserCommandReceiverQueryInput!]
+  publicKey: String
+  publicKey_lt: String
+  publicKey_in: [String]
+  AND: [BlockTransactionUserCommandReceiverQueryInput!]
+  publicKey_nin: [String]
+  publicKey_exists: Boolean
+  publicKey_ne: String
+  publicKey_gt: String
+  publicKey_gte: String
 }
 
-input TransactionFeePayerUpdateInput {
+input BlockTransactionUserCommandSourceQueryInput {
+  publicKey_gte: String
+  publicKey_exists: Boolean
+  publicKey_lte: String
+  AND: [BlockTransactionUserCommandSourceQueryInput!]
+  publicKey: String
+  publicKey_nin: [String]
+  publicKey_lt: String
+  publicKey_in: [String]
+  OR: [BlockTransactionUserCommandSourceQueryInput!]
+  publicKey_gt: String
+  publicKey_ne: String
+}
+
+input BlockTransactionUserCommandFeePayerQueryInput {
+  token_lt: Int
+  token_lte: Int
+  token_in: [Int]
+  token_nin: [Int]
   token: Int
-  token_inc: Int
-  token_unset: Boolean
+  token_ne: Int
+  token_exists: Boolean
+  token_gt: Int
+  token_gte: Int
+  AND: [BlockTransactionUserCommandFeePayerQueryInput!]
+  OR: [BlockTransactionUserCommandFeePayerQueryInput!]
 }
 
-input TransactionFromAccountUpdateInput {
-  token_unset: Boolean
-  token_inc: Int
-  token: Int
-}
-
-input StakeTimingUpdateInput {
-  untimed_slot: Int
-  initial_minimum_balance_inc: Float
-  timed_in_epoch_unset: Boolean
-  cliff_amount_unset: Boolean
-  timed_in_epoch: Boolean
-  cliff_amount_inc: Float
-  untimed_slot_inc: Int
-  cliff_time_unset: Boolean
-  cliff_time: Int
-  vesting_increment_unset: Boolean
-  vesting_increment: Float
-  timed_weighting_inc: Float
-  untimed_slot_unset: Boolean
-  vesting_period_inc: Int
-  cliff_time_inc: Int
-  initial_minimum_balance_unset: Boolean
-  timed_weighting: Float
-  vesting_period: Int
-  vesting_increment_inc: Float
-  vesting_period_unset: Boolean
-  initial_minimum_balance: Float
-  timed_epoch_end: Boolean
-  timed_weighting_unset: Boolean
-  cliff_amount: Float
-  timed_epoch_end_unset: Boolean
-}
-
-input StakesQueryInput {
-  genesisStateHash: String
-  stake_lte: String
-  timing_exists: Boolean
-  chainId_gte: String
-  balance_ne: Float
-  nonce: Int
-  delegate_gte: String
-  epoch_nin: [Int]
-  public_key_gt: String
-  ledgerHash_nin: [String]
-  ledgerHash_lt: String
-  chainId_in: [String]
-  delegate_nin: [String]
+input BlockTransactionUserCommandFromAccountQueryInput {
+  token_in: [Int]
   token_nin: [Int]
   token_lt: Int
-  pk_gte: String
-  balance_gt: Float
-  ledgerHash_lte: String
-  epoch_in: [Int]
-  ledgerHash_gt: String
-  delegate_gt: String
-  pk_nin: [String]
-  balance_lte: Float
-  public_key_nin: [String]
-  ledgerHash_ne: String
-  voting_for: String
-  nonce_in: [Int]
-  permissions_exists: Boolean
-  permissions: StakePermissionQueryInput
-  chainId_nin: [String]
-  token_gte: Int
-  chainId_gt: String
-  nonce_lt: Int
-  pk_gt: String
-  voting_for_lte: String
-  receipt_chain_hash_in: [String]
-  public_key_gte: String
-  ledgerHash: String
-  chainId_lte: String
-  ledgerHash_in: [String]
-  receipt_chain_hash_lt: String
-  voting_for_gt: String
-  balance_lt: Float
-  token_ne: Int
-  pk_in: [String]
-  balance_exists: Boolean
-  voting_for_gte: String
-  delegate: String
-  OR: [StakesQueryInput!]
-  balance_nin: [Float]
-  epoch_ne: Int
-  nonce_gte: Int
-  AND: [StakesQueryInput!]
-  voting_for_exists: Boolean
-  public_key_exists: Boolean
-  token_in: [Int]
-  receipt_chain_hash_lte: String
-  epoch_lte: Int
-  balance_gte: Float
-  voting_for_lt: String
-  chainId: String
-  delegate_ne: String
-  public_key_in: [String]
-  delegate_lte: String
-  pk_lte: String
-  receipt_chain_hash_ne: String
-  voting_for_in: [String]
-  public_key_lte: String
-  receipt_chain_hash: String
-  voting_for_ne: String
-  token: Int
-  public_key: String
-  balance_in: [Float]
-  public_key_lt: String
-  chainId_exists: Boolean
   token_lte: Int
-  delegate_exists: Boolean
-  balance: Float
-  receipt_chain_hash_gte: String
-  epoch_exists: Boolean
-  nonce_nin: [Int]
-  chainId_ne: String
-  epoch_gte: Int
-  epoch_gt: Int
-  voting_for_nin: [String]
-  pk: String
-  pk_ne: String
-  nonce_exists: Boolean
-  receipt_chain_hash_exists: Boolean
-  token_exists: Boolean
-  epoch: Int
-  receipt_chain_hash_gt: String
-  chainId_lt: String
   token_gt: Int
-  nonce_gt: Int
-  receipt_chain_hash_nin: [String]
-  timing: StakeTimingQueryInput
-  pk_lt: String
-  public_key_ne: String
-  nonce_ne: Int
-  epoch_lt: Int
-  nonce_lte: Int
-  delegate_in: [String]
-  ledgerHash_gte: String
-  ledgerHash_exists: Boolean
-  pk_exists: Boolean
-  delegate_lt: String
+  token: Int
+  OR: [BlockTransactionUserCommandFromAccountQueryInput!]
+  token_exists: Boolean
+  token_ne: Int
+  token_gte: Int
+  AND: [BlockTransactionUserCommandFromAccountQueryInput!]
+}
+
+input BlockTransactionUserCommandToAccountQueryInput {
+  token_in: [Int]
+  token_lte: Int
+  token_exists: Boolean
+  AND: [BlockTransactionUserCommandToAccountQueryInput!]
+  token_gt: Int
+  token_ne: Int
+  token_gte: Int
+  token: Int
+  token_lt: Int
+  OR: [BlockTransactionUserCommandToAccountQueryInput!]
+  token_nin: [Int]
+}
+
+input StakePermissionQueryInput {
+  set_delegate_ne: String
+  set_verification_key_gte: String
+  send_gt: String
+  send_exists: Boolean
+  set_delegate_lte: String
+  set_delegate_lt: String
+  set_permissions_lte: String
+  edit_state_nin: [String]
+  send_nin: [String]
+  edit_state_exists: Boolean
+  edit_state_gt: String
+  set_permissions_nin: [String]
+  set_verification_key_gt: String
+  OR: [StakePermissionQueryInput!]
+  edit_state_lte: String
+  set_permissions_lt: String
+  set_verification_key_lt: String
+  send: String
+  set_permissions: String
+  set_delegate: String
+  set_delegate_exists: Boolean
+  set_verification_key_nin: [String]
+  set_delegate_gte: String
+  edit_state: String
+  edit_state_in: [String]
+  stake_ne: Boolean
+  stake_exists: Boolean
+  set_delegate_in: [String]
+  set_permissions_gte: String
+  set_verification_key_lte: String
+  edit_state_ne: String
+  send_ne: String
+  set_verification_key_ne: String
+  send_lte: String
+  set_delegate_gt: String
+  send_in: [String]
+  send_lt: String
+  AND: [StakePermissionQueryInput!]
+  set_permissions_exists: Boolean
+  set_delegate_nin: [String]
+  set_verification_key_in: [String]
+  stake: Boolean
+  set_permissions_in: [String]
+  set_permissions_gt: String
+  set_permissions_ne: String
+  send_gte: String
+  set_verification_key: String
+  set_verification_key_exists: Boolean
+  edit_state_gte: String
+  edit_state_lt: String
+}
+
+input StakeTimingQueryInput {
+  untimed_slot_ne: Int
+  vesting_period_ne: Int
+  timed_weighting_gt: Float
+  vesting_increment_gt: Float
+  initial_minimum_balance_nin: [Float]
+  vesting_period_in: [Int]
+  untimed_slot_gt: Int
+  vesting_period_exists: Boolean
+  untimed_slot_nin: [Int]
+  vesting_period_gte: Int
+  cliff_amount: Float
+  cliff_amount_exists: Boolean
+  initial_minimum_balance_gt: Float
+  timed_in_epoch: Boolean
+  timed_epoch_end_ne: Boolean
+  untimed_slot_in: [Int]
+  initial_minimum_balance_exists: Boolean
+  cliff_amount_in: [Float]
+  cliff_time_gt: Int
+  untimed_slot: Int
+  vesting_period_lte: Int
+  initial_minimum_balance_in: [Float]
+  initial_minimum_balance_ne: Float
+  untimed_slot_exists: Boolean
+  untimed_slot_gte: Int
+  cliff_time_exists: Boolean
+  vesting_period_nin: [Int]
+  untimed_slot_lt: Int
+  initial_minimum_balance_lte: Float
+  timed_weighting: Float
+  vesting_increment_exists: Boolean
+  cliff_time_gte: Int
+  vesting_increment: Float
+  untimed_slot_lte: Int
+  cliff_time_nin: [Int]
+  timed_epoch_end_exists: Boolean
+  cliff_amount_gte: Float
+  cliff_time_in: [Int]
+  vesting_period: Int
+  vesting_increment_lt: Float
+  vesting_increment_in: [Float]
+  cliff_time_lte: Int
+  vesting_increment_lte: Float
+  AND: [StakeTimingQueryInput!]
+  initial_minimum_balance_lt: Float
+  cliff_time_lt: Int
+  cliff_amount_lt: Float
+  cliff_time_ne: Int
+  cliff_amount_nin: [Float]
+  vesting_increment_ne: Float
+  cliff_amount_gt: Float
+  vesting_increment_gte: Float
+  timed_weighting_gte: Float
+  timed_weighting_lt: Float
+  cliff_amount_lte: Float
+  timed_weighting_in: [Float]
+  vesting_increment_nin: [Float]
+  vesting_period_lt: Int
+  OR: [StakeTimingQueryInput!]
+  timed_in_epoch_exists: Boolean
+  cliff_amount_ne: Float
+  timed_weighting_ne: Float
+  timed_in_epoch_ne: Boolean
+  cliff_time: Int
+  timed_weighting_exists: Boolean
+  timed_epoch_end: Boolean
+  timed_weighting_nin: [Float]
+  vesting_period_gt: Int
+  initial_minimum_balance: Float
+  initial_minimum_balance_gte: Float
+  timed_weighting_lte: Float
+}
+
+input TransactionFromAccountQueryInput {
+  token_nin: [Int]
+  token_in: [Int]
+  OR: [TransactionFromAccountQueryInput!]
+  token: Int
+  token_gte: Int
+  token_gt: Int
+  token_lt: Int
+  token_lte: Int
+  token_ne: Int
+  AND: [TransactionFromAccountQueryInput!]
+  token_exists: Boolean
+}
+
+input TransactionFeePayerQueryInput {
+  token_exists: Boolean
+  token_lte: Int
+  AND: [TransactionFeePayerQueryInput!]
+  OR: [TransactionFeePayerQueryInput!]
+  token_ne: Int
+  token_lt: Int
+  token_nin: [Int]
+  token: Int
+  token_gt: Int
+  token_gte: Int
+  token_in: [Int]
+}
+
+input TransactionReceiverQueryInput {
+  publicKey_lte: String
+  publicKey_gte: String
+  publicKey_lt: String
+  OR: [TransactionReceiverQueryInput!]
+  publicKey_nin: [String]
+  publicKey_exists: Boolean
+  publicKey: String
+  publicKey_gt: String
+  publicKey_in: [String]
+  publicKey_ne: String
+  AND: [TransactionReceiverQueryInput!]
+}
+
+input TransactionSourceQueryInput {
+  publicKey_nin: [String]
+  OR: [TransactionSourceQueryInput!]
+  publicKey_lte: String
+  publicKey_exists: Boolean
+  publicKey_ne: String
+  AND: [TransactionSourceQueryInput!]
+  publicKey_in: [String]
+  publicKey: String
+  publicKey_gt: String
+  publicKey_gte: String
+  publicKey_lt: String
+}
+
+input TransactionToAccountQueryInput {
+  OR: [TransactionToAccountQueryInput!]
+  token_nin: [Int]
+  AND: [TransactionToAccountQueryInput!]
+  token: Int
+  token_gt: Int
+  token_gte: Int
+  token_lt: Int
+  token_lte: Int
+  token_in: [Int]
+  token_exists: Boolean
+  token_ne: Int
+}
+
+input BlockWinnerAccountQueryInput {
+  balance: BlockWinnerAccountBalanceQueryInput
+  publicKey_in: [String]
+  publicKey_ne: String
+  publicKey_gt: String
+  AND: [BlockWinnerAccountQueryInput!]
+  publicKey_lt: String
+  publicKey_nin: [String]
+  OR: [BlockWinnerAccountQueryInput!]
+  publicKey_lte: String
+  publicKey_exists: Boolean
+  publicKey_gte: String
+  publicKey: String
+  balance_exists: Boolean
+}
+
+input BlockWinnerAccountBalanceQueryInput {
+  blockHeight_in: [Int]
+  stateHash_gte: String
+  liquid_lt: Int
+  total_gt: Long
+  liquid_exists: Boolean
+  unknown_in: [Long]
+  liquid_in: [Int]
+  total_gte: Long
+  stateHash_gt: String
+  stateHash_lt: String
+  liquid_ne: Int
+  locked_lte: Long
+  unknown_gt: Long
+  total_nin: [Long]
+  locked_exists: Boolean
+  total_lte: Long
+  unknown_nin: [Long]
+  total_lt: Long
+  blockHeight_lte: Int
+  stateHash_in: [String]
+  stateHash: String
+  blockHeight_exists: Boolean
+  unknown_lt: Long
+  liquid_gte: Int
+  locked_ne: Long
+  stateHash_lte: String
+  unknown_lte: Long
+  liquid_gt: Int
+  blockHeight_lt: Int
+  locked_in: [Long]
+  locked_nin: [Long]
+  blockHeight_gte: Int
+  locked_lt: Long
+  AND: [BlockWinnerAccountBalanceQueryInput!]
+  unknown_ne: Long
+  total_exists: Boolean
+  liquid_lte: Int
+  liquid: Int
+  stateHash_nin: [String]
+  blockHeight: Int
+  locked_gt: Long
+  OR: [BlockWinnerAccountBalanceQueryInput!]
+  locked_gte: Long
+  total_ne: Long
+  stateHash_exists: Boolean
+  blockHeight_gt: Int
+  blockHeight_ne: Int
+  stateHash_ne: String
+  unknown: Long
+  liquid_nin: [Int]
+  locked: Long
+  blockHeight_nin: [Int]
+  total_in: [Long]
+  unknown_gte: Long
+  total: Long
+  unknown_exists: Boolean
+}
+
+input BlockProtocolStateConsensusStateStakingEpochDatumQueryInput {
+  startCheckpoint_gt: String
+  epochLength_lte: Int
+  lockCheckpoint_ne: String
+  lockCheckpoint_gte: String
+  seed: String
+  startCheckpoint_ne: String
+  epochLength_exists: Boolean
+  lockCheckpoint_lt: String
+  startCheckpoint_lt: String
+  epochLength_gte: Int
+  epochLength_lt: Int
+  lockCheckpoint_gt: String
+  seed_nin: [String]
+  epochLength_ne: Int
+  epochLength_gt: Int
+  epochLength_in: [Int]
+  startCheckpoint_gte: String
+  OR: [BlockProtocolStateConsensusStateStakingEpochDatumQueryInput!]
+  lockCheckpoint_in: [String]
+  startCheckpoint_in: [String]
+  ledger_exists: Boolean
+  seed_in: [String]
+  lockCheckpoint_exists: Boolean
+  ledger: BlockProtocolStateConsensusStateStakingEpochDatumLedgerQueryInput
+  lockCheckpoint_nin: [String]
+  startCheckpoint_exists: Boolean
+  seed_exists: Boolean
+  lockCheckpoint_lte: String
+  AND: [BlockProtocolStateConsensusStateStakingEpochDatumQueryInput!]
+  startCheckpoint: String
+  startCheckpoint_lte: String
+  seed_lte: String
+  seed_lt: String
+  seed_gt: String
+  epochLength: Int
+  seed_gte: String
+  epochLength_nin: [Int]
+  lockCheckpoint: String
+  seed_ne: String
+}
+
+input BlockProtocolStateConsensusStateStakingEpochDatumLedgerQueryInput {
+  hash_in: [String]
+  hash_exists: Boolean
+  totalCurrency: Float
+  hash_gte: String
+  totalCurrency_lt: Float
+  totalCurrency_nin: [Float]
+  hash: String
+  hash_lte: String
+  totalCurrency_exists: Boolean
+  totalCurrency_gt: Float
+  OR: [BlockProtocolStateConsensusStateStakingEpochDatumLedgerQueryInput!]
+  hash_gt: String
+  AND: [BlockProtocolStateConsensusStateStakingEpochDatumLedgerQueryInput!]
+  hash_ne: String
+  hash_nin: [String]
+  totalCurrency_gte: Float
+  totalCurrency_in: [Float]
+  totalCurrency_ne: Float
+  hash_lt: String
+  totalCurrency_lte: Float
+}
+
+input BlockProtocolStateConsensusStateNextEpochDatumQueryInput {
+  lockCheckpoint: String
+  seed_gte: String
+  ledger: BlockProtocolStateConsensusStateNextEpochDatumLedgerQueryInput
+  epochLength_ne: Int
+  lockCheckpoint_nin: [String]
+  seed_exists: Boolean
+  lockCheckpoint_lt: String
+  seed_nin: [String]
+  lockCheckpoint_exists: Boolean
+  seed: String
+  lockCheckpoint_in: [String]
+  startCheckpoint_nin: [String]
+  lockCheckpoint_ne: String
+  epochLength: Int
+  startCheckpoint_lte: String
+  AND: [BlockProtocolStateConsensusStateNextEpochDatumQueryInput!]
+  seed_ne: String
+  seed_lt: String
+  lockCheckpoint_lte: String
+  ledger_exists: Boolean
+  startCheckpoint_exists: Boolean
+  epochLength_exists: Boolean
+  lockCheckpoint_gt: String
+  epochLength_lte: Int
+  seed_in: [String]
+  lockCheckpoint_gte: String
+  startCheckpoint_ne: String
+  epochLength_gte: Int
+  startCheckpoint_gte: String
+  startCheckpoint_in: [String]
+  seed_lte: String
+  startCheckpoint: String
+  startCheckpoint_lt: String
+  epochLength_gt: Int
+  startCheckpoint_gt: String
+  epochLength_lt: Int
+  seed_gt: String
+  OR: [BlockProtocolStateConsensusStateNextEpochDatumQueryInput!]
+  epochLength_nin: [Int]
+  epochLength_in: [Int]
+}
+
+input BlockProtocolStateConsensusStateNextEpochDatumLedgerQueryInput {
+  hash_gt: String
+  totalCurrency_gt: Float
+  hash: String
+  totalCurrency_lt: Float
+  totalCurrency_exists: Boolean
+  hash_exists: Boolean
+  hash_ne: String
+  totalCurrency_in: [Float]
+  totalCurrency_nin: [Float]
+  totalCurrency_lte: Float
+  totalCurrency_ne: Float
+  hash_in: [String]
+  AND: [BlockProtocolStateConsensusStateNextEpochDatumLedgerQueryInput!]
+  totalCurrency_gte: Float
+  hash_lt: String
+  hash_gte: String
+  hash_lte: String
+  OR: [BlockProtocolStateConsensusStateNextEpochDatumLedgerQueryInput!]
+  hash_nin: [String]
+  totalCurrency: Float
 }
