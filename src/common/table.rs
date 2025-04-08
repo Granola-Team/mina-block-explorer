@@ -378,7 +378,7 @@ where
         .into_iter()
         .map(|row| {
             view! {
-                <tr class="h-12 bg-table-row-fill">
+                <tr class="h-12 bg-table-row-fill border-b border-slate-200">
                     {row
                         .into_iter()
                         .enumerate()
