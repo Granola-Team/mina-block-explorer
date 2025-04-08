@@ -5,7 +5,7 @@ require "socket"
 # Constants and environment variables
 SPEC = "cypress/e2e/"
 TRUNK_PORT = rand(5170..5179).to_s
-IDXR_PORT = rand(8090..8099).to_s
+IDXR_PORT = 8090.to_s
 ENV["RUSTFLAGS"] = "--cfg=web_sys_unstable_apis"
 ENV["CYPRESS_BASE_URL"] = "http://localhost:#{TRUNK_PORT}"
 ENV["VERSION"] = `git rev-parse --short=8 HEAD`.chomp
