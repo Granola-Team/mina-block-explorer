@@ -49,7 +49,7 @@ fn Spotlight(
     view! {
         <div
             id="spotlight-heading"
-            class="@3xl:grid @3xl:grid-cols-[10rem_5rem_auto_10rem] @3xl:grid-rows-[2.5rem_2.5rem] @3xl:gap-x-[2rem] @3xl:h-auto @3xl:pb-0 flex flex-col items-center mt-6 @3xl:mt-16 bg-light-granola-orange rounded-3xl h-36"
+            class="@3xl:grid @3xl:grid-cols-[12rem_4rem_auto_5rem] @3xl:grid-rows-[2.5rem_2.5rem] @3xl:gap-x-[2rem] @3xl:h-auto @3xl:pb-0 flex flex-col items-center mt-6 @3xl:mt-16 bg-light-granola-orange rounded-3xl h-36"
         >
             <div
                 id="spotlight-icon"
@@ -96,7 +96,7 @@ fn Spotlight(
 #[component]
 pub fn SpotlightTable(children: Children) -> impl IntoView {
     view! {
-        <table class="font-mono @3xl:mx-[10rem] bg-white rounded-xl mt-2 @3xl:mt-8 pl-8 table-fixed flex flex-wrap">
+        <table class="font-mono @3xl:mx-[5rem] bg-white rounded-xl mt-2 @3xl:mt-8 pl-8 table-fixed flex flex-wrap">
             {children()}
         </table>
     }
@@ -116,7 +116,7 @@ fn SpotlightRow(entry: SpotlightEntry) -> impl IntoView {
         <th class=format!(
             "{} {}",
             th_td_class_base,
-            "w-36 md:w-40 min-w-36 md:min-w-40 font-normal text-slate-400",
+            "w-36 md:w-40 min-w-36 md:min-w-40 font-normal text-slate-400 md:mr-8 mr-0",
         )>{entry.label}:</th>
         <td class=format!(
             "{} {}",
