@@ -158,7 +158,7 @@ pub fn AccountUserCommandsPage() -> impl IntoView {
 #[component]
 pub fn AccountSnarkWorkPage() -> impl IntoView {
     let snarks = use_context::<ReadSignal<Option<Vec<Option<AccountActivityQuerySnarks>>>>>()
-        .expect("there to be an optional AccountActivityQuerySnarks signal provided");
+        .expect("Expected there to be an optional AccountActivityQuerySnarks signal provided");
     view! {
         <AccountOverviewSnarkJobTable
             snarks_sig=snarks
@@ -170,7 +170,7 @@ pub fn AccountSnarkWorkPage() -> impl IntoView {
 #[component]
 pub fn AccountBlockProductionPage() -> impl IntoView {
     let blocks = use_context::<ReadSignal<Option<Vec<Option<AccountActivityQueryBlocks>>>>>()
-        .expect("there to be an optional AccountActivityQueryBlocks signal provided");
+        .expect("Expected there to be an optional AccountActivityQueryBlocks signal provided");
     view! {
         <AccountOverviewBlocksTable
             blocks_sig=blocks
@@ -182,7 +182,9 @@ pub fn AccountBlockProductionPage() -> impl IntoView {
 #[component]
 pub fn AccountTokensPage() -> impl IntoView {
     let tokens = use_context::<ReadSignal<Option<Vec<Option<AccountActivityQueryTokenHolders>>>>>()
-        .expect("there to be an optional AccountActivityQueryTokenHolders signal provided");
+        .expect(
+            "Expected there to be an optional AccountActivityQueryTokenHolders signal provided",
+        );
     view! {
         <AccountOverviewTokensTable
             tokens_sig=tokens
@@ -193,9 +195,10 @@ pub fn AccountTokensPage() -> impl IntoView {
 
 #[component]
 pub fn AccountInternalCommandsPage() -> impl IntoView {
-    let txn: ReadSignal<Option<Vec<Option<_>>>> =
-        use_context::<ReadSignal<Option<Vec<Option<AccountActivityQueryFeetransfers>>>>>()
-            .expect("there to be an optional AccountActivityQueryFeetransfers signal provided");
+    let txn: ReadSignal<Option<Vec<Option<_>>>> = use_context::<
+        ReadSignal<Option<Vec<Option<AccountActivityQueryFeetransfers>>>>,
+    >()
+    .expect("Expectedthere to be an optional AccountActivityQueryFeetransfers signal provided");
     view! {
         <AccountInternalCommandsSection
             txn_sig=txn
@@ -207,11 +210,12 @@ pub fn AccountInternalCommandsPage() -> impl IntoView {
 #[component]
 pub fn AccountAccountTokensPageDelegationsPage() -> impl IntoView {
     let delegations_sig: ReadSignal<Option<Vec<Option<AccountActivityQueryDelegatorExt>>>> =
-        use_context::<ReadSignal<Option<Vec<Option<AccountActivityQueryDelegatorExt>>>>>()
-            .expect("there to be an optional AccountActivityQueryFeetransfers signal provided");
+        use_context::<ReadSignal<Option<Vec<Option<AccountActivityQueryDelegatorExt>>>>>().expect(
+            "Expected there to be an optional AccountActivityQueryFeetransfers signal provided",
+        );
     let delegator_count: ReadSignal<Option<DelegateCount>> =
         use_context::<ReadSignal<Option<DelegateCount>>>()
-            .expect("there to be an optional delegator count signal provided");
+            .expect("Expected there to be an optional delegator count signal provided");
     {
         move || {
             view! {
@@ -228,11 +232,12 @@ pub fn AccountAccountTokensPageDelegationsPage() -> impl IntoView {
 #[component]
 pub fn AccountDelegationsPage() -> impl IntoView {
     let delegations_sig: ReadSignal<Option<Vec<Option<AccountActivityQueryDelegatorExt>>>> =
-        use_context::<ReadSignal<Option<Vec<Option<AccountActivityQueryDelegatorExt>>>>>()
-            .expect("there to be an optional AccountActivityQueryFeetransfers signal provided");
+        use_context::<ReadSignal<Option<Vec<Option<AccountActivityQueryDelegatorExt>>>>>().expect(
+            "Expected there to be an optional AccountActivityQueryFeetransfers signal provided",
+        );
     let delegator_count: ReadSignal<Option<DelegateCount>> =
         use_context::<ReadSignal<Option<DelegateCount>>>()
-            .expect("there to be an optional delegator count signal provided");
+            .expect("Expected there to be an optional delegator count signal provided");
     {
         move || {
             view! {
@@ -452,13 +457,13 @@ pub fn AccountSpotlightTabs() -> impl IntoView {
 
     let delegator_count: ReadSignal<Option<DelegateCount>> =
         use_context::<ReadSignal<Option<DelegateCount>>>()
-            .expect("there to be an optional DelegateCount signal provided");
+            .expect("Expected there to be an optional DelegateCount signal provided");
 
     let account = use_context::<ReadSignal<Option<AccountActivityQueryAccounts>>>()
-        .expect("there to be an optional account provided");
+        .expect("Expected an account to be provided in the context");
 
     let tokens = use_context::<ReadSignal<Option<Vec<Option<AccountActivityQueryTokenHolders>>>>>()
-        .expect("there to be an optional tokens provided");
+        .expect("Expected there to be an optional tokens provided");
 
     let tabs = vec![
         NavEntry {

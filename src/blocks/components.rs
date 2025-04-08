@@ -23,7 +23,7 @@ use web_sys::VisibilityState;
 #[component]
 pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
     let option_block = use_context::<ReadSignal<Option<BlocksQueryBlocks>>>()
-        .expect("there to be an optional block signal provided");
+        .expect("Expected there to be an optional block signal provided");
     view! {
         <PageContainer>
             {move || match (option_block.get(), content.clone()) {

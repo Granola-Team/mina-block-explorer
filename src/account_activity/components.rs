@@ -69,7 +69,7 @@ pub fn AccountTransactionsSection(
     is_loading: Signal<bool>,
 ) -> impl IntoView {
     let account = use_context::<ReadSignal<Option<AccountActivityQueryAccounts>>>()
-        .expect("there to be an optional account provided");
+        .expect("Expected an account to be provided in the context");
     let (summary_sig, _, _) =
         use_local_storage::<BlockchainSummary, JsonSerdeCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
     let memo_params_map = use_params_map();
@@ -195,7 +195,7 @@ pub fn AccountInternalCommandsSection(
     is_loading: Signal<bool>,
 ) -> impl IntoView {
     let account = use_context::<ReadSignal<Option<AccountActivityQueryAccounts>>>()
-        .expect("there to be an optional account provided");
+        .expect("Expected an account to be provided in the context");
     let (summary_sig, _, _) =
         use_local_storage::<BlockchainSummary, JsonSerdeCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
     let memo_params_map = use_params_map();
@@ -375,7 +375,7 @@ pub fn AccountOverviewSnarkJobTable(
     is_loading: Signal<bool>,
 ) -> impl IntoView {
     let account = use_context::<ReadSignal<Option<AccountActivityQueryAccounts>>>()
-        .expect("there to be an optional account provided");
+        .expect("Expected an account to be provided in the context");
     let (summary_sig, _, _) =
         use_local_storage::<BlockchainSummary, JsonSerdeCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
     let memo_params_map = use_params_map();
@@ -468,7 +468,7 @@ pub fn AccountOverviewBlocksTable(
     is_loading: Signal<bool>,
 ) -> impl IntoView {
     let account = use_context::<ReadSignal<Option<AccountActivityQueryAccounts>>>()
-        .expect("there to be an optional account provided");
+        .expect("Expected an account to be provided in the context");
     let (summary_sig, _, _) =
         use_local_storage::<BlockchainSummary, JsonSerdeCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
     let memo_params_map = use_params_map();
