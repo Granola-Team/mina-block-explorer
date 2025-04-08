@@ -18,7 +18,7 @@ type TokenHolderAccount {
   balance: Int!
   nonce: Int!
   token: String!
-  zkapp: ZkappAccount!
+  zkapp: ZkappAccount
 }
 
 type TokenHolder {
