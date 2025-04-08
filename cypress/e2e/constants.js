@@ -65,3 +65,6 @@ export const ZK_APP_TXN_HASH =
   "5Juph2RjJTR4rF2u9mKzWTS9wze7romYLaH1RqRLKN7eLbecXZX1";
 export const TOKEN_ACTIVITY_ONLY_ADDRESS =
   "B62qnVLedrzTUMZME91WKbNw3qJ3hw7cc5PeK6RR3vH7RTFTsVbiBj4";
+export const MINU_TOKEN_ADDRESS =
+  "wfG3GivPMttpt6nQnPuX9eDPnoyA5RJZY23LTc4kkNkCRH2gUd";
+export const MINU_USERNAME = "MINU";
