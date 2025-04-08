@@ -643,20 +643,20 @@ pub fn BlocksSection() -> impl IntoView {
         TableColumn {
             column: "Height".to_string(),
             html_input_type: "number".to_string(),
-            is_searchable: true,
+            search_type: ColumnSearchType::Text,
             width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
             alignment: Some(ColumnTextAlignment::Right),
             ..Default::default()
         },
         TableColumn {
             column: "State Hash".to_string(),
-            is_searchable: true,
+            search_type: ColumnSearchType::Text,
             width: Some(String::from(TABLE_COL_HASH_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "Slot".to_string(),
-            is_searchable: true,
+            search_type: ColumnSearchType::Text,
             html_input_type: "number".to_string(),
             alignment: Some(ColumnTextAlignment::Right),
             width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
@@ -669,7 +669,7 @@ pub fn BlocksSection() -> impl IntoView {
         },
         TableColumn {
             column: "Block Producer".to_string(),
-            is_searchable: true,
+            search_type: ColumnSearchType::Text,
             width: Some(String::from(TABLE_COL_HASH_WIDTH)),
             ..Default::default()
         },

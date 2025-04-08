@@ -203,7 +203,7 @@ pub fn TransactionsSection() -> impl IntoView {
     let table_columns: Vec<TableColumn<AnySort>> = vec![
         TableColumn {
             column: "Height".to_string(),
-            is_searchable: true,
+            search_type: ColumnSearchType::Text,
             html_input_type: "number".to_string(),
             alignment: Some(ColumnTextAlignment::Right),
             width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
@@ -211,7 +211,7 @@ pub fn TransactionsSection() -> impl IntoView {
         },
         TableColumn {
             column: "Txn Hash".to_string(),
-            is_searchable: true,
+            search_type: ColumnSearchType::Text,
             width: Some(String::from(TABLE_COL_HASH_WIDTH)),
             ..Default::default()
         },
@@ -232,13 +232,13 @@ pub fn TransactionsSection() -> impl IntoView {
         },
         TableColumn {
             column: "From".to_string(),
-            is_searchable: true,
+            search_type: ColumnSearchType::Text,
             width: Some(String::from(TABLE_COL_HASH_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "To".to_string(),
-            is_searchable: true,
+            search_type: ColumnSearchType::Text,
             width: Some(String::from(TABLE_COL_HASH_WIDTH)),
             ..Default::default()
         },
@@ -376,7 +376,7 @@ pub fn PendingTransactionsSection() -> impl IntoView {
     let table_columns: Vec<TableColumn<AnySort>> = vec![
         TableColumn {
             column: "Txn Hash".to_string(),
-            is_searchable: true,
+            search_type: ColumnSearchType::Text,
             width: Some(String::from(TABLE_COL_HASH_WIDTH)),
             ..Default::default()
         },
@@ -387,13 +387,13 @@ pub fn PendingTransactionsSection() -> impl IntoView {
         },
         TableColumn {
             column: "From".to_string(),
-            is_searchable: true,
+            search_type: ColumnSearchType::Text,
             width: Some(String::from(TABLE_COL_HASH_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "To".to_string(),
-            is_searchable: true,
+            search_type: ColumnSearchType::Text,
             width: Some(String::from(TABLE_COL_HASH_WIDTH)),
             ..Default::default()
         },

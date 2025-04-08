@@ -111,21 +111,21 @@ fn AccountsPageContents() -> impl IntoView {
             let table_columns: Vec<TableColumn<AnySort>> = vec![
                 TableColumn {
                     column: "Public Key".to_string(),
-                    is_searchable: true,
+                    search_type: ColumnSearchType::Text,
                     width: Some(String::from(TABLE_COL_HASH_WIDTH)),
                     ..Default::default()
                 },
                 TableColumn {
                     column: "Username".to_string(),
                     width: Some(String::from(TABLE_COL_USERNAME_WIDTH)),
-                    is_searchable: true,
+                    search_type: ColumnSearchType::Text,
                     ..Default::default()
                 },
                 TableColumn {
                     column: "Balance".to_string(),
                     width: Some(String::from(TABLE_COL_LARGE_BALANCE)),
                     sort_direction: Some(AnySort::Accounts(s_dir)),
-                    is_searchable: true,
+                    search_type: ColumnSearchType::Text,
                     html_input_type: "number".to_string(),
                     alignment: Some(ColumnTextAlignment::Right),
                     ..Default::default()
@@ -139,7 +139,7 @@ fn AccountsPageContents() -> impl IntoView {
                 TableColumn {
                     column: "Delegate".to_string(),
                     width: Some(String::from(TABLE_COL_HASH_WIDTH)),
-                    is_searchable: true,
+                    search_type: ColumnSearchType::Text,
                     ..Default::default()
                 },
                 TableColumn {

@@ -20,7 +20,7 @@ pub fn StakesPageContents(
         vec![
             TableColumn {
                 column: "Key".to_string(),
-                is_searchable: true,
+                search_type: ColumnSearchType::Text,
                 width: Some(String::from(TABLE_COL_HASH_WIDTH)),
                 ..Default::default()
             },
@@ -32,13 +32,12 @@ pub fn StakesPageContents(
             TableColumn {
                 column: "Balance".to_string(),
                 width: Some(String::from(TABLE_COL_LARGE_BALANCE)),
-                is_searchable: false,
                 ..Default::default()
             },
             TableColumn {
                 column: "Stake".to_string(),
                 width: Some(String::from(TABLE_COL_LARGE_BALANCE)),
-                is_searchable: true,
+                search_type: ColumnSearchType::Text,
                 html_input_type: "number".to_string(),
                 ..Default::default()
             },
@@ -58,7 +57,7 @@ pub fn StakesPageContents(
             },
             TableColumn {
                 column: "Delegate".to_string(),
-                is_searchable: true,
+                search_type: ColumnSearchType::Text,
                 width: Some(String::from(TABLE_COL_HASH_WIDTH)),
                 ..Default::default()
             },

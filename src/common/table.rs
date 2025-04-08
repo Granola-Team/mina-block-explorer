@@ -37,9 +37,15 @@ pub enum ColumnTextAlignment {
 }
 
 #[derive(Clone)]
+pub enum ColumnSearchType {
+    None,
+    Text,
+}
+
+#[derive(Clone)]
 pub struct TableColumn<T> {
     pub column: String,
-    pub is_searchable: bool,
+    pub search_type: ColumnSearchType,
     pub sort_direction: Option<T>,
     pub is_sortable: bool,
     pub width: Option<String>,
@@ -51,7 +57,7 @@ impl<T> Default for TableColumn<T> {
     fn default() -> Self {
         TableColumn {
             column: String::new(),
-            is_searchable: false,
+            search_type: ColumnSearchType::None,
             sort_direction: None,
             is_sortable: false,
             width: None,
@@ -343,25 +349,27 @@ where
                 }
                 None => ().into_view(),
             }}
-            {if column.is_searchable {
-                view! {
-                    <input
-                        value=value
-                        type=column.html_input_type
-                        on:input=move |_| {
-                            update_value();
-                        }
-                        on:click=move |e| {
-                            e.stop_propagation();
-                        }
-                        node_ref=input_element
-                        class=INPUT_CLASS.to_string() + &input_class
-                        id=id_copy
-                    />
+
+            {match column.search_type {
+                ColumnSearchType::Text => {
+                    view! {
+                        <input
+                            value=value
+                            type=column.html_input_type
+                            on:input=move |_| {
+                                update_value();
+                            }
+                            on:click=move |e| {
+                                e.stop_propagation();
+                            }
+                            node_ref=input_element
+                            class=INPUT_CLASS.to_string() + &input_class
+                            id=id_copy
+                        />
+                    }
+                        .into_view()
                 }
-                    .into_view()
-            } else {
-                view! { <div class=INPUT_CLASS></div> }.into_view()
+                _ => view! { <div class=INPUT_CLASS></div> }.into_view(),
             }}
 
         </th>

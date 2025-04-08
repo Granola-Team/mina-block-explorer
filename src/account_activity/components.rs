@@ -76,7 +76,7 @@ pub fn AccountTransactionsSection(
     let table_columns: Vec<TableColumn<AnySort>> = vec![
         TableColumn {
             column: "Height".to_string(),
-            is_searchable: true,
+            search_type: ColumnSearchType::Text,
             html_input_type: "number".to_string(),
             alignment: Some(ColumnTextAlignment::Right),
             width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
@@ -84,7 +84,7 @@ pub fn AccountTransactionsSection(
         },
         TableColumn {
             column: "Txn Hash".to_string(),
-            is_searchable: true,
+            search_type: ColumnSearchType::Text,
             width: Some(String::from(TABLE_COL_HASH_WIDTH)),
             ..Default::default()
         },
@@ -111,7 +111,7 @@ pub fn AccountTransactionsSection(
         },
         TableColumn {
             column: "Counterparty".to_string(),
-            is_searchable: true,
+            search_type: ColumnSearchType::Text,
             width: Some(String::from(TABLE_COL_HASH_WIDTH)),
             ..Default::default()
         },
@@ -202,7 +202,7 @@ pub fn AccountInternalCommandsSection(
     let table_columns: Vec<TableColumn<AnySort>> = vec![
         TableColumn {
             column: "Height".to_string(),
-            is_searchable: true,
+            search_type: ColumnSearchType::Text,
             html_input_type: "number".to_string(),
             alignment: Some(ColumnTextAlignment::Right),
             width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
@@ -210,7 +210,7 @@ pub fn AccountInternalCommandsSection(
         },
         TableColumn {
             column: "State Hash".to_string(),
-            is_searchable: true,
+            search_type: ColumnSearchType::Text,
             width: Some(String::from(TABLE_COL_HASH_WIDTH)),
             ..Default::default()
         },
@@ -391,7 +391,7 @@ pub fn AccountOverviewSnarkJobTable(
     let table_columns: Vec<TableColumn<AnySort>> = vec![
         TableColumn {
             column: "Height".to_string(),
-            is_searchable: true,
+            search_type: ColumnSearchType::Text,
             html_input_type: "number".to_string(),
             alignment: Some(ColumnTextAlignment::Right),
             width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
@@ -399,7 +399,7 @@ pub fn AccountOverviewSnarkJobTable(
         },
         TableColumn {
             column: "State Hash".to_string(),
-            is_searchable: true,
+            search_type: ColumnSearchType::Text,
             width: Some(String::from(TABLE_COL_HASH_WIDTH)),
             ..Default::default()
         },
@@ -484,7 +484,7 @@ pub fn AccountOverviewBlocksTable(
     let table_columns: Vec<TableColumn<AnySort>> = vec![
         TableColumn {
             column: "Height".to_string(),
-            is_searchable: true,
+            search_type: ColumnSearchType::Text,
             html_input_type: "number".to_string(),
             alignment: Some(ColumnTextAlignment::Right),
             width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
@@ -492,13 +492,13 @@ pub fn AccountOverviewBlocksTable(
         },
         TableColumn {
             column: "State Hash".to_string(),
-            is_searchable: true,
+            search_type: ColumnSearchType::Text,
             width: Some(String::from(TABLE_COL_HASH_WIDTH)),
             ..Default::default()
         },
         TableColumn {
             column: "Slot".to_string(),
-            is_searchable: true,
+            search_type: ColumnSearchType::Text,
             html_input_type: "number".to_string(),
             alignment: Some(ColumnTextAlignment::Right),
             width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),

@@ -56,7 +56,7 @@ pub fn TokensPage() -> impl IntoView {
         TableColumn {
             column: "Symbol".to_string(),
             html_input_type: "text".to_string(),
-            is_searchable: true,
+            search_type: ColumnSearchType::Text,
             is_sortable: true,
             width: Some(String::from(TABLE_COL_USERNAME_WIDTH)),
             alignment: Some(ColumnTextAlignment::Left),
