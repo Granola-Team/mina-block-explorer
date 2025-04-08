@@ -2,10 +2,13 @@ use super::graphql::{token_holders_query, TokenHoldersQuery};
 use crate::common::{constants::GRAPHQL_ENDPOINT, models::MyError};
 use graphql_client::reqwest::post_graphql;
 
-pub async fn load_data(token: String) -> Result<token_holders_query::ResponseData, MyError> {
+pub async fn load_data(
+    account: String,
+    token: String,
+) -> Result<token_holders_query::ResponseData, MyError> {
     let query = token_holders_query::TokenHoldersQueryInput {
         token: Some(token),
-        holder: None,
+        holder: Some(account),
     };
 
     let variables = token_holders_query::Variables { limit: 1, query };
