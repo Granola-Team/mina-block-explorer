@@ -1,7 +1,9 @@
 use super::functions::load_data;
 use crate::{
     common::{
-        components::{CodeBlock, CopyToClipboard, ZkAppDetailTd, ZkAppDetailTh, ZkAppDetailTr},
+        components::{
+            CodeBlock, CopyToClipboard, PageContainer, ZkAppDetailTd, ZkAppDetailTh, ZkAppDetailTr,
+        },
         functions::*,
         models::{ColorVariant, TableMetadata},
         spotlight::{SpotlightEntry, SpotlightSection, SpotlightTable},
@@ -63,133 +65,140 @@ pub fn TokenHolderPage() -> impl IntoView {
                 )
             }
         />
-        {move || match get_token() {
-            Some(token) => {
-                let zk_app_uri = token
-                    .account
-                    .zkapp
-                    .as_ref()
-                    .and_then(|zkapp| zkapp.zkapp_uri.clone())
-                    .unwrap_or("None".to_string());
-                let verification_key_hash = token
-                    .account
-                    .zkapp
-                    .as_ref()
-                    .and_then(|zkapp| zkapp.verification_key.as_ref())
-                    .and_then(|key| key.hash.clone())
-                    .unwrap_or("None".to_string());
-                let zkapp_clone = token.account.zkapp.clone();
-                let zkapp = token.account.zkapp.clone();
-                // C
-                // C
-                view! {
-                    <SpotlightSection
-                        header="Token Holding"
-                        spotlight_items=vec![
-                            SpotlightEntry {
-                                label: "Public Key".to_string(),
-                                any_el: Some(
-                                    convert_to_copy_link(
-                                        token.account.public_key.to_string(),
-                                        format!("/addresses/accounts/{}", token.account.public_key),
+        <PageContainer>
+            {move || match get_token() {
+                Some(token) => {
+                    let zk_app_uri = token
+                        .account
+                        .zkapp
+                        .as_ref()
+                        .and_then(|zkapp| zkapp.zkapp_uri.clone())
+                        .unwrap_or("None".to_string());
+                    let verification_key_hash = token
+                        .account
+                        .zkapp
+                        .as_ref()
+                        .and_then(|zkapp| zkapp.verification_key.as_ref())
+                        .and_then(|key| key.hash.clone())
+                        .unwrap_or("None".to_string());
+                    let zkapp_clone = token.account.zkapp.clone();
+                    let zkapp = token.account.zkapp.clone();
+                    // C
+                    // C
+                    view! {
+                        <SpotlightSection
+                            header="Token Holding"
+                            spotlight_items=vec![
+                                SpotlightEntry {
+                                    label: "Public Key".to_string(),
+                                    any_el: Some(
+                                        convert_to_copy_link(
+                                            token.account.public_key.to_string(),
+                                            format!("/addresses/accounts/{}", token.account.public_key),
+                                        ),
                                     ),
-                                ),
-                                ..Default::default()
-                            },
-                            SpotlightEntry {
-                                label: "Balance".to_string(),
-                                any_el: Some(
-                                    convert_to_span(
-                                        format_number(token.account.balance.to_string()),
+                                    ..Default::default()
+                                },
+                                SpotlightEntry {
+                                    label: "Balance".to_string(),
+                                    any_el: Some(
+                                        convert_to_span(
+                                            format_number(token.account.balance.to_string()),
+                                        ),
                                     ),
-                                ),
-                                ..Default::default()
-                            },
-                            SpotlightEntry {
-                                label: "Nonce".to_string(),
-                                any_el: Some(
-                                    convert_to_pill(
-                                        token.account.nonce.to_string(),
-                                        ColorVariant::Grey,
+                                    ..Default::default()
+                                },
+                                SpotlightEntry {
+                                    label: "Nonce".to_string(),
+                                    any_el: Some(
+                                        convert_to_pill(
+                                            token.account.nonce.to_string(),
+                                            ColorVariant::Grey,
+                                        ),
                                     ),
-                                ),
-                                ..Default::default()
-                            },
-                            SpotlightEntry {
-                                label: "Delegate".to_string(),
-                                any_el: Some(
-                                    convert_to_copy_link(
-                                        token.account.delegate.to_string(),
-                                        format!("/addresses/accounts/{}", token.account.delegate),
+                                    ..Default::default()
+                                },
+                                SpotlightEntry {
+                                    label: "Delegate".to_string(),
+                                    any_el: Some(
+                                        convert_to_copy_link(
+                                            token.account.delegate.to_string(),
+                                            format!("/addresses/accounts/{}", token.account.delegate),
+                                        ),
                                     ),
-                                ),
-                                ..Default::default()
-                            },
-                            SpotlightEntry {
-                                label: "Zkapp URI".to_string(),
-                                any_el: Some(convert_to_link(zk_app_uri.to_string(), zk_app_uri)),
-                                ..Default::default()
-                            },
-                            SpotlightEntry {
-                                label: "Ver. Hash Key".to_string(),
-                                any_el: Some(convert_to_span(verification_key_hash)),
-                                ..Default::default()
-                            },
-                        ]
-                        meta=Some(format!("Symbol: {}", token.symbol))
-                        id=memo_params_map.get().get("token_id").cloned()
-                    >
-                        <TokenSymbol width=40 />
-                    </SpotlightSection>
-                    <TableSection metadata=metadata.into() section_heading="Other Zkapp Details">
-                        <SpotlightTable>
-                            <ZkAppDetailTr>
-                                <ZkAppDetailTh>"App State:"</ZkAppDetailTh>
-                                <ZkAppDetailTd>
-                                    <CopyToClipboard>
-                                        <CodeBlock>
-                                            {format_json_array_pretty(
-                                                zkapp
-                                                    .as_ref()
-                                                    .and_then(|zkapp| zkapp.app_state.clone())
-                                                    .unwrap_or(vec![]),
-                                            )}
-                                        </CodeBlock>
-                                    </CopyToClipboard>
-                                </ZkAppDetailTd>
-                            </ZkAppDetailTr>
-                            <ZkAppDetailTr>
-                                <ZkAppDetailTh>"Action State:"</ZkAppDetailTh>
-                                <ZkAppDetailTd>
-                                    <CopyToClipboard>
-                                        <CodeBlock>
-                                            {format_json_array_pretty(
-                                                zkapp_clone
-                                                    .as_ref()
-                                                    .and_then(|zkapp| zkapp.action_state.clone())
-                                                    .unwrap_or(vec![]),
-                                            )}
-                                        </CodeBlock>
-                                    </CopyToClipboard>
-                                </ZkAppDetailTd>
-                            </ZkAppDetailTr>
-                        </SpotlightTable>
-                    </TableSection>
+                                    ..Default::default()
+                                },
+                                SpotlightEntry {
+                                    label: "Zkapp URI".to_string(),
+                                    any_el: Some(
+                                        convert_to_link(zk_app_uri.to_string(), zk_app_uri),
+                                    ),
+                                    ..Default::default()
+                                },
+                                SpotlightEntry {
+                                    label: "Ver. Hash Key".to_string(),
+                                    any_el: Some(convert_to_span(verification_key_hash)),
+                                    ..Default::default()
+                                },
+                            ]
+                            meta=Some(format!("Symbol: {}", token.symbol))
+                            id=memo_params_map.get().get("token_id").cloned()
+                        >
+                            <TokenSymbol width=40 />
+                        </SpotlightSection>
+                        <TableSection
+                            metadata=metadata.into()
+                            section_heading="Other Zkapp Details"
+                        >
+                            <SpotlightTable>
+                                <ZkAppDetailTr>
+                                    <ZkAppDetailTh>"App State:"</ZkAppDetailTh>
+                                    <ZkAppDetailTd>
+                                        <CopyToClipboard>
+                                            <CodeBlock>
+                                                {format_json_array_pretty(
+                                                    zkapp
+                                                        .as_ref()
+                                                        .and_then(|zkapp| zkapp.app_state.clone())
+                                                        .unwrap_or(vec![]),
+                                                )}
+                                            </CodeBlock>
+                                        </CopyToClipboard>
+                                    </ZkAppDetailTd>
+                                </ZkAppDetailTr>
+                                <ZkAppDetailTr>
+                                    <ZkAppDetailTh>"Action State:"</ZkAppDetailTh>
+                                    <ZkAppDetailTd>
+                                        <CopyToClipboard>
+                                            <CodeBlock>
+                                                {format_json_array_pretty(
+                                                    zkapp_clone
+                                                        .as_ref()
+                                                        .and_then(|zkapp| zkapp.action_state.clone())
+                                                        .unwrap_or(vec![]),
+                                                )}
+                                            </CodeBlock>
+                                        </CopyToClipboard>
+                                    </ZkAppDetailTd>
+                                </ZkAppDetailTr>
+                            </SpotlightTable>
+                        </TableSection>
+                    }
+                        .into_view()
                 }
-                    .into_view()
-            }
-            None => {
-                view! {
-                    <SpotlightSection
-                        header="Token Overview"
-                        spotlight_items=vec![]
-                        meta=None
-                        id=None
-                    >
-                        <TokenSymbol width=40 />
-                    </SpotlightSection>
+                None => {
+                    view! {
+                        <SpotlightSection
+                            header="Token Overview"
+                            spotlight_items=vec![]
+                            meta=None
+                            id=None
+                        >
+                            <TokenSymbol width=40 />
+                        </SpotlightSection>
+                    }
                 }
-            }
-        }}
+            }}
+        </PageContainer>
     }
 }

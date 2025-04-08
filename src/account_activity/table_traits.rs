@@ -149,6 +149,13 @@ impl TableData for Vec<Option<AccountActivityQueryTokenHolders>> {
                         token.symbol.to_string(),
                         format!("/tokens?{}={}", QUERY_PARAM_TOKEN_SYMBOL, token.symbol),
                     ),
+                    convert_to_copy_link(
+                        token.token.to_string(),
+                        format!(
+                            "/addresses/accounts/{}/tokens/{}",
+                            token.account.public_key, token.token
+                        ),
+                    ),
                     convert_to_span(format_number_helper(
                         &token.account.balance.to_string(),
                         Some(0),

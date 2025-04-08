@@ -592,6 +592,11 @@ pub fn AccountOverviewTokensTable(
             ..Default::default()
         },
         TableColumn {
+            column: "Token ID".to_string(),
+            width: Some(String::from(TABLE_COL_HASH_WIDTH)),
+            ..Default::default()
+        },
+        TableColumn {
             column: "Balance".to_string(),
             width: Some(String::from(TABLE_COL_LARGE_BALANCE)),
             ..Default::default()
