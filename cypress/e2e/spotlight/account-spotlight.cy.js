@@ -33,4 +33,13 @@ suite(["@tier2"], "account spotlight", () => {
       expect(text).equal("Zkapp");
     });
   });
+  it.only("renders More Details subpage on tokens tab", () => {
+    cy.visit(`/addresses/accounts/${TOKEN_ACTIVITY_ONLY_ADDRESS}/tokens`);
+    cy.waitUntilTableLoads("Tokens");
+    cy.contains("More Details").should("not.exist");
+    cy.clickLinkInTable(0, "More", "Tokens");
+    cy.contains("More Details").should("exist");
+    cy.aliasTransposedTableRows("More Details", "table-rows");
+    cy.get("@table-rows").should("have.lengthOf", 4);
+  });
 });

@@ -12,6 +12,18 @@ pub fn TokenHoldersMoreDetails(zkapp: TokenHoldersQueryTokenHoldersAccountZkapp)
         <TableSection metadata=metadata.into() section_heading="More Details">
             <SpotlightTable>
                 <ZkAppDetailTr>
+                    <ZkAppDetailTh>"Ver. Key Hash:"</ZkAppDetailTh>
+                    <ZkAppDetailTd>
+                        {zkapp.verification_key.map(|vk| vk.hash.unwrap_or("None".to_string()))}
+                    </ZkAppDetailTd>
+                </ZkAppDetailTr>
+                <ZkAppDetailTr>
+                    <ZkAppDetailTh>"Zkapp URI:"</ZkAppDetailTh>
+                    <ZkAppDetailTd>
+                        {zkapp.zkapp_uri.map(|uri| uri.to_string()).unwrap_or("None".to_string())}
+                    </ZkAppDetailTd>
+                </ZkAppDetailTr>
+                <ZkAppDetailTr>
                     <ZkAppDetailTh>"App State:"</ZkAppDetailTh>
                     <ZkAppDetailTd>
                         <CopyToClipboard>

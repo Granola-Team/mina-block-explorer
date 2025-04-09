@@ -1,11 +1,4 @@
-import {
-  MINU_TOKEN_ADDRESS,
-  MINU_USERNAME,
-  FIRST_TXN_HASH,
-  ROMEK_ADDRESS,
-  ROMEK_USERNAME,
-  STANDARD_ACCOUNT_PK,
-} from "../constants";
+import { FIRST_TXN_HASH, ROMEK_ADDRESS, ROMEK_USERNAME } from "../constants";
 suite(["@tier2"], "meta title", () => {
   let block_hash = "3NLhBh3d4b91DPoJn5hhwRAWmHSAaG8Qz4W5r9FhJBCXLD3WrAt4";
   let pages = [
@@ -75,10 +68,6 @@ suite(["@tier2"], "meta title", () => {
     {
       url: `/addresses/accounts/${ROMEK_ADDRESS}`,
       title: `Account Overview | ${ROMEK_USERNAME}`,
-    },
-    {
-      url: `/addresses/accounts/${STANDARD_ACCOUNT_PK}/tokens/${MINU_TOKEN_ADDRESS}`,
-      title: `Token Holding | ${STANDARD_ACCOUNT_PK} | ${MINU_USERNAME}`,
     },
   ];
   pages.forEach(({ title, url }) =>

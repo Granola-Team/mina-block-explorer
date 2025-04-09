@@ -588,7 +588,7 @@ pub fn AccountOverviewTokensTable(
     let table_columns: Vec<TableColumn<AnySort>> = vec![
         TableColumn {
             column: "Token Symbol".to_string(),
-            width: Some(String::from(TABLE_COL_HASH_WIDTH)),
+            width: Some(String::from(TABLE_COL_SHORT_WIDTH)),
             ..Default::default()
         },
         TableColumn {
@@ -604,6 +604,16 @@ pub fn AccountOverviewTokensTable(
         TableColumn {
             column: "Nonce".to_string(),
             width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
+            ..Default::default()
+        },
+        TableColumn {
+            column: "Delegate".to_string(),
+            width: Some(String::from(TABLE_COL_HASH_WIDTH)),
+            ..Default::default()
+        },
+        TableColumn {
+            column: "More".to_string(),
+            width: Some(String::from(TABLE_COL_SHORT_WIDTH)),
             ..Default::default()
         },
     ];

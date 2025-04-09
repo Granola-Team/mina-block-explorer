@@ -132,6 +132,7 @@ query AccountActivityQuery(
      account {
        publicKey
        balance
+       delegate
        nonce
     }
   }

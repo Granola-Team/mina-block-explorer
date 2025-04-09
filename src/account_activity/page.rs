@@ -190,6 +190,7 @@ pub fn AccountTokensPage() -> impl IntoView {
             tokens_sig=tokens
             is_loading=Signal::derive(move || tokens.get().is_none())
         />
+        <Outlet />
     }
 }
 
