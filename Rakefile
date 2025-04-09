@@ -209,7 +209,7 @@ desc "Clean the repo of built artifacts"
 task clean: [:clean_cypress, :clean_node_modules, :clean_build, :clean_target]
 
 desc "Format the source code"
-task format: [:pnpm_install] do
+task format: ["node_modules"] do
   sh "pnpm exec prettier --write cypress/ src/scripts/"
   sh "standardrb --fix #{RUBY_SRC_FILES.join(" ")}"
   sh "cargo-fmt --all"
@@ -247,7 +247,7 @@ file ".build/audit" => CARGO_DEPS do |t|
 end
 
 desc "Fix linting errors"
-task lint_fix: [:pnpm_install] do
+task lint_fix: ["node_modules"] do
   sh "standardrb --fix #{RUBY_SRC_FILES.join(" ")}"
   sh "cargo clippy --fix --allow-dirty --allow-staged"
   sh "pnpm exec eslint --fix cypress/"
@@ -260,9 +260,6 @@ file ".build/docs" => GRAPHQL_SRC_FILES do |t|
   mkdir_p(".build")
   sh "cargo doc --document-private-items --target-dir #{t.name}"
 end
-
-desc "Install the JavaScript dependencies with 'pnpm'"
-task pnpm_install: "node_modules"
 
 file "node_modules" => ["pnpm-lock.yaml", "package.json"] do
   puts "--- Installing NPM dependencies"
@@ -286,7 +283,7 @@ task :check_tokens do
 end
 
 desc "Publish the website to production"
-task publish: [:check_tokens, :pnpm_install, :release_build] do
+task publish: [:check_tokens, "node_modules", :release_build] do
   puts "--- Publishing"
   puts "Publishing version #{ENV["VERSION"]}"
   sh "pnpx wrangler pages deploy --branch main"
@@ -347,19 +344,19 @@ file RELEASE_BUILD_TARGET.to_s => CARGO_DEPS + ["Trunk.toml", "tailwind.config.j
 end
 
 desc "Lint all source code"
-task lint: [:pnpm_install, :audit, :lint_javascript, :lint_ruby, :lint_rust]
+task lint: ["node_modules", :audit, :lint_javascript, :lint_ruby, :lint_rust]
 
 desc "Run the Tier1 tests"
 task tier1: [:dev_build, :lint, :test_unit]
 
 desc "Invoke the Tier2 regression suite (non-interactive)"
-task tier2: [:clean_cypress, :tier1, :pnpm_install, :deploy_mina_indexer] do
+task tier2: [:clean_cypress, :tier1, "node_modules", :deploy_mina_indexer] do
   trap("INT") { Rake::Task["shutdown_mina_indexer"].invoke }
   run_tier_task("pnpm exec cypress run -r list -q", wait_for_cypress: true)
 end
 
 desc "Invoke the Tier2 regression suite (interactive)"
-task t2_i: [:pnpm_install, :deploy_mina_indexer, :dev_build] do
+task t2_i: ["node_modules", :deploy_mina_indexer, :dev_build] do
   run_tier_task("pnpm exec cypress open", wait_for_cypress: false)
 end
 
