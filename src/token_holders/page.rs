@@ -1,13 +1,10 @@
-use super::functions::load_data;
+use super::{components::TokenHoldersMoreDetails, functions::load_data};
 use crate::{
     common::{
-        components::{
-            CodeBlock, CopyToClipboard, PageContainer, ZkAppDetailTd, ZkAppDetailTh, ZkAppDetailTr,
-        },
+        components::PageContainer,
         functions::*,
-        models::{ColorVariant, TableMetadata},
-        spotlight::{SpotlightEntry, SpotlightSection, SpotlightTable},
-        table::TableSection,
+        models::ColorVariant,
+        spotlight::{SpotlightEntry, SpotlightSection},
     },
     icons::TokenSymbol,
 };
@@ -17,7 +14,6 @@ use leptos_router::use_params_map;
 
 #[component]
 pub fn TokenHolderPage() -> impl IntoView {
-    let (metadata, _) = create_signal::<Option<TableMetadata>>(None);
     let memo_params_map = use_params_map();
     let (token_symbol_sig, set_token) = create_signal::<String>("".to_string());
 
@@ -81,8 +77,6 @@ pub fn TokenHolderPage() -> impl IntoView {
                         .and_then(|zkapp| zkapp.verification_key.as_ref())
                         .and_then(|key| key.hash.clone())
                         .unwrap_or("None".to_string());
-                    let zkapp_clone = token.account.zkapp.clone();
-                    let zkapp = token.account.zkapp.clone();
                     // C
                     // C
                     view! {
@@ -146,43 +140,10 @@ pub fn TokenHolderPage() -> impl IntoView {
                         >
                             <TokenSymbol width=40 />
                         </SpotlightSection>
-                        <TableSection
-                            metadata=metadata.into()
-                            section_heading="Other Zkapp Details"
-                        >
-                            <SpotlightTable>
-                                <ZkAppDetailTr>
-                                    <ZkAppDetailTh>"App State:"</ZkAppDetailTh>
-                                    <ZkAppDetailTd>
-                                        <CopyToClipboard>
-                                            <CodeBlock>
-                                                {format_json_array_pretty(
-                                                    zkapp
-                                                        .as_ref()
-                                                        .and_then(|zkapp| zkapp.app_state.clone())
-                                                        .unwrap_or(vec![]),
-                                                )}
-                                            </CodeBlock>
-                                        </CopyToClipboard>
-                                    </ZkAppDetailTd>
-                                </ZkAppDetailTr>
-                                <ZkAppDetailTr>
-                                    <ZkAppDetailTh>"Action State:"</ZkAppDetailTh>
-                                    <ZkAppDetailTd>
-                                        <CopyToClipboard>
-                                            <CodeBlock>
-                                                {format_json_array_pretty(
-                                                    zkapp_clone
-                                                        .as_ref()
-                                                        .and_then(|zkapp| zkapp.action_state.clone())
-                                                        .unwrap_or(vec![]),
-                                                )}
-                                            </CodeBlock>
-                                        </CopyToClipboard>
-                                    </ZkAppDetailTd>
-                                </ZkAppDetailTr>
-                            </SpotlightTable>
-                        </TableSection>
+                        {token
+                            .account
+                            .zkapp
+                            .map(|zkapp| view! { <TokenHoldersMoreDetails zkapp /> })}
                     }
                         .into_view()
                 }
