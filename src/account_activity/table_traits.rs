@@ -153,14 +153,20 @@ impl TableData for Vec<Option<AccountActivityQueryTokenHolders>> {
                     )),
                     convert_to_pill(token.account.nonce.to_string(), ColorVariant::Grey),
                     convert_to_copy_link(token.account.delegate.to_string(), "#".to_string()),
-                    convert_to_link(
-                        "see more".to_string(),
-                        format!(
-                            "/addresses/accounts/{}/tokens/{}",
-                            token.account.public_key, token.token
-                        ),
-                    )
-                    .attr("style", "color: unset;"),
+                    token
+                        .account
+                        .zkapp
+                        .clone()
+                        .map(|_| {
+                            convert_to_link(
+                                "see more".to_string(),
+                                format!(
+                                    "/addresses/accounts/{}/tokens/{}",
+                                    token.account.public_key, token.token
+                                ),
+                            )
+                        })
+                        .unwrap_or(convert_to_span("".to_string())),
                 ],
                 None => vec![],
             })

@@ -40,6 +40,6 @@ suite(["@tier2"], "account spotlight", () => {
     cy.clickLinkInTable(0, "More", "Tokens");
     cy.contains("More Details").should("exist");
     cy.aliasTransposedTableRows("More Details", "table-rows");
-    cy.get("@table-rows").should("have.lengthOf", 4);
+    cy.get("@table-rows").should("have.lengthOf", 2);
   });
 });

@@ -134,6 +134,9 @@ query AccountActivityQuery(
        balance
        delegate
        nonce
+       zkapp {
+         zkappUri
+       }
     }
   }
   accounts(limit: 1, query: $account_query) {
