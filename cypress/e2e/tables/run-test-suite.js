@@ -49,8 +49,7 @@ export function runTestSuite(testSuiteData) {
               cy.get("@input").select(input).should("have.value", input);
             } else {
               cy.get("th").contains(column).find("input").as("input");
-              cy.get("@input")
-                .type(input, { delay: 0 });
+              cy.get("@input").type(input, { delay: 0 });
             }
             cy.intercept("POST", "/graphql").as("graphql");
             cy.wait("@graphql", { timeout: 15000 });
@@ -60,7 +59,7 @@ export function runTestSuite(testSuiteData) {
               cy.assertTableRecordsCorrect(heading);
             }
             if (filter_type == "select") {
-              cy.get("@input").select(0);
+              cy.get("@input").select([]);
             } else {
               cy.get("@input").clear();
             }

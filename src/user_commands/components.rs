@@ -23,7 +23,6 @@ const QP_FROM: &str = "q-from";
 const QP_TO: &str = "q-to";
 const QP_TOKEN: &str = "q-token";
 const BACKSCAN_LIMIT: u64 = 2000;
-const TYPE_SEARCH_OPTION_ZKAPP: &str = "Zkapp";
 const STATUS_SEARCH_OPTION_APPLIED: &str = "Applied";
 const STATUS_SEARCH_OPTION_FAILED: &str = "Failed";
 

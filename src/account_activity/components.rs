@@ -102,6 +102,8 @@ pub fn AccountTransactionsSection(
         TableColumn {
             column: "Type".to_string(),
             width: Some(String::from(TABLE_COL_SHORT_WIDTH)),
+            search_type: ColumnSearchType::Select,
+            search_options: Some(vec!["".to_string(), TYPE_SEARCH_OPTION_ZKAPP.to_string()]),
             ..Default::default()
         },
         TableColumn {
@@ -154,14 +156,6 @@ pub fn AccountTransactionsSection(
                         labels=UrlParamSelectOptions {
                             is_boolean_option: true,
                             cases: vec!["Canonical".to_string(), "Non-Canonical".to_string()],
-                        }
-                    />
-                    <UrlParamSelectMenu
-                        id="is-all-selection"
-                        query_str_key="q-is-all"
-                        labels=UrlParamSelectOptions {
-                            is_boolean_option: true,
-                            cases: vec!["All".to_string(), "zkApp".to_string()],
                         }
                     />
                 }

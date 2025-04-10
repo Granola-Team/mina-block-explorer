@@ -270,7 +270,7 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
     let (block_height_sig, _) = create_query_signal::<i64>("q-height");
     let (nonce_sig, _) = create_query_signal::<u64>("q-nonce");
     let (slot_sig, _) = create_query_signal::<u64>("q-slot");
-    let (is_all_sig, _) = create_query_signal::<bool>("q-is-all");
+    let (q_type_sig, _) = create_query_signal::<String>(QUERY_PARAM_USER_COMMAND);
     let (row_limit_sig, _) = create_query_signal::<i64>("row-limit");
 
     let (summary_sig, _, _) =
@@ -295,7 +295,7 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
                 slot_sig.get(),
                 current_epoch_staking_ledger(),
                 row_limit_sig.get(),
-                is_all_sig.get(),
+                q_type_sig.get(),
             )
         },
         |(
@@ -307,7 +307,7 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
             slot,
             current_epoch_staking_ledger,
             mut row_limit,
-            is_all,
+            q_type,
         )| async move {
             let limit = *row_limit.get_or_insert(25i64);
             if let Some(id) = value.get("id").cloned() {
@@ -329,7 +329,7 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
                     Some(id),
                     current_epoch_staking_ledger,
                     canonical_opt,
-                    is_all,
+                    q_type.map(|q_type| q_type != TYPE_SEARCH_OPTION_ZKAPP),
                 )
                 .await
                 {
@@ -417,12 +417,13 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
     });
 
     create_effect(move |_| {
-        canonical_sig.get();
-        set_transactions.set(None);
-        set_snarks.set(None);
-        set_blocks.set(None);
-        set_int_txn.set(None);
-        set_tokens.set(None);
+        if is_loading_sig.get().is_some_and(|b| b) {
+            set_transactions.set(None);
+            set_snarks.set(None);
+            set_blocks.set(None);
+            set_int_txn.set(None);
+            set_tokens.set(None);
+        }
     });
 
     provide_context(transactions);
