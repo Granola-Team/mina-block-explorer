@@ -60,7 +60,10 @@ impl TableData for Vec<TransactionsQueryTransactionsZkappAccountsUpdated> {
                         au.pk.to_string(),
                         format!("/addresses/accounts/{}", au.pk),
                     ),
-                    convert_to_span(format_number(au.balance_change.to_string())),
+                    convert_to_span(format_number_for_html(
+                        &format_number(au.balance_change.to_string()),
+                        14,
+                    )),
                     convert_to_span(au.increment_nonce.to_string()),
                     convert_to_span(au.token.to_string()),
                 ]

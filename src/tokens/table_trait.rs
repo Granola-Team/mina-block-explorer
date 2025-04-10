@@ -80,7 +80,7 @@ impl TokensTrait for TokensQueryTokens {
             .to_string()
     }
     fn get_supply(&self) -> String {
-        format_number(self.supply.to_string())
+        format_number_for_html(&nanomina_str_to_mina(&self.supply.to_string()), 14)
     }
     fn get_number_of_holders(&self) -> String {
         format_number(self.num_holders.to_string())

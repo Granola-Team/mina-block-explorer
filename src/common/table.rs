@@ -320,6 +320,7 @@ where
     let col_clone_2 = col_clone.clone();
     view! {
         <th
+            data-test=format!("column-{}", col_clone.column)
             class=th_class + CELL_PADDING_CLASS
             class=(
                 "cursor-pointer",

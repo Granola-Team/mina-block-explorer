@@ -8,6 +8,22 @@ import {
 import { parseFormattedNumber } from "../helpers";
 let pages = [
   {
+    page: "/tokens",
+    wait: () => {
+      cy.intercept("GET", "/summary").as("summaryData");
+      cy.wait("@summaryData");
+      cy.aliasTableRows("Tokens", "table-rows");
+      cy.get("@table-rows").find(".loading-placeholder").should("not.exist");
+    },
+    tests: [
+      {
+        name: "supply column",
+        selector: () => cy.get("@table-rows").first().find("td").eq(1),
+        type: "number",
+      },
+    ],
+  },
+  {
     page: "/blocks",
     wait: () => {
       cy.intercept("GET", "/summary").as("summaryData");
@@ -381,7 +397,7 @@ pages.forEach(({ tests, page, wait = () => {} }) => {
         selector()
           .invoke("text")
           .then((text) => {
-            let number = parseFormattedNumber(text);
+            let number = parseFormattedNumber(text.trim());
             expect(number).to.be.a("number");
             let options =
               type === "number"
