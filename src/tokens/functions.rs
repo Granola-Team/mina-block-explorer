@@ -8,12 +8,25 @@ use graphql_client::reqwest::post_graphql;
 pub async fn load_data(
     limit: Option<i64>,
     name: Option<String>,
+    token: Option<String>,
     sort_by: Option<TokensSortByInput>,
 ) -> Result<tokens_query::ResponseData, MyError> {
-    let query = name.map(|name| tokens_query::TokensQueryInput {
-        symbol: Some(name),
-        ..Default::default()
-    });
+    let query = match (name, token) {
+        (Some(name), Some(token)) => Some(tokens_query::TokensQueryInput {
+            symbol: Some(name),
+            token: Some(token),
+            ..Default::default()
+        }),
+        (Some(name), None) => Some(tokens_query::TokensQueryInput {
+            symbol: Some(name),
+            ..Default::default()
+        }),
+        (None, Some(token)) => Some(tokens_query::TokensQueryInput {
+            token: Some(token),
+            ..Default::default()
+        }),
+        (None, None) => None,
+    };
 
     let variables = tokens_query::Variables {
         limit,

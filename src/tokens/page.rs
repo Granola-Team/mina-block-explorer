@@ -3,8 +3,8 @@ use crate::{
     common::{
         components::*,
         constants::{
-            QUERY_PARAM_TOKEN_SYMBOL, TABLE_COL_HASH_WIDTH, TABLE_COL_LARGE_BALANCE,
-            TABLE_COL_NUMERIC_WIDTH, TABLE_COL_USERNAME_WIDTH,
+            QUERY_PARAM_ID, QUERY_PARAM_TOKEN_SYMBOL, TABLE_COL_HASH_WIDTH,
+            TABLE_COL_LARGE_BALANCE, TABLE_COL_NUMERIC_WIDTH, TABLE_COL_USERNAME_WIDTH,
         },
         models::{TableMetadata, UrlParamSelectOptions},
         table::*,
@@ -21,13 +21,15 @@ pub fn TokensPage() -> impl IntoView {
     let (total_count_sig, set_total_count) = create_signal(None::<i64>);
     let (row_limit_sig, _) = create_query_signal::<i64>("row-limit");
     let (name_sig, _) = create_query_signal::<String>(QUERY_PARAM_TOKEN_SYMBOL);
+    let (q_token_id_sig, _) = create_query_signal::<String>(QUERY_PARAM_ID);
 
     let resource = create_resource(
-        move || name_sig.get(),
-        move |name_opt| async move {
+        move || (name_sig.get(), q_token_id_sig.get()),
+        move |(name_opt, q_token_id_opt)| async move {
             load_data(
                 row_limit_sig.get().or(Some(50)),
                 name_opt,
+                q_token_id_opt,
                 Some(tokens_query::TokensSortByInput::SUPPLY_DESC),
             )
             .await
@@ -42,14 +44,6 @@ pub fn TokensPage() -> impl IntoView {
                 set_total_count.set(Some(first_token.total_num_tokens));
             }
         };
-    });
-
-    create_effect(move |_| {
-        if let Some(res) = get_data() {
-            if let Some(first_token) = res.tokens.first().cloned().flatten() {
-                set_total_count.set(Some(first_token.total_num_tokens));
-            }
-        }
     });
 
     let table_columns: Vec<TableColumn<AnySort>> = vec![
@@ -72,6 +66,7 @@ pub fn TokensPage() -> impl IntoView {
             column: "ID".to_string(),
             width: Some(String::from(TABLE_COL_HASH_WIDTH)),
             alignment: Some(ColumnTextAlignment::Left),
+            search_type: ColumnSearchType::Text,
             ..Default::default()
         },
         TableColumn {

@@ -1,3 +1,4 @@
+import { MINU_TOKEN_ADDRESS } from "../../constants";
 export const tag = "@tier2";
 export const url = "/tokens";
 export const table = {
@@ -27,6 +28,17 @@ export const table = {
         cy.get("@table-rows").should("have.lengthOf", 1);
         cy.assertForEachColumnValue("Tokens", "Symbol", (text) => {
           expect(text).to.be.eq("MINU");
+        });
+      },
+    },
+    {
+      column: "ID",
+      input: MINU_TOKEN_ADDRESS,
+      assertion: function () {
+        cy.aliasTableRows("Tokens", "table-rows");
+        cy.get("@table-rows").should("have.lengthOf", 1);
+        cy.assertForEachColumnValue("Tokens", "ID", (text) => {
+          expect(text).to.be.eq(MINU_TOKEN_ADDRESS);
         });
       },
     },

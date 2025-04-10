@@ -35,6 +35,7 @@ pub const QUERY_PARAM_TOKEN_SYMBOL: &str = "q-symbol";
 pub const QUERY_PARAM_TYPE: &str = "q-type";
 pub const QUERY_PARAM_TXN_APPLIED: &str = "q-status";
 pub const QUERY_PARAM_TO: &str = "q-to";
+pub const QUERY_PARAM_ID: &str = "q-id";
 pub const TYPE_SEARCH_OPTION_ZKAPP: &str = "Zkapp";
 pub const MINA_TOKEN_ADDRESS: &str = "wSHV2S4qX9jFsLjQo8r1BsMLH2ZRKsZx6EJd1sbozGPieEC4Jf";
 pub const MAINNET_STATE_HASH: &str = "3NKeMoncuHab5ScarV5ViyF16cJPT4taWNSaTLS64Dp67wuXigPZ";
