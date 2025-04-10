@@ -1,24 +1,16 @@
-use crate::common::{components::*, constants::QUERY_PARAM_TYPE, models::*};
+use crate::common::{components::*, models::*};
 use leptos::*;
 
 #[component]
 pub fn Header() -> impl IntoView {
     let (open, set_open) = create_signal(false);
 
-    let zk_app_commands = Some(vec![NavEntry {
-        href: format!("/commands/user?{}={}", QUERY_PARAM_TYPE, "false"),
-        text: "ZKApp Commands".to_string(),
-        icon: NavIcon::Transactions,
-        sub_entries: None,
-        ..Default::default()
-    }]);
-
     let txn_entries = Some(vec![
         NavEntry {
             href: "/commands/user".to_string(),
             text: "User Commands".to_string(),
             icon: NavIcon::Transactions,
-            sub_entries: zk_app_commands,
+            sub_entries: None,
             ..Default::default()
         },
         NavEntry {
