@@ -6,7 +6,10 @@ use super::{
     models::PendingTxn,
 };
 use crate::common::{
-    constants::{LHS_MAX_DIGIT_PADDING, LHS_MAX_SPACE_FEES, TXN_STATUS_APPLIED, TXN_STATUS_FAILED},
+    constants::{
+        LHS_MAX_DIGIT_PADDING, LHS_MAX_SPACE_FEES, QUERY_PARAM_ID, TXN_STATUS_APPLIED,
+        TXN_STATUS_FAILED,
+    },
     functions::*,
     models::{ColorVariant, HasBlockHeight},
     table::*,
@@ -65,7 +68,10 @@ impl TableData for Vec<TransactionsQueryTransactionsZkappAccountsUpdated> {
                         14,
                     )),
                     convert_to_span(au.increment_nonce.to_string()),
-                    convert_to_span(au.token.to_string()),
+                    convert_to_copy_link(
+                        au.token.to_string(),
+                        format!("/tokens?{}={}", QUERY_PARAM_ID, au.token),
+                    ),
                 ]
             })
             .collect::<Vec<_>>()

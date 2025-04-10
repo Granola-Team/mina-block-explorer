@@ -15,7 +15,7 @@ use crate::{
         },
     },
     common::{
-        constants::{LHS_MAX_DIGIT_PADDING, LHS_MAX_SPACE_FEES},
+        constants::{LHS_MAX_DIGIT_PADDING, LHS_MAX_SPACE_FEES, QUERY_PARAM_ID},
         functions::*,
         models::*,
         table::TableData,
@@ -146,7 +146,10 @@ impl TableData for Vec<Option<AccountActivityQueryTokenHolders>> {
             .map(|opt_token| match opt_token {
                 Some(token) => vec![
                     convert_to_span(token.symbol.to_string()),
-                    convert_to_copy_link(token.token.to_string(), "#".to_string()),
+                    convert_to_copy_link(
+                        token.token.to_string(),
+                        format!("/tokens?{}={}", QUERY_PARAM_ID, token.token),
+                    ),
                     convert_to_span(format_number_helper(
                         &token.account.balance.to_string(),
                         Some(0),
