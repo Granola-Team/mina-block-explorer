@@ -270,7 +270,7 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
     let (block_height_sig, _) = create_query_signal::<i64>("q-height");
     let (nonce_sig, _) = create_query_signal::<u64>("q-nonce");
     let (slot_sig, _) = create_query_signal::<u64>("q-slot");
-    let (q_type_sig, _) = create_query_signal::<String>(QUERY_PARAM_USER_COMMAND);
+    let (q_type_sig, _) = create_query_signal::<String>(QUERY_PARAM_TYPE);
     let (row_limit_sig, _) = create_query_signal::<i64>("row-limit");
 
     let (summary_sig, _, _) =

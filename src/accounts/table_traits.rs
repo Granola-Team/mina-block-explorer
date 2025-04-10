@@ -9,6 +9,11 @@ impl TableData for Vec<Option<AccountsQueryAccounts>> {
         self.iter()
             .map(|acct_opt| match acct_opt {
                 Some(account) => vec![
+                    if account.is_zk_app() {
+                        convert_to_pill("Zkapp".to_string(), ColorVariant::Orange)
+                    } else {
+                        convert_to_span("".to_string())
+                    },
                     convert_to_copy_link(
                         account.get_public_key(),
                         format!("/addresses/accounts/{}", account.get_public_key()),
@@ -29,6 +34,7 @@ impl TableData for Vec<Option<AccountsQueryAccounts>> {
 }
 
 pub trait AccountTrait {
+    fn is_zk_app(&self) -> bool;
     fn get_public_key(&self) -> String;
     fn get_username(&self) -> String;
     fn get_balance(&self) -> String;
@@ -38,6 +44,9 @@ pub trait AccountTrait {
 }
 
 impl AccountTrait for AccountsQueryAccounts {
+    fn is_zk_app(&self) -> bool {
+        self.zkapp.is_some()
+    }
     fn get_public_key(&self) -> String {
         self.public_key
             .as_ref()

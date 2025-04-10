@@ -5,6 +5,7 @@ export const url = "/addresses/accounts";
 export const table = {
   heading: "MINA Accounts",
   columns: [
+    "Type",
     "Public Key",
     "Username",
     "Balance",
@@ -21,26 +22,12 @@ export const table = {
   ],
   filter_tests: [
     {
-      column: "Balance",
-      input: 5000,
+      column: "Type",
+      input: "Zkapp",
+      filter_type: "select",
       assertion: function () {
-        cy.aliasTableRows("MINA Accounts", "table-rows");
-        cy.get("@table-rows").should("have.lengthOf", 25);
-        cy.assertForEachColumnValue("MINA Accounts", "Balance", (text) => {
-          let balance = parseFormattedNumber(text);
-          expect(balance).to.be.lte(5000);
-        });
-      },
-    },
-    {
-      column: "Balance",
-      input: "5000.1234",
-      assertion: function () {
-        cy.aliasTableRows("MINA Accounts", "table-rows");
-        cy.get("@table-rows").should("have.lengthOf", 25);
-        cy.assertForEachColumnValue("MINA Accounts", "Balance", (text) => {
-          let balance = parseFormattedNumber(text);
-          expect(balance).to.be.lte(5000.1234);
+        cy.assertForEachColumnValue("MINA Accounts", "Type", (text) => {
+          expect(text).to.be.eq("Zkapp");
         });
       },
     },
@@ -54,6 +41,18 @@ export const table = {
           expect(text).to.equal(ROMEK_ADDRESS);
         });
         cy.tableColumnValuesEqual("MINA Accounts", "Username", ROMEK_USERNAME);
+      },
+    },
+    {
+      column: "Balance",
+      input: "5000.1234",
+      assertion: function () {
+        cy.aliasTableRows("MINA Accounts", "table-rows");
+        cy.get("@table-rows").should("have.lengthOf", 25);
+        cy.assertForEachColumnValue("MINA Accounts", "Balance", (text) => {
+          let balance = parseFormattedNumber(text);
+          expect(balance).to.be.lte(5000.1234);
+        });
       },
     },
     // TODO: commented out due to lack of txn to MINA NAMING SERVICE post-hardfork

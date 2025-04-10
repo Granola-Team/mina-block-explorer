@@ -4,6 +4,9 @@ query AccountsQuery(
   $query: AccountQueryInput
 ) {
   accounts(limit: $limit, query: $query, sortBy: $sortBy) {
+    zkapp {
+      zkappUri
+    }
     publicKey
     username
     balance

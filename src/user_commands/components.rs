@@ -143,7 +143,7 @@ pub fn TransactionsSection() -> impl IntoView {
     let query_params_map = use_query_map();
     let (block_height_sig, _) = create_query_signal::<u64>(QP_HEIGHT);
     let (token_sig, _) = create_query_signal::<String>(QP_TOKEN);
-    let (q_type_sig, _) = create_query_signal::<String>(QUERY_PARAM_USER_COMMAND);
+    let (q_type_sig, _) = create_query_signal::<String>(QUERY_PARAM_TYPE);
     let UseIntervalReturn { counter, .. } = use_interval(LIVE_RELOAD_INTERVAL);
 
     let resource = create_resource(
@@ -283,7 +283,7 @@ pub fn TransactionsSection() -> impl IntoView {
                 otherQps.remove(QP_TXN_TYPE);
                 otherQps.remove(QUERY_PARAM_TXN_APPLIED);
                 otherQps.remove(QP_ROW_LIMIT);
-                otherQps.remove(QUERY_PARAM_USER_COMMAND);
+                otherQps.remove(QUERY_PARAM_TYPE);
                 let mut available_records = None;
                 let url_query_map = query_params_map.get();
                 let from = url_query_map.get(QP_FROM).cloned();

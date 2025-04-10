@@ -32,7 +32,7 @@ fn AccountsPageContents() -> impl IntoView {
     let (token_sig, _) = create_query_signal::<String>(QUERY_PARAM_TOKEN);
     let (row_limit_sig, _) = create_query_signal::<i64>("row-limit");
     let (sort_dir_sig, _) = create_query_signal::<String>("sort-dir");
-    let (is_standard_sig, _) = create_query_signal::<bool>("q-is-all");
+    let (q_type_sig, _) = create_query_signal::<String>(QUERY_PARAM_TYPE);
     let (section_heading_sig, set_section_heading) =
         create_signal::<String>("MINA Accounts".to_string());
 
@@ -45,11 +45,11 @@ fn AccountsPageContents() -> impl IntoView {
                 delegate_sig.get(),
                 row_limit_sig.get(),
                 sort_dir_sig.get(),
-                is_standard_sig.get(),
+                q_type_sig.get(),
                 token_sig.get(),
             )
         },
-        |(public_key, username, balance, delegate, mut row_limit, sort_dir, is_standard, token)| async move {
+        |(public_key, username, balance, delegate, mut row_limit, sort_dir, q_type, token)| async move {
             let s_dir = if let Some(s) = sort_dir.and_then(|s| AccountsSort::try_from(s).ok()) {
                 s
             } else {
@@ -59,7 +59,7 @@ fn AccountsPageContents() -> impl IntoView {
                 AccountsSort::BalanceDesc => accounts_query::AccountSortByInput::BALANCE_DESC,
                 AccountsSort::BalanceAsc => accounts_query::AccountSortByInput::BALANCE_ASC,
             };
-            let is_zk_app = is_standard.and_then(|is_std| (!is_std).then_some(true));
+            let is_zk_app = q_type.is_some_and(|p| p == TYPE_SEARCH_OPTION_ZKAPP);
 
             load_data(
                 Some(*row_limit.get_or_insert(25i64)),
@@ -68,7 +68,7 @@ fn AccountsPageContents() -> impl IntoView {
                 balance,
                 delegate,
                 Some(sort_by),
-                is_zk_app,
+                Some(is_zk_app),
                 token.or(Some(MINA_TOKEN_ADDRESS.to_string())),
             )
             .await
@@ -109,6 +109,16 @@ fn AccountsPageContents() -> impl IntoView {
                 AccountsSort::BalanceDesc
             };
             let table_columns: Vec<TableColumn<AnySort>> = vec![
+                TableColumn {
+                    column: "Type".to_string(),
+                    search_type: ColumnSearchType::Select,
+                    search_options: Some(vec![
+                        "".to_string(),
+                        TYPE_SEARCH_OPTION_ZKAPP.to_string(),
+                    ]),
+                    width: Some(String::from(TABLE_COL_SHORT_WIDTH)),
+                    ..Default::default()
+                },
                 TableColumn {
                     column: "Public Key".to_string(),
                     search_type: ColumnSearchType::Text,
@@ -178,14 +188,6 @@ fn AccountsPageContents() -> impl IntoView {
                             <div class="hidden md:flex justify-center items-center">
                                 <RowLimit />
                             </div>
-                            <UrlParamSelectMenu
-                                id="is-all-selection"
-                                query_str_key="q-is-all"
-                                labels=UrlParamSelectOptions {
-                                    is_boolean_option: true,
-                                    cases: vec!["All".to_string(), "zkApp".to_string()],
-                                }
-                            />
                         }
                     }
                 />

@@ -211,14 +211,14 @@ let pages = [
       {
         name: "balance column",
         selector: () => {
-          return cy.get("@table-rows").first().find("td").eq(2);
+          return cy.get("@table-rows").first().find("td").eq(3);
         },
         type: "currency",
       },
       {
         name: "nonce column",
         selector: () => {
-          return cy.get("@table-rows").first().find("td").eq(3);
+          return cy.get("@table-rows").first().find("td").eq(4);
         },
         type: "number",
       },
