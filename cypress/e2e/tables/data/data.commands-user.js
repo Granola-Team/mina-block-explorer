@@ -45,6 +45,36 @@ export const table = {
       },
     },
     {
+      column: "Type",
+      input: "Zkapp",
+      filter_type: "select",
+      assertion: function () {
+        cy.assertForEachColumnValue("User Commands", "Type", (text) => {
+          expect(text).to.be.eq("Zkapp");
+        });
+      },
+    },
+    {
+      column: "Status",
+      input: "Applied",
+      filter_type: "select",
+      assertion: function () {
+        cy.assertForEachColumnValue("User Commands", "Status", (text) => {
+          expect(text).to.be.eq("Applied");
+        });
+      },
+    },
+    {
+      column: "Status",
+      input: "Failed",
+      filter_type: "select",
+      assertion: function () {
+        cy.assertForEachColumnValue("User Commands", "Status", (text) => {
+          expect(text).to.be.eq("Failed");
+        });
+      },
+    },
+    {
       column: "From",
       input: FIRST_SENDER_ADDRESS,
       assertion: function () {
@@ -71,56 +101,8 @@ export const tests = [
     cy.assertStandardRowLimits("User Commands");
   },
   () => {
-    cy.get("select#txn-status").as("txn-applied");
-    cy.get("select#canonical-selection").as("canonical");
-    ["Failed", "Applied"].forEach((txnApplied) => {
-      ["Canonical"].forEach((canonical) => {
-        cy.get("@txn-applied")
-          .select(txnApplied)
-          .should("have.value", txnApplied);
-        cy.get("@canonical").select(canonical).should("have.value", canonical);
-        cy.intercept("POST", "/graphql").as("graphql");
-        cy.wait("@graphql").then(() => {
-          cy.assertForEachColumnValue("User Commands", "Status", (text) => {
-            expect(text).to.be.eq(txnApplied);
-          });
-          cy.intercept("POST", "/graphql").as("graphql2");
-          cy.clickLinkInTable(0, "Txn Hash", "User Commands");
-          cy.wait("@graphql2").then(() => {
-            cy.testSpotlightValue("Status", txnApplied);
-            cy.testSpotlightValue(
-              "Canonical",
-              "" + (canonical === "Canonical"),
-            );
-            cy.go("back");
-          });
-        });
-      });
-    });
-  },
-  () => {
-    cy.getBySel("user-command-selection").as("select");
-
-    // Select just zkApps
-    cy.get("@select").select("zkApps").should("have.value", "zkApps");
-    cy.wait(500); // small delay to let the request fire
-    cy.waitUntilTableLoads("User Commands");
-    cy.assertForEachColumnValue("User Commands", "Type", (text) => {
-      expect(text).to.be.eq("Zkapp");
-    });
-
-    // Select all (both payments and zkapps)
-    cy.get("@select").select("All").should("have.value", "All");
-    cy.wait(500); // small delay to let the request fire
-    cy.waitUntilTableLoads("User Commands");
-    cy.assertForEachColumnValue("User Commands", "Type", (text) => {
-      let result = text == "Zkapp" || text == "Payment";
-      expect(result).to.be.true;
-    });
-  },
-  () => {
     cy.intercept("POST", "/graphql").as("graphql");
-    cy.visit("/commands/user?q-height=359611&row-limit=50");
+    cy.visit("/commands/user?q-height=359611&row-limit=25");
     cy.wait("@graphql").then(() => {
       cy.wait(1000);
       cy.assertLoadNextWorks("User Commands", "Height", {

@@ -40,7 +40,7 @@ impl TableData for Vec<Option<TokensQueryTokens>> {
                                         "false"
                                     },
                                     QUERY_PARAM_TXN_APPLIED,
-                                    "true"
+                                    "Applied"
                                 ),
                             ),
                             ColorVariant::Blue,

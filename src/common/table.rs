@@ -40,12 +40,14 @@ pub enum ColumnTextAlignment {
 pub enum ColumnSearchType {
     None,
     Text,
+    Select,
 }
 
 #[derive(Clone)]
 pub struct TableColumn<T> {
     pub column: String,
     pub search_type: ColumnSearchType,
+    pub search_options: Option<Vec<String>>,
     pub sort_direction: Option<T>,
     pub is_sortable: bool,
     pub width: Option<String>,
@@ -58,6 +60,7 @@ impl<T> Default for TableColumn<T> {
         TableColumn {
             column: String::new(),
             search_type: ColumnSearchType::None,
+            search_options: None,
             sort_direction: None,
             is_sortable: false,
             width: None,
@@ -67,8 +70,7 @@ impl<T> Default for TableColumn<T> {
     }
 }
 
-const INPUT_CLASS: &str =
-    " block w-full mt-1 h-7 text-base text-sm font-normal font-mono p-2 rounded ";
+const INPUT_CLASS: &str = " block w-full mt-1 h-7 text-base text-sm font-normal font-mono rounded ";
 const CELL_PADDING_CLASS: &str = " first:pl-8 pl-4 last:pr-4 ";
 
 #[component]
@@ -274,6 +276,7 @@ where
     let (value, set_value) = create_query_signal::<String>(id);
     let (_, set_sort_dir) = create_query_signal::<String>("sort-dir");
     let input_element: NodeRef<html::Input> = create_node_ref();
+    let select_element: NodeRef<html::Select> = create_node_ref();
     let mut th_class = " whitespace-nowrap h-12 bg-table-header-fill xl:sticky xl:top-16 z-[1] text-table-header-text-color font-semibold uppercase text-xs text-left py-4 box-border ".to_string();
     let mut input_class = " pointer-events-auto ".to_string();
     match column.alignment {
@@ -288,12 +291,21 @@ where
         _ => (),
     }
 
+    let search_type = column.search_type.clone();
+
     let update_value = use_debounce_fn_with_options(
         move || {
-            let v = input_element
-                .get()
-                .expect("<input/> should be mounted")
-                .value();
+            let v = match search_type {
+                ColumnSearchType::Text => input_element
+                    .get()
+                    .expect("<input/> should be mounted")
+                    .value(),
+                ColumnSearchType::Select => select_element
+                    .get()
+                    .expect("<select/> should be mounted")
+                    .value(),
+                ColumnSearchType::None => panic!("Unexpected scenario"),
+            };
             if v.is_empty() {
                 set_value.set(None);
             } else {
@@ -354,6 +366,7 @@ where
                 ColumnSearchType::Text => {
                     view! {
                         <input
+                            data-test=format!("input-{}", column.column)
                             value=value
                             type=column.html_input_type
                             on:input=move |_| {
@@ -363,9 +376,44 @@ where
                                 e.stop_propagation();
                             }
                             node_ref=input_element
-                            class=INPUT_CLASS.to_string() + &input_class
+                            class=INPUT_CLASS.to_string() + &input_class + " p-2 pl-1"
                             id=id_copy
                         />
+                    }
+                        .into_view()
+                }
+                ColumnSearchType::Select => {
+                    view! {
+                        <select
+                            data-test=format!("select-{}", column.column)
+                            value=value
+                            on:input=move |_| {
+                                update_value();
+                            }
+                            on:click=move |e| {
+                                e.stop_propagation();
+                            }
+                            node_ref=select_element
+                            class=INPUT_CLASS.to_string() + &input_class + " p-0 text-xs"
+                            id=id_copy
+                        >
+                            {column
+                                .search_options
+                                .expect("Expected to have search options")
+                                .into_iter()
+                                .map(|text| {
+                                    view! {
+                                        <option
+                                            value=text.to_string()
+                                            selected=text == value.get().unwrap_or_default()
+                                        >
+                                            {text}
+                                        </option>
+                                    }
+                                })
+                                .collect::<Vec<_>>()
+                                .into_view()}
+                        </select>
                     }
                         .into_view()
                 }

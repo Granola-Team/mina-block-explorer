@@ -23,6 +23,9 @@ const QP_FROM: &str = "q-from";
 const QP_TO: &str = "q-to";
 const QP_TOKEN: &str = "q-token";
 const BACKSCAN_LIMIT: u64 = 2000;
+const TYPE_SEARCH_OPTION_ZKAPP: &str = "Zkapp";
+const STATUS_SEARCH_OPTION_APPLIED: &str = "Applied";
+const STATUS_SEARCH_OPTION_FAILED: &str = "Failed";
 
 fn get_available_records(
     summary: BlockchainSummary,
@@ -137,11 +140,11 @@ pub fn TransactionsSection() -> impl IntoView {
     let (data_sig, set_data) = create_signal(None);
     let (txn_type_qp, _) = create_query_signal::<String>(QP_TXN_TYPE);
     let (row_limit_sig, _) = create_query_signal::<u64>(QP_ROW_LIMIT);
-    let (txn_applied_sig, _) = create_query_signal::<bool>(QUERY_PARAM_TXN_APPLIED);
+    let (txn_applied_sig, _) = create_query_signal::<String>(QUERY_PARAM_TXN_APPLIED);
     let query_params_map = use_query_map();
     let (block_height_sig, _) = create_query_signal::<u64>(QP_HEIGHT);
     let (token_sig, _) = create_query_signal::<String>(QP_TOKEN);
-    let (is_all_user_commands_sig, _) = create_query_signal::<bool>(QUERY_PARAM_USER_COMMAND);
+    let (q_type_sig, _) = create_query_signal::<String>(QUERY_PARAM_USER_COMMAND);
     let UseIntervalReturn { counter, .. } = use_interval(LIVE_RELOAD_INTERVAL);
 
     let resource = create_resource(
@@ -153,20 +156,11 @@ pub fn TransactionsSection() -> impl IntoView {
                 block_height_sig.get(),
                 row_limit_sig.get(),
                 txn_applied_sig.get(),
-                is_all_user_commands_sig.get(),
+                q_type_sig.get(),
                 token_sig.get(),
             )
         },
-        move |(
-            _,
-            url_query_map,
-            txn_type,
-            block_height,
-            row_limit,
-            txn_applied,
-            is_all_user_commands,
-            token,
-        )| async move {
+        move |(_, url_query_map, txn_type, block_height, row_limit, txn_applied, q_type, token)| async move {
             if visibility.get() != VisibilityState::Visible {
                 logging::log!("Document not visible. Data polling skipped for user commands.");
                 return Ok(transactions_query::ResponseData {
@@ -181,7 +175,9 @@ pub fn TransactionsSection() -> impl IntoView {
                 _ => (Some(true), load_data),
             };
 
-            let is_zk_app = is_all_user_commands.and_then(|is_all_uc| (!is_all_uc).then_some(true));
+            let is_zk_app = q_type.is_some_and(|p| p == TYPE_SEARCH_OPTION_ZKAPP);
+            let is_txn_applied =
+                txn_applied.is_none_or(|txn_applied| txn_applied != STATUS_SEARCH_OPTION_FAILED);
 
             load_fn(
                 row_limit,
@@ -189,11 +185,15 @@ pub fn TransactionsSection() -> impl IntoView {
                 url_query_map.get(QP_TO).cloned(),
                 url_query_map.get(QP_TXN_HASH).cloned(),
                 block_height,
-                txn_applied.and_then(|a| if !a { Some(BACKSCAN_LIMIT) } else { None }),
+                if !is_txn_applied {
+                    Some(BACKSCAN_LIMIT)
+                } else {
+                    None
+                },
                 None,
                 canonical,
-                txn_applied,
-                is_zk_app,
+                Some(is_txn_applied),
+                Some(is_zk_app),
                 token,
             )
             .await
@@ -223,11 +223,19 @@ pub fn TransactionsSection() -> impl IntoView {
         TableColumn {
             column: "Type".to_string(),
             width: Some(String::from(TABLE_COL_SHORT_WIDTH)),
+            search_type: ColumnSearchType::Select,
+            search_options: Some(vec!["".to_string(), TYPE_SEARCH_OPTION_ZKAPP.to_string()]),
             ..Default::default()
         },
         TableColumn {
             column: "Status".to_string(),
             width: Some(String::from(TABLE_COL_SHORT_WIDTH)),
+            search_type: ColumnSearchType::Select,
+            search_options: Some(vec![
+                "".to_string(),
+                STATUS_SEARCH_OPTION_APPLIED.to_string(),
+                STATUS_SEARCH_OPTION_FAILED.to_string(),
+            ]),
             ..Default::default()
         },
         TableColumn {
@@ -282,17 +290,21 @@ pub fn TransactionsSection() -> impl IntoView {
                 let from = url_query_map.get(QP_FROM).cloned();
                 let to = url_query_map.get(QP_TO).cloned();
                 let txn_hash = url_query_map.get(QP_TXN_HASH).cloned();
-                let is_zk_app = is_all_user_commands_sig
-                    .get()
-                    .and_then(|is_all_uc| (!is_all_uc).then_some(true));
+                let is_zk_app = q_type_sig.get().is_some_and(|p| p == "Zkapp");
                 if block_height_sig.get().is_none() && from.is_none() && to.is_none()
                     && txn_hash.is_none()
                 {
                     available_records = get_available_records(
                         summary_sig.get(),
                         txn_type_qp.get(),
-                        txn_applied_sig.get(),
-                        is_zk_app,
+                        Some(
+                            txn_applied_sig
+                                .get()
+                                .is_none_or(|txn_applied| {
+                                    txn_applied != STATUS_SEARCH_OPTION_FAILED
+                                }),
+                        ),
+                        Some(is_zk_app),
                         !otherQps.to_query_string().is_empty(),
                     );
                 }
@@ -322,27 +334,11 @@ pub fn TransactionsSection() -> impl IntoView {
                         <RowLimit />
                     </div>
                     <UrlParamSelectMenu
-                        id="txn-status"
-                        query_str_key="txn-applied"
-                        labels=UrlParamSelectOptions {
-                            is_boolean_option: true,
-                            cases: vec!["Applied".to_string(), "Failed".to_string()],
-                        }
-                    />
-                    <UrlParamSelectMenu
                         id="canonical-selection"
                         query_str_key="txn-type"
                         labels=UrlParamSelectOptions {
                             is_boolean_option: false,
                             cases: vec!["Canonical".to_string(), "Non-Canonical".to_string()],
-                        }
-                    />
-                    <UrlParamSelectMenu
-                        id="user-command-selection"
-                        query_str_key=QUERY_PARAM_USER_COMMAND
-                        labels=UrlParamSelectOptions {
-                            is_boolean_option: true,
-                            cases: vec!["All".to_string(), "zkApps".to_string()],
                         }
                     />
                 }

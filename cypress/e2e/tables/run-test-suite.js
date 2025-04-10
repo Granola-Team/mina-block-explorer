@@ -43,9 +43,15 @@ export function runTestSuite(testSuiteData) {
               cy.get("th").contains(column).click("top");
             });
           });
-          filter_tests.forEach(({ column, input, assertion }) => {
-            cy.get("th").contains(column).find("input").as("input");
-            cy.get("@input").type(input, { delay: 0 });
+          filter_tests.forEach(({ column, input, assertion, filter_type }) => {
+            if (filter_type == "select") {
+              cy.get("th").contains(column).find("select").as("input");
+              cy.get("@input").select(input).should("have.value", input);
+            } else {
+              cy.get("th").contains(column).find("input").as("input");
+              cy.get("@input")
+                .type(input, { delay: 0 });
+            }
             cy.intercept("POST", "/graphql").as("graphql");
             cy.wait("@graphql", { timeout: 15000 });
             cy.wait(1000);
@@ -53,7 +59,11 @@ export function runTestSuite(testSuiteData) {
             if (heading != "Staking Ledger - Epoch 1") {
               cy.assertTableRecordsCorrect(heading);
             }
-            cy.get("@input").clear();
+            if (filter_type == "select") {
+              cy.get("@input").select(0);
+            } else {
+              cy.get("@input").clear();
+            }
           });
           tests.forEach((test) => test());
         });
