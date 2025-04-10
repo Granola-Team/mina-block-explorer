@@ -192,7 +192,7 @@ pub fn TransactionsSection() -> impl IntoView {
                 None,
                 canonical,
                 Some(is_txn_applied),
-                Some(is_zk_app),
+                if is_zk_app { Some(is_zk_app) } else { None },
                 token,
             )
             .await

@@ -101,14 +101,11 @@ export const tests = [
     cy.assertStandardRowLimits("User Commands");
   },
   () => {
-    cy.intercept("POST", "/graphql").as("graphql");
-    cy.visit("/commands/user?q-height=359611&row-limit=25");
-    cy.wait("@graphql").then(() => {
-      cy.wait(1000);
-      cy.assertLoadNextWorks("User Commands", "Height", {
-        button_text: "Load Next",
-        expected_button_state: "be.disabled",
-      });
+    cy.visit("/commands/user?q-height=359611&row-limit=50");
+    cy.waitUntilTableLoads("User Commands");
+    cy.assertLoadNextWorks("User Commands", "Height", {
+      button_text: "Load Next",
+      expected_button_state: "be.disabled",
     });
   },
 ];

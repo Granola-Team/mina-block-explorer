@@ -52,7 +52,7 @@ export function runTestSuite(testSuiteData) {
               cy.get("@input").type(input, { delay: 0 });
             }
             cy.intercept("POST", "/graphql").as("graphql");
-            cy.wait("@graphql", { timeout: 15000 });
+            cy.wait("@graphql");
             cy.wait(1000);
             assertion();
             if (heading != "Staking Ledger - Epoch 1") {
