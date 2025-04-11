@@ -2,7 +2,11 @@ use super::{
     graphql::{transactions_query::TransactionsQueryTransactions, *},
     models::PooledUserCommandsResponse,
 };
-use crate::common::{constants::*, functions::format_json_array_pretty, models::MyError};
+use crate::common::{
+    constants::*,
+    functions::format_json_array_pretty,
+    models::{MyError, TransactionKind},
+};
 use graphql_client::reqwest::post_graphql;
 
 pub async fn load_pending_txn() -> Result<transactions_query::ResponseData, MyError> {
@@ -43,7 +47,7 @@ pub async fn load_data(
     state_hash: Option<String>,
     canonical: Option<bool>,
     is_applied: Option<bool>,
-    is_zk_app: Option<bool>,
+    kind: Option<TransactionKind>,
     token: Option<String>,
 ) -> Result<transactions_query::ResponseData, MyError> {
     let variables = transactions_query::Variables {
@@ -65,7 +69,7 @@ pub async fn load_data(
                     state_hash: Some(sh),
                     ..Default::default()
                 }),
-            zkapp: is_zk_app,
+            kind: kind.map(|k| k.to_string()),
             token,
             ..Default::default()
         },

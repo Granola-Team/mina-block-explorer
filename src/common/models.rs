@@ -1,5 +1,37 @@
 use graphql_client::Error;
 use serde::{Deserialize, Serialize};
+use std::{fmt, str::FromStr};
+
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
+pub enum TransactionKind {
+    Payment,
+    Zkapp,
+    StakeDelegation,
+}
+
+impl fmt::Display for TransactionKind {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let s = match self {
+            TransactionKind::Payment => "PAYMENT",
+            TransactionKind::Zkapp => "ZKAPP",
+            TransactionKind::StakeDelegation => "STAKE_DELEGATION",
+        };
+        write!(f, "{}", s)
+    }
+}
+
+impl FromStr for TransactionKind {
+    type Err = String;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "PAYMENT" => Ok(TransactionKind::Payment),
+            "ZKAPP" => Ok(TransactionKind::Zkapp),
+            "STAKE_DELEGATION" => Ok(TransactionKind::StakeDelegation),
+            _ => Err(format!("Invalid TransactionKind: {}", s)),
+        }
+    }
+}
 
 pub enum ButtonStyleVariant {
     Primary,

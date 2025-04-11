@@ -143,7 +143,7 @@ pub fn TransactionsSection() -> impl IntoView {
     let query_params_map = use_query_map();
     let (block_height_sig, _) = create_query_signal::<u64>(QP_HEIGHT);
     let (token_sig, _) = create_query_signal::<String>(QP_TOKEN);
-    let (q_type_sig, _) = create_query_signal::<String>(QUERY_PARAM_TYPE);
+    let (q_type_sig, _) = create_query_signal::<TransactionKind>(QUERY_PARAM_TYPE);
     let UseIntervalReturn { counter, .. } = use_interval(LIVE_RELOAD_INTERVAL);
 
     let resource = create_resource(
@@ -174,7 +174,6 @@ pub fn TransactionsSection() -> impl IntoView {
                 _ => (Some(true), load_data),
             };
 
-            let is_zk_app = q_type.is_some_and(|p| p == TYPE_SEARCH_OPTION_ZKAPP);
             let is_txn_applied =
                 txn_applied.is_none_or(|txn_applied| txn_applied != STATUS_SEARCH_OPTION_FAILED);
 
@@ -192,7 +191,7 @@ pub fn TransactionsSection() -> impl IntoView {
                 None,
                 canonical,
                 Some(is_txn_applied),
-                if is_zk_app { Some(is_zk_app) } else { None },
+                q_type,
                 token,
             )
             .await
@@ -223,7 +222,12 @@ pub fn TransactionsSection() -> impl IntoView {
             column: "Type".to_string(),
             width: Some(String::from(TABLE_COL_SHORT_WIDTH)),
             search_type: ColumnSearchType::Select,
-            search_options: Some(vec!["".to_string(), TYPE_SEARCH_OPTION_ZKAPP.to_string()]),
+            search_options: Some(vec![
+                "".to_string(),
+                TransactionKind::Payment.to_string(),
+                TransactionKind::Zkapp.to_string(),
+                TransactionKind::StakeDelegation.to_string(),
+            ]),
             ..Default::default()
         },
         TableColumn {
@@ -289,7 +293,7 @@ pub fn TransactionsSection() -> impl IntoView {
                 let from = url_query_map.get(QP_FROM).cloned();
                 let to = url_query_map.get(QP_TO).cloned();
                 let txn_hash = url_query_map.get(QP_TXN_HASH).cloned();
-                let is_zk_app = q_type_sig.get().is_some_and(|p| p == "Zkapp");
+                let is_zk_app = q_type_sig.get().is_some_and(|p| p == TransactionKind::Zkapp);
                 if block_height_sig.get().is_none() && from.is_none() && to.is_none()
                     && txn_hash.is_none()
                 {

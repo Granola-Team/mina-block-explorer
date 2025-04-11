@@ -46,11 +46,31 @@ export const table = {
     },
     {
       column: "Type",
-      input: "Zkapp",
+      input: "ZKAPP",
       filter_type: "select",
       assertion: function () {
         cy.assertForEachColumnValue("User Commands", "Type", (text) => {
           expect(text).to.be.eq("Zkapp");
+        });
+      },
+    },
+    {
+      column: "Type",
+      input: "PAYMENT",
+      filter_type: "select",
+      assertion: function () {
+        cy.assertForEachColumnValue("User Commands", "Type", (text) => {
+          expect(text).to.be.eq("Payment");
+        });
+      },
+    },
+    {
+      column: "Type",
+      input: "STAKE_DELEGATION",
+      filter_type: "select",
+      assertion: function () {
+        cy.assertForEachColumnValue("User Commands", "Type", (text) => {
+          expect(text).to.be.eq("Stake Delegation");
         });
       },
     },
