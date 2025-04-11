@@ -46,7 +46,7 @@ export function runTestSuite(testSuiteData) {
           filter_tests.forEach(({ column, input, assertion, filter_type }) => {
             if (filter_type == "select") {
               cy.get("th").contains(column).find("select").as("input");
-              cy.get("@input").select(input).should("have.value", input);
+              cy.get("@input").select(input);
             } else {
               cy.get("th").contains(column).find("input").as("input");
               cy.get("@input").type(input, { delay: 0 });

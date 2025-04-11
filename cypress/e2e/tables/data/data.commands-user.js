@@ -46,7 +46,7 @@ export const table = {
     },
     {
       column: "Type",
-      input: "ZKAPP",
+      input: "Zkapp",
       filter_type: "select",
       assertion: function () {
         cy.assertForEachColumnValue("User Commands", "Type", (text) => {
@@ -56,7 +56,7 @@ export const table = {
     },
     {
       column: "Type",
-      input: "PAYMENT",
+      input: "Payment",
       filter_type: "select",
       assertion: function () {
         cy.assertForEachColumnValue("User Commands", "Type", (text) => {
@@ -66,7 +66,7 @@ export const table = {
     },
     {
       column: "Type",
-      input: "STAKE_DELEGATION",
+      input: "Stake Delegation",
       filter_type: "select",
       assertion: function () {
         cy.assertForEachColumnValue("User Commands", "Type", (text) => {

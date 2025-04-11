@@ -10,7 +10,7 @@ use crate::{
     icons::*,
     stakes::models::StakesSort,
 };
-use heck::ToKebabCase;
+use heck::{ToKebabCase, ToTitleCase};
 use leptos::{html::*, *};
 use leptos_router::*;
 use leptos_use::{use_debounce_fn_with_options, DebounceOptions};
@@ -408,7 +408,7 @@ where
                                             value=text.to_string()
                                             selected=text == value.get().unwrap_or_default()
                                         >
-                                            {text}
+                                            {ToTitleCase::to_title_case(text.as_str()).to_string()}
                                         </option>
                                     }
                                 })
