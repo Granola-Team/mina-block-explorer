@@ -70,3 +70,5 @@ export const MINU_TOKEN_ADDRESS =
 export const MINU_USERNAME = "MINU";
 export const NFT_TOKEN_ID =
   "xosVXFFDvDiKvHSDAaHvrTSRtoa5Graf2J7LM5Smb4GNTrT2Hn";
+export const TITS_TOKEN_ID =
+  "yBen7FzpjJAz2qoWpVxodyCr9CUD4xxtegEa6nZziq1jSTCfNB";

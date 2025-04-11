@@ -153,6 +153,13 @@ pub fn GlobalSearchBar() -> impl IntoView {
             val if val.starts_with('j') => {
                 set_lh.set(Some(val));
             }
+            val if val.starts_with('w') || val.starts_with('x') || val.starts_with('y') => {
+                navigate(
+                    &format!("/tokens?{}={}", QUERY_PARAM_ID, val),
+                    Default::default(),
+                );
+                set_value.set("".to_string());
+            }
             val if val.chars().all(char::is_numeric) => {
                 if let Ok(epoch) = val.parse::<u64>() {
                     set_e.set(Some(epoch));
