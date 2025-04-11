@@ -36,12 +36,23 @@ pub async fn load_data(
     current_epoch_staking_ledger: Option<u64>,
     canonical: Option<bool>,
     all_account_types: Option<bool>,
+    direction_in: Option<bool>,
 ) -> Result<account_activity_query::ResponseData, MyError> {
     let block_height = block_height.map(|x| std::cmp::max(0i64, x));
     let nonce = nonce.map(|x| x as i64);
     let slot = slot.map(|x| x as i64);
     let get_current_epoch_staking_ledger =
         move || current_epoch_staking_ledger.and_then(|e| e.try_into().ok());
+
+    let mut outgoing_limit = trans_limit;
+    let mut incoming_limit = trans_limit;
+    if let Some(is_incoming) = direction_in {
+        if is_incoming {
+            outgoing_limit = Some(0);
+        } else {
+            incoming_limit = Some(0);
+        }
+    }
 
     let variables = account_activity_query::Variables {
         blocks_sort_by: account_activity_query::BlockSortByInput::BLOCKHEIGHT_DESC,
@@ -51,7 +62,8 @@ pub async fn load_data(
         delegators_sort_by: account_activity_query::StakesSortByInput::BALANCE_DESC,
         blocks_limit,
         snarks_limit,
-        trans_limit,
+        incoming_limit,
+        outgoing_limit,
         internal_commands_limit,
         delegators_limit,
         account_query: account_activity_query::AccountQueryInput {

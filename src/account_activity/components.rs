@@ -109,6 +109,12 @@ pub fn AccountTransactionsSection(
         TableColumn {
             column: "Direction".to_string(),
             width: Some(String::from(TABLE_COL_SHORT_WIDTH)),
+            search_type: ColumnSearchType::Select,
+            search_options: Some(vec![
+                "".to_string(),
+                DIRECTION_IN.to_string(),
+                DIRECTION_OUT.to_string(),
+            ]),
             ..Default::default()
         },
         TableColumn {

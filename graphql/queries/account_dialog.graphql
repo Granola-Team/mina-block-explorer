@@ -5,7 +5,8 @@ query AccountActivityQuery(
   $snarks_sort_by: SnarkSortByInput!
   $snarks_limit: Int = 3
   $snarks_query: SnarkQueryInput!
-  $trans_limit: Int = 10
+  $incoming_limit: Int = 10
+  $outgoing_limit: Int = 10
   $trans_sort_by: TransactionSortByInput!
   $outgoing_trans_query: TransactionQueryInput!
   $incoming_trans_query: TransactionQueryInput!
@@ -21,7 +22,7 @@ query AccountActivityQuery(
 ) {
   incoming_transactions: transactions(
     sortBy: $trans_sort_by
-    limit: $trans_limit
+    limit: $incoming_limit
     query: $incoming_trans_query
   ) {
     canonical
@@ -41,7 +42,7 @@ query AccountActivityQuery(
   }
   outgoing_transactions: transactions(
     sortBy: $trans_sort_by
-    limit: $trans_limit
+    limit: $outgoing_limit
     query: $outgoing_trans_query
   ) {
     canonical

@@ -49,6 +49,26 @@ export const table = {
         });
       },
     },
+    {
+      column: "Direction",
+      input: "In",
+      filter_type: "select",
+      assertion: function () {
+        cy.assertForEachColumnValue("User Commands", "Direction", (text) => {
+          expect(text).to.be.eq("IN");
+        });
+      },
+    },
+    {
+      column: "Direction",
+      input: "Out",
+      filter_type: "select",
+      assertion: function () {
+        cy.assertForEachColumnValue("User Commands", "Direction", (text) => {
+          expect(text).to.be.eq("OUT");
+        });
+      },
+    },
   ],
 };
 export const tests = [];

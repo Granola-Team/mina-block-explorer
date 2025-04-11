@@ -271,6 +271,7 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
     let (nonce_sig, _) = create_query_signal::<u64>("q-nonce");
     let (slot_sig, _) = create_query_signal::<u64>("q-slot");
     let (q_type_sig, _) = create_query_signal::<String>(QUERY_PARAM_TYPE);
+    let (q_direction_sig, _) = create_query_signal::<String>("q-direction");
     let (row_limit_sig, _) = create_query_signal::<i64>("row-limit");
 
     let (summary_sig, _, _) =
@@ -296,6 +297,7 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
                 current_epoch_staking_ledger(),
                 row_limit_sig.get(),
                 q_type_sig.get(),
+                q_direction_sig.get(),
             )
         },
         |(
@@ -308,6 +310,7 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
             current_epoch_staking_ledger,
             mut row_limit,
             q_type,
+            q_direction,
         )| async move {
             let limit = *row_limit.get_or_insert(25i64);
             if let Some(id) = value.get("id").cloned() {
@@ -330,6 +333,7 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
                     current_epoch_staking_ledger,
                     canonical_opt,
                     q_type.map(|q_type| q_type != TYPE_SEARCH_OPTION_ZKAPP),
+                    q_direction.map(|d| d == DIRECTION_IN),
                 )
                 .await
                 {
