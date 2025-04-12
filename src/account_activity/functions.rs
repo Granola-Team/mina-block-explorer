@@ -419,6 +419,139 @@ pub fn get_action_state(
     format_json_array_pretty(json_arr)
 }
 
+type TabLimits = (
+    Option<i64>,
+    Option<i64>,
+    Option<i64>,
+    Option<i64>,
+    Option<i64>,
+);
+
+pub fn set_tab_limits(tab: &str, row_limit: Option<i64>) -> TabLimits {
+    let default_limit = row_limit.unwrap_or(25);
+    let mut blocks_limit = Some(0);
+    let mut snarks_limit = Some(0);
+    let mut trans_limit = Some(0);
+    let mut delegators_limit = Some(0);
+    let mut internal_commands_limit = Some(0);
+
+    match tab {
+        "/commands/user" => trans_limit = Some(default_limit),
+        "/commands/internal" => internal_commands_limit = Some(default_limit),
+        "/snark-jobs" => snarks_limit = Some(default_limit),
+        "/block-production" => blocks_limit = Some(default_limit),
+        "/delegations" => delegators_limit = Some(default_limit),
+        _ => {}
+    }
+
+    (
+        blocks_limit,
+        snarks_limit,
+        trans_limit,
+        delegators_limit,
+        internal_commands_limit,
+    )
+}
+
+#[cfg(test)]
+mod set_tab_limit_tests {
+    use super::*;
+
+    #[test]
+    fn test_commands_user_with_limit() {
+        let (blocks, snarks, trans, delegators, internal) =
+            set_tab_limits("/commands/user", Some(50));
+        assert_eq!(blocks, Some(0), "blocks_limit should be 0");
+        assert_eq!(snarks, Some(0), "snarks_limit should be 0");
+        assert_eq!(trans, Some(50), "trans_limit should be 50");
+        assert_eq!(delegators, Some(0), "delegators_limit should be 0");
+        assert_eq!(internal, Some(0), "internal_commands_limit should be 0");
+    }
+
+    #[test]
+    fn test_commands_internal_with_limit() {
+        let (blocks, snarks, trans, delegators, internal) =
+            set_tab_limits("/commands/internal", Some(50));
+        assert_eq!(blocks, Some(0), "blocks_limit should be 0");
+        assert_eq!(snarks, Some(0), "snarks_limit should be 0");
+        assert_eq!(trans, Some(0), "trans_limit should be 0");
+        assert_eq!(delegators, Some(0), "delegators_limit should be 0");
+        assert_eq!(internal, Some(50), "internal_commands_limit should be 50");
+    }
+
+    #[test]
+    fn test_snark_jobs_with_limit() {
+        let (blocks, snarks, trans, delegators, internal) = set_tab_limits("/snark-jobs", Some(50));
+        assert_eq!(blocks, Some(0), "blocks_limit should be 0");
+        assert_eq!(snarks, Some(50), "snarks_limit should be 50");
+        assert_eq!(trans, Some(0), "trans_limit should be 0");
+        assert_eq!(delegators, Some(0), "delegators_limit should be 0");
+        assert_eq!(internal, Some(0), "internal_commands_limit should be 0");
+    }
+
+    #[test]
+    fn test_block_production_with_limit() {
+        let (blocks, snarks, trans, delegators, internal) =
+            set_tab_limits("/block-production", Some(50));
+        assert_eq!(blocks, Some(50), "blocks_limit should be 50");
+        assert_eq!(snarks, Some(0), "snarks_limit should be 0");
+        assert_eq!(trans, Some(0), "trans_limit should be 0");
+        assert_eq!(delegators, Some(0), "delegators_limit should be 0");
+        assert_eq!(internal, Some(0), "internal_commands_limit should be 0");
+    }
+
+    #[test]
+    fn test_delegations_with_limit() {
+        let (blocks, snarks, trans, delegators, internal) =
+            set_tab_limits("/delegations", Some(50));
+        assert_eq!(blocks, Some(0), "blocks_limit should be 0");
+        assert_eq!(snarks, Some(0), "snarks_limit should be 0");
+        assert_eq!(trans, Some(0), "trans_limit should be 0");
+        assert_eq!(delegators, Some(50), "delegators_limit should be 50");
+        assert_eq!(internal, Some(0), "internal_commands_limit should be 0");
+    }
+
+    #[test]
+    fn test_commands_user_default_limit() {
+        let (blocks, snarks, trans, delegators, internal) = set_tab_limits("/commands/user", None);
+        assert_eq!(blocks, Some(0), "blocks_limit should be 0");
+        assert_eq!(snarks, Some(0), "snarks_limit should be 0");
+        assert_eq!(trans, Some(25), "trans_limit should be 25");
+        assert_eq!(delegators, Some(0), "delegators_limit should be 0");
+        assert_eq!(internal, Some(0), "internal_commands_limit should be 0");
+    }
+
+    #[test]
+    fn test_snark_jobs_default_limit() {
+        let (blocks, snarks, trans, delegators, internal) = set_tab_limits("/snark-jobs", None);
+        assert_eq!(blocks, Some(0), "blocks_limit should be 0");
+        assert_eq!(snarks, Some(25), "snarks_limit should be 25");
+        assert_eq!(trans, Some(0), "trans_limit should be 0");
+        assert_eq!(delegators, Some(0), "delegators_limit should be 0");
+        assert_eq!(internal, Some(0), "internal_commands_limit should be 0");
+    }
+
+    #[test]
+    fn test_unknown_tab() {
+        let (blocks, snarks, trans, delegators, internal) = set_tab_limits("/unknown", Some(50));
+        assert_eq!(blocks, Some(0), "blocks_limit should be 0");
+        assert_eq!(snarks, Some(0), "snarks_limit should be 0");
+        assert_eq!(trans, Some(0), "trans_limit should be 0");
+        assert_eq!(delegators, Some(0), "delegators_limit should be 0");
+        assert_eq!(internal, Some(0), "internal_commands_limit should be 0");
+    }
+
+    #[test]
+    fn test_empty_tab() {
+        let (blocks, snarks, trans, delegators, internal) = set_tab_limits("", Some(50));
+        assert_eq!(blocks, Some(0), "blocks_limit should be 0");
+        assert_eq!(snarks, Some(0), "snarks_limit should be 0");
+        assert_eq!(trans, Some(0), "trans_limit should be 0");
+        assert_eq!(delegators, Some(0), "delegators_limit should be 0");
+        assert_eq!(internal, Some(0), "internal_commands_limit should be 0");
+    }
+}
+
 #[cfg(test)]
 mod extend_delegator_info_tests {
     use super::*;

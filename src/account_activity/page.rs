@@ -254,6 +254,8 @@ pub fn AccountDelegationsPage() -> impl IntoView {
 #[component]
 pub fn AccountSpotlightTabbedPage() -> impl IntoView {
     let memo_params_map = use_params_map();
+    let route = use_route();
+    let location = use_location();
     let (account, set_account) = create_signal(None);
     let (transactions, set_transactions) = create_signal(None);
     let (internal_transactions, set_int_txn) = create_signal(None);
@@ -263,6 +265,11 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
     let (delegators_count, set_delegators_counts) = create_signal(None);
     let (tokens, set_tokens) = create_signal(None);
     let (is_loading_sig, set_is_loading) = create_signal(None);
+    let get_tab = move || {
+        let path = route.path();
+        let pathname = location.pathname.get();
+        pathname[path.len()..].to_string()
+    };
 
     let query_params_map = use_query_map();
     let (canonical_sig, _) = create_query_signal::<bool>("canonical");
@@ -297,6 +304,7 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
                 row_limit_sig.get(),
                 q_type_sig.get(),
                 q_direction_sig.get(),
+                get_tab(),
             )
         },
         |(
@@ -307,20 +315,27 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
             nonce,
             slot,
             current_epoch_staking_ledger,
-            mut row_limit,
+            row_limit,
             q_type,
             q_direction,
+            tab,
         )| async move {
-            let limit = *row_limit.get_or_insert(25i64);
+            let (
+                blocks_limit,
+                snarks_limit,
+                trans_limit,
+                delegators_limit,
+                internal_commands_limit,
+            ) = set_tab_limits(&tab, row_limit);
             if let Some(id) = value.get("id").cloned() {
                 // Attempt to load data and handle any potential errors more gracefully
                 match load_data(
                     Some(id.clone()),
-                    Some(limit),
-                    Some(limit),
-                    Some(limit),
-                    Some(limit),
-                    Some(limit),
+                    blocks_limit,
+                    snarks_limit,
+                    trans_limit,
+                    delegators_limit,
+                    internal_commands_limit,
                     block_height,
                     qp_map.get("q-txn-hash").cloned(),
                     qp_map.get("q-state-hash").cloned(),
