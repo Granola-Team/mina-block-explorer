@@ -10,7 +10,7 @@ use chrono::{DateTime, Utc};
 use heck::ToTitleCase;
 use leptos_router::Params;
 use serde::{Deserialize, Serialize};
-use std::fmt;
+use std::{cmp::Ordering, fmt};
 
 #[derive(Copy, Clone)]
 pub struct DelegateCount(pub usize);
@@ -48,7 +48,7 @@ pub struct AccountResponse {
     pub account: AccountSummary,
 }
 
-#[derive(Clone)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct AccountActivityQueryDirectionalTransactions {
     pub fee: Option<f64>,
     pub counterparty: Option<String>,
@@ -124,6 +124,35 @@ impl From<AccountActivityQueryOutgoingTransactions>
             canonical: i.canonical,
         }
     }
+}
+
+pub fn merge_transactions(
+    incoming: Vec<Option<AccountActivityQueryIncomingTransactions>>,
+    outgoing: Vec<Option<AccountActivityQueryOutgoingTransactions>>,
+) -> Vec<Option<AccountActivityQueryDirectionalTransactions>> {
+    let mut transactions: Vec<Option<AccountActivityQueryDirectionalTransactions>> = incoming
+        .into_iter()
+        .map(|t| t.map(AccountActivityQueryDirectionalTransactions::from))
+        .chain(
+            outgoing
+                .into_iter()
+                .map(|t| t.map(AccountActivityQueryDirectionalTransactions::from)),
+        )
+        .collect();
+
+    transactions.sort_by(|a, b| {
+        match (
+            a.as_ref().and_then(|x| x.date_time),
+            b.as_ref().and_then(|x| x.date_time),
+        ) {
+            (Some(date_time_a), Some(date_time_b)) => date_time_b.cmp(&date_time_a),
+            (Some(_), None) => Ordering::Greater,
+            (None, Some(_)) => Ordering::Less,
+            (None, None) => Ordering::Equal,
+        }
+    });
+
+    transactions
 }
 
 pub trait AccountActivityQueryDirectionalTransactionTrait {
@@ -352,5 +381,191 @@ impl fmt::Display for Delegators {
                 write!(f, "BALANCE_DESC")
             }
         }
+    }
+}
+
+#[cfg(test)]
+mod merge_tests {
+    use super::*;
+    use crate::account_activity::graphql::account_activity_query::{
+        AccountActivityQueryIncomingTransactionsBlock,
+        AccountActivityQueryOutgoingTransactionsBlock,
+    };
+    use chrono::{DateTime, Utc};
+
+    #[test]
+    fn test_merge_transactions() {
+        // Helper to parse dates
+        let parse_date = |s: &str| DateTime::parse_from_rfc3339(s).unwrap().with_timezone(&Utc);
+
+        // Test data (only Some transactions with date_time)
+        let incoming = vec![
+            Some(AccountActivityQueryIncomingTransactions {
+                fee: Some(0.1),
+                from: Some("alice".to_string()),
+                to: Some("bob".to_string()),
+                hash: Some("in1".to_string()),
+                amount: Some(10.0),
+                block: Some(AccountActivityQueryIncomingTransactionsBlock {
+                    date_time: Some(parse_date("2023-10-01T10:00:00Z")),
+                }),
+                block_height: Some(100),
+                kind: Some("payment".to_string()),
+                nonce: Some(1),
+                failure_reason: None,
+                memo: Some("test".to_string()),
+                canonical: Some(true),
+            }),
+            Some(AccountActivityQueryIncomingTransactions {
+                fee: Some(0.2),
+                from: Some("alice".to_string()),
+                to: Some("alice".to_string()), // Self-transfer
+                hash: Some("in2".to_string()),
+                amount: Some(5.0),
+                block: Some(AccountActivityQueryIncomingTransactionsBlock {
+                    date_time: Some(parse_date("2023-10-02T12:00:00Z")),
+                }),
+                block_height: Some(101),
+                kind: Some("payment".to_string()),
+                nonce: Some(2),
+                failure_reason: None,
+                memo: None,
+                canonical: Some(true),
+            }),
+        ];
+
+        let outgoing = vec![Some(AccountActivityQueryOutgoingTransactions {
+            fee: Some(0.3),
+            from: Some("bob".to_string()),
+            to: Some("charlie".to_string()),
+            hash: Some("out1".to_string()),
+            amount: Some(15.0),
+            block: Some(AccountActivityQueryOutgoingTransactionsBlock {
+                date_time: Some(parse_date("2023-10-01T09:00:00Z")),
+            }),
+            block_height: Some(99),
+            kind: Some("payment".to_string()),
+            nonce: Some(3),
+            failure_reason: None,
+            memo: Some("outgoing".to_string()),
+            canonical: Some(true),
+        })];
+
+        // Run the function
+        let result = merge_transactions(incoming, outgoing);
+
+        // Expected output (sorted by date_time descending, only Some transactions)
+        let expected = vec![
+            // Latest: 2023-10-02T12:00:00Z (in2)
+            Some(AccountActivityQueryDirectionalTransactions {
+                fee: Some(0.2),
+                counterparty: Some("Self".to_string()),
+                direction: Some("IN".to_string()),
+                hash: Some("in2".to_string()),
+                amount: Some(5.0),
+                date_time: Some(parse_date("2023-10-02T12:00:00Z")),
+                height: Some(101),
+                kind: Some("payment".to_string()),
+                nonce: Some(2),
+                failure_reason: None,
+                memo: None,
+                canonical: Some(true),
+            }),
+            // 2023-10-01T10:00:00Z (in1)
+            Some(AccountActivityQueryDirectionalTransactions {
+                fee: Some(0.1),
+                counterparty: Some("alice".to_string()),
+                direction: Some("IN".to_string()),
+                hash: Some("in1".to_string()),
+                amount: Some(10.0),
+                date_time: Some(parse_date("2023-10-01T10:00:00Z")),
+                height: Some(100),
+                kind: Some("payment".to_string()),
+                nonce: Some(1),
+                failure_reason: None,
+                memo: Some("test".to_string()),
+                canonical: Some(true),
+            }),
+            // 2023-10-01T09:00:00Z (out1)
+            Some(AccountActivityQueryDirectionalTransactions {
+                fee: Some(0.3),
+                counterparty: Some("charlie".to_string()),
+                direction: Some("OUT".to_string()),
+                hash: Some("out1".to_string()),
+                amount: Some(15.0),
+                date_time: Some(parse_date("2023-10-01T09:00:00Z")),
+                height: Some(99),
+                kind: Some("payment".to_string()),
+                nonce: Some(3),
+                failure_reason: None,
+                memo: Some("outgoing".to_string()),
+                canonical: Some(true),
+            }),
+        ];
+
+        // Assert the result matches expected
+        assert_eq!(
+            result, expected,
+            "Merged transactions do not match expected output"
+        );
+
+        // Verify length
+        assert_eq!(result.len(), 3, "Unexpected number of transactions");
+
+        // Verify sorting (check date_time order)
+        let date_times: Vec<Option<DateTime<Utc>>> = result
+            .iter()
+            .map(|t| t.as_ref().and_then(|x| x.date_time))
+            .collect();
+        assert_eq!(
+            date_times,
+            vec![
+                Some(parse_date("2023-10-02T12:00:00Z")),
+                Some(parse_date("2023-10-01T10:00:00Z")),
+                Some(parse_date("2023-10-01T09:00:00Z")),
+            ],
+            "Transactions are not sorted correctly by date_time"
+        );
+
+        // Verify directions
+        let directions: Vec<Option<String>> = result
+            .iter()
+            .map(|t| t.as_ref().and_then(|x| x.direction.clone()))
+            .collect();
+        assert_eq!(
+            directions,
+            vec![
+                Some("IN".to_string()),
+                Some("IN".to_string()),
+                Some("OUT".to_string()),
+            ],
+            "Transaction directions are incorrect"
+        );
+    }
+
+    #[test]
+    fn test_merge_transactions_empty() {
+        // Test with empty inputs
+        let incoming: Vec<Option<AccountActivityQueryIncomingTransactions>> = vec![];
+        let outgoing: Vec<Option<AccountActivityQueryOutgoingTransactions>> = vec![];
+        let result = merge_transactions(incoming, outgoing);
+        assert!(
+            result.is_empty(),
+            "Empty inputs should produce empty output"
+        );
+    }
+
+    // Optionally keep or remove this test
+    #[test]
+    fn test_merge_transactions_only_none() {
+        // Test with only None values
+        let incoming: Vec<Option<AccountActivityQueryIncomingTransactions>> = vec![None, None];
+        let outgoing: Vec<Option<AccountActivityQueryOutgoingTransactions>> = vec![None];
+        let result = merge_transactions(incoming, outgoing);
+        assert_eq!(
+            result,
+            vec![None, None, None],
+            "None inputs should produce None outputs"
+        );
     }
 }

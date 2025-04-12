@@ -10,8 +10,7 @@ use crate::{
         },
         graphql::account_activity_query::{
             AccountActivityQueryAccounts, AccountActivityQueryBlocks,
-            AccountActivityQueryFeetransfers, AccountActivityQueryIncomingTransactions,
-            AccountActivityQueryOutgoingTransactions, AccountActivityQuerySnarks,
+            AccountActivityQueryFeetransfers, AccountActivityQuerySnarks,
             AccountActivityQueryTokenHolders,
         },
         models::AccountActivityQueryDirectionalTransactions,
@@ -358,36 +357,8 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
 
     create_effect(move |_| {
         if let Some(res) = activity_resource.get().and_then(|res| res.ok()) {
-            let mut transactions: Vec<Option<AccountActivityQueryDirectionalTransactions>> = res
-                .incoming_transactions
-                .into_iter()
-                .filter_map(|t| {
-                    t.map(|x| {
-                        Some(<AccountActivityQueryIncomingTransactions as Into<
-                            AccountActivityQueryDirectionalTransactions,
-                        >>::into(x))
-                    })
-                })
-                .chain(res.outgoing_transactions.into_iter().filter_map(|t| {
-                    t.map(|x| {
-                        Some(<AccountActivityQueryOutgoingTransactions as Into<
-                            AccountActivityQueryDirectionalTransactions,
-                        >>::into(x))
-                    })
-                }))
-                .collect();
-            transactions.sort_by(|a, b| {
-                match (
-                    a.as_ref().and_then(|x| x.date_time),
-                    b.as_ref().and_then(|x| x.date_time),
-                ) {
-                    (Some(date_time_a), Some(date_time_b)) => date_time_b.cmp(&date_time_a),
-                    (Some(_), None) => std::cmp::Ordering::Greater,
-                    (None, Some(_)) => std::cmp::Ordering::Less,
-                    (None, None) => std::cmp::Ordering::Equal,
-                }
-            });
-
+            let transactions =
+                merge_transactions(res.incoming_transactions, res.outgoing_transactions);
             let end_index = res.snarks.len().min(50);
             set_transactions.set(Some(transactions));
             set_snarks.set(Some(res.snarks[..end_index].to_vec()));
