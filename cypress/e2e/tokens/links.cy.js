@@ -24,5 +24,9 @@ suite(["@tier2"], "token holders", () => {
     );
     cy.aliasTableRows("MINU Token Accounts", "table-rows");
     cy.get("@table-rows").should("have.length", 1);
+
+    // 1 of 1
+    cy.assertTableMetadataCorrect("MINU Token Accounts", 1, 0);
+    cy.assertTableMetadataCorrect("MINU Token Accounts", 1, 1);
   });
 });

@@ -1,4 +1,4 @@
-use super::graphql::accounts_query;
+use super::{graphql::accounts_query, models::TokenData};
 use crate::{
     accounts::{components::NextAccountsPage, functions::*, models::AccountsSort},
     common::{components::*, constants::*, models::*, table::*},
@@ -29,12 +29,11 @@ fn AccountsPageContents() -> impl IntoView {
     let (username_sig, _) = create_query_signal::<String>("q-username");
     let (balance_sig, _) = create_query_signal::<f64>(QUERY_PARAM_BALANCE);
     let (delegate_sig, _) = create_query_signal::<String>("q-delegate");
-    let (token_sig, _) = create_query_signal::<String>(QUERY_PARAM_TOKEN);
+    let (q_token, _) = create_query_signal::<String>(QUERY_PARAM_TOKEN);
     let (row_limit_sig, _) = create_query_signal::<i64>("row-limit");
     let (sort_dir_sig, _) = create_query_signal::<String>("sort-dir");
     let (q_type_sig, _) = create_query_signal::<String>(QUERY_PARAM_TYPE);
-    let (section_heading_sig, set_section_heading) =
-        create_signal::<String>("MINA Accounts".to_string());
+    let (token_sig, set_token) = create_signal::<Option<TokenData>>(None);
 
     let resource = create_resource(
         move || {
@@ -46,10 +45,10 @@ fn AccountsPageContents() -> impl IntoView {
                 row_limit_sig.get(),
                 sort_dir_sig.get(),
                 q_type_sig.get(),
-                token_sig.get(),
+                q_token.get(),
             )
         },
-        |(public_key, username, balance, delegate, mut row_limit, sort_dir, q_type, token)| async move {
+        |(public_key, username, balance, delegate, mut row_limit, sort_dir, q_type, q_token)| async move {
             let s_dir = if let Some(s) = sort_dir.and_then(|s| AccountsSort::try_from(s).ok()) {
                 s
             } else {
@@ -69,18 +68,18 @@ fn AccountsPageContents() -> impl IntoView {
                 delegate,
                 Some(sort_by),
                 Some(is_zk_app),
-                token.or(Some(MINA_TOKEN_ADDRESS.to_string())),
+                q_token,
             )
             .await
         },
     );
-    let token_symbol_resource = create_resource(
-        move || token_sig.get(),
-        |token_id| async move { load_token_symbol(token_id).await },
+    let token_resource = create_resource(
+        move || q_token.get(),
+        |token| async move { load_token_symbol(token).await },
     );
 
     let get_data = move || resource.get().and_then(|res| res.ok());
-    let get_token_symbol_resp = move || token_symbol_resource.get().and_then(|res| res.ok());
+    let get_token = move || token_resource.get().and_then(|res| res.ok());
 
     create_effect(move |_| {
         if let Some(data) = get_data() {
@@ -92,9 +91,9 @@ fn AccountsPageContents() -> impl IntoView {
 
     create_effect(move |_| {
         if let Some(token) =
-            get_token_symbol_resp().and_then(|token_resp| token_resp.data.tokens.first().cloned())
+            get_token().and_then(|token_resp| token_resp.data.tokens.first().cloned())
         {
-            set_section_heading.set(format!("{} Token Accounts", token.symbol));
+            set_token.set(Some(token));
         }
     });
 
@@ -165,9 +164,12 @@ fn AccountsPageContents() -> impl IntoView {
                     metadata=Signal::derive(move || {
                         Some(
                             TableMetadataBuilder::new()
-                                .total_records_value(summary_sig.get().total_num_accounts)
                                 .displayed_records_value(
                                     data_sig.get().map(|a| a.len() as u64).unwrap_or_default(),
+                                )
+                                .available_records(
+                                    move || token_sig.get().is_some(),
+                                    token_sig.get().map(|t| t.total_num_txns).unwrap_or_default(),
                                 )
                                 .available_records(
                                     move || q_type_sig.get().is_none(),
@@ -183,10 +185,14 @@ fn AccountsPageContents() -> impl IntoView {
                                     },
                                     summary_sig.get().total_num_zkapp_accounts,
                                 )
+                                .total_records_value(summary_sig.get().total_num_accounts)
                                 .build(),
                         )
                     })
-                    section_heading=section_heading_sig.get()
+                    section_heading=token_sig
+                        .get()
+                        .map(|t| format!("{} Token Accounts", t.symbol))
+                        .unwrap_or("MINA Accounts".to_string())
                     is_loading=resource.loading()
                     footer=move || {
                         view! {

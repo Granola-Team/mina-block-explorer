@@ -13,7 +13,7 @@ pub async fn load_token_symbol(token_id: Option<String>) -> Result<TokenSymbolRe
         return Err(MyError::ParseError("token id must be set".into()));
     }
     let query_body = format!(
-        r#"{{"query": "{{ tokens(limit: 1, query: {{ token: \"{}\" }}) {{ symbol }} }}"}}"#,
+        r#"{{"query": "{{ tokens(limit: 1, query: {{ token: \"{}\" }}) {{ symbol total_num_txns }} }}"}}"#,
         token_id.unwrap(),
     );
     let client = reqwest::Client::new();
