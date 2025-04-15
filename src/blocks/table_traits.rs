@@ -68,7 +68,12 @@ impl TableData for Vec<Option<BlocksQueryBlocks>> {
                     ),
                     decorate_with_mina_tag(get_coinbase(block)),
                     convert_to_pill(
-                        get_transaction_count(block).map_or_else(String::new, |o| o.to_string()),
+                        format!(
+                            "{}/{}",
+                            get_transaction_count(block)
+                                .map_or_else(String::new, |o| o.to_string()),
+                            block.block_num_zkapp_commands
+                        ),
                         ColorVariant::Blue,
                     ),
                     convert_to_pill(

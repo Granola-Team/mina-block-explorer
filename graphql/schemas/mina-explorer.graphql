@@ -1276,6 +1276,7 @@ type Block {
   transactions: BlockTransaction
   txFees: String
   winnerAccount: BlockWinnerAccount
+  block_num_zkapp_commands: Int!
 }
 
 input BlockTransactionUserCommandReceiverQueryInput {

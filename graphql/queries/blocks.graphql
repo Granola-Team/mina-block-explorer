@@ -55,5 +55,6 @@ query BlocksQuery(
     }
     snarkFees
     txFees
+    block_num_zkapp_commands
   }
 }
