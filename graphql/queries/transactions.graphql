@@ -3,6 +3,7 @@ query TransactionsQuery(
   $sort_by: TransactionSortByInput!
   $txn_query: TransactionQueryInput!
   $other_txn_query: TransactionQueryInput
+  $token_query: TokensQueryInput
 ) {
   transactions(limit: $limit, sortBy: $sort_by, query: $txn_query) {
     blockHeight
@@ -46,5 +47,8 @@ query TransactionsQuery(
     block {
       stateHash
     }
+  }
+  tokens(limit: 1, query: $token_query) {
+    total_num_txns
   }
 }

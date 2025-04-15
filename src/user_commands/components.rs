@@ -84,8 +84,9 @@ pub fn TransactionsSection() -> impl IntoView {
     let (txn_applied_sig, _) = create_query_signal::<String>(QUERY_PARAM_TXN_APPLIED);
     let query_params_map = use_query_map();
     let (block_height_sig, _) = create_query_signal::<u64>(QP_HEIGHT);
-    let (token_sig, _) = create_query_signal::<String>(QP_TOKEN);
+    let (q_token_sig, _) = create_query_signal::<String>(QP_TOKEN);
     let (q_type_sig, _) = create_query_signal::<TransactionKind>(QUERY_PARAM_TYPE);
+    let (token_sig, set_token) = create_signal(None);
     let UseIntervalReturn { counter, .. } = use_interval(LIVE_RELOAD_INTERVAL);
 
     let resource = create_resource(
@@ -98,7 +99,7 @@ pub fn TransactionsSection() -> impl IntoView {
                 row_limit_sig.get(),
                 txn_applied_sig.get(),
                 q_type_sig.get(),
-                token_sig.get(),
+                q_token_sig.get(),
             )
         },
         move |(_, url_query_map, txn_type, block_height, row_limit, txn_applied, q_type, token)| async move {
@@ -107,6 +108,7 @@ pub fn TransactionsSection() -> impl IntoView {
                 return Ok(transactions_query::ResponseData {
                     transactions: data_sig.get().unwrap_or_default(),
                     other_transactions: vec![],
+                    tokens: vec![],
                 });
             }
 
@@ -216,7 +218,8 @@ pub fn TransactionsSection() -> impl IntoView {
 
     create_effect(move |_| {
         if let Some(data) = get_data() {
-            set_data.set(Some(data.transactions))
+            set_data.set(Some(data.transactions));
+            set_token.set(data.tokens.first().cloned().flatten());
         }
     });
 
@@ -240,7 +243,8 @@ pub fn TransactionsSection() -> impl IntoView {
                     .unwrap_or(true);
                 Some(
                     TableMetadataBuilder::new()
-                        .total_records_value(
+                        .total_records(
+                            move || token_sig.get().is_none(),
                             summary_sig
                                 .get()
                                 .total_num_user_commands
@@ -248,9 +252,17 @@ pub fn TransactionsSection() -> impl IntoView {
                                 .ok()
                                 .unwrap_or_default(),
                         )
+                        .total_records(
+                            move || token_sig.get().is_some(),
+                            token_sig
+                                .get()
+                                .and_then(|t| t.total_num_txns.try_into().ok())
+                                .unwrap_or_default(),
+                        )
                         .displayed_records_value(
                             data_sig.get().map(|d| d.len() as u64).unwrap_or_default(),
                         )
+                        .available_records(move || token_sig.get().is_some(), 0)
                         .available_records(
                             move || { no_filters && is_zk_app && is_canonical && applied_opt },
                             summary_sig.get().total_num_applied_canonical_zkapp_commands,
@@ -347,6 +359,7 @@ pub fn PendingTransactionsSection() -> impl IntoView {
                 return Ok(transactions_query::ResponseData {
                     transactions: vec![],
                     other_transactions: vec![],
+                    tokens: vec![],
                 });
             }
 

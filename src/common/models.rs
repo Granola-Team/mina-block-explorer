@@ -62,7 +62,6 @@ impl TableMetadataBuilder {
     }
 
     // Add an option for total_records
-    #[allow(dead_code)]
     pub fn total_records(mut self, condition: impl Fn() -> bool + 'static, value: u64) -> Self {
         self.total_records_options
             .push((Box::new(condition), value));

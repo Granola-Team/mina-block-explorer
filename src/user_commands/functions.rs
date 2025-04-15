@@ -30,6 +30,7 @@ pub async fn load_pending_txn() -> Result<transactions_query::ResponseData, MyEr
         Ok(transactions_query::ResponseData {
             transactions: txn,
             other_transactions: vec![],
+            tokens: vec![],
         })
     } else {
         Err(MyError::NetworkError("Failed to fetch data".into()))
@@ -70,12 +71,18 @@ pub async fn load_data(
                     ..Default::default()
                 }),
             kind: kind.map(|k| k.to_string()),
-            token,
+            token: token.clone(),
             ..Default::default()
         },
         other_txn_query: Some(transactions_query::TransactionQueryInput {
             hash: txn_hash,
             ..Default::default()
+        }),
+        token_query: Some(transactions_query::TokensQueryInput {
+            token,
+            owner: None,
+            symbol: None,
+            supply: None,
         }),
     };
 
