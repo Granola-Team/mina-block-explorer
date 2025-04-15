@@ -243,26 +243,16 @@ pub fn TransactionsSection() -> impl IntoView {
                     .unwrap_or(true);
                 Some(
                     TableMetadataBuilder::new()
-                        .total_records(
-                            move || token_sig.get().is_none(),
-                            summary_sig
-                                .get()
-                                .total_num_user_commands
-                                .try_into()
-                                .ok()
-                                .unwrap_or_default(),
+                        .displayed_records_value(
+                            data_sig.get().map(|d| d.len() as u64).unwrap_or_default(),
                         )
-                        .total_records(
+                        .available_records(
                             move || token_sig.get().is_some(),
                             token_sig
                                 .get()
                                 .and_then(|t| t.total_num_txns.try_into().ok())
                                 .unwrap_or_default(),
                         )
-                        .displayed_records_value(
-                            data_sig.get().map(|d| d.len() as u64).unwrap_or_default(),
-                        )
-                        .available_records(move || token_sig.get().is_some(), 0)
                         .available_records(
                             move || { no_filters && is_zk_app && is_canonical && applied_opt },
                             summary_sig.get().total_num_applied_canonical_zkapp_commands,
@@ -310,6 +300,14 @@ pub fn TransactionsSection() -> impl IntoView {
                         .available_records(
                             move || { no_filters && !is_zk_app && !is_canonical && !applied_opt },
                             summary_sig.get().get_total_num_non_canonical_failed_user_commands(),
+                        )
+                        .total_records_value(
+                            summary_sig
+                                .get()
+                                .total_num_user_commands
+                                .try_into()
+                                .ok()
+                                .unwrap_or_default(),
                         )
                         .build(),
                 )
