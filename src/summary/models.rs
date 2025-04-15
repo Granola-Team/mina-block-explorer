@@ -46,6 +46,24 @@ pub struct BlockchainSummary {
     pub chain: Option<HashMap<String, ChainSummary>>, // Keyed by chain ID hash
 }
 
+impl BlockchainSummary {
+    pub fn get_total_num_non_canonical_applied_zkapp_commands(&self) -> u64 {
+        self.total_num_applied_zkapp_commands - self.total_num_applied_canonical_zkapp_commands
+    }
+
+    pub fn get_total_num_non_canonical_failed_zkapp_commands(&self) -> u64 {
+        self.total_num_failed_zkapp_commands - self.total_num_failed_canonical_zkapp_commands
+    }
+
+    pub fn get_total_num_non_canonical_applied_user_commands(&self) -> u64 {
+        self.total_num_applied_user_commands - self.total_num_applied_canonical_user_commands
+    }
+
+    pub fn get_total_num_non_canonical_failed_user_commands(&self) -> u64 {
+        self.total_num_failed_user_commands - self.total_num_failed_canonical_user_commands
+    }
+}
+
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq, Default)]
 pub struct BlockchainStatData {
     pub blocks: Vec<BlockchainStat>,
@@ -84,5 +102,53 @@ mod float_tests {
         };
         assert_eq!(bs.circ_supply(), 2345345.4312431243);
         assert_eq!(bs.tot_currency(), 1_105_297_372.840_039_3)
+    }
+}
+
+#[cfg(test)]
+mod blockchain_summary_tests {
+    use super::*;
+
+    // Helper function to create a sample BlockchainSummary
+    fn create_sample_summary() -> BlockchainSummary {
+        BlockchainSummary {
+            total_num_applied_zkapp_commands: 120,
+            total_num_applied_canonical_zkapp_commands: 100,
+            total_num_failed_zkapp_commands: 30,
+            total_num_failed_canonical_zkapp_commands: 20,
+            total_num_applied_user_commands: 250,
+            total_num_applied_canonical_user_commands: 230,
+            total_num_failed_user_commands: 50,
+            total_num_failed_canonical_user_commands: 40,
+            ..BlockchainSummary::default()
+        }
+    }
+
+    #[test]
+    fn test_get_total_num_non_canonical_applied_zkapp_commands() {
+        let summary = create_sample_summary();
+        let result = summary.get_total_num_non_canonical_applied_zkapp_commands();
+        assert_eq!(result, 120 - 100); // 20
+    }
+
+    #[test]
+    fn test_get_total_num_non_canonical_failed_zkapp_commands() {
+        let summary = create_sample_summary();
+        let result = summary.get_total_num_non_canonical_failed_zkapp_commands();
+        assert_eq!(result, 30 - 20); // 10
+    }
+
+    #[test]
+    fn test_get_total_num_non_canonical_applied_user_commands() {
+        let summary = create_sample_summary();
+        let result = summary.get_total_num_non_canonical_applied_user_commands();
+        assert_eq!(result, 250 - 230); // 20
+    }
+
+    #[test]
+    fn test_get_total_num_non_canonical_failed_user_commands() {
+        let summary = create_sample_summary();
+        let result = summary.get_total_num_non_canonical_failed_user_commands();
+        assert_eq!(result, 50 - 40); // 10
     }
 }

@@ -44,14 +44,12 @@ fn get_available_records(
             (Some(tt), Some(false), Some(true)) if &tt == "Canonical" => {
                 Some(summary.total_num_failed_canonical_zkapp_commands)
             }
-            (Some(tt), Some(true), Some(true)) if &tt == "Non-Canonical" => Some(
-                summary.total_num_applied_zkapp_commands
-                    - summary.total_num_applied_canonical_zkapp_commands,
-            ),
-            (Some(tt), Some(false), Some(true)) if &tt == "Non-Canonical" => Some(
-                summary.total_num_failed_zkapp_commands
-                    - summary.total_num_failed_canonical_zkapp_commands,
-            ),
+            (Some(tt), Some(true), Some(true)) if &tt == "Non-Canonical" => {
+                Some(summary.get_total_num_non_canonical_applied_zkapp_commands())
+            }
+            (Some(tt), Some(false), Some(true)) if &tt == "Non-Canonical" => {
+                Some(summary.get_total_num_non_canonical_failed_zkapp_commands())
+            }
             (None, Some(true), Some(true)) | (None, None, Some(true)) => {
                 Some(summary.total_num_applied_canonical_zkapp_commands)
             }
@@ -70,14 +68,12 @@ fn get_available_records(
                 Some(summary.total_num_failed_canonical_user_commands)
             }
             (None, Some(false), _) => Some(summary.total_num_failed_canonical_user_commands),
-            (Some(tt), Some(true), _) if &tt == "Non-Canonical" => Some(
-                summary.total_num_applied_user_commands
-                    - summary.total_num_applied_canonical_user_commands,
-            ),
-            (Some(tt), Some(false), _) if &tt == "Non-Canonical" => Some(
-                summary.total_num_failed_user_commands
-                    - summary.total_num_failed_canonical_user_commands,
-            ),
+            (Some(tt), Some(true), _) if &tt == "Non-Canonical" => {
+                Some(summary.get_total_num_non_canonical_applied_user_commands())
+            }
+            (Some(tt), Some(false), _) if &tt == "Non-Canonical" => {
+                Some(summary.get_total_num_non_canonical_failed_user_commands())
+            }
 
             _ => None,
         }
