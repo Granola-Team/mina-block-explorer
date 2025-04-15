@@ -26,60 +26,6 @@ const BACKSCAN_LIMIT: u64 = 2000;
 const STATUS_SEARCH_OPTION_APPLIED: &str = "Applied";
 const STATUS_SEARCH_OPTION_FAILED: &str = "Failed";
 
-fn get_available_records(
-    summary: BlockchainSummary,
-    canonical_opt: Option<String>,
-    applied_opt: Option<bool>,
-    zk_app: Option<bool>,
-    other_qps: bool,
-) -> Option<u64> {
-    if other_qps {
-        None
-    } else {
-        match (canonical_opt, applied_opt, zk_app) {
-            // zk_app = Some(true) cases
-            (Some(tt), Some(true), Some(true)) if &tt == "Canonical" => {
-                Some(summary.total_num_applied_canonical_zkapp_commands)
-            }
-            (Some(tt), Some(false), Some(true)) if &tt == "Canonical" => {
-                Some(summary.total_num_failed_canonical_zkapp_commands)
-            }
-            (Some(tt), Some(true), Some(true)) if &tt == "Non-Canonical" => {
-                Some(summary.get_total_num_non_canonical_applied_zkapp_commands())
-            }
-            (Some(tt), Some(false), Some(true)) if &tt == "Non-Canonical" => {
-                Some(summary.get_total_num_non_canonical_failed_zkapp_commands())
-            }
-            (None, Some(true), Some(true)) | (None, None, Some(true)) => {
-                Some(summary.total_num_applied_canonical_zkapp_commands)
-            }
-            (None, Some(false), Some(true)) => {
-                Some(summary.total_num_failed_canonical_zkapp_commands)
-            }
-
-            // zk_app = None or Some(false) cases (original behavior)
-            (Some(tt), Some(true), _) if &tt == "Canonical" => {
-                Some(summary.total_num_applied_canonical_user_commands)
-            }
-            (None, Some(true), _) | (None, None, _) => {
-                Some(summary.total_num_applied_canonical_user_commands)
-            }
-            (Some(tt), Some(false), _) if &tt == "Canonical" => {
-                Some(summary.total_num_failed_canonical_user_commands)
-            }
-            (None, Some(false), _) => Some(summary.total_num_failed_canonical_user_commands),
-            (Some(tt), Some(true), _) if &tt == "Non-Canonical" => {
-                Some(summary.get_total_num_non_canonical_applied_user_commands())
-            }
-            (Some(tt), Some(false), _) if &tt == "Non-Canonical" => {
-                Some(summary.get_total_num_non_canonical_failed_user_commands())
-            }
-
-            _ => None,
-        }
-    }
-}
-
 #[component]
 pub fn AccountsUpdatedSection(
     zkapp: Option<transactions_query::TransactionsQueryTransactionsZkapp>,
@@ -279,42 +225,82 @@ pub fn TransactionsSection() -> impl IntoView {
             table_columns
             data_sig
             metadata=Signal::derive(move || {
-                let mut otherQps = query_params_map.get();
-                otherQps.remove(QP_TXN_TYPE);
-                otherQps.remove(QUERY_PARAM_TXN_APPLIED);
-                otherQps.remove(QP_ROW_LIMIT);
-                otherQps.remove(QUERY_PARAM_TYPE);
-                let mut available_records = None;
                 let url_query_map = query_params_map.get();
-                let from = url_query_map.get(QP_FROM).cloned();
-                let to = url_query_map.get(QP_TO).cloned();
-                let txn_hash = url_query_map.get(QP_TXN_HASH).cloned();
+                let no_filters = url_query_map.get(QP_HEIGHT).is_none()
+                    && url_query_map.get(QP_FROM).is_none() && url_query_map.get(QP_TO).is_none()
+                    && url_query_map.get(QP_TXN_HASH).is_none();
                 let is_zk_app = q_type_sig.get().is_some_and(|p| p == TransactionKind::Zkapp);
-                if block_height_sig.get().is_none() && from.is_none() && to.is_none()
-                    && txn_hash.is_none()
-                {
-                    available_records = get_available_records(
-                        summary_sig.get(),
-                        txn_type_qp.get(),
-                        Some(
-                            txn_applied_sig
+                let applied_opt = txn_applied_sig
+                    .get()
+                    .is_none_or(|txn_applied| txn_applied != STATUS_SEARCH_OPTION_FAILED);
+                let is_canonical = txn_type_qp
+                    .get()
+                    .as_ref()
+                    .map(|tt| tt != "Non-Canonical")
+                    .unwrap_or(true);
+                Some(
+                    TableMetadataBuilder::new()
+                        .total_records_value(
+                            summary_sig
                                 .get()
-                                .is_none_or(|txn_applied| {
-                                    txn_applied != STATUS_SEARCH_OPTION_FAILED
-                                }),
-                        ),
-                        Some(is_zk_app),
-                        !otherQps.to_query_string().is_empty(),
-                    );
-                }
-                Some(TableMetadata {
-                    total_records: u64::try_from(summary_sig.get().total_num_user_commands).ok(),
-                    available_records,
-                    displayed_records: u64::try_from(
-                            data_sig.get().map(|d| d.len()).unwrap_or_default(),
+                                .total_num_user_commands
+                                .try_into()
+                                .ok()
+                                .unwrap_or_default(),
                         )
-                        .unwrap_or_default(),
-                })
+                        .displayed_records_value(
+                            data_sig.get().map(|d| d.len() as u64).unwrap_or_default(),
+                        )
+                        .available_records(
+                            move || { no_filters && is_zk_app && is_canonical && applied_opt },
+                            summary_sig.get().total_num_applied_canonical_zkapp_commands,
+                        )
+                        .available_records(
+                            move || { no_filters && is_zk_app && is_canonical && !applied_opt },
+                            summary_sig.get().total_num_failed_canonical_zkapp_commands,
+                        )
+                        .available_records(
+                            move || { no_filters && is_zk_app && !is_canonical && applied_opt },
+                            summary_sig.get().get_total_num_non_canonical_applied_zkapp_commands(),
+                        )
+                        .available_records(
+                            move || { no_filters && is_zk_app && !is_canonical && !applied_opt },
+                            summary_sig.get().get_total_num_non_canonical_failed_zkapp_commands(),
+                        )
+                        .available_records(
+                            move || { no_filters && is_zk_app && is_canonical && applied_opt },
+                            summary_sig.get().total_num_applied_canonical_zkapp_commands,
+                        )
+                        .available_records(
+                            move || { no_filters && is_zk_app && is_canonical && !applied_opt },
+                            summary_sig.get().total_num_failed_canonical_zkapp_commands,
+                        )
+                        .available_records(
+                            move || { no_filters && !is_zk_app && is_canonical && applied_opt },
+                            summary_sig.get().total_num_applied_canonical_user_commands,
+                        )
+                        .available_records(
+                            move || { no_filters && !is_zk_app && is_canonical && applied_opt },
+                            summary_sig.get().total_num_applied_canonical_user_commands,
+                        )
+                        .available_records(
+                            move || { no_filters && !is_zk_app && is_canonical && !applied_opt },
+                            summary_sig.get().total_num_failed_canonical_user_commands,
+                        )
+                        .available_records(
+                            move || { no_filters && !is_zk_app && is_canonical && !applied_opt },
+                            summary_sig.get().total_num_failed_canonical_user_commands,
+                        )
+                        .available_records(
+                            move || { no_filters && !is_zk_app && !is_canonical && applied_opt },
+                            summary_sig.get().get_total_num_non_canonical_applied_user_commands(),
+                        )
+                        .available_records(
+                            move || { no_filters && !is_zk_app && !is_canonical && !applied_opt },
+                            summary_sig.get().get_total_num_non_canonical_failed_user_commands(),
+                        )
+                        .build(),
+                )
             })
 
             is_loading=resource.loading()
@@ -444,292 +430,5 @@ pub fn PendingTransactionsSection() -> impl IntoView {
             is_loading=resource.loading()
             section_heading="Pending Commands"
         />
-    }
-}
-
-#[cfg(test)]
-mod get_available_records_tests {
-    use super::*;
-
-    #[test]
-    fn test_canonical_applied_true() {
-        let summary = BlockchainSummary {
-            total_num_applied_canonical_user_commands: 100,
-            total_num_failed_canonical_user_commands: 50,
-            total_num_applied_user_commands: 200,
-            total_num_failed_user_commands: 75,
-            ..Default::default()
-        };
-        let result = get_available_records(
-            summary,
-            Some("Canonical".to_string()),
-            Some(true),
-            None, // zk_app = None
-            false,
-        );
-        assert_eq!(result, Some(100));
-    }
-
-    #[test]
-    fn test_non_canonical_applied_true() {
-        let summary = BlockchainSummary {
-            total_num_applied_canonical_user_commands: 100,
-            total_num_failed_canonical_user_commands: 50,
-            total_num_applied_user_commands: 200,
-            total_num_failed_user_commands: 75,
-            ..Default::default()
-        };
-        let result = get_available_records(
-            summary,
-            Some("Non-Canonical".to_string()),
-            Some(true),
-            None, // zk_app = None
-            false,
-        );
-        assert_eq!(result, Some(100)); // 200 - 100
-    }
-
-    #[test]
-    fn test_canonical_applied_false() {
-        let summary = BlockchainSummary {
-            total_num_applied_canonical_user_commands: 100,
-            total_num_failed_canonical_user_commands: 50,
-            total_num_applied_user_commands: 200,
-            total_num_failed_user_commands: 75,
-            ..Default::default()
-        };
-        let result = get_available_records(
-            summary,
-            Some("Canonical".to_string()),
-            Some(false),
-            None, // zk_app = None
-            false,
-        );
-        assert_eq!(result, Some(50));
-    }
-
-    #[test]
-    fn test_non_canonical_applied_false() {
-        let summary = BlockchainSummary {
-            total_num_applied_canonical_user_commands: 100,
-            total_num_failed_canonical_user_commands: 50,
-            total_num_applied_user_commands: 200,
-            total_num_failed_user_commands: 75,
-            ..Default::default()
-        };
-        let result = get_available_records(
-            summary,
-            Some("Non-Canonical".to_string()),
-            Some(false),
-            None, // zk_app = None
-            false,
-        );
-        assert_eq!(result, Some(25)); // 75 - 50
-    }
-
-    #[test]
-    fn test_none_applied_true() {
-        let summary = BlockchainSummary {
-            total_num_applied_canonical_user_commands: 100,
-            total_num_failed_canonical_user_commands: 50,
-            total_num_applied_user_commands: 200,
-            total_num_failed_user_commands: 75,
-            ..Default::default()
-        };
-        let result = get_available_records(
-            summary,
-            None,
-            Some(true),
-            None, // zk_app = None
-            false,
-        );
-        assert_eq!(result, Some(100));
-    }
-
-    #[test]
-    fn test_none_applied_false() {
-        let summary = BlockchainSummary {
-            total_num_applied_canonical_user_commands: 100,
-            total_num_failed_canonical_user_commands: 50,
-            total_num_applied_user_commands: 200,
-            total_num_failed_user_commands: 75,
-            ..Default::default()
-        };
-        let result = get_available_records(
-            summary,
-            None,
-            Some(false),
-            None, // zk_app = None
-            false,
-        );
-        assert_eq!(result, Some(50));
-    }
-
-    #[test]
-    fn test_none_none() {
-        let summary = BlockchainSummary {
-            total_num_applied_canonical_user_commands: 100,
-            total_num_failed_canonical_user_commands: 50,
-            total_num_applied_user_commands: 200,
-            total_num_failed_user_commands: 75,
-            ..Default::default()
-        };
-        let result = get_available_records(summary, None, None, None, false); // zk_app = None
-        assert_eq!(result, Some(100));
-    }
-
-    #[test]
-    fn test_other_qps_true() {
-        let summary = BlockchainSummary {
-            total_num_applied_canonical_user_commands: 100,
-            total_num_failed_canonical_user_commands: 50,
-            total_num_applied_user_commands: 200,
-            total_num_failed_user_commands: 75,
-            ..Default::default()
-        };
-        let result = get_available_records(
-            summary,
-            Some("Canonical".to_string()),
-            Some(true),
-            None, // zk_app = None
-            true,
-        );
-        assert_eq!(result, None);
-    }
-
-    // New tests for zk_app = Some(true)
-    #[test]
-    fn test_zkapp_canonical_applied_true() {
-        let summary = BlockchainSummary {
-            total_num_applied_canonical_zkapp_commands: 80,
-            total_num_failed_canonical_zkapp_commands: 40,
-            total_num_applied_zkapp_commands: 150,
-            total_num_failed_zkapp_commands: 60,
-            ..Default::default()
-        };
-        let result = get_available_records(
-            summary,
-            Some("Canonical".to_string()),
-            Some(true),
-            Some(true),
-            false,
-        );
-        assert_eq!(result, Some(80));
-    }
-
-    #[test]
-    fn test_zkapp_non_canonical_applied_true() {
-        let summary = BlockchainSummary {
-            total_num_applied_canonical_zkapp_commands: 80,
-            total_num_failed_canonical_zkapp_commands: 40,
-            total_num_applied_zkapp_commands: 150,
-            total_num_failed_zkapp_commands: 60,
-            ..Default::default()
-        };
-        let result = get_available_records(
-            summary,
-            Some("Non-Canonical".to_string()),
-            Some(true),
-            Some(true),
-            false,
-        );
-        assert_eq!(result, Some(70)); // 150 - 80
-    }
-
-    #[test]
-    fn test_zkapp_canonical_applied_false() {
-        let summary = BlockchainSummary {
-            total_num_applied_canonical_zkapp_commands: 80,
-            total_num_failed_canonical_zkapp_commands: 40,
-            total_num_applied_zkapp_commands: 150,
-            total_num_failed_zkapp_commands: 60,
-            ..Default::default()
-        };
-        let result = get_available_records(
-            summary,
-            Some("Canonical".to_string()),
-            Some(false),
-            Some(true),
-            false,
-        );
-        assert_eq!(result, Some(40));
-    }
-
-    #[test]
-    fn test_zkapp_non_canonical_applied_false() {
-        let summary = BlockchainSummary {
-            total_num_applied_canonical_zkapp_commands: 80,
-            total_num_failed_canonical_zkapp_commands: 40,
-            total_num_applied_zkapp_commands: 150,
-            total_num_failed_zkapp_commands: 60,
-            ..Default::default()
-        };
-        let result = get_available_records(
-            summary,
-            Some("Non-Canonical".to_string()),
-            Some(false),
-            Some(true),
-            false,
-        );
-        assert_eq!(result, Some(20)); // 60 - 40
-    }
-
-    #[test]
-    fn test_zkapp_none_applied_true() {
-        let summary = BlockchainSummary {
-            total_num_applied_canonical_zkapp_commands: 80,
-            total_num_failed_canonical_zkapp_commands: 40,
-            total_num_applied_zkapp_commands: 150,
-            total_num_failed_zkapp_commands: 60,
-            ..Default::default()
-        };
-        let result = get_available_records(summary, None, Some(true), Some(true), false);
-        assert_eq!(result, Some(80));
-    }
-
-    #[test]
-    fn test_zkapp_none_applied_false() {
-        let summary = BlockchainSummary {
-            total_num_applied_canonical_zkapp_commands: 80,
-            total_num_failed_canonical_zkapp_commands: 40,
-            total_num_applied_zkapp_commands: 150,
-            total_num_failed_zkapp_commands: 60,
-            ..Default::default()
-        };
-        let result = get_available_records(summary, None, Some(false), Some(true), false);
-        assert_eq!(result, Some(40));
-    }
-
-    #[test]
-    fn test_zkapp_none_none() {
-        let summary = BlockchainSummary {
-            total_num_applied_canonical_zkapp_commands: 80,
-            total_num_failed_canonical_zkapp_commands: 40,
-            total_num_applied_zkapp_commands: 150,
-            total_num_failed_zkapp_commands: 60,
-            ..Default::default()
-        };
-        let result = get_available_records(summary, None, None, Some(true), false);
-        assert_eq!(result, Some(80));
-    }
-
-    // Test for zk_app = Some(false) to confirm it matches None behavior
-    #[test]
-    fn test_zkapp_false_canonical_applied_true() {
-        let summary = BlockchainSummary {
-            total_num_applied_canonical_user_commands: 100,
-            total_num_failed_canonical_user_commands: 50,
-            total_num_applied_user_commands: 200,
-            total_num_failed_user_commands: 75,
-            ..Default::default()
-        };
-        let result = get_available_records(
-            summary,
-            Some("Canonical".to_string()),
-            Some(true),
-            Some(false),
-            false,
-        );
-        assert_eq!(result, Some(100));
     }
 }
