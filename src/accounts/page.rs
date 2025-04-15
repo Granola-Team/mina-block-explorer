@@ -163,16 +163,29 @@ fn AccountsPageContents() -> impl IntoView {
                     table_columns
                     data_sig
                     metadata=Signal::derive(move || {
-                        Some(TableMetadata {
-                            total_records: Some(summary_sig.get().total_num_accounts),
-                            displayed_records: u64::try_from(
-                                    data_sig.get().map(|a| a.len()).unwrap_or_default(),
+                        Some(
+                            TableMetadataBuilder::new()
+                                .total_records_value(summary_sig.get().total_num_accounts)
+                                .displayed_records_value(
+                                    data_sig.get().map(|a| a.len() as u64).unwrap_or_default(),
                                 )
-                                .unwrap_or_default(),
-                            available_records: None,
-                        })
+                                .available_records(
+                                    move || q_type_sig.get().is_none(),
+                                    summary_sig.get().total_num_accounts,
+                                )
+                                .available_records(
+                                    move || {
+                                        q_type_sig
+                                            .get()
+                                            .as_ref()
+                                            .map(|t| t == TYPE_SEARCH_OPTION_ZKAPP)
+                                            .unwrap_or(false)
+                                    },
+                                    summary_sig.get().total_num_zkapp_accounts,
+                                )
+                                .build(),
+                        )
                     })
-
                     section_heading=section_heading_sig.get()
                     is_loading=resource.loading()
                     footer=move || {

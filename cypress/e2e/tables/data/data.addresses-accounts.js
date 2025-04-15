@@ -26,6 +26,7 @@ export const table = {
       input: "Zkapp",
       filter_type: "select",
       assertion: function () {
+        cy.assertTableMetadataCorrect("MINA Accounts", 27, 1);
         cy.assertForEachColumnValue("MINA Accounts", "Type", (text) => {
           expect(text).to.be.eq("Zkapp");
         });
