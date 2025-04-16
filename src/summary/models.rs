@@ -62,6 +62,12 @@ impl BlockchainSummary {
     pub fn get_total_num_non_canonical_failed_user_commands(&self) -> u64 {
         self.total_num_failed_user_commands - self.total_num_failed_canonical_user_commands
     }
+
+    pub fn get_total_num_non_canonical_blocks(&self) -> u64 {
+        // when ingesting from hardfork, total number of blocks is less than blockchain
+        // length therefore we use saturating_sub, to accomodate automated tests
+        self.total_num_blocks.saturating_sub(self.blockchain_length)
+    }
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq, Default)]

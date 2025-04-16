@@ -710,34 +710,34 @@ pub fn BlocksSection() -> impl IntoView {
             data_sig
             section_heading="Blocks"
             metadata=Signal::derive(move || {
-                let qp_map = query_params_map.get();
-                let bp = qp_map.get("q-block-producer").cloned();
-                let sh = qp_map.get("q-state-hash").cloned();
-                let mut available_records = None;
-                if block_height_sig.get().is_none() && slot_sig.get().is_none() && sh.is_none()
-                    && bp.is_none()
-                {
-                    available_records = canonical_sig
-                        .get()
-                        .map(|c| &c == "Canonical")
-                        .map(|c| {
-                            if c {
-                                summary_sig.get().blockchain_length
-                            } else {
-                                summary_sig.get().total_num_blocks
-                                    - summary_sig.get().blockchain_length
-                            }
-                        })
-                        .or(Some(summary_sig.get().blockchain_length));
-                }
-                Some(TableMetadata {
-                    displayed_records: u64::try_from(
-                            data_sig.get().map(|d| d.len()).unwrap_or_default(),
+                let query_params_map = query_params_map.get();
+                let indexes_not_available = query_params_map.get(QUERY_PARAM_HEIGHT).is_some()
+                    || query_params_map.get(QUERY_PARAM_STATE_HASH).is_some()
+                    || query_params_map.get(QUERY_PARAM_SLOT).is_some()
+                    || query_params_map.get(QUERY_PARAM_BLOCK_PRODUCER).is_some();
+                let indexes_available = !indexes_not_available;
+                let canonical_blocks = query_params_map
+                    .get(QUERY_PARAM_CANONICAL)
+                    .is_some_and(|canonical| canonical == "Canonical");
+                let non_canonical_blocks = query_params_map
+                    .get(QUERY_PARAM_CANONICAL)
+                    .is_some_and(|canonical| canonical == "Non-Canonical");
+                Some(
+                    TableMetadataBuilder::new()
+                        .total_records_value(summary_sig.get().total_num_blocks)
+                        .displayed_records_value(
+                            data_sig.get().and_then(|d| d.len().try_into().ok()).unwrap_or_default(),
                         )
-                        .unwrap_or_default(),
-                    available_records,
-                    total_records: Some(summary_sig.get().total_num_blocks),
-                })
+                        .available_records(
+                            move || indexes_available && canonical_blocks,
+                            summary_sig.get().blockchain_length,
+                        )
+                        .available_records(
+                            move || indexes_available && non_canonical_blocks,
+                            summary_sig.get().get_total_num_non_canonical_blocks(),
+                        )
+                        .build(),
+                )
             })
 
             is_loading=resource.loading()

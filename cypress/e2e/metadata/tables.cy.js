@@ -11,6 +11,16 @@ import {
   TOTAL_NUM_MINU_TOKEN_TXN,
 } from "../constants";
 
+const testMetadata = ({ url, table_header, metadata }) => {
+  it(`is correct for ${url}`, () => {
+    cy.visit(url);
+    cy.waitUntilTableLoads(table_header);
+    metadata.forEach((datum, ith) => {
+      cy.assertTableMetadataCorrect(table_header, datum, ith);
+    });
+  });
+};
+
 const row_limit = 25;
 suite(["@tier2"], "user command metadata", () => {
   [
@@ -103,13 +113,21 @@ suite(["@tier2"], "user command metadata", () => {
       table_header: "User Commands",
       metadata: [1, TOTAL_NUM_MINU_TOKEN_TXN, TOTAL_NUMBER_USER_COMMANDS],
     },
-  ].forEach(({ url, table_header, metadata }) => {
-    it(`is correct for ${url}`, () => {
-      cy.visit(url);
-      cy.waitUntilTableLoads(table_header);
-      metadata.forEach((datum, ith) => {
-        cy.assertTableMetadataCorrect(table_header, datum, ith);
-      });
-    });
-  });
+  ].forEach(testMetadata);
 });
+
+// TODO: Not a meaninful test due to blockchain length being greated than
+// indexed value "total_num_blocks" when ingesting from hardfork
+// suite(["@tier2"], "blocks metadata", () => {
+//   [
+//     {
+//       url: "/blocks",
+//       table_header: "Blocks",
+//       metadata: [
+//         ...,
+//         ...,
+//         ...,
+//       ],
+//     },
+//   ].forEach(testMetadata);
+// });
