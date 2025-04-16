@@ -229,9 +229,13 @@ pub fn TransactionsSection() -> impl IntoView {
             data_sig
             metadata=Signal::derive(move || {
                 let url_query_map = query_params_map.get();
-                let no_filters = url_query_map.get(QP_HEIGHT).is_none()
-                    && url_query_map.get(QP_FROM).is_none() && url_query_map.get(QP_TO).is_none()
-                    && url_query_map.get(QP_TXN_HASH).is_none();
+                let indexes_not_available = url_query_map.get(QP_HEIGHT).is_some()
+                    || url_query_map
+                        .get(QUERY_PARAM_TYPE)
+                        .is_some_and(|q_type| { *q_type != TransactionKind::Zkapp.to_string() })
+                    || url_query_map.get(QP_FROM).is_some() || url_query_map.get(QP_TO).is_some()
+                    || url_query_map.get(QP_TXN_HASH).is_some();
+                let indexes_available = !indexes_not_available;
                 let is_zk_app = q_type_sig.get().is_some_and(|p| p == TransactionKind::Zkapp);
                 let applied_opt = txn_applied_sig
                     .get()
@@ -247,59 +251,59 @@ pub fn TransactionsSection() -> impl IntoView {
                             data_sig.get().map(|d| d.len() as u64).unwrap_or_default(),
                         )
                         .available_records(
+                            move || {
+                                indexes_available && !is_zk_app && is_canonical && applied_opt
+                            },
+                            summary_sig.get().total_num_applied_canonical_user_commands,
+                        )
+                        .available_records(
+                            move || {
+                                indexes_available && !is_zk_app && is_canonical && !applied_opt
+                            },
+                            summary_sig.get().total_num_failed_canonical_user_commands,
+                        )
+                        .available_records(
+                            move || {
+                                indexes_available && !is_zk_app && !is_canonical && applied_opt
+                            },
+                            summary_sig.get().get_total_num_non_canonical_applied_user_commands(),
+                        )
+                        .available_records(
+                            move || {
+                                indexes_available && !is_zk_app && !is_canonical && !applied_opt
+                            },
+                            summary_sig.get().get_total_num_non_canonical_failed_user_commands(),
+                        )
+                        .available_records(
+                            move || {
+                                indexes_available && is_zk_app && is_canonical && applied_opt
+                            },
+                            summary_sig.get().total_num_applied_canonical_zkapp_commands,
+                        )
+                        .available_records(
+                            move || {
+                                indexes_available && is_zk_app && is_canonical && !applied_opt
+                            },
+                            summary_sig.get().total_num_failed_canonical_zkapp_commands,
+                        )
+                        .available_records(
+                            move || {
+                                indexes_available && is_zk_app && !is_canonical && applied_opt
+                            },
+                            summary_sig.get().get_total_num_non_canonical_applied_zkapp_commands(),
+                        )
+                        .available_records(
+                            move || {
+                                indexes_available && is_zk_app && !is_canonical && !applied_opt
+                            },
+                            summary_sig.get().get_total_num_non_canonical_failed_zkapp_commands(),
+                        )
+                        .available_records(
                             move || token_sig.get().is_some(),
                             token_sig
                                 .get()
                                 .and_then(|t| t.total_num_txns.try_into().ok())
                                 .unwrap_or_default(),
-                        )
-                        .available_records(
-                            move || { no_filters && is_zk_app && is_canonical && applied_opt },
-                            summary_sig.get().total_num_applied_canonical_zkapp_commands,
-                        )
-                        .available_records(
-                            move || { no_filters && is_zk_app && is_canonical && !applied_opt },
-                            summary_sig.get().total_num_failed_canonical_zkapp_commands,
-                        )
-                        .available_records(
-                            move || { no_filters && is_zk_app && !is_canonical && applied_opt },
-                            summary_sig.get().get_total_num_non_canonical_applied_zkapp_commands(),
-                        )
-                        .available_records(
-                            move || { no_filters && is_zk_app && !is_canonical && !applied_opt },
-                            summary_sig.get().get_total_num_non_canonical_failed_zkapp_commands(),
-                        )
-                        .available_records(
-                            move || { no_filters && is_zk_app && is_canonical && applied_opt },
-                            summary_sig.get().total_num_applied_canonical_zkapp_commands,
-                        )
-                        .available_records(
-                            move || { no_filters && is_zk_app && is_canonical && !applied_opt },
-                            summary_sig.get().total_num_failed_canonical_zkapp_commands,
-                        )
-                        .available_records(
-                            move || { no_filters && !is_zk_app && is_canonical && applied_opt },
-                            summary_sig.get().total_num_applied_canonical_user_commands,
-                        )
-                        .available_records(
-                            move || { no_filters && !is_zk_app && is_canonical && applied_opt },
-                            summary_sig.get().total_num_applied_canonical_user_commands,
-                        )
-                        .available_records(
-                            move || { no_filters && !is_zk_app && is_canonical && !applied_opt },
-                            summary_sig.get().total_num_failed_canonical_user_commands,
-                        )
-                        .available_records(
-                            move || { no_filters && !is_zk_app && is_canonical && !applied_opt },
-                            summary_sig.get().total_num_failed_canonical_user_commands,
-                        )
-                        .available_records(
-                            move || { no_filters && !is_zk_app && !is_canonical && applied_opt },
-                            summary_sig.get().get_total_num_non_canonical_applied_user_commands(),
-                        )
-                        .available_records(
-                            move || { no_filters && !is_zk_app && !is_canonical && !applied_opt },
-                            summary_sig.get().get_total_num_non_canonical_failed_user_commands(),
                         )
                         .total_records_value(
                             summary_sig
