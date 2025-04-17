@@ -395,7 +395,7 @@ where
                                 e.stop_propagation();
                             }
                             node_ref=select_element
-                            class=INPUT_CLASS.to_string() + &input_class + " p-0 text-xs"
+                            class=INPUT_CLASS.to_string() + &input_class + " p-0 text-xs bg-white "
                             id=id_copy
                         >
                             {column
