@@ -260,8 +260,6 @@ Cypress.Commands.add("testSpotlightValue", (key, value) => {
 Cypress.Commands.add(
   "aliasTableMetadata",
   (heading, alias = "table-metadata") => {
-    cy.log(heading);
-    cy.log("metadata-" + kebabCase(removeParentheses(heading)));
     cy.getBySel("metadata-" + kebabCase(removeParentheses(heading))).as(alias);
   },
 );

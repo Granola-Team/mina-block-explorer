@@ -534,6 +534,16 @@ pub fn nanomina_to_mina(num: u64) -> String {
     format_mina(num_str)
 }
 
+pub fn nanomina_to_mina_i64(num: i64) -> String {
+    let abs_num = num.unsigned_abs();
+    let formatted = nanomina_to_mina(abs_num);
+    if num.is_negative() {
+        format!("-{}", formatted)
+    } else {
+        formatted
+    }
+}
+
 pub fn convert_to_copy_link(data: String, href: String) -> HtmlElement<html::AnyElement> {
     view! {
         <span class="w-full text-ellipsis overflow-hidden">

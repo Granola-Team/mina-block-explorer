@@ -64,7 +64,7 @@ impl TableData for Vec<TransactionsQueryTransactionsZkappAccountsUpdated> {
                         format!("/addresses/accounts/{}", au.pk),
                     ),
                     convert_to_span(format_number_for_html(
-                        &format_number(au.balance_change.to_string()),
+                        &format_number(nanomina_to_mina_i64(au.balance_change)),
                         14,
                     )),
                     convert_to_span(au.increment_nonce.to_string()),

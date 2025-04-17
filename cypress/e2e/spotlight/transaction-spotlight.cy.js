@@ -86,7 +86,16 @@ suite(["@tier2"], "transaction spotlight", () => {
   it("displays zk app sections for zk app txn", () => {
     cy.visit(`/commands/${ZK_APP_TXN_HASH}`);
     cy.aliasTableRows("Accounts Updated", "table-rows");
-    cy.get("@table-rows").should("have.length.gt", 0);
+    cy.get("@table-rows").should("have.lengthOf", 7);
+    let expected_values = [-1, 0, 0, -19, 19, 0, 1];
+    cy.assertForEachColumnValue(
+      "Accounts Updated",
+      "Balance Change",
+      (text) => {
+        let next_val = expected_values.shift();
+        expect(text).equal("" + next_val);
+      },
+    );
 
     cy.aliasTransposedTableRows("Actions & Events", "table-rows");
     cy.get("@table-rows").should("have.lengthOf", 2);
