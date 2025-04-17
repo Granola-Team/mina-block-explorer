@@ -21,7 +21,9 @@ suite(["@tier2"], "tokens page", () => {
     verifyTokensPage();
   });
 
-  it("is navigated to from the account token holding page", () => {
+  // TODO: uncomment when https://github.com/Granola-Team/mina-indexer/issues/1860 closed and
+  // indexer version is updated locally in project
+  xit("is navigated to from the account token holding page", () => {
     cy.visit(`/addresses/accounts/${TOKEN_ACTIVITY_ONLY_ADDRESS}/tokens`);
     cy.waitUntilTableLoads("Tokens");
     cy.clickLinkInTable(0, "Token ID", "Tokens");

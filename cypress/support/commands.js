@@ -346,8 +346,8 @@ Cypress.Commands.add(
   },
 );
 Cypress.Commands.add("waitUntilTableLoads", (tableHeading) => {
-  cy.aliasTableRows(tableHeading, "table-rows");
-  cy.get("@table-rows").find(".loading-placeholder").should("not.exist");
+  cy.contains("section", tableHeading).closest("section").as("table-section");
+  cy.get("@table-section").find(".loading-placeholder").should("not.exist");
 });
 Cypress.Commands.add(
   "tableColumnValuesEqual",

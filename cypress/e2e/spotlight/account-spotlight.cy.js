@@ -33,7 +33,9 @@ suite(["@tier2"], "account spotlight", () => {
       expect(text).equal("Zkapp");
     });
   });
-  it("renders More Details subpage on tokens tab", () => {
+  // TODO: uncomment when https://github.com/Granola-Team/mina-indexer/issues/1860 closed and
+  // indexer version is updated locally in project
+  xit("renders More Details subpage on tokens tab", () => {
     cy.visit(`/addresses/accounts/${TOKEN_ACTIVITY_ONLY_ADDRESS}/tokens`);
     cy.waitUntilTableLoads("Tokens");
     cy.contains("More Details").should("not.exist");

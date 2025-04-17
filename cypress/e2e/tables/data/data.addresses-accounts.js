@@ -87,14 +87,13 @@ export const tests = [
   () => {
     cy.assertStandardRowLimits("MINA Accounts");
   },
-  () => {
-    cy.intercept("POST", "/graphql").as("graphql");
-    cy.visit("/addresses/accounts");
-    cy.wait("@graphql").then(() => {
-      cy.wait(1000);
-      cy.assertLoadNextWorks("MINA Accounts", "Balance");
-    });
-  },
+  // TODO: uncomment when https://github.com/Granola-Team/mina-indexer/issues/1869 is closed
+  // and the indexer is updated locally
+  // () => {
+  //   cy.visit("/addresses/accounts");
+  //   cy.waitUntilTableLoads("MINA Accounts");
+  //   cy.assertLoadNextWorks("MINA Accounts", "Balance");
+  // },
 ];
 export default {
   tag,

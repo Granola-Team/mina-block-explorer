@@ -68,7 +68,7 @@ fn AccountsPageContents() -> impl IntoView {
                 delegate,
                 Some(sort_by),
                 Some(is_zk_app),
-                q_token,
+                q_token.or(Some(MINA_TOKEN_ADDRESS.to_string())),
             )
             .await
         },
