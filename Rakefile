@@ -353,6 +353,7 @@ desc "Invoke the Tier2 regression suite (non-interactive)"
 task tier2: [:clean_cypress, :tier1, "node_modules", :deploy_mina_indexer] do
   trap("INT") { Rake::Task["shutdown_mina_indexer"].invoke }
   run_tier_task("pnpm exec cypress run -r list -q", wait_for_cypress: true)
+  Rake::Task["shutdown_mina_indexer"].invoke
 end
 
 desc "Invoke the Tier2 regression suite (interactive)"
