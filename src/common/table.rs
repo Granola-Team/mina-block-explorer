@@ -163,7 +163,7 @@ pub fn TableSectionTemplate<T, S>(
     data_sig: ReadSignal<Option<T>>,
     is_loading: Signal<bool>,
     #[prop(optional)] metadata: Option<Signal<Option<TableMetadata>>>,
-    #[prop(into)] section_heading: String,
+    #[prop(into)] section_heading: MaybeSignal<String>,
     #[prop(optional, into)] additional_info: ViewFn,
     #[prop(optional, into)] controls: ViewFn,
     #[prop(optional, into)] footer: ViewFn,
@@ -494,19 +494,21 @@ pub fn EmptyTable(#[prop(into)] message: String) -> impl IntoView {
 
 #[component]
 pub fn TableSection(
-    #[prop(into)] section_heading: String,
+    #[prop(into)] section_heading: MaybeSignal<String>,
     children: Children,
     #[prop(optional, into)] additional_info: ViewFn,
     metadata: Signal<Option<TableMetadata>>,
     #[prop(optional, into)] controls: ViewFn,
 ) -> impl IntoView {
     let BASE_META_CLASS = "h-16 grow flex justify-start md:justify-center items-center text-slate-400 text-normal text-xs";
-
+    let section_heading_clone = section_heading.clone();
     view! {
         <AppSection>
             <span class="w-full flex justify-between flex-wrap">
                 <div class="flex justify-start items-baseline flex-wrap">
-                    <AppHeading heading=section_heading.to_string() />
+                    {move || {
+                        view! { <AppHeading heading=section_heading_clone.get().to_string() /> }
+                    }}
                     {move || {
                         metadata
                             .get()
@@ -515,7 +517,11 @@ pub fn TableSection(
                                     <div
                                         data-test=format!(
                                             "metadata-{}",
-                                            section_heading.as_str().to_lowercase().to_kebab_case(),
+                                            section_heading
+                                                .get()
+                                                .as_str()
+                                                .to_lowercase()
+                                                .to_kebab_case(),
                                         )
                                         class="metadata pl-4 ".to_string() + BASE_META_CLASS
                                     >

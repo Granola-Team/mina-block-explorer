@@ -12,12 +12,14 @@ import {
   TOTAL_NUM_FAILED_ZKAPP_COMMANDS,
   TOTAL_NUM_NFT_HOLDERS,
   NFT_TOKEN_ID,
+  MINU_SYMBOL,
 } from "../constants";
 
 const testMetadata = ({ url, table_header, metadata }) => {
   it(`is correct for ${url}`, () => {
     cy.visit(url);
     cy.waitUntilTableLoads(table_header);
+    cy.wait(150);
     metadata.forEach((datum, ith) => {
       cy.assertTableMetadataCorrect(table_header, datum, ith);
     });
@@ -123,7 +125,7 @@ suite(["@tier2"], "user command metadata", () => {
     },
     {
       url: `/commands/user?q-token=${MINU_TOKEN_ADDRESS}`,
-      table_header: "User Commands",
+      table_header: `User Commands (${MINU_SYMBOL})`,
       metadata: [1, TOTAL_NUM_MINU_TOKEN_TXN, TOTAL_NUMBER_USER_COMMANDS],
     },
   ].forEach(testMetadata);

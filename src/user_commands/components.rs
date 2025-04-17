@@ -318,7 +318,18 @@ pub fn TransactionsSection() -> impl IntoView {
             })
 
             is_loading=resource.loading()
-            section_heading="User Commands"
+            section_heading=MaybeSignal::derive(move || {
+                token_sig
+                    .get()
+                    .and_then(|token| {
+                        (token.token != MINA_TOKEN_ADDRESS)
+                            .then(|| {
+                                token.symbol.map(|symbol| symbol.to_string()).unwrap_or_default()
+                            })
+                    })
+                    .map(|symbol| format!("User Commands ({symbol})"))
+                    .unwrap_or("User Commands".to_string())
+            })
             footer=move || {
                 view! {
                     <NextBlockPage

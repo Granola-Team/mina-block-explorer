@@ -22,7 +22,11 @@
 //
 //
 // -- This will overwrite an existing command --
-import { parseFormattedNumber, kebabCase } from "../e2e/helpers";
+import {
+  parseFormattedNumber,
+  kebabCase,
+  removeParentheses,
+} from "../e2e/helpers";
 Cypress.Commands.add("assertAnalyticsSimplValueEquals", (label, value) => {
   cy.get("span")
     .contains(label)
@@ -256,7 +260,9 @@ Cypress.Commands.add("testSpotlightValue", (key, value) => {
 Cypress.Commands.add(
   "aliasTableMetadata",
   (heading, alias = "table-metadata") => {
-    cy.getBySel("metadata-" + kebabCase(heading)).as(alias);
+    cy.log(heading);
+    cy.log("metadata-" + kebabCase(removeParentheses(heading)));
+    cy.getBySel("metadata-" + kebabCase(removeParentheses(heading))).as(alias);
   },
 );
 Cypress.Commands.add("assertTableMetadataCorrect", (heading, metadata, ith) => {

@@ -49,6 +49,8 @@ query TransactionsQuery(
     }
   }
   tokens(limit: 1, query: $token_query) {
+    token
+    symbol
     total_num_txns
   }
 }

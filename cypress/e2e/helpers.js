@@ -4,6 +4,9 @@ export const kebabCase = (string) =>
     .replace(/[\s_]+/g, "-")
     .replace(/-+/g, "-")
     .toLowerCase();
+export const removeParentheses = (str) => {
+  return str.replace(/[()]/g, "");
+};
 export const parseFormattedNumber = (formattedString) => {
   let normalizedNumber = formattedString.replace(/[^0-9.]/g, "");
   return parseFloat(normalizedNumber);
