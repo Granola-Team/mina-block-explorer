@@ -3,12 +3,13 @@ import {
   TOTAL_NUMBER_USER_COMMANDS,
   TOTAL_NUM_APPLIED_CANONICAL_ZKAPP_COMMANDS,
   TOTAL_NUMBER_APPLIED_USER_COMMANDS,
-  // TOTAL_NUM_FAILED_CANONICAL_ZKAPP_COMMANDS,
+  TOTAL_NUM_FAILED_CANONICAL_ZKAPP_COMMANDS,
   TOTAL_NUMBER_APPLIED_CANONICAL_USER_COMMANDS,
   TOTAL_NUM_FAILED_USER_COMMANDS,
   TOTAL_NUM_APPLIED_ZKAPP_COMMANDS,
   MINU_TOKEN_ADDRESS,
   TOTAL_NUM_MINU_TOKEN_TXN,
+  TOTAL_NUM_FAILED_ZKAPP_COMMANDS,
 } from "../constants";
 
 const testMetadata = ({ url, table_header, metadata }) => {
@@ -91,23 +92,23 @@ suite(["@tier2"], "user command metadata", () => {
         TOTAL_NUMBER_USER_COMMANDS,
       ],
     },
-    // TODO: fix these two later
-    // {
-    //   url: "/commands/user?q-status=Failed&txn-type=Canonical&q-type=ZKAPP",
-    //   table_header: "User Commands",
-    //   metadata: [
-    //     TOTAL_NUM_FAILED_CANONICAL_ZKAPP_COMMANDS,
-    //     TOTAL_NUMBER_USER_COMMANDS,
-    //   ],
-    // },
-    // {
-    //   url: "/commands/user?q-status=Failed&txn-type=Non-Canonical&q-type=ZKAPP",
-    //   table_header: "User Commands",
-    //   metadata: [
-    //     TOTAL_NUM_FAILED_CANONICAL_ZKAPP_COMMANDS,
-    //     TOTAL_NUMBER_USER_COMMANDS,
-    //   ],
-    // },
+    {
+      url: "/commands/user?q-status=Failed&txn-type=Canonical&q-type=ZKAPP",
+      table_header: "User Commands",
+      metadata: [
+        TOTAL_NUM_FAILED_CANONICAL_ZKAPP_COMMANDS,
+        TOTAL_NUMBER_USER_COMMANDS,
+      ],
+    },
+    {
+      url: "/commands/user?q-status=Failed&txn-type=Non-Canonical&q-type=ZKAPP",
+      table_header: "User Commands",
+      metadata: [
+        TOTAL_NUM_FAILED_ZKAPP_COMMANDS -
+          TOTAL_NUM_FAILED_CANONICAL_ZKAPP_COMMANDS,
+        TOTAL_NUMBER_USER_COMMANDS,
+      ],
+    },
     {
       url: `/commands/user?q-token=${MINU_TOKEN_ADDRESS}`,
       table_header: "User Commands",

@@ -506,14 +506,21 @@ pub fn TableSection(
         <AppSection>
             <span class="w-full flex justify-between flex-wrap">
                 <div class="flex justify-start items-baseline flex-wrap">
-                    <AppHeading heading=section_heading />
+                    <AppHeading heading=section_heading.to_string() />
                     {move || {
                         metadata
                             .get()
                             .map(|m| {
                                 view! {
-                                    <div class="metadata pl-4 ".to_string()
-                                        + BASE_META_CLASS>{format_metadata(&m, format_number)}</div>
+                                    <div
+                                        data-test=format!(
+                                            "metadata-{}",
+                                            section_heading.as_str().to_lowercase().to_kebab_case(),
+                                        )
+                                        class="metadata pl-4 ".to_string() + BASE_META_CLASS
+                                    >
+                                        {format_metadata(&m, format_number)}
+                                    </div>
                                 }
                                     .into_view()
                             })
