@@ -34,9 +34,7 @@ suite(["@tier2"], "Block spotlight", () => {
   it("displays complete information for canonical block", () => {
     testForCompleteness(FIRST_BLOCK_WITH_SNARK_WORK);
   });
-  // TODO: enable when non-canonical blocks are fixed
-  // https://github.com/Granola-Team/mina-indexer/issues/1548
-  xit("displays complete information for non-canonical block", () => {
+  it("displays complete information for non-canonical block", () => {
     testForCompleteness(FIRST_NON_CANONICAL_BLOCK_WITH_SNARK_WORK);
   });
 });
