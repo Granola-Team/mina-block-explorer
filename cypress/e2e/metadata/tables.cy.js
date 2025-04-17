@@ -10,6 +10,8 @@ import {
   MINU_TOKEN_ADDRESS,
   TOTAL_NUM_MINU_TOKEN_TXN,
   TOTAL_NUM_FAILED_ZKAPP_COMMANDS,
+  TOTAL_NUM_NFT_HOLDERS,
+  NFT_TOKEN_ID,
 } from "../constants";
 
 const testMetadata = ({ url, table_header, metadata }) => {
@@ -21,6 +23,16 @@ const testMetadata = ({ url, table_header, metadata }) => {
     });
   });
 };
+
+suite(["@tier2"], "accounts metadata", () => {
+  [
+    {
+      url: `/addresses/accounts?q-token=${NFT_TOKEN_ID}`,
+      table_header: `NFT Token Accounts`,
+      metadata: [1, TOTAL_NUM_NFT_HOLDERS],
+    },
+  ].forEach(testMetadata);
+});
 
 const row_limit = 25;
 suite(["@tier2"], "user command metadata", () => {

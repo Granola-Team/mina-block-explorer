@@ -169,7 +169,7 @@ fn AccountsPageContents() -> impl IntoView {
                                 )
                                 .available_records(
                                     move || token_sig.get().is_some(),
-                                    token_sig.get().map(|t| t.total_num_txns).unwrap_or_default(),
+                                    token_sig.get().map(|t| t.num_holders).unwrap_or_default(),
                                 )
                                 .available_records(
                                     move || q_type_sig.get().is_none(),

@@ -331,13 +331,13 @@ Cypress.Commands.add(
 );
 Cypress.Commands.add(
   "aliasTableColumnValue",
-  (columnHeading, column, alias = "table-column-values") => {
-    cy.aliasTableHeaders(columnHeading, "columns");
+  (tableHeading, column, alias = "table-column-values") => {
+    cy.aliasTableHeaders(tableHeading, "columns");
     cy.get("@columns")
       .contains(column)
       .invoke("index")
       .then((columnIndex) => {
-        cy.aliasTableRows(columnHeading, "table-rows");
+        cy.aliasTableRows(tableHeading, "table-rows");
         cy.get("@table-rows").find("td").eq(columnIndex).as(alias);
       });
   },

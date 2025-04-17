@@ -15,7 +15,7 @@ pub struct TokensData {
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 pub struct TokenData {
     pub symbol: String,
-    pub total_num_txns: u64,
+    pub num_holders: u64,
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
