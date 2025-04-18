@@ -4,7 +4,9 @@ describe("token transactions", () => {
   it("links to the user commands page", () => {
     cy.visit("/tokens");
     cy.clickLinkInTable(1, "Transactions", "Tokens");
-    cy.url().should("include", `/commands/user?q-token=${MINU_TOKEN_ADDRESS}`);
+    cy.url().should("include", `/commands/user`);
+    cy.url().should("include", `q-token=${MINU_TOKEN_ADDRESS}`);
+    cy.url().should("include", `q-status=All`);
     cy.aliasTableRows(`User Commands (${MINU_SYMBOL})`, "table-rows");
     cy.get("@table-rows").should("have.length", 1);
 
