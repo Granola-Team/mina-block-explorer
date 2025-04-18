@@ -1,5 +1,4 @@
 import { MINU_TOKEN_ADDRESS } from "../../constants";
-export const tag = "@tier2";
 export const url = "/tokens";
 export const table = {
   heading: "Tokens",
@@ -60,7 +59,6 @@ export const tests = [
   // },
 ];
 export default {
-  tag,
   url,
   table,
   tests,

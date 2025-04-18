@@ -1,5 +1,5 @@
 let pages = ["/blocks", "/commands", "/snarks", "/staking-ledgers"];
-suite(["@tier2"], "mobile menu", () => {
+describe("mobile menu", () => {
   beforeEach(() => {
     cy.viewport("iphone-xr");
     cy.visit("/");

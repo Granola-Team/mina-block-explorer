@@ -24,23 +24,8 @@ addMatchImageSnapshotCommand();
 addMatchImageSnapshotCommand({
   failureThreshold: 0.2,
 });
-function suite(tags, suiteName, callback) {
-  Cypress.on("uncaught:exception", () => {
-    // if (err.message.includes("ResizeObserver")) {
-    return false;
-    // }
-  });
-  if (tags.length == 0) {
-    tags = ["n/a"];
-  }
-  const shouldSkip =
-    Cypress.env("tags") &&
-    !tags.some((tag) => Cypress.env("tags").includes(tag));
-  let tagsStr = tags.join(", ");
-  if (!shouldSkip) {
-    describe(`[Tags: ${tagsStr}] ${suiteName}`, callback);
-  } else {
-    it.skip(`Skipped suite: [Tags: ${tagsStr}] ${suiteName}`, () => {});
-  }
-}
-global.suite = suite;
+Cypress.on("uncaught:exception", () => {
+  // if (err.message.includes("ResizeObserver")) {
+  return false;
+  // }
+});

@@ -1,6 +1,6 @@
 import { MINU_SYMBOL, MINU_TOKEN_ADDRESS } from "../constants";
 
-suite(["@tier2"], "token transactions", () => {
+describe("token transactions", () => {
   it("links to the user commands page", () => {
     cy.visit("/tokens");
     cy.clickLinkInTable(1, "Transactions", "Tokens");
@@ -14,7 +14,7 @@ suite(["@tier2"], "token transactions", () => {
   });
 });
 
-suite(["@tier2"], "token holders", () => {
+describe("token holders", () => {
   it("links to the accounts page", () => {
     cy.visit("/tokens");
     cy.clickLinkInTable(1, "Holders", "Tokens");

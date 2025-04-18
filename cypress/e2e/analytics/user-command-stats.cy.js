@@ -1,4 +1,4 @@
-suite(["@tier2"], "user commands stats", () => {
+describe("user commands stats", () => {
   it("are rendered", () => {
     cy.visit(
       "/analytics/commands/user?q-blockheight-gte=0&q-blockheight-lte=10000",

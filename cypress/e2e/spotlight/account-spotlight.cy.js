@@ -4,7 +4,7 @@ import {
   GENESIS_ACCOUNT_PK_ZERO_GENESIS,
   STANDARD_ACCOUNT_PK,
 } from "../constants.js";
-suite(["@tier2"], "account spotlight", () => {
+describe("account spotlight", () => {
   it("displays appropriately for standard accounts", () => {
     cy.visit("/addresses/accounts/" + STANDARD_ACCOUNT_PK);
     cy.contains("Includes 1 MINA account creation fee").should("exist");

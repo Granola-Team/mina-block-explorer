@@ -1,7 +1,7 @@
 // Test suite data for: /commands/user
 import { parseFormattedNumber } from "../../helpers";
 import { FIRST_RECIPIENT_ADDRESS, FIRST_SENDER_ADDRESS } from "../../constants";
-export const tag = "@tier2";
+
 export const url = "/commands/user";
 export const table = {
   heading: "User Commands",
@@ -126,7 +126,6 @@ export const tests = [
   },
 ];
 export default {
-  tag,
   url,
   table,
   tests,

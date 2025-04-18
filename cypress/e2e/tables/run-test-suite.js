@@ -1,12 +1,11 @@
 export function runTestSuite(testSuiteData) {
   const {
     disabled = false,
-    tag,
     url,
     table: { heading, filter_tests, columns, sorting_columns = [] },
     tests,
   } = testSuiteData;
-  suite([tag], `table on ${url}`, () => {
+  describe(`table on ${url}`, () => {
     if (disabled) {
       xit("has standard functionality", () => {});
     } else {

@@ -1,4 +1,4 @@
-suite(["@tier2"], "Not Found Page", () => {
+describe("Not Found Page", () => {
   [
     {
       url: `/commands/GggGXNjmeiA59Kn1qiyG3NZ1oT1sBNBg8iwvLzJuyT7GH9dVmGggg`,

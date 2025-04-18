@@ -4,7 +4,7 @@ import {
   TOKEN_ACTIVITY_ONLY_ADDRESS,
 } from "../constants";
 
-suite(["@tier2"], "tokens page", () => {
+describe("tokens page", () => {
   // Reusable function to verify tokens page navigation
   const verifyTokensPage = () => {
     cy.url().should("contain", `/tokens?q-id=${NFT_TOKEN_ID}`);

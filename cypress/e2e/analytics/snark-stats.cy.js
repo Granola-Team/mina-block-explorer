@@ -1,4 +1,4 @@
-suite(["@tier2"], "SNARK stats", () => {
+describe("SNARK stats", () => {
   it("are rendered", () => {
     cy.visit(
       "/analytics/snarks?q-blockheight-gte=359606&q-blockheight-lte=359706",

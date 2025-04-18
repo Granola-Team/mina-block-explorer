@@ -5,7 +5,7 @@ import {
   GENESIS_BLOCK_BLOCK_HASH,
   SLOTS_PER_EPOCH,
 } from "../../constants";
-export const tag = "@tier2";
+
 export const url = "/blocks";
 export const table = {
   heading: "Blocks",
@@ -117,7 +117,6 @@ export const tests = [
   },
 ];
 export default {
-  tag,
   url,
   table,
   tests,

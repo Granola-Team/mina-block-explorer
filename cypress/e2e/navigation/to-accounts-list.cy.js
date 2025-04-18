@@ -1,4 +1,4 @@
-suite(["@tier2"], "accounts listing page", () => {
+describe("accounts listing page", () => {
   let pages = [
     {
       origin: `/tokens`,

@@ -68,7 +68,7 @@ end
 
 # Helper to run a task with server and Cypress
 def run_tier_task(cypress_cmd, wait_for_cypress: true)
-  puts "--- Performing end-to-end @tier2 tests"
+  puts "--- Performing end-to-end tier2 tests"
   server_pid = nil
   cypress_pid = nil
 

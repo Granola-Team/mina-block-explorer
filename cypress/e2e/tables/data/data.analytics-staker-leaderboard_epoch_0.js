@@ -1,4 +1,3 @@
-export const tag = "@tier2";
 export const url = "/analytics/staker-leaderboard?epoch=0";
 export const table = {
   heading: "Staker Leaderboard",
@@ -14,7 +13,6 @@ export const table = {
 };
 export const tests = [];
 export default {
-  tag,
   url,
   table,
   tests,

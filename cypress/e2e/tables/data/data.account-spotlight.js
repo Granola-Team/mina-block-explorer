@@ -1,7 +1,7 @@
 // Test suite data for: /addresses/accounts/B62qiVr4Wy6yKhxNV49Npnpr2XF5AhsFejFWWQpWKARQpTYsb9snNZY/commands/internal
 import { GENESIS_ACCOUNT_PK } from "../../constants";
 import { parseFormattedNumber } from "../../helpers";
-export const tag = "@tier2";
+
 export const url = `/addresses/accounts/${GENESIS_ACCOUNT_PK}/commands/internal`;
 export const table = {
   heading: "Internal Commands",
@@ -51,7 +51,6 @@ export const tests = [
   },
 ];
 export default {
-  tag,
   url,
   table,
   tests,

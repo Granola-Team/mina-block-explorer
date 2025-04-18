@@ -1,6 +1,6 @@
 import { parseFormattedNumber } from "../../helpers.js";
 import { ROMEK_ADDRESS, ROMEK_USERNAME } from "../../constants.js";
-export const tag = "@tier2";
+
 export const url = "/addresses/accounts";
 export const table = {
   heading: "MINA Accounts",
@@ -96,7 +96,6 @@ export const tests = [
   // },
 ];
 export default {
-  tag,
   url,
   table,
   tests,

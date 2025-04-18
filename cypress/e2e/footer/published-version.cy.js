@@ -1,4 +1,4 @@
-suite(["@tier2"], "header", () => {
+describe("header", () => {
   it(`links to deployed version on github.com`, () => {
     cy.visit("/");
     cy.intercept("GET", "/summary").as("summaryData");

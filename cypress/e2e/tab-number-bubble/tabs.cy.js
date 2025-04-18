@@ -1,5 +1,5 @@
 import { BLOCK_WITH_ALL_ACTIVITY, GENESIS_ACCOUNT_PK } from "../constants";
-suite(["@tier2"], "number bubble in tab", () => {
+describe("number bubble in tab", () => {
   let tabs = [
     {
       url: `/blocks/${BLOCK_WITH_ALL_ACTIVITY}/commands/user`,

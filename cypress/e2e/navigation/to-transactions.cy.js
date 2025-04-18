@@ -1,5 +1,5 @@
 import { GENESIS_ACCOUNT_PK, APPLIED_TXN_BLOCK_STATE_HASH } from "../constants";
-suite(["@tier2"], "transaction spotlight", () => {
+describe("transaction spotlight", () => {
   let pages = [
     { origin: "/commands", column: "Hash", tableHeader: "User Commands" },
     {
@@ -34,7 +34,7 @@ suite(["@tier2"], "transaction spotlight", () => {
   );
 });
 
-suite(["@tier2"], "user commands page", () => {
+describe("user commands page", () => {
   [
     {
       origin: `/addresses/accounts/${GENESIS_ACCOUNT_PK}/user-commands`,

@@ -1,5 +1,5 @@
 import { GENESIS_ACCOUNT_PK } from "../constants";
-suite(["@tier2"], "internal commands page", () => {
+describe("internal commands page", () => {
   [
     {
       origin: `/addresses/accounts/${GENESIS_ACCOUNT_PK}/commands/internal`,

@@ -1,5 +1,5 @@
 import { GENESIS_BLOCK_BLOCK_HASH } from "../constants";
-suite(["@tier2"], "block analytic tab", () => {
+describe("block analytic tab", () => {
   it("contains the correct elements", () => {
     cy.visit(`/blocks/${GENESIS_BLOCK_BLOCK_HASH}/analytics`);
     cy.get(".analytics-sm").should("have.lengthOf", 4);

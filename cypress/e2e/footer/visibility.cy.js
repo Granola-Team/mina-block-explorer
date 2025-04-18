@@ -1,4 +1,4 @@
-suite(["@tier2"], "footer content", () => {
+describe("footer content", () => {
   let footer_links = [
     { text: "Granola", selector: 'a[href="https://granola.team"]' },
     {

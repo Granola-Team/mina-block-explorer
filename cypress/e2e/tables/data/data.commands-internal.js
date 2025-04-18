@@ -1,6 +1,6 @@
 // Test suite data for: /commands/internal
 import { parseFormattedNumber } from "../../helpers";
-export const tag = "@tier2";
+
 export const url = "/commands/internal";
 export const table = {
   heading: "Internal Commands",
@@ -70,7 +70,6 @@ export const tests = [
   },
 ];
 export default {
-  tag,
   url,
   table,
   tests,

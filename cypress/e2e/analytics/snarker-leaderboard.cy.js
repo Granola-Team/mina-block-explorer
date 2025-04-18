@@ -1,4 +1,4 @@
-suite(["@tier2"], "SNARKer Leaderboard", () => {
+describe("SNARKer Leaderboard", () => {
   it("defaults to latest epoch", () => {
     cy.visit("/analytics/");
     cy.get("menu#tabs").find("li").contains("Snarker Leaderboard").click();

@@ -1,5 +1,5 @@
 import { GENESIS_ACCOUNT_PK, FIRST_BLOCK_WITH_SNARK_WORK } from "../constants";
-suite(["@tier2"], "account page", () => {
+describe("account page", () => {
   let pages = [
     // TODO: Enable when there is some data to display
     // {

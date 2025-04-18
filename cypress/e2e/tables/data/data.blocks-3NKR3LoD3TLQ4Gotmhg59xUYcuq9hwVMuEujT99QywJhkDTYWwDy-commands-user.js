@@ -1,6 +1,5 @@
 import { BLOCK_WITH_ALL_ACTIVITY } from "../../constants";
 
-export const tag = "@tier2";
 export const url = `/blocks/${BLOCK_WITH_ALL_ACTIVITY}/commands/user`;
 export const exclusive = true;
 export const table = {
@@ -15,7 +14,6 @@ export const tests = [
   },
 ];
 export default {
-  tag,
   url,
   exclusive,
   table,

@@ -1,7 +1,7 @@
 // Test suite data for: /snarks
 import { parseFormattedNumber } from "../../helpers";
 import { BLOCK_WITH_ALL_ACTIVITY } from "../../constants";
-export const tag = "@tier2";
+
 export const url = "/snarks";
 export const table = {
   heading: "SNARKs",
@@ -61,7 +61,6 @@ export const tests = [
   },
 ];
 export default {
-  tag,
   url,
   table,
   tests,

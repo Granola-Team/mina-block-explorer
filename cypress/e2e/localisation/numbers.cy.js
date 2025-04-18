@@ -389,7 +389,7 @@ let pages = [
   },
 ];
 pages.forEach(({ tests, page, wait = () => {} }) => {
-  suite(["@tier2"], "number or currency", () => {
+  describe("number or currency", () => {
     it(`on page ${page} is formatted correctly for '${tests.map((t) => t.name).join("', '")}'`, () => {
       cy.visit(page);
       wait();

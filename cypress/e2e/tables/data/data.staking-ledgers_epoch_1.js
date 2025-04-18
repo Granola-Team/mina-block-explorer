@@ -1,6 +1,5 @@
 // Test suite data for: /staking-ledgers?epoch=1
 import { SNZ_USERNAME, SNZPOOL_ADDRESS } from "../../constants";
-export const tag = "@tier2";
 export const url = "/staking-ledgers?epoch=1";
 export const table = {
   columns: [
@@ -92,7 +91,6 @@ export const tests = [
   // },
 ];
 export default {
-  tag,
   url,
   table,
   tests,

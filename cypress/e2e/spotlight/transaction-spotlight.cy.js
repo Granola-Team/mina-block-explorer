@@ -9,7 +9,7 @@ import {
   TXN_HASH_IN_OTHER_BLOCKS,
   ZK_APP_TXN_HASH,
 } from "../constants.js";
-suite(["@tier2"], "transaction spotlight", () => {
+describe("transaction spotlight", () => {
   let expected_fields = [
     "Status",
     "Date",

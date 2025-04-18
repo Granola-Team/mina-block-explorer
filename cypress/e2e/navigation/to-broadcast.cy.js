@@ -1,4 +1,4 @@
-suite(["@tier2"], "broadcast page", () => {
+describe("broadcast page", () => {
   let tabs = [
     { text: "Transaction", heading: "Broadcast Signed Transaction" },
     { text: "Delegation", heading: "Broadcast Signed Delegation" },

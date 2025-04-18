@@ -4,7 +4,7 @@ import {
   CI_TEST_ACCOUNT_PRIVATE_KEY,
 } from "../constants";
 const ONE_MILLION_NANOMINA = 1000000;
-suite(["@tier2"], "broadcast page", () => {
+describe("broadcast page", () => {
   let nonce = null;
   beforeEach(async () => {
     const response = await fetch("https://api.minasearch.com/graphql", {

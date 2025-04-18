@@ -1,5 +1,5 @@
 import { FIRST_BLOCK_PRODUCER_ADDRESS } from "../constants";
-suite(["@tier2"], "block page", () => {
+describe("block page", () => {
   [
     {
       origin: `/addresses/accounts/${FIRST_BLOCK_PRODUCER_ADDRESS}/block-production`,

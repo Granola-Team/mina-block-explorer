@@ -1,4 +1,4 @@
-suite(["@tier2"], "empty table", () => {
+describe("empty table", () => {
   let pages = [
     "/addresses/accounts?q-public-key=B62fake",
     "/blocks?q-state-hash=3Nfake",

@@ -1,5 +1,5 @@
 import { GENESIS_ACCOUNT_PK } from "../constants";
-suite(["@tier2"], "block spotlight", () => {
+describe("block spotlight", () => {
   [
     {
       origin: `/commands/internal`,

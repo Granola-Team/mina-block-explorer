@@ -26,7 +26,7 @@ const testMetadata = ({ url, table_header, metadata }) => {
   });
 };
 
-suite(["@tier2"], "accounts metadata", () => {
+describe("accounts metadata", () => {
   [
     {
       url: `/addresses/accounts?q-token=${NFT_TOKEN_ID}`,
@@ -37,7 +37,7 @@ suite(["@tier2"], "accounts metadata", () => {
 });
 
 const row_limit = 25;
-suite(["@tier2"], "user command metadata", () => {
+describe("user command metadata", () => {
   [
     {
       url: "/commands/user",
@@ -133,7 +133,7 @@ suite(["@tier2"], "user command metadata", () => {
 
 // TODO: Not a meaninful test due to blockchain length being greated than
 // indexed value "total_num_blocks" when ingesting from hardfork
-// suite(["@tier2"], "blocks metadata", () => {
+// describe( "blocks metadata", () => {
 //   [
 //     {
 //       url: "/blocks",

@@ -1,6 +1,6 @@
 let devices = ["iphone-xr", "macbook-11"];
 let pages = ["/blocks", "/commands", "/snarks", "/staking-ledgers"];
-suite(["@tier2"], "desktop footer", () => {
+describe("desktop footer", () => {
   devices.forEach((device) => {
     pages.forEach((page) => {
       it(`exist on ${page} page on device ${device}`, () => {

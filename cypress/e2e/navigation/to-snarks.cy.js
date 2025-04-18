@@ -1,5 +1,5 @@
 import { GENESIS_ACCOUNT_PK } from "../constants";
-suite(["@tier2"], "snarks page", () => {
+describe("snarks page", () => {
   [
     {
       origin: `/addresses/accounts/${GENESIS_ACCOUNT_PK}/snark-jobs`,

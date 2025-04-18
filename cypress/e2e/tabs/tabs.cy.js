@@ -1,5 +1,5 @@
 import { GENESIS_ACCOUNT_PK } from "../constants";
-suite(["@tier2"], "tab", () => {
+describe("tab", () => {
   let tabs = [
     {
       page: "/commands/internal",

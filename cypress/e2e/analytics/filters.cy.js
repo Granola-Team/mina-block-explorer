@@ -1,4 +1,4 @@
-suite(["@tier2"], "block height filters", () => {
+describe("block height filters", () => {
   let pages = [
     {
       url: "/analytics/blocks",
@@ -55,7 +55,7 @@ suite(["@tier2"], "block height filters", () => {
     }),
   );
 });
-suite(["@tier2"], "block height filter url params", () => {
+describe("block height filter url params", () => {
   let cases = [
     {
       url: "/analytics/blocks?q-blockheight-gte=7000",

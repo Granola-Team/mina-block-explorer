@@ -1,4 +1,4 @@
-suite(["@tier2"], "back navigation from redirection", () => {
+describe("back navigation from redirection", () => {
   let navigations = [
     ["/commands/user", "/", "/blocks"],
     [

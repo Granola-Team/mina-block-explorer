@@ -1,5 +1,4 @@
 import { ZK_APP_TXN_HASH } from "../../constants";
-export const tag = "@tier2";
 export const url = `/commands/${ZK_APP_TXN_HASH}`;
 export const table = {
   heading: "Accounts Updated",
@@ -8,7 +7,6 @@ export const table = {
 };
 export const tests = [];
 export default {
-  tag,
   url,
   table,
   tests,

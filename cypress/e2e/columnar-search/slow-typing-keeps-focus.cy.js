@@ -1,5 +1,5 @@
 import { kebabCase } from "../helpers";
-suite(["@tier2"], "input", () => {
+describe("input", () => {
   let slow_input_searches = [
     {
       origin: "/addresses/accounts",

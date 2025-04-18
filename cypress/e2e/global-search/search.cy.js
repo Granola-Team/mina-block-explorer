@@ -7,7 +7,7 @@ import {
   MINU_TOKEN_ADDRESS,
   TITS_TOKEN_ID,
 } from "../constants";
-suite(["@tier2"], "global search", () => {
+describe("global search", () => {
   it("has visible placeholder text", () => {
     cy.viewport("iphone-xr");
     cy.visit("/");

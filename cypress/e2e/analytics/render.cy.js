@@ -1,4 +1,4 @@
-suite(["@tier2"], "chart", () => {
+describe("chart", () => {
   let analytics_pages = [
     {
       page: "/analytics/commands/user",
