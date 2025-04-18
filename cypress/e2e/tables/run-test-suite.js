@@ -55,9 +55,7 @@ export function runTestSuite(testSuiteData) {
         cy.wait("@graphql");
         cy.waitUntilTableLoads(heading);
         assertion();
-        if (heading != "Staking Ledger - Epoch 1") {
-          cy.assertTableRecordsCorrect(heading);
-        }
+        cy.assertTableRecordsCorrect(heading);
       });
     });
 
