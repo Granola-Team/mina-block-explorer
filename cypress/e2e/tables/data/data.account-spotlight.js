@@ -37,7 +37,7 @@ export const table = {
   ],
 };
 export const tests = [
-  () => {
+  ["links to internal commands with correct filter", () => {
     cy.get("a").contains("See all internal commands").click();
     cy.url().should(
       "contain",
@@ -48,7 +48,7 @@ export const tests = [
       "Recipient",
       GENESIS_ACCOUNT_PK,
     );
-  },
+  }],
 ];
 export default {
   url,

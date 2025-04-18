@@ -69,14 +69,14 @@ export const table = {
   ],
 };
 export const tests = [
-  () => {
+  ["has 3 metadata points", () => {
     cy.visit("/staking-ledgers?epoch=1");
     cy.wait(1000);
     cy.assertNumberOfTableMetadataDatum("Staking Ledger - Epoch 1", 3);
-  },
-  () => {
+  }],
+  ["has standard row limits", () => {
     cy.assertStandardRowLimits("Staking Ledger - Epoch 1");
-  },
+  }],
   // TODO: unable to effectively find the end of the "load next" button
   // () => {
   //   cy.intercept("POST", "/graphql").as("graphql");

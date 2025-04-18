@@ -69,10 +69,10 @@ export const table = {
   ],
 };
 export const tests = [
-  () => {
+  ["has standard row limits",() => {
     cy.assertStandardRowLimits("Blocks");
-  },
-  () => {
+  }],
+  ["has working canonical filter",() => {
     cy.get("select#canonical-selection").as("canonical");
     cy.get("@canonical").select("Canonical");
     cy.intercept("POST", "/graphql").as("graphql");
@@ -95,8 +95,8 @@ export const tests = [
       cy.get("@table-rows").find(".non-canonical").should("exist");
       cy.get("@table-rows").find(".canonical").should("exist");
     });
-  },
-  () => {
+  }],
+  ["has working load next button",() => {
     cy.intercept("POST", "/graphql").as("graphql");
     cy.visit("/blocks?q-height=359613");
     cy.wait("@graphql").then(() => {
@@ -106,15 +106,15 @@ export const tests = [
         expected_button_state: "be.disabled",
       });
     });
-  },
-  () => {
+  }],
+  ["has user command and zk txn counts in the user command column",() => {
     cy.get("th").contains("Height").find("input").as("input");
     cy.get("@input").clear();
     cy.get("@input").type("360580", { delay: 0 });
     cy.waitUntilTableLoads("Blocks");
     cy.aliasTableRows("Blocks", "table-rows");
     cy.get("@table-rows").first().should("contain", "58/2");
-  },
+  }],
 ];
 export default {
   url,

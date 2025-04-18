@@ -59,8 +59,6 @@ export function runTestSuite(testSuiteData) {
       });
     });
 
-    it("works with a variety of tests", () => {
-      tests.forEach((test) => test());
-    });
+    tests.forEach(([desc,test]) => it(desc, test));
   });
 }

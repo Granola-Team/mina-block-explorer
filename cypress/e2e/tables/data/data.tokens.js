@@ -43,21 +43,7 @@ export const table = {
     },
   ],
 };
-export const tests = [
-  () => {
-    // [30].forEach((l) => {
-    //   cy.assertRowLimitWorks("Tokens", l);
-    // });
-  },
-  // () => {
-  //   cy.intercept("GET", "/rest").as("rest");
-  //   cy.visit("/tokens");
-  //   cy.wait("@graphql").then(() => {
-  //     cy.wait(1000);
-  //     cy.assertLoadNextWorks("Tokens", "Balance");
-  //   });
-  // },
-];
+export const tests = [];
 export default {
   url,
   table,

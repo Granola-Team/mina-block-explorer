@@ -54,10 +54,10 @@ export const table = {
   ],
 };
 export const tests = [
-  () => {
+  ["has standard row limits",() => {
     cy.assertStandardRowLimits("Internal Commands");
-  },
-  () => {
+  }],
+  ["has working load next button",() => {
     cy.intercept("POST", "/graphql").as("graphql");
     cy.visit("/commands/internal?q-height=359618");
     cy.wait("@graphql").then(() => {
@@ -67,7 +67,7 @@ export const tests = [
         expected_button_state: "be.disabled",
       });
     });
-  },
+  }],
 ];
 export default {
   url,

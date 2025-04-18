@@ -8,10 +8,10 @@ export const table = {
   filter_tests: [],
 };
 export const tests = [
-  () => {
+  ["has data",() => {
     cy.aliasTableRows("User Commands", "table-rows");
     cy.get("@table-rows").should("have.length.gte", 0);
-  },
+  }],
 ];
 export default {
   url,
