@@ -93,6 +93,16 @@ export const table = {
       },
     },
     {
+      column: "Status",
+      input: "All",
+      filter_type: "select",
+      assertion: function () {
+        cy.assertForEachColumnValue("User Commands", "Status", (text) => {
+          expect(text).to.be.oneOf(["Failed", "Applied"]);
+        });
+      },
+    },
+    {
       column: "From",
       input: FIRST_SENDER_ADDRESS,
       assertion: function () {

@@ -51,8 +51,7 @@ export function runTestSuite(testSuiteData) {
           cy.get("th").contains(column).find("input").as("input");
           cy.get("@input").type(input, { delay: 0 });
         }
-        cy.intercept("POST", "/graphql").as("graphql");
-        cy.wait("@graphql");
+        cy.wait(1000); // wait for user input to trigger table load
         cy.waitUntilTableLoads(heading);
         assertion();
         cy.assertTableRecordsCorrect(heading);

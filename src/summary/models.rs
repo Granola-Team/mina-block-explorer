@@ -68,6 +68,10 @@ impl BlockchainSummary {
         // length therefore we use saturating_sub, to accomodate automated tests
         self.total_num_blocks.saturating_sub(self.blockchain_length)
     }
+
+    pub fn get_total_num_non_canonical_user_commands(&self) -> u64 {
+        self.total_num_user_commands as u64 - self.total_num_canonical_user_commands
+    }
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq, Default)]

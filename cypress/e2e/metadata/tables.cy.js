@@ -13,6 +13,7 @@ import {
   TOTAL_NUM_NFT_HOLDERS,
   NFT_TOKEN_ID,
   MINU_SYMBOL,
+  TOTAL_NUM_CANONICAL_USER_COMMANDS,
 } from "../constants";
 
 const testMetadata = ({ url, table_header, metadata }) => {
@@ -45,6 +46,24 @@ describe("user command metadata", () => {
       metadata: [
         row_limit,
         TOTAL_NUMBER_APPLIED_CANONICAL_USER_COMMANDS,
+        TOTAL_NUMBER_USER_COMMANDS,
+      ],
+    },
+    {
+      url: "/commands/user?q-status=All&txn-type=Canonical",
+      table_header: "User Commands",
+      metadata: [
+        row_limit,
+        TOTAL_NUM_CANONICAL_USER_COMMANDS,
+        TOTAL_NUMBER_USER_COMMANDS,
+      ],
+    },
+    {
+      url: "/commands/user?q-status=All&txn-type=Non-Canonical",
+      table_header: "User Commands",
+      metadata: [
+        row_limit,
+        TOTAL_NUMBER_USER_COMMANDS - TOTAL_NUM_CANONICAL_USER_COMMANDS,
         TOTAL_NUMBER_USER_COMMANDS,
       ],
     },

@@ -25,6 +25,7 @@ const QP_TOKEN: &str = "q-token";
 const BACKSCAN_LIMIT: u64 = 2000;
 const STATUS_SEARCH_OPTION_APPLIED: &str = "Applied";
 const STATUS_SEARCH_OPTION_FAILED: &str = "Failed";
+const STATUS_SEARCH_OPTION_ALL: &str = "All";
 
 #[component]
 pub fn AccountsUpdatedSection(
@@ -118,8 +119,13 @@ pub fn TransactionsSection() -> impl IntoView {
                 _ => (Some(true), load_data),
             };
 
-            let is_txn_applied =
-                txn_applied.is_none_or(|txn_applied| txn_applied != STATUS_SEARCH_OPTION_FAILED);
+            let is_txn_applied = match txn_applied {
+                None => Some(true), // by default, assume applied
+                Some(txn) if txn == STATUS_SEARCH_OPTION_APPLIED => Some(true),
+                Some(txn) if txn == STATUS_SEARCH_OPTION_FAILED => Some(false),
+                Some(txn) if txn == STATUS_SEARCH_OPTION_ALL => None,
+                _ => None,
+            };
 
             load_fn(
                 row_limit,
@@ -127,14 +133,14 @@ pub fn TransactionsSection() -> impl IntoView {
                 url_query_map.get(QP_TO).cloned(),
                 url_query_map.get(QP_TXN_HASH).cloned(),
                 block_height,
-                if !is_txn_applied {
+                if is_txn_applied.is_some_and(|t| !t) {
                     Some(BACKSCAN_LIMIT)
                 } else {
                     None
                 },
                 None,
                 canonical,
-                Some(is_txn_applied),
+                is_txn_applied,
                 q_type,
                 token,
             )
@@ -179,8 +185,8 @@ pub fn TransactionsSection() -> impl IntoView {
             width: Some(String::from(TABLE_COL_SHORT_WIDTH)),
             search_type: ColumnSearchType::Select,
             search_options: Some(vec![
-                "".to_string(),
                 STATUS_SEARCH_OPTION_APPLIED.to_string(),
+                STATUS_SEARCH_OPTION_ALL.to_string(),
                 STATUS_SEARCH_OPTION_FAILED.to_string(),
             ]),
             ..Default::default()
@@ -237,6 +243,9 @@ pub fn TransactionsSection() -> impl IntoView {
                     || url_query_map.get(QP_TXN_HASH).is_some();
                 let indexes_available = !indexes_not_available;
                 let is_zk_app = q_type_sig.get().is_some_and(|p| p == TransactionKind::Zkapp);
+                let txn_all = txn_applied_sig
+                    .get()
+                    .is_some_and(|txn_applied| txn_applied == STATUS_SEARCH_OPTION_ALL);
                 let applied_opt = txn_applied_sig
                     .get()
                     .is_none_or(|txn_applied| txn_applied != STATUS_SEARCH_OPTION_FAILED);
@@ -249,6 +258,14 @@ pub fn TransactionsSection() -> impl IntoView {
                     TableMetadataBuilder::new()
                         .displayed_records_value(
                             data_sig.get().map(|d| d.len() as u64).unwrap_or_default(),
+                        )
+                        .available_records(
+                            move || { indexes_available && !is_zk_app && is_canonical && txn_all },
+                            summary_sig.get().total_num_canonical_user_commands,
+                        )
+                        .available_records(
+                            move || { indexes_available && !is_zk_app && !is_canonical && txn_all },
+                            summary_sig.get().get_total_num_non_canonical_user_commands(),
                         )
                         .available_records(
                             move || {
