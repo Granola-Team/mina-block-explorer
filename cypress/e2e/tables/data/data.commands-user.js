@@ -113,17 +113,23 @@ export const table = {
   ],
 };
 export const tests = [
-  ["has standard row limits", () => {
-    cy.assertStandardRowLimits("User Commands");
-  }],
-  ["has working load next button", () => {
-    cy.visit("/commands/user?q-height=359611&row-limit=50");
-    cy.waitUntilTableLoads("User Commands");
-    cy.assertLoadNextWorks("User Commands", "Height", {
-      button_text: "Load Next",
-      expected_button_state: "be.disabled",
-    });
-  }],
+  [
+    "has standard row limits",
+    () => {
+      cy.assertStandardRowLimits("User Commands");
+    },
+  ],
+  [
+    "has working load next button",
+    () => {
+      cy.visit("/commands/user?q-height=359611&row-limit=50");
+      cy.waitUntilTableLoads("User Commands");
+      cy.assertLoadNextWorks("User Commands", "Height", {
+        button_text: "Load Next",
+        expected_button_state: "be.disabled",
+      });
+    },
+  ],
 ];
 export default {
   url,

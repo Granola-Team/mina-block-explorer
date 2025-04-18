@@ -59,6 +59,6 @@ export function runTestSuite(testSuiteData) {
       });
     });
 
-    tests.forEach(([desc,test]) => it(desc, test));
+    tests.forEach(([desc, test]) => it(desc, test));
   });
 }

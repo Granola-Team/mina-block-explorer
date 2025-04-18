@@ -37,18 +37,21 @@ export const table = {
   ],
 };
 export const tests = [
-  ["links to internal commands with correct filter", () => {
-    cy.get("a").contains("See all internal commands").click();
-    cy.url().should(
-      "contain",
-      `/commands/internal?q-recipient=${GENESIS_ACCOUNT_PK}`,
-    );
-    cy.tableColumnValuesEqual(
-      "Internal Commands",
-      "Recipient",
-      GENESIS_ACCOUNT_PK,
-    );
-  }],
+  [
+    "links to internal commands with correct filter",
+    () => {
+      cy.get("a").contains("See all internal commands").click();
+      cy.url().should(
+        "contain",
+        `/commands/internal?q-recipient=${GENESIS_ACCOUNT_PK}`,
+      );
+      cy.tableColumnValuesEqual(
+        "Internal Commands",
+        "Recipient",
+        GENESIS_ACCOUNT_PK,
+      );
+    },
+  ],
 ];
 export default {
   url,

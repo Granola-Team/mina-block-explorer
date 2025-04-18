@@ -45,20 +45,26 @@ export const table = {
   ],
 };
 export const tests = [
-  ["has standard row limits", () => {
-    cy.assertStandardRowLimits("SNARKs");
-  }],
-  ["has working load next button", () => {
-    cy.intercept("POST", "/graphql").as("graphql");
-    cy.visit("/snarks?row-limit=50&q-height=359630");
-    cy.wait("@graphql").then(() => {
-      cy.wait(1000);
-      cy.assertLoadNextWorks("SNARKs", "Height", {
-        button_text: "Load Next",
-        expected_button_state: "be.disabled",
+  [
+    "has standard row limits",
+    () => {
+      cy.assertStandardRowLimits("SNARKs");
+    },
+  ],
+  [
+    "has working load next button",
+    () => {
+      cy.intercept("POST", "/graphql").as("graphql");
+      cy.visit("/snarks?row-limit=50&q-height=359630");
+      cy.wait("@graphql").then(() => {
+        cy.wait(1000);
+        cy.assertLoadNextWorks("SNARKs", "Height", {
+          button_text: "Load Next",
+          expected_button_state: "be.disabled",
+        });
       });
-    });
-  }],
+    },
+  ],
 ];
 export default {
   url,

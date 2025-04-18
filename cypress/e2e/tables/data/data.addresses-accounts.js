@@ -71,9 +71,12 @@ export const table = {
   ],
 };
 export const tests = [
-  ["has standard row limits",() => {
-    cy.assertStandardRowLimits("MINA Accounts");
-  }],
+  [
+    "has standard row limits",
+    () => {
+      cy.assertStandardRowLimits("MINA Accounts");
+    },
+  ],
   // TODO: uncomment when https://github.com/Granola-Team/mina-indexer/issues/1869 is closed
   // and the indexer is updated locally
   // () => {
@@ -81,7 +84,6 @@ export const tests = [
   //   cy.waitUntilTableLoads("MINA Accounts");
   //   cy.assertLoadNextWorks("MINA Accounts", "Balance");
   // },
-
 ];
 export default {
   url,
