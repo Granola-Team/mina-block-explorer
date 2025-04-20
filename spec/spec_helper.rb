@@ -1,6 +1,11 @@
 require "capybara/rspec"
 require "capybara/cuprite"
-require_relative "support/test_constants"
+require_relative "support/constants"
+require_relative "support/capybara_helpers"
+
+RSpec.configure do |config|
+  config.include CapybaraHelpers, type: :system
+end
 
 raise "APP_PORT environment variable is not set" unless ENV.key?("APP_PORT")
 

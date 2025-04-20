@@ -7,7 +7,7 @@ RSpec.describe "Desktop footer", type: :system do
         page.driver.resize(width, height)
       end
 
-      PAGES.each do |p|
+      TOP_LEVEL_PAGES.each do |p|
         it "exists on #{p} page" do
           visit p
           page.has_selector?("footer")
