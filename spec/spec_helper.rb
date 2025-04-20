@@ -43,4 +43,14 @@ RSpec.configure do |config|
   config.profile_examples = 10
   config.order = :random
   Kernel.srand config.seed
+
+  # config.after(:each) do |example|
+  #   if example.exception && example.metadata[:type] == :system
+  #     timestamp = Time.now.strftime("%Y%m%d_%H%M%S")
+  #     process_id = ENV["TEST_ENV_NUMBER"] || "0"
+  #     filename = "tmp/screenshot-failed-#{timestamp}-#{process_id}.png"
+  #     page.save_screenshot(filename)
+  #     puts "Screenshot saved: #{filename}"
+  #   end
+  # end
 end

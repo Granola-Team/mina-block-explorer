@@ -41,6 +41,9 @@ GEM
       racc (~> 1.4)
     nokogiri (1.18.7-x86_64-linux-musl)
       racc (~> 1.4)
+    parallel (1.27.0)
+    parallel_tests (4.10.1)
+      parallel
     public_suffix (6.0.1)
     racc (1.8.1)
     rack (3.1.13)
@@ -81,6 +84,7 @@ PLATFORMS
 DEPENDENCIES
   capybara (~> 3.40)
   cuprite (~> 0.15)
+  parallel_tests (~> 4.7)
   rspec (~> 3.13)
 
 BUNDLED WITH

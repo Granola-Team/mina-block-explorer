@@ -74,9 +74,13 @@ const INPUT_CLASS: &str = " block w-full mt-1 h-7 text-base text-sm font-normal 
 const CELL_PADDING_CLASS: &str = " first:pl-8 pl-4 last:pr-4 ";
 
 #[component]
-pub fn Table(children: Children) -> impl IntoView {
+pub fn Table(children: Children, id: String) -> impl IntoView {
     view! {
-        <table class="xl:relative font-mono md:rounded-b-lg w-full @xs:w-[400%] @md:w-[300%] @2xl:w-[200%] xl:w-full">
+        <table
+            id=id.to_string()
+            data-test=id.to_string() + "-table"
+            class="xl:relative font-mono md:rounded-b-lg w-full @xs:w-[400%] @md:w-[300%] @2xl:w-[200%] xl:w-full"
+        >
             {children()}
         </table>
     }
@@ -178,7 +182,7 @@ where
     view! {
         <TableSection
             metadata=metadata.unwrap_or_default()
-            section_heading
+            section_heading=section_heading.clone()
             controls
             additional_info
         >
@@ -187,7 +191,7 @@ where
                 class=("md:w-1/2", move || half_width)
                 class=("mx-auto", move || half_width)
             >
-                <Table>
+                <Table id=section_heading.get().as_str().to_kebab_case()>
                     <ColGroup columns=table_columns.clone() />
                     <TableHeader columns=table_columns.clone() />
 
