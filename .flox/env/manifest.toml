@@ -35,6 +35,8 @@ clang.pkg-path = "clang"
 clang.systems = ["aarch64-linux", "x86_64-linux"]
 openssl.pkg-path = "openssl"
 openssl.systems = ["aarch64-linux", "x86_64-linux"]
+google-chrome.pkg-path = "google-chrome"
+google-chrome.systems = ["aarch64-darwin", "x86_64-darwin", "x86_64-linux"]
 
 # Set environment variables in the `[vars]` section. These variables may not
 # reference one another, and are added to the environment without first

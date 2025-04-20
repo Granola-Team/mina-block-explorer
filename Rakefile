@@ -6,6 +6,8 @@ require "socket"
 SPEC = "cypress/e2e/"
 TRUNK_PORT = rand(5170..5179).to_s
 IDXR_PORT = 8090.to_s
+ENV["BROWSER_PATH"] = `which google-chrome-stable`.chomp
+ENV["APP_PORT"] = TRUNK_PORT
 ENV["RUSTFLAGS"] = "--cfg=web_sys_unstable_apis"
 ENV["CYPRESS_BASE_URL"] = "http://localhost:#{TRUNK_PORT}"
 ENV["VERSION"] = `git rev-parse --short=8 HEAD`.chomp
@@ -67,7 +69,7 @@ def wait_for_port(port, interval = 5)
 end
 
 # Helper to run a task with server and Cypress
-def run_tier_task(cypress_cmd, wait_for_cypress: true)
+def run_tier_task(cypress_cmd, wait_for_test_suite: true)
   puts "--- Performing end-to-end tier2 tests"
   server_pid = nil
   cypress_pid = nil
@@ -113,7 +115,7 @@ def run_tier_task(cypress_cmd, wait_for_cypress: true)
   cypress_pid = Process.spawn(cypress_cmd, pgroup: true)
   puts "Started Cypress with PID: #{cypress_pid}"
 
-  if wait_for_cypress
+  if wait_for_test_suite
     # Wait for Cypress to finish and capture exit status
     _, cypress_status = Process.wait2(cypress_pid)
     puts "Cypress finished with exit code: #{cypress_status.exitstatus}"
@@ -261,6 +263,12 @@ file ".build/docs" => GRAPHQL_SRC_FILES do |t|
   sh "cargo doc --document-private-items --target-dir #{t.name}"
 end
 
+task bundle_install: ".build/bundle"
+file ".build/bundle" => ["Gemfile", "Gemfile.lock"] do |t|
+  puts "--- Installing Ruby dependencies"
+  sh "bundle install"
+end
+
 file "node_modules" => ["pnpm-lock.yaml", "package.json"] do
   puts "--- Installing NPM dependencies"
   sh "pnpm install"
@@ -350,15 +358,15 @@ desc "Run the Tier1 tests"
 task tier1: [:dev_build, :lint, :test_unit]
 
 desc "Invoke the Tier2 regression suite (non-interactive)"
-task tier2: [:clean_cypress, :tier1, "node_modules", :deploy_mina_indexer] do
+task tier2: [:clean_cypress, :tier1, "node_modules", :bundle_install, :deploy_mina_indexer] do
   trap("INT") { Rake::Task["shutdown_mina_indexer"].invoke }
-  run_tier_task("pnpm exec cypress run -r list -q", wait_for_cypress: true)
+  run_tier_task("bundle exec rspec && pnpm exec cypress run -r list -q", wait_for_test_suite: true)
   Rake::Task["shutdown_mina_indexer"].invoke
 end
 
 desc "Invoke the Tier2 regression suite (interactive)"
-task t2_i: ["node_modules", :deploy_mina_indexer, :dev_build] do
-  run_tier_task("pnpm exec cypress open", wait_for_cypress: false)
+task t2_i: ["node_modules", :bundle_install, :deploy_mina_indexer, :dev_build] do
+  run_tier_task("pnpm exec cypress open", wait_for_test_suite: false)
 end
 
 desc "Print all tasks and their dependencies as a tree"
