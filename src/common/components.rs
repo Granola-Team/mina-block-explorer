@@ -3,6 +3,7 @@ use crate::{
     common::{constants::*, functions::*},
     icons::*,
 };
+use heck::ToKebabCase;
 use leptos::{html::Div, *};
 use leptos_meta::Script;
 use leptos_router::{create_query_signal, *};
@@ -144,6 +145,7 @@ where
 
     view! {
         <input
+            data-test=id.to_string() + "-input"
             id=id
             type=input_type
             on:input=move |_| {
@@ -409,6 +411,7 @@ pub fn TabLink(nav_entry: NavEntry) -> impl IntoView {
     let href = nav_entry.href.clone();
     view! {
         <a
+            data-test=format!("{}-tab", nav_entry.text.as_str().to_kebab_case())
             class=move || {
                 format!(
                     "{} {} {}",
