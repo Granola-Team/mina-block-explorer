@@ -2,6 +2,8 @@ require "capybara/rspec"
 require "capybara/cuprite"
 require_relative "support/test_constants"
 
+raise "APP_PORT environment variable is not set" unless ENV.key?("APP_PORT")
+
 # Configure Cuprite driver
 Capybara.register_driver :cuprite do |app|
   Capybara::Cuprite::Driver.new(
@@ -16,7 +18,7 @@ Capybara.default_driver = :cuprite
 Capybara.javascript_driver = :cuprite
 Capybara.default_max_wait_time = 5 # Adjust for async apps
 
-Capybara.app_host = "http://localhost:#{ENV["APP_PORT"] || 3000}" # Base URL
+Capybara.app_host = "http://localhost:#{ENV["APP_PORT"]}" # Base URL
 # Capybara.app_host = "http://localhost:5171"
 
 # RSpec configuration
