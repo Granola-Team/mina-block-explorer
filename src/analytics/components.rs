@@ -95,6 +95,7 @@ pub fn AnalyticsFilters(#[prop(optional, default = false)] by_block: bool) -> im
                                 "Start Block Height: "
                             </label>
                             <input
+                                data-test="start-block-height-input"
                                 id="blockheight-gte"
                                 type="number"
                                 name="blockheight-gte"
@@ -119,6 +120,7 @@ pub fn AnalyticsFilters(#[prop(optional, default = false)] by_block: bool) -> im
                                 "End Block Height: "
                             </label>
                             <input
+                                data-test="end-block-height-input"
                                 id="blockheight-lte"
                                 type="number"
                                 name="blockheight-lte"
