@@ -191,8 +191,9 @@ task :shutdown_mina_indexer do
   end
 end
 
-task :clean_cypress do
+task :clean_test do
   FileUtils.rm_rf "cypress/screenshots"
+  FileUtils.rm_rf "tmp"
 end
 
 task :clean_node_modules do
@@ -208,7 +209,7 @@ task :clean_target do
 end
 
 desc "Clean the repo of built artifacts"
-task clean: [:clean_cypress, :clean_node_modules, :clean_build, :clean_target]
+task clean: [:clean_test, :clean_node_modules, :clean_build, :clean_target]
 
 desc "Format the source code"
 task format: ["node_modules"] do
@@ -358,7 +359,7 @@ desc "Run the Tier1 tests"
 task tier1: [:dev_build, :lint, :test_unit]
 
 desc "Invoke the Tier2 regression suite (non-interactive)"
-task tier2: [:clean_cypress, :tier1, "node_modules", :bundle_install, :deploy_mina_indexer] do
+task tier2: [:clean_test, :tier1, "node_modules", :bundle_install, :deploy_mina_indexer] do
   trap("INT") { Rake::Task["shutdown_mina_indexer"].invoke }
   run_tier_task("bundle exec rspec && pnpm exec cypress run -r list -q", wait_for_test_suite: true)
   Rake::Task["shutdown_mina_indexer"].invoke
