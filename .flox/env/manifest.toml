@@ -53,6 +53,8 @@ google-chrome.systems = ["aarch64-darwin", "x86_64-darwin", "x86_64-linux"]
 [hook]
 on-activate = """
   export CARGO_HOME="$(pwd)/.cargo"
+  bundle install
+  pnpm install
 """
 
 # Scripts defined in the `[profile]` section are *sourced* by *your shell* and

@@ -83,7 +83,7 @@
       }
     },
     "hook": {
-      "on-activate": "  export CARGO_HOME=\"$(pwd)/.cargo\"\n"
+      "on-activate": "  export CARGO_HOME=\"$(pwd)/.cargo\"\n  bundle install\n  pnpm install\n"
     },
     "profile": {},
     "options": {
