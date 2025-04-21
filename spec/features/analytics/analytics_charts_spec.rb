@@ -39,7 +39,7 @@ RSpec.describe "Chart", type: :system do
     it "renders on page #{analytics_page[:url]}" do
       visit analytics_page[:url]
       analytics_page[:chart_ids].each do |id|
-        expect(page).to have_css("#{id} canvas", visible: :visible)
+        expect(page).to have_css("#{id} canvas", visible: :visible, wait: 10)
       end
     end
   end

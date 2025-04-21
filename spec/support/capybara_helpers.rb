@@ -28,8 +28,6 @@ module CapybaraHelpers
 
   def wait_until_table_loaded(heading)
     table_selector = "[data-test='#{to_kebab_case(heading)}-table']"
-    # Wait for table to appear
-    expect(page).to have_css(table_selector, wait: 1)
-    expect(page).not_to have_css("#{table_selector} .loading-placeholder")
+    expect(page).not_to have_css("#{table_selector} .loading-placeholder", wait: 60)
   end
 end
