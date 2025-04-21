@@ -191,7 +191,7 @@ where
                 class=("md:w-1/2", move || half_width)
                 class=("mx-auto", move || half_width)
             >
-                <Table id=section_heading.get().as_str().to_kebab_case()>
+                <Table id=section_heading.get().as_str().to_lowercase().to_kebab_case()>
                     <ColGroup columns=table_columns.clone() />
                     <TableHeader columns=table_columns.clone() />
 

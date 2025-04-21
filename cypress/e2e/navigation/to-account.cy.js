@@ -16,7 +16,7 @@ describe("account page", () => {
     {
       origin: `/addresses/accounts`,
       column: "Public Key",
-      tableHeader: "MINA Accounts",
+      tableHeader: "MINA Token Accounts",
     },
     {
       origin: `/addresses/accounts/${GENESIS_ACCOUNT_PK}`,
