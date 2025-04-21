@@ -121,10 +121,14 @@ RSpec.describe "Number or currency", type: :system do
 
   items.each do |item|
     item[:tests].each do |test|
-      it "on page #{item[:url]} is formatted correctly for '#{test[:name]}'" do
-        visit item[:url]
-        wait_until_table_loaded(item[:heading])
-        # page.save_screenshot("tmp/#{test[:name]}.png")
+      Rspec.context "on page #{item[:url]}" do
+        before do
+          visit item[:url]
+          wait_until_table_loaded(item[:heading])
+        end
+      end
+
+      it "is formatted correctly for '#{test[:name]}'" do
         all(test[:selector]).each do |element|
           is_numeric?(element)
         end

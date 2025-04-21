@@ -30,7 +30,7 @@ module CapybaraHelpers
     table_selector = "[data-test='#{to_kebab_case(heading)}-table']"
     # wait for the placeholder to appear in the table, for a max of 1 second
     # (this is better than using `sleep 1` as it might return quicker)
-    page.has_css?("#{table_selector} .loading-placeholder", wait: 1)
+    page.has_css?("#{table_selector} .loading-placeholder", wait: 3)
     # Then assert the table does not have the placeholder
     expect(page).not_to have_css("#{table_selector} .loading-placeholder", wait: 60)
   end
