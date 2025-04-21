@@ -74,7 +74,7 @@ fn AccountsPageContents() -> impl IntoView {
         },
     );
     let token_resource = create_resource(
-        move || q_token.get(),
+        move || q_token.get().or(Some(MINA_TOKEN_ADDRESS.to_string())),
         |token| async move { load_token_symbol(token).await },
     );
 
