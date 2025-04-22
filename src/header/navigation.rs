@@ -171,6 +171,7 @@ pub fn Header() -> impl IntoView {
             <label
                 on:click=toggle
                 for="nav-toggle"
+                data-test="mobile-menu-toggle"
                 class="md:hidden absolute top-0 left-0 h-full ml-4 flex items-center "
             >
                 <span class="relative rounded-lg block bg-white h-0.5 w-4 after:absolute after:rounded-lg after:block after:bg-white after:h-0.5 after:w-4 after:bottom-1 before:absolute before:roudned-sm before:block before:bg-white before:h-0.5 before:w-4 before:top-1"></span>
