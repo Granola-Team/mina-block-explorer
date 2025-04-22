@@ -17,6 +17,10 @@ module CapybaraHelpers
     expect(!numeric_value.nan? && numeric_value.finite?).to be true
   end
 
+  def remove_parentheses(string)
+    string.to_s.gsub(/[()]/, " ").strip.squeeze(" ")
+  end
+
   def to_kebab_case(string)
     string
       .to_s                                   # Ensure input is a string
