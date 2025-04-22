@@ -33,7 +33,7 @@ module CapybaraHelpers
   end
 
   def wait_until_table_loaded(heading)
-    table_selector = "[data-test='#{to_kebab_case(heading)}-table']"
+    table_selector = "[data-test='#{to_kebab_case(heading.downcase)}-table']"
 
     # Wait for placeholders to appear, if need be
     page.has_css?("#{table_selector} .loading-placeholder", wait: 1, visible: true)
@@ -49,7 +49,7 @@ module CapybaraHelpers
 
   def click_link_in_table_column(table_header, column_text, nth_row)
     # Find the table using the table header text
-    table_selector = "table[data-test='#{to_kebab_case(table_header)}-table']"
+    table_selector = "table[data-test='#{to_kebab_case(table_header.downcase)}-table']"
     table = page.find(table_selector, wait: 1)
 
     # Find the header row and identify the column index
