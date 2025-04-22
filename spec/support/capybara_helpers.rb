@@ -47,29 +47,36 @@ module CapybaraHelpers
     expect(page).not_to have_css("#{table_selector} .loading-placeholder", wait: 0, visible: true)
   end
 
-  def click_link_in_table_column(table_header, column_text, nth_row)
-    # Find the table using the table header text
+  def table_column_selector(table_header, column_name)
+    # Construct the table selector
     table_selector = "table[data-test='#{to_kebab_case(table_header.downcase)}-table']"
-    table = page.find(table_selector, wait: 1)
+
+    # Find the table
+    table = find(table_selector, wait: 1)
 
     # Find the header row and identify the column index
     header_row = table.find("tr:has(th)", wait: 1)
     headers = header_row.all("th")
-    column_index = headers.index { |th| th.text.strip == column_text }
-    raise "Column '#{column_text}' not found in table '#{table_header}'" unless column_index
+    column_index = headers.index { |th| th.text.strip == column_name }
+    raise "Column '#{column_name}' not found in table '#{table_header}'" unless column_index
 
-    # Adjust for 1-based indexing (nth_row is 1-based, CSS is 1-based)
-    # Find the nth data row (excluding header row)
-    data_rows = table.all("tr:not(:has(th))", wait: 1)
-    raise "Row #{nth_row} not found in table '#{table_header}' (only #{data_rows.count} data rows available)" if nth_row > data_rows.count || nth_row < 1
+    # Return selector for td elements in the specified column (excluding header row)
+    "#{table_selector} tr:not(:has(th)) td:nth-child(#{column_index + 1})"
+  end
 
-    target_row = data_rows[nth_row - 1] # Convert to 0-based index for array access
+  def click_link_in_table_column(table_header, column_text, nth_row)
+    # Construct the selector for the specified column
+    column_selector = table_column_selector(table_header, column_text)
 
-    # Find the cell in the specified column (column_index is 0-based, CSS nth-child is 1-based)
-    cell = target_row.find("td:nth-child(#{column_index + 1})", wait: 1)
+    # Find all data rows in the specified column
+    data_cells = all(column_selector, wait: 1)
+    raise "Row #{nth_row} not found in table '#{table_header}' (only #{data_cells.count} data rows available)" if nth_row > data_cells.count || nth_row < 1
+
+    # Select the nth cell (nth_row is 1-based, array index is 0-based)
+    target_cell = data_cells[nth_row - 1]
 
     # Find and click the link within the cell
-    link = cell.find("a", wait: 1)
+    link = target_cell.find("a", wait: 1)
     link.click
   end
 end
