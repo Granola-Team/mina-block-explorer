@@ -3,9 +3,9 @@ require "spec_helper"
 RSpec.describe "Accounts metadata", type: :system do
   [
     {
-      url: "/addresses/accounts?q-token=#{NFT_TOKEN_ID}",
+      url: "/addresses/accounts?q-token=#{Constants::NFT_TOKEN_ID}",
       table_header: "NFT Token Accounts",
-      metadata: [1, TOTAL_NUM_NFT_HOLDERS, TOTAL_NUM_ACCOUNTS]
+      metadata: [1, Constants::TOTAL_NUM_NFT_HOLDERS, Constants::TOTAL_NUM_ACCOUNTS]
     }
   ].each do |item|
     it "is correct for #{item[:url]}" do
@@ -38,8 +38,8 @@ RSpec.describe "User command metadata", type: :system do
       table_header: "User Commands",
       metadata: [
         row_limit,
-        TOTAL_NUMBER_APPLIED_CANONICAL_USER_COMMANDS,
-        TOTAL_NUMBER_USER_COMMANDS
+        Constants::TOTAL_NUMBER_APPLIED_CANONICAL_USER_COMMANDS,
+        Constants::TOTAL_NUMBER_USER_COMMANDS
       ]
     },
     {
@@ -47,8 +47,8 @@ RSpec.describe "User command metadata", type: :system do
       table_header: "User Commands",
       metadata: [
         row_limit,
-        TOTAL_NUM_CANONICAL_USER_COMMANDS,
-        TOTAL_NUMBER_USER_COMMANDS
+        Constants::TOTAL_NUM_CANONICAL_USER_COMMANDS,
+        Constants::TOTAL_NUMBER_USER_COMMANDS
       ]
     },
     {
@@ -56,8 +56,8 @@ RSpec.describe "User command metadata", type: :system do
       table_header: "User Commands",
       metadata: [
         row_limit,
-        TOTAL_NUMBER_USER_COMMANDS - TOTAL_NUM_CANONICAL_USER_COMMANDS,
-        TOTAL_NUMBER_USER_COMMANDS
+        Constants::TOTAL_NUMBER_USER_COMMANDS - Constants::TOTAL_NUM_CANONICAL_USER_COMMANDS,
+        Constants::TOTAL_NUMBER_USER_COMMANDS
       ]
     },
     {
@@ -65,17 +65,17 @@ RSpec.describe "User command metadata", type: :system do
       table_header: "User Commands",
       metadata: [
         row_limit,
-        TOTAL_NUMBER_APPLIED_CANONICAL_USER_COMMANDS,
-        TOTAL_NUMBER_USER_COMMANDS
+        Constants::TOTAL_NUMBER_APPLIED_CANONICAL_USER_COMMANDS,
+        Constants::TOTAL_NUMBER_USER_COMMANDS
       ]
     },
     {
       url: "/commands/user?q-status=Failed&txn-type=Canonical",
       table_header: "User Commands",
       metadata: [
-        TOTAL_NUM_FAILED_CANONICAL_USER_COMMANDS,
-        TOTAL_NUM_FAILED_CANONICAL_USER_COMMANDS,
-        TOTAL_NUMBER_USER_COMMANDS
+        Constants::TOTAL_NUM_FAILED_CANONICAL_USER_COMMANDS,
+        Constants::TOTAL_NUM_FAILED_CANONICAL_USER_COMMANDS,
+        Constants::TOTAL_NUMBER_USER_COMMANDS
       ]
     },
     {
@@ -83,17 +83,17 @@ RSpec.describe "User command metadata", type: :system do
       table_header: "User Commands",
       metadata: [
         row_limit,
-        TOTAL_NUMBER_APPLIED_USER_COMMANDS - TOTAL_NUMBER_APPLIED_CANONICAL_USER_COMMANDS,
-        TOTAL_NUMBER_USER_COMMANDS
+        Constants::TOTAL_NUMBER_APPLIED_USER_COMMANDS - Constants::TOTAL_NUMBER_APPLIED_CANONICAL_USER_COMMANDS,
+        Constants::TOTAL_NUMBER_USER_COMMANDS
       ]
     },
     {
       url: "/commands/user?q-status=Failed&txn-type=Non-Canonical",
       table_header: "User Commands",
       metadata: [
-        TOTAL_NUM_FAILED_USER_COMMANDS - TOTAL_NUM_FAILED_CANONICAL_USER_COMMANDS,
-        TOTAL_NUM_FAILED_USER_COMMANDS - TOTAL_NUM_FAILED_CANONICAL_USER_COMMANDS,
-        TOTAL_NUMBER_USER_COMMANDS
+        Constants::TOTAL_NUM_FAILED_USER_COMMANDS - Constants::TOTAL_NUM_FAILED_CANONICAL_USER_COMMANDS,
+        Constants::TOTAL_NUM_FAILED_USER_COMMANDS - Constants::TOTAL_NUM_FAILED_CANONICAL_USER_COMMANDS,
+        Constants::TOTAL_NUMBER_USER_COMMANDS
       ]
     },
     {
@@ -101,8 +101,8 @@ RSpec.describe "User command metadata", type: :system do
       table_header: "User Commands",
       metadata: [
         row_limit,
-        TOTAL_NUM_APPLIED_CANONICAL_ZKAPP_COMMANDS,
-        TOTAL_NUMBER_USER_COMMANDS
+        Constants::TOTAL_NUM_APPLIED_CANONICAL_ZKAPP_COMMANDS,
+        Constants::TOTAL_NUMBER_USER_COMMANDS
       ]
     },
     {
@@ -110,31 +110,31 @@ RSpec.describe "User command metadata", type: :system do
       table_header: "User Commands",
       metadata: [
         row_limit,
-        TOTAL_NUM_APPLIED_ZKAPP_COMMANDS - TOTAL_NUM_APPLIED_CANONICAL_ZKAPP_COMMANDS,
-        TOTAL_NUMBER_USER_COMMANDS
+        Constants::TOTAL_NUM_APPLIED_ZKAPP_COMMANDS - Constants::TOTAL_NUM_APPLIED_CANONICAL_ZKAPP_COMMANDS,
+        Constants::TOTAL_NUMBER_USER_COMMANDS
       ]
     },
     {
       url: "/commands/user?q-status=Failed&txn-type=Canonical&q-type=ZKAPP",
       table_header: "User Commands",
       metadata: [
-        TOTAL_NUM_FAILED_CANONICAL_ZKAPP_COMMANDS,
-        TOTAL_NUMBER_USER_COMMANDS
+        Constants::TOTAL_NUM_FAILED_CANONICAL_ZKAPP_COMMANDS,
+        Constants::TOTAL_NUMBER_USER_COMMANDS
       ]
     },
     {
       url: "/commands/user?q-status=Failed&txn-type=Non-Canonical&q-type=ZKAPP",
       table_header: "User Commands",
       metadata: [
-        TOTAL_NUM_FAILED_ZKAPP_COMMANDS - TOTAL_NUM_FAILED_CANONICAL_ZKAPP_COMMANDS,
-        TOTAL_NUMBER_USER_COMMANDS
+        Constants::TOTAL_NUM_FAILED_ZKAPP_COMMANDS - Constants::TOTAL_NUM_FAILED_CANONICAL_ZKAPP_COMMANDS,
+        Constants::TOTAL_NUMBER_USER_COMMANDS
       ]
     },
     {
-      url: "/commands/user?q-token=#{MINU_TOKEN_ADDRESS}",
-      table_header: "User Commands (#{MINU_SYMBOL})",
+      url: "/commands/user?q-token=#{Constants::MINU_TOKEN_ADDRESS}",
+      table_header: "User Commands (#{Constants::MINU_SYMBOL})",
       selector: "table[data-test=user-commands-table]",
-      metadata: [1, TOTAL_NUM_MINU_TOKEN_TXN, TOTAL_NUMBER_USER_COMMANDS]
+      metadata: [1, Constants::TOTAL_NUM_MINU_TOKEN_TXN, Constants::TOTAL_NUMBER_USER_COMMANDS]
     }
   ].each do |item|
     it "is correct for #{item[:url]}" do

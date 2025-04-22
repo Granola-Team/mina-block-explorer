@@ -46,4 +46,30 @@ module CapybaraHelpers
     # Final assertion to ensure placeholders are gone
     expect(page).not_to have_css("#{table_selector} .loading-placeholder", wait: 0, visible: true)
   end
+
+  def click_link_in_table_column(table_header, column_text, nth_row)
+    # Find the table using the table header text
+    table_selector = "table[data-test='#{to_kebab_case(table_header)}-table']"
+    table = page.find(table_selector, wait: 1)
+
+    # Find the header row and identify the column index
+    header_row = table.find("tr:has(th)", wait: 1)
+    headers = header_row.all("th")
+    column_index = headers.index { |th| th.text.strip == column_text }
+    raise "Column '#{column_text}' not found in table '#{table_header}'" unless column_index
+
+    # Adjust for 1-based indexing (nth_row is 1-based, CSS is 1-based)
+    # Find the nth data row (excluding header row)
+    data_rows = table.all("tr:not(:has(th))", wait: 1)
+    raise "Row #{nth_row} not found in table '#{table_header}' (only #{data_rows.count} data rows available)" if nth_row > data_rows.count || nth_row < 1
+
+    target_row = data_rows[nth_row - 1] # Convert to 0-based index for array access
+
+    # Find the cell in the specified column (column_index is 0-based, CSS nth-child is 1-based)
+    cell = target_row.find("td:nth-child(#{column_index + 1})", wait: 1)
+
+    # Find and click the link within the cell
+    link = cell.find("a", wait: 1)
+    link.click
+  end
 end

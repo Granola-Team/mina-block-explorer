@@ -7,17 +7,17 @@ RSpec.describe "Global search", type: :system do
     expect(page).to have_css('input[placeholder="Paste -> Enter -> Explore!"]', visible: true)
   end
 
-  xyz_tokens = [MINU_TOKEN_ADDRESS, TITS_TOKEN_ID, NFT_TOKEN_ID]
+  xyz_tokens = [Constants::MINU_TOKEN_ADDRESS, Constants::TITS_TOKEN_ID, Constants::NFT_TOKEN_ID]
   items = xyz_tokens.map do |token|
     {input: token, expected_url: "/tokens?q-id=#{token}"}
   end
   items.push(
     {input: "359617", expected_url: "/blocks?q-height=359617"},
-    {input: "      #{EPOCH_ZERO_STAKING_LEDGER_HASH}     ", expected_url: "/staking-ledgers?epoch=0"},
-    {input: EPOCH_ZERO_STAKING_LEDGER_HASH, expected_url: "/staking-ledgers?epoch=0"},
-    {input: GENESIS_ACCOUNT_PK, expected_url: "/addresses/accounts/#{GENESIS_ACCOUNT_PK}"},
-    {input: GENESIS_BLOCK_BLOCK_HASH, expected_url: "/blocks/#{GENESIS_BLOCK_BLOCK_HASH}"},
-    {input: FIRST_TXN_HASH, expected_url: "/commands/#{FIRST_TXN_HASH}"},
+    {input: "      #{Constants::EPOCH_ZERO_STAKING_LEDGER_HASH}     ", expected_url: "/staking-ledgers?epoch=0"},
+    {input: Constants::EPOCH_ZERO_STAKING_LEDGER_HASH, expected_url: "/staking-ledgers?epoch=0"},
+    {input: Constants::GENESIS_ACCOUNT_PK, expected_url: "/addresses/accounts/#{Constants::GENESIS_ACCOUNT_PK}"},
+    {input: Constants::GENESIS_BLOCK_BLOCK_HASH, expected_url: "/blocks/#{Constants::GENESIS_BLOCK_BLOCK_HASH}"},
+    {input: Constants::FIRST_TXN_HASH, expected_url: "/commands/#{Constants::FIRST_TXN_HASH}"},
     {input: "1", expected_url: "/staking-ledgers?epoch=1"}
   )
 

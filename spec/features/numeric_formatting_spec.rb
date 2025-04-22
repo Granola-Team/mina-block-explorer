@@ -19,7 +19,7 @@ RSpec.describe "Number or currency", type: :system do
       ]
     },
     {
-      url: "/blocks/#{GENESIS_BLOCK_BLOCK_HASH}/spotlight",
+      url: "/blocks/#{Constants::GENESIS_BLOCK_BLOCK_HASH}/spotlight",
       heading: "Block Spotlight",
       tests: [
         {name: "coinbase", selector: "table tr:nth-child(5) td:first-of-type", type: "currency"},
@@ -28,7 +28,7 @@ RSpec.describe "Number or currency", type: :system do
       ]
     },
     {
-      url: "/blocks/#{BLOCK_WITH_ALL_ACTIVITY}/commands/user",
+      url: "/blocks/#{Constants::BLOCK_WITH_ALL_ACTIVITY}/commands/user",
       heading: "User Commands",
       tests: [
         {name: "fee", selector: '[data-test="user-commands-table"] tr:has(:not(th)) td:nth-child(7)', type: "currency"},
@@ -36,14 +36,14 @@ RSpec.describe "Number or currency", type: :system do
       ]
     },
     {
-      url: "/blocks/#{BLOCK_WITH_ALL_ACTIVITY}/commands/internal",
+      url: "/blocks/#{Constants::BLOCK_WITH_ALL_ACTIVITY}/commands/internal",
       heading: "Internal Commands",
       tests: [
         {name: "fee", selector: '[data-test="internal-commands-table"] tr:has(:not(th)) td:nth-child(2)', type: "currency"}
       ]
     },
     {
-      url: "/blocks/#{BLOCK_WITH_ALL_ACTIVITY}/snark-jobs",
+      url: "/blocks/#{Constants::BLOCK_WITH_ALL_ACTIVITY}/snark-jobs",
       heading: "SNARK Jobs",
       tests: [
         {name: "fee", selector: '[data-test="snark-jobs-table"] tr:has(:not(th)) td:last-child', type: "currency"}
@@ -76,7 +76,7 @@ RSpec.describe "Number or currency", type: :system do
       ]
     },
     {
-      url: "/addresses/accounts/#{COMMAND_SNARK_BLOCK_ACTIVITY_ADDRESS}",
+      url: "/addresses/accounts/#{Constants::COMMAND_SNARK_BLOCK_ACTIVITY_ADDRESS}",
       heading: "User Commands",
       tests: [
         {name: "height", selector: '[data-test="user-commands-table"] tr:has(:not(th)) td:first-child', type: "number"},
@@ -86,7 +86,7 @@ RSpec.describe "Number or currency", type: :system do
       ]
     },
     {
-      url: "/addresses/accounts/#{COMMAND_SNARK_BLOCK_ACTIVITY_ADDRESS}/snark-jobs",
+      url: "/addresses/accounts/#{Constants::COMMAND_SNARK_BLOCK_ACTIVITY_ADDRESS}/snark-jobs",
       heading: "SNARK Jobs",
       tests: [
         {name: "height", selector: '[data-test="snark-jobs-table"] tr:has(:not(th)) td:first-child', type: "number"},
@@ -94,7 +94,7 @@ RSpec.describe "Number or currency", type: :system do
       ]
     },
     {
-      url: "/addresses/accounts/#{COMMAND_SNARK_BLOCK_ACTIVITY_ADDRESS}/block-production",
+      url: "/addresses/accounts/#{Constants::COMMAND_SNARK_BLOCK_ACTIVITY_ADDRESS}/block-production",
       heading: "Block Production",
       tests: [
         {name: "height", selector: '[data-test="block-production-table"] tr:has(:not(th)) td:first-child', type: "number"},
@@ -111,7 +111,7 @@ RSpec.describe "Number or currency", type: :system do
       ]
     },
     {
-      url: "/staking-ledgers?epoch=0&q-key=#{ROMEK_ADDRESS}",
+      url: "/staking-ledgers?epoch=0&q-key=#{Constants::ROMEK_ADDRESS}",
       heading: "Staking Ledger - Epoch 0",
       tests: [
         {name: "stake", selector: '[data-test="staking-ledger-epoch-0-table"] tr:has(:not(th)) td:nth-child(3)', type: "currency"}

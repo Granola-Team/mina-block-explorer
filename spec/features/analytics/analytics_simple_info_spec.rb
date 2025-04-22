@@ -2,7 +2,7 @@ require "spec_helper"
 
 RSpec.describe "Analytics Simple Info stats", type: :system do
   pages = [
-    "/blocks/#{APPLIED_TXN_BLOCK_STATE_HASH}/analytics",
+    "/blocks/#{Constants::APPLIED_TXN_BLOCK_STATE_HASH}/analytics",
     "/analytics/snarks?q-blockheight-gte=359606&q-blockheight-lte=359706",
     "/analytics/commands/user?q-blockheight-gte=0&q-blockheight-lte=10000"
   ].freeze

@@ -21,8 +21,8 @@ RSpec.describe "Meta title", type: :system do
     {url: "/broadcast/ledger", title: "Offline Broadcasting | Broadcast Signed Transaction From Ledger"},
     {url: "/staking-ledgers?epoch=1", title: "Staking Ledger | Epoch 1"},
     {url: "/snarks", title: "SNARKs | Search For SNARKs"},
-    {url: "/commands/#{FIRST_TXN_HASH}", title: "Transaction Overview | No Memo"},
-    {url: "/addresses/accounts/#{ROMEK_ADDRESS}", title: "Account Overview | #{ROMEK_USERNAME}"}
+    {url: "/commands/#{Constants::FIRST_TXN_HASH}", title: "Transaction Overview | No Memo"},
+    {url: "/addresses/accounts/#{Constants::ROMEK_ADDRESS}", title: "Account Overview | #{Constants::ROMEK_USERNAME}"}
   ]
 
   pages.each do |p|
