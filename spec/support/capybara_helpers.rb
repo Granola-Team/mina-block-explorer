@@ -32,11 +32,11 @@ module CapybaraHelpers
       .downcase.squeeze("-")                  # Collapse multiple hyphens
   end
 
-  def wait_until_table_loaded(heading)
+  def wait_until_table_loaded(heading, wait: 1)
     table_selector = "[data-test='#{to_kebab_case(heading.downcase)}-table']"
 
     # Wait for placeholders to appear, if need be
-    page.has_css?("#{table_selector} .loading-placeholder", wait: 1, visible: true)
+    page.has_css?("#{table_selector} .loading-placeholder", wait: wait, visible: true)
 
     # Loop until placeholders are gone
     loop do

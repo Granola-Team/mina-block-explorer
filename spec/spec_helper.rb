@@ -1,5 +1,6 @@
 require "capybara/rspec"
 require "capybara/cuprite"
+require "rspec/retry"
 require_relative "support/constants"
 require_relative "support/capybara_helpers"
 
@@ -41,8 +42,17 @@ RSpec.configure do |config|
   config.warnings = true
   config.default_formatter = "doc" if config.files_to_run.one?
   config.profile_examples = 10
-  config.order = :random
   Kernel.srand config.seed
+
+  # show retry status in spec process
+  config.verbose_retry = true
+  # show exception that triggers a retry if verbose_retry is set to true
+  config.display_try_failure_messages = true
+
+  # run retry only on features
+  config.around :each do |ex|
+    ex.run_with_retry retry: 3
+  end
 
   config.after(:each) do |example|
     if example.exception && example.metadata[:type] == :system
