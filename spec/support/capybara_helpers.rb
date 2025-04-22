@@ -79,4 +79,12 @@ module CapybaraHelpers
     link = target_cell.find("a", wait: 1)
     link.click
   end
+
+  def get_table_metadata(table_header)
+    metadata_selector = "metadata-#{to_kebab_case(table_header)}"
+    metadata_element = get_by_sel(metadata_selector)
+    metadata_text = metadata_element.text
+    # Parse "x of y of z" format, removing commas for number conversion
+    metadata_text.scan(/\d[\d,]*/).map { |num| num.delete(",").to_i }
+  end
 end

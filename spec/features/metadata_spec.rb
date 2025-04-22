@@ -17,12 +17,7 @@ RSpec.describe "Accounts metadata", type: :system do
       row_count = page.all("#{table_selector} tr:not(:has(th))", wait: 1).count
       expect(row_count).to eq(item[:metadata][0]), "Expected #{item[:metadata][0]} rows for '#{item[:table_header]}', but found #{row_count}"
 
-      # Parse metadata using get_by_sel
-      metadata_selector = "metadata-#{to_kebab_case(item[:table_header])}"
-      metadata_element = get_by_sel(metadata_selector)
-      metadata_text = metadata_element.text
-      # Parse "x of y of z" format, removing commas for number conversion
-      metadata_numbers = metadata_text.scan(/\d[\d,]*/).map { |num| num.delete(",").to_i }
+      metadata_numbers = get_table_metadata(item[:table_header])
 
       # Assert metadata values
       expect(metadata_numbers[1]).to eq(item[:metadata][1]), "Expected total of #{item[:metadata][1]} for '#{item[:table_header]}', but found #{metadata_numbers[1]}"
@@ -146,12 +141,7 @@ RSpec.describe "User command metadata", type: :system do
       row_count = page.all("#{table_selector} tr:not(:has(th))", wait: 2).count
       expect(row_count).to eq(item[:metadata][0]), "Expected #{item[:metadata][0]} rows for '#{item[:table_header]}', but found #{row_count}"
 
-      # Parse metadata using get_by_sel
-      metadata_selector = "metadata-#{to_kebab_case(item[:table_header])}"
-      metadata_element = get_by_sel(metadata_selector)
-      metadata_text = metadata_element.text
-      # Parse "x of y of z" format, removing commas for number conversion
-      metadata_numbers = metadata_text.scan(/\d[\d,]*/).map { |num| num.delete(",").to_i }
+      metadata_numbers = get_table_metadata(item[:table_header])
 
       # Assert metadata values based on length
       if item[:metadata].length == 3
