@@ -57,7 +57,20 @@ module CapybaraHelpers
     # Find the header row and identify the column index
     header_row = table.find("tr:has(th)", wait: 1)
     headers = header_row.all("th")
-    column_index = headers.index { |th| th.text.strip == column_name }
+    cleaned_headers = headers.map do |th|
+      # Remove the <select> element from the DOM for this <th>
+      page.execute_script(<<-JS, th)
+          const thElement = arguments[0];
+          const selectElement = thElement.querySelector('select');
+          if (selectElement) {
+            selectElement.remove();
+          }
+      JS
+
+      # Extract the remaining text from the <th>
+      th.text.gsub(/\s+/, " ").strip
+    end
+    column_index = cleaned_headers.index { |txt| txt == column_name }
     raise "Column '#{column_name}' not found in table '#{table_header}'" unless column_index
 
     # Return selector for td elements in the specified column (excluding header row)
