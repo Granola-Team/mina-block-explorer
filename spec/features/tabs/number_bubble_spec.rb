@@ -50,7 +50,7 @@ RSpec.describe "Number bubble in tab", type: :system do
       # Wait for the table associated with the tab to load
       wait_until_table_loaded(test_case[:tab])
 
-      bubble = find("[data-test=\"#{to_kebab_case(test_case[:tab])}-tab\"] .number-bubble")
+      bubble = find("#{tab_selector(test_case[:tab])} .number-bubble")
       number = bubble.text.to_i
 
       if test_case[:comparison_method] == "rows"

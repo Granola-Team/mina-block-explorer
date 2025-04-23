@@ -1,3 +1,4 @@
+# spec/support/capybara_helpers.rb
 require "benchmark"
 
 module CapybaraHelpers
@@ -45,6 +46,14 @@ module CapybaraHelpers
 
     # Final assertion to ensure placeholders are gone
     expect(page).not_to have_css("#{table_selector} .loading-placeholder", wait: 0, visible: true)
+  end
+
+  def get_table_rows(heading)
+    find_all("table[data-test='#{to_kebab_case(heading.downcase)}-table'] tr:not(:has(th))")
+  end
+
+  def tab_selector(text)
+    "[data-test='#{to_kebab_case(text.downcase)}-tab']"
   end
 
   def table_column_selector(table_header, column_name)
@@ -99,5 +108,20 @@ module CapybaraHelpers
     metadata_text = metadata_element.text
     # Parse "x of y of z" format, removing commas for number conversion
     metadata_text.scan(/\d[\d,]*/).map { |num| num.delete(",").to_i }
+  end
+
+  def test_spotlight(heading, id, expected_fields)
+    # Verify the heading in section#spotlight-section h1
+    expect(page).to have_selector("section#spotlight-section h1", text: heading), "Expected heading '#{heading}' in section#spotlight-section h1"
+
+    # Verify the ID in #spotlight-id
+    expect(page).to have_selector("#spotlight-id", text: id), "Expected ID '#{id}' in #spotlight-id"
+
+    # Within the spotlight section table, verify each expected field in the <th> elements
+    within("section#spotlight-section table") do
+      expected_fields.each do |field|
+        expect(page).to have_selector("th", text: field, wait: 0), "Expected field '#{field}' in spotlight section table headers"
+      end
+    end
   end
 end
