@@ -4,14 +4,16 @@ require "spec_helper"
 RSpec.describe "Snarker Leaderboard table", type: :system do
   let(:url) { "/analytics/staker-leaderboard?epoch=0" }
   let(:heading) { "Staker Leaderboard" }
-  let(:columns) { [
-    "Username",
-    "Public Key",
-    "Canonical Blocks Produced",
-    "Supercharged Blocks Produced",
-    "Slots Produced",
-    "Orphan Rate",
-  ].map(&:upcase) }
+  let(:columns) {
+    [
+      "Username",
+      "Public Key",
+      "Canonical Blocks Produced",
+      "Supercharged Blocks Produced",
+      "Slots Produced",
+      "Orphan Rate"
+    ].map(&:upcase)
+  }
 
   before do
     visit url
