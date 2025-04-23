@@ -73,6 +73,16 @@ module CapybaraHelpers
     "[data-test='#{to_kebab_case(text.downcase)}-tab']"
   end
 
+  def remove_select(th)
+    page.execute_script(<<-JS, th)
+        const thElement = arguments[0];
+        const selectElement = thElement.querySelector('select');
+        if (selectElement) {
+          selectElement.remove();
+        }
+    JS
+  end
+
   def table_column_selector(table_header, column_name)
     # Construct the table selector
     table_selector = "table[data-test='#{to_kebab_case(table_header.downcase)}-table']"
@@ -84,14 +94,7 @@ module CapybaraHelpers
     header_row = table.find("tr:has(th)", wait: 1)
     headers = header_row.all("th")
     cleaned_headers = headers.map do |th|
-      # Remove the <select> element from the DOM for this <th>
-      page.execute_script(<<-JS, th)
-          const thElement = arguments[0];
-          const selectElement = thElement.querySelector('select');
-          if (selectElement) {
-            selectElement.remove();
-          }
-      JS
+      remove_select(th)
 
       # Extract the remaining text from the <th>
       th.text.gsub(/\s+/, " ").strip

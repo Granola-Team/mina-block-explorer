@@ -40,11 +40,10 @@ module TableHelpers
         if i != 0
           expect(page.current_url).to include("sort-dir=#{sort}"), "Expected URL to include 'sort-dir=#{sort}', but was '#{page.current_url}'"
         end
-
-        # Click the column to sort
-        find("th", text: column.upcase, wait: 0).click
-        wait_until_table_loaded(heading) # Wait for table to reload after sorting
       end
+      # Click the column to sort
+      find("th", text: column.upcase, wait: 0).find("svg").click
+      wait_until_table_loaded(heading) # Wait for table to reload after sorting
     end
   end
 
@@ -61,9 +60,7 @@ module TableHelpers
       filter_input.set(input)
     end
 
-    sleep 2
-
-    wait_until_table_loaded(heading)
+    wait_until_table_loaded(heading, wait: 2)
 
     # Run the provided assertion if given
     assertion&.call

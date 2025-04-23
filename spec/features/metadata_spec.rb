@@ -7,6 +7,12 @@ RSpec.describe "Accounts metadata", type: :system do
       table_header: "NFT Token Accounts",
       metadata: [1, Constants::TOTAL_NUM_NFT_HOLDERS, Constants::TOTAL_NUM_ACCOUNTS]
     }
+    # TODO: uncomment when https://github.com/Granola-Team/mina-indexer/issues/1873 is done
+    # {
+    #   url: "/addresses/accounts",
+    #   table_header: "MINA Token Accounts",
+    #   metadata: [25, 27, Constants::TOTAL_NUM_ACCOUNTS]
+    # },
   ].each do |item|
     it "is correct for #{item[:url]}" do
       visit item[:url]
