@@ -392,11 +392,8 @@ where
                         <select
                             data-test=format!("select-{}", column.column)
                             value=value
-                            on:input=move |_| {
+                            on:change=move |_| {
                                 update_value();
-                            }
-                            on:click=move |e| {
-                                e.stop_propagation();
                             }
                             node_ref=select_element
                             class=INPUT_CLASS.to_string() + &input_class + " p-0 text-xs bg-white "

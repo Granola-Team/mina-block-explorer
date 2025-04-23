@@ -1,10 +1,23 @@
 # spec/support/table_helpers.rb
 module TableHelpers
   def test_ordered_columns(heading, expected_columns)
-    table = find("table[data-test='#{to_kebab_case(heading.downcase)}-table']")
-    header_row = table.find("tr:has(th)")
-    headers = header_row.all("th").map { |th| th.text.strip }
-    expect(headers).to eq(expected_columns), "Expected table headers to be #{expected_columns}, but found #{headers}"
+    table = find("table[data-test='#{to_kebab_case(heading.downcase)}-table']", wait: 0)
+    header_row = table.find("tr:has(th)", wait: 0)
+    headers = header_row.all("th", wait: 0)
+    cleaned_headers = headers.map do |th|
+      # Remove the <select> element from the DOM for this <th>
+      page.execute_script(<<-JS, th)
+          const thElement = arguments[0];
+          const selectElement = thElement.querySelector('select');
+          if (selectElement) {
+            selectElement.remove();
+          }
+      JS
+
+      # Extract the remaining text from the <th>
+      th.text.gsub(/\s+/, " ").strip
+    end
+    expect(cleaned_headers).to eq(expected_columns), "Expected table headers to be #{expected_columns}, but found #{headers}"
   end
 
   def test_valid_dates(heading)
@@ -29,7 +42,7 @@ module TableHelpers
         end
 
         # Click the column to sort
-        find("th", text: column.upcase).click
+        find("th", text: column.upcase, wait: 0).click
         wait_until_table_loaded(heading) # Wait for table to reload after sorting
       end
     end
@@ -37,16 +50,19 @@ module TableHelpers
 
   def test_filter(heading, column, input, filter_type, assertion = nil)
     # Find the filter input/select
-    filter_container = find("th", text: column.upcase)
+    filter_container = find("th", text: column.upcase, wait: 0)
     if filter_type == "select"
-      filter_input = filter_container.find("select")
-      filter_input.select(input)
+      filter_input = filter_container.find("select", wait: 0)
+      option = filter_input.find("option", text: input, wait: 1)
+      option.select_option
+      page.execute_script("arguments[0].dispatchEvent(new Event('blur', { bubbles: true }))", filter_input)
     else
       filter_input = filter_container.find("input")
       filter_input.set(input)
     end
 
-    sleep 1 # Wait for user input to trigger table load (equivalent to cy.wait(1000))
+    sleep 2
+
     wait_until_table_loaded(heading)
 
     # Run the provided assertion if given

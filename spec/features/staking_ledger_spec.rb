@@ -74,7 +74,7 @@ RSpec.describe "Staking ledger", type: :system do
     visit "/staking-ledgers?epoch=0"
     expect(page).to have_content("40% complete"), "Expected '40% complete' to be present for epoch 0"
 
-    find("button", text: "Next").click
+    find("button", text: "Next", match: :first).click
     expect(page).to have_content("0% complete"), "Expected '0% complete' to be present for the next epoch"
   end
 end

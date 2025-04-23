@@ -53,7 +53,7 @@ RSpec.configure do |config|
 
   # run retry only on features
   config.around :each do |ex|
-    ex.run_with_retry retry: 3
+    ex.run_with_retry retry: 2
   end
 
   config.after(:each) do |example|
