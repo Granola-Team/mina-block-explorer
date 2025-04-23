@@ -3,9 +3,11 @@ require "capybara/cuprite"
 require "rspec/retry"
 require_relative "support/constants"
 require_relative "support/capybara_helpers"
+require_relative "support/table_helpers"
 
 RSpec.configure do |config|
   config.include CapybaraHelpers, type: :system
+  config.include TableHelpers, type: :system
 end
 
 raise "APP_PORT environment variable is not set" unless ENV.key?("APP_PORT")
