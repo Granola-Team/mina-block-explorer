@@ -43,4 +43,26 @@ RSpec.describe "Transaction spotlight navigation", type: :system do
       expect(data.text).to eq("true"), "Expected 'Canonical' to be 'true', but found '#{data.text}'"
     end
   end
+
+  it "is navigated to with correct url params from /tokens page by clicking link in 'Transactions'" do
+    visit "/tokens"
+
+    # Click the "Transactions" link in the 2nd row (Cypress index 1 = Capybara row 2)
+    click_link_in_table_column("Tokens", "Transactions".upcase, 2)
+
+    # Verify the URL includes the expected parameters
+    expect(page.current_url).to include("/commands/user"), "Expected URL to include '/commands/user', but was '#{page.current_url}'"
+    expect(page.current_url).to include("q-token=#{Constants::MINU_TOKEN_ADDRESS}"), "Expected URL to include 'q-token=#{Constants::MINU_TOKEN_ADDRESS}', but was '#{page.current_url}'"
+    expect(page.current_url).to include("q-status=All"), "Expected URL to include 'q-status=All', but was '#{page.current_url}'"
+
+    # Verify the "User Commands (MINU)" table has 1 row
+    wait_until_table_loaded("User Commands")
+    table_rows = get_table_rows("User Commands")
+    expect(table_rows.count).to eq(1), "Expected 'User Commands (#{Constants::MINU_SYMBOL})' table to have 1 row, but found #{table_rows.count}"
+
+    # Verify table metadata (1 of 1)
+    metadata = get_table_metadata("User Commands (#{Constants::MINU_SYMBOL})")
+    expect(metadata[0]).to eq(1), "Expected metadata 'x' in 'x of y' to be 1, but was #{metadata[0]}"
+    expect(metadata[1]).to eq(1), "Expected metadata 'y' in 'x of y' to be 1, but was #{metadata[1]}"
+  end
 end

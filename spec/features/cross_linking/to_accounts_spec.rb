@@ -83,4 +83,26 @@ RSpec.describe "Account page navigation", type: :system do
       expect(page.current_path).to match(/\/accounts\//), "Expected URL to include '/accounts/', but was #{page.current_path}"
     end
   end
+
+  it "is navigated to from /tokens by clicking link in 'Holders'" do
+    visit "/tokens"
+
+    wait_until_table_loaded("Tokens")
+
+    # Click the "Holders" link in the 2nd row
+    click_link_in_table_column("Tokens", "Holders".upcase, 2)
+
+    # Verify the URL includes the expected parameters
+    expect(page.current_url).to include("/addresses/accounts?q-token=#{Constants::MINU_TOKEN_ADDRESS}"), "Expected URL to include '/addresses/accounts?q-token=#{Constants::MINU_TOKEN_ADDRESS}', but was '#{page.current_url}'"
+
+    # Verify the "MINU Token Accounts" table has 1 row
+    wait_until_table_loaded("MINU Token Accounts")
+    table_rows = get_table_rows("MINU Token Accounts")
+    expect(table_rows.count).to eq(1), "Expected 'MINU Token Accounts' table to have 1 row, but found #{table_rows.count}"
+
+    # Verify table metadata (1 of 1)
+    metadata = get_table_metadata("MINU Token Accounts")
+    expect(metadata[0]).to eq(1), "Expected metadata 'x' in 'x of y' to be 1, but was #{metadata[0]}"
+    expect(metadata[1]).to eq(1), "Expected metadata 'y' in 'x of y' to be 1, but was #{metadata[1]}"
+  end
 end
