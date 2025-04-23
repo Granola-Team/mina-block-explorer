@@ -10,7 +10,7 @@ pub fn TokenHoldersMoreDetails(zkapp: TokenHoldersQueryTokenHoldersAccountZkapp)
     let zkapp_clone = zkapp.clone();
     view! {
         <TableSection metadata=metadata.into() section_heading="More Details">
-            <SpotlightTable>
+            <SpotlightTable id=MaybeSignal::derive(|| "More Details".to_string())>
                 <ZkAppDetailTr>
                     <ZkAppDetailTh>"App State:"</ZkAppDetailTh>
                     <ZkAppDetailTd>

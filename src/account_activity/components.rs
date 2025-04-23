@@ -30,7 +30,7 @@ pub fn ZkAppDetailsSection(zkapp: Option<AccountActivityQueryAccountsZkapp>) -> 
         let zkapp_clone = zkapp.clone();
         view! {
             <TableSection metadata=metadata.into() section_heading="ZKApp Details".to_string()>
-                <SpotlightTable>
+                <SpotlightTable id=MaybeSignal::derive(|| "ZKApp Details".to_string())>
                     <ZkAppDetailTr>
                         <ZkAppDetailTh>"App State:"</ZkAppDetailTh>
                         <ZkAppDetailTd>

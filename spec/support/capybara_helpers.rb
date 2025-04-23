@@ -48,8 +48,25 @@ module CapybaraHelpers
     expect(page).not_to have_css("#{table_selector} .loading-placeholder", wait: 0, visible: true)
   end
 
-  def get_table_rows(heading)
-    find_all("table[data-test='#{to_kebab_case(heading.downcase)}-table'] tr:not(:has(th))")
+  def wait_until_spotlight_loaded(wait: 5)
+    # Wait for placeholders to appear, if needed
+    page.has_css?("section#spotlight-section .loading-placeholder", wait: wait, visible: true)
+
+    # Loop until placeholders are gone
+    loop do
+      break unless page.has_css?("section#spotlight-section .loading-placeholder", wait: 0, visible: true)
+    end
+
+    # Final assertion to ensure placeholders are gone
+    expect(page).not_to have_css("section#spotlight-section .loading-placeholder", wait: 0, visible: true)
+  end
+
+  def get_table_rows(heading, transposed = false)
+    if transposed
+      find_all("table[data-test='#{to_kebab_case(heading.downcase)}-table'] tr:has(th)")
+    else
+      find_all("table[data-test='#{to_kebab_case(heading.downcase)}-table'] tr:not(:has(th))")
+    end
   end
 
   def tab_selector(text)

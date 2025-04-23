@@ -1,4 +1,5 @@
 use crate::common::{components::*, functions::*};
+use heck::ToKebabCase;
 use leptos::*;
 
 #[derive(Default)]
@@ -46,6 +47,7 @@ fn Spotlight(
     #[prop(into)] id: Option<String>,
     children: Children,
 ) -> impl IntoView {
+    let id_clone = id.clone();
     view! {
         <div
             id="spotlight-heading"
@@ -78,7 +80,9 @@ fn Spotlight(
 
             </div>
         </div>
-        <SpotlightTable>
+        <SpotlightTable id=MaybeSignal::derive(move || {
+            id_clone.as_ref().map(|id| id.to_string()).unwrap_or_default()
+        })>
             {spotlight_items
                 .into_iter()
                 .map(|entry| {
@@ -94,9 +98,12 @@ fn Spotlight(
 }
 
 #[component]
-pub fn SpotlightTable(children: Children) -> impl IntoView {
+pub fn SpotlightTable(children: Children, id: MaybeSignal<String>) -> impl IntoView {
     view! {
-        <table class="font-mono @3xl:mx-[5rem] bg-white rounded-xl mt-2 @3xl:mt-8 pl-8 table-fixed flex flex-wrap">
+        <table
+            data-test=id.get().as_str().to_lowercase().to_kebab_case() + "-table"
+            class="font-mono @3xl:mx-[5rem] bg-white rounded-xl mt-2 @3xl:mt-8 pl-8 table-fixed flex flex-wrap"
+        >
             {children()}
         </table>
     }

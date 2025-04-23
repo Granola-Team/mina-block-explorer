@@ -315,7 +315,9 @@ pub fn CommandSpotlightPage() -> impl IntoView {
                                             metadata=metadata.into()
                                             section_heading="Actions & Events"
                                         >
-                                            <SpotlightTable>
+                                            <SpotlightTable id=MaybeSignal::derive(|| {
+                                                "Actions & Events".to_string()
+                                            })>
 
                                                 <ZkAppDetailTr>
                                                     <ZkAppDetailTh>"Actions:"</ZkAppDetailTh>
