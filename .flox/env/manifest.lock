@@ -52,13 +52,6 @@
       "lld": {
         "pkg-path": "lld"
       },
-      "mold": {
-        "pkg-path": "mold-wrapped",
-        "systems": [
-          "aarch64-linux",
-          "x86_64-linux"
-        ]
-      },
       "nodejs_23": {
         "pkg-path": "nodejs_23"
       },
@@ -1372,64 +1365,6 @@
         "dev": "/nix/store/m9kzs09qavhpq1l7ihq0v42s6382aqzd-lld-19.1.7-dev",
         "lib": "/nix/store/d53xcc8zvrgsxwphkgc562gpnj8mmgf0-lld-19.1.7-lib",
         "out": "/nix/store/6gxr0kllxxkv24hva8k27x1cqrs6d454-lld-19.1.7"
-      },
-      "system": "x86_64-linux",
-      "group": "toplevel",
-      "priority": 5
-    },
-    {
-      "attr_path": "mold-wrapped",
-      "broken": false,
-      "derivation": "/nix/store/hh3x6669sx1wv42snsdhmlfss9mmx1m3-mold-wrapper-2.37.1.drv",
-      "description": "Faster drop-in replacement for existing Unix linkers (unwrapped) (wrapper script)",
-      "install_id": "mold",
-      "license": "MIT",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
-      "name": "mold-wrapper-2.37.1",
-      "pname": "mold-wrapped",
-      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
-      "rev_count": 776537,
-      "rev_date": "2025-03-30T06:12:12Z",
-      "scrape_date": "2025-04-01T01:30:21.324430Z",
-      "stabilities": [
-        "unstable"
-      ],
-      "unfree": false,
-      "version": "2.37.1",
-      "outputs_to_install": [
-        "out"
-      ],
-      "outputs": {
-        "out": "/nix/store/jxigrmi35fkc4smr447y8x8ca341y9sc-mold-wrapper-2.37.1"
-      },
-      "system": "aarch64-linux",
-      "group": "toplevel",
-      "priority": 5
-    },
-    {
-      "attr_path": "mold-wrapped",
-      "broken": false,
-      "derivation": "/nix/store/203kh53ri8199nw7ldgf8gbqcafn89fx-mold-wrapper-2.37.1.drv",
-      "description": "Faster drop-in replacement for existing Unix linkers (unwrapped) (wrapper script)",
-      "install_id": "mold",
-      "license": "MIT",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
-      "name": "mold-wrapper-2.37.1",
-      "pname": "mold-wrapped",
-      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
-      "rev_count": 776537,
-      "rev_date": "2025-03-30T06:12:12Z",
-      "scrape_date": "2025-04-01T02:07:06.065173Z",
-      "stabilities": [
-        "unstable"
-      ],
-      "unfree": false,
-      "version": "2.37.1",
-      "outputs_to_install": [
-        "out"
-      ],
-      "outputs": {
-        "out": "/nix/store/9d8pni5qag016s04ikj6hksph7ydyq6d-mold-wrapper-2.37.1"
       },
       "system": "x86_64-linux",
       "group": "toplevel",
