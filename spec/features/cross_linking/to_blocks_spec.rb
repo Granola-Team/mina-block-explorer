@@ -13,6 +13,8 @@ RSpec.describe "Block page navigation", type: :system do
     it "is navigated to from #{item[:origin]}" do
       visit item[:origin]
 
+      wait_until_table_loaded("Block Production")
+
       # Click the link with text "See all block production"
       find("a", text: "SEE ALL BLOCK PRODUCTION").click
 

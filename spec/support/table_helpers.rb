@@ -60,7 +60,7 @@ module TableHelpers
       filter_input.set(input)
     end
 
-    wait_until_table_loaded(heading, wait: 2)
+    wait_until_table_loaded(heading)
 
     # Run the provided assertion if given
     assertion&.call

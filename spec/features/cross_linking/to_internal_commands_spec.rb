@@ -13,6 +13,8 @@ RSpec.describe "Internal commands page navigation", type: :system do
     it "is navigated to from #{test_case[:origin]}" do
       visit test_case[:origin]
 
+      wait_until_table_loaded("Internal Commands")
+
       # Click the link with text "See all internal commands"
       find("a", text: "SEE ALL INTERNAL COMMANDS").click
 

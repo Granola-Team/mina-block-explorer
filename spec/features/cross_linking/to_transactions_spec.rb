@@ -47,6 +47,8 @@ RSpec.describe "Transaction spotlight navigation", type: :system do
   it "is navigated to with correct url params from /tokens page by clicking link in 'Transactions'" do
     visit "/tokens"
 
+    wait_until_table_loaded("Tokens")
+
     # Click the "Transactions" link in the 2nd row (Cypress index 1 = Capybara row 2)
     click_link_in_table_column("Tokens", "Transactions".upcase, 2)
 

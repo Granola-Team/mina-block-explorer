@@ -13,6 +13,8 @@ RSpec.describe "Snarks page navigation", type: :system do
     it "is navigated to from #{test_case[:dest]}" do
       visit test_case[:origin]
 
+      wait_until_table_loaded("SNARK Jobs")
+
       # Click the link with text "See all snark jobs"
       find("a", text: "See all snark jobs".upcase).click
 

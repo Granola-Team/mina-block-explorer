@@ -13,6 +13,8 @@ RSpec.describe "Staking ledger page navigation", type: :system do
     it "is navigated to from #{test_case[:dest]}" do
       visit test_case[:origin]
 
+      wait_until_table_loaded("Delegations")
+
       # Click the link with text "See all delegators"
       find("a", text: "See all delegators".upcase).click
 

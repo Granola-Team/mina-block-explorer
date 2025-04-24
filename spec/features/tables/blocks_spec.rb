@@ -120,7 +120,7 @@ RSpec.describe "Blocks table", type: :system do
   it "has working load next button" do
     visit "/blocks?q-height=359613"
 
-    wait_until_table_loaded("Blocks", wait: 2)
+    wait_until_table_loaded("Blocks")
     load_next_button = find("button", text: "Load Next", wait: 2, visible: false)
     load_next_button.click
     expect(load_next_button[:disabled]).to eq(true), "Expected 'Load Next' button to be disabled"

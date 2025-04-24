@@ -78,7 +78,7 @@ RSpec.describe "Internal Commands table", type: :system do
 
   it "has working load next button" do
     visit "/commands/internal?q-height=359618"
-    wait_until_table_loaded("Internal Commands", wait: 2)
+    wait_until_table_loaded("Internal Commands")
     load_next_button = find("button", text: "Load Next", wait: 2, visible: false)
     load_next_button.click
     expect(load_next_button[:disabled]).to eq(true), "Expected 'Load Next' button to be disabled"

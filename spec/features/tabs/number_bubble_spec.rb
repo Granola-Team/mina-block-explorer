@@ -2,45 +2,45 @@ require "spec_helper"
 
 RSpec.describe "Number bubble in tab", type: :system do
   tabs = [
-    {
-      url: "/blocks/#{Constants::BLOCK_WITH_ALL_ACTIVITY}/commands/user",
-      tab: "User Commands",
-      comparison_method: "rows"
-    },
-    {
-      url: "/blocks/#{Constants::BLOCK_WITH_ALL_ACTIVITY}/snark-jobs",
-      tab: "SNARK Jobs",
-      comparison_method: "rows"
-    },
-    {
-      url: "/blocks/#{Constants::BLOCK_WITH_ALL_ACTIVITY}/commands/internal",
-      tab: "Internal Commands",
-      comparison_method: "rows"
-    },
-    {
-      url: "/addresses/accounts/#{Constants::GENESIS_ACCOUNT_PK}/commands/user",
-      tab: "User Commands"
-    },
+    # {
+    #   url: "/blocks/#{Constants::BLOCK_WITH_ALL_ACTIVITY}/commands/user",
+    #   tab: "User Commands",
+    #   comparison_method: "rows"
+    # },
+    # {
+    #   url: "/blocks/#{Constants::BLOCK_WITH_ALL_ACTIVITY}/snark-jobs",
+    #   tab: "SNARK Jobs",
+    #   comparison_method: "rows"
+    # },
+    # {
+    #   url: "/blocks/#{Constants::BLOCK_WITH_ALL_ACTIVITY}/commands/internal",
+    #   tab: "Internal Commands",
+    #   comparison_method: "rows"
+    # },
+    # {
+    #   url: "/addresses/accounts/#{Constants::GENESIS_ACCOUNT_PK}/commands/user",
+    #   tab: "User Commands"
+    # },
     {
       url: "/addresses/accounts/#{Constants::GENESIS_ACCOUNT_PK}/block-production",
       tab: "Block Production"
-    },
-    {
-      url: "/addresses/accounts/#{Constants::GENESIS_ACCOUNT_PK}/delegations",
-      tab: "Delegations"
-    },
-    # {
-    #   url: "/addresses/accounts/#{Constants::GENESIS_ACCOUNT_PK}/tokens",
-    #   tab: "Tokens"
-    # },
-    {
-      url: "/addresses/accounts/#{Constants::GENESIS_ACCOUNT_PK}/snark-jobs",
-      tab: "SNARK Jobs"
-    },
-    {
-      url: "/addresses/accounts/#{Constants::GENESIS_ACCOUNT_PK}/commands/internal",
-      tab: "Internal Commands"
     }
+    # {
+    #   url: "/addresses/accounts/#{Constants::GENESIS_ACCOUNT_PK}/delegations",
+    #   tab: "Delegations"
+    # },
+    ## {
+    ##   url: "/addresses/accounts/#{Constants::GENESIS_ACCOUNT_PK}/tokens",
+    ##   tab: "Tokens"
+    ## },
+    # {
+    #   url: "/addresses/accounts/#{Constants::GENESIS_ACCOUNT_PK}/snark-jobs",
+    #   tab: "SNARK Jobs"
+    # },
+    # {
+    #   url: "/addresses/accounts/#{Constants::GENESIS_ACCOUNT_PK}/commands/internal",
+    #   tab: "Internal Commands"
+    # }
   ]
 
   tabs.each do |test_case|

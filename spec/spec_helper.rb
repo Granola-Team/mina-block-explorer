@@ -16,7 +16,7 @@ raise "APP_PORT environment variable is not set" unless ENV.key?("APP_PORT")
 Capybara.register_driver :cuprite do |app|
   Capybara::Cuprite::Driver.new(
     app,
-    headless: true, # Headless for CI/build machine
+    headless: ENV["INTERACTIVE"].to_i == 0, # Headless for CI/build machine
     browser_options: {"no-sandbox": true}, # Required for CI
     window_size: [1920, 1080] # Consistent viewport
   )
@@ -24,7 +24,7 @@ end
 
 Capybara.default_driver = :cuprite
 Capybara.javascript_driver = :cuprite
-Capybara.default_max_wait_time = 5 # Adjust for async apps
+Capybara.default_max_wait_time = 1 # Adjust for async apps
 
 Capybara.app_host = "http://localhost:#{ENV["APP_PORT"]}" # Base URL
 # Capybara.app_host = "http://localhost:5171"

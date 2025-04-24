@@ -33,19 +33,35 @@ module CapybaraHelpers
       .downcase.squeeze("-")                  # Collapse multiple hyphens
   end
 
-  def wait_until_table_loaded(heading, wait: 1)
-    table_selector = "[data-test='#{to_kebab_case(heading.downcase)}-table']"
+  def wait_until_table_loaded(heading, timeout: 60)
+    # Initial wait of 1 second to ensure the loading placeholder has time to render in the UI
+    sleep 1
 
-    # Wait for placeholders to appear, if need be
-    page.has_css?("#{table_selector} .loading-placeholder", wait: wait, visible: true)
-
-    # Loop until placeholders are gone
+    # Loop up to the timeout to check for absence of .loading-placeholder
+    start_time = Time.now
     loop do
-      break unless page.has_css?("#{table_selector} .loading-placeholder", wait: 0, visible: true)
+      table_rows = get_table_rows(heading)
+      loading_rows = table_rows.filter { |row| row.has_css?(".loading-placeholder", wait: 0) }
+
+      # Break if there are no loading placeholders
+      if loading_rows.empty?
+        break
+      end
+
+      # Check if timeout has been reached
+      elapsed_time = Time.now - start_time
+      if elapsed_time >= timeout
+        puts "Timeout reached: Table '#{heading}' not loaded after #{elapsed_time.round(2)} seconds"
+        raise "Timeout waiting for table '#{heading}' to load: found #{loading_rows.count} rows with .loading-placeholder"
+      end
+
+      sleep 0.5
     end
 
-    # Final assertion to ensure placeholders are gone
-    expect(page).not_to have_css("#{table_selector} .loading-placeholder", wait: 0, visible: true)
+    # Final assertion to ensure no loading placeholders remain
+    table_rows = get_table_rows(heading)
+    loading_rows = table_rows.filter { |row| row.has_css?(".loading-placeholder", wait: 0) }
+    expect(loading_rows).to be_empty, "Expected table '#{heading}' to have no rows with .loading-placeholder, but found #{loading_rows.count}"
   end
 
   def wait_until_spotlight_loaded(wait: 5)
