@@ -15,6 +15,7 @@ leptosfmt.pkg-path = "leptosfmt"
 trunk.pkg-path = "trunk"
 cacert.pkg-path = "cacert"
 pkg-config.pkg-path = "pkg-config"
+socat.pkg-path = "socat"
 
 # Ruby
 ruby.pkg-path = "ruby"

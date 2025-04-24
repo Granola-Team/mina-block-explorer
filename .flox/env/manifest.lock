@@ -71,6 +71,9 @@
       "ruby": {
         "pkg-path": "ruby"
       },
+      "socat": {
+        "pkg-path": "socat"
+      },
       "standard": {
         "pkg-path": "rubyPackages.standard"
       },
@@ -1916,6 +1919,122 @@
       "outputs": {
         "devdoc": "/nix/store/2h68kzh5bv60l4bq814r0my8brk93lcg-ruby-3.3.6-devdoc",
         "out": "/nix/store/xk96lh29cjq0ak8zf89as6yk3wj7zh0x-ruby-3.3.6"
+      },
+      "system": "x86_64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "socat",
+      "broken": false,
+      "derivation": "/nix/store/nnim37wffbpv5vx1n8fdpp12khnllsz1-socat-1.8.0.3.drv",
+      "description": "Utility for bidirectional data transfer between two independent data channels",
+      "install_id": "socat",
+      "license": "[ GPL-2.0-only ]",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
+      "name": "socat-1.8.0.3",
+      "pname": "socat",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:12:14.974801Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "1.8.0.3",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/3ij20ydxpbg14grgxlvy60gpmsl5bxh0-socat-1.8.0.3"
+      },
+      "system": "aarch64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "socat",
+      "broken": false,
+      "derivation": "/nix/store/p0f1y5gxzhwvf3qiyvhb9rnwh2227g2m-socat-1.8.0.3.drv",
+      "description": "Utility for bidirectional data transfer between two independent data channels",
+      "install_id": "socat",
+      "license": "[ GPL-2.0-only ]",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
+      "name": "socat-1.8.0.3",
+      "pname": "socat",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:31:17.047644Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "1.8.0.3",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/9z14rvval5r5kdpxsmlvzqrql8abmpbq-socat-1.8.0.3"
+      },
+      "system": "aarch64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "socat",
+      "broken": false,
+      "derivation": "/nix/store/l8f0kj8agn7ai3abhl4qifgg96s2dqqs-socat-1.8.0.3.drv",
+      "description": "Utility for bidirectional data transfer between two independent data channels",
+      "install_id": "socat",
+      "license": "[ GPL-2.0-only ]",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
+      "name": "socat-1.8.0.3",
+      "pname": "socat",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:47:21.455564Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "1.8.0.3",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/arpz6pli138iqzdhljx045waswnrbfi6-socat-1.8.0.3"
+      },
+      "system": "x86_64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "socat",
+      "broken": false,
+      "derivation": "/nix/store/r4ncf2ifl4m9b8pkb57vswzi1pqjnna0-socat-1.8.0.3.drv",
+      "description": "Utility for bidirectional data transfer between two independent data channels",
+      "install_id": "socat",
+      "license": "[ GPL-2.0-only ]",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
+      "name": "socat-1.8.0.3",
+      "pname": "socat",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T02:08:07.602594Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "1.8.0.3",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/5480az0xmqz929wh33bhv8pkiq0q8z7i-socat-1.8.0.3"
       },
       "system": "x86_64-linux",
       "group": "toplevel",
