@@ -44,7 +44,7 @@ RSpec.describe "User command metadata", type: :system do
       ]
     },
     {
-      url: "/commands/user?q-status=All&txn-type=Canonical",
+      url: "/commands/user?txn-type=Canonical",
       table_header: "User Commands",
       metadata: [
         row_limit,
@@ -53,7 +53,7 @@ RSpec.describe "User command metadata", type: :system do
       ]
     },
     {
-      url: "/commands/user?q-status=All&txn-type=Non-Canonical",
+      url: "/commands/user?txn-type=Non-Canonical",
       table_header: "User Commands",
       metadata: [
         row_limit,

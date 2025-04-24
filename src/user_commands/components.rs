@@ -239,9 +239,7 @@ pub fn TransactionsSection() -> impl IntoView {
                     || url_query_map.get(QP_TXN_HASH).is_some();
                 let indexes_available = !indexes_not_available;
                 let is_zk_app = q_type_sig.get().is_some_and(|p| p == TransactionKind::Zkapp);
-                let txn_all = txn_applied_sig
-                    .get()
-                    .is_some_and(|txn_applied| txn_applied == STATUS_SEARCH_OPTION_ALL);
+                let txn_all = txn_applied_sig.get().is_none();
                 let applied_opt = txn_applied_sig
                     .get()
                     .is_none_or(|txn_applied| txn_applied != STATUS_SEARCH_OPTION_FAILED);
