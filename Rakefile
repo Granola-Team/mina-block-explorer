@@ -215,6 +215,7 @@ desc "Format the source code"
 task format: ["node_modules"] do
   sh "pnpm exec prettier --write cypress/ src/scripts/"
   sh "standardrb --fix #{RUBY_SRC_FILES.join(" ")}"
+  sh "cargo-fmt --all"
   sh "leptosfmt ./src"
 end
 
@@ -329,9 +330,10 @@ task lint_rust: ".build/lint-rust"
 
 file ".build/lint-rust" => RUST_SRC_FILES + ["rustfmt.toml"] do |t|
   puts "--- Linting Rust code"
+  cargo_fmt_out = cmd_capture("cargo-fmt --all --check")
   leptos_fmt_out = cmd_capture("leptosfmt --check ./src")
   clippy_out = cmd_capture("cargo clippy --all-targets --all-features -- -D warnings")
-  record_output(t, [leptos_fmt_out, clippy_out])
+  record_output(t, [cargo_fmt_out, leptos_fmt_out, clippy_out])
 end
 
 desc "Build the dev version for front-end WASM bundle"
