@@ -30,7 +30,7 @@ impl TableData for Vec<Option<TokensQueryTokens>> {
                             convert_to_link(
                                 token.get_number_of_txn(),
                                 format!(
-                                    "/commands/user?{}={}&{}={}&{}={}",
+                                    "/commands/user?{}={}&{}={}",
                                     QUERY_PARAM_TOKEN,
                                     token.get_token(),
                                     QUERY_PARAM_TYPE,
@@ -39,8 +39,6 @@ impl TableData for Vec<Option<TokensQueryTokens>> {
                                     } else {
                                         "false"
                                     },
-                                    QUERY_PARAM_TXN_APPLIED,
-                                    "All"
                                 ),
                             ),
                             ColorVariant::Blue,

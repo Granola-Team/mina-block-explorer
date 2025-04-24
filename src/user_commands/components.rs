@@ -23,9 +23,6 @@ const QP_FROM: &str = "q-from";
 const QP_TO: &str = "q-to";
 const QP_TOKEN: &str = "q-token";
 const BACKSCAN_LIMIT: u64 = 2000;
-const STATUS_SEARCH_OPTION_APPLIED: &str = "Applied";
-const STATUS_SEARCH_OPTION_FAILED: &str = "Failed";
-const STATUS_SEARCH_OPTION_ALL: &str = "All";
 
 #[component]
 pub fn AccountsUpdatedSection(
@@ -120,10 +117,9 @@ pub fn TransactionsSection() -> impl IntoView {
             };
 
             let is_txn_applied = match txn_applied {
-                None => Some(true), // by default, assume applied
+                None => None, // by default, assume all txn
                 Some(txn) if txn == STATUS_SEARCH_OPTION_APPLIED => Some(true),
                 Some(txn) if txn == STATUS_SEARCH_OPTION_FAILED => Some(false),
-                Some(txn) if txn == STATUS_SEARCH_OPTION_ALL => None,
                 _ => None,
             };
 
@@ -185,8 +181,8 @@ pub fn TransactionsSection() -> impl IntoView {
             width: Some(String::from(TABLE_COL_SHORT_WIDTH)),
             search_type: ColumnSearchType::Select,
             search_options: Some(vec![
-                STATUS_SEARCH_OPTION_APPLIED.to_string(),
                 STATUS_SEARCH_OPTION_ALL.to_string(),
+                STATUS_SEARCH_OPTION_APPLIED.to_string(),
                 STATUS_SEARCH_OPTION_FAILED.to_string(),
             ]),
             ..Default::default()

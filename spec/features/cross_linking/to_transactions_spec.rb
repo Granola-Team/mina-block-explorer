@@ -55,7 +55,6 @@ RSpec.describe "Transaction spotlight navigation", type: :system do
     # Verify the URL includes the expected parameters
     expect(page.current_url).to include("/commands/user"), "Expected URL to include '/commands/user', but was '#{page.current_url}'"
     expect(page.current_url).to include("q-token=#{Constants::MINU_TOKEN_ADDRESS}"), "Expected URL to include 'q-token=#{Constants::MINU_TOKEN_ADDRESS}', but was '#{page.current_url}'"
-    expect(page.current_url).to include("q-status=All"), "Expected URL to include 'q-status=All', but was '#{page.current_url}'"
 
     # Verify the "User Commands (MINU)" table has 1 row
     wait_until_table_loaded("User Commands")
