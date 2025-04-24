@@ -79,7 +79,7 @@
       }
     },
     "hook": {
-      "on-activate": "  export CARGO_HOME=\"$(pwd)/.cargo\"\n  bundle install\n  pnpm install\n"
+      "on-activate": "  export CARGO_HOME=\"$(pwd)/.cargo\"\n  export BUNDLE_APP_CONFIG=\"$(pwd)/.build/bundle\"\n  pnpm install\n"
     },
     "profile": {},
     "options": {
@@ -88,7 +88,11 @@
         "aarch64-linux",
         "x86_64-darwin",
         "x86_64-linux"
-      ]
+      ],
+      "allow": {
+        "licenses": []
+      },
+      "semver": {}
     }
   },
   "packages": [

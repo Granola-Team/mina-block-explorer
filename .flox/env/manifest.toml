@@ -52,7 +52,7 @@ lld.pkg-path = "lld"
 [hook]
 on-activate = """
   export CARGO_HOME="$(pwd)/.cargo"
-  bundle install
+  export BUNDLE_APP_CONFIG="$(pwd)/.build/bundle"
   pnpm install
 """
 
