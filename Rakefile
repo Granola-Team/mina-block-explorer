@@ -3,7 +3,6 @@ require "fileutils"
 require "socket"
 
 # Constants and environment variables
-SPEC = "cypress/e2e/"
 TRUNK_PORT = rand(5170..5179).to_s
 IDXR_PORT = 8090.to_s
 ENV["BROWSER_PATH"] = `which google-chrome-stable`.chomp

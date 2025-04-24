@@ -39,7 +39,7 @@ RSpec.describe "User command metadata", type: :system do
       table_header: "User Commands",
       metadata: [
         row_limit,
-        Constants::TOTAL_NUMBER_APPLIED_CANONICAL_USER_COMMANDS,
+        Constants::TOTAL_NUM_CANONICAL_USER_COMMANDS,
         Constants::TOTAL_NUMBER_USER_COMMANDS
       ]
     },

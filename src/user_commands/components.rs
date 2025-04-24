@@ -242,7 +242,7 @@ pub fn TransactionsSection() -> impl IntoView {
                 let txn_all = txn_applied_sig.get().is_none();
                 let applied_opt = txn_applied_sig
                     .get()
-                    .is_none_or(|txn_applied| txn_applied != STATUS_SEARCH_OPTION_FAILED);
+                    .is_some_and(|txn_applied| txn_applied == STATUS_SEARCH_OPTION_APPLIED);
                 let is_canonical = txn_type_qp
                     .get()
                     .as_ref()
@@ -252,6 +252,13 @@ pub fn TransactionsSection() -> impl IntoView {
                     TableMetadataBuilder::new()
                         .displayed_records_value(
                             data_sig.get().map(|d| d.len() as u64).unwrap_or_default(),
+                        )
+                        .available_records(
+                            move || q_token_sig.get().is_some(),
+                            token_sig
+                                .get()
+                                .and_then(|t| t.total_num_txns.try_into().ok())
+                                .unwrap_or_default(),
                         )
                         .available_records(
                             move || { indexes_available && !is_zk_app && is_canonical && txn_all },
@@ -308,13 +315,6 @@ pub fn TransactionsSection() -> impl IntoView {
                                 indexes_available && is_zk_app && !is_canonical && !applied_opt
                             },
                             summary_sig.get().get_total_num_non_canonical_failed_zkapp_commands(),
-                        )
-                        .available_records(
-                            move || token_sig.get().is_some(),
-                            token_sig
-                                .get()
-                                .and_then(|t| t.total_num_txns.try_into().ok())
-                                .unwrap_or_default(),
                         )
                         .total_records_value(
                             summary_sig
