@@ -326,7 +326,7 @@ end
 desc "Lint the Rust code"
 task lint_rust: ".build/lint-rust"
 
-file ".build/lint-rust" => RUST_SRC_FILES + ["rustfmt.toml"] do |t|
+file ".build/lint-rust" => RUST_SRC_FILES do |t|
   puts "--- Linting Rust code"
   leptos_fmt_out = cmd_capture("leptosfmt --check ./src")
   clippy_out = cmd_capture("cargo clippy --all-targets --all-features -- -D warnings")

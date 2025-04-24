@@ -1,4 +1,0 @@
-[toolchain]
-channel = "nightly-2025-01-07"
-components = ["rust-src", "rust-analyzer"]
-profile = "default"
