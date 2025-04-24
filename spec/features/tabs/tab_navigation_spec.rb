@@ -38,6 +38,8 @@ RSpec.describe "Tab navigation", type: :system do
     it "links to page #{test_case[:expected_url]} from '#{test_case[:tab]}' tab" do
       visit test_case[:page]
 
+      wait_until_table_loaded(test_case[:tab])
+
       # Find the active and target tabs
       active_tab = find("a.active", match: :first)
       target_tab = find("a#{tab_selector(test_case[:tab])}.inactive", text: test_case[:tab].upcase, match: :first)
