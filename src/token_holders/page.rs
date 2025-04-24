@@ -34,8 +34,12 @@ pub fn TokenHoldersMoreDetailsSubpage() -> impl IntoView {
     };
 
     view! {
-        {move || match get_token().and_then(|token| token.account.zkapp) {
-            Some(zkapp) => view! { <TokenHoldersMoreDetails zkapp=zkapp /> },
+        {move || match get_token().map(|token| token.account) {
+            Some(account) => {
+                view! {
+                    <TokenHoldersMoreDetails zkapp=account.zkapp permissions=account.permissions />
+                }
+            }
             None => ().into_view(),
         }}
     }

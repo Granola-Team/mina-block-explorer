@@ -53,8 +53,7 @@ RSpec.describe "Account spotlight", type: :system do
     end
   end
 
-  # Skipped test (pending implementation as per TODO)
-  xit "renders More Details subpage on tokens tab" do
+  it "renders More Details subpage on tokens tab" do
     visit "/addresses/accounts/#{Constants::TOKEN_ACTIVITY_ONLY_ADDRESS}/tokens"
 
     # Wait for the "Tokens" table to load
@@ -64,7 +63,7 @@ RSpec.describe "Account spotlight", type: :system do
     expect(page).not_to have_content("More Details", wait: 30), "Expected 'More Details' to not be present initially"
 
     # Click the link in the "More" column of the 1st row (Cypress index 0 = Capybara row 1)
-    click_link_in_table_column("Tokens", "More", 1)
+    click_link_in_table_column("Tokens", "More".upcase, 1)
 
     # Verify "More Details" is now present
     expect(page).to have_content("More Details"), "Expected 'More Details' to be present after clicking link"
@@ -72,6 +71,13 @@ RSpec.describe "Account spotlight", type: :system do
     # Verify the "More Details" table has 2 rows
     # Assuming "More Details" is a transposed table (rows represent key-value pairs)
     table_rows = find_all("table[data-test='#{to_kebab_case("More Details")}-table'] tr")
-    expect(table_rows.count).to eq(2), "Expected 'More Details' table to have 2 rows, but found #{table_rows.count}"
+    expect(table_rows.count).to eq(3), "Expected 'More Details' table to have 3 rows, but found #{table_rows.count}"
+
+    # Verify the table rows contain the expected text in <th> elements
+    expected_texts = ["App State:", "Action State:", "Permissions:"]
+    table_rows.each_with_index do |row, index|
+      th_text = row.find("th").text
+      expect(th_text).to eq(expected_texts[index]), "Expected row #{index + 1} to have <th> text '#{expected_texts[index]}', but found '#{th_text}'"
+    end
   end
 end

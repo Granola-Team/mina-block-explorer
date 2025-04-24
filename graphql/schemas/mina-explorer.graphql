@@ -12,6 +12,27 @@ type TransactionZkapp {
   events: [String!]!
 }
 
+type PermissionVk {
+    permission: String!
+    number: String!
+}
+
+type Permissions {
+    edit_state: String!
+    access: String!
+    send: String!
+    receive: String!
+    set_delegate: String!
+    set_permissions: String!
+    set_verification_key: PermissionVk!
+    set_zkapp_uri: String!
+    edit_action_state: String!
+    set_token_symbol: String!
+    increment_nonce: String!
+    set_voting_for: String!
+    set_timing: String!
+}
+
 type TokenHolderAccount {
   publicKey: String!
   delegate: String!
@@ -19,6 +40,7 @@ type TokenHolderAccount {
   nonce: Int!
   token: String!
   zkapp: ZkappAccount
+  permissions: Permissions
 }
 
 type TokenHolder {
