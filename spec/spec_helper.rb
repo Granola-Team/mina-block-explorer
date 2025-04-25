@@ -14,9 +14,10 @@ raise "APP_PORT environment variable is not set" unless ENV.key?("APP_PORT")
 
 # Configure Cuprite driver
 Capybara.register_driver :cuprite do |app|
+  headless = !ENV["INTERACTIVE"]
   Capybara::Cuprite::Driver.new(
     app,
-    headless: ENV["INTERACTIVE"].to_i == 0, # Headless for CI/build machine
+    headless: headless, # Headless for CI/build machine
     browser_options: {"no-sandbox": true}, # Required for CI
     window_size: [1920, 1080] # Consistent viewport
   )
@@ -42,18 +43,19 @@ RSpec.configure do |config|
   config.example_status_persistence_file_path = ".build/spec_results.txt"
   config.disable_monkey_patching!
   config.warnings = true
-  config.default_formatter = "doc" if config.files_to_run.one?
+  config.default_formatter = :progress
   config.profile_examples = 10
+  config.order = :defined
   Kernel.srand config.seed
 
   # show retry status in spec process
-  config.verbose_retry = true
+  config.verbose_retry = ENV["VERBOSE"]
   # show exception that triggers a retry if verbose_retry is set to true
-  config.display_try_failure_messages = true
+  config.display_try_failure_messages = ENV["VERBOSE"]
 
   # run retry only on features
   config.around :each do |ex|
-    ex.run_with_retry retry: 2
+    ex.run_with_retry retry: 3
   end
 
   config.after(:each) do |example|
