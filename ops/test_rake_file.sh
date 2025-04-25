@@ -15,7 +15,6 @@ rake format                 # Format the source code
 rake jest_test              # Run the Jest tests
 rake lint                   # Lint all source code
 rake lint_fix               # Fix linting errors
-rake lint_javascript        # Lint the Cypress test code (JavaScript)
 rake lint_ruby              # Lint the Ruby code
 rake lint_rust              # Lint the Rust code
 rake pnpm_install           # Install the JavaScript dependencies with 'pnpm'

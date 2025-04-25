@@ -8,7 +8,6 @@ IDXR_PORT = 8090.to_s
 ENV["BROWSER_PATH"] = `which google-chrome-stable`.chomp
 ENV["APP_PORT"] = TRUNK_PORT
 ENV["RUSTFLAGS"] = "--cfg=web_sys_unstable_apis"
-ENV["CYPRESS_BASE_URL"] = "http://localhost:#{TRUNK_PORT}"
 ENV["VERSION"] = `git rev-parse --short=8 HEAD`.chomp
 ENV["INDEXER_VERSION"] = `cd lib/mina-indexer && git rev-parse --short=8 HEAD`.chomp
 ENV["CARGO_HOME"] = "#{Dir.pwd}/.cargo"
@@ -18,7 +17,6 @@ ENV["REST_URL"] = "http://localhost:#{IDXR_PORT}"
 GRAPHQL_SRC_FILES = Dir.glob("graphql/**/*.graphql")
 RUST_SRC_FILES = Dir.glob("src/**/*.rs") + GRAPHQL_SRC_FILES
 CARGO_DEPS = RUST_SRC_FILES + ["Cargo.toml", "Cargo.lock", "build.rs", ".cargo/audit.toml"]
-CYPRESS_FILES = Dir.glob("cypress/{e2e,support}/**/*.js")
 RUBY_SRC_FILES = Dir.glob("**/*.rb").reject { |file| file.start_with?("lib/") } + ["Rakefile"]
 JAVASCRIPT_SRC_FILES = Dir.glob("src/scripts_tests/**")
 MINASEARCH_GRAPHQL = "https://api.minasearch.com/graphql"
@@ -67,23 +65,23 @@ def wait_for_port(port, interval = 5)
   puts "Port #{port} is now available."
 end
 
-# Helper to run a task with server and Cypress
-def run_tier_task(cypress_cmd, wait_for_test_suite: true)
+# Helper to run a task with server and RSpec
+def run_tier_task(rspec_cmd)
   puts "--- Performing end-to-end tier2 tests"
   server_pid = nil
-  cypress_pid = nil
+  rspec_pid = nil
 
   # Early trap to handle SIGINT
   trap("INT") do
     puts "\nReceived SIGINT, terminating running processes..."
-    if cypress_pid
+    if rspec_pid
       begin
-        Process.kill("INT", -cypress_pid)
+        Process.kill("INT", -rspec_pid)
       rescue
         nil
       end
       begin
-        Process.wait(cypress_pid)
+        Process.wait(rspec_pid)
       rescue
         nil
       end
@@ -110,37 +108,29 @@ def run_tier_task(cypress_cmd, wait_for_test_suite: true)
   # Wait for port
   wait_for_port(TRUNK_PORT.to_i)
 
-  # Run Cypress
-  cypress_pid = Process.spawn(cypress_cmd, pgroup: true)
-  puts "Started Cypress with PID: #{cypress_pid}"
+  # Run RSpec
+  rspec_pid = Process.spawn(rspec_cmd, pgroup: true)
+  puts "Started RSpec (bundler) with PID: #{rspec_pid}"
 
-  if wait_for_test_suite
-    # Wait for Cypress to finish and capture exit status
-    _, cypress_status = Process.wait2(cypress_pid)
-    puts "Cypress finished with exit code: #{cypress_status.exitstatus}"
+  # Wait for RSpec to finish and capture exit status
+  _, rspec_status = Process.wait2(rspec_pid)
+  puts "RSpec (bundler) finished with exit code: #{rspec_status.exitstatus}"
 
-    # Kill the server after Cypress finishes
-    puts "Killing trunk server..."
-    begin
-      Process.kill("TERM", -server_pid)
-    rescue
-      nil
-    end
-    begin
-      Process.wait(server_pid)
-    rescue
-      nil
-    end
-
-    # Exit with Cypress’s status
-    exit(cypress_status.exitstatus)
-  else
-    # For non-terminating Cypress (e.g., cypress open), just let it run
-    # Server and Cypress will be killed via SIGINT when user is done
-    puts "Cypress is running interactively. Press Ctrl+C to stop."
-    # Wait indefinitely for SIGINT
-    sleep
+  # Kill the server
+  puts "Killing trunk server..."
+  begin
+    Process.kill("TERM", -server_pid)
+  rescue
+    nil
   end
+  begin
+    Process.wait(server_pid)
+  rescue
+    nil
+  end
+
+  # Important! Exit with RSpec’s status.
+  exit(rspec_status.exitstatus)
 end
 
 def cmd_capture(command)
@@ -191,7 +181,6 @@ task :shutdown_mina_indexer do
 end
 
 task :clean_test do
-  FileUtils.rm_rf "cypress/screenshots"
   FileUtils.rm_rf "spec-screenshots"
 end
 
@@ -212,7 +201,7 @@ task clean: [:clean_test, :clean_node_modules, :clean_build, :clean_target]
 
 desc "Format the source code"
 task format: ["node_modules"] do
-  sh "pnpm exec prettier --write cypress/ src/scripts/"
+  sh "pnpm exec prettier --write src/scripts/"
   sh "standardrb --fix #{RUBY_SRC_FILES.join(" ")}"
   sh "leptosfmt ./src"
 end
@@ -251,7 +240,6 @@ desc "Fix linting errors"
 task lint_fix: ["node_modules"] do
   sh "standardrb --fix #{RUBY_SRC_FILES.join(" ")}"
   sh "cargo clippy --fix --allow-dirty --allow-staged"
-  sh "pnpm exec eslint --fix cypress/"
 end
 
 desc "Build documentation in the build directory"
@@ -304,15 +292,6 @@ file ".build/check" => CARGO_DEPS do |t|
   record_output(t, check_output)
 end
 
-desc "Lint the Cypress test code (JavaScript)"
-task lint_javascript: ".build/lint-javascript"
-file ".build/lint-javascript" => CYPRESS_FILES + ["node_modules"] do |t|
-  puts "--- Linting JS/TS"
-  prettier_output = cmd_capture("pnpm exec prettier --check cypress/")
-  eslint_output = cmd_capture("pnpm exec eslint cypress/")
-  record_output(t, [prettier_output, eslint_output])
-end
-
 desc "Lint the Ruby code"
 task lint_ruby: ".build/lint-ruby"
 
@@ -350,7 +329,7 @@ file RELEASE_BUILD_TARGET.to_s => CARGO_DEPS + ["Trunk.toml", "tailwind.config.j
 end
 
 desc "Lint all source code"
-task lint: ["node_modules", :audit, :lint_javascript, :lint_ruby, :lint_rust]
+task lint: ["node_modules", :audit, :lint_ruby, :lint_rust]
 
 desc "Run the Tier1 tests"
 task tier1: [:dev_build, :lint, :test_unit]
@@ -358,13 +337,8 @@ task tier1: [:dev_build, :lint, :test_unit]
 desc "Invoke the Tier2 regression suite (non-interactive)"
 task tier2: [:clean_test, :tier1, "node_modules", :bundle_install, :deploy_mina_indexer] do
   trap("INT") { Rake::Task["shutdown_mina_indexer"].invoke }
-  run_tier_task("bundle exec rspec && pnpm exec cypress run -r list -q", wait_for_test_suite: true)
+  run_tier_task("bundle exec rspec")
   Rake::Task["shutdown_mina_indexer"].invoke
-end
-
-desc "Invoke the Tier2 regression suite (interactive)"
-task t2_i: ["node_modules", :bundle_install, :deploy_mina_indexer, :dev_build] do
-  run_tier_task("pnpm exec cypress open", wait_for_test_suite: false)
 end
 
 desc "Print all tasks and their dependencies as a tree"
