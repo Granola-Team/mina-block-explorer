@@ -192,7 +192,7 @@ end
 
 task :clean_test do
   FileUtils.rm_rf "cypress/screenshots"
-  FileUtils.rm_rf "tmp"
+  FileUtils.rm_rf "spec-screenshots"
 end
 
 task :clean_node_modules do
