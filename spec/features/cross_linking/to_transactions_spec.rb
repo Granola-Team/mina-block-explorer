@@ -49,7 +49,7 @@ RSpec.describe "Transaction spotlight navigation", type: :system do
 
     wait_until_table_loaded("Tokens")
 
-    # Click the "Transactions" link in the 2nd row (Cypress index 1 = Capybara row 2)
+    # Click the "Transactions" link in the 2nd row.
     click_link_in_table_column("Tokens", "Transactions".upcase, 2)
 
     # Verify the URL includes the expected parameters

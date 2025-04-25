@@ -17,7 +17,7 @@ RSpec.describe "Tokens page navigation", type: :system do
     # Wait for the "Accounts Updated" table to load
     wait_until_table_loaded("Accounts Updated")
 
-    # Click the link in the "Token ID" column of the 6th row (Cypress uses 0-based indexing, so 5 means 6th row in Capybara)
+    # Click the link in the "Token ID" column of the 6th row.
     click_link_in_table_column("Accounts Updated", "Token ID".upcase, 6)
 
     # Verify navigation to the tokens page
@@ -32,7 +32,7 @@ RSpec.describe "Tokens page navigation", type: :system do
     # Wait for the "Tokens" table to load
     wait_until_table_loaded("Tokens")
 
-    # Click the link in the "Token ID" column of the 1st row (Cypress index 0 = Capybara row 1)
+    # Click the link in the "Token ID" column of the 1st row.
     click_link_in_table_column("Tokens", "Token ID".upcase, 1)
 
     # Verify navigation to the tokens page

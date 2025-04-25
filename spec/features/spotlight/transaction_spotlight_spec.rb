@@ -2,7 +2,7 @@
 require "spec_helper"
 
 RSpec.describe "Transaction spotlight", type: :system do
-  let(:devices) { ["iphone-xr", "macbook-11"] } # Define devices as in Cypress
+  let(:devices) { ["iphone-xr", "macbook-11"] } # Define devices
   let(:mobile) { devices[0] } # iPhone XR
   let(:expected_fields) do
     [
@@ -82,7 +82,7 @@ RSpec.describe "Transaction spotlight", type: :system do
     table_rows = get_table_rows("In Other Blocks")
     expect(table_rows.count).to eq(1), "Expected 'In Other Blocks' table to have 1 row, but found #{table_rows.count}"
 
-    # Verify table headers (Cypress's tableHasOrderedColumns)
+    # Verify table headers
     table = find("table[data-test='#{to_kebab_case("In Other Blocks")}-table']")
     header_row = table.find("tr:has(th)")
     headers = header_row.all("th").map { |th| th.text.strip }

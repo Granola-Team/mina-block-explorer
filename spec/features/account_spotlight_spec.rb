@@ -62,7 +62,7 @@ RSpec.describe "Account spotlight", type: :system do
     # Verify "More Details" does not exist initially
     expect(page).not_to have_content("More Details", wait: 30), "Expected 'More Details' to not be present initially"
 
-    # Click the link in the "More" column of the 1st row (Cypress index 0 = Capybara row 1)
+    # Click the link in the "More" column of the 1st row.
     click_link_in_table_column("Tokens", "More".upcase, 1)
 
     # Verify "More Details" is now present
