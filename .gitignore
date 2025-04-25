@@ -22,4 +22,4 @@ target/
 !/.cargo/audit.toml
 /.build
 /cypress/screenshots
-/tmp
+/spec-screenshots
