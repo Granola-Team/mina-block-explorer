@@ -85,7 +85,12 @@ RSpec.describe "Blocks table", type: :system do
 
   it "has standard row limits" do
     select_input = get_by_sel("row-limit")
-    expect(select_input.all("option").map(&:text)).to include("25", "50", "100", "250", "500", "1000"), "Expected pagination options to include 25, 50, 100, 250, 500, 1000"
+    [25, 50, 100, 250, 500, 1000].each { |limit|
+      select_option(select_input, limit.to_s)
+      wait_until_table_loaded("Blocks")
+      table_rows = get_table_rows("Blocks")
+      expect(table_rows.count).to be == limit, "Expected 'Blocks' table to have row count of #{limit}, but found #{table_rows.count}"
+    }
   end
 
   it "has working canonical filter" do

@@ -84,6 +84,11 @@ RSpec.describe "Staking Ledger - Epoch 1 table", type: :system do
 
   it "has standard row limits" do
     select_input = get_by_sel("row-limit")
-    expect(select_input.all("option").map(&:text)).to include("25", "50", "100", "250", "500", "1000"), "Expected pagination options to include 25, 50, 100, 250, 500, 1000"
+    [25, 50, 100, 250, 500, 1000].each { |limit|
+      select_option(select_input, limit.to_s)
+      wait_until_table_loaded("Staking Ledger - Epoch 1")
+      table_rows = get_table_rows("Staking Ledger - Epoch 1")
+      expect(table_rows.count).to be == limit, "Expected 'Staking Ledger - Epoch 1' table to have row count of #{limit}, but found #{table_rows.count}"
+    }
   end
 end

@@ -47,14 +47,18 @@ module TableHelpers
     end
   end
 
+  def select_option(select_el, option)
+    option = select_el.find_all("option", text: option, wait: 1).first
+    option.select_option
+    page.execute_script("arguments[0].dispatchEvent(new Event('blur', { bubbles: true }))", select_el)
+  end
+
   def test_filter(heading, column, input, filter_type, assertion = nil)
     # Find the filter input/select
     filter_container = find("th", text: column.upcase, wait: 0)
     if filter_type == "select"
-      filter_input = filter_container.find("select", wait: 0)
-      option = filter_input.find("option", text: input, wait: 1)
-      option.select_option
-      page.execute_script("arguments[0].dispatchEvent(new Event('blur', { bubbles: true }))", filter_input)
+      select_el = filter_container.find("select", wait: 0)
+      select_option(select_el, input)
     else
       filter_input = filter_container.find("input")
       filter_input.set(input)

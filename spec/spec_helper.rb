@@ -14,7 +14,7 @@ raise "APP_PORT environment variable is not set" unless ENV.key?("APP_PORT")
 
 # Configure Cuprite driver
 Capybara.register_driver :cuprite do |app|
-  headless = !ENV["INTERACTIVE"]
+  headless = true # !ENV["INTERACTIVE"]
   Capybara::Cuprite::Driver.new(
     app,
     headless: headless, # Headless for CI/build machine
