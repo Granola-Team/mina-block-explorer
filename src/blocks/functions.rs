@@ -116,7 +116,7 @@ pub fn get_internal_command_count(block: &BlocksQueryBlocks) -> Option<usize> {
 pub fn get_slot(block: &BlocksQueryBlocks) -> String {
     block.protocol_state.as_ref().map_or_else(String::new, |o| {
         o.consensus_state.as_ref().map_or_else(String::new, |o| {
-            o.slot_since_genesis
+            o.slot
                 .map_or_else(String::new, |o| format_number(o.to_string()))
         })
     })

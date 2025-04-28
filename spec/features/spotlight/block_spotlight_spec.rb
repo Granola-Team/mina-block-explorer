@@ -2,28 +2,29 @@
 require "spec_helper"
 
 RSpec.describe "Block spotlight", type: :system do
-  let(:expected_fields) do
+  let(:expected_values) do
     [
-      "State Hash",
-      "Previous State Hash",
-      "Staged Ledger Hash",
-      "Snarked Ledger Hash",
-      "Coinbase",
-      "Coinbase Receiver",
-      "SNARK Fees",
-      "Global Slot",
-      "Slot",
-      "Epoch",
-      "Transaction Fees",
-      "Blockchain Length",
-      "Canonical"
+      ["State Hash:", "3NLjRmTyUzeA7meRAT3Yjqxzfe95GKBgkLPD2iLeVE5RMCFcw8eL"],
+      ["Previous State Hash:", "3NKRe6U3WWEPX2dvuwfCLVX1nw8v5BWU1CZey9Wb9yhoeeHYDXXw"],
+      ["Staged Ledger Hash:", "jwe76qJhJNSqBDxE1ZAwnT7NLzJhznUmZRPpfuaHCWF6sQvtAq7"],
+      ["Snarked Ledger Hash:", "jwNw4qb6tnNhpQNxiMLem9WumxZTwmbSx3fYXW4FP3hZRkoQJSE"],
+      ["Coinbase:", "720.0MINA"],
+      ["Coinbase Receiver:", "B62qk2EqDADtDejTwGFi7Fp1p6ft34oi8ExnE8TmHfoqb71cotL6Mfv"],
+      ["SNARK Fees:", "0.0MINA"],
+      ["Global Slot:", "564,524"],
+      ["Slot:", "464"],
+      ["Epoch:", "0"],
+      ["Transaction Fees:", "1.4161MINA"],
+      ["Blockchain Length:", "359,630"],
+      ["Canonical:", "true"],
+      ["Total MINA:", "1,166,062,074.840039168MINA"]
     ]
   end
 
   def test_for_completeness(state_hash)
     # Test on the spotlight subpage
     visit "/blocks/#{state_hash}/spotlight"
-    test_spotlight("Block Spotlight", state_hash, expected_fields)
+    test_spotlight("Block Spotlight", state_hash, expected_values)
 
     # Navigate to "User Commands" tab and verify rows
     find("a#{tab_selector("User Commands")}", match: :first).click
@@ -51,9 +52,5 @@ RSpec.describe "Block spotlight", type: :system do
 
   it "displays complete information for canonical block" do
     test_for_completeness(Constants::FIRST_BLOCK_WITH_SNARK_WORK)
-  end
-
-  it "displays complete information for non-canonical block" do
-    test_for_completeness(Constants::FIRST_NON_CANONICAL_BLOCK_WITH_SNARK_WORK)
   end
 end

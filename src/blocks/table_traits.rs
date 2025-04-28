@@ -57,7 +57,7 @@ impl TableData for Vec<Option<BlocksQueryBlocks>> {
                         get_state_hash(block),
                         format!("/blocks/{}/spotlight", get_state_hash(block)),
                     ),
-                    convert_to_pill(get_slot(block), ColorVariant::Grey),
+                    convert_to_pill(get_global_slot(block), ColorVariant::Grey),
                     convert_to_title(
                         convert_to_local_timezone_formatted(&get_date_time(block)),
                         get_date_time(block),

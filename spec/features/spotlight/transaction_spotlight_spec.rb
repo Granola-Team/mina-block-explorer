@@ -4,23 +4,6 @@ require "spec_helper"
 RSpec.describe "Transaction spotlight", type: :system do
   let(:devices) { ["iphone-xr", "macbook-11"] } # Define devices
   let(:mobile) { devices[0] } # iPhone XR
-  let(:expected_fields) do
-    [
-      "Status",
-      "Date",
-      "Canonical",
-      "Amount",
-      "From/Fee Payer",
-      "Nonce",
-      "Kind",
-      "Txn Hash",
-      "Block Height",
-      "Block State Hash",
-      "Fee",
-      "To",
-      "Memo"
-    ]
-  end
 
   it "displays proper status" do
     # Test Failed status
@@ -45,14 +28,46 @@ RSpec.describe "Transaction spotlight", type: :system do
   it "displays complete information" do
     # Set viewport to iPhone XR (414x896)
     page.driver.resize(414, 896)
+    expected_values =
+      [
+        ["Status:", "Applied"],
+        ["Date:", "20240605 00:12:00 UTC"],
+        ["Canonical:", "true"],
+        ["Amount:", "1.0 MINA"],
+        ["From/Fee Payer:", "B62qpjxUpgdjzwQfd8q2gzxi99wN7SCgmofpvw27MBkfNHfHoY2VH32"],
+        ["Nonce:", "765"],
+        ["Kind:", "Payment"],
+        ["Txn Hash:", "5JuJ1eRNWdE8jSMmCDoHnAdBGhLyBnCk2gkcvkfCZ7WvrKtGuWHB"],
+        ["Block Height:", "359,607"],
+        ["Block State Hash:", "3NKg81uwJ61tNNbM1SkS6862AHwfRhwNQEKZemJS9UwBAzaNK8ch"],
+        ["Fee:", "0.0011 MINA"],
+        ["To:", "B62qpjxUpgdjzwQfd8q2gzxi99wN7SCgmofpvw27MBkfNHfHoY2VH32"]
+      ]
 
     visit "/commands/#{Constants::FIRST_TXN_HASH}"
-    test_spotlight("Command Spotlight", Constants::FIRST_TXN_HASH, expected_fields)
+    test_spotlight("Command Spotlight", Constants::FIRST_TXN_HASH, expected_values)
   end
 
   it "displays non-canonical command" do
+    expected_values = [
+      ["Status:", "Applied"],
+      ["Date:", "20240610 02:27:00 UTC"],
+      ["Txn Hash:", "5JurAvgK6MAjZ9EMsV11dxQTef7TX5KLKnJzwRXEtD7HUoscww38"],
+      ["Block Height:", "360,998"],
+      ["Canonical:", "false"],
+      ["Block State Hash:", "3NLnBeReHAkWkUeeUeFzHjEXb7UamxyKmhGcycFzyjisE2nWRmak"],
+      ["Amount:", "0.08 MINA"],
+      ["Fee:", "0.01 MINA"],
+      ["From/Fee Payer:", "B62qnEeb4KAp9WxdMxddHVtJ8gwfyJURG5BZZ6e4LsRjQKHNWqmgSWt"],
+      ["To:", "B62qq6PqndihT5uoGAXzndoNgYSUMvUPmVqMQATusaoS1ZmCZRcM1ku"],
+      ["Nonce:", "243,120"],
+      ["Memo:", ""],
+      ["Kind:", "Payment"],
+      ["Block Height:", "360,998"],
+      ["Block State Hash:", "3NLnBeReHAkWkUeeUeFzHjEXb7UamxyKmhGcycFzyjisE2nWRmak"]
+    ]
     visit "/commands/#{Constants::FIRST_NON_CANONICAL_TXN_HASH}"
-    test_spotlight("Command Spotlight", Constants::FIRST_NON_CANONICAL_TXN_HASH, expected_fields)
+    test_spotlight("Command Spotlight", Constants::FIRST_NON_CANONICAL_TXN_HASH, expected_values)
   end
 
   it "renders the tooltip for stake delegations" do

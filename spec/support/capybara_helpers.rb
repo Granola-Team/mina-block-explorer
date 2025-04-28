@@ -146,17 +146,35 @@ module CapybaraHelpers
     metadata_text.scan(/\d[\d,]*/).map { |num| num.delete(",").to_i }
   end
 
-  def test_spotlight(heading, id, expected_fields)
+  # spec/support/test_helpers.rb
+  def test_spotlight(heading, id, expected_values)
     # Verify the heading in section#spotlight-section h1
     expect(page).to have_selector("section#spotlight-section h1", text: heading), "Expected heading '#{heading}' in section#spotlight-section h1"
 
     # Verify the ID in #spotlight-id
     expect(page).to have_selector("#spotlight-id", text: id), "Expected ID '#{id}' in #spotlight-id"
 
-    # Within the spotlight section table, verify each expected field in the <th> elements
+    # Within the spotlight section table, verify each field and its corresponding value
     within("section#spotlight-section table") do
-      expected_fields.each do |field|
-        expect(page).to have_selector("th", text: field, wait: 0), "Expected field '#{field}' in spotlight section table headers"
+      # Get all table rows
+      spotlight_rows = all("tr", wait: 0)
+
+      expected_values.each do |field, expected_value|
+        # Find the row containing the field in <th>
+        row = spotlight_rows.find do |row|
+          th = row.first("th", wait: 0, visible: false) # Use first to avoid ambiguity
+          th && th.text.strip == field # Exact match after stripping whitespace
+        end
+
+        # check exists
+        expect(row).not_to be_nil, "Expected to find a row with field '#{field}' in spotlight section table"
+
+        # Verify the field exists in <th>
+        expect(row).to have_selector("th", text: field, wait: 0), "Expected field '#{field}' in spotlight section table headers"
+
+        # Verify the corresponding value in <td>
+        actual_value = row.find("td", wait: 0).text.gsub(/[\n+-]/, "")
+        expect(actual_value).to eq(expected_value), "Expected value '#{expected_value}' for field '#{field}', but found '#{actual_value}'"
       end
     end
   end
