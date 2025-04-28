@@ -121,7 +121,7 @@ pub fn BlockTabbedPage() -> impl IntoView {
                 href: format!("/blocks/{}/commands/internal", id()),
                 text: "Internal Commands".to_string(),
                 icon: NavIcon::FeeTransfers,
-                number_bubble: option_block.get().as_ref().and_then(get_fee_transfer_count),
+                number_bubble: option_block.get().as_ref().and_then(get_internal_command_count),
                 ..Default::default()
             },
             NavEntry {

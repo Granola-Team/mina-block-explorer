@@ -1,4 +1,4 @@
-use super::{functions::*, graphql::blocks_query::BlocksQueryBlocks, models::*};
+use super::{functions::*, graphql::blocks_query::{BlocksQueryBlocks, BlocksQueryBlocksTransactionsFeeTransfer}, models::*};
 use crate::{
     blocks::graphql::blocks_query,
     common::{components::*, constants::*, functions::*, models::*, spotlight::*, table::*},
@@ -151,12 +151,26 @@ pub fn BlockInternalCommands(block: BlocksQueryBlocks) -> impl IntoView {
     let (loading_sig, _) = create_signal(false);
 
     create_effect(move |_| {
-        set_data.set(
-            block
-                .transactions
-                .as_ref()
-                .and_then(|txn| txn.fee_transfer.clone()),
-        );
+        let mut internal_commands = block
+            .transactions
+            .as_ref()
+            .and_then(|txn| txn.fee_transfer.clone()) // Clone if necessary
+            .unwrap_or_default();
+
+        let fee = block.transactions.as_ref().and_then(|txn| txn.coinbase.clone());
+        let recipient = block
+            .transactions
+            .as_ref()
+            .and_then(|txn| txn.coinbase_receiver_account.as_ref())
+            .and_then(|cra| cra.public_key.clone()); // Clone if String
+
+        internal_commands.push(Some(BlocksQueryBlocksTransactionsFeeTransfer {
+            type_: Some("Coinbase".to_string()),
+            fee,
+            recipient,
+        }));
+
+        set_data.set(Some(internal_commands));
     });
 
     let table_columns: Vec<TableColumn<AnySort>> = vec![

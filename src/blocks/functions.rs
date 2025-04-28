@@ -106,11 +106,11 @@ pub fn get_snark_job_count(block: &BlocksQueryBlocks) -> Option<usize> {
     block.snark_jobs.as_ref().map(|o| o.len())
 }
 
-pub fn get_fee_transfer_count(block: &BlocksQueryBlocks) -> Option<usize> {
-    block
-        .transactions
-        .as_ref()
-        .and_then(|o| o.fee_transfer.as_ref().map(|o1| o1.len()))
+pub fn get_internal_command_count(block: &BlocksQueryBlocks) -> Option<usize> {
+    Some(block.transactions.as_ref().map_or(0, |txn| {
+           txn.fee_transfer.as_ref().map_or(0, |fee_transfers| fee_transfers.len())
+               + txn.coinbase.is_some() as usize
+       }))
 }
 
 pub fn get_slot(block: &BlocksQueryBlocks) -> String {
