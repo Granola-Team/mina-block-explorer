@@ -1,6 +1,6 @@
 const SLOT_GROUPING = 50; // groups slots by 50
 const CHART_COLORS = ["#7BBBCA", "#A57B66", "#E2918F", "#629EDE", "#84BD7C"];
-const TOOLTIP_DEFAULT = { position: "top" };
+const TOOLTIP_DEFAULT = { position: "top", confine: true };
 const GRID_LINES = {
   show: true, // Show or hide grid lines for the X-axis
   lineStyle: {
