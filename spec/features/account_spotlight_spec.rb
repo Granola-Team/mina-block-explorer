@@ -18,7 +18,7 @@ RSpec.describe "Account spotlight", type: :system do
     expect(page).not_to have_content("Includes balance from genesis ledger"), "Expected 'Includes balance from genesis ledger' to not be present"
 
     # Verify the token-only message is not displayed
-    expect(page).not_to have_content("This account only has custom tokens and no MINA balance.", wait: 30), "Expected 'This account only has custom tokens and no MINA balance.' to not be present"
+    expect(page).not_to have_content("Account has no MINA balance.", wait: 30), "Expected 'Account has no MINA balance.' to not be present"
   end
 
   it "displays appropriately for genesis accounts with positive balances" do
@@ -40,7 +40,7 @@ RSpec.describe "Account spotlight", type: :system do
     wait_until_table_loaded("User Commands")
 
     # Verify the token-only message is displayed
-    expect(page).to have_content("This account only has custom tokens and no MINA balance."), "Expected 'This account only has custom tokens and no MINA balance.' to be present"
+    expect(page).to have_content("Account has no MINA balance."), "Expected 'Account has no MINA balance.' to be present"
 
     # Verify the "User Commands" table has at least 0 rows
     table_rows = find_all("table[data-test=\"#{to_kebab_case("User Commands")}-table\"] tr:not(:has(th))")

@@ -108,10 +108,7 @@ fn AccountSpotlightPage() -> impl IntoView {
                             <SpotlightSection
                                 header="Account Spotlight"
                                 spotlight_items=vec![]
-                                meta=Some(
-                                    "This account only has custom tokens and no MINA balance."
-                                        .to_string(),
-                                )
+                                meta=Some("Account has no MINA balance.".to_string())
                                 id=memo_params_map.get().get("id").cloned()
                             >
                                 <WalletIcon width=40 />
