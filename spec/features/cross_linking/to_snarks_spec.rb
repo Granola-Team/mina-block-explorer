@@ -31,4 +31,11 @@ RSpec.describe "Snarks page navigation", type: :system do
       end
     end
   end
+
+  it "is navigated to from nav menu" do
+    visit "/"
+    wait_until_table_loaded("Blocks")
+    click_nav_menu_item(["More", "SNARKs"])
+    expect(page.current_path).to match(/\/snarks/), "Expected URL to include '/snarks', but was #{page.current_path}"
+  end
 end

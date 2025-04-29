@@ -38,4 +38,11 @@ RSpec.describe "Tokens page navigation", type: :system do
     # Verify navigation to the tokens page
     verify_tokens_page
   end
+
+  it "is navigated to from nav menu" do
+    visit "/"
+    wait_until_table_loaded("Blocks")
+    click_nav_menu_item(["Tokens"])
+    expect(page.current_path).to match(/\/tokens/), "Expected URL to include '/tokens', but was #{page.current_path}"
+  end
 end

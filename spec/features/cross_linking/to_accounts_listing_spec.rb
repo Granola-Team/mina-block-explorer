@@ -17,4 +17,11 @@ RSpec.describe "Accounts listing page navigation", type: :system do
       expect(page.current_path).to match(/\/addresses\/accounts/), "Expected URL to include '/addresses/accounts', but was #{page.current_path}"
     end
   end
+
+  it "is navigated to from nav menu" do
+    visit "/"
+    wait_until_table_loaded("Blocks")
+    click_nav_menu_item(["MINA Accounts"])
+    expect(page.current_path).to match(/\/addresses\/accounts/), "Expected URL to include '/addresses/accounts', but was #{page.current_path}"
+  end
 end

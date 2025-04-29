@@ -31,4 +31,11 @@ RSpec.describe "Internal commands page navigation", type: :system do
       end
     end
   end
+
+  it "is navigated to from nav menu" do
+    visit "/"
+    wait_until_table_loaded("Blocks")
+    click_nav_menu_item(["Transactions", "Internal Commands"])
+    expect(page.current_path).to match(/\/commands\/internal/), "Expected URL to include '/commands/internal', but was #{page.current_path}"
+  end
 end

@@ -146,6 +146,19 @@ module CapybaraHelpers
     metadata_text.scan(/\d[\d,]*/).map { |num| num.delete(",").to_i }
   end
 
+  def click_nav_menu_item(lineage)
+    raise ArgumentError, "Lineage must be a non-empty array" if !lineage.is_a?(Array) || lineage.empty?
+
+    # Iterate through all but the last item to hover
+    lineage[0..-2].each do |item|
+      element = find("nav a", text: item.upcase, wait: 0)
+      element.hover
+    end
+
+    # Click the last item
+    find("nav a", text: lineage.last.upcase, wait: 0).click
+  end
+
   # spec/support/test_helpers.rb
   def test_spotlight(heading, id, expected_values)
     # Verify the heading in section#spotlight-section h1

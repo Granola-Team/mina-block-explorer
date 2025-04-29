@@ -30,4 +30,11 @@ RSpec.describe "Block page navigation", type: :system do
       end
     end
   end
+
+  it "is navigated to from nav menu" do
+    visit "/tokens"
+    wait_until_table_loaded("Tokens")
+    click_nav_menu_item(["Blocks"])
+    expect(page.current_path).to match(/\/blocks/), "Expected URL to include '/blocks', but was #{page.current_path}"
+  end
 end

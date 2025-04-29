@@ -32,4 +32,11 @@ RSpec.describe "Staking ledger page navigation", type: :system do
       end
     end
   end
+
+  it "is navigated to from nav menu" do
+    visit "/"
+    wait_until_table_loaded("Blocks")
+    click_nav_menu_item(["Staking"])
+    expect(page.current_path).to match(/\/staking-ledgers/), "Expected URL to include '/staking-ledgers', but was #{page.current_path}"
+  end
 end

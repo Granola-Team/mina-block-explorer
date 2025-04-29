@@ -29,4 +29,11 @@ RSpec.describe "Broadcast page", type: :system do
       expect(page).to have_selector("section form input[type='submit']"), "Expected a submit button in the form"
     end
   end
+
+  it "is navigated to from nav menu" do
+    visit "/"
+    wait_until_table_loaded("Blocks")
+    click_nav_menu_item(["More", "Send"])
+    expect(page.current_path).to match(/\/broadcast\/transaction/), "Expected URL to include '/broadcast/transaction', but was #{page.current_path}"
+  end
 end

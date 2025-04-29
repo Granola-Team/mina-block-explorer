@@ -66,4 +66,11 @@ RSpec.describe "Transaction spotlight navigation", type: :system do
     expect(metadata[0]).to eq(1), "Expected metadata 'x' in 'x of y' to be 1, but was #{metadata[0]}"
     expect(metadata[1]).to eq(1), "Expected metadata 'y' in 'x of y' to be 1, but was #{metadata[1]}"
   end
+
+  it "is navigated to from nav menu" do
+    visit "/"
+    wait_until_table_loaded("Blocks")
+    click_nav_menu_item(["Transactions", "User Commands"])
+    expect(page.current_path).to match(/\/commands\/user/), "Expected URL to include '/commands/user', but was #{page.current_path}"
+  end
 end
