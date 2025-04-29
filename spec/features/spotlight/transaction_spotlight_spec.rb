@@ -117,7 +117,7 @@ RSpec.describe "Transaction spotlight", type: :system do
     balance_cells = all(table_column_selector("Accounts Updated", "Balance Change".upcase))
     balance_cells.each do |cell|
       next_val = expected_values.shift
-      expect(cell.text).to eq(next_val.to_s), "Expected 'Balance Change' to be '#{next_val}', but found '#{cell.text}'"
+      expect(cell.text).to eq(next_val), "Expected 'Balance Change' to be '#{next_val}', but found '#{cell.text}'"
     end
 
     table_rows = get_table_rows("Actions Events", transposed: true)
