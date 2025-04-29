@@ -12,6 +12,11 @@ TABS = [
     expected_url: "/commands/internal"
   },
   {
+    page: "/commands/user",
+    tab: "Pending Commands",
+    expected_url: "/commands/pending"
+  },
+  {
     page: "/addresses/accounts/#{Constants::GENESIS_ACCOUNT_PK}/snark-jobs",
     tab: "User Commands",
     expected_url: "/addresses/accounts/#{Constants::GENESIS_ACCOUNT_PK}/commands/user"
@@ -30,6 +35,41 @@ TABS = [
     page: "/addresses/accounts/#{Constants::GENESIS_ACCOUNT_PK}",
     tab: "Internal Commands",
     expected_url: "/addresses/accounts/#{Constants::GENESIS_ACCOUNT_PK}/commands/internal"
+  },
+  {
+    page: "/addresses/accounts/#{Constants::GENESIS_ACCOUNT_PK}",
+    tab: "Delegations",
+    expected_url: "/addresses/accounts/#{Constants::GENESIS_ACCOUNT_PK}/delegations"
+  },
+  {
+    page: "/addresses/accounts/#{Constants::GENESIS_ACCOUNT_PK}",
+    tab: "Tokens",
+    expected_url: "/addresses/accounts/#{Constants::GENESIS_ACCOUNT_PK}/tokens"
+  },
+  {
+    page: "/analytics",
+    tab: "Transactions",
+    expected_url: "/analytics/commands/user"
+  },
+  {
+    page: "/analytics/commands/user",
+    tab: "Blocks",
+    expected_url: "/analytics/blocks"
+  },
+  {
+    page: "/analytics",
+    tab: "SNARKs",
+    expected_url: "/analytics/snarks"
+  },
+  {
+    page: "/analytics",
+    tab: "Staker Leaderboard",
+    expected_url: "/analytics/staker-leaderboard"
+  },
+  {
+    page: "/analytics",
+    tab: "SNARKer Leaderboard",
+    expected_url: "/analytics/snarker-leaderboard"
   }
 ]
 

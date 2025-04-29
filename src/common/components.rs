@@ -411,7 +411,7 @@ pub fn TabLink(nav_entry: NavEntry) -> impl IntoView {
     let href = nav_entry.href.clone();
     view! {
         <a
-            data-test=format!("{}-tab", nav_entry.text.as_str().to_kebab_case())
+            data-test=format!("{}-tab", nav_entry.text.as_str().to_lowercase().to_kebab_case())
             class=move || {
                 format!(
                     "{} {} {}",
