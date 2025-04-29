@@ -113,7 +113,7 @@ RSpec.describe "Transaction spotlight", type: :system do
     table_rows = get_table_rows("Accounts Updated")
     expect(table_rows.count).to eq(7), "Expected 'Accounts Updated' table to have 7 rows, but found #{table_rows.count}"
 
-    expected_values = [-1, 0, 0, -19, 19, 0, 1]
+    expected_values = ["-1.0", "0.0", "0.0", "-19.0", "19.0", "0.0", "1.0"]
     balance_cells = all(table_column_selector("Accounts Updated", "Balance Change".upcase))
     balance_cells.each do |cell|
       next_val = expected_values.shift
