@@ -24,10 +24,10 @@ pub fn TokensPage() -> impl IntoView {
     let (q_token_id_sig, _) = create_query_signal::<String>(QUERY_PARAM_ID);
 
     let resource = create_resource(
-        move || (name_sig.get(), q_token_id_sig.get()),
-        move |(name_opt, q_token_id_opt)| async move {
+        move || (name_sig.get(), q_token_id_sig.get(), row_limit_sig.get()),
+        move |(name_opt, q_token_id_opt, row_limit)| async move {
             load_data(
-                row_limit_sig.get().or(Some(50)),
+                row_limit.or(Some(50)),
                 name_opt,
                 q_token_id_opt,
                 Some(tokens_query::TokensSortByInput::SUPPLY_DESC),
