@@ -24,9 +24,7 @@ RSpec.describe "Tokens page navigation", type: :system do
     verify_tokens_page
   end
 
-  # TODO: uncomment when https://github.com/Granola-Team/mina-indexer/issues/1860 closed and
-  # indexer version is updated locally in project
-  xit "is navigated to from the account token holding page" do
+  it "is navigated to from the account token holding page" do
     visit "/addresses/accounts/#{Constants::TOKEN_ACTIVITY_ONLY_ADDRESS}/tokens"
 
     # Wait for the "Tokens" table to load
