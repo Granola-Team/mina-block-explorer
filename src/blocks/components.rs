@@ -42,7 +42,7 @@ pub fn BlockTabContainer(content: BlockContent) -> impl IntoView {
                 (Some(block), BlockContent::Analytics) => {
                     view! { <BlockAnalytics block=block /> }
                 }
-                _ => ().into_view(),
+                _ => view! { <NotFound message=Some("Block Not Found :(".to_string()) /> },
             }}
 
         </PageContainer>

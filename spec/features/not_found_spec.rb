@@ -5,6 +5,10 @@ RSpec.describe "Not Found Page", type: :system do
     {
       url: "/commands/GggGXNjmeiA59Kn1qiyG3NZ1oT1sBNBg8iwvLzJuyT7GH9dVmGggg",
       message: "Transaction Not Found :("
+    },
+    {
+      url: "/blocks/3NLCZXPQH8WwSXUtrCHHz3n78RQJxNYUyn4uyx6JyTo4THApBBgg",
+      message: "Block Not Found :("
     }
   ]
 
