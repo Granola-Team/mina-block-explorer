@@ -9,4 +9,5 @@ fn main() {
     println!("cargo:rustc-env=GRAPHQL_URL={}", graphql_url);
     println!("cargo:rustc-env=REST_URL={}", rest_url);
     println!("cargo:rustc-env=COMMIT_HASH={}", commit_hash);
+    println!("cargo:warning=Chromium bug 677022 (SRI for preload as=fetch) is still open. Check https://issues.chromium.org/issues/41469335 for updates. Using data-integrity='none' as workaround.");
 }
