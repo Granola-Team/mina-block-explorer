@@ -40,13 +40,13 @@ pub fn SummaryLocalStorage() -> impl IntoView {
     let UseIntervalReturn { counter, .. } = use_interval(LIVE_RELOAD_INTERVAL);
 
     let resource = create_resource(
-        move || (counter.get()),
+        move || counter.get(),
         move |_| async move {
-            if visibility.get() == VisibilityState::Visible {
+            if visibility.get_untracked() == VisibilityState::Visible {
                 load_data().await
             } else {
                 logging::log!("Document not visible. Data polling skipped for summary endpoint.");
-                Ok(summary_sig.get())
+                Ok(summary_sig.get_untracked())
             }
         },
     );
@@ -54,7 +54,7 @@ pub fn SummaryLocalStorage() -> impl IntoView {
     let unique_blocks_producers_resource = create_resource(
         move || (counter.get()),
         move |_| async move {
-            if visibility.get() == VisibilityState::Visible {
+            if visibility.get_untracked() == VisibilityState::Visible {
                 load_block_producers_stat(10000).await
             } else {
                 logging::log!("Document not visible. Data polling skipped for summary endpoint.");

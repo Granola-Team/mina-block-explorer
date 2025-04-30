@@ -272,7 +272,7 @@ pub fn UrlParamSelectMenu(
         >
 
             {if labels.is_boolean_option {
-                let is_true_case = move || match query_val.get() {
+                let is_true_case = move || match query_val.get_untracked() {
                     Some(ref val) if val == "true" => true,
                     Some(ref val) if val == "false" => false,
                     Some(_) | None => true,
@@ -288,7 +288,7 @@ pub fn UrlParamSelectMenu(
                     .into_view()
             } else {
                 let is_selected = move |selection| {
-                    query_val.get().filter(|q| q == &selection).is_some()
+                    query_val.get_untracked().filter(|q| q == &selection).is_some()
                 };
                 labels
                     .cases

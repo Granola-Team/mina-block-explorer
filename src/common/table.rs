@@ -407,7 +407,7 @@ where
                                     view! {
                                         <option
                                             value=text.to_string()
-                                            selected=text == value.get().unwrap_or_default()
+                                            selected=text == value.get_untracked().unwrap_or_default()
                                         >
                                             {ToTitleCase::to_title_case(text.as_str()).to_string()}
                                         </option>

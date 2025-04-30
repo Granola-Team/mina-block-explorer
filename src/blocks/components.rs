@@ -629,7 +629,7 @@ pub fn BlocksSection() -> impl IntoView {
             )
         },
         move |(_, q_map, block_height, slot, canonical, row_limit)| async move {
-            if visibility.get() == VisibilityState::Visible {
+            if visibility.get_untracked() == VisibilityState::Visible {
                 load_data(
                     row_limit,
                     q_map.get("q-block-producer").cloned(),

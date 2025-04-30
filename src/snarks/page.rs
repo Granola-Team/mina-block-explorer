@@ -46,7 +46,7 @@ fn SnarksPageContents() -> impl IntoView {
             )
         },
         move |(_, value, canonical, block_height, mut row_limit)| async move {
-            if visibility.get() == VisibilityState::Visible {
+            if visibility.get_untracked() == VisibilityState::Visible {
                 let prover = value.get("q-prover");
                 let block_state_hash = value.get("q-state-hash");
                 load_data(

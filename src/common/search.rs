@@ -91,11 +91,11 @@ pub fn GlobalSearchBar() -> impl IntoView {
     let (epoch_sig, set_e) = create_signal(None);
     let ledger_resource = create_resource(
         move || epoch_sig.get(),
-        move |_| async move { load_ledger_hash_data(epoch_sig.get()).await },
+        move |_| async move { load_ledger_hash_data(epoch_sig.get_untracked()).await },
     );
     let epoch_resource = create_resource(
         move || ledger_hash_sig.get(),
-        move |_| async move { load_epoch_data(ledger_hash_sig.get()).await },
+        move |_| async move { load_epoch_data(ledger_hash_sig.get_untracked()).await },
     );
 
     let navigate = leptos_router::use_navigate();

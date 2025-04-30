@@ -101,7 +101,7 @@ pub fn TransactionsSection() -> impl IntoView {
             )
         },
         move |(_, url_query_map, txn_type, block_height, row_limit, txn_applied, q_type, token)| async move {
-            if visibility.get() != VisibilityState::Visible {
+            if visibility.get_untracked() != VisibilityState::Visible {
                 logging::log!("Document not visible. Data polling skipped for user commands.");
                 return Ok(transactions_query::ResponseData {
                     transactions: data_sig.get().unwrap_or_default(),
@@ -331,7 +331,7 @@ pub fn TransactionsSection() -> impl IntoView {
             is_loading=resource.loading()
             section_heading=MaybeSignal::derive(move || {
                 token_sig
-                    .get()
+                    .get_untracked()
                     .and_then(|token| {
                         (token.token != MINA_TOKEN_ADDRESS)
                             .then(|| {
@@ -378,7 +378,7 @@ pub fn PendingTransactionsSection() -> impl IntoView {
     let resource = create_resource(
         move || counter.get(),
         move |_| async move {
-            if visibility.get() != VisibilityState::Visible {
+            if visibility.get_untracked() != VisibilityState::Visible {
                 logging::log!("Document not visible. Data polling skipped for user commands.");
                 return Ok(transactions_query::ResponseData {
                     transactions: vec![],

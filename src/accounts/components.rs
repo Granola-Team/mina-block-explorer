@@ -44,7 +44,8 @@ pub fn NextAccountsPage(
                 }
                 class_str="ml-2"
                 disabled=data.len() as u64 != row_limit.unwrap_or(TABLE_ROW_LIMIT)
-                    || get_next_balance(balance_sig.get(), last_balance_clone.clone()).is_none()
+                    || get_next_balance(balance_sig.get_untracked(), last_balance_clone.clone())
+                        .is_none()
             />
         </div>
     }
