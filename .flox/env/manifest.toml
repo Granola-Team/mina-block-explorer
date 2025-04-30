@@ -52,6 +52,7 @@ rustup.pkg-path = "rustup"
 on-activate = """
   export CARGO_HOME="$(pwd)/.cargo"
   rustup default stable
+  rustup target add wasm32-unknown-unknown
   export BUNDLE_APP_CONFIG="$(pwd)/.build/bundle"
   pnpm install
 """
