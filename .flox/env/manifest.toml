@@ -51,6 +51,7 @@ rustup.pkg-path = "rustup"
 [hook]
 on-activate = """
   export CARGO_HOME="$(pwd)/.cargo"
+  rustup default stable
   export BUNDLE_APP_CONFIG="$(pwd)/.build/bundle"
   pnpm install
 """
