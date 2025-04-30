@@ -22,7 +22,9 @@ module.exports = {
                 'table-row-text-color': '#25213B',
                 'table-header-text-color': '#25213B',
                 'green': '#56D05F',
+                'green-dark': '#2B9546',
                 'blue': '#14DBF6',
+                'blue-dark': '#0EACD3',
                 'purple': '#8572E6',
                 'dark-blue': '#4392F7',
                 'card-purple': '#F4F2FF',
@@ -38,5 +40,5 @@ module.exports = {
     plugins: [
         require('@tailwindcss/container-queries'),
     ],
-    
+
 }

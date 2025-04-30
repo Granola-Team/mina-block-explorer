@@ -158,8 +158,10 @@ pub enum ColorVariant {
     Green,
     Blue,
     Grey,
-    DarkBlue,
     Orange,
+    DarkGreen,
+    DarkBlue,
+    DarkGrey,
 }
 
 #[derive(Clone)]

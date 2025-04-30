@@ -109,7 +109,11 @@ impl TableData for Vec<Option<TransactionsQueryTransactions>> {
                         convert_to_local_timezone_formatted(&transaction.get_block_datetime()),
                         transaction.get_block_datetime(),
                     ),
-                    convert_to_pill(transaction.get_kind(), ColorVariant::Grey),
+                    convert_to_pill(transaction.get_kind(), match transaction.get_kind().as_str() {
+                        "Zkapp" => ColorVariant::DarkBlue,
+                        "Payment" => ColorVariant::DarkGreen,
+                        _ => ColorVariant::DarkGrey,
+                    }),
                     if transaction.get_failure_reason().is_none() {
                         convert_to_pill(TXN_STATUS_APPLIED.to_string(), ColorVariant::Green)
                     } else {
