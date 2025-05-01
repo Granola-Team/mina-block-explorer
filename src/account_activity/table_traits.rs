@@ -73,7 +73,11 @@ impl TableData for Vec<Option<AccountActivityQueryDirectionalTransactions>> {
                         convert_to_local_timezone_formatted(&transaction.get_date_time()),
                         transaction.get_date_time(),
                     ),
-                    convert_to_pill(transaction.get_kind(), ColorVariant::Grey),
+                    convert_to_pill(transaction.get_kind(), match transaction.get_kind().as_str() {
+                        "Zkapp" => ColorVariant::DarkBlue,
+                        "Payment" => ColorVariant::DarkGreen,
+                        _ => ColorVariant::DarkGrey,
+                    }),
                     convert_to_pill(
                         transaction.get_direction(),
                         if transaction.get_direction() == *"OUT".to_string() {

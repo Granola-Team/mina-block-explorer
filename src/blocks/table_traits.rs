@@ -120,7 +120,11 @@ impl TableData for Vec<Option<BlocksQueryBlocksTransactionsUserCommandsExt>> {
                             ),
                         )
                     },
-                    convert_to_pill(user_command.get_kind(), ColorVariant::Grey),
+                    convert_to_pill(user_command.get_kind(), match user_command.get_kind().as_str() {
+                        "Zkapp" => ColorVariant::DarkBlue,
+                        "Payment" => ColorVariant::DarkGreen,
+                        _ => ColorVariant::DarkGrey,
+                    }),
                     convert_to_pill(
                         if user_command.get_failure_reason().is_none() {
                             TXN_STATUS_APPLIED.to_string()
