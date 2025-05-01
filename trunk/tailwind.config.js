@@ -2,7 +2,7 @@
 
 module.exports = {
     content: {
-        files: ["*.html","../src/**/*.{html,rs}"],
+        files: ["*.html","../rust/**/*.{html,rs}"],
     },
     theme: {
         fontFamily: {

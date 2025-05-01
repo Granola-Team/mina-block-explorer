@@ -15,10 +15,10 @@ ENV["VOLUMES_DIR"] ||= "/mnt" if Dir.exist?("/mnt")
 ENV["GRAPHQL_URL"] = "http://localhost:#{IDXR_PORT}/graphql"
 ENV["REST_URL"] = "http://localhost:#{IDXR_PORT}"
 GRAPHQL_SRC_FILES = Dir.glob("graphql/**/*.graphql")
-RUST_SRC_FILES = Dir.glob("src/**/*.rs") + GRAPHQL_SRC_FILES
-CARGO_DEPS = RUST_SRC_FILES + ["Cargo.toml", "Cargo.lock", "build.rs", ".cargo/audit.toml"]
+RUST_SRC_FILES = Dir.glob("rust/**/*.rs") + GRAPHQL_SRC_FILES
+CARGO_DEPS = RUST_SRC_FILES + ["rust/Cargo.toml", "rust/Cargo.lock", ".cargo/audit.toml"]
 RUBY_SRC_FILES = Dir.glob("**/*.rb").reject { |file| file.start_with?("lib/") } + ["Rakefile"]
-JAVASCRIPT_SRC_FILES = Dir.glob("src/scripts_tests/**")
+JAVASCRIPT_SRC_FILES = Dir.glob("trunk/scripts_tests/**")
 MINASEARCH_GRAPHQL = "https://api.minasearch.com/graphql"
 MINASEARCH_REST = "https://api.minasearch.com"
 DEV_BUILD_TARGET = ".build/dev_build"
@@ -195,7 +195,7 @@ task :clean_build do
 end
 
 task :clean_target do
-  FileUtils.rm_rf "target"
+  FileUtils.rm_rf "rust/target"
 end
 
 desc "Clean the repo of built artifacts"
@@ -204,10 +204,10 @@ task clean: [:clean_test, :clean_node_modules, :clean_build, :clean_target]
 desc "Format the source code"
 task format: ["pnpm/node_modules"] do
   Dir.chdir("pnpm") do
-    sh "pnpm exec prettier --write ../src/scripts/"
+    sh "pnpm exec prettier --write ../trunk/scripts"
   end
   sh "standardrb --fix #{RUBY_SRC_FILES.join(" ")}"
-  sh "leptosfmt ./src"
+  sh "leptosfmt ./rust"
 end
 
 desc "Run the Jest tests"
@@ -226,7 +226,9 @@ task rust_test: ".build/rust-test"
 
 file ".build/rust-test" => CARGO_DEPS do |t|
   puts "--- Performing rust unit tests"
-  nextest_output = cmd_capture("cargo-nextest nextest run")
+  nextest_output = Dir.chdir("rust") do
+    cmd_capture("cargo-nextest nextest run")
+  end
   record_output(t, nextest_output)
 end
 
@@ -237,15 +239,21 @@ desc "Audit the Rust code with cargo-audit"
 task audit: ".build/audit"
 
 file ".build/audit" => CARGO_DEPS do |t|
-  audit_output = cmd_capture("cargo-audit audit")
-  machete_output = cmd_capture("cargo machete")
+  audit_output = Dir.chdir("rust") do
+    cmd_capture("cargo-audit audit")
+  end
+  machete_output = Dir.chdir("rust") do
+    cmd_capture("cargo machete")
+  end
   record_output(t, [audit_output, machete_output])
 end
 
 desc "Fix linting errors"
 task lint_fix: ["pnpm/node_modules"] do
   sh "standardrb --fix #{RUBY_SRC_FILES.join(" ")}"
-  sh "cargo clippy --fix --allow-dirty --allow-staged"
+  Dir.chdir("rust") do
+    sh "cargo clippy --fix --allow-dirty --allow-staged"
+  end
 end
 
 desc "Build documentation in the build directory"
@@ -253,7 +261,9 @@ task build_docs: ".build/docs"
 
 file ".build/docs" => GRAPHQL_SRC_FILES do |t|
   mkdir_p(".build")
-  sh "cargo doc --document-private-items --target-dir #{t.name}"
+  Dir.chdir("rust") do
+    sh "cargo doc --document-private-items --target-dir ../#{t.name}"
+  end
 end
 
 task bundle_install: ".build/bundle"
@@ -279,7 +289,9 @@ end
 
 desc "Serve the built website locally against prod indexer"
 task dev_prod: [:release_build] do
-  sh "trunk serve --port=#{TRUNK_PORT} --open --dist=#{RELEASE_BUILD_TARGET}"
+  Dir.chdir("trunk") do
+    sh "trunk serve --port=#{TRUNK_PORT} --open --dist=../#{RELEASE_BUILD_TARGET}"
+  end
 end
 
 task :check_tokens do
@@ -291,14 +303,18 @@ desc "Publish the website to production"
 task publish: [:check_tokens, "pnpm/node_modules", :release_build] do
   puts "--- Publishing"
   puts "Publishing version #{ENV["VERSION"]}"
-  sh "pnpx wrangler pages deploy --branch main"
+  Dir.chdir("pnpm") do
+    sh "pnpx wrangler pages deploy --branch main"
+  end
 end
 
 desc "Use 'cargo check' to verify buildability"
 task check: ".build/check"
 
 file ".build/check" => CARGO_DEPS do |t|
-  check_output = cmd_capture("cargo check")
+  check_output = Dir.chdir("rust") do
+    cmd_capture("cargo check")
+  end
   record_output(t, check_output)
 end
 
@@ -317,8 +333,10 @@ task lint_rust: ".build/lint-rust"
 
 file ".build/lint-rust" => RUST_SRC_FILES do |t|
   puts "--- Linting Rust code"
-  leptos_fmt_out = cmd_capture("leptosfmt --check ./src")
-  clippy_out = cmd_capture("cargo clippy --all-targets --all-features -- -D warnings")
+  leptos_fmt_out = cmd_capture("leptosfmt --check ./rust")
+  clippy_out = Dir.chdir("rust") do
+    cmd_capture("cargo clippy --all-targets --all-features -- -D warnings")
+  end
   record_output(t, [leptos_fmt_out, clippy_out])
 end
 
@@ -333,11 +351,13 @@ end
 
 desc "Build the release version for front-end WASM bundle"
 task release_build: RELEASE_BUILD_TARGET.to_s
-file RELEASE_BUILD_TARGET.to_s => CARGO_DEPS + ["Trunk.toml", "tailwind.config.js"] do |t|
+file RELEASE_BUILD_TARGET.to_s => CARGO_DEPS + ["trunk/Trunk.toml", "trunk/tailwind.config.js"] do |t|
   puts "--- Building release version"
   ENV["GRAPHQL_URL"] = MINASEARCH_GRAPHQL
   ENV["REST_URL"] = MINASEARCH_REST
-  sh "trunk build --release --filehash true --dist=#{t.name}"
+  Dir.chdir("trunk") do
+    sh "trunk build --release --filehash true --dist=#{t.name}"
+  end
 end
 
 desc "Lint all source code"

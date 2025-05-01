@@ -7,8 +7,8 @@ type Long = i32;
 
 #[derive(GraphQLQuery)]
 #[graphql(
-    schema_path = "graphql/schemas/mina-explorer.graphql",
-    query_path = "graphql/queries/transactions.graphql",
+    schema_path = "../graphql/schemas/mina-explorer.graphql",
+    query_path = "../graphql/queries/transactions.graphql",
     response_derives = "Serialize,PartialEq,Debug,Clone,Default",
     skip_serializing_none
 )]
