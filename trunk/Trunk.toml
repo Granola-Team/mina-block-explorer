@@ -1,5 +1,5 @@
 [watch]
-watch = ["src","assets", "graphql"]
+watch = ["../src","../graphql","./"]
 
 [tools]
 tailwindcss = "3.4.1"

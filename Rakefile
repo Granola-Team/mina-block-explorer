@@ -102,7 +102,9 @@ def run_tier_task(rspec_cmd)
   end
 
   # Start the server
-  server_pid = Process.spawn("trunk serve --no-autoreload --port=#{TRUNK_PORT} --dist=#{DEV_BUILD_TARGET}", pgroup: true)
+  server_pid = Dir.chdir("trunk") do
+    Process.spawn("trunk serve --no-autoreload --port=#{TRUNK_PORT} --dist=../#{DEV_BUILD_TARGET}", pgroup: true)
+  end
   puts "Started trunk server with PID: #{server_pid}"
 
   # Wait for port
@@ -270,7 +272,9 @@ end
 desc "Serve the built website locally"
 task dev: [:deploy_mina_indexer, :dev_build] do
   trap("INT") { Rake::Task["shutdown_mina_indexer"].invoke }
-  sh "trunk serve --port=#{TRUNK_PORT} --open --dist=#{DEV_BUILD_TARGET}"
+  Dir.chdir("trunk") do
+    sh "trunk serve --port=#{TRUNK_PORT} --open --dist=../#{DEV_BUILD_TARGET}"
+  end
 end
 
 desc "Serve the built website locally against prod indexer"
@@ -320,9 +324,11 @@ end
 
 desc "Build the dev version for front-end WASM bundle"
 task dev_build: DEV_BUILD_TARGET.to_s
-file DEV_BUILD_TARGET.to_s => CARGO_DEPS + ["Trunk.toml", "tailwind.config.js"] do |t|
+file DEV_BUILD_TARGET.to_s => CARGO_DEPS + ["trunk/Trunk.toml", "trunk/tailwind.config.js"] do |t|
   puts "--- Building dev version"
-  sh "trunk build --dist=#{t.name}"
+  Dir.chdir("trunk") do
+    sh "trunk build --dist=../#{t.name}"
+  end
 end
 
 desc "Build the release version for front-end WASM bundle"
