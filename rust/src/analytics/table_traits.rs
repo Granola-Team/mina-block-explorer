@@ -19,8 +19,9 @@ impl TableData for Vec<StakerStats> {
                         stat.num_supercharged_blocks_produced.to_string(),
                     )),
                     convert_to_span(format_number(stat.num_slots_produced.to_string())),
-                    convert_to_span(format_number(
-                        stat.orphan_rate().unwrap_or("n/a".to_string()),
+                    convert_to_span(format_number_for_html(
+                        &stat.orphan_rate().unwrap_or("n/a".to_string()),
+                        5
                     )),
                 ]
             })

@@ -384,7 +384,7 @@ pub fn StakerLeaderboard() -> impl IntoView {
                 },
                 TableColumn {
                     column: "Orphan Rate".to_string(),
-                    alignment: Some(ColumnTextAlignment::Right),
+                    alignment: Some(ColumnTextAlignment::Center),
                     ..Default::default()
                 },
             ];

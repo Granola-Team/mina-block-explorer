@@ -109,7 +109,7 @@ pub struct SnarkFeesResponse {
     pub data: SnarkFeesData,
 }
 
-#[derive(Deserialize, Serialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone, Default)]
 pub struct StakerStats {
     pub username: String,
     pub public_key: String,
@@ -145,13 +145,21 @@ impl fmt::Display for StakerLeaderboardCanonicalBlocks {
 
 impl StakerStats {
     pub fn orphan_rate(&self) -> Option<String> {
-        if self.num_blocks_produced > 0 {
-            let orphan_frac =
-                1f32 - self.num_canonical_blocks_produced as f32 / self.num_blocks_produced as f32;
-            Some(format!("{:.2}", orphan_frac * 100.0))
-        } else {
-            None
+        if self.num_blocks_produced == 0 {
+            return None;
         }
+
+        let num_orphans = self
+            .num_slots_produced
+            .checked_sub(self.num_canonical_blocks_produced)?;
+
+        let numerator = num_orphans.checked_mul(10000)?;
+
+        let orphan_rate_scaled = numerator.checked_div(self.num_slots_produced)?;
+
+        let whole = orphan_rate_scaled / 100;
+        let frac = orphan_rate_scaled % 100;
+        Some(format!("{}.{:02}", whole, frac))
     }
 }
 
@@ -342,5 +350,117 @@ impl TryFrom<String> for StakerLeaderboardCanonicalBlocks {
             }
             _ => Err("Unable to parse the StakerLeaderboardCanonicalBlocks from string"),
         }
+    }
+}
+
+#[cfg(test)]
+mod orphan_rate_tests {
+    use super::*;
+
+    #[test]
+    fn test_orphan_rate_zero_blocks_produced() {
+        let stats = StakerStats {
+            num_blocks_produced: 0,
+            num_canonical_blocks_produced: 0,
+            num_slots_produced: 100,
+            ..Default::default()
+        };
+        assert_eq!(stats.orphan_rate(), None);
+    }
+
+    #[test]
+    fn test_orphan_rate_zero_slots_produced() {
+        let stats = StakerStats {
+            num_blocks_produced: 100,
+            num_canonical_blocks_produced: 50,
+            num_slots_produced: 0,
+            ..Default::default()
+        };
+        // Division by zero in checked_div
+        assert_eq!(stats.orphan_rate(), None);
+    }
+
+    #[test]
+    fn test_orphan_rate_all_canonical() {
+        let stats = StakerStats {
+            num_blocks_produced: 100,
+            num_canonical_blocks_produced: 100,
+            num_slots_produced: 100,
+            ..Default::default()
+        };
+        // (100 - 100) / 100 * 100 = 0%
+        assert_eq!(stats.orphan_rate(), Some("0.00".to_string()));
+    }
+
+    #[test]
+    fn test_orphan_rate_all_orphans() {
+        let stats = StakerStats {
+            num_blocks_produced: 100,
+            num_canonical_blocks_produced: 0,
+            num_slots_produced: 100,
+            ..Default::default()
+        };
+        // (100 - 0) / 100 * 100 = 100%
+        assert_eq!(stats.orphan_rate(), Some("100.00".to_string()));
+    }
+
+    #[test]
+    fn test_orphan_rate_partial_orphans() {
+        let stats = StakerStats {
+            num_blocks_produced: 100,
+            num_canonical_blocks_produced: 80,
+            num_slots_produced: 100,
+            ..Default::default()
+        };
+        // (100 - 80) / 100 * 100 = 20%
+        assert_eq!(stats.orphan_rate(), Some("20.00".to_string()));
+    }
+
+    #[test]
+    fn test_orphan_rate_slots_different_from_blocks() {
+        let stats = StakerStats {
+             num_blocks_produced: 50,
+            num_canonical_blocks_produced: 80,
+            num_slots_produced: 100,
+            ..Default::default()
+        };
+        // (100 - 80) / 100 * 100 = 20%
+        assert_eq!(stats.orphan_rate(), Some("20.00".to_string()));
+    }
+
+    #[test]
+    fn test_orphan_rate_underflow() {
+        let stats = StakerStats {
+            num_blocks_produced: 100,
+            num_canonical_blocks_produced: 101,
+            num_slots_produced: 100,
+            ..Default::default()
+        };
+        // num_slots_produced < num_canonical_blocks_produced causes underflow
+        assert_eq!(stats.orphan_rate(), None);
+    }
+
+    #[test]
+    fn test_orphan_rate_small_numbers() {
+        let stats = StakerStats {
+            num_blocks_produced: 3,
+            num_canonical_blocks_produced: 2,
+            num_slots_produced: 3,
+            ..Default::default()
+        };
+        // (3 - 2) / 3 * 100 ≈ 33.33%
+        assert_eq!(stats.orphan_rate(), Some("33.33".to_string()));
+    }
+
+    #[test]
+    fn test_orphan_rate_large_numbers() {
+        let stats = StakerStats {
+            num_blocks_produced: 1_000_000,
+            num_canonical_blocks_produced: 999_000,
+            num_slots_produced: 1_000_000,
+            ..Default::default()
+        };
+        // (1,000,000 - 999,000) / 1,000,000 * 100 = 0.1%
+        assert_eq!(stats.orphan_rate(), Some("0.10".to_string()));
     }
 }
