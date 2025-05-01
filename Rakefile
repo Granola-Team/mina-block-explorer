@@ -185,7 +185,7 @@ task :clean_test do
 end
 
 task :clean_node_modules do
-  FileUtils.rm_rf "node_modules"
+  FileUtils.rm_rf "pnpm/node_modules"
 end
 
 task :clean_build do
@@ -200,8 +200,10 @@ desc "Clean the repo of built artifacts"
 task clean: [:clean_test, :clean_node_modules, :clean_build, :clean_target]
 
 desc "Format the source code"
-task format: ["node_modules"] do
-  sh "pnpm exec prettier --write src/scripts/"
+task format: ["pnpm/node_modules"] do
+  Dir.chdir("pnpm") do
+    sh "pnpm exec prettier --write ../src/scripts/"
+  end
   sh "standardrb --fix #{RUBY_SRC_FILES.join(" ")}"
   sh "leptosfmt ./src"
 end
@@ -209,9 +211,11 @@ end
 desc "Run the Jest tests"
 task jest_test: ".build/jest-test"
 
-file ".build/jest-test" => JAVASCRIPT_SRC_FILES + ["jest.config.js"] do |t|
+file ".build/jest-test" => JAVASCRIPT_SRC_FILES + ["pnpm/jest.config.js"] do |t|
   puts "--- Performing jest unit tests"
-  jest_output = cmd_capture("pnpm exec jest test")
+  jest_output = Dir.chdir("pnpm") do
+    cmd_capture("pnpm exec jest test")
+  end
   record_output(t, jest_output)
 end
 
@@ -237,7 +241,7 @@ file ".build/audit" => CARGO_DEPS do |t|
 end
 
 desc "Fix linting errors"
-task lint_fix: ["node_modules"] do
+task lint_fix: ["pnpm/node_modules"] do
   sh "standardrb --fix #{RUBY_SRC_FILES.join(" ")}"
   sh "cargo clippy --fix --allow-dirty --allow-staged"
 end
@@ -256,9 +260,11 @@ file ".build/bundle" => ["Gemfile", "Gemfile.lock"] do |t|
   sh "bundle install"
 end
 
-file "node_modules" => ["pnpm-lock.yaml", "package.json"] do
+file "pnpm/node_modules" => ["pnpm/pnpm-lock.yaml", "pnpm/package.json"] do
   puts "--- Installing NPM dependencies"
-  sh "pnpm install"
+  Dir.chdir("pnpm") do
+    sh "pnpm install"
+  end
 end
 
 desc "Serve the built website locally"
@@ -278,7 +284,7 @@ task :check_tokens do
 end
 
 desc "Publish the website to production"
-task publish: [:check_tokens, "node_modules", :release_build] do
+task publish: [:check_tokens, "pnpm/node_modules", :release_build] do
   puts "--- Publishing"
   puts "Publishing version #{ENV["VERSION"]}"
   sh "pnpx wrangler pages deploy --branch main"
@@ -329,13 +335,13 @@ file RELEASE_BUILD_TARGET.to_s => CARGO_DEPS + ["Trunk.toml", "tailwind.config.j
 end
 
 desc "Lint all source code"
-task lint: ["node_modules", :audit, :lint_ruby, :lint_rust]
+task lint: ["pnpm/node_modules", :audit, :lint_ruby, :lint_rust]
 
 desc "Run the Tier1 tests"
 task tier1: [:dev_build, :lint, :test_unit]
 
 desc "Invoke the Tier2 regression suite (non-interactive)"
-task tier2: [:clean_test, :tier1, "node_modules", :bundle_install, :deploy_mina_indexer] do
+task tier2: [:clean_test, :tier1, "pnpm/node_modules", :bundle_install, :deploy_mina_indexer] do
   trap("INT") { Rake::Task["shutdown_mina_indexer"].invoke }
   run_tier_task("bundle exec rspec")
   Rake::Task["shutdown_mina_indexer"].invoke
