@@ -434,6 +434,11 @@ pub fn BlockSpotlight(block: BlocksQueryBlocks) -> impl IntoView {
             copiable: true,
         },
         SpotlightEntry {
+            label: "Staged Ledger Hash".to_string(),
+            any_el: Some(convert_to_span(get_staged_ledger_hash(&block))),
+            copiable: true,
+        },
+        SpotlightEntry {
             label: "Previous State Hash".to_string(),
             any_el: Some({
                 let prev_state_hash = get_previous_state_hash(&block);
@@ -445,19 +450,9 @@ pub fn BlockSpotlight(block: BlocksQueryBlocks) -> impl IntoView {
             copiable: true,
         },
         SpotlightEntry {
-            label: "Staged Ledger Hash".to_string(),
-            any_el: Some(convert_to_span(get_staged_ledger_hash(&block))),
-            copiable: true,
-        },
-        SpotlightEntry {
             label: "Snarked Ledger Hash".to_string(),
             any_el: Some(convert_to_span(get_snarked_ledger_hash(&block))),
             copiable: true,
-        },
-        SpotlightEntry {
-            label: "Coinbase".to_string(),
-            any_el: Some(decorate_with_mina_tag(get_coinbase(&block))),
-            ..Default::default()
         },
         SpotlightEntry {
             label: "Coinbase Receiver".to_string(),
@@ -471,6 +466,21 @@ pub fn BlockSpotlight(block: BlocksQueryBlocks) -> impl IntoView {
             copiable: true,
         },
         SpotlightEntry {
+            label: "Epoch".to_string(),
+            any_el: Some(convert_to_pill(get_epoch(&block), ColorVariant::Grey)),
+            ..Default::default()
+        },
+        SpotlightEntry {
+            label: "Coinbase".to_string(),
+            any_el: Some(decorate_with_mina_tag(get_coinbase(&block))),
+            ..Default::default()
+        },
+        SpotlightEntry {
+            label: "Slot".to_string(),
+            any_el: Some(convert_to_pill(get_slot(&block), ColorVariant::Grey)),
+            ..Default::default()
+        },
+        SpotlightEntry {
             label: "SNARK Fees".to_string(),
             any_el: Some(decorate_with_mina_tag(get_snark_fees(&block))),
             ..Default::default()
@@ -480,16 +490,7 @@ pub fn BlockSpotlight(block: BlocksQueryBlocks) -> impl IntoView {
             any_el: Some(convert_to_pill(get_global_slot(&block), ColorVariant::Grey)),
             ..Default::default()
         },
-        SpotlightEntry {
-            label: "Slot".to_string(),
-            any_el: Some(convert_to_pill(get_slot(&block), ColorVariant::Grey)),
-            ..Default::default()
-        },
-        SpotlightEntry {
-            label: "Epoch".to_string(),
-            any_el: Some(convert_to_pill(get_epoch(&block), ColorVariant::Grey)),
-            ..Default::default()
-        },
+
         SpotlightEntry {
             label: "Transaction Fees".to_string(),
             any_el: Some(decorate_with_mina_tag(get_transaction_fees(&block))),
