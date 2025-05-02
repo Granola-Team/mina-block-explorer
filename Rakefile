@@ -15,7 +15,7 @@ ENV["VOLUMES_DIR"] ||= "/mnt" if Dir.exist?("/mnt")
 ENV["GRAPHQL_URL"] = "http://localhost:#{IDXR_PORT}/graphql"
 ENV["REST_URL"] = "http://localhost:#{IDXR_PORT}"
 GRAPHQL_SRC_FILES = Dir.glob("graphql/**/*.graphql")
-RUST_SRC_FILES = Dir.glob("rust/**/*.rs").reject { |file| file.start_with?(".cargo") }
+RUST_SRC_FILES = Dir.glob("rust/**/*.rs").reject { |file| file.start_with?("rust/.cargo", "rust/target") }
 CARGO_DEPS = RUST_SRC_FILES + GRAPHQL_SRC_FILES + ["rust/Cargo.toml", "rust/Cargo.lock", "rust/.cargo/audit.toml", "rust/.cargo/config.toml"]
 RUBY_SRC_FILES = Dir.glob("**/*.rb").reject { |file| file.start_with?("lib/") } + ["Rakefile"]
 JAVASCRIPT_SRC_FILES = Dir.glob("trunk/scripts_tests/**")
@@ -364,7 +364,7 @@ file RELEASE_BUILD_TARGET.to_s => CARGO_DEPS + ["trunk/Trunk.toml", "trunk/tailw
   ENV["GRAPHQL_URL"] = MINASEARCH_GRAPHQL
   ENV["REST_URL"] = MINASEARCH_REST
   Dir.chdir("trunk") do
-    sh "trunk build --release --filehash true --dist=#{t.name}"
+    sh "trunk build --release --filehash true --dist=../#{t.name}"
   end
 end
 
