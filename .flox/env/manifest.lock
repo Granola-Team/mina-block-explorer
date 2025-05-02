@@ -74,6 +74,9 @@
       "rust-analyzer": {
         "pkg-path": "rust-analyzer"
       },
+      "rustc": {
+        "pkg-path": "rustc"
+      },
       "rustfmt": {
         "pkg-path": "rustfmt"
       },
@@ -2034,6 +2037,134 @@
       ],
       "outputs": {
         "out": "/nix/store/v4mdgjh4x0gpl5cwc844zyy2hy1gxs6c-rust-analyzer-2025-03-24"
+      },
+      "system": "x86_64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "rustc",
+      "broken": false,
+      "derivation": "/nix/store/hk59x7mhicsdps077blg9dm9qn4g277z-rustc-wrapper-1.85.0.drv",
+      "description": "Safe, concurrent, practical language (wrapper script)",
+      "install_id": "rustc",
+      "license": "[ MIT, Apache-2.0 ]",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
+      "name": "rustc-wrapper-1.85.0",
+      "pname": "rustc",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:12:07.044204Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "1.85.0",
+      "outputs_to_install": [
+        "man",
+        "out"
+      ],
+      "outputs": {
+        "doc": "/nix/store/qkk1dmb22icxry6znd675ja51knfpg04-rustc-wrapper-1.85.0-doc",
+        "man": "/nix/store/1i72bkryqwspi1x7r3nyx3pmhw08hzyl-rustc-wrapper-1.85.0-man",
+        "out": "/nix/store/09i285aci376jhda46idzcbhn4kjzzyh-rustc-wrapper-1.85.0"
+      },
+      "system": "aarch64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "rustc",
+      "broken": false,
+      "derivation": "/nix/store/bv84qy3f9llzsyhkyb9ikrrb0lx5li0p-rustc-wrapper-1.85.0.drv",
+      "description": "Safe, concurrent, practical language (wrapper script)",
+      "install_id": "rustc",
+      "license": "[ MIT, Apache-2.0 ]",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
+      "name": "rustc-wrapper-1.85.0",
+      "pname": "rustc",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:31:06.266337Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "1.85.0",
+      "outputs_to_install": [
+        "man",
+        "out"
+      ],
+      "outputs": {
+        "doc": "/nix/store/3iwjm7c7p81cvia60mgix73cb00cyasc-rustc-wrapper-1.85.0-doc",
+        "man": "/nix/store/yfyjf1bqnh95i708kqnnxmawcwyxrzhb-rustc-wrapper-1.85.0-man",
+        "out": "/nix/store/x1xn6jpj1fb4ykcy42fhxfc717n9xwb8-rustc-wrapper-1.85.0"
+      },
+      "system": "aarch64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "rustc",
+      "broken": false,
+      "derivation": "/nix/store/bi9dj1hpk7qlpxdiq5pgdyqaljhgjcym-rustc-wrapper-1.85.0.drv",
+      "description": "Safe, concurrent, practical language (wrapper script)",
+      "install_id": "rustc",
+      "license": "[ MIT, Apache-2.0 ]",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
+      "name": "rustc-wrapper-1.85.0",
+      "pname": "rustc",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:47:13.516524Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "1.85.0",
+      "outputs_to_install": [
+        "man",
+        "out"
+      ],
+      "outputs": {
+        "doc": "/nix/store/i1mpf9c2zpdsq8mrkvfc89cnhlchc2y0-rustc-wrapper-1.85.0-doc",
+        "man": "/nix/store/1hkp8zx2gkr76gfc6shyx4j44qdk7955-rustc-wrapper-1.85.0-man",
+        "out": "/nix/store/79y3kxkgq5g5givwiici35k2f3lzf5px-rustc-wrapper-1.85.0"
+      },
+      "system": "x86_64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "rustc",
+      "broken": false,
+      "derivation": "/nix/store/mh0i37vsb1hslw2h1qfy6ys9p9zmjkhz-rustc-wrapper-1.85.0.drv",
+      "description": "Safe, concurrent, practical language (wrapper script)",
+      "install_id": "rustc",
+      "license": "[ MIT, Apache-2.0 ]",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
+      "name": "rustc-wrapper-1.85.0",
+      "pname": "rustc",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T02:07:55.821846Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "1.85.0",
+      "outputs_to_install": [
+        "man",
+        "out"
+      ],
+      "outputs": {
+        "doc": "/nix/store/lswzhf0bmi2xz3429fiqs9idih41lzqy-rustc-wrapper-1.85.0-doc",
+        "man": "/nix/store/kckf5ys6jcqy4vgg69zn3isdclv8qy5y-rustc-wrapper-1.85.0-man",
+        "out": "/nix/store/kgm38w1xznn5d45c38pzjpzr1nrypwrr-rustc-wrapper-1.85.0"
       },
       "system": "x86_64-linux",
       "group": "toplevel",
