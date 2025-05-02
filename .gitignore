@@ -5,9 +5,9 @@
 # Icon must end with two \r
 Icon
 
-node_modules/
-dist
-target/
+/pnpm/node_modules/
+/dist
+/rust/target/
 
 ### VisualStudioCode ###
 .vscode/*

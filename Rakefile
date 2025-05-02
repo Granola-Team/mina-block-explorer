@@ -207,7 +207,11 @@ task format: ["pnpm/node_modules"] do
     sh "pnpm exec prettier --write ../trunk/scripts"
   end
   sh "standardrb --fix #{RUBY_SRC_FILES.join(" ")}"
-  sh "leptosfmt ./rust"
+  Dir.chdir("rust") do
+    # TODO: are these both required?
+    sh "leptosfmt ."
+    sh "cargo clippy --fix --allow-dirty --allow-staged"
+  end
 end
 
 desc "Run the Jest tests"
@@ -246,14 +250,6 @@ file ".build/audit" => CARGO_DEPS do |t|
     cmd_capture("cargo machete")
   end
   record_output(t, [audit_output, machete_output])
-end
-
-desc "Fix linting errors"
-task lint_fix: ["pnpm/node_modules"] do
-  sh "standardrb --fix #{RUBY_SRC_FILES.join(" ")}"
-  Dir.chdir("rust") do
-    sh "cargo clippy --fix --allow-dirty --allow-staged"
-  end
 end
 
 desc "Build documentation in the build directory"
@@ -328,6 +324,17 @@ file ".build/lint-ruby" => RUBY_SRC_FILES do |t|
   record_output(t, [ruby_cw_output, ruby_std_output])
 end
 
+desc "Lint the JavaScript code"
+task lint_js: ".build/lint-js"
+
+file ".build/lint-js" => JAVASCRIPT_SRC_FILES + ["pnpm/node_modules"] do |t|
+  puts "--- Linting the JavaScript code"
+  prettier_output = Dir.chdir("pnpm") do
+    cmd_capture("pnpm exec prettier --check ../trunk/scripts")
+  end
+  record_output(t, prettier_output)
+end
+
 desc "Lint the Rust code"
 task lint_rust: ".build/lint-rust"
 
@@ -361,7 +368,7 @@ file RELEASE_BUILD_TARGET.to_s => CARGO_DEPS + ["trunk/Trunk.toml", "trunk/tailw
 end
 
 desc "Lint all source code"
-task lint: ["pnpm/node_modules", :audit, :lint_ruby, :lint_rust]
+task lint: [:audit, :lint_ruby, :lint_rust, :lint_js]
 
 desc "Run the Tier1 tests"
 task tier1: [:dev_build, :lint, :test_unit]

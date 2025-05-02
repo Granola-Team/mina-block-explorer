@@ -76,7 +76,7 @@
       }
     },
     "hook": {
-      "on-activate": "  export CARGO_HOME=\"$(pwd)/.cargo\"\n  rustup default stable\n  rustup target add wasm32-unknown-unknown\n  export BUNDLE_APP_CONFIG=\"$(pwd)/.build/bundle\"\n  pnpm install\n"
+      "on-activate": "  export CARGO_HOME=\"$(pwd)/.cargo\"\n  rustup default stable\n  rustup target add wasm32-unknown-unknown\n  export BUNDLE_APP_CONFIG=\"$(pwd)/.build/bundle\"\n"
     },
     "profile": {},
     "options": {
@@ -85,7 +85,11 @@
         "aarch64-linux",
         "x86_64-darwin",
         "x86_64-linux"
-      ]
+      ],
+      "allow": {
+        "licenses": []
+      },
+      "semver": {}
     }
   },
   "packages": [

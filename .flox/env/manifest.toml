@@ -54,7 +54,6 @@ on-activate = """
   rustup default stable
   rustup target add wasm32-unknown-unknown
   export BUNDLE_APP_CONFIG="$(pwd)/.build/bundle"
-  pnpm install
 """
 
 # Scripts defined in the `[profile]` section are *sourced* by *your shell* and
