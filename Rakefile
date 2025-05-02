@@ -341,10 +341,11 @@ task lint_rust: ".build/lint-rust"
 file ".build/lint-rust" => RUST_SRC_FILES do |t|
   puts "--- Linting Rust code"
   leptos_fmt_out = cmd_capture("leptosfmt --check #{RUST_SRC_FILES.join(" ")}")
+  fmt_out = cmd_capture("rustfmt --edition 2024 --check #{RUST_SRC_FILES.join(" ")}")
   clippy_out = Dir.chdir("rust") do
     cmd_capture("cargo clippy --no-deps -- -D warnings")
   end
-  record_output(t, [leptos_fmt_out, clippy_out])
+  record_output(t, [fmt_out, leptos_fmt_out, clippy_out])
 end
 
 desc "Build the dev version for front-end WASM bundle"
