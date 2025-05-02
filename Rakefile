@@ -10,13 +10,13 @@ ENV["APP_PORT"] = TRUNK_PORT
 ENV["RUSTFLAGS"] = "--cfg=web_sys_unstable_apis"
 ENV["VERSION"] = `git rev-parse --short=8 HEAD`.chomp
 ENV["INDEXER_VERSION"] = `cd lib/mina-indexer && git rev-parse --short=8 HEAD`.chomp
-ENV["CARGO_HOME"] = "#{Dir.pwd}/.cargo"
+ENV["CARGO_HOME"] = "#{Dir.pwd}/rust/.cargo"
 ENV["VOLUMES_DIR"] ||= "/mnt" if Dir.exist?("/mnt")
 ENV["GRAPHQL_URL"] = "http://localhost:#{IDXR_PORT}/graphql"
 ENV["REST_URL"] = "http://localhost:#{IDXR_PORT}"
 GRAPHQL_SRC_FILES = Dir.glob("graphql/**/*.graphql")
 RUST_SRC_FILES = Dir.glob("rust/**/*.rs") + GRAPHQL_SRC_FILES
-CARGO_DEPS = RUST_SRC_FILES + ["rust/Cargo.toml", "rust/Cargo.lock", ".cargo/audit.toml"]
+CARGO_DEPS = RUST_SRC_FILES + ["rust/Cargo.toml", "rust/Cargo.lock", "rust/.cargo/audit.toml"]
 RUBY_SRC_FILES = Dir.glob("**/*.rb").reject { |file| file.start_with?("lib/") } + ["Rakefile"]
 JAVASCRIPT_SRC_FILES = Dir.glob("trunk/scripts_tests/**")
 MINASEARCH_GRAPHQL = "https://api.minasearch.com/graphql"

@@ -7,7 +7,6 @@ Icon
 
 /pnpm/node_modules/
 /dist
-/rust/target/
 
 ### VisualStudioCode ###
 .vscode/*
@@ -17,9 +16,9 @@ Icon
 !.vscode/extensions.json
 !.vscode/*.code-snippets
 
-.cargo/
-!/.cargo/config.toml
-!/.cargo/audit.toml
+/rust/target/
+/rust/.cargo/
+!/rust/.cargo/config.toml
+!/rust/.cargo/audit.toml
 /.build
-/cypress/screenshots
 /spec-screenshots

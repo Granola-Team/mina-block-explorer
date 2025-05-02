@@ -76,7 +76,7 @@
       }
     },
     "hook": {
-      "on-activate": "  export CARGO_HOME=\"$(pwd)/.cargo\"\n  rustup default stable\n  rustup target add wasm32-unknown-unknown\n  export BUNDLE_APP_CONFIG=\"$(pwd)/.build/bundle\"\n"
+      "on-activate": "  export CARGO_HOME=\"$(pwd)/rust/.cargo\"\n  rustup default stable\n  rustup target add wasm32-unknown-unknown\n  export BUNDLE_APP_CONFIG=\"$(pwd)/.build/bundle\"\n"
     },
     "profile": {},
     "options": {
