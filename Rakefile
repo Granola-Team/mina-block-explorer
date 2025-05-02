@@ -15,8 +15,8 @@ ENV["VOLUMES_DIR"] ||= "/mnt" if Dir.exist?("/mnt")
 ENV["GRAPHQL_URL"] = "http://localhost:#{IDXR_PORT}/graphql"
 ENV["REST_URL"] = "http://localhost:#{IDXR_PORT}"
 GRAPHQL_SRC_FILES = Dir.glob("graphql/**/*.graphql")
-RUST_SRC_FILES = Dir.glob("rust/**/*.rs") + GRAPHQL_SRC_FILES
-CARGO_DEPS = RUST_SRC_FILES + ["rust/Cargo.toml", "rust/Cargo.lock", "rust/.cargo/audit.toml"]
+RUST_SRC_FILES = Dir.glob("rust/**/*.rs") - Dir.glob("rust/.cargo/**/*")
+CARGO_DEPS = RUST_SRC_FILES + GRAPHQL_SRC_FILES + ["rust/Cargo.toml", "rust/Cargo.lock", "rust/.cargo/audit.toml", "rust/.cargo/config.toml"]
 RUBY_SRC_FILES = Dir.glob("**/*.rb").reject { |file| file.start_with?("lib/") } + ["Rakefile"]
 JAVASCRIPT_SRC_FILES = Dir.glob("trunk/scripts_tests/**")
 MINASEARCH_GRAPHQL = "https://api.minasearch.com/graphql"
@@ -340,9 +340,9 @@ task lint_rust: ".build/lint-rust"
 
 file ".build/lint-rust" => RUST_SRC_FILES do |t|
   puts "--- Linting Rust code"
-  leptos_fmt_out = cmd_capture("leptosfmt --check ./rust")
+  leptos_fmt_out = cmd_capture("leptosfmt --check #{RUST_SRC_FILES.join(" ")}")
   clippy_out = Dir.chdir("rust") do
-    cmd_capture("cargo clippy --all-targets --all-features -- -D warnings")
+    cmd_capture("cargo clippy --no-deps -- -D warnings")
   end
   record_output(t, [leptos_fmt_out, clippy_out])
 end

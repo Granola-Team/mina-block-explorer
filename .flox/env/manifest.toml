@@ -34,7 +34,8 @@ openssl.systems = ["aarch64-linux", "x86_64-linux"]
 google-chrome.pkg-path = "google-chrome"
 google-chrome.systems = ["aarch64-darwin", "x86_64-darwin", "x86_64-linux"]
 lld.pkg-path = "lld"
-rustup.pkg-path = "rustup"
+cargo.pkg-path = "cargo"
+clippy.pkg-path = "clippy"
 
 # Set environment variables in the `[vars]` section. These variables may not
 # reference one another, and are added to the environment without first
@@ -51,8 +52,6 @@ rustup.pkg-path = "rustup"
 [hook]
 on-activate = """
   export CARGO_HOME="$(pwd)/rust/.cargo"
-  rustup default stable
-  rustup target add wasm32-unknown-unknown
   export BUNDLE_APP_CONFIG="$(pwd)/.build/bundle"
 """
 
