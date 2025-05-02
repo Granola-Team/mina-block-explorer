@@ -117,12 +117,19 @@ pub struct StakerStats {
     pub num_canonical_blocks_produced: u32,
     pub num_supercharged_blocks_produced: u32,
     pub num_slots_produced: u32,
+    pub epoch_num_canonical_blocks: Option<u32>,
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone, Default)]
+pub struct EpochNumCanonicalBlocks {
+    pub epoch_num_canonical_blocks: u32,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct TopStakers {
     pub top_stakers: Vec<StakerStats>,
+    pub blocks: Vec<EpochNumCanonicalBlocks>,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
@@ -160,6 +167,22 @@ impl StakerStats {
         let whole = orphan_rate_scaled / 100;
         let frac = orphan_rate_scaled % 100;
         Some(format!("{}.{:02}", whole, frac))
+    }
+
+    pub fn win_rate(&self) -> Option<String> {
+        let total_blocks = self.epoch_num_canonical_blocks?;
+        if total_blocks == 0 {
+            return None;
+        }
+
+        let win_rate = self.num_canonical_blocks_produced as f64 / total_blocks as f64;
+        if !win_rate.is_finite() {
+            return None;
+        }
+
+        // Scale to percentage with 2 decimal places
+        let percentage = win_rate * 100.0;
+        Some(format!("{:.2}", percentage))
     }
 }
 
@@ -462,5 +485,70 @@ mod orphan_rate_tests {
         };
         // (1,000,000 - 999,000) / 1,000,000 * 100 = 0.1%
         assert_eq!(stats.orphan_rate(), Some("0.10".to_string()));
+    }
+}
+
+#[cfg(test)]
+mod win_rate_tests {
+    use super::*;
+
+    #[test]
+    fn test_valid_win_rate() {
+        let stats = StakerStats {
+            epoch_num_canonical_blocks: Some(100),
+            num_canonical_blocks_produced: 50,
+            ..Default::default()
+        };
+        assert_eq!(stats.win_rate(), Some("50.00".to_string()));
+    }
+
+    #[test]
+    fn test_zero_total_blocks() {
+        let stats = StakerStats {
+            epoch_num_canonical_blocks: Some(0),
+            num_canonical_blocks_produced: 50,
+            ..Default::default()
+        };
+        assert_eq!(stats.win_rate(), None);
+    }
+
+    #[test]
+    fn test_none_total_blocks() {
+        let stats = StakerStats {
+            epoch_num_canonical_blocks: None,
+            num_canonical_blocks_produced: 50,
+            ..Default::default()
+        };
+        assert_eq!(stats.win_rate(), None);
+    }
+
+    #[test]
+    fn test_zero_produced_blocks() {
+        let stats = StakerStats {
+            epoch_num_canonical_blocks: Some(100),
+            num_canonical_blocks_produced: 0,
+            ..Default::default()
+        };
+        assert_eq!(stats.win_rate(), Some("0.00".to_string()));
+    }
+
+    #[test]
+    fn test_full_win_rate() {
+        let stats = StakerStats {
+            epoch_num_canonical_blocks: Some(100),
+            num_canonical_blocks_produced: 100,
+            ..Default::default()
+        };
+        assert_eq!(stats.win_rate(), Some("100.00".to_string()));
+    }
+
+    #[test]
+    fn test_partial_win_rate() {
+        let stats = StakerStats {
+            epoch_num_canonical_blocks: Some(3),
+            num_canonical_blocks_produced: 1,
+            ..Default::default()
+        };
+        assert_eq!(stats.win_rate(), Some("33.33".to_string()));
     }
 }

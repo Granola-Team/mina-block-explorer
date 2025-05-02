@@ -20,7 +20,17 @@ impl TableData for Vec<StakerStats> {
                     )),
                     convert_to_span(format_number(stat.num_slots_produced.to_string())),
                     convert_to_span(format_number_for_html(
-                        &stat.orphan_rate().unwrap_or("n/a".to_string()),
+                        &stat
+                            .orphan_rate()
+                            .map(|r| format!("{r}%"))
+                            .unwrap_or("n/a".to_string()),
+                        5,
+                    )),
+                    convert_to_span(format_number_for_html(
+                        &stat
+                            .win_rate()
+                            .map(|r| format!("{r}%"))
+                            .unwrap_or("n/a".to_string()),
                         5,
                     )),
                 ]

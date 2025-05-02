@@ -343,12 +343,31 @@ pub fn StakerLeaderboard() -> impl IntoView {
     });
 
     create_effect(move |_| {
-        set_data.set(
-            resource
-                .get()
-                .and_then(|res| res.ok())
-                .map(|res| res.data.top_stakers),
-        );
+        let top_stakers_opt = resource
+            .get()
+            .and_then(|res| res.ok())
+            .map(|res| res.data.top_stakers);
+
+        let updated_stakers = top_stakers_opt.map(|top_stakers| {
+            top_stakers
+                .into_iter()
+                .map(|ss| StakerStats {
+                    username: ss.username,
+                    public_key: ss.public_key,
+                    num_blocks_produced: ss.num_blocks_produced,
+                    num_canonical_blocks_produced: ss.num_canonical_blocks_produced,
+                    num_supercharged_blocks_produced: ss.num_supercharged_blocks_produced,
+                    num_slots_produced: ss.num_slots_produced,
+                    epoch_num_canonical_blocks: resource
+                        .get()
+                        .and_then(|res| res.ok())
+                        .and_then(|res| res.data.blocks.first().cloned())
+                        .map(|block| block.epoch_num_canonical_blocks),
+                })
+                .collect::<Vec<StakerStats>>()
+        });
+
+        set_data.set(updated_stakers);
     });
 
     {
@@ -384,6 +403,11 @@ pub fn StakerLeaderboard() -> impl IntoView {
                 },
                 TableColumn {
                     column: "Orphan Rate".to_string(),
+                    alignment: Some(ColumnTextAlignment::Center),
+                    ..Default::default()
+                },
+                TableColumn {
+                    column: "Win Rate".to_string(),
                     alignment: Some(ColumnTextAlignment::Center),
                     ..Default::default()
                 },

@@ -177,9 +177,7 @@ end
 desc "Shut down mina-indexer"
 task :shutdown_mina_indexer do
   puts "--- Shutting down mina-indexer"
-  Dir.chdir("lib/mina-indexer") do
-    sh "nix develop --command rake shutdown"
-  end
+  sh "kill -9 $(pgrep mina-indexer)"
 end
 
 task :clean_test do
@@ -374,11 +372,24 @@ task lint: [:audit, :lint_ruby, :lint_rust, :lint_js]
 desc "Run the Tier1 tests"
 task tier1: [:dev_build, :lint, :test_unit]
 
-desc "Invoke the Tier2 regression suite (non-interactive)"
-task tier2: [:clean_test, :tier1, "pnpm/node_modules", :bundle_install, :deploy_mina_indexer] do
+# Defining common prerequisites for Tier2 tasks
+tier2_prerequisites = [:clean_test, :tier1, "pnpm/node_modules", :bundle_install, :deploy_mina_indexer]
+
+# Helper method to run tier tasks with common setup and teardown
+def run_tier2_task(rspec_command)
   trap("INT") { Rake::Task["shutdown_mina_indexer"].invoke }
-  run_tier_task("bundle exec rspec")
+  run_tier_task(rspec_command)
   Rake::Task["shutdown_mina_indexer"].invoke
+end
+
+desc "Invoke the Tier2 regression suite (non-interactive)"
+task tier2: tier2_prerequisites do
+  run_tier2_task("bundle exec rspec")
+end
+
+desc "Retry the Tier2 regression suite (non-interactive)"
+task tier2_retry: tier2_prerequisites do
+  run_tier2_task("bundle exec rspec --only-failures")
 end
 
 desc "Print all tasks and their dependencies as a tree"
