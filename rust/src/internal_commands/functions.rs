@@ -1,7 +1,7 @@
 use crate::{
     common::{constants::*, models::*},
     internal_commands::graphql::{
-        internal_commands_query, internal_commands_query::BlockQueryInput, InternalCommandsQuery,
+        InternalCommandsQuery, internal_commands_query, internal_commands_query::BlockQueryInput,
     },
 };
 use graphql_client::reqwest::post_graphql;

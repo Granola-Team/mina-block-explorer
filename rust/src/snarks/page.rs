@@ -9,7 +9,7 @@ use leptos::*;
 use leptos_meta::Title;
 use leptos_router::{create_query_signal, use_query_map};
 use leptos_use::{
-    storage::use_local_storage, use_document_visibility, use_interval, UseIntervalReturn,
+    UseIntervalReturn, storage::use_local_storage, use_document_visibility, use_interval,
 };
 use web_sys::VisibilityState;
 

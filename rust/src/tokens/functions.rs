@@ -1,6 +1,6 @@
 use super::graphql::{
-    tokens_query::{self, TokensSortByInput},
     TokensQuery,
+    tokens_query::{self, TokensSortByInput},
 };
 use crate::common::{constants::GRAPHQL_ENDPOINT, models::MyError};
 use graphql_client::reqwest::post_graphql;

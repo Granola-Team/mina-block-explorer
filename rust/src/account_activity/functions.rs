@@ -1,6 +1,6 @@
 use super::graphql::{
-    account_activity_query::{self, AccountActivityQueryAccountsZkapp},
     AccountActivityQuery,
+    account_activity_query::{self, AccountActivityQueryAccountsZkapp},
 };
 use crate::{
     account_activity::{

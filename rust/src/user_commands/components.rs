@@ -11,7 +11,7 @@ use codee::string::JsonSerdeCodec;
 use leptos::*;
 use leptos_router::*;
 use leptos_use::{
-    storage::use_local_storage, use_document_visibility, use_interval, UseIntervalReturn,
+    UseIntervalReturn, storage::use_local_storage, use_document_visibility, use_interval,
 };
 use web_sys::VisibilityState;
 

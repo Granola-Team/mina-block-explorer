@@ -1,5 +1,5 @@
 use super::graphql::{
-    staking_ledgers_query, staking_ledgers_query::StakingLedgersQueryStakes, StakingLedgersQuery,
+    StakingLedgersQuery, staking_ledgers_query, staking_ledgers_query::StakingLedgersQueryStakes,
 };
 use crate::common::{constants::*, functions::*, models::*};
 use graphql_client::reqwest::post_graphql;

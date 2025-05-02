@@ -15,7 +15,7 @@ ENV["VOLUMES_DIR"] ||= "/mnt" if Dir.exist?("/mnt")
 ENV["GRAPHQL_URL"] = "http://localhost:#{IDXR_PORT}/graphql"
 ENV["REST_URL"] = "http://localhost:#{IDXR_PORT}"
 GRAPHQL_SRC_FILES = Dir.glob("graphql/**/*.graphql")
-RUST_SRC_FILES = Dir.glob("rust/**/*.rs") - Dir.glob("rust/.cargo/**/*")
+RUST_SRC_FILES = Dir.glob("rust/**/*.rs").reject { |file| file.start_with?(".cargo") }
 CARGO_DEPS = RUST_SRC_FILES + GRAPHQL_SRC_FILES + ["rust/Cargo.toml", "rust/Cargo.lock", "rust/.cargo/audit.toml", "rust/.cargo/config.toml"]
 RUBY_SRC_FILES = Dir.glob("**/*.rb").reject { |file| file.start_with?("lib/") } + ["Rakefile"]
 JAVASCRIPT_SRC_FILES = Dir.glob("trunk/scripts_tests/**")
@@ -207,8 +207,8 @@ task format: ["pnpm/node_modules"] do
     sh "pnpm exec prettier --write ../trunk/scripts"
   end
   sh "standardrb --fix #{RUBY_SRC_FILES.join(" ")}"
+  sh "rustfmt --edition 2024 #{RUST_SRC_FILES.join(" ")}"
   Dir.chdir("rust") do
-    # TODO: are these both required?
     sh "leptosfmt ."
     sh "cargo clippy --fix --allow-dirty --allow-staged"
   end

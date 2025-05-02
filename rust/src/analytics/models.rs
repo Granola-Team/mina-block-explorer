@@ -419,7 +419,7 @@ mod orphan_rate_tests {
     #[test]
     fn test_orphan_rate_slots_different_from_blocks() {
         let stats = StakerStats {
-             num_blocks_produced: 50,
+            num_blocks_produced: 50,
             num_canonical_blocks_produced: 80,
             num_slots_produced: 100,
             ..Default::default()

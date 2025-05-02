@@ -7,7 +7,7 @@ use codee::string::JsonSerdeCodec;
 use leptos::*;
 use leptos_meta::Title;
 use leptos_router::*;
-use leptos_use::{storage::*, use_interval, UseIntervalReturn};
+use leptos_use::{UseIntervalReturn, storage::*, use_interval};
 
 #[component]
 pub fn BlockSpotlightTab() -> impl IntoView {
@@ -121,7 +121,10 @@ pub fn BlockTabbedPage() -> impl IntoView {
                 href: format!("/blocks/{}/commands/internal", id()),
                 text: "Internal Commands".to_string(),
                 icon: NavIcon::FeeTransfers,
-                number_bubble: option_block.get().as_ref().and_then(get_internal_command_count),
+                number_bubble: option_block
+                    .get()
+                    .as_ref()
+                    .and_then(get_internal_command_count),
                 ..Default::default()
             },
             NavEntry {

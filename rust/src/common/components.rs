@@ -7,9 +7,9 @@ use heck::ToKebabCase;
 use leptos::{html::Div, *};
 use leptos_meta::Script;
 use leptos_router::{create_query_signal, *};
-use leptos_use::{use_debounce_fn_with_options, DebounceOptions};
+use leptos_use::{DebounceOptions, use_debounce_fn_with_options};
 use std::collections::HashMap;
-use web_sys::{window, Event, MouseEvent};
+use web_sys::{Event, MouseEvent, window};
 
 #[component]
 pub fn NextBlockPage<T: HasBlockHeight>(

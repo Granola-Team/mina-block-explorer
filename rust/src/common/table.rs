@@ -13,7 +13,7 @@ use crate::{
 use heck::{ToKebabCase, ToTitleCase};
 use leptos::{html::*, *};
 use leptos_router::*;
-use leptos_use::{use_debounce_fn_with_options, DebounceOptions};
+use leptos_use::{DebounceOptions, use_debounce_fn_with_options};
 
 pub trait TableData {
     #[allow(dead_code)]

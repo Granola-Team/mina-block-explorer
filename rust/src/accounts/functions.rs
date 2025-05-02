@@ -1,7 +1,7 @@
 use super::{
     graphql::{
-        accounts_query::{self, AccountSortByInput},
         AccountsQuery,
+        accounts_query::{self, AccountSortByInput},
     },
     models::TokenSymbolResponse,
 };

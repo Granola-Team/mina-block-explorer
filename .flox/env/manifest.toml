@@ -36,6 +36,7 @@ google-chrome.systems = ["aarch64-darwin", "x86_64-darwin", "x86_64-linux"]
 lld.pkg-path = "lld"
 cargo.pkg-path = "cargo"
 clippy.pkg-path = "clippy"
+rustfmt.pkg-path = "rustfmt"
 
 # Set environment variables in the `[vars]` section. These variables may not
 # reference one another, and are added to the environment without first

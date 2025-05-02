@@ -2,9 +2,9 @@ use super::graphql::account_activity_query::{
     AccountActivityQueryIncomingTransactions, AccountActivityQueryOutgoingTransactions,
 };
 use crate::{
+    Params,
     account_activity::graphql::account_activity_query::StakesQueryInput,
     common::{functions::*, table::SortDirection},
-    Params,
 };
 use chrono::{DateTime, Utc};
 use heck::ToTitleCase;

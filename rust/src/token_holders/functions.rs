@@ -1,4 +1,4 @@
-use super::graphql::{token_holders_query, TokenHoldersQuery};
+use super::graphql::{TokenHoldersQuery, token_holders_query};
 use crate::common::{constants::GRAPHQL_ENDPOINT, models::MyError};
 use graphql_client::reqwest::post_graphql;
 

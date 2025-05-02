@@ -11,7 +11,7 @@ use crate::{
 use codee::string::JsonSerdeCodec;
 use leptos::*;
 use leptos_meta::Title;
-use leptos_use::{storage::*, use_document_visibility, use_interval, UseIntervalReturn};
+use leptos_use::{UseIntervalReturn, storage::*, use_document_visibility, use_interval};
 use std::collections::HashMap;
 use web_sys::VisibilityState;
 

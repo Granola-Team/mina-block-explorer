@@ -1,6 +1,6 @@
 use super::graphql::tokens_query::TokensQueryTokens;
 use crate::common::{constants::*, functions::*, models::*, table::TableData};
-use leptos::{html, HtmlElement};
+use leptos::{HtmlElement, html};
 
 impl TableData for Vec<Option<TokensQueryTokens>> {
     fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {

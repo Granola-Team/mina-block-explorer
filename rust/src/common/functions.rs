@@ -7,7 +7,7 @@ use chrono::{DateTime, Duration, Utc};
 use leptos::*;
 use rust_decimal::prelude::*;
 use serde_json::Value;
-use wasm_bindgen::{prelude::*, JsValue};
+use wasm_bindgen::{JsValue, prelude::*};
 use web_sys::js_sys::{Date, Intl::NumberFormat, Object, Reflect, *};
 
 #[wasm_bindgen]
@@ -960,12 +960,8 @@ extern "C" {
 
 pub fn get_button_style_variation(style_variant: &ButtonStyleVariant) -> &str {
     match style_variant {
-        ButtonStyleVariant::Primary => {
-            "text-white bg-granola-orange"
-        }
-        ButtonStyleVariant::Secondary => {
-            "text-granola-orange bg-white"
-        }
+        ButtonStyleVariant::Primary => "text-white bg-granola-orange",
+        ButtonStyleVariant::Secondary => "text-granola-orange bg-white",
         ButtonStyleVariant::Tertiary => {
             "text-slate-500 bg-white border-slate-500 disabled:text-slate-300 disabled:border-slate-300"
         }

@@ -63,7 +63,10 @@ impl TableData for Vec<TransactionsQueryTransactionsZkappAccountsUpdated> {
                         au.pk.to_string(),
                         format!("/addresses/accounts/{}", au.pk),
                     ),
-                    convert_to_span(format_number_for_html(&nanomina_to_mina_i64(au.balance_change), 14)),
+                    convert_to_span(format_number_for_html(
+                        &nanomina_to_mina_i64(au.balance_change),
+                        14,
+                    )),
                     convert_to_span(au.increment_nonce.to_string()),
                     convert_to_copy_link(
                         au.token.to_string(),
@@ -109,11 +112,14 @@ impl TableData for Vec<Option<TransactionsQueryTransactions>> {
                         convert_to_local_timezone_formatted(&transaction.get_block_datetime()),
                         transaction.get_block_datetime(),
                     ),
-                    convert_to_pill(transaction.get_kind(), match transaction.get_kind().as_str() {
-                        "Zkapp" => ColorVariant::DarkBlue,
-                        "Payment" => ColorVariant::DarkGreen,
-                        _ => ColorVariant::DarkGrey,
-                    }),
+                    convert_to_pill(
+                        transaction.get_kind(),
+                        match transaction.get_kind().as_str() {
+                            "Zkapp" => ColorVariant::DarkBlue,
+                            "Payment" => ColorVariant::DarkGreen,
+                            _ => ColorVariant::DarkGrey,
+                        },
+                    ),
                     if transaction.get_failure_reason().is_none() {
                         convert_to_pill(TXN_STATUS_APPLIED.to_string(), ColorVariant::Green)
                     } else {

@@ -120,20 +120,12 @@ impl TableMetadataBuilder {
         TableMetadata {
             total_records: {
                 let value = select_option(self.total_records_options);
-                if value == 0 {
-                    None
-                } else {
-                    Some(value)
-                }
+                if value == 0 { None } else { Some(value) }
             },
             displayed_records: select_option(self.displayed_records_options),
             available_records: {
                 let value = select_option(self.available_records_options);
-                if value == 0 {
-                    None
-                } else {
-                    Some(value)
-                }
+                if value == 0 { None } else { Some(value) }
             },
         }
     }

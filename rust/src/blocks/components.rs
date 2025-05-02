@@ -1,4 +1,8 @@
-use super::{functions::*, graphql::blocks_query::{BlocksQueryBlocks, BlocksQueryBlocksTransactionsFeeTransfer}, models::*};
+use super::{
+    functions::*,
+    graphql::blocks_query::{BlocksQueryBlocks, BlocksQueryBlocksTransactionsFeeTransfer},
+    models::*,
+};
 use crate::{
     blocks::graphql::blocks_query,
     common::{components::*, constants::*, functions::*, models::*, spotlight::*, table::*},
@@ -6,16 +10,16 @@ use crate::{
     summary::models::BlockchainSummary,
 };
 use charming::{
+    Chart, WasmRenderer,
     component::{Legend, Title},
     series::*,
-    Chart, WasmRenderer,
 };
 use codee::string::JsonSerdeCodec;
 use leptos::*;
 use leptos_router::*;
 use leptos_use::{
-    storage::use_local_storage, use_document_visibility, use_interval, use_timeout_fn,
-    UseIntervalReturn, UseTimeoutFnReturn,
+    UseIntervalReturn, UseTimeoutFnReturn, storage::use_local_storage, use_document_visibility,
+    use_interval, use_timeout_fn,
 };
 use std::collections::HashMap;
 use web_sys::VisibilityState;
@@ -157,7 +161,10 @@ pub fn BlockInternalCommands(block: BlocksQueryBlocks) -> impl IntoView {
             .and_then(|txn| txn.fee_transfer.clone()) // Clone if necessary
             .unwrap_or_default();
 
-        let fee = block.transactions.as_ref().and_then(|txn| txn.coinbase.clone());
+        let fee = block
+            .transactions
+            .as_ref()
+            .and_then(|txn| txn.coinbase.clone());
         let recipient = block
             .transactions
             .as_ref()
@@ -490,7 +497,6 @@ pub fn BlockSpotlight(block: BlocksQueryBlocks) -> impl IntoView {
             any_el: Some(convert_to_pill(get_global_slot(&block), ColorVariant::Grey)),
             ..Default::default()
         },
-
         SpotlightEntry {
             label: "Transaction Fees".to_string(),
             any_el: Some(decorate_with_mina_tag(get_transaction_fees(&block))),
