@@ -6,8 +6,7 @@ RSpec.describe "Snarker Leaderboard table", type: :system do
   let(:heading) { "Staker Leaderboard" }
   let(:columns) {
     [
-      "Username",
-      "Public Key",
+      "Delegate",
       "Canonical Blocks Produced",
       "Supercharged Blocks Produced",
       "Slots Produced",

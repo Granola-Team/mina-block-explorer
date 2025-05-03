@@ -374,11 +374,8 @@ pub fn StakerLeaderboard() -> impl IntoView {
         move || {
             let table_columns: Vec<TableColumn<AnySort>> = vec![
                 TableColumn {
-                    column: "Username".to_string(),
-                    ..Default::default()
-                },
-                TableColumn {
-                    column: "Public Key".to_string(),
+                    column: "Delegate".to_string(),
+                    width: Some(String::from(TABLE_COL_HASH_WIDTH)),
                     ..Default::default()
                 },
                 TableColumn {

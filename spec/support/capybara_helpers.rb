@@ -134,7 +134,7 @@ module CapybaraHelpers
     target_cell = data_cells[nth_row - 1]
 
     # Find and click the link within the cell
-    link = target_cell.find("a", wait: 1)
+    link = target_cell.find_all("a", wait: 1).first
     link.click
   end
 

@@ -7,11 +7,18 @@ impl TableData for Vec<StakerStats> {
         self.iter()
             .map(|stat| {
                 vec![
-                    convert_to_span(stat.username.clone()),
-                    convert_to_copy_link(
-                        stat.public_key.clone(),
-                        format!("/addresses/accounts/{}/spotlight", stat.public_key),
-                    ),
+                    convert_array_to_span(vec![
+                        convert_to_link(
+                            stat.username.clone(),
+                            format!("/addresses/accounts/{}/spotlight", stat.public_key),
+                        ),
+                        convert_to_copy_link(
+                            stat.public_key.clone(),
+                            format!("/addresses/accounts/{}/spotlight", stat.public_key),
+                        )
+                        .attr("class", "text-xs text-slate-400"),
+                    ])
+                    .attr("class", "flex flex-col items-start"),
                     convert_to_span(format_number(
                         stat.num_canonical_blocks_produced.to_string(),
                     )),

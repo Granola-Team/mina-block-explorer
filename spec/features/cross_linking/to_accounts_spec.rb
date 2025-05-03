@@ -4,7 +4,7 @@ RSpec.describe "Account page navigation", type: :system do
   pages = [
     {
       origin: "/analytics/staker-leaderboard",
-      column: "Public Key",
+      column: "Delegate",
       tableHeader: "Staker Leaderboard"
     },
     {
