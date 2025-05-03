@@ -373,7 +373,7 @@ desc "Run the Tier1 tests"
 task tier1: [:dev_build, :lint, :test_unit]
 
 # Defining common prerequisites for Tier2 tasks
-tier2_prerequisites = [:clean_test, :tier1, "pnpm/node_modules", :bundle_install, :deploy_mina_indexer]
+tier2_prerequisites = [:clean_test, :tier1, "pnpm/node_modules", :bundle_install, :shutdown_mina_indexer, :deploy_mina_indexer]
 
 # Helper method to run tier tasks with common setup and teardown
 def run_tier2_task(rspec_command)

@@ -404,7 +404,7 @@ pub fn StakerLeaderboard() -> impl IntoView {
                     ..Default::default()
                 },
                 TableColumn {
-                    column: "Win Rate".to_string(),
+                    column: "Canonical Production".to_string(),
                     alignment: Some(ColumnTextAlignment::Center),
                     ..Default::default()
                 },

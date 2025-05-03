@@ -35,7 +35,7 @@ impl TableData for Vec<StakerStats> {
                     )),
                     convert_to_span(format_number_for_html(
                         &stat
-                            .win_rate()
+                            .get_percent_of_canonical_blocks()
                             .map(|r| format!("{r}%"))
                             .unwrap_or("n/a".to_string()),
                         5,

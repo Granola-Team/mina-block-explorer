@@ -169,19 +169,20 @@ impl StakerStats {
         Some(format!("{}.{:02}", whole, frac))
     }
 
-    pub fn win_rate(&self) -> Option<String> {
+    pub fn get_percent_of_canonical_blocks(&self) -> Option<String> {
         let total_blocks = self.epoch_num_canonical_blocks?;
         if total_blocks == 0 {
             return None;
         }
 
-        let win_rate = self.num_canonical_blocks_produced as f64 / total_blocks as f64;
-        if !win_rate.is_finite() {
+        let percent_of_blocks_produced =
+            self.num_canonical_blocks_produced as f64 / total_blocks as f64;
+        if !percent_of_blocks_produced.is_finite() {
             return None;
         }
 
         // Scale to percentage with 2 decimal places
-        let percentage = win_rate * 100.0;
+        let percentage = percent_of_blocks_produced * 100.0;
         Some(format!("{:.2}", percentage))
     }
 }
@@ -489,17 +490,20 @@ mod orphan_rate_tests {
 }
 
 #[cfg(test)]
-mod win_rate_tests {
+mod get_percent_of_canonical_blocks_tests {
     use super::*;
 
     #[test]
-    fn test_valid_win_rate() {
+    fn test_valid_get_percent_of_canonical_blocks() {
         let stats = StakerStats {
             epoch_num_canonical_blocks: Some(100),
             num_canonical_blocks_produced: 50,
             ..Default::default()
         };
-        assert_eq!(stats.win_rate(), Some("50.00".to_string()));
+        assert_eq!(
+            stats.get_percent_of_canonical_blocks(),
+            Some("50.00".to_string())
+        );
     }
 
     #[test]
@@ -509,7 +513,7 @@ mod win_rate_tests {
             num_canonical_blocks_produced: 50,
             ..Default::default()
         };
-        assert_eq!(stats.win_rate(), None);
+        assert_eq!(stats.get_percent_of_canonical_blocks(), None);
     }
 
     #[test]
@@ -519,7 +523,7 @@ mod win_rate_tests {
             num_canonical_blocks_produced: 50,
             ..Default::default()
         };
-        assert_eq!(stats.win_rate(), None);
+        assert_eq!(stats.get_percent_of_canonical_blocks(), None);
     }
 
     #[test]
@@ -529,26 +533,35 @@ mod win_rate_tests {
             num_canonical_blocks_produced: 0,
             ..Default::default()
         };
-        assert_eq!(stats.win_rate(), Some("0.00".to_string()));
+        assert_eq!(
+            stats.get_percent_of_canonical_blocks(),
+            Some("0.00".to_string())
+        );
     }
 
     #[test]
-    fn test_full_win_rate() {
+    fn test_full_get_percent_of_canonical_blocks() {
         let stats = StakerStats {
             epoch_num_canonical_blocks: Some(100),
             num_canonical_blocks_produced: 100,
             ..Default::default()
         };
-        assert_eq!(stats.win_rate(), Some("100.00".to_string()));
+        assert_eq!(
+            stats.get_percent_of_canonical_blocks(),
+            Some("100.00".to_string())
+        );
     }
 
     #[test]
-    fn test_partial_win_rate() {
+    fn test_partial_get_percent_of_canonical_blocks() {
         let stats = StakerStats {
             epoch_num_canonical_blocks: Some(3),
             num_canonical_blocks_produced: 1,
             ..Default::default()
         };
-        assert_eq!(stats.win_rate(), Some("33.33".to_string()));
+        assert_eq!(
+            stats.get_percent_of_canonical_blocks(),
+            Some("33.33".to_string())
+        );
     }
 }

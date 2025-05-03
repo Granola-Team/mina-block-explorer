@@ -11,7 +11,7 @@ RSpec.describe "Snarker Leaderboard table", type: :system do
       "Supercharged Blocks Produced",
       "Slots Produced",
       "Orphan Rate",
-      "Win Rate"
+      "Canonical Production"
     ].map(&:upcase)
   }
 
