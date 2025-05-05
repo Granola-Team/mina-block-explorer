@@ -363,6 +363,11 @@ pub fn StakerLeaderboard() -> impl IntoView {
                         .and_then(|res| res.ok())
                         .and_then(|res| res.data.blocks.first().cloned())
                         .map(|block| block.epoch_num_canonical_blocks),
+                    epoch_num_blocks: resource
+                        .get()
+                        .and_then(|res| res.ok())
+                        .and_then(|res| res.data.blocks.first().cloned())
+                        .map(|block| block.epoch_num_blocks),
                 })
                 .collect::<Vec<StakerStats>>()
         });
@@ -400,6 +405,11 @@ pub fn StakerLeaderboard() -> impl IntoView {
                 },
                 TableColumn {
                     column: "Orphan Rate".to_string(),
+                    alignment: Some(ColumnTextAlignment::Center),
+                    ..Default::default()
+                },
+                TableColumn {
+                    column: "Canonical Fill Rate".to_string(),
                     alignment: Some(ColumnTextAlignment::Center),
                     ..Default::default()
                 },

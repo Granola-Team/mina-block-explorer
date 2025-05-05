@@ -49,6 +49,13 @@ impl TableData for Vec<StakerStats> {
                             .unwrap_or("n/a".to_string()),
                         5,
                     )),
+                    convert_to_span(format_number_for_html(
+                        &stat
+                            .get_canonical_fill_rate()
+                            .map(|r| format!("{r}%"))
+                            .unwrap_or("n/a".to_string()),
+                        5,
+                    )),
                 ]
             })
             .collect()
