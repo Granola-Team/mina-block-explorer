@@ -19,9 +19,17 @@ impl TableData for Vec<StakerStats> {
                         .attr("class", "text-xs text-slate-400"),
                     ])
                     .attr("class", "flex flex-col items-start"),
-                    convert_to_span(format_number(
-                        stat.num_canonical_blocks_produced.to_string(),
-                    )),
+                    convert_array_to_span(vec![
+                        convert_to_span(format_number(
+                            stat.num_canonical_blocks_produced.to_string(),
+                        )),
+                        convert_to_span(
+                            stat.get_percent_of_canonical_blocks()
+                                .map(|r| format!("({r}%)"))
+                                .unwrap_or("n/a".to_string()),
+                        )
+                        .attr("class", "w-24 text-slate-400 flex justify-end"),
+                    ]),
                     convert_to_span(format_number(
                         stat.num_supercharged_blocks_produced.to_string(),
                     )),
@@ -29,13 +37,6 @@ impl TableData for Vec<StakerStats> {
                     convert_to_span(format_number_for_html(
                         &stat
                             .orphan_rate()
-                            .map(|r| format!("{r}%"))
-                            .unwrap_or("n/a".to_string()),
-                        5,
-                    )),
-                    convert_to_span(format_number_for_html(
-                        &stat
-                            .get_percent_of_canonical_blocks()
                             .map(|r| format!("{r}%"))
                             .unwrap_or("n/a".to_string()),
                         5,

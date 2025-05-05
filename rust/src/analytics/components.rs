@@ -403,11 +403,6 @@ pub fn StakerLeaderboard() -> impl IntoView {
                     alignment: Some(ColumnTextAlignment::Center),
                     ..Default::default()
                 },
-                TableColumn {
-                    column: "Canonical Production".to_string(),
-                    alignment: Some(ColumnTextAlignment::Center),
-                    ..Default::default()
-                },
             ];
             view! {
                 <TableSectionTemplate
