@@ -175,12 +175,6 @@ task deploy_mina_indexer: [:clone_mina_indexer] do
   end
 end
 
-desc "Shut down mina-indexer"
-task :shutdown_mina_indexer do
-  puts "--- Shutting down mina-indexer"
-  sh "kill -9 $(pgrep mina-indexer) || true"
-end
-
 task :clean_test do
   FileUtils.rm_rf "ruby/spec-screenshots"
 end
