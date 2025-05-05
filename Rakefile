@@ -261,9 +261,9 @@ file ".build/docs" => GRAPHQL_SRC_FILES do |t|
 end
 
 task bundle_install: ".build/bundle"
-file ".build/bundle" => ["Gemfile", "Gemfile.lock"] do |t|
+file ".build/bundle" => ["spec/Gemfile", "spec/Gemfile.lock"] do |t|
   puts "--- Installing Ruby dependencies"
-  sh "bundle install"
+  sh "bundle install --gemfile=./spec/Gemfile"
 end
 
 file "pnpm/node_modules" => ["pnpm/pnpm-lock.yaml", "pnpm/package.json"] do
