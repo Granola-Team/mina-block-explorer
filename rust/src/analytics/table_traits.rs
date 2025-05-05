@@ -30,9 +30,6 @@ impl TableData for Vec<StakerStats> {
                         )
                         .attr("class", "w-20 text-slate-400 flex justify-end"),
                     ]),
-                    convert_to_span(format_number(
-                        stat.num_supercharged_blocks_produced.to_string(),
-                    )),
                     convert_array_to_span(vec![
                         convert_to_span(format_number(stat.num_slots_produced.to_string())),
                         convert_to_span(
@@ -55,6 +52,9 @@ impl TableData for Vec<StakerStats> {
                             .map(|r| format!("{r}%"))
                             .unwrap_or("n/a".to_string()),
                         5,
+                    )),
+                    convert_to_span(format_number(
+                        stat.num_supercharged_blocks_produced.to_string(),
                     )),
                 ]
             })

@@ -8,10 +8,10 @@ RSpec.describe "Snarker Leaderboard table", type: :system do
     [
       "Delegate",
       "Canonical Blocks Produced",
-      "Supercharged Blocks Produced",
       "Slots Produced",
       "Orphan Rate",
-      "Canonical Fill Rate"
+      "Canonical Fill Rate",
+      "Supercharged Blocks Produced"
     ].map(&:upcase)
   }
 

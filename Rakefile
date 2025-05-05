@@ -177,7 +177,7 @@ end
 desc "Shut down mina-indexer"
 task :shutdown_mina_indexer do
   puts "--- Shutting down mina-indexer"
-  sh "kill -9 $(pgrep mina-indexer)"
+  sh "kill -9 $(pgrep mina-indexer) || true"
 end
 
 task :clean_test do
