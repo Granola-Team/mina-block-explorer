@@ -3,6 +3,7 @@ require "fileutils"
 require "socket"
 
 # Constants and environment variables
+TOP = __dir__
 TRUNK_PORT = rand(5170..5179).to_s
 IDXR_PORT = 8090.to_s
 ENV["BROWSER_PATH"] = `which google-chrome-stable`.chomp
@@ -10,7 +11,7 @@ ENV["APP_PORT"] = TRUNK_PORT
 ENV["RUSTFLAGS"] = "--cfg=web_sys_unstable_apis"
 ENV["VERSION"] = `git rev-parse --short=8 HEAD`.chomp
 ENV["INDEXER_VERSION"] = `cd lib/mina-indexer && git rev-parse --short=8 HEAD`.chomp
-ENV["CARGO_HOME"] = "#{Dir.pwd}/rust/.cargo"
+ENV["CARGO_HOME"] = "#{TOP}/rust/.cargo"
 ENV["VOLUMES_DIR"] ||= "/mnt" if Dir.exist?("/mnt")
 ENV["GRAPHQL_URL"] = "http://localhost:#{IDXR_PORT}/graphql"
 ENV["REST_URL"] = "http://localhost:#{IDXR_PORT}"
@@ -23,7 +24,7 @@ MINASEARCH_GRAPHQL = "https://api.minasearch.com/graphql"
 MINASEARCH_REST = "https://api.minasearch.com"
 DEV_BUILD_TARGET = ".build/dev_build"
 RELEASE_BUILD_TARGET = ".build/release_build"
-IDXR_FOLDER = "lib/mina-indexer"
+IDXR_FOLDER = "#{TOP}/lib/mina-indexer"
 
 def ensure_env_vars(required_vars, error_context = "Task failed")
   missing_vars = required_vars.reject { |var| ENV[var] && !ENV[var].empty? }
@@ -43,7 +44,7 @@ end
 
 def record_output(task, outputs)
   outputs = outputs.is_a?(String) ? [outputs] : outputs
-  FileUtils.mkdir_p(".build")
+  FileUtils.mkdir_p("#{TOP}/.build")
   File.write(task.name, outputs.join("\n"))
 end
 
@@ -102,7 +103,7 @@ def run_tier_task(rspec_cmd)
   end
 
   # Start the server
-  server_pid = Dir.chdir("trunk") do
+  server_pid = Dir.chdir("#{TOP}/trunk") do
     Process.spawn("trunk serve --no-autoreload --port=#{TRUNK_PORT} --dist=../#{DEV_BUILD_TARGET}", pgroup: true)
   end
   puts "Started trunk server with PID: #{server_pid}"
@@ -168,7 +169,7 @@ desc "Deploy mina-indexer"
 task deploy_mina_indexer: [:clone_mina_indexer] do
   ensure_env_vars(%w[VOLUMES_DIR], "Cannot deploy mina indexer")
   puts "--- Deploying mina-indexer at #{ENV["INDEXER_VERSION"]}"
-  Dir.chdir("lib/mina-indexer") do
+  Dir.chdir("#{TOP}/lib/mina-indexer") do
     sh "nix develop --command rake build:dev"
     sh "nix develop --command rake \"bin:stage_and_start_v2[#{Dir.pwd}/rust/target/debug/mina-indexer,361000,#{IDXR_PORT}]\""
   end
@@ -181,7 +182,7 @@ task :shutdown_mina_indexer do
 end
 
 task :clean_test do
-  FileUtils.rm_rf "spec-screenshots"
+  FileUtils.rm_rf "ruby/spec-screenshots"
 end
 
 task :clean_node_modules do
@@ -201,12 +202,12 @@ task clean: [:clean_test, :clean_node_modules, :clean_build, :clean_target]
 
 desc "Format the source code"
 task format: ["pnpm/node_modules"] do
-  Dir.chdir("pnpm") do
+  Dir.chdir("#{TOP}/pnpm") do
     sh "pnpm exec prettier --write ../trunk/scripts"
   end
   sh "standardrb --fix #{RUBY_SRC_FILES.join(" ")}"
   sh "rustfmt --edition 2024 #{RUST_SRC_FILES.join(" ")}"
-  Dir.chdir("rust") do
+  Dir.chdir("#{TOP}/rust") do
     sh "leptosfmt ."
     sh "cargo clippy --fix --allow-dirty --allow-staged"
   end
@@ -217,7 +218,7 @@ task jest_test: ".build/jest-test"
 
 file ".build/jest-test" => JAVASCRIPT_SRC_FILES + ["pnpm/jest.config.js"] do |t|
   puts "--- Performing jest unit tests"
-  jest_output = Dir.chdir("pnpm") do
+  jest_output = Dir.chdir("#{TOP}/pnpm") do
     cmd_capture("pnpm exec jest test")
   end
   record_output(t, jest_output)
@@ -228,7 +229,7 @@ task rust_test: ".build/rust-test"
 
 file ".build/rust-test" => CARGO_DEPS do |t|
   puts "--- Performing rust unit tests"
-  nextest_output = Dir.chdir("rust") do
+  nextest_output = Dir.chdir("#{TOP}/rust") do
     cmd_capture("cargo-nextest nextest run")
   end
   record_output(t, nextest_output)
@@ -241,10 +242,10 @@ desc "Audit the Rust code with cargo-audit"
 task audit: ".build/audit"
 
 file ".build/audit" => CARGO_DEPS do |t|
-  audit_output = Dir.chdir("rust") do
+  audit_output = Dir.chdir("#{TOP}/rust") do
     cmd_capture("cargo-audit audit")
   end
-  machete_output = Dir.chdir("rust") do
+  machete_output = Dir.chdir("#{TOP}/rust") do
     cmd_capture("cargo machete")
   end
   record_output(t, [audit_output, machete_output])
@@ -255,20 +256,22 @@ task build_docs: ".build/docs"
 
 file ".build/docs" => GRAPHQL_SRC_FILES do |t|
   mkdir_p(".build")
-  Dir.chdir("rust") do
+  Dir.chdir("#{TOP}/rust") do
     sh "cargo doc --document-private-items --target-dir ../#{t.name}"
   end
 end
 
 task bundle_install: ".build/bundle"
-file ".build/bundle" => ["spec/Gemfile", "spec/Gemfile.lock"] do |t|
+file ".build/bundle" => ["ruby/Gemfile", "ruby/Gemfile.lock"] do |t|
   puts "--- Installing Ruby dependencies"
-  sh "bundle install --gemfile=./spec/Gemfile"
+  Dir.chdir("#{TOP}/ruby") do
+    sh "bundle install"
+  end
 end
 
 file "pnpm/node_modules" => ["pnpm/pnpm-lock.yaml", "pnpm/package.json"] do
   puts "--- Installing NPM dependencies"
-  Dir.chdir("pnpm") do
+  Dir.chdir("#{TOP}/pnpm") do
     sh "pnpm install"
   end
 end
@@ -276,14 +279,14 @@ end
 desc "Serve the built website locally"
 task dev: [:deploy_mina_indexer, :dev_build] do
   trap("INT") { Rake::Task["shutdown_mina_indexer"].invoke }
-  Dir.chdir("trunk") do
+  Dir.chdir("#{TOP}/trunk") do
     sh "trunk serve --port=#{TRUNK_PORT} --open --dist=../#{DEV_BUILD_TARGET}"
   end
 end
 
 desc "Serve the built website locally against prod indexer"
 task dev_prod: [:release_build] do
-  Dir.chdir("trunk") do
+  Dir.chdir("#{TOP}/trunk") do
     sh "trunk serve --port=#{TRUNK_PORT} --open --dist=../#{RELEASE_BUILD_TARGET}"
   end
 end
@@ -297,7 +300,7 @@ desc "Publish the website to production"
 task publish: [:check_tokens, "pnpm/node_modules", :release_build] do
   puts "--- Publishing"
   puts "Publishing version #{ENV["VERSION"]}"
-  Dir.chdir("pnpm") do
+  Dir.chdir("#{TOP}/pnpm") do
     sh "pnpx wrangler pages deploy --branch main"
   end
 end
@@ -306,7 +309,7 @@ desc "Use 'cargo check' to verify buildability"
 task check: ".build/check"
 
 file ".build/check" => CARGO_DEPS do |t|
-  check_output = Dir.chdir("rust") do
+  check_output = Dir.chdir("#{TOP}/rust") do
     cmd_capture("cargo check")
   end
   record_output(t, check_output)
@@ -327,7 +330,7 @@ task lint_js: ".build/lint-js"
 
 file ".build/lint-js" => JAVASCRIPT_SRC_FILES + ["pnpm/node_modules"] do |t|
   puts "--- Linting the JavaScript code"
-  prettier_output = Dir.chdir("pnpm") do
+  prettier_output = Dir.chdir("#{TOP}/pnpm") do
     cmd_capture("pnpm exec prettier --check ../trunk/scripts")
   end
   record_output(t, prettier_output)
@@ -340,28 +343,28 @@ file ".build/lint-rust" => RUST_SRC_FILES do |t|
   puts "--- Linting Rust code"
   leptos_fmt_out = cmd_capture("leptosfmt --check #{RUST_SRC_FILES.join(" ")}")
   fmt_out = cmd_capture("rustfmt --edition 2024 --check #{RUST_SRC_FILES.join(" ")}")
-  clippy_out = Dir.chdir("rust") do
+  clippy_out = Dir.chdir("#{TOP}/rust") do
     cmd_capture("cargo clippy --no-deps -- -D warnings")
   end
   record_output(t, [fmt_out, leptos_fmt_out, clippy_out])
 end
 
 desc "Build the dev version for front-end WASM bundle"
-task dev_build: DEV_BUILD_TARGET.to_s
-file DEV_BUILD_TARGET.to_s => CARGO_DEPS + ["trunk/Trunk.toml", "trunk/tailwind.config.js"] do |t|
+task dev_build: DEV_BUILD_TARGET
+file DEV_BUILD_TARGET => CARGO_DEPS + ["trunk/Trunk.toml", "trunk/tailwind.config.js"] do |t|
   puts "--- Building dev version"
-  Dir.chdir("trunk") do
+  Dir.chdir("#{TOP}/trunk") do
     sh "trunk build --dist=../#{t.name}"
   end
 end
 
 desc "Build the release version for front-end WASM bundle"
-task release_build: RELEASE_BUILD_TARGET.to_s
-file RELEASE_BUILD_TARGET.to_s => CARGO_DEPS + ["trunk/Trunk.toml", "trunk/tailwind.config.js"] do |t|
+task release_build: RELEASE_BUILD_TARGET
+file RELEASE_BUILD_TARGET => CARGO_DEPS + ["trunk/Trunk.toml", "trunk/tailwind.config.js"] do |t|
   puts "--- Building release version"
   ENV["GRAPHQL_URL"] = MINASEARCH_GRAPHQL
   ENV["REST_URL"] = MINASEARCH_REST
-  Dir.chdir("trunk") do
+  Dir.chdir("#{TOP}/trunk") do
     sh "trunk build --release --filehash true --dist=../#{t.name}"
   end
 end
@@ -384,12 +387,16 @@ end
 
 desc "Invoke the Tier2 regression suite (non-interactive)"
 task tier2: tier2_prerequisites do
-  run_tier2_task("bundle exec rspec")
+  Dir.chdir("#{TOP}/ruby") do
+    run_tier2_task("bundle exec rspec")
+  end
 end
 
 desc "Retry the Tier2 regression suite (non-interactive)"
 task tier2_retry: tier2_prerequisites do
-  run_tier2_task("bundle exec rspec --only-failures")
+  Dir.chdir("#{TOP}/ruby") do
+    run_tier2_task("bundle exec rspec --only-failures")
+  end
 end
 
 desc "Print all tasks and their dependencies as a tree"
