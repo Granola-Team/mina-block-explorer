@@ -213,6 +213,15 @@ impl StakerStats {
         let truncated = (percentage * 100.0) as u64 as f64 / 100.0; // Truncate to 2 decimal places
         Some(format!("{:.2}", truncated))
     }
+
+    pub fn get_block_fill_rate(&self) -> Option<String> {
+        let percent_of_slots_produced = self.num_slots_produced as f64 / EPOCH_SLOTS as f64;
+
+        // Scale to percentage with 2 decimal places
+        let percentage = percent_of_slots_produced * 100.0;
+        let truncated = (percentage * 100.0) as u64 as f64 / 100.0; // Truncate to 2 decimal places
+        Some(format!("{:.2}", truncated))
+    }
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone)]

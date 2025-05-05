@@ -409,6 +409,11 @@ pub fn StakerLeaderboard() -> impl IntoView {
                     ..Default::default()
                 },
                 TableColumn {
+                    column: "Slot Fill Rate".to_string(),
+                    alignment: Some(ColumnTextAlignment::Center),
+                    ..Default::default()
+                },
+                TableColumn {
                     column: "Supercharged Blocks Produced".to_string(),
                     alignment: Some(ColumnTextAlignment::Center),
                     ..Default::default()
