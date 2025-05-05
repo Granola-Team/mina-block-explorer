@@ -1,4 +1,7 @@
-use crate::common::table::{AnySort, CycleSort, SortDirection};
+use crate::common::{
+    constants::EPOCH_SLOTS,
+    table::{AnySort, CycleSort, SortDirection},
+};
 use serde::*;
 use statrs::statistics::{Data, Distribution, OrderStatistics};
 use std::fmt;
@@ -183,7 +186,17 @@ impl StakerStats {
 
         // Scale to percentage with 2 decimal places
         let percentage = percent_of_blocks_produced * 100.0;
-        Some(format!("{:.2}", percentage))
+        let truncated = (percentage * 100.0) as u64 as f64 / 100.0; // Truncate to 2 decimal places
+        Some(format!("{:.2}", truncated))
+    }
+
+    pub fn get_slots_produced_percent(&self) -> Option<String> {
+        let percent_of_slots_produced = self.num_blocks_produced as f64 / EPOCH_SLOTS as f64;
+
+        // Scale to percentage with 2 decimal places
+        let percentage = percent_of_slots_produced * 100.0;
+        let truncated = (percentage * 100.0) as u64 as f64 / 100.0; // Truncate to 2 decimal places
+        Some(format!("{:.2}", truncated))
     }
 }
 
@@ -562,6 +575,72 @@ mod get_percent_of_canonical_blocks_tests {
         assert_eq!(
             stats.get_percent_of_canonical_blocks(),
             Some("33.33".to_string())
+        );
+    }
+}
+
+#[cfg(test)]
+mod slot_production_percent_tests {
+    use super::*;
+
+    #[test]
+    fn test_slots_produced_percent_normal_case() {
+        let stats = StakerStats {
+            num_blocks_produced: 714,
+            ..Default::default()
+        };
+        // Expected: (714 / 7140) * 100 = 10.0, truncated to "10.00"
+        assert_eq!(
+            stats.get_slots_produced_percent(),
+            Some("10.00".to_string())
+        );
+    }
+
+    #[test]
+    fn test_slots_produced_percent_zero_blocks() {
+        let stats = StakerStats {
+            num_blocks_produced: 0,
+            ..Default::default()
+        };
+        // Expected: (0 / 7140) * 100 = 0.0, truncated to "0.00"
+        assert_eq!(stats.get_slots_produced_percent(), Some("0.00".to_string()));
+    }
+
+    #[test]
+    fn test_slots_produced_percent_truncation() {
+        let stats = StakerStats {
+            num_blocks_produced: 71,
+            ..Default::default()
+        };
+        // Expected: (71 / 7140) * 100 ≈ 0.9943977591
+        // After truncation: 0.99 (not 1.00, which would be rounded)
+        assert_eq!(stats.get_slots_produced_percent(), Some("0.99".to_string()));
+    }
+
+    #[test]
+    fn test_slots_produced_percent_full_slots() {
+        let stats = StakerStats {
+            num_blocks_produced: 7140,
+            ..Default::default()
+        };
+        // Expected: (7140 / 7140) * 100 = 100.0, truncated to "100.00"
+        assert_eq!(
+            stats.get_slots_produced_percent(),
+            Some("100.00".to_string())
+        );
+    }
+
+    #[test]
+    fn test_slots_produced_percent_partial_high_precision() {
+        let stats = StakerStats {
+            num_blocks_produced: 1000,
+            ..Default::default()
+        };
+        // Expected: (1000 / 7140) * 100 ≈ 14.0056022409
+        // After truncation: 14.00 (not 14.01, which would be rounded)
+        assert_eq!(
+            stats.get_slots_produced_percent(),
+            Some("14.00".to_string())
         );
     }
 }
