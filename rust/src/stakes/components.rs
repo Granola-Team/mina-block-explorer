@@ -19,14 +19,9 @@ pub fn StakesPageContents(
     fn create_table_columns(total_stake_percent_sort: AnySort) -> Vec<TableColumn<AnySort>> {
         vec![
             TableColumn {
-                column: "Key".to_string(),
+                column: "Account".to_string(),
                 search_type: ColumnSearchType::Text,
                 width: Some(String::from(TABLE_COL_HASH_WIDTH)),
-                ..Default::default()
-            },
-            TableColumn {
-                column: "Username".to_string(),
-                width: Some(String::from(TABLE_COL_USERNAME_WIDTH)),
                 ..Default::default()
             },
             TableColumn {
@@ -56,15 +51,15 @@ pub fn StakesPageContents(
                 ..Default::default()
             },
             TableColumn {
-                column: "Delegate".to_string(),
-                search_type: ColumnSearchType::Text,
-                width: Some(String::from(TABLE_COL_HASH_WIDTH)),
-                ..Default::default()
-            },
-            TableColumn {
                 column: "Delegators".to_string(),
                 width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
                 alignment: Some(ColumnTextAlignment::Right),
+                ..Default::default()
+            },
+            TableColumn {
+                column: "Delegate".to_string(),
+                search_type: ColumnSearchType::Text,
+                width: Some(String::from(TABLE_COL_HASH_WIDTH)),
                 ..Default::default()
             },
         ]
@@ -105,7 +100,7 @@ pub fn StakesPageContents(
             )
         },
         move |(epoch_opt, params_map, mut row_limit, sort_dir, genesis_state_hash)| async move {
-            let public_key = params_map.get("q-key").cloned();
+            let public_key = params_map.get("q-account").cloned();
             let delegate = params_map.get("q-delegate").cloned();
             let stake = params_map.get("q-stake").cloned();
             let mut sort_by = StakesSortByInput::STAKE_DESC;
@@ -150,7 +145,7 @@ pub fn StakesPageContents(
     create_effect(move |_| {
         let mut available_records = None;
         let qp_map = query_params_map.get();
-        let public_key = qp_map.get("q-key").cloned();
+        let public_key = qp_map.get("q-account").cloned();
         let delegate = qp_map.get("q-delegate").cloned();
         let stake = qp_map.get("q-stake").cloned();
         if stake.is_none() && delegate.is_none() && public_key.is_none() {

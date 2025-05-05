@@ -35,7 +35,7 @@ RSpec.describe "Account page navigation", type: :system do
     {origin: "/snarks", column: "Prover", tableHeader: "SNARKs"},
     {
       origin: "/staking-ledgers?epoch=1",
-      column: "Key",
+      column: "Account",
       tableHeader: "Staking Ledger - Epoch 1"
     },
     {

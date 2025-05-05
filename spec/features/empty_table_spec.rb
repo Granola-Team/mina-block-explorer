@@ -6,7 +6,7 @@ RSpec.describe "Empty table", type: :system do
     "/blocks?q-state-hash=3Nfake",
     "/commands/user?q-txn-hash=Cpkfake",
     "/commands/internal?q-recipient=B62qfake",
-    "/staking-ledgers?q-key=B62qfake",
+    "/staking-ledgers?q-account=B62qfake",
     "/snarks?q-state-hash=3Nfake",
     "/analytics/staker-leaderboard?epoch=100000",
     "/analytics/snarker-leaderboard?epoch=100000"

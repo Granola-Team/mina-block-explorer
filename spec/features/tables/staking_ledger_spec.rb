@@ -4,7 +4,7 @@ require "spec_helper"
 RSpec.describe "Staking Ledger - Epoch 1 table", type: :system do
   let(:url) { "/staking-ledgers?epoch=1" }
   let(:heading) { "Staking Ledger - Epoch 1" }
-  let(:columns) { ["Key", "Username", "Balance", "Stake", "Total Stake %", "Block Win %", "Delegate", "Delegators"].map(&:upcase) }
+  let(:columns) { ["Account", "Balance", "Stake", "Total Stake %", "Block Win %", "Delegators", "Delegate"].map(&:upcase) }
 
   before do
     visit url
@@ -19,10 +19,10 @@ RSpec.describe "Staking Ledger - Epoch 1 table", type: :system do
     test_sortable_column(heading, "Total Stake %", ["STAKE_DESC", "STAKE_ASC"])
   end
 
-  it "has working filter for column 'Key' with input 'B62qq3tqfdj19hqaVCozJFM2q9gT2WezQMaJMKD6wxyvK3fMpHiP9va'" do
+  it "has working filter for column 'Account' with input 'B62qq3tqfdj19hqaVCozJFM2q9gT2WezQMaJMKD6wxyvK3fMpHiP9va'" do
     test_filter(
       heading,
-      "Key",
+      "Account",
       "B62qq3tqfdj19hqaVCozJFM2q9gT2WezQMaJMKD6wxyvK3fMpHiP9va",
       nil,
       lambda do
@@ -30,14 +30,11 @@ RSpec.describe "Staking Ledger - Epoch 1 table", type: :system do
         expect(metadata.length).to eq(2), "Expected 'Staking Ledger - Epoch 1' table metadata to have 2 datum, but found #{metadata.length}"
         table_rows = get_table_rows("Staking Ledger - Epoch 1")
         expect(table_rows.count).to eq(1), "Expected 'Staking Ledger - Epoch 1' table to have 1 row, but found #{table_rows.count}"
-        key_cells = all(table_column_selector("Staking Ledger - Epoch 1", "Key".upcase))
+        key_cells = all(table_column_selector("Staking Ledger - Epoch 1", "Account".upcase))
         key_cells.each do |cell|
           cleaned_text = cell.text.gsub(/[\n+-]/, "")
-          expect(cleaned_text).to eq(Constants::SNZPOOL_ADDRESS), "Expected 'Key' to be '#{Constants::SNZPOOL_ADDRESS}', but was '#{cleaned_text}'"
-        end
-        username_cells = all(table_column_selector("Staking Ledger - Epoch 1", "Username".upcase))
-        username_cells.each do |cell|
-          expect(cell.text).to eq(Constants::SNZ_USERNAME), "Expected 'Username' to be '#{Constants::SNZ_USERNAME}', but was '#{cell.text}'"
+          expect(cleaned_text).to include(Constants::SNZPOOL_ADDRESS), "Expected 'Account' to contain '#{Constants::SNZPOOL_ADDRESS}', but was '#{cleaned_text}'"
+          expect(cleaned_text).to include(Constants::SNZ_USERNAME), "Expected 'Account' to contain '#{Constants::SNZ_USERNAME}', but was '#{cleaned_text}'"
         end
       end
     )

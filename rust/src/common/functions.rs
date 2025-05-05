@@ -438,7 +438,7 @@ pub fn convert_to_linkable_address(username: &str, address: &str) -> HtmlElement
         )
         .attr("class", "text-xs text-slate-400"),
     ])
-    .attr("class", "flex flex-col items-start")
+    .attr("class", "w-full text-ellipsis overflow-hidden")
 }
 
 pub fn convert_array_to_span(

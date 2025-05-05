@@ -111,7 +111,7 @@ RSpec.describe "Number or currency", type: :system do
       ]
     },
     {
-      url: "/staking-ledgers?epoch=0&q-key=#{Constants::ROMEK_ADDRESS}",
+      url: "/staking-ledgers?epoch=0&q-account=#{Constants::ROMEK_ADDRESS}",
       heading: "Staking Ledger - Epoch 0",
       tests: [
         {name: "stake", selector: '[data-test="staking-ledger-epoch-0-table"] tr:has(:not(th)) td:nth-child(3)', type: "currency"}
