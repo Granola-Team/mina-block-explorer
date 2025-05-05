@@ -155,7 +155,7 @@ impl fmt::Display for StakerLeaderboardCanonicalBlocks {
 
 impl StakerStats {
     pub fn orphan_rate(&self) -> Option<String> {
-        if self.num_blocks_produced == 0 {
+        if self.num_slots_produced == 0 {
             return None;
         }
 
@@ -191,7 +191,8 @@ impl StakerStats {
     }
 
     pub fn get_slots_produced_percent(&self) -> Option<String> {
-        let percent_of_slots_produced = self.num_blocks_produced as f64 / EPOCH_SLOTS as f64;
+        let percent_of_slots_produced =
+            self.num_canonical_blocks_produced as f64 / EPOCH_SLOTS as f64;
 
         // Scale to percentage with 2 decimal places
         let percentage = percent_of_slots_produced * 100.0;
@@ -395,20 +396,8 @@ mod orphan_rate_tests {
     use super::*;
 
     #[test]
-    fn test_orphan_rate_zero_blocks_produced() {
-        let stats = StakerStats {
-            num_blocks_produced: 0,
-            num_canonical_blocks_produced: 0,
-            num_slots_produced: 100,
-            ..Default::default()
-        };
-        assert_eq!(stats.orphan_rate(), None);
-    }
-
-    #[test]
     fn test_orphan_rate_zero_slots_produced() {
         let stats = StakerStats {
-            num_blocks_produced: 100,
             num_canonical_blocks_produced: 50,
             num_slots_produced: 0,
             ..Default::default()
@@ -420,7 +409,6 @@ mod orphan_rate_tests {
     #[test]
     fn test_orphan_rate_all_canonical() {
         let stats = StakerStats {
-            num_blocks_produced: 100,
             num_canonical_blocks_produced: 100,
             num_slots_produced: 100,
             ..Default::default()
@@ -432,7 +420,6 @@ mod orphan_rate_tests {
     #[test]
     fn test_orphan_rate_all_orphans() {
         let stats = StakerStats {
-            num_blocks_produced: 100,
             num_canonical_blocks_produced: 0,
             num_slots_produced: 100,
             ..Default::default()
@@ -444,7 +431,6 @@ mod orphan_rate_tests {
     #[test]
     fn test_orphan_rate_partial_orphans() {
         let stats = StakerStats {
-            num_blocks_produced: 100,
             num_canonical_blocks_produced: 80,
             num_slots_produced: 100,
             ..Default::default()
@@ -456,7 +442,6 @@ mod orphan_rate_tests {
     #[test]
     fn test_orphan_rate_slots_different_from_blocks() {
         let stats = StakerStats {
-            num_blocks_produced: 50,
             num_canonical_blocks_produced: 80,
             num_slots_produced: 100,
             ..Default::default()
@@ -468,7 +453,6 @@ mod orphan_rate_tests {
     #[test]
     fn test_orphan_rate_underflow() {
         let stats = StakerStats {
-            num_blocks_produced: 100,
             num_canonical_blocks_produced: 101,
             num_slots_produced: 100,
             ..Default::default()
@@ -480,7 +464,6 @@ mod orphan_rate_tests {
     #[test]
     fn test_orphan_rate_small_numbers() {
         let stats = StakerStats {
-            num_blocks_produced: 3,
             num_canonical_blocks_produced: 2,
             num_slots_produced: 3,
             ..Default::default()
@@ -492,7 +475,6 @@ mod orphan_rate_tests {
     #[test]
     fn test_orphan_rate_large_numbers() {
         let stats = StakerStats {
-            num_blocks_produced: 1_000_000,
             num_canonical_blocks_produced: 999_000,
             num_slots_produced: 1_000_000,
             ..Default::default()
@@ -586,7 +568,7 @@ mod slot_production_percent_tests {
     #[test]
     fn test_slots_produced_percent_normal_case() {
         let stats = StakerStats {
-            num_blocks_produced: 714,
+            num_canonical_blocks_produced: 714,
             ..Default::default()
         };
         // Expected: (714 / 7140) * 100 = 10.0, truncated to "10.00"
@@ -599,7 +581,7 @@ mod slot_production_percent_tests {
     #[test]
     fn test_slots_produced_percent_zero_blocks() {
         let stats = StakerStats {
-            num_blocks_produced: 0,
+            num_canonical_blocks_produced: 0,
             ..Default::default()
         };
         // Expected: (0 / 7140) * 100 = 0.0, truncated to "0.00"
@@ -609,7 +591,7 @@ mod slot_production_percent_tests {
     #[test]
     fn test_slots_produced_percent_truncation() {
         let stats = StakerStats {
-            num_blocks_produced: 71,
+            num_canonical_blocks_produced: 71,
             ..Default::default()
         };
         // Expected: (71 / 7140) * 100 ≈ 0.9943977591
@@ -620,7 +602,7 @@ mod slot_production_percent_tests {
     #[test]
     fn test_slots_produced_percent_full_slots() {
         let stats = StakerStats {
-            num_blocks_produced: 7140,
+            num_canonical_blocks_produced: 7140,
             ..Default::default()
         };
         // Expected: (7140 / 7140) * 100 = 100.0, truncated to "100.00"
@@ -633,7 +615,7 @@ mod slot_production_percent_tests {
     #[test]
     fn test_slots_produced_percent_partial_high_precision() {
         let stats = StakerStats {
-            num_blocks_produced: 1000,
+            num_canonical_blocks_produced: 1000,
             ..Default::default()
         };
         // Expected: (1000 / 7140) * 100 ≈ 14.0056022409
