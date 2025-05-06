@@ -21,4 +21,4 @@ Icon
 !/rust/.cargo/config.toml
 !/rust/.cargo/audit.toml
 /.build
-/spec-screenshots
+/ruby/spec-screenshots

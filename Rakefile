@@ -273,7 +273,6 @@ end
 
 desc "Serve the built website locally"
 task dev: [:deploy_mina_indexer, :dev_build] do
-  trap("INT") { Rake::Task["shutdown_mina_indexer"].invoke }
   Dir.chdir("#{TOP}/trunk") do
     sh "trunk serve --port=#{TRUNK_PORT} --open --dist=../#{DEV_BUILD_TARGET}"
   end
@@ -380,13 +379,11 @@ desc "Run the Tier1 tests"
 task tier1: [:dev_build, :lint, :test_unit]
 
 # Defining common prerequisites for Tier2 tasks
-tier2_prerequisites = [:clean_test, :tier1, "pnpm/node_modules", :bundle_install, :shutdown_mina_indexer, :deploy_mina_indexer]
+tier2_prerequisites = [:clean_test, :tier1, "pnpm/node_modules", :bundle_install, :deploy_mina_indexer]
 
 # Helper method to run tier tasks with common setup and teardown
 def run_tier2_task(rspec_command)
-  trap("INT") { Rake::Task["shutdown_mina_indexer"].invoke }
   run_tier_task(rspec_command)
-  Rake::Task["shutdown_mina_indexer"].invoke
 end
 
 desc "Invoke the Tier2 regression suite (non-interactive)"
