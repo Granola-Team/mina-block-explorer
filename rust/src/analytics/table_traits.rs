@@ -19,15 +19,7 @@ impl TableData for Vec<StakerStats> {
                         )
                         .attr("class", "w-20 text-slate-400 flex justify-end"),
                     ]),
-                    convert_array_to_span(vec![
-                        convert_to_span(format_number(stat.num_slots_produced.to_string())),
-                        convert_to_span(
-                            stat.get_slots_produced_percent()
-                                .map(|r| format!("({r}%)"))
-                                .unwrap_or("n/a".to_string()),
-                        )
-                        .attr("class", "w-20 text-slate-400 flex justify-end"),
-                    ]),
+                    convert_to_span(format_number(stat.num_slots_produced.to_string())),
                     convert_to_span(format_number_for_html(
                         &stat
                             .orphan_rate()
