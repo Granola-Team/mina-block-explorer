@@ -52,6 +52,9 @@
       "lld": {
         "pkg-path": "lld"
       },
+      "mdl": {
+        "pkg-path": "mdl"
+      },
       "nodejs_23": {
         "pkg-path": "nodejs_23"
       },
@@ -97,11 +100,7 @@
         "aarch64-linux",
         "x86_64-darwin",
         "x86_64-linux"
-      ],
-      "allow": {
-        "licenses": []
-      },
-      "semver": {}
+      ]
     }
   },
   "packages": [
@@ -1371,6 +1370,122 @@
         "dev": "/nix/store/m9kzs09qavhpq1l7ihq0v42s6382aqzd-lld-19.1.7-dev",
         "lib": "/nix/store/d53xcc8zvrgsxwphkgc562gpnj8mmgf0-lld-19.1.7-lib",
         "out": "/nix/store/6gxr0kllxxkv24hva8k27x1cqrs6d454-lld-19.1.7"
+      },
+      "system": "x86_64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "mdl",
+      "broken": false,
+      "derivation": "/nix/store/92wxnpqjm0frqybq77r5da9wrvvh4981-mdl-0.13.0.drv",
+      "description": "Tool to check markdown files and flag style issues",
+      "install_id": "mdl",
+      "license": "MIT",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
+      "name": "mdl-0.13.0",
+      "pname": "mdl",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:11:38.231030Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "0.13.0",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/pg0wsx1niipiamgfsv51hcg095r9mjc0-mdl-0.13.0"
+      },
+      "system": "aarch64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "mdl",
+      "broken": false,
+      "derivation": "/nix/store/ybg0f8ch8chygms9i7lh6492xvh75nvi-mdl-0.13.0.drv",
+      "description": "Tool to check markdown files and flag style issues",
+      "install_id": "mdl",
+      "license": "MIT",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
+      "name": "mdl-0.13.0",
+      "pname": "mdl",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:30:20.968959Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "0.13.0",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/7f9z81i7nn570x0zv4x1k6rx5srz67vq-mdl-0.13.0"
+      },
+      "system": "aarch64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "mdl",
+      "broken": false,
+      "derivation": "/nix/store/bb29lgszgd9kqds7d70x6navfci05y52-mdl-0.13.0.drv",
+      "description": "Tool to check markdown files and flag style issues",
+      "install_id": "mdl",
+      "license": "MIT",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
+      "name": "mdl-0.13.0",
+      "pname": "mdl",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T01:46:44.712078Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "0.13.0",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/y0csyg62hnw2wa9n21vd8pbgdrxhhp0q-mdl-0.13.0"
+      },
+      "system": "x86_64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "mdl",
+      "broken": false,
+      "derivation": "/nix/store/x3z98dxxrfzqg8flflmrrk5pybgvyn6b-mdl-0.13.0.drv",
+      "description": "Tool to check markdown files and flag style issues",
+      "install_id": "mdl",
+      "license": "MIT",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=52faf482a3889b7619003c0daec593a1912fddc1",
+      "name": "mdl-0.13.0",
+      "pname": "mdl",
+      "rev": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "rev_count": 776537,
+      "rev_date": "2025-03-30T06:12:12Z",
+      "scrape_date": "2025-04-01T02:07:05.618048Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "0.13.0",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/invs5w1hzc7qynymp57zhjz1daxx05if-mdl-0.13.0"
       },
       "system": "x86_64-linux",
       "group": "toplevel",

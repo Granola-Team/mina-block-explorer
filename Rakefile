@@ -15,6 +15,7 @@ ENV["CARGO_HOME"] = "#{TOP}/rust/.cargo"
 ENV["VOLUMES_DIR"] ||= "/mnt" if Dir.exist?("/mnt")
 ENV["GRAPHQL_URL"] = "http://localhost:#{IDXR_PORT}/graphql"
 ENV["REST_URL"] = "http://localhost:#{IDXR_PORT}"
+MARKDOWN_SRC_FILES = Dir.glob("**/*.md").reject { |file| file.start_with?("lib", "rust/target") }
 GRAPHQL_SRC_FILES = Dir.glob("graphql/**/*.graphql")
 RUST_SRC_FILES = Dir.glob("rust/**/*.rs").reject { |file| file.start_with?("rust/.cargo", "rust/target") }
 CARGO_DEPS = RUST_SRC_FILES + GRAPHQL_SRC_FILES + ["rust/Cargo.toml", "rust/Cargo.lock", "rust/.cargo/audit.toml", "rust/.cargo/config.toml"]
@@ -309,6 +310,15 @@ file ".build/check" => CARGO_DEPS do |t|
   record_output(t, check_output)
 end
 
+desc "Lints Markdown Files"
+task lint_md: ".build/lint-md"
+
+file ".build/lint-md" => MARKDOWN_SRC_FILES do |t|
+  puts "--- Linting mardown files"
+  md_out = cmd_capture("mdl #{MARKDOWN_SRC_FILES.join(" ")}")
+  record_output(t, [md_out])
+end
+
 desc "Lint the Ruby code"
 task lint_ruby: ".build/lint-ruby"
 
@@ -364,7 +374,7 @@ file RELEASE_BUILD_TARGET => CARGO_DEPS + ["trunk/Trunk.toml", "trunk/tailwind.c
 end
 
 desc "Lint all source code"
-task lint: [:audit, :lint_ruby, :lint_rust, :lint_js]
+task lint: [:audit, :lint_ruby, :lint_rust, :lint_js, :lint_md]
 
 desc "Run the Tier1 tests"
 task tier1: [:dev_build, :lint, :test_unit]
