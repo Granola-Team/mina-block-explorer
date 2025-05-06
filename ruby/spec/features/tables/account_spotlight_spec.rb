@@ -62,3 +62,18 @@ RSpec.describe "Internal Commands table", type: :system do
     end
   end
 end
+
+RSpec.describe "Delegations table", type: :system do
+  let(:url) { "/addresses/accounts/#{Constants::GENESIS_ACCOUNT_PK}/delegations" }
+  let(:heading) { "Delegations" }
+  let(:columns) { ["Account", "Delegated Balance", "% of Delegation"].map(&:upcase) }
+
+  before do
+    visit url
+    wait_until_table_loaded(heading)
+  end
+
+  it "has ordered columns" do
+    test_ordered_columns(heading, columns)
+  end
+end

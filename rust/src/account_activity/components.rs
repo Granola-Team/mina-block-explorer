@@ -300,13 +300,8 @@ pub fn AccountDelegationsSection(
     let memo_params_map = use_params_map();
     let table_columns: Vec<TableColumn<AnySort>> = vec![
         TableColumn {
-            column: "Public Key".to_string(),
+            column: "Account".to_string(),
             width: Some(String::from(TABLE_COL_HASH_WIDTH)),
-            ..Default::default()
-        },
-        TableColumn {
-            column: "Username".to_string(),
-            width: Some(String::from(TABLE_COL_USERNAME_WIDTH)),
             ..Default::default()
         },
         TableColumn {

@@ -24,12 +24,7 @@ RSpec.describe "Account page navigation", type: :system do
     },
     {
       origin: "/addresses/accounts/#{Constants::GENESIS_ACCOUNT_PK}/delegations",
-      column: "Public Key",
-      tableHeader: "Delegations"
-    },
-    {
-      origin: "/addresses/accounts/#{Constants::GENESIS_ACCOUNT_PK}/delegations",
-      column: "Username",
+      column: "Account",
       tableHeader: "Delegations"
     },
     {origin: "/snarks", column: "Prover", tableHeader: "SNARKs"},
