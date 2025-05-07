@@ -156,6 +156,16 @@ impl fmt::Display for StakerLeaderboardCanonicalBlocks {
 }
 
 impl StakerStats {
+    // Helper function for rounding to 2 decimal places
+    fn round_to_two_decimals(value: f64) -> Option<String> {
+        if !value.is_finite() {
+            return None;
+        }
+        // Round to 2 decimal places
+        let rounded = (value * 100.0).round() / 100.0;
+        Some(format!("{:.2}", rounded))
+    }
+
     pub fn orphan_rate(&self) -> Option<String> {
         if self.num_slots_produced == 0 {
             return None;
@@ -165,13 +175,8 @@ impl StakerStats {
             .num_slots_produced
             .checked_sub(self.num_canonical_blocks_produced)?;
 
-        let numerator = num_orphans.checked_mul(10000)?;
-
-        let orphan_rate_scaled = numerator.checked_div(self.num_slots_produced)?;
-
-        let whole = orphan_rate_scaled / 100;
-        let frac = orphan_rate_scaled % 100;
-        Some(format!("{}.{:02}", whole, frac))
+        let orphan_rate = num_orphans as f64 / self.num_slots_produced as f64 * 100.0;
+        Self::round_to_two_decimals(orphan_rate)
     }
 
     pub fn get_percent_of_canonical_blocks(&self) -> Option<String> {
@@ -181,15 +186,8 @@ impl StakerStats {
         }
 
         let percent_of_blocks_produced =
-            self.num_canonical_blocks_produced as f64 / total_blocks as f64;
-        if !percent_of_blocks_produced.is_finite() {
-            return None;
-        }
-
-        // Scale to percentage with 2 decimal places
-        let percentage = percent_of_blocks_produced * 100.0;
-        let truncated = (percentage * 100.0) as u64 as f64 / 100.0; // Truncate to 2 decimal places
-        Some(format!("{:.2}", truncated))
+            self.num_canonical_blocks_produced as f64 / total_blocks as f64 * 100.0;
+        Self::round_to_two_decimals(percent_of_blocks_produced)
     }
 
     pub fn get_canonical_fill_rate(&self) -> Option<String> {
@@ -198,19 +196,13 @@ impl StakerStats {
             return None;
         }
 
-        let ratio = self.num_canonical_blocks_produced as f64 / epoch_num_blocks as f64;
-        let percentage = ratio * 100.0;
-        let truncated = (percentage * 100.0) as u64 as f64 / 100.0; // Truncate to 2 decimal places
-        Some(format!("{:.2}", truncated))
+        let ratio = self.num_canonical_blocks_produced as f64 / epoch_num_blocks as f64 * 100.0;
+        Self::round_to_two_decimals(ratio)
     }
 
     pub fn get_block_fill_rate(&self) -> Option<String> {
-        let percent_of_slots_produced = self.num_slots_produced as f64 / EPOCH_SLOTS as f64;
-
-        // Scale to percentage with 2 decimal places
-        let percentage = percent_of_slots_produced * 100.0;
-        let truncated = (percentage * 100.0) as u64 as f64 / 100.0; // Truncate to 2 decimal places
-        Some(format!("{:.2}", truncated))
+        let percent_of_slots_produced = self.num_slots_produced as f64 / EPOCH_SLOTS as f64 * 100.0;
+        Self::round_to_two_decimals(percent_of_slots_produced)
     }
 }
 
@@ -578,5 +570,50 @@ mod canonical_fill_rate_tests {
         };
         // Expected: (0 / 1000) * 100 = 0.0, truncated to "0.00"
         assert_eq!(stats.get_canonical_fill_rate(), Some("0.00".to_string()));
+    }
+}
+
+#[cfg(test)]
+mod round_to_two_decimals_tests {
+    use super::StakerStats;
+
+    #[test]
+    fn test_round_to_two_decimals() {
+        // Test normal cases
+        assert_eq!(
+            StakerStats::round_to_two_decimals(12.3456),
+            Some("12.35".to_string())
+        );
+        assert_eq!(
+            StakerStats::round_to_two_decimals(12.3444),
+            Some("12.34".to_string())
+        );
+        assert_eq!(
+            StakerStats::round_to_two_decimals(0.0),
+            Some("0.00".to_string())
+        );
+        assert_eq!(
+            StakerStats::round_to_two_decimals(99.999),
+            Some("100.00".to_string())
+        );
+
+        // Test edge cases
+        assert_eq!(
+            StakerStats::round_to_two_decimals(-12.3456),
+            Some("-12.35".to_string())
+        );
+        assert_eq!(
+            StakerStats::round_to_two_decimals(0.001),
+            Some("0.00".to_string())
+        );
+        assert_eq!(
+            StakerStats::round_to_two_decimals(0.005),
+            Some("0.01".to_string())
+        );
+
+        // Test non-finite cases
+        assert_eq!(StakerStats::round_to_two_decimals(f64::INFINITY), None);
+        assert_eq!(StakerStats::round_to_two_decimals(f64::NEG_INFINITY), None);
+        assert_eq!(StakerStats::round_to_two_decimals(f64::NAN), None);
     }
 }
