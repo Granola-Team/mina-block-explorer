@@ -1,5 +1,5 @@
 [watch]
-watch = ["../rust","../graphql","./"]
+watch = ["../rust","./"]
 
 [tools]
 tailwindcss = "3.4.1"
