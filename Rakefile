@@ -313,7 +313,7 @@ desc "Lints Markdown Files"
 task lint_md: ".build/lint-md"
 
 file ".build/lint-md" => MARKDOWN_SRC_FILES do |t|
-  puts "--- Linting mardown files"
+  puts "--- Linting markdown files"
   md_out = cmd_capture("mdl #{MARKDOWN_SRC_FILES.join(" ")}")
   record_output(t, [md_out])
 end

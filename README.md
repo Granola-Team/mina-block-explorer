@@ -32,7 +32,7 @@ __If you have previously installed Nix, you may need to uninstall it first:__
 ## Back-End Integration
 
 Environment variables are bundled into the WASM file at compile time (see
-[`build.rs`](build.rs)). With the intended environment variables specified
+[`build.rs`](rust/build.rs)). With the intended environment variables specified
 at compile time, the production WASM file may be deployed without any
 further configuration required.
 
