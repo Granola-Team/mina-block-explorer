@@ -246,13 +246,17 @@ file ".build/audit" => CARGO_DEPS do |t|
   record_output(t, [audit_output, machete_output])
 end
 
-desc "Build documentation in the build directory"
-task build_docs: ".build/docs"
-
 file ".build/docs" => GRAPHQL_SRC_FILES do |t|
   mkdir_p(".build")
   Dir.chdir("#{TOP}/rust") do
     sh "cargo doc --document-private-items --target-dir ../#{t.name}"
+  end
+end
+
+desc "Serve the rust documentation"
+task serve_docs: [".build/docs"] do
+  Dir.chdir("#{TOP}/ruby") do
+    sh "ruby doc-server.rb"
   end
 end
 
