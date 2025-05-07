@@ -160,14 +160,14 @@ task :default do
   system("rake -T")
 end
 
-task clone_mina_indexer: IDXR_FOLDER.to_s
+task prepare_submodule: IDXR_FOLDER.to_s
 file IDXR_FOLDER.to_s do
   puts "--- Cloning indexer"
   sh "git submodule update --init"
 end
 
 desc "Deploy mina-indexer"
-task deploy_mina_indexer: [:clone_mina_indexer] do
+task deploy_mina_indexer: [:prepare_submodule] do
   ensure_env_vars(%w[VOLUMES_DIR], "Cannot deploy mina indexer")
   puts "--- Deploying mina-indexer at #{ENV["INDEXER_VERSION"]}"
   Dir.chdir("#{TOP}/lib/mina-indexer") do
