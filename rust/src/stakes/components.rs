@@ -184,8 +184,8 @@ pub fn StakesPageContents(
                                     labels=UrlParamSelectOptions {
                                         is_boolean_option: true,
                                         cases: vec![
-                                            format!("{} (Berkeley)", BERKELEY_CHAIN_ID),
-                                            format!("{}", MAINNET_CHAIN_ID),
+                                            format!("mainnet {}", BERKELEY_CHAIN_ID),
+                                            format!("mainnet {}", MAINNET_CHAIN_ID),
                                         ],
                                     }
                                 />
