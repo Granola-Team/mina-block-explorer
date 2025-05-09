@@ -30,21 +30,24 @@ pub fn get_stake_percentage(stake: &StakingLedgersQueryStakes) -> String {
         .unwrap_or("0".to_string())
 }
 
-pub fn get_block_win_percentage(stake: &StakingLedgersQueryStakes) -> String {
-    let pk_epoch_num_blocks = stake.pk_epoch_num_blocks.unwrap_or(0) as f64;
-    stake.epoch_num_blocks.map_or_else(
-        || "0".to_string(),
-        |epoch_num_blocks| {
-            if epoch_num_blocks != 0 {
-                format!(
-                    "{:.2}%",
-                    100.0 * pk_epoch_num_blocks / epoch_num_blocks as f64
-                )
-            } else {
-                "0".to_string()
-            }
-        },
-    )
+pub fn get_slot_win_likelihood(stake: &StakingLedgersQueryStakes) -> String {
+    let total_stake_percentage = stake
+        .delegation_totals
+        .as_ref()
+        .and_then(|delegation_totals| delegation_totals.total_stake_percentage.clone())
+        .unwrap_or_default();
+
+    let total_stake_percentage: f64 = match total_stake_percentage.parse::<f64>() {
+        Ok(value) if value >= 0.0 => value,
+        _ => return "n/a".to_string(),
+    };
+
+    let total_stake_fraction = total_stake_percentage / 100.0_f64;
+    let c = 1.0_f64;
+    let f = 0.75_f64;
+    let probability = c * c * (1.0_f64 - (1.0_f64 - f).powf(total_stake_fraction));
+
+    format!("{:.2}%", probability * 100_f64)
 }
 
 pub fn get_delegate(stake: &StakingLedgersQueryStakes) -> String {

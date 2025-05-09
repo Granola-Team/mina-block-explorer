@@ -12,7 +12,7 @@ impl TableData for Vec<Option<StakingLedgersQueryStakes>> {
                     convert_to_span(get_balance(stake)),
                     convert_to_span(get_stake(stake)),
                     convert_to_span(get_stake_percentage(stake)),
-                    convert_to_span(get_block_win_percentage(stake)),
+                    convert_to_span(get_slot_win_likelihood(stake)),
                     convert_to_pill(get_delegators_count(stake), ColorVariant::Blue),
                     convert_to_copy_link(
                         if get_public_key(stake) == get_delegate(stake) {
