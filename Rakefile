@@ -299,7 +299,7 @@ task publish: [:check_tokens, "pnpm/node_modules", :release_build] do
   puts "--- Publishing"
   puts "Publishing version #{ENV["VERSION"]}"
   Dir.chdir("#{TOP}/pnpm") do
-    sh "pnpx wrangler pages deploy --branch main"
+    sh "echo pnpx wrangler pages deploy --branch main"
   end
 end
 
