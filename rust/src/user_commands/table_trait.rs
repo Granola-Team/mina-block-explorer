@@ -240,11 +240,7 @@ impl TransactionsTrait for TransactionsQueryTransactions {
     }
 
     fn get_receiver_public_key(&self) -> String {
-        self.receiver.as_ref().map_or_else(String::new, |o| {
-            o.public_key
-                .as_ref()
-                .map_or_else(String::new, |o| o.to_string())
-        })
+        self.receiver.clone().unwrap_or_default()
     }
 
     fn get_fee(&self) -> String {

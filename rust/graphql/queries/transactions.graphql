@@ -31,9 +31,7 @@ query TransactionsQuery(
       dateTime
       stateHash
     }
-    receiver {
-      publicKey
-    }
+    receiver
   }
   other_transactions: transactions(
     limit: $limit

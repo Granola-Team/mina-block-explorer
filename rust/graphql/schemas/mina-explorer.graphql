@@ -389,10 +389,6 @@ type BlockWinnerAccount {
   publicKey: String
 }
 
-type TransactionReceiver {
-  publicKey: String
-}
-
 type Stake {
   balance: Float
   username: String
@@ -729,7 +725,7 @@ type Transaction {
   kind: String
   memo: String
   nonce: Int
-  receiver: TransactionReceiver
+  receiver: String
   to: String
   zkapp: TransactionZkapp
 }

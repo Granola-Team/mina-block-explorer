@@ -68,12 +68,7 @@ impl From<PooledUserCommand> for transactions_query::TransactionsQueryTransactio
             memo: txn.memo,
             hash: txn.hash,
             block: None,
-            receiver: Some(transactions_query::TransactionsQueryTransactionsReceiver {
-                public_key: match txn.receiver {
-                    Some(receiver) => receiver.public_key,
-                    None => None,
-                },
-            }),
+            receiver: None,
         }
     }
 }
@@ -95,7 +90,7 @@ impl From<TransactionsQueryTransactions> for PendingTxn {
             txn_hash: value.hash,
             kind: value.kind,
             from: value.from,
-            to: value.receiver.map(|r| r.public_key.unwrap_or_default()),
+            to: value.receiver,
             nonce: value.nonce,
             fee: value.fee,
             amount: value.amount,
