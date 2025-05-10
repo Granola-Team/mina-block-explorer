@@ -202,8 +202,8 @@ task format: ["pnpm/node_modules"] do
   end
   sh "standardrb --fix #{RUBY_SRC_FILES.join(" ")}"
   sh "rustfmt --edition 2024 #{RUST_SRC_FILES.join(" ")}"
+  sh "leptosfmt #{RUST_SRC_FILES.join(" ")}"
   Dir.chdir("#{TOP}/rust") do
-    sh "leptosfmt ."
     sh "cargo clippy --fix --allow-dirty --allow-staged"
   end
 end
