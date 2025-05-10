@@ -27,7 +27,7 @@ RSpec.describe "Snarks page navigation", type: :system do
       prover_cells.each do |cell|
         # Join split text if necessary (as per your previous issue)
         cleaned_text = cell.text.gsub(/[\n+-]/, "")
-        expect(cleaned_text).to eq(Constants::GENESIS_ACCOUNT_PK), "Expected 'Prover' column to contain '#{Constants::GENESIS_ACCOUNT_PK}', but found '#{cleaned_text}'"
+        expect(cleaned_text).to include(Constants::GENESIS_ACCOUNT_PK), "Expected 'Prover' column to contain '#{Constants::GENESIS_ACCOUNT_PK}', but found '#{cleaned_text}'"
       end
     end
   end

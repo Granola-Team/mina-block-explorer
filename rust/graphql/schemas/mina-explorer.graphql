@@ -525,6 +525,7 @@ type Snark {
   dateTime: DateTime
   fee: Float
   prover: String
+  proverUsername: String
 }
 
 input SnarkQueryInput {

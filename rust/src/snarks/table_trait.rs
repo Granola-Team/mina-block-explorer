@@ -4,20 +4,6 @@ use leptos::*;
 use snarks_query::SnarksQuerySnarks;
 
 impl TableData for Vec<Option<SnarksQuerySnarks>> {
-    fn get_columns(&self) -> Vec<String> {
-        ["Height", "State Hash", "Age", "Prover", "Fee"]
-            .iter()
-            .map(ToString::to_string)
-            .collect::<Vec<_>>()
-    }
-
-    fn get_exact_search_columns(&self) -> Vec<String> {
-        ["Height", "State Hash", "Prover"]
-            .iter()
-            .map(ToString::to_string)
-            .collect::<Vec<_>>()
-    }
-
     fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
         self.iter()
             .map(|opt_snark| match opt_snark {
@@ -31,10 +17,7 @@ impl TableData for Vec<Option<SnarksQuerySnarks>> {
                         convert_to_local_timezone_formatted(&get_date_time(snark)),
                         get_date_time(snark),
                     ),
-                    convert_to_copy_link(
-                        get_prover(snark),
-                        format!("/addresses/accounts/{}", get_prover(snark)),
-                    ),
+                    convert_to_linkable_address(&get_prover_username(snark), &get_prover(snark)),
                     convert_to_span(get_fee(snark)),
                 ],
                 None => vec![],

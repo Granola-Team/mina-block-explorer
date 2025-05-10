@@ -65,7 +65,7 @@ RSpec.describe "SNARKs table", type: :system do
         prover_cells = all(table_column_selector("SNARKs".downcase, "Prover".upcase))
         prover_cells.each do |cell|
           cleaned_text = cell.text.gsub(/[\n+-]/, "")
-          expect(cleaned_text).to eq("B62qrQiw9JhUumq457sMxicgQ94Z1WD9JChzJu19kBE8Szb5T8tcUAC"), "Expected 'Prover' to be 'B62qrQiw9JhUumq457sMxicgQ94Z1WD9JChzJu19kBE8Szb5T8tcUAC', but was '#{cleaned_text}'"
+          expect(cleaned_text).to include("B62qrQiw9JhUumq457sMxicgQ94Z1WD9JChzJu19kBE8Szb5T8tcUAC"), "Expected 'Prover' to be 'B62qrQiw9JhUumq457sMxicgQ94Z1WD9JChzJu19kBE8Szb5T8tcUAC', but was '#{cleaned_text}'"
         end
       end
     )
