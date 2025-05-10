@@ -14,13 +14,9 @@ impl TableData for Vec<Option<StakingLedgersQueryStakes>> {
                     convert_to_span(get_stake_percentage(stake)),
                     convert_to_span(get_slot_win_likelihood(stake)),
                     convert_to_pill(get_delegators_count(stake), ColorVariant::Blue),
-                    convert_to_copy_link(
-                        if get_public_key(stake) == get_delegate(stake) {
-                            "Self".to_string()
-                        } else {
-                            get_delegate(stake)
-                        },
-                        format!("/addresses/accounts/{}", get_delegate(stake)),
+                    convert_to_linkable_address(
+                        &get_delegate_username(stake),
+                        &get_delegate(stake),
                     ),
                 ],
                 None => vec![],

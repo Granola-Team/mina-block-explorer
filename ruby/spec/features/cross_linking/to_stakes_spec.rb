@@ -26,9 +26,7 @@ RSpec.describe "Staking ledger page navigation", type: :system do
       delegate_cells = all(table_column_selector("Staking Ledger - Epoch 0", "Delegate".upcase))
       delegate_cells.each do |cell|
         cleaned_text = cell.text.gsub(/[\n+-]/, "")
-        expect(cleaned_text).to satisfy("be '#{Constants::GENESIS_ACCOUNT_PK}' or 'Self'") { |text|
-          text == Constants::GENESIS_ACCOUNT_PK || text == "Self"
-        }
+        expect(cleaned_text).to include(Constants::GENESIS_ACCOUNT_PK), "Expected 'Delegate' column to contain '#{Constants::GENESIS_ACCOUNT_PK}', but found '#{cleaned_text}'"
       end
     end
   end

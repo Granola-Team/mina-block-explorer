@@ -57,6 +57,13 @@ pub fn get_delegate(stake: &StakingLedgersQueryStakes) -> String {
         .map_or_else(String::new, ToString::to_string)
 }
 
+pub fn get_delegate_username(stake: &StakingLedgersQueryStakes) -> String {
+    stake
+        .delegate_username
+        .as_ref()
+        .map_or_else(String::new, ToString::to_string)
+}
+
 pub fn get_username(stake: &StakingLedgersQueryStakes) -> String {
     stake
         .username
