@@ -125,9 +125,9 @@ impl TableData for Vec<Option<TransactionsQueryTransactions>> {
                     } else {
                         convert_to_pill(TXN_STATUS_FAILED.to_string(), ColorVariant::Orange)
                     },
-                    convert_to_copy_link(
-                        transaction.get_from(),
-                        format!("/addresses/accounts/{}", transaction.get_from()),
+                    convert_to_linkable_address(
+                        &transaction.get_sender_username(),
+                        &transaction.get_from(),
                     ),
                     convert_to_copy_link(
                         transaction.get_receiver_public_key(),
@@ -181,6 +181,7 @@ pub trait TransactionsTrait {
     fn get_memo(&self) -> String;
     fn get_block_state_hash(&self) -> String;
     fn get_from(&self) -> String;
+    fn get_sender_username(&self) -> String;
     fn get_receiver_public_key(&self) -> String;
     fn get_fee(&self) -> String;
     fn get_hash(&self) -> String;
@@ -268,6 +269,12 @@ impl TransactionsTrait for TransactionsQueryTransactions {
     fn get_to(&self) -> String {
         self.to.as_ref().map_or_else(String::new, |o| o.to_string())
     }
+
+    fn get_sender_username(&self) -> String {
+        self.sender_username
+            .as_ref()
+            .map_or_else(String::new, |o| o.to_string())
+    }
 }
 
 impl TransactionsTrait for PendingTxn {
@@ -308,6 +315,12 @@ impl TransactionsTrait for PendingTxn {
 
     fn get_from(&self) -> String {
         self.from
+            .as_ref()
+            .map_or_else(String::new, |o| o.to_string())
+    }
+
+    fn get_sender_username(&self) -> String {
+        self.sender_username
             .as_ref()
             .map_or_else(String::new, |o| o.to_string())
     }
@@ -383,6 +396,10 @@ impl TransactionsTrait for TransactionsQueryOtherTransactions {
     }
 
     fn get_from(&self) -> String {
+        String::new()
+    }
+
+    fn get_sender_username(&self) -> String {
         String::new()
     }
 

@@ -150,7 +150,7 @@ RSpec.describe "User Commands table", type: :system do
         from_cells = all(table_column_selector("User Commands", "From".upcase))
         from_cells.each do |cell|
           cleaned_text = cell.text.gsub(/[\n+-]/, "")
-          expect(cleaned_text).to eq(Constants::FIRST_SENDER_ADDRESS), "Expected 'From' to be '#{Constants::FIRST_SENDER_ADDRESS}', but was '#{cleaned_text}'"
+          expect(cleaned_text).to include(Constants::FIRST_SENDER_ADDRESS), "Expected 'From' to be '#{Constants::FIRST_SENDER_ADDRESS}', but was '#{cleaned_text}'"
         end
       end
     )
@@ -166,7 +166,7 @@ RSpec.describe "User Commands table", type: :system do
         to_cells = all(table_column_selector("User Commands", "To".upcase))
         to_cells.each do |cell|
           cleaned_text = cell.text.gsub(/[\n+-]/, "")
-          expect(cleaned_text).to eq(Constants::FIRST_RECIPIENT_ADDRESS), "Expected 'To' to be '#{Constants::FIRST_RECIPIENT_ADDRESS}', but was '#{cleaned_text}'"
+          expect(cleaned_text).to include(Constants::FIRST_RECIPIENT_ADDRESS), "Expected 'To' to be '#{Constants::FIRST_RECIPIENT_ADDRESS}', but was '#{cleaned_text}'"
         end
       end
     )

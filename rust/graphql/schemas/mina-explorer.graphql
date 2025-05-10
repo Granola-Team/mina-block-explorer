@@ -721,6 +721,8 @@ type Transaction {
   failureReason: String
   fee: Float
   from: String
+  sender: String
+  senderUsername: String
   hash: String
   kind: String
   memo: String
