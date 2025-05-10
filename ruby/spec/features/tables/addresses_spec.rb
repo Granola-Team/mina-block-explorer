@@ -85,7 +85,7 @@ RSpec.describe "MINA Token Accounts table", type: :system do
         delegate_cells = all(table_column_selector("MINA Token Accounts", "Delegate".upcase))
         delegate_cells.each do |cell|
           cleaned_text = cell.text.gsub(/[\n+-]/, "")
-          expect(cleaned_text).to eq("B62qrQKS9ghd91shs73TCmBJRW9GzvTJK443DPx2YbqcyoLc56g1ny9"), "Expected 'Delegate' to be 'B62qrQKS9ghd91shs73TCmBJRW9GzvTJK443DPx2YbqcyoLc56g1ny9', but was '#{cell.text}'"
+          expect(cleaned_text).to include("B62qrQKS9ghd91shs73TCmBJRW9GzvTJK443DPx2YbqcyoLc56g1ny9"), "Expected 'Delegate' to be 'B62qrQKS9ghd91shs73TCmBJRW9GzvTJK443DPx2YbqcyoLc56g1ny9', but was '#{cleaned_text}'"
         end
       end
     )

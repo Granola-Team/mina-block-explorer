@@ -21,9 +21,9 @@ impl TableData for Vec<Option<AccountsQueryAccounts>> {
                     convert_to_span(account.get_username()),
                     convert_to_span(account.get_balance()),
                     convert_to_pill(account.get_nonce(), ColorVariant::Grey),
-                    convert_to_copy_link(
-                        account.get_delegate(),
-                        format!("/addresses/accounts/{}", account.get_delegate()),
+                    convert_to_linkable_address(
+                        &account.get_delegate_username(),
+                        &account.get_delegate(),
                     ),
                     convert_to_span(account.get_timelocked()),
                 ],
@@ -40,6 +40,7 @@ pub trait AccountTrait {
     fn get_balance(&self) -> String;
     fn get_nonce(&self) -> String;
     fn get_delegate(&self) -> String;
+    fn get_delegate_username(&self) -> String;
     fn get_timelocked(&self) -> String;
 }
 
@@ -75,6 +76,9 @@ impl AccountTrait for AccountsQueryAccounts {
     }
     fn get_delegate(&self) -> String {
         self.delegate.as_ref().cloned().unwrap_or_default()
+    }
+    fn get_delegate_username(&self) -> String {
+        self.delegate_username.as_ref().cloned().unwrap_or_default()
     }
     fn get_timelocked(&self) -> String {
         self.time_locked

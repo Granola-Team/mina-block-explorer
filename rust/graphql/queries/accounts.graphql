@@ -11,6 +11,7 @@ query AccountsQuery(
     username
     balance
     delegate
+    delegateUsername
     nonce
     timeLocked
   }

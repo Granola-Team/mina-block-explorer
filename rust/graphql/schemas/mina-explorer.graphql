@@ -97,6 +97,7 @@ type Account {
   balance: Int
   nonce: Int
   delegate: String
+  delegateUsername: String
   timeLocked: Boolean
   is_genesis_account: Boolean
   genesis_account: Int
