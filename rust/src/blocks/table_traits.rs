@@ -34,9 +34,9 @@ impl TableData for Vec<Option<BlocksQueryBlocks>> {
                         convert_to_local_timezone_formatted(&get_date_time(block)),
                         get_date_time(block),
                     ),
-                    convert_to_copy_link(
-                        get_creator_account(block),
-                        format!("/addresses/accounts/{}", get_creator_account(block)),
+                    convert_to_linkable_address(
+                        &get_creator_username(block),
+                        &get_creator_account(block),
                     ),
                     decorate_with_mina_tag(get_coinbase(block)),
                     convert_to_pill(

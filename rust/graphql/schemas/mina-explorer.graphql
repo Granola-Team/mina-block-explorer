@@ -1286,6 +1286,7 @@ type Block {
   blockHeight: Int
   canonical: Boolean
   creatorAccount: BlockCreatorAccount
+  creatorUsername: String
   dateTime: DateTime
   protocolState: BlockProtocolState
   snarkFees: String

@@ -86,6 +86,13 @@ pub fn get_creator_account(block: &BlocksQueryBlocks) -> String {
         })
 }
 
+pub fn get_creator_username(block: &BlocksQueryBlocks) -> String {
+    block
+        .creator_username
+        .as_ref()
+        .map_or_else(String::new, |o| o.to_string())
+}
+
 pub fn get_coinbase(block: &BlocksQueryBlocks) -> String {
     block
         .transactions

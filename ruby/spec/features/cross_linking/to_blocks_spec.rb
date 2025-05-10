@@ -26,7 +26,7 @@ RSpec.describe "Block page navigation", type: :system do
       producer_cells = all(table_column_selector("Blocks", "BLOCK PRODUCER"))
       producer_cells.each do |cell|
         cleaned_text = cell.text.gsub(/[\n+-]/, "")
-        expect(cleaned_text).to eq(Constants::FIRST_BLOCK_PRODUCER_ADDRESS), "Expected 'Block Producer' column to contain '#{Constants::FIRST_BLOCK_PRODUCER_ADDRESS}', but found '#{cell.text}'"
+        expect(cleaned_text).to include(Constants::FIRST_BLOCK_PRODUCER_ADDRESS), "Expected 'Block Producer' column to contain '#{Constants::FIRST_BLOCK_PRODUCER_ADDRESS}', but found '#{cleaned_text}'"
       end
     end
   end

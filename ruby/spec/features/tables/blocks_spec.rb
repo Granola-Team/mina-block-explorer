@@ -77,7 +77,7 @@ RSpec.describe "Blocks table", type: :system do
         block_producer_cells = all(table_column_selector("Blocks", "Block Producer".upcase))
         block_producer_cells.each do |cell|
           cleaned_text = cell.text.gsub(/[\n+-]/, "")
-          expect(cleaned_text).to eq(Constants::FIRST_BLOCK_PRODUCER_ADDRESS), "Expected 'Block Producer' to be '#{Constants::FIRST_BLOCK_PRODUCER_ADDRESS}', but was '#{cleaned_text}'"
+          expect(cleaned_text).to include(Constants::FIRST_BLOCK_PRODUCER_ADDRESS), "Expected 'Block Producer' to be '#{Constants::FIRST_BLOCK_PRODUCER_ADDRESS}', but was '#{cleaned_text}'"
         end
       end
     )

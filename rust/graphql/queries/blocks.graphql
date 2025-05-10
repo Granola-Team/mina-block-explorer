@@ -33,6 +33,7 @@ query BlocksQuery(
     creatorAccount {
       publicKey
     }
+    creatorUsername
     snarkJobs {
       prover
       blockStateHash
