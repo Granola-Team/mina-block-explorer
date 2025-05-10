@@ -16,35 +16,7 @@ use crate::{
 use heck::ToTitleCase;
 use leptos::*;
 
-fn shared_get_columns() -> Vec<String> {
-    [
-        "Height",
-        "State Hash",
-        "Slot",
-        "Age",
-        "Block Producer",
-        "Coinbase",
-        "User Commands",
-        "SNARKs",
-        "Coinbase Receiver",
-    ]
-    .iter()
-    .map(|slc| slc.to_string())
-    .collect::<Vec<_>>()
-}
-
 impl TableData for Vec<Option<BlocksQueryBlocks>> {
-    fn get_columns(&self) -> Vec<String> {
-        shared_get_columns()
-    }
-
-    fn get_exact_search_columns(&self) -> Vec<String> {
-        ["Height", "State Hash", "Slot", "Block Producer"]
-            .iter()
-            .map(|slc| slc.to_string())
-            .collect::<Vec<_>>()
-    }
-
     fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
         self.iter()
             .map(|opt_blocks| match opt_blocks {
