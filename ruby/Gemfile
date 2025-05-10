@@ -10,3 +10,6 @@ gem 'puma'
 group :test do
   gem "rspec-retry", "~> 0.6.2"
 end
+group :development do
+  gem "solargraph", "~> 0.50.0"
+end
