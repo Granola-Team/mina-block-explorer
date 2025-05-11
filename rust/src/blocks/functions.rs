@@ -221,6 +221,10 @@ pub fn get_coinbase_receiver(block: &BlocksQueryBlocks) -> String {
     })
 }
 
+pub fn get_coinbase_receiver_username(_block: &BlocksQueryBlocks) -> String {
+    "...".to_string()
+}
+
 pub async fn load_data(
     limit: Option<u64>,
     block_creator_account: Option<String>,

@@ -52,9 +52,9 @@ impl TableData for Vec<Option<BlocksQueryBlocks>> {
                         get_snark_job_count(block).map_or_else(String::new, |o| o.to_string()),
                         ColorVariant::Blue,
                     ),
-                    convert_to_copy_link(
-                        get_coinbase_receiver(block),
-                        format!("/addresses/accounts/{}", get_coinbase_receiver(block)),
+                    convert_to_linkable_address(
+                        &get_coinbase_receiver_username(block),
+                        &get_coinbase_receiver(block),
                     ),
                 ],
                 None => vec![],
