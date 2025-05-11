@@ -28,6 +28,7 @@ query AccountActivityQuery(
     canonical
     fee
     from
+    senderUsername
     hash
     to
     amount
@@ -48,6 +49,7 @@ query AccountActivityQuery(
     canonical
     fee
     from
+    senderUsername
     hash
     to
     amount

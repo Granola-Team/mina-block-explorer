@@ -48,10 +48,11 @@ pub struct AccountResponse {
     pub account: AccountSummary,
 }
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq, Default)]
 pub struct AccountActivityQueryDirectionalTransactions {
     pub fee: Option<f64>,
     pub counterparty: Option<String>,
+    pub counterparty_username: Option<String>,
     pub direction: Option<String>,
     pub hash: Option<String>,
     pub amount: Option<f64>,
@@ -73,9 +74,15 @@ impl From<AccountActivityQueryIncomingTransactions>
         AccountActivityQueryDirectionalTransactions {
             fee: i.fee,
             counterparty: if i.from == i.to {
-                Some("Self".to_string())
+                i.to.clone()
             } else {
-                i.from
+                i.from.clone()
+            },
+            counterparty_username: if i.from == i.to {
+                // i.receiver_username
+                None
+            } else {
+                i.sender_username
             },
             direction: Some("IN".to_string()),
             hash: i.hash,
@@ -104,9 +111,15 @@ impl From<AccountActivityQueryOutgoingTransactions>
         AccountActivityQueryDirectionalTransactions {
             fee: i.fee,
             counterparty: if i.from == i.to {
-                Some("Self".to_string())
+                i.from.clone()
             } else {
-                i.to
+                i.to.clone()
+            },
+            counterparty_username: if i.from == i.to {
+                i.sender_username
+            } else {
+                //i.receiver_username
+                None
             },
             direction: Some("OUT".to_string()),
             hash: i.hash,
@@ -158,6 +171,7 @@ pub fn merge_transactions(
 pub trait AccountActivityQueryDirectionalTransactionTrait {
     fn get_fee(&self) -> String;
     fn get_counterparty(&self) -> String;
+    fn get_counterparty_username(&self) -> String;
     fn get_direction(&self) -> String;
     fn get_hash(&self) -> String;
     fn get_amount(&self) -> String;
@@ -183,6 +197,11 @@ impl AccountActivityQueryDirectionalTransactionTrait
         self.counterparty
             .as_ref()
             .map_or(String::new(), |f| f.to_string())
+    }
+    fn get_counterparty_username(&self) -> String {
+        self.counterparty_username
+            .as_ref()
+            .map_or(String::from("..."), |f| f.to_string())
     }
     fn get_direction(&self) -> String {
         self.direction
@@ -415,6 +434,7 @@ mod merge_tests {
                 failure_reason: None,
                 memo: Some("test".to_string()),
                 canonical: Some(true),
+                ..Default::default()
             }),
             Some(AccountActivityQueryIncomingTransactions {
                 fee: Some(0.2),
@@ -431,6 +451,7 @@ mod merge_tests {
                 failure_reason: None,
                 memo: None,
                 canonical: Some(true),
+                ..Default::default()
             }),
         ];
 
@@ -449,6 +470,7 @@ mod merge_tests {
             failure_reason: None,
             memo: Some("outgoing".to_string()),
             canonical: Some(true),
+            ..Default::default()
         })];
 
         // Run the function
@@ -459,7 +481,7 @@ mod merge_tests {
             // Latest: 2023-10-02T12:00:00Z (in2)
             Some(AccountActivityQueryDirectionalTransactions {
                 fee: Some(0.2),
-                counterparty: Some("Self".to_string()),
+                counterparty: Some("alice".to_string()),
                 direction: Some("IN".to_string()),
                 hash: Some("in2".to_string()),
                 amount: Some(5.0),
@@ -470,6 +492,7 @@ mod merge_tests {
                 failure_reason: None,
                 memo: None,
                 canonical: Some(true),
+                ..Default::default()
             }),
             // 2023-10-01T10:00:00Z (in1)
             Some(AccountActivityQueryDirectionalTransactions {
@@ -485,6 +508,7 @@ mod merge_tests {
                 failure_reason: None,
                 memo: Some("test".to_string()),
                 canonical: Some(true),
+                ..Default::default()
             }),
             // 2023-10-01T09:00:00Z (out1)
             Some(AccountActivityQueryDirectionalTransactions {
@@ -500,6 +524,7 @@ mod merge_tests {
                 failure_reason: None,
                 memo: Some("outgoing".to_string()),
                 canonical: Some(true),
+                ..Default::default()
             }),
         ];
 

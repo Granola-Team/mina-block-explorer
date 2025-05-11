@@ -112,6 +112,9 @@ def run_tier_task(rspec_cmd)
   # Wait for port
   wait_for_port(TRUNK_PORT.to_i)
 
+  # Give time for indexer to start
+  sleep 10
+
   # Run RSpec
   rspec_pid = Process.spawn(rspec_cmd, pgroup: true)
   puts "Started RSpec (bundler) with PID: #{rspec_pid}"

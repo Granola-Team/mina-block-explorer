@@ -24,29 +24,6 @@ use crate::{
 use leptos::*;
 
 impl TableData for Vec<Option<AccountActivityQueryDirectionalTransactions>> {
-    fn get_columns(&self) -> Vec<String> {
-        [
-            "Height",
-            "Txn Hash",
-            "Nonce",
-            "Age",
-            "Type",
-            "Direction",
-            "Counterparty",
-            "Amount/Fee",
-        ]
-        .iter()
-        .map(ToString::to_string)
-        .collect::<Vec<_>>()
-    }
-
-    fn get_exact_search_columns(&self) -> Vec<String> {
-        ["Height", "Txn Hash", "Nonce", "Counterparty"]
-            .iter()
-            .map(ToString::to_string)
-            .collect::<Vec<_>>()
-    }
-
     fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
         self.iter()
             .map(|opt_trans| match opt_trans {
@@ -89,9 +66,9 @@ impl TableData for Vec<Option<AccountActivityQueryDirectionalTransactions>> {
                             ColorVariant::DarkBlue
                         },
                     ),
-                    convert_to_copy_link(
-                        transaction.get_counterparty(),
-                        format!("/addresses/accounts/{}", transaction.get_counterparty()),
+                    convert_to_linkable_address(
+                        &transaction.get_counterparty_username(),
+                        &transaction.get_counterparty(),
                     ),
                     convert_array_to_span(vec![
                         decorate_with_mina_tag(transaction.get_amount()),
@@ -107,20 +84,6 @@ impl TableData for Vec<Option<AccountActivityQueryDirectionalTransactions>> {
 }
 
 impl TableData for Vec<Option<AccountActivityQuerySnarks>> {
-    fn get_columns(&self) -> Vec<String> {
-        ["Height", "State Hash", "Age", "Prover", "Fee"]
-            .iter()
-            .map(ToString::to_string)
-            .collect::<Vec<_>>()
-    }
-
-    fn get_exact_search_columns(&self) -> Vec<String> {
-        ["Height", "State Hash", "Prover"]
-            .iter()
-            .map(ToString::to_string)
-            .collect::<Vec<_>>()
-    }
-
     fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
         self.iter()
             .map(|opt_snark| match opt_snark {
