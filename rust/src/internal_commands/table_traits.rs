@@ -8,20 +8,6 @@ use crate::common::{
 use leptos::*;
 
 impl TableData for Vec<Option<InternalCommandsQueryFeetransfers>> {
-    fn get_columns(&self) -> Vec<String> {
-        ["Height", "State Hash", "Age", "Recipient", "Fee", "Type"]
-            .iter()
-            .map(ToString::to_string)
-            .collect::<Vec<_>>()
-    }
-
-    fn get_exact_search_columns(&self) -> Vec<String> {
-        ["Height", "State Hash", "Recipient"]
-            .iter()
-            .map(ToString::to_string)
-            .collect::<Vec<_>>()
-    }
-
     fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
         self.iter()
             .map(|opt_internal_command| match opt_internal_command {
@@ -31,9 +17,9 @@ impl TableData for Vec<Option<InternalCommandsQueryFeetransfers>> {
                         internal_command.get_state_hash(),
                         format!("/blocks/{}", internal_command.get_state_hash()),
                     ),
-                    convert_to_copy_link(
-                        internal_command.get_receipient(),
-                        format!("/addresses/accounts/{}", internal_command.get_receipient()),
+                    convert_to_linkable_address(
+                        &internal_command.get_receipient_username(),
+                        &internal_command.get_receipient(),
                     ),
                     decorate_with_mina_tag(internal_command.get_fee()),
                     convert_to_pill(internal_command.get_type(), ColorVariant::Grey),
@@ -52,6 +38,7 @@ pub trait InternalCommandTrait {
     fn get_height(&self) -> String;
     fn get_state_hash(&self) -> String;
     fn get_receipient(&self) -> String;
+    fn get_receipient_username(&self) -> String;
     fn get_fee(&self) -> String;
     fn get_type(&self) -> String;
     fn get_block_datetime(&self) -> String;
@@ -70,6 +57,11 @@ impl InternalCommandTrait for InternalCommandsQueryFeetransfers {
     }
     fn get_receipient(&self) -> String {
         self.recipient
+            .as_ref()
+            .map_or_else(String::new, |t| t.to_string())
+    }
+    fn get_receipient_username(&self) -> String {
+        self.recipient_username
             .as_ref()
             .map_or_else(String::new, |t| t.to_string())
     }

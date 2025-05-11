@@ -65,7 +65,7 @@ RSpec.describe "Internal Commands table", type: :system do
         recipient_cells = all(table_column_selector("Internal Commands", "Recipient".upcase))
         recipient_cells.each do |cell|
           cleaned_text = cell.text.gsub(/[\n+-]/, "")
-          expect(cleaned_text).to eq("B62qioAD9geuKsffk9gXSgHf18riNEB9NmR4Zyuo2fvWd5WWYTg4WHB"), "Expected 'Recipient' to be 'B62qioAD9geuKsffk9gXSgHf18riNEB9NmR4Zyuo2fvWd5WWYTg4WHB', but was '#{cleaned_text}'"
+          expect(cleaned_text).to include("B62qioAD9geuKsffk9gXSgHf18riNEB9NmR4Zyuo2fvWd5WWYTg4WHB"), "Expected 'Recipient' to be 'B62qioAD9geuKsffk9gXSgHf18riNEB9NmR4Zyuo2fvWd5WWYTg4WHB', but was '#{cleaned_text}'"
         end
       end
     )
