@@ -463,13 +463,10 @@ pub fn BlockSpotlight(block: BlocksQueryBlocks) -> impl IntoView {
         },
         SpotlightEntry {
             label: "Coinbase Receiver".to_string(),
-            any_el: Some({
-                let coinbase_receiver = get_coinbase_receiver(&block);
-                convert_to_copy_link(
-                    coinbase_receiver.clone(),
-                    format!("/addresses/accounts/{}", coinbase_receiver),
-                )
-            }),
+            any_el: Some(convert_to_linkable_address(
+                &get_coinbase_receiver_username(&block),
+                &get_coinbase_receiver(&block),
+            )),
             copiable: true,
         },
         SpotlightEntry {

@@ -187,7 +187,7 @@ module CapybaraHelpers
 
         # Verify the corresponding value in <td>
         actual_value = row.find("td", wait: 0).text.gsub(/[\n+-]/, "")
-        expect(actual_value).to eq(expected_value), "Expected value '#{expected_value}' for field '#{field}', but found '#{actual_value}'"
+        expect(actual_value).to include(expected_value), "Expected value '#{expected_value}' for field '#{field}', but found '#{actual_value}'"
       end
     end
   end
