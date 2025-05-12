@@ -1,5 +1,6 @@
 type TokenAccount {
   pk: String!
+  username: String!
   token: String!
   balance_change: Int!
   symbol: String!

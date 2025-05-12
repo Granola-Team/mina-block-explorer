@@ -217,9 +217,9 @@ pub fn CommandSpotlightPage() -> impl IntoView {
                                 SpotlightEntry {
                                     label: "From/Fee Payer".to_string(),
                                     any_el: Some(
-                                        convert_to_copy_link(
-                                            transaction.get_from(),
-                                            format!("/addresses/accounts/{}", transaction.get_from()),
+                                        convert_to_linkable_address(
+                                            &transaction.get_sender_username(),
+                                            &transaction.get_from(),
                                         ),
                                     ),
                                     copiable: true,
@@ -227,9 +227,9 @@ pub fn CommandSpotlightPage() -> impl IntoView {
                                 SpotlightEntry {
                                     label: "To".to_string(),
                                     any_el: Some(
-                                        convert_to_copy_link(
-                                            transaction.get_to(),
-                                            format!("/addresses/accounts/{}", transaction.get_to()),
+                                        convert_to_linkable_address(
+                                            &transaction.get_receiver_username(),
+                                            &transaction.get_to(),
                                         ),
                                     ),
                                     copiable: true,

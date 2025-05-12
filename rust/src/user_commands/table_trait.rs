@@ -59,10 +59,7 @@ impl TableData for Vec<TransactionsQueryTransactionsZkappAccountsUpdated> {
         self.iter()
             .map(|au| {
                 vec![
-                    convert_to_copy_link(
-                        au.pk.to_string(),
-                        format!("/addresses/accounts/{}", au.pk),
-                    ),
+                    convert_to_linkable_address(&au.username.to_string(), &au.pk.to_string()),
                     convert_to_span(format_number_for_html(
                         &nanomina_to_mina_i64(au.balance_change),
                         14,
@@ -183,6 +180,7 @@ pub trait TransactionsTrait {
     fn get_from(&self) -> String;
     fn get_sender_username(&self) -> String;
     fn get_receiver_public_key(&self) -> String;
+    fn get_receiver_username(&self) -> String;
     fn get_fee(&self) -> String;
     fn get_hash(&self) -> String;
     fn get_amount(&self) -> String;
@@ -270,6 +268,10 @@ impl TransactionsTrait for TransactionsQueryTransactions {
         self.to.as_ref().map_or_else(String::new, |o| o.to_string())
     }
 
+    fn get_receiver_username(&self) -> String {
+        "...".to_string()
+    }
+
     fn get_sender_username(&self) -> String {
         self.sender_username
             .as_ref()
@@ -327,6 +329,10 @@ impl TransactionsTrait for PendingTxn {
 
     fn get_receiver_public_key(&self) -> String {
         String::new()
+    }
+
+    fn get_receiver_username(&self) -> String {
+        "".to_string()
     }
 
     fn get_fee(&self) -> String {
@@ -404,6 +410,10 @@ impl TransactionsTrait for TransactionsQueryOtherTransactions {
     }
 
     fn get_receiver_public_key(&self) -> String {
+        String::new()
+    }
+
+    fn get_receiver_username(&self) -> String {
         String::new()
     }
 

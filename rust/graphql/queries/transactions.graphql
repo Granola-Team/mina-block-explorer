@@ -21,6 +21,7 @@ query TransactionsQuery(
     zkapp {
       accounts_updated {
         pk
+        username
         token
         increment_nonce
         balance_change
