@@ -230,14 +230,9 @@ pub fn BlockAnalytics(block: BlocksQueryBlocks) -> impl IntoView {
             0
         }
     };
-    let (metadata, _) = create_signal(Some(TableMetadata {
-        displayed_records: user_command_amount_total(),
-        available_records: None,
-        total_records: None,
-    }));
 
     view! {
-        <TableSection metadata=metadata.into() section_heading="Analytics">
+        <TableSection metadata=Signal::derive(move || { None }) section_heading="Analytics">
 
             <AnalyticsLayout>
                 <AnalyticsSmContainer>
