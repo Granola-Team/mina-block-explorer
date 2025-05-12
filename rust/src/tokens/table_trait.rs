@@ -11,9 +11,9 @@ impl TableData for Vec<Option<TokensQueryTokens>> {
                         convert_to_pill(token.get_symbol(), ColorVariant::Grey),
                         convert_to_span(token.get_supply()),
                         convert_to_copy_link(token.get_token(), "#".to_string()),
-                        convert_to_copy_link(
-                            token.get_owner(),
-                            format!("/addresses/accounts/{}", token.get_owner()),
+                        convert_to_linkable_address(
+                            &token.get_owner_username(),
+                            &token.get_owner(),
                         ),
                         wrap_in_pill(
                             convert_to_link(
@@ -56,6 +56,7 @@ impl TableData for Vec<Option<TokensQueryTokens>> {
 pub trait TokensTrait {
     fn get_token(&self) -> String;
     fn get_owner(&self) -> String;
+    fn get_owner_username(&self) -> String;
     fn get_symbol(&self) -> String;
     fn get_supply(&self) -> String;
     fn get_number_of_holders(&self) -> String;
@@ -69,6 +70,9 @@ impl TokensTrait for TokensQueryTokens {
     }
     fn get_owner(&self) -> String {
         self.owner.as_ref().cloned().unwrap_or_default().to_string()
+    }
+    fn get_owner_username(&self) -> String {
+        "...".to_string()
     }
     fn get_symbol(&self) -> String {
         self.symbol
