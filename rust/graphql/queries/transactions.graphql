@@ -34,6 +34,9 @@ query TransactionsQuery(
       stateHash
     }
     receiver
+    receiver_account {
+        username
+    }
   }
   other_transactions: transactions(
     limit: $limit

@@ -1,3 +1,5 @@
+use crate::blocks::graphql::blocks_query::BlocksQueryBlocksTransactionsUserCommandsReceiverAccount;
+
 #[derive(Clone)]
 pub enum BlockContent {
     Spotlight,
@@ -20,4 +22,5 @@ pub struct BlocksQueryBlocksTransactionsUserCommandsExt {
     pub failure_reason: Option<String>,
     pub nonce: Option<i64>,
     pub block_state_hash: Option<String>,
+    pub receiver_account: Option<BlocksQueryBlocksTransactionsUserCommandsReceiverAccount>,
 }

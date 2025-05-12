@@ -61,6 +61,7 @@ pub fn get_user_commands(
                         failure_reason: t.failure_reason,
                         nonce: t.nonce,
                         block_state_hash: block_state_hash.clone(),
+                        receiver_account: t.receiver_account,
                     })
                 })
                 .collect::<Vec<_>>()

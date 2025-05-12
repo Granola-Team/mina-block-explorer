@@ -25,6 +25,9 @@ query BlocksQuery(
         memo
         failureReason
         nonce
+        receiver_account {
+            username
+        }
       }
       feeTransfer {
         type

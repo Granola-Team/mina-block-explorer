@@ -160,6 +160,7 @@ type BlockTransactionUserCommand {
   nonce: Int
   to: String
   senderUsername: String
+  receiver_account: ReceiverAccount
 }
 
 input BlockTransactionUserCommandQueryInput {
@@ -722,6 +723,10 @@ type BlockProtocolState {
   previousStateHash: String
 }
 
+type ReceiverAccount {
+    username: String
+}
+
 type Transaction {
   amount: Float
   block: Block
@@ -738,6 +743,7 @@ type Transaction {
   memo: String
   nonce: Int
   receiver: String
+  receiver_account: ReceiverAccount
   to: String
   zkapp: TransactionZkapp
 }

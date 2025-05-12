@@ -70,6 +70,7 @@ impl From<PooledUserCommand> for transactions_query::TransactionsQueryTransactio
             hash: txn.hash,
             block: None,
             receiver: None,
+            receiver_account: None,
         }
     }
 }

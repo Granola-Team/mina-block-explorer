@@ -126,12 +126,9 @@ impl TableData for Vec<Option<TransactionsQueryTransactions>> {
                         &transaction.get_sender_username(),
                         &transaction.get_from(),
                     ),
-                    convert_to_copy_link(
-                        transaction.get_receiver_public_key(),
-                        format!(
-                            "/addresses/accounts/{}",
-                            transaction.get_receiver_public_key()
-                        ),
+                    convert_to_linkable_address(
+                        &transaction.get_receiver_username(),
+                        &transaction.get_receiver_public_key(),
                     ),
                     convert_to_pill(transaction.get_nonce(), ColorVariant::Grey),
                     convert_to_span(transaction.get_fee()),
@@ -150,13 +147,13 @@ impl TableData for Vec<Option<PendingTxn>> {
                 Some(transaction) => vec![
                     convert_to_span(transaction.get_hash()),
                     convert_to_pill(transaction.get_kind(), ColorVariant::Grey),
-                    convert_to_copy_link(
-                        transaction.get_from(),
-                        format!("/addresses/accounts/{}", transaction.get_from()),
+                    convert_to_linkable_address(
+                        &transaction.get_sender_username(),
+                        &transaction.get_from(),
                     ),
-                    convert_to_copy_link(
-                        transaction.get_to(),
-                        format!("/addresses/accounts/{}", transaction.get_to()),
+                    convert_to_linkable_address(
+                        &transaction.get_receiver_username(),
+                        &transaction.get_receiver_public_key(),
                     ),
                     convert_to_pill(transaction.get_nonce(), ColorVariant::Grey),
                     convert_to_span(transaction.get_fee()),
@@ -269,7 +266,10 @@ impl TransactionsTrait for TransactionsQueryTransactions {
     }
 
     fn get_receiver_username(&self) -> String {
-        "...".to_string()
+        self.receiver_account
+            .as_ref()
+            .and_then(|b| b.username.as_ref())
+            .map_or_else(String::new, |o1| o1.to_string())
     }
 
     fn get_sender_username(&self) -> String {

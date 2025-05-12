@@ -195,7 +195,10 @@ impl UserCommandTrait for BlocksQueryBlocksTransactionsUserCommandsExt {
     }
 
     fn get_receiver_username(&self) -> String {
-        "...".to_string()
+        self.receiver_account
+            .as_ref()
+            .and_then(|ra| ra.username.clone())
+            .unwrap_or_default()
     }
 
     fn get_nonce(&self) -> String {
