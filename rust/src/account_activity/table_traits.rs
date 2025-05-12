@@ -107,10 +107,6 @@ impl TableData for Vec<Option<AccountActivityQuerySnarks>> {
 }
 
 impl TableData for Vec<Option<AccountActivityQueryTokenHolders>> {
-    fn get_exact_search_columns(&self) -> Vec<String> {
-        vec![]
-    }
-
     fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
         self.iter()
             .map(|opt_token| match opt_token {
@@ -125,7 +121,10 @@ impl TableData for Vec<Option<AccountActivityQueryTokenHolders>> {
                         Some(0),
                     )),
                     convert_to_pill(token.account.nonce.to_string(), ColorVariant::Grey),
-                    convert_to_copy_link(token.account.delegate.to_string(), "#".to_string()),
+                    convert_to_linkable_address(
+                        &token.account.delegate_username.to_string(),
+                        &token.account.delegate.to_string(),
+                    ),
                     token
                         .account
                         .zkapp
@@ -230,9 +229,9 @@ impl TableData for Vec<Option<AccountActivityQueryBlocks>> {
                     decorate_with_mina_tag(block.get_coinbase()),
                     convert_to_pill(block.get_transaction_count(), ColorVariant::Blue),
                     convert_to_pill(block.get_snark_job_count(), ColorVariant::Blue),
-                    convert_to_copy_link(
-                        block.get_coinbase_receiver(),
-                        format!("/addresses/accounts/{}", block.get_coinbase_receiver()),
+                    convert_to_linkable_address(
+                        &block.get_coinbase_receiver_username(),
+                        &block.get_coinbase_receiver(),
                     ),
                 ],
                 None => vec![],
@@ -253,6 +252,7 @@ pub trait BlockTrait {
     fn get_transaction_count(&self) -> String;
     fn get_snark_job_count(&self) -> String;
     fn get_coinbase_receiver(&self) -> String;
+    fn get_coinbase_receiver_username(&self) -> String;
 }
 
 impl BlockTrait for AccountActivityQueryBlocks {
@@ -292,6 +292,13 @@ impl BlockTrait for AccountActivityQueryBlocks {
             .and_then(|o| o.coinbase.as_deref())
             .map(nanomina_str_to_mina)
             .unwrap_or_default()
+    }
+    fn get_coinbase_receiver_username(&self) -> String {
+        self.transactions
+            .as_ref()
+            .and_then(|o| o.coinbase_receiver_username.clone())
+            .unwrap_or_default()
+            .to_string()
     }
     fn get_transaction_count(&self) -> String {
         self.transactions

@@ -15,6 +15,7 @@ use crate::{
     common::{constants::*, functions::*, models::*, spotlight::*},
 };
 use graphql_client::reqwest::post_graphql;
+use leptos::logging;
 use rust_decimal::prelude::ToPrimitive;
 
 #[allow(clippy::too_many_arguments)]
@@ -236,7 +237,6 @@ pub fn get_spotlight_data(
             .map(|b| nanomina_to_mina(b.try_into().unwrap_or_default()))
             .unwrap_or_default(),
     );
-    crate::logging::log!("account: {:#?}", account);
     balance_el = match (
         account.is_genesis_account.unwrap_or(false), // false if None
         account.genesis_account.unwrap_or(0_i64),    // 0 if None
@@ -301,12 +301,19 @@ pub fn get_spotlight_data(
         SpotlightEntry {
             label: String::from("Delegate"),
             any_el: Some({
-                let account = account
+                logging::log!("{:#?}", account);
+                let account_address = account
                     .delegate
                     .clone()
                     .map(|b| b.to_string())
-                    .unwrap_or_default();
-                convert_to_copy_link(account.clone(), format!("/addresses/accounts/{}", account))
+                    .unwrap_or_default()
+                    .to_string();
+                let account_username = account
+                    .delegate_username
+                    .clone()
+                    .unwrap_or_default()
+                    .to_string();
+                convert_to_linkable_address(&account_username, &account_address)
             }),
             copiable: true,
         },

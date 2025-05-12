@@ -121,6 +121,7 @@ query AccountActivityQuery(
     }
     transactions {
       coinbase
+      coinbaseReceiverUsername
       userCommands {
         blockHeight
       }
@@ -136,6 +137,7 @@ query AccountActivityQuery(
        publicKey
        balance
        delegate
+       delegateUsername
        nonce
        zkapp {
          zkappUri
@@ -147,6 +149,7 @@ query AccountActivityQuery(
     username
     nonce
     delegate
+    delegateUsername
     is_genesis_account
     genesis_account
     zkapp {

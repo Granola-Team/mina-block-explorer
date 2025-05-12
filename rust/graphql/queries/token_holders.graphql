@@ -7,6 +7,7 @@ query TokenHoldersQuery($query:TokenHoldersQueryInput!, $limit: Int!) {
     account {
       publicKey
       delegate
+      delegateUsername
       balance
       nonce
       token
