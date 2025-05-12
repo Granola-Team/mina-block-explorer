@@ -112,13 +112,13 @@ impl TableData for Vec<Option<BlocksQueryBlocksTransactionsUserCommandsExt>> {
                             ColorVariant::Orange
                         },
                     ),
-                    convert_to_copy_link(
-                        user_command.get_from(),
-                        format!("/addresses/accounts/{}", user_command.get_from()),
+                    convert_to_linkable_address(
+                        &user_command.get_sender_username(),
+                        &user_command.get_from(),
                     ),
-                    convert_to_copy_link(
-                        user_command.get_to(),
-                        format!("/addresses/accounts/{}", user_command.get_to()),
+                    convert_to_linkable_address(
+                        &user_command.get_receiver_username(),
+                        &user_command.get_to(),
                     ),
                     convert_to_pill(format_number(user_command.get_nonce()), ColorVariant::Grey),
                     decorate_with_mina_tag(nanomina_to_mina(
@@ -141,7 +141,9 @@ pub trait UserCommandTrait {
     fn get_kind(&self) -> String;
     fn get_failure_reason(&self) -> Option<String>;
     fn get_from(&self) -> String;
+    fn get_sender_username(&self) -> String;
     fn get_to(&self) -> String;
+    fn get_receiver_username(&self) -> String;
     fn get_nonce(&self) -> String;
     fn get_fee(&self) -> String;
     fn get_amount(&self) -> String;
@@ -180,10 +182,20 @@ impl UserCommandTrait for BlocksQueryBlocksTransactionsUserCommandsExt {
             .map_or_else(|| "".to_string(), |o| o.to_string())
     }
 
+    fn get_sender_username(&self) -> String {
+        self.sender_username
+            .as_ref()
+            .map_or_else(|| "".to_string(), |o| o.to_string())
+    }
+
     fn get_to(&self) -> String {
         self.to
             .as_ref()
             .map_or_else(|| "".to_string(), |o| o.to_string())
+    }
+
+    fn get_receiver_username(&self) -> String {
+        "...".to_string()
     }
 
     fn get_nonce(&self) -> String {
@@ -213,9 +225,9 @@ impl TableData for Vec<Option<BlocksQueryBlocksSnarkJobs>> {
                         convert_to_local_timezone_formatted(&get_snark_date_time(snark)),
                         get_snark_date_time(snark),
                     ),
-                    convert_to_copy_link(
-                        get_snark_prover(snark),
-                        format!("/addresses/accounts/{}", get_snark_prover(snark)),
+                    convert_to_linkable_address(
+                        &get_snark_prover_username(snark),
+                        &get_snark_prover(snark),
                     ),
                     decorate_with_mina_tag(get_snark_fee(snark)),
                 ],
@@ -230,9 +242,9 @@ impl TableData for Vec<Option<BlocksQueryBlocksTransactionsFeeTransfer>> {
         self.iter()
             .map(|opt_fee_transfer| match opt_fee_transfer {
                 Some(fee_transfer) => vec![
-                    convert_to_copy_link(
-                        fee_transfer.get_receipient(),
-                        format!("/addresses/accounts/{}", fee_transfer.get_receipient()),
+                    convert_to_linkable_address(
+                        &fee_transfer.get_receipient_username(),
+                        &fee_transfer.get_receipient(),
                     ),
                     decorate_with_mina_tag(fee_transfer.get_fee()),
                     convert_to_pill(fee_transfer.get_type(), ColorVariant::Grey),
@@ -245,6 +257,7 @@ impl TableData for Vec<Option<BlocksQueryBlocksTransactionsFeeTransfer>> {
 
 pub trait FeeTransferTrait {
     fn get_receipient(&self) -> String;
+    fn get_receipient_username(&self) -> String;
     fn get_fee(&self) -> String;
     fn get_type(&self) -> String;
 }
@@ -252,6 +265,11 @@ pub trait FeeTransferTrait {
 impl FeeTransferTrait for BlocksQueryBlocksTransactionsFeeTransfer {
     fn get_receipient(&self) -> String {
         self.recipient
+            .as_ref()
+            .map_or_else(String::new, |t| t.to_string())
+    }
+    fn get_receipient_username(&self) -> String {
+        self.recipient_username
             .as_ref()
             .map_or_else(String::new, |t| t.to_string())
     }

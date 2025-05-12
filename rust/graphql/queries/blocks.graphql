@@ -13,9 +13,11 @@ query BlocksQuery(
       coinbaseReceiverAccount {
         publicKey
       }
+      coinbaseReceiverUsername
       userCommands {
         from
         to
+        senderUsername
         hash
         fee
         amount
@@ -28,6 +30,7 @@ query BlocksQuery(
         type
         fee
         recipient
+        recipientUsername
       }
     }
     creatorAccount {
@@ -36,6 +39,7 @@ query BlocksQuery(
     creatorUsername
     snarkJobs {
       prover
+      proverUsername
       blockStateHash
       blockHeight
       fee

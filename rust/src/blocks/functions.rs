@@ -27,6 +27,12 @@ pub fn get_snark_prover(snark: &BlocksQueryBlocksSnarkJobs) -> String {
         .as_ref()
         .map_or_else(String::new, |o| o.to_string())
 }
+pub fn get_snark_prover_username(snark: &BlocksQueryBlocksSnarkJobs) -> String {
+    snark
+        .prover_username
+        .as_ref()
+        .map_or_else(String::new, |o| o.to_string())
+}
 pub fn get_snark_fee(snark: &BlocksQueryBlocksSnarkJobs) -> String {
     snark
         .fee
@@ -46,6 +52,7 @@ pub fn get_user_commands(
                     Some(BlocksQueryBlocksTransactionsUserCommandsExt {
                         from: t.from,
                         to: t.to,
+                        sender_username: t.sender_username,
                         hash: t.hash,
                         fee: t.fee,
                         amount: t.amount,
@@ -221,8 +228,13 @@ pub fn get_coinbase_receiver(block: &BlocksQueryBlocks) -> String {
     })
 }
 
-pub fn get_coinbase_receiver_username(_block: &BlocksQueryBlocks) -> String {
-    "...".to_string()
+pub fn get_coinbase_receiver_username(block: &BlocksQueryBlocks) -> String {
+    block
+        .transactions
+        .as_ref()
+        .and_then(|t| t.coinbase_receiver_username.clone())
+        .unwrap_or_default()
+        .to_string()
 }
 
 pub async fn load_data(

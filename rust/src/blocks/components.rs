@@ -171,10 +171,16 @@ pub fn BlockInternalCommands(block: BlocksQueryBlocks) -> impl IntoView {
             .and_then(|txn| txn.coinbase_receiver_account.as_ref())
             .and_then(|cra| cra.public_key.clone()); // Clone if String
 
+        let recipient_username = block
+            .transactions
+            .as_ref()
+            .and_then(|txn| txn.coinbase_receiver_username.clone());
+
         internal_commands.push(Some(BlocksQueryBlocksTransactionsFeeTransfer {
             type_: Some("Coinbase".to_string()),
             fee,
             recipient,
+            recipient_username,
         }));
 
         set_data.set(Some(internal_commands));

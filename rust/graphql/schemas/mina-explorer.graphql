@@ -129,12 +129,14 @@ enum AccountSortByInput {
 type BlockTransactionFeeTransfer {
   fee: String
   recipient: String
+  recipientUsername: String
   type: String
 }
 
 type BlockTransaction {
   coinbase: String
   coinbaseReceiverAccount: BlockTransactionCoinbaseReceiverAccount
+  coinbaseReceiverUsername: String
   feeTransfer: [BlockTransactionFeeTransfer]
   userCommands: [BlockTransactionUserCommand]
 }
@@ -155,6 +157,7 @@ type BlockTransactionUserCommand {
   memo: String
   nonce: Int
   to: String
+  senderUsername: String
 }
 
 input BlockTransactionUserCommandQueryInput {
@@ -584,6 +587,7 @@ type BlockSnarkJob {
   dateTime: DateTime
   fee: Int
   prover: String
+  proverUsername: String
 }
 
 scalar DateTime

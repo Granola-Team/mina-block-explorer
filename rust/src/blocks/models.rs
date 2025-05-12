@@ -11,6 +11,7 @@ pub enum BlockContent {
 pub struct BlocksQueryBlocksTransactionsUserCommandsExt {
     pub from: Option<String>,
     pub to: Option<String>,
+    pub sender_username: Option<String>,
     pub hash: Option<String>,
     pub fee: Option<f64>,
     pub amount: Option<f64>,
