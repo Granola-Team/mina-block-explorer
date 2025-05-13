@@ -4,7 +4,7 @@ require "spec_helper"
 RSpec.describe "Staking Ledger - Epoch 1 table", type: :system do
   let(:url) { "/staking-ledgers?epoch=1" }
   let(:heading) { "Staking Ledger - Epoch 1" }
-  let(:columns) { ["Account", "Balance", "Stake", "Total Stake %", "Block Win %", "Delegators", "Delegate"].map(&:upcase) }
+  let(:columns) { ["Account", "Balance", "Stake", "Total Stake %", "Slot Win Likelihood", "Delegators", "Delegate"].map(&:upcase) }
 
   before do
     visit url

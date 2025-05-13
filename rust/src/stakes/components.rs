@@ -45,7 +45,7 @@ pub fn StakesPageContents(
                 ..Default::default()
             },
             TableColumn {
-                column: "Block Win %".to_string(),
+                column: "Slot Win Likelihood".to_string(),
                 width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
                 alignment: Some(ColumnTextAlignment::Right),
                 ..Default::default()
