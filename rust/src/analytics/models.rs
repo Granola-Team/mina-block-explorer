@@ -1,4 +1,7 @@
-use crate::common::table::{AnySort, CycleSort, SortDirection};
+use crate::common::{
+    constants::EPOCH_SLOTS,
+    table::{AnySort, CycleSort, SortDirection},
+};
 use serde::*;
 use statrs::statistics::{Data, Distribution, OrderStatistics};
 use std::fmt;
@@ -192,6 +195,12 @@ impl StakerStats {
         let percent_of_blocks_produced =
             self.num_canonical_blocks_produced as f64 / total_blocks as f64 * 100.0;
         Self::round_to_two_decimals(percent_of_blocks_produced)
+    }
+
+    pub fn get_percent_of_winnable_slots(&self) -> Option<String> {
+        let percent_of_winnable_slots =
+            self.num_slots_produced as f64 / (EPOCH_SLOTS as f64 * 0.75_f64) * 100.0;
+        Self::round_to_two_decimals(percent_of_winnable_slots)
     }
 }
 
