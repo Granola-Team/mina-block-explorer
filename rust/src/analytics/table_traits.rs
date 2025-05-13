@@ -26,7 +26,7 @@ impl TableData for Vec<StakerStats> {
                     convert_array_to_span(vec![
                         convert_to_span(format_number(stat.num_slots_produced.to_string())),
                         convert_to_span(
-                            stat.get_percent_of_winnable_slots()
+                            stat.get_percent_of_produced_slots()
                                 .map(|r| format!("({r}%)"))
                                 .unwrap_or("n/a".to_string()),
                         )

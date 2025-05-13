@@ -359,6 +359,11 @@ pub fn StakerLeaderboard() -> impl IntoView {
                     num_supercharged_blocks_produced: ss.num_supercharged_blocks_produced,
                     num_slots_produced: ss.num_slots_produced,
                     delegation_totals: ss.delegation_totals,
+                    epoch_num_slots_produced: resource
+                        .get()
+                        .and_then(|res| res.ok())
+                        .and_then(|res| res.data.blocks.first().cloned())
+                        .map(|block| block.epoch_num_slots_produced),
                     epoch_num_canonical_blocks: resource
                         .get()
                         .and_then(|res| res.ok())
@@ -405,7 +410,7 @@ pub fn StakerLeaderboard() -> impl IntoView {
                     column: "Slots Produced".to_string(),
                     alignment: Some(ColumnTextAlignment::Center),
                     width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
-                    tooltip: Some("Of All Winnable Slots".to_string()),
+                    tooltip: Some("of total slots produced".to_string()),
                     ..Default::default()
                 },
                 TableColumn {

@@ -1,7 +1,4 @@
-use crate::common::{
-    constants::EPOCH_SLOTS,
-    table::{AnySort, CycleSort, SortDirection},
-};
+use crate::common::table::{AnySort, CycleSort, SortDirection};
 use serde::*;
 use statrs::statistics::{Data, Distribution, OrderStatistics};
 use std::fmt;
@@ -128,6 +125,7 @@ pub struct StakerStats {
     pub num_slots_produced: u32,
     pub epoch_num_canonical_blocks: Option<u32>,
     pub epoch_num_blocks: Option<u32>,
+    pub epoch_num_slots_produced: Option<u32>,
     pub delegation_totals: DelegationTotals,
 }
 
@@ -135,6 +133,7 @@ pub struct StakerStats {
 pub struct TopStakerBlocks {
     pub epoch_num_canonical_blocks: u32,
     pub epoch_num_blocks: u32,
+    pub epoch_num_slots_produced: u32,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
@@ -197,9 +196,12 @@ impl StakerStats {
         Self::round_to_two_decimals(percent_of_blocks_produced)
     }
 
-    pub fn get_percent_of_winnable_slots(&self) -> Option<String> {
-        let percent_of_winnable_slots =
-            self.num_slots_produced as f64 / (EPOCH_SLOTS as f64 * 0.75_f64) * 100.0;
+    pub fn get_percent_of_produced_slots(&self) -> Option<String> {
+        let total_slots = self.epoch_num_slots_produced?;
+        if total_slots == 0 {
+            return None;
+        }
+        let percent_of_winnable_slots = self.num_slots_produced as f64 / total_slots as f64 * 100.0;
         Self::round_to_two_decimals(percent_of_winnable_slots)
     }
 }
