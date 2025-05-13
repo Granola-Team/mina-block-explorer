@@ -73,7 +73,7 @@ pub async fn load_staker_leaderboard_data(
         return Err(MyError::ParseError("Epoch must not be None".into()));
     }
     let query_body = format!(
-        r#"{{"query":"query TopStakers($query: TopStakersQueryInput!, $blocks_query: BlockQueryInput!, $limit: Int = 50, $sort_by: TopStakersSortByInput!) {{ blocks(limit: 1, query: $blocks_query) {{ epoch_num_canonical_blocks epoch_num_blocks }} topStakers(query: $query, limit: $limit, sortBy: $sort_by) {{ username public_key num_blocks_produced num_canonical_blocks_produced num_supercharged_blocks_produced num_slots_produced }} }}","variables":{{"limit": 50, "sort_by": "{}", "query": {{ "epoch": {} }}, "blocks_query": {{ "protocolState": {{ "consensusState": {{ "epoch": {} }} }} }} }},"operationName":"TopStakers"}}"#,
+        r#"{{"query":"query TopStakers($query: TopStakersQueryInput!, $blocks_query: BlockQueryInput!, $limit: Int = 50, $sort_by: TopStakersSortByInput!) {{ blocks(limit: 1, query: $blocks_query) {{ epoch_num_canonical_blocks epoch_num_blocks }} topStakers(query: $query, limit: $limit, sortBy: $sort_by) {{ username public_key num_blocks_produced num_canonical_blocks_produced num_supercharged_blocks_produced num_slots_produced delegation_totals {{ totalStakePercentage }} }} }}","variables":{{"limit": 50, "sort_by": "{}", "query": {{ "epoch": {} }}, "blocks_query": {{ "protocolState": {{ "consensusState": {{ "epoch": {} }} }} }} }},"operationName":"TopStakers"}}"#,
         sort_by,
         epoch.unwrap(),
         epoch.unwrap()

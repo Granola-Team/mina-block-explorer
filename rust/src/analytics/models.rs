@@ -1,7 +1,4 @@
-use crate::common::{
-    constants::EPOCH_SLOTS,
-    table::{AnySort, CycleSort, SortDirection},
-};
+use crate::common::table::{AnySort, CycleSort, SortDirection};
 use serde::*;
 use statrs::statistics::{Data, Distribution, OrderStatistics};
 use std::fmt;
@@ -113,6 +110,12 @@ pub struct SnarkFeesResponse {
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, Default)]
+#[serde(rename_all = "camelCase")]
+pub struct DelegationTotals {
+    pub total_stake_percentage: String,
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone, Default)]
 pub struct StakerStats {
     pub username: String,
     pub public_key: String,
@@ -122,6 +125,7 @@ pub struct StakerStats {
     pub num_slots_produced: u32,
     pub epoch_num_canonical_blocks: Option<u32>,
     pub epoch_num_blocks: Option<u32>,
+    pub delegation_totals: DelegationTotals,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, Default)]
@@ -188,21 +192,6 @@ impl StakerStats {
         let percent_of_blocks_produced =
             self.num_canonical_blocks_produced as f64 / total_blocks as f64 * 100.0;
         Self::round_to_two_decimals(percent_of_blocks_produced)
-    }
-
-    pub fn get_canonical_fill_rate(&self) -> Option<String> {
-        let epoch_num_blocks = self.epoch_num_blocks?;
-        if epoch_num_blocks == 0 {
-            return None;
-        }
-
-        let ratio = self.num_canonical_blocks_produced as f64 / epoch_num_blocks as f64 * 100.0;
-        Self::round_to_two_decimals(ratio)
-    }
-
-    pub fn get_block_fill_rate(&self) -> Option<String> {
-        let percent_of_slots_produced = self.num_slots_produced as f64 / EPOCH_SLOTS as f64 * 100.0;
-        Self::round_to_two_decimals(percent_of_slots_produced)
     }
 }
 
@@ -486,90 +475,6 @@ mod orphan_rate_tests {
         };
         // (1,000,000 - 999,000) / 1,000,000 * 100 = 0.1%
         assert_eq!(stats.orphan_rate(), Some("0.10".to_string()));
-    }
-}
-
-#[cfg(test)]
-mod canonical_fill_rate_tests {
-    use super::*;
-
-    #[test]
-    fn test_canonical_fill_rate_normal_case() {
-        let stats = StakerStats {
-            num_canonical_blocks_produced: 500,
-            epoch_num_blocks: Some(1000),
-            ..Default::default()
-        };
-        // Expected: (500 / 1000) * 100 = 50.0, truncated to "50.00"
-        assert_eq!(stats.get_canonical_fill_rate(), Some("50.00".to_string()));
-    }
-
-    #[test]
-    fn test_canonical_fill_rate_none_epoch_blocks() {
-        let stats = StakerStats {
-            num_canonical_blocks_produced: 500,
-            epoch_num_blocks: None,
-            ..Default::default()
-        };
-        // Expected: None if epoch_num_blocks is None
-        assert_eq!(stats.get_canonical_fill_rate(), None);
-    }
-
-    #[test]
-    fn test_canonical_fill_rate_zero_epoch_blocks() {
-        let stats = StakerStats {
-            num_canonical_blocks_produced: 500,
-            epoch_num_blocks: Some(0),
-            ..Default::default()
-        };
-        // Expected: None if epoch_num_blocks is 0
-        assert_eq!(stats.get_canonical_fill_rate(), None);
-    }
-
-    #[test]
-    fn test_canonical_fill_rate_truncation() {
-        let stats = StakerStats {
-            num_canonical_blocks_produced: 499,
-            epoch_num_blocks: Some(1000),
-            ..Default::default()
-        };
-        // Expected: (499 / 1000) * 100 = 49.9
-        // After truncation: 49.90 (not 49.90 rounded to 49.90, but truncation ensures exact)
-        assert_eq!(stats.get_canonical_fill_rate(), Some("49.90".to_string()));
-    }
-
-    #[test]
-    fn test_canonical_fill_rate_high_precision() {
-        let stats = StakerStats {
-            num_canonical_blocks_produced: 1234,
-            epoch_num_blocks: Some(10000),
-            ..Default::default()
-        };
-        // Expected: (1234 / 10000) * 100 = 12.34
-        // After truncation: 12.34 (exact, no rounding needed)
-        assert_eq!(stats.get_canonical_fill_rate(), Some("12.34".to_string()));
-    }
-
-    #[test]
-    fn test_canonical_fill_rate_full_canonical_blocks() {
-        let stats = StakerStats {
-            num_canonical_blocks_produced: 1000,
-            epoch_num_blocks: Some(1000),
-            ..Default::default()
-        };
-        // Expected: (1000 / 1000) * 100 = 100.0, truncated to "100.00"
-        assert_eq!(stats.get_canonical_fill_rate(), Some("100.00".to_string()));
-    }
-
-    #[test]
-    fn test_canonical_fill_rate_zero_canonical_blocks() {
-        let stats = StakerStats {
-            num_canonical_blocks_produced: 0,
-            epoch_num_blocks: Some(1000),
-            ..Default::default()
-        };
-        // Expected: (0 / 1000) * 100 = 0.0, truncated to "0.00"
-        assert_eq!(stats.get_canonical_fill_rate(), Some("0.00".to_string()));
     }
 }
 

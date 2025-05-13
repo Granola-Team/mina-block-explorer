@@ -358,6 +358,7 @@ pub fn StakerLeaderboard() -> impl IntoView {
                     num_canonical_blocks_produced: ss.num_canonical_blocks_produced,
                     num_supercharged_blocks_produced: ss.num_supercharged_blocks_produced,
                     num_slots_produced: ss.num_slots_produced,
+                    delegation_totals: ss.delegation_totals,
                     epoch_num_canonical_blocks: resource
                         .get()
                         .and_then(|res| res.ok())
@@ -391,31 +392,31 @@ pub fn StakerLeaderboard() -> impl IntoView {
                         .unwrap_or(StakerLeaderboardCanonicalBlocks::NumberOfCanonicalBlocksProducedDesc))),
                     alignment: Some(ColumnTextAlignment::Right),
                     is_sortable: true,
+                    width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
+                    ..Default::default()
+                },
+                TableColumn {
+                    column: "Stake Percentage".to_string(),
+                    alignment: Some(ColumnTextAlignment::Center),
+                    width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
                     ..Default::default()
                 },
                 TableColumn {
                     column: "Slots Produced".to_string(),
                     alignment: Some(ColumnTextAlignment::Right),
+                    width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
                     ..Default::default()
                 },
                 TableColumn {
                     column: "Orphan Rate".to_string(),
                     alignment: Some(ColumnTextAlignment::Center),
-                    ..Default::default()
-                },
-                TableColumn {
-                    column: "Canonical Fill Rate".to_string(),
-                    alignment: Some(ColumnTextAlignment::Center),
-                    ..Default::default()
-                },
-                TableColumn {
-                    column: "Slot Fill Rate".to_string(),
-                    alignment: Some(ColumnTextAlignment::Center),
+                    width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
                     ..Default::default()
                 },
                 TableColumn {
                     column: "Supercharged Blocks Produced".to_string(),
                     alignment: Some(ColumnTextAlignment::Center),
+                    width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
                     ..Default::default()
                 },
             ];
