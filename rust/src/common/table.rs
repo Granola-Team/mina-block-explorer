@@ -53,6 +53,7 @@ pub struct TableColumn<T> {
     pub width: Option<String>,
     pub html_input_type: String,
     pub alignment: Option<ColumnTextAlignment>,
+    pub tooltip: Option<String>,
 }
 
 impl<T> Default for TableColumn<T> {
@@ -66,6 +67,7 @@ impl<T> Default for TableColumn<T> {
             width: None,
             html_input_type: "text".to_string(),
             alignment: None,
+            tooltip: None,
         }
     }
 }
@@ -336,7 +338,19 @@ where
                 }
             }
         >
-            {column.column.clone()}
+            {column
+                .tooltip
+                .map(|title| {
+                    view! {
+                        <span class="flex justify-start items-center cursor-pointer" title=title>
+                            {column.column.to_string()}
+                            <span class="w-2" />
+                            <QuestionMark />
+                        </span>
+                    }
+                        .into_view()
+                })
+                .unwrap_or(view! { {column.column.to_string()} }.into_view())}
             {match &column.sort_direction {
                 Some(direction) => {
                     if direction.is_active() {

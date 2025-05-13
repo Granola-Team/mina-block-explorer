@@ -403,8 +403,9 @@ pub fn StakerLeaderboard() -> impl IntoView {
                 },
                 TableColumn {
                     column: "Slots Produced".to_string(),
-                    alignment: Some(ColumnTextAlignment::Right),
+                    alignment: Some(ColumnTextAlignment::Center),
                     width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
+                    tooltip: Some("Of All Winnable Slots".to_string()),
                     ..Default::default()
                 },
                 TableColumn {
