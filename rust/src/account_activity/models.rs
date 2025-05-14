@@ -79,8 +79,9 @@ impl From<AccountActivityQueryIncomingTransactions>
                 i.from.clone()
             },
             counterparty_username: if i.from == i.to {
-                // i.receiver_username
-                None
+                i.receiver_account
+                    .as_ref()
+                    .and_then(|ra| ra.username.clone())
             } else {
                 i.sender_username
             },
@@ -118,8 +119,9 @@ impl From<AccountActivityQueryOutgoingTransactions>
             counterparty_username: if i.from == i.to {
                 i.sender_username
             } else {
-                //i.receiver_username
-                None
+                i.receiver_account
+                    .as_ref()
+                    .and_then(|ra| ra.username.clone())
             },
             direction: Some("OUT".to_string()),
             hash: i.hash,

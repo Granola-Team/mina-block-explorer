@@ -40,6 +40,9 @@ query AccountActivityQuery(
     kind
     failureReason
     memo
+    receiver_account {
+        username
+    }
   }
   outgoing_transactions: transactions(
     sortBy: $trans_sort_by
@@ -61,6 +64,9 @@ query AccountActivityQuery(
     kind
     failureReason
     memo
+    receiver_account {
+        username
+    }
   }
   feetransfers(
     sortBy: $internal_commands_sort_by
