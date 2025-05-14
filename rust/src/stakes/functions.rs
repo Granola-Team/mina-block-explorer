@@ -47,7 +47,7 @@ pub fn get_slot_win_likelihood(stake: &StakingLedgersQueryStakes) -> String {
     let f = 0.75_f64;
     let probability = c * c * (1.0_f64 - (1.0_f64 - f).powf(total_stake_fraction));
 
-    format!("{:.2}%", probability * 100_f64)
+    round_to_two_decimals(probability * 100_f64).unwrap_or("n/a".to_string())
 }
 
 pub fn get_delegate(stake: &StakingLedgersQueryStakes) -> String {

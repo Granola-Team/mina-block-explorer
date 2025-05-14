@@ -619,6 +619,39 @@ pub fn split_str(s: &str) -> (String, String) {
     (first_half.to_string(), second_half.to_string())
 }
 
+pub fn round_to_two_decimals(value: f64) -> Option<String> {
+    if !value.is_finite() {
+        return None;
+    }
+    // Round to 2 decimal places
+    let rounded = (value * 100.0).round() / 100.0;
+    Some(format!("{:.2}", rounded))
+}
+
+#[cfg(test)]
+mod round_to_two_decimals_tests {
+    use super::round_to_two_decimals;
+
+    #[test]
+    fn test_round_to_two_decimals() {
+        // Test normal cases
+        assert_eq!(round_to_two_decimals(12.3456), Some("12.35".to_string()));
+        assert_eq!(round_to_two_decimals(12.3444), Some("12.34".to_string()));
+        assert_eq!(round_to_two_decimals(0.0), Some("0.00".to_string()));
+        assert_eq!(round_to_two_decimals(99.999), Some("100.00".to_string()));
+
+        // Test edge cases
+        assert_eq!(round_to_two_decimals(-12.3456), Some("-12.35".to_string()));
+        assert_eq!(round_to_two_decimals(0.001), Some("0.00".to_string()));
+        assert_eq!(round_to_two_decimals(0.005), Some("0.01".to_string()));
+
+        // Test non-finite cases
+        assert_eq!(round_to_two_decimals(f64::INFINITY), None);
+        assert_eq!(round_to_two_decimals(f64::NEG_INFINITY), None);
+        assert_eq!(round_to_two_decimals(f64::NAN), None);
+    }
+}
+
 #[cfg(test)]
 mod split_str_tests {
     use super::split_str;

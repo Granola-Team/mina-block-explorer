@@ -1,4 +1,7 @@
-use crate::common::table::{AnySort, CycleSort, SortDirection};
+use crate::common::{
+    functions::round_to_two_decimals,
+    table::{AnySort, CycleSort, SortDirection},
+};
 use serde::*;
 use statrs::statistics::{Data, Distribution, OrderStatistics};
 use std::fmt;
@@ -162,16 +165,6 @@ impl fmt::Display for StakerLeaderboardCanonicalBlocks {
 }
 
 impl StakerStats {
-    // Helper function for rounding to 2 decimal places
-    fn round_to_two_decimals(value: f64) -> Option<String> {
-        if !value.is_finite() {
-            return None;
-        }
-        // Round to 2 decimal places
-        let rounded = (value * 100.0).round() / 100.0;
-        Some(format!("{:.2}", rounded))
-    }
-
     pub fn orphan_rate(&self) -> Option<String> {
         if self.num_slots_produced == 0 {
             return None;
@@ -182,7 +175,7 @@ impl StakerStats {
             .checked_sub(self.num_canonical_blocks_produced)?;
 
         let orphan_rate = num_orphans as f64 / self.num_slots_produced as f64 * 100.0;
-        Self::round_to_two_decimals(orphan_rate)
+        round_to_two_decimals(orphan_rate)
     }
 
     pub fn get_percent_of_canonical_blocks(&self) -> Option<String> {
@@ -193,7 +186,7 @@ impl StakerStats {
 
         let percent_of_blocks_produced =
             self.num_canonical_blocks_produced as f64 / total_blocks as f64 * 100.0;
-        Self::round_to_two_decimals(percent_of_blocks_produced)
+        round_to_two_decimals(percent_of_blocks_produced)
     }
 
     pub fn get_percent_of_produced_slots(&self) -> Option<String> {
@@ -202,7 +195,7 @@ impl StakerStats {
             return None;
         }
         let percent_of_winnable_slots = self.num_slots_produced as f64 / total_slots as f64 * 100.0;
-        Self::round_to_two_decimals(percent_of_winnable_slots)
+        round_to_two_decimals(percent_of_winnable_slots)
     }
 }
 
@@ -486,50 +479,5 @@ mod orphan_rate_tests {
         };
         // (1,000,000 - 999,000) / 1,000,000 * 100 = 0.1%
         assert_eq!(stats.orphan_rate(), Some("0.10".to_string()));
-    }
-}
-
-#[cfg(test)]
-mod round_to_two_decimals_tests {
-    use super::StakerStats;
-
-    #[test]
-    fn test_round_to_two_decimals() {
-        // Test normal cases
-        assert_eq!(
-            StakerStats::round_to_two_decimals(12.3456),
-            Some("12.35".to_string())
-        );
-        assert_eq!(
-            StakerStats::round_to_two_decimals(12.3444),
-            Some("12.34".to_string())
-        );
-        assert_eq!(
-            StakerStats::round_to_two_decimals(0.0),
-            Some("0.00".to_string())
-        );
-        assert_eq!(
-            StakerStats::round_to_two_decimals(99.999),
-            Some("100.00".to_string())
-        );
-
-        // Test edge cases
-        assert_eq!(
-            StakerStats::round_to_two_decimals(-12.3456),
-            Some("-12.35".to_string())
-        );
-        assert_eq!(
-            StakerStats::round_to_two_decimals(0.001),
-            Some("0.00".to_string())
-        );
-        assert_eq!(
-            StakerStats::round_to_two_decimals(0.005),
-            Some("0.01".to_string())
-        );
-
-        // Test non-finite cases
-        assert_eq!(StakerStats::round_to_two_decimals(f64::INFINITY), None);
-        assert_eq!(StakerStats::round_to_two_decimals(f64::NEG_INFINITY), None);
-        assert_eq!(StakerStats::round_to_two_decimals(f64::NAN), None);
     }
 }
