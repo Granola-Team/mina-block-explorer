@@ -31,23 +31,25 @@ pub fn get_stake_percentage(stake: &StakingLedgersQueryStakes) -> String {
 }
 
 pub fn get_slot_win_likelihood(stake: &StakingLedgersQueryStakes) -> String {
-    let total_stake_percentage = stake
-        .delegation_totals
-        .as_ref()
-        .and_then(|delegation_totals| delegation_totals.total_stake_percentage.clone())
-        .unwrap_or_default();
+    let stake_fraction = stake.delegation_totals.as_ref().and_then(|dt| {
+        let delegated = dt.total_delegated_nanomina? as f64;
+        let total = dt.total_currency? as f64;
+        if total == 0.0 {
+            None
+        } else {
+            Some(delegated / total)
+        }
+    });
 
-    let total_stake_percentage: f64 = match total_stake_percentage.parse::<f64>() {
-        Ok(value) if value >= 0.0 => value,
-        _ => return "n/a".to_string(),
-    };
+    let probability = stake_fraction.map(|fraction| {
+        let base_factor = 1.0_f64;
+        let decay_factor = 0.75_f64;
+        base_factor * base_factor * (1.0_f64 - (1.0_f64 - decay_factor).powf(fraction))
+    });
 
-    let total_stake_fraction = total_stake_percentage / 100.0_f64;
-    let c = 1.0_f64;
-    let f = 0.75_f64;
-    let probability = c * c * (1.0_f64 - (1.0_f64 - f).powf(total_stake_fraction));
-
-    round_to_two_decimals(probability * 100_f64).unwrap_or("n/a".to_string())
+    probability
+        .and_then(|p| round_to_two_decimals(p * 100.0))
+        .unwrap_or("n/a".to_string())
 }
 
 pub fn get_delegate(stake: &StakingLedgersQueryStakes) -> String {

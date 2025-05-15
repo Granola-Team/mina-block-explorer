@@ -320,6 +320,7 @@ type DelegationTotal {
   totalStakePercentage: String
   countDelegates: Int
   totalDelegatedNanomina: Int
+  totalCurrency: Int
 }
 
 input BlockTransactionQueryInput {
