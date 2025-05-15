@@ -37,7 +37,7 @@ pub async fn load_token_symbol(token_id: Option<String>) -> Result<TokenSymbolRe
 #[allow(clippy::too_many_arguments)]
 pub async fn load_data(
     limit: Option<i64>,
-    public_key: Option<String>,
+    public_key: Option<PublicKey>,
     username: Option<String>,
     mina_balance: Option<f64>,
     delegate: Option<String>,
@@ -55,7 +55,7 @@ pub async fn load_data(
         None
     } else {
         Some(accounts_query::AccountQueryInput {
-            public_key,
+            public_key: public_key.map(|pk| pk.as_str().to_string()),
             username,
             token,
             balance_lte: mina_balance

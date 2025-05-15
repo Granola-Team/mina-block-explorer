@@ -4,7 +4,7 @@ require "spec_helper"
 RSpec.describe "MINA Token Accounts table", type: :system do
   let(:url) { "/addresses/accounts" }
   let(:heading) { "MINA Token Accounts" }
-  let(:columns) { ["Type", "Public Key", "Username", "Balance", "Nonce", "Delegate", "Time Locked"].map(&:upcase) }
+  let(:columns) { ["Type", "Account", "Balance", "Nonce", "Delegate", "Time Locked"].map(&:upcase) }
 
   before(:each) do
     visit url
@@ -35,23 +35,20 @@ RSpec.describe "MINA Token Accounts table", type: :system do
     )
   end
 
-  it "has working filter for column 'Public Key' with input 'B62qpqCBExtxzfHUPkmrrfmYhXZyg3V7pSmwuxHMzTi8E6gBbopauJS'" do
+  it "has working filter for column 'Account' with input 'B62qpqCBExtxzfHUPkmrrfmYhXZyg3V7pSmwuxHMzTi8E6gBbopauJS'" do
     test_filter(
       heading,
-      "Public Key",
+      "Account",
       "B62qpqCBExtxzfHUPkmrrfmYhXZyg3V7pSmwuxHMzTi8E6gBbopauJS",
       nil,
       lambda do
         table_rows = get_table_rows("MINA Token Accounts")
         expect(table_rows.count).to eq(1), "Expected 'MINA Token Accounts' table to have 1 row, but found #{table_rows.count}"
-        public_key_cells = all(table_column_selector("MINA Token Accounts", "Public Key".upcase))
+        public_key_cells = all(table_column_selector("MINA Token Accounts", "Account".upcase))
         public_key_cells.each do |cell|
           cleaned_text = cell.text.gsub(/[\n+-]/, "")
-          expect(cleaned_text).to eq(Constants::ROMEK_ADDRESS), "Expected 'Public Key' to be '#{Constants::ROMEK_ADDRESS}', but was '#{cell.text}'"
-        end
-        username_cells = all(table_column_selector("MINA Token Accounts", "Username".upcase))
-        username_cells.each do |cell|
-          expect(cell.text).to eq(Constants::ROMEK_USERNAME), "Expected 'Username' to be '#{Constants::ROMEK_USERNAME}', but was '#{cell.text}'"
+          expect(cleaned_text).to include(Constants::ROMEK_ADDRESS), "Expected 'Account' to be '#{Constants::ROMEK_ADDRESS}', but was '#{cleaned_text}'"
+          expect(cleaned_text).to include(Constants::ROMEK_USERNAME), "Expected 'Username' to be '#{Constants::ROMEK_USERNAME}', but was '#{cleaned_text}'"
         end
       end
     )

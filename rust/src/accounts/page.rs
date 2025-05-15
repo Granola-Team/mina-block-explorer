@@ -25,8 +25,7 @@ fn AccountsPageContents() -> impl IntoView {
     let (summary_sig, _, _) =
         use_local_storage::<BlockchainSummary, JsonSerdeCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
     let (data_sig, set_data) = create_signal(None);
-    let (public_key_sig, _) = create_query_signal::<String>("q-public-key");
-    let (username_sig, _) = create_query_signal::<String>("q-username");
+    let (account_sig, _) = create_query_signal::<String>("q-account");
     let (balance_sig, _) = create_query_signal::<f64>(QUERY_PARAM_BALANCE);
     let (delegate_sig, _) = create_query_signal::<String>("q-delegate");
     let (q_token, _) = create_query_signal::<String>(QUERY_PARAM_TOKEN);
@@ -35,11 +34,32 @@ fn AccountsPageContents() -> impl IntoView {
     let (q_type_sig, _) = create_query_signal::<String>(QUERY_PARAM_TYPE);
     let (token_sig, set_token) = create_signal::<Option<TokenData>>(None);
 
+    let public_key_memo = Memo::new(move |_| {
+        account_sig
+            .get()
+            .and_then(|account| match PublicKey::new(account) {
+                Ok(public_key) => Some(public_key),
+                Err(_) => None,
+            })
+    });
+    let username_memo = Memo::new(move |_| {
+        account_sig
+            .get()
+            .and_then(|account| match PublicKey::new(account) {
+                Ok(_) => None,
+                Err(_) => Some(
+                    account_sig
+                        .get()
+                        .expect("Expected to find username in q-account"),
+                ),
+            })
+    });
+
     let resource = create_resource(
         move || {
             (
-                public_key_sig.get(),
-                username_sig.get(),
+                public_key_memo.get(),
+                username_memo.get(),
                 balance_sig.get(),
                 delegate_sig.get(),
                 row_limit_sig.get(),
@@ -119,15 +139,9 @@ fn AccountsPageContents() -> impl IntoView {
                     ..Default::default()
                 },
                 TableColumn {
-                    column: "Public Key".to_string(),
+                    column: "Account".to_string(),
                     search_type: ColumnSearchType::Text,
                     width: Some(String::from(TABLE_COL_HASH_WIDTH)),
-                    ..Default::default()
-                },
-                TableColumn {
-                    column: "Username".to_string(),
-                    width: Some(String::from(TABLE_COL_USERNAME_WIDTH)),
-                    search_type: ColumnSearchType::Text,
                     ..Default::default()
                 },
                 TableColumn {

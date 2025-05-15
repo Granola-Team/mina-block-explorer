@@ -2,7 +2,7 @@ require "spec_helper"
 
 RSpec.describe "Input", type: :system do
   slow_input_searches = [
-    {heading: "MINA Accounts", url: "/addresses/accounts", input: "B62", column: "Public Key"},
+    {heading: "MINA Accounts", url: "/addresses/accounts", input: "B62", column: "Account"},
     {heading: "Blocks", url: "/blocks", input: "253134", column: "Height"},
     {heading: "Staking Ledger - Epoch 1", url: "/staking-ledgers?epoch=1", input: "B62", column: "Account"},
     {heading: "Internal Commands", url: "/commands/internal", input: "253134", column: "Height"}

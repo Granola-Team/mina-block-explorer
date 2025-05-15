@@ -1,6 +1,50 @@
-use graphql_client::Error;
 use serde::{Deserialize, Serialize};
 use std::{fmt, str::FromStr};
+
+#[derive(Debug, Clone, Serialize, PartialEq, Eq, PartialOrd, Ord)]
+pub struct PublicKey(String);
+
+impl PublicKey {
+    pub const LEN: usize = 55;
+    pub const PREFIX: &'static str = "B62q";
+
+    pub fn new(pk: impl Into<String>) -> Result<Self, String> {
+        let pk = pk.into();
+        if Self::is_valid(&pk) {
+            Ok(Self(pk))
+        } else {
+            Err(format!("Invalid public key: {}", pk))
+        }
+    }
+
+    fn is_valid(pk: &str) -> bool {
+        pk.starts_with(Self::PREFIX) && pk.len() == Self::LEN
+    }
+
+    pub fn as_str(&self) -> &str {
+        &self.0
+    }
+}
+
+impl FromStr for PublicKey {
+    type Err = String;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Self::new(s)
+    }
+}
+
+impl fmt::Display for PublicKey {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", self.0)
+    }
+}
+
+impl AsRef<str> for PublicKey {
+    fn as_ref(&self) -> &str {
+        self.as_str()
+    }
+}
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
 pub enum TransactionKind {
@@ -135,7 +179,7 @@ impl TableMetadataBuilder {
 pub enum MyError {
     NetworkError(String),
     ParseError(String), // other error variants
-    GraphQLError(Vec<Error>),
+    GraphQLError(Vec<graphql_client::Error>),
     GraphQLEmpty(String),
     UrlParseError(String),
 }

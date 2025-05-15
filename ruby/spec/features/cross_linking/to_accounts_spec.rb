@@ -9,7 +9,7 @@ RSpec.describe "Account page navigation", type: :system do
     },
     {
       origin: "/addresses/accounts",
-      column: "Public Key",
+      column: "Account",
       tableHeader: "MINA Token Accounts"
     },
     {

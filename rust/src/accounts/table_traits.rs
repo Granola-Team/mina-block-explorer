@@ -14,11 +14,7 @@ impl TableData for Vec<Option<AccountsQueryAccounts>> {
                     } else {
                         convert_to_span("".to_string())
                     },
-                    convert_to_copy_link(
-                        account.get_public_key(),
-                        format!("/addresses/accounts/{}", account.get_public_key()),
-                    ),
-                    convert_to_span(account.get_username()),
+                    convert_to_linkable_address(&account.get_username(), &account.get_public_key()),
                     convert_to_span(account.get_balance()),
                     convert_to_pill(account.get_nonce(), ColorVariant::Grey),
                     convert_to_linkable_address(
