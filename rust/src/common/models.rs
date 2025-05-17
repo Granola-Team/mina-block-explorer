@@ -46,6 +46,28 @@ impl AsRef<str> for PublicKey {
     }
 }
 
+impl From<String> for PublicKey {
+    fn from(val: String) -> Self {
+        let expectation = format!(
+            "String must be a valid public key ({} chars, starts with '{}')",
+            PublicKey::LEN,
+            PublicKey::PREFIX
+        );
+        PublicKey::new(val).expect(&expectation)
+    }
+}
+
+impl From<&str> for PublicKey {
+    fn from(val: &str) -> Self {
+        let expectation = format!(
+            "String must be a valid public key ({} chars, starts with '{}')",
+            PublicKey::LEN,
+            PublicKey::PREFIX
+        );
+        PublicKey::new(val).expect(&expectation)
+    }
+}
+
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
 pub enum TransactionKind {
     Payment,

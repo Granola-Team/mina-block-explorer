@@ -14,12 +14,12 @@ impl TableData for Vec<Option<AccountsQueryAccounts>> {
                     } else {
                         convert_to_span("".to_string())
                     },
-                    convert_to_linkable_address(&account.get_username(), &account.get_public_key()),
+                    convert_to_linkable_address(account.get_username(), account.get_public_key()),
                     convert_to_span(account.get_balance()),
                     convert_to_pill(account.get_nonce(), ColorVariant::Grey),
                     convert_to_linkable_address(
-                        &account.get_delegate_username(),
-                        &account.get_delegate(),
+                        account.get_delegate_username(),
+                        account.get_delegate(),
                     ),
                     convert_to_span(account.get_timelocked()),
                 ],
@@ -32,11 +32,11 @@ impl TableData for Vec<Option<AccountsQueryAccounts>> {
 pub trait AccountTrait {
     fn is_zk_app(&self) -> bool;
     fn get_public_key(&self) -> String;
-    fn get_username(&self) -> String;
+    fn get_username(&self) -> Option<String>;
     fn get_balance(&self) -> String;
     fn get_nonce(&self) -> String;
     fn get_delegate(&self) -> String;
-    fn get_delegate_username(&self) -> String;
+    fn get_delegate_username(&self) -> Option<String>;
     fn get_timelocked(&self) -> String;
 }
 
@@ -51,12 +51,8 @@ impl AccountTrait for AccountsQueryAccounts {
             .unwrap_or_default()
             .to_string()
     }
-    fn get_username(&self) -> String {
-        self.username
-            .as_ref()
-            .cloned()
-            .unwrap_or_default()
-            .to_string()
+    fn get_username(&self) -> Option<String> {
+        self.username.clone()
     }
     fn get_balance(&self) -> String {
         self.balance
@@ -73,8 +69,8 @@ impl AccountTrait for AccountsQueryAccounts {
     fn get_delegate(&self) -> String {
         self.delegate.as_ref().cloned().unwrap_or_default()
     }
-    fn get_delegate_username(&self) -> String {
-        self.delegate_username.as_ref().cloned().unwrap_or_default()
+    fn get_delegate_username(&self) -> Option<String> {
+        self.delegate_username.clone()
     }
     fn get_timelocked(&self) -> String {
         self.time_locked

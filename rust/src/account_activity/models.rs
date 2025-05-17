@@ -173,7 +173,7 @@ pub fn merge_transactions(
 pub trait AccountActivityQueryDirectionalTransactionTrait {
     fn get_fee(&self) -> String;
     fn get_counterparty(&self) -> String;
-    fn get_counterparty_username(&self) -> String;
+    fn get_counterparty_username(&self) -> Option<String>;
     fn get_direction(&self) -> String;
     fn get_hash(&self) -> String;
     fn get_amount(&self) -> String;
@@ -200,10 +200,8 @@ impl AccountActivityQueryDirectionalTransactionTrait
             .as_ref()
             .map_or(String::new(), |f| f.to_string())
     }
-    fn get_counterparty_username(&self) -> String {
-        self.counterparty_username
-            .as_ref()
-            .map_or(String::from("..."), |f| f.to_string())
+    fn get_counterparty_username(&self) -> Option<String> {
+        self.counterparty_username.clone()
     }
     fn get_direction(&self) -> String {
         self.direction

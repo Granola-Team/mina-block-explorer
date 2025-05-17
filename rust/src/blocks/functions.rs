@@ -27,11 +27,8 @@ pub fn get_snark_prover(snark: &BlocksQueryBlocksSnarkJobs) -> String {
         .as_ref()
         .map_or_else(String::new, |o| o.to_string())
 }
-pub fn get_snark_prover_username(snark: &BlocksQueryBlocksSnarkJobs) -> String {
-    snark
-        .prover_username
-        .as_ref()
-        .map_or_else(String::new, |o| o.to_string())
+pub fn get_snark_prover_username(snark: &BlocksQueryBlocksSnarkJobs) -> Option<String> {
+    snark.prover_username.clone()
 }
 pub fn get_snark_fee(snark: &BlocksQueryBlocksSnarkJobs) -> String {
     snark
@@ -94,11 +91,8 @@ pub fn get_creator_account(block: &BlocksQueryBlocks) -> String {
         })
 }
 
-pub fn get_creator_username(block: &BlocksQueryBlocks) -> String {
-    block
-        .creator_username
-        .as_ref()
-        .map_or_else(String::new, |o| o.to_string())
+pub fn get_creator_username(block: &BlocksQueryBlocks) -> Option<String> {
+    block.creator_username.clone()
 }
 
 pub fn get_coinbase(block: &BlocksQueryBlocks) -> String {
@@ -229,13 +223,11 @@ pub fn get_coinbase_receiver(block: &BlocksQueryBlocks) -> String {
     })
 }
 
-pub fn get_coinbase_receiver_username(block: &BlocksQueryBlocks) -> String {
+pub fn get_coinbase_receiver_username(block: &BlocksQueryBlocks) -> Option<String> {
     block
         .transactions
         .as_ref()
         .and_then(|t| t.coinbase_receiver_username.clone())
-        .unwrap_or_default()
-        .to_string()
 }
 
 pub async fn load_data(

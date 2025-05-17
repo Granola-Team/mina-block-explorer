@@ -66,11 +66,8 @@ pub fn get_prover(snark: &SnarksQuerySnarks) -> String {
         .map_or_else(String::new, ToString::to_string)
 }
 
-pub fn get_prover_username(snark: &SnarksQuerySnarks) -> String {
-    snark
-        .prover_username
-        .as_ref()
-        .map_or_else(String::new, ToString::to_string)
+pub fn get_prover_username(snark: &SnarksQuerySnarks) -> Option<String> {
+    snark.prover_username.clone()
 }
 
 pub fn get_block_state_hash(snark: &SnarksQuerySnarks) -> String {

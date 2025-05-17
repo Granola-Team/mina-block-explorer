@@ -11,10 +11,12 @@ impl TableData for Vec<Option<TokensQueryTokens>> {
                         convert_to_pill(token.get_symbol(), ColorVariant::Grey),
                         convert_to_span(token.get_supply()),
                         convert_to_copy_link(token.get_token(), "#".to_string()),
-                        convert_to_linkable_address(
-                            &token.get_owner_username(),
-                            &token.get_owner(),
-                        ),
+                        match token.get_owner() {
+                            Some(owner) => {
+                                convert_to_linkable_address(token.get_owner_username(), owner)
+                            }
+                            None => html::span().into(),
+                        },
                         wrap_in_pill(
                             convert_to_link(
                                 token.get_number_of_holders(),
@@ -55,8 +57,8 @@ impl TableData for Vec<Option<TokensQueryTokens>> {
 
 pub trait TokensTrait {
     fn get_token(&self) -> String;
-    fn get_owner(&self) -> String;
-    fn get_owner_username(&self) -> String;
+    fn get_owner(&self) -> Option<String>;
+    fn get_owner_username(&self) -> Option<String>;
     fn get_symbol(&self) -> String;
     fn get_supply(&self) -> String;
     fn get_number_of_holders(&self) -> String;
@@ -68,11 +70,11 @@ impl TokensTrait for TokensQueryTokens {
     fn get_token(&self) -> String {
         self.token.to_string()
     }
-    fn get_owner(&self) -> String {
-        self.owner.as_ref().cloned().unwrap_or_default().to_string()
+    fn get_owner(&self) -> Option<String> {
+        self.owner.clone()
     }
-    fn get_owner_username(&self) -> String {
-        "...".to_string()
+    fn get_owner_username(&self) -> Option<String> {
+        None
     }
     fn get_symbol(&self) -> String {
         self.symbol

@@ -67,8 +67,8 @@ impl TableData for Vec<Option<AccountActivityQueryDirectionalTransactions>> {
                         },
                     ),
                     convert_to_linkable_address(
-                        &transaction.get_counterparty_username(),
-                        &transaction.get_counterparty(),
+                        transaction.get_counterparty_username(),
+                        transaction.get_counterparty(),
                     ),
                     convert_array_to_span(vec![
                         decorate_with_mina_tag(transaction.get_amount()),
@@ -122,8 +122,8 @@ impl TableData for Vec<Option<AccountActivityQueryTokenHolders>> {
                     )),
                     convert_to_pill(token.account.nonce.to_string(), ColorVariant::Grey),
                     convert_to_linkable_address(
-                        &token.account.delegate_username.to_string(),
-                        &token.account.delegate.to_string(),
+                        token.account.delegate_username.clone(),
+                        token.account.delegate.to_string(),
                     ),
                     token
                         .account
@@ -230,8 +230,8 @@ impl TableData for Vec<Option<AccountActivityQueryBlocks>> {
                     convert_to_pill(block.get_transaction_count(), ColorVariant::Blue),
                     convert_to_pill(block.get_snark_job_count(), ColorVariant::Blue),
                     convert_to_linkable_address(
-                        &block.get_coinbase_receiver_username(),
-                        &block.get_coinbase_receiver(),
+                        block.get_coinbase_receiver_username(),
+                        block.get_coinbase_receiver(),
                     ),
                 ],
                 None => vec![],
@@ -252,7 +252,7 @@ pub trait BlockTrait {
     fn get_transaction_count(&self) -> String;
     fn get_snark_job_count(&self) -> String;
     fn get_coinbase_receiver(&self) -> String;
-    fn get_coinbase_receiver_username(&self) -> String;
+    fn get_coinbase_receiver_username(&self) -> Option<String>;
 }
 
 impl BlockTrait for AccountActivityQueryBlocks {
@@ -293,12 +293,10 @@ impl BlockTrait for AccountActivityQueryBlocks {
             .map(nanomina_str_to_mina)
             .unwrap_or_default()
     }
-    fn get_coinbase_receiver_username(&self) -> String {
+    fn get_coinbase_receiver_username(&self) -> Option<String> {
         self.transactions
             .as_ref()
             .and_then(|o| o.coinbase_receiver_username.clone())
-            .unwrap_or_default()
-            .to_string()
     }
     fn get_transaction_count(&self) -> String {
         self.transactions
@@ -330,7 +328,7 @@ impl TableData for Vec<Option<AccountActivityQueryDelegatorExt>> {
         self.iter()
             .map(|opt_stake| match opt_stake {
                 Some(stake) => vec![
-                    convert_to_linkable_address(&stake.get_username(), &stake.get_public_key()),
+                    convert_to_linkable_address(stake.get_username(), stake.get_public_key()),
                     convert_to_span(stake.get_delegated_balance()),
                     convert_to_span(stake.get_percent_of_delegation()),
                 ],
@@ -365,7 +363,7 @@ impl TableData for Vec<Option<AccountActivityQueryFeetransfers>> {
 
 pub trait StakeTrait {
     fn get_public_key(&self) -> String;
-    fn get_username(&self) -> String;
+    fn get_username(&self) -> Option<String>;
     fn get_delegated_balance(&self) -> String;
     fn get_percent_of_delegation(&self) -> String;
 }
@@ -375,8 +373,8 @@ impl StakeTrait for AccountActivityQueryDelegatorExt {
         self.public_key.clone().unwrap_or_default()
     }
 
-    fn get_username(&self) -> String {
-        self.username.clone().unwrap_or_default()
+    fn get_username(&self) -> Option<String> {
+        self.username.clone()
     }
 
     fn get_delegated_balance(&self) -> String {

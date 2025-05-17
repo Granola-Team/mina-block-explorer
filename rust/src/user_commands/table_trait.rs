@@ -59,7 +59,7 @@ impl TableData for Vec<TransactionsQueryTransactionsZkappAccountsUpdated> {
         self.iter()
             .map(|au| {
                 vec![
-                    convert_to_linkable_address(&au.username.to_string(), &au.pk.to_string()),
+                    convert_to_linkable_address(au.username.clone(), au.pk.to_string()),
                     convert_to_span(format_number_for_html(
                         &nanomina_to_mina_i64(au.balance_change),
                         14,
@@ -123,12 +123,12 @@ impl TableData for Vec<Option<TransactionsQueryTransactions>> {
                         convert_to_pill(TXN_STATUS_FAILED.to_string(), ColorVariant::Orange)
                     },
                     convert_to_linkable_address(
-                        &transaction.get_sender_username(),
-                        &transaction.get_from(),
+                        transaction.get_sender_username(),
+                        transaction.get_from(),
                     ),
                     convert_to_linkable_address(
-                        &transaction.get_receiver_username(),
-                        &transaction.get_receiver_public_key(),
+                        transaction.get_receiver_username(),
+                        transaction.get_receiver_public_key(),
                     ),
                     convert_to_pill(transaction.get_nonce(), ColorVariant::Grey),
                     convert_to_span(transaction.get_fee()),
@@ -148,12 +148,12 @@ impl TableData for Vec<Option<PendingTxn>> {
                     convert_to_span(transaction.get_hash()),
                     convert_to_pill(transaction.get_kind(), ColorVariant::Grey),
                     convert_to_linkable_address(
-                        &transaction.get_sender_username(),
-                        &transaction.get_from(),
+                        transaction.get_sender_username(),
+                        transaction.get_from(),
                     ),
                     convert_to_linkable_address(
-                        &transaction.get_receiver_username(),
-                        &transaction.get_receiver_public_key(),
+                        transaction.get_receiver_username(),
+                        transaction.get_receiver_public_key(),
                     ),
                     convert_to_pill(transaction.get_nonce(), ColorVariant::Grey),
                     convert_to_span(transaction.get_fee()),
@@ -175,9 +175,9 @@ pub trait TransactionsTrait {
     fn get_memo(&self) -> String;
     fn get_block_state_hash(&self) -> String;
     fn get_from(&self) -> String;
-    fn get_sender_username(&self) -> String;
+    fn get_sender_username(&self) -> Option<String>;
     fn get_receiver_public_key(&self) -> String;
-    fn get_receiver_username(&self) -> String;
+    fn get_receiver_username(&self) -> Option<String>;
     fn get_fee(&self) -> String;
     fn get_hash(&self) -> String;
     fn get_amount(&self) -> String;
@@ -265,17 +265,14 @@ impl TransactionsTrait for TransactionsQueryTransactions {
         self.to.as_ref().map_or_else(String::new, |o| o.to_string())
     }
 
-    fn get_receiver_username(&self) -> String {
+    fn get_receiver_username(&self) -> Option<String> {
         self.receiver_account
             .as_ref()
-            .and_then(|b| b.username.as_ref())
-            .map_or_else(String::new, |o1| o1.to_string())
+            .and_then(|b| b.username.clone())
     }
 
-    fn get_sender_username(&self) -> String {
-        self.sender_username
-            .as_ref()
-            .map_or_else(String::new, |o| o.to_string())
+    fn get_sender_username(&self) -> Option<String> {
+        self.sender_username.clone()
     }
 }
 
@@ -321,18 +318,16 @@ impl TransactionsTrait for PendingTxn {
             .map_or_else(String::new, |o| o.to_string())
     }
 
-    fn get_sender_username(&self) -> String {
-        self.sender_username
-            .as_ref()
-            .map_or_else(String::new, |o| o.to_string())
+    fn get_sender_username(&self) -> Option<String> {
+        self.sender_username.clone()
     }
 
     fn get_receiver_public_key(&self) -> String {
-        String::new()
+        "".to_string()
     }
 
-    fn get_receiver_username(&self) -> String {
-        "".to_string()
+    fn get_receiver_username(&self) -> Option<String> {
+        None
     }
 
     fn get_fee(&self) -> String {
@@ -405,16 +400,16 @@ impl TransactionsTrait for TransactionsQueryOtherTransactions {
         String::new()
     }
 
-    fn get_sender_username(&self) -> String {
-        String::new()
+    fn get_sender_username(&self) -> Option<String> {
+        None
     }
 
     fn get_receiver_public_key(&self) -> String {
-        String::new()
+        "".to_string()
     }
 
-    fn get_receiver_username(&self) -> String {
-        String::new()
+    fn get_receiver_username(&self) -> Option<String> {
+        None
     }
 
     fn get_fee(&self) -> String {

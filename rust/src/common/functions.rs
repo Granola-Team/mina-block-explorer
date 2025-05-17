@@ -426,19 +426,24 @@ pub fn convert_to_title(data: String, title: String) -> HtmlElement<html::AnyEle
         .into()
 }
 
-pub fn convert_to_linkable_address(username: &str, address: &str) -> HtmlElement<html::AnyElement> {
-    convert_array_to_span(vec![
-        convert_to_link(
-            username.to_string(),
-            format!("/addresses/accounts/{}/spotlight", address),
-        ),
-        convert_to_copy_link(
-            address.to_string(),
-            format!("/addresses/accounts/{}/spotlight", address),
-        )
-        .attr("class", "text-xs text-slate-400"),
-    ])
-    .attr("class", "w-full text-ellipsis overflow-hidden")
+pub fn convert_to_linkable_address(
+    username: Option<String>,
+    address: impl Into<PublicKey>,
+) -> HtmlElement<html::AnyElement> {
+    let address = address.into();
+    let address_str = address.as_str();
+    let href = format!("/addresses/accounts/{}/spotlight", address_str);
+
+    match username {
+        Some(username) => convert_array_to_span(vec![
+            convert_to_link(username, href.to_string()),
+            convert_to_copy_link(address_str.to_string(), href)
+                .attr("class", "text-xs text-slate-400"),
+        ])
+        .attr("class", "w-full text-ellipsis overflow-hidden"),
+        None => convert_to_copy_link(address_str.to_string(), href)
+            .attr("class", "text-xs text-slate-400"),
+    }
 }
 
 pub fn convert_array_to_span(

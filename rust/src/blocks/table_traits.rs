@@ -35,8 +35,8 @@ impl TableData for Vec<Option<BlocksQueryBlocks>> {
                         get_date_time(block),
                     ),
                     convert_to_linkable_address(
-                        &get_creator_username(block),
-                        &get_creator_account(block),
+                        get_creator_username(block),
+                        get_creator_account(block),
                     ),
                     decorate_with_mina_tag(get_coinbase(block)),
                     convert_to_pill(
@@ -53,8 +53,8 @@ impl TableData for Vec<Option<BlocksQueryBlocks>> {
                         ColorVariant::Blue,
                     ),
                     convert_to_linkable_address(
-                        &get_coinbase_receiver_username(block),
-                        &get_coinbase_receiver(block),
+                        get_coinbase_receiver_username(block),
+                        get_coinbase_receiver(block),
                     ),
                 ],
                 None => vec![],
@@ -113,12 +113,12 @@ impl TableData for Vec<Option<BlocksQueryBlocksTransactionsUserCommandsExt>> {
                         },
                     ),
                     convert_to_linkable_address(
-                        &user_command.get_sender_username(),
-                        &user_command.get_from(),
+                        user_command.get_sender_username(),
+                        user_command.get_from(),
                     ),
                     convert_to_linkable_address(
-                        &user_command.get_receiver_username(),
-                        &user_command.get_to(),
+                        user_command.get_receiver_username(),
+                        user_command.get_to(),
                     ),
                     convert_to_pill(format_number(user_command.get_nonce()), ColorVariant::Grey),
                     decorate_with_mina_tag(nanomina_to_mina(
@@ -141,9 +141,9 @@ pub trait UserCommandTrait {
     fn get_kind(&self) -> String;
     fn get_failure_reason(&self) -> Option<String>;
     fn get_from(&self) -> String;
-    fn get_sender_username(&self) -> String;
+    fn get_sender_username(&self) -> Option<String>;
     fn get_to(&self) -> String;
-    fn get_receiver_username(&self) -> String;
+    fn get_receiver_username(&self) -> Option<String>;
     fn get_nonce(&self) -> String;
     fn get_fee(&self) -> String;
     fn get_amount(&self) -> String;
@@ -182,10 +182,8 @@ impl UserCommandTrait for BlocksQueryBlocksTransactionsUserCommandsExt {
             .map_or_else(|| "".to_string(), |o| o.to_string())
     }
 
-    fn get_sender_username(&self) -> String {
-        self.sender_username
-            .as_ref()
-            .map_or_else(|| "".to_string(), |o| o.to_string())
+    fn get_sender_username(&self) -> Option<String> {
+        self.sender_username.clone()
     }
 
     fn get_to(&self) -> String {
@@ -194,11 +192,10 @@ impl UserCommandTrait for BlocksQueryBlocksTransactionsUserCommandsExt {
             .map_or_else(|| "".to_string(), |o| o.to_string())
     }
 
-    fn get_receiver_username(&self) -> String {
+    fn get_receiver_username(&self) -> Option<String> {
         self.receiver_account
             .as_ref()
             .and_then(|ra| ra.username.clone())
-            .unwrap_or_default()
     }
 
     fn get_nonce(&self) -> String {
@@ -229,8 +226,8 @@ impl TableData for Vec<Option<BlocksQueryBlocksSnarkJobs>> {
                         get_snark_date_time(snark),
                     ),
                     convert_to_linkable_address(
-                        &get_snark_prover_username(snark),
-                        &get_snark_prover(snark),
+                        get_snark_prover_username(snark),
+                        get_snark_prover(snark),
                     ),
                     decorate_with_mina_tag(get_snark_fee(snark)),
                 ],
@@ -246,8 +243,8 @@ impl TableData for Vec<Option<BlocksQueryBlocksTransactionsFeeTransfer>> {
             .map(|opt_fee_transfer| match opt_fee_transfer {
                 Some(fee_transfer) => vec![
                     convert_to_linkable_address(
-                        &fee_transfer.get_receipient_username(),
-                        &fee_transfer.get_receipient(),
+                        fee_transfer.get_receipient_username(),
+                        fee_transfer.get_receipient(),
                     ),
                     decorate_with_mina_tag(fee_transfer.get_fee()),
                     convert_to_pill(fee_transfer.get_type(), ColorVariant::Grey),
@@ -260,7 +257,7 @@ impl TableData for Vec<Option<BlocksQueryBlocksTransactionsFeeTransfer>> {
 
 pub trait FeeTransferTrait {
     fn get_receipient(&self) -> String;
-    fn get_receipient_username(&self) -> String;
+    fn get_receipient_username(&self) -> Option<String>;
     fn get_fee(&self) -> String;
     fn get_type(&self) -> String;
 }
@@ -271,10 +268,8 @@ impl FeeTransferTrait for BlocksQueryBlocksTransactionsFeeTransfer {
             .as_ref()
             .map_or_else(String::new, |t| t.to_string())
     }
-    fn get_receipient_username(&self) -> String {
-        self.recipient_username
-            .as_ref()
-            .map_or_else(String::new, |t| t.to_string())
+    fn get_receipient_username(&self) -> Option<String> {
+        self.recipient_username.clone()
     }
     fn get_fee(&self) -> String {
         self.fee

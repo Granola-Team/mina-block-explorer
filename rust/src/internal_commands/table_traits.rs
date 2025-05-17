@@ -18,8 +18,8 @@ impl TableData for Vec<Option<InternalCommandsQueryFeetransfers>> {
                         format!("/blocks/{}", internal_command.get_state_hash()),
                     ),
                     convert_to_linkable_address(
-                        &internal_command.get_receipient_username(),
-                        &internal_command.get_receipient(),
+                        internal_command.get_receipient_username(),
+                        internal_command.get_receipient(),
                     ),
                     decorate_with_mina_tag(internal_command.get_fee()),
                     convert_to_pill(internal_command.get_type(), ColorVariant::Grey),
@@ -38,7 +38,7 @@ pub trait InternalCommandTrait {
     fn get_height(&self) -> String;
     fn get_state_hash(&self) -> String;
     fn get_receipient(&self) -> String;
-    fn get_receipient_username(&self) -> String;
+    fn get_receipient_username(&self) -> Option<String>;
     fn get_fee(&self) -> String;
     fn get_type(&self) -> String;
     fn get_block_datetime(&self) -> String;
@@ -60,10 +60,8 @@ impl InternalCommandTrait for InternalCommandsQueryFeetransfers {
             .as_ref()
             .map_or_else(String::new, |t| t.to_string())
     }
-    fn get_receipient_username(&self) -> String {
-        self.recipient_username
-            .as_ref()
-            .map_or_else(String::new, |t| t.to_string())
+    fn get_receipient_username(&self) -> Option<String> {
+        self.recipient_username.clone()
     }
     fn get_fee(&self) -> String {
         self.fee

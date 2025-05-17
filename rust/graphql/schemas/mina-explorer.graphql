@@ -1,6 +1,6 @@
 type TokenAccount {
   pk: String!
-  username: String!
+  username: String
   token: String!
   balance_change: Int!
   symbol: String!
@@ -37,7 +37,7 @@ type Permissions {
 type TokenHolderAccount {
   publicKey: String!
   delegate: String!
-  delegateUsername: String!
+  delegateUsername: String
   balance: Int!
   nonce: Int!
   token: String!

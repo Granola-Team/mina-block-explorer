@@ -7,7 +7,7 @@ impl TableData for Vec<StakerStats> {
         self.iter()
             .map(|stat| {
                 vec![
-                    convert_to_linkable_address(&stat.username, &stat.public_key),
+                    convert_to_linkable_address(stat.username.clone(), stat.public_key.clone()),
                     convert_array_to_span(vec![
                         convert_to_span(format_number(
                             stat.num_canonical_blocks_produced.to_string(),
@@ -54,10 +54,7 @@ impl TableData for Vec<TopSnarkerStat> {
         self.iter()
             .map(|stat| {
                 vec![
-                    convert_to_linkable_address(
-                        &stat.username.clone().unwrap_or("Unknown".to_string()),
-                        &stat.public_key.clone(),
-                    ),
+                    convert_to_linkable_address(stat.username.clone(), stat.public_key.clone()),
                     convert_to_span(format_number_for_html(
                         nanomina_to_mina(stat.total_fees).as_str(),
                         TOP_SNARKER_FEE_MAX_LHS_DIGITS,

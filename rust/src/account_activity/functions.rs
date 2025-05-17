@@ -15,7 +15,6 @@ use crate::{
     common::{constants::*, functions::*, models::*, spotlight::*},
 };
 use graphql_client::reqwest::post_graphql;
-use leptos::logging;
 use rust_decimal::prelude::ToPrimitive;
 
 #[allow(clippy::too_many_arguments)]
@@ -301,19 +300,14 @@ pub fn get_spotlight_data(
         SpotlightEntry {
             label: String::from("Delegate"),
             any_el: Some({
-                logging::log!("{:#?}", account);
                 let account_address = account
                     .delegate
                     .clone()
                     .map(|b| b.to_string())
                     .unwrap_or_default()
                     .to_string();
-                let account_username = account
-                    .delegate_username
-                    .clone()
-                    .unwrap_or_default()
-                    .to_string();
-                convert_to_linkable_address(&account_username, &account_address)
+                let account_username = account.delegate_username.clone();
+                convert_to_linkable_address(account_username, account_address)
             }),
             copiable: true,
         },

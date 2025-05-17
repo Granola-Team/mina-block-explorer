@@ -120,7 +120,7 @@ pub struct DelegationTotals {
 
 #[derive(Deserialize, Serialize, Debug, Clone, Default)]
 pub struct StakerStats {
-    pub username: String,
+    pub username: Option<String>,
     pub public_key: String,
     pub num_blocks_produced: u32,
     pub num_canonical_blocks_produced: u32,

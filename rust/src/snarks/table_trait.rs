@@ -17,7 +17,7 @@ impl TableData for Vec<Option<SnarksQuerySnarks>> {
                         convert_to_local_timezone_formatted(&get_date_time(snark)),
                         get_date_time(snark),
                     ),
-                    convert_to_linkable_address(&get_prover_username(snark), &get_prover(snark)),
+                    convert_to_linkable_address(get_prover_username(snark), get_prover(snark)),
                     convert_to_span(get_fee(snark)),
                 ],
                 None => vec![],

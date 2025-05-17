@@ -218,8 +218,8 @@ pub fn CommandSpotlightPage() -> impl IntoView {
                                     label: "From/Fee Payer".to_string(),
                                     any_el: Some(
                                         convert_to_linkable_address(
-                                            &transaction.get_sender_username(),
-                                            &transaction.get_from(),
+                                            transaction.get_sender_username(),
+                                            transaction.get_from(),
                                         ),
                                     ),
                                     copiable: true,
@@ -228,8 +228,8 @@ pub fn CommandSpotlightPage() -> impl IntoView {
                                     label: "To".to_string(),
                                     any_el: Some(
                                         convert_to_linkable_address(
-                                            &transaction.get_receiver_username(),
-                                            &transaction.get_to(),
+                                            transaction.get_receiver_username(),
+                                            transaction.get_to(),
                                         ),
                                     ),
                                     copiable: true,
