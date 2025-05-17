@@ -4,7 +4,7 @@ require "spec_helper"
 RSpec.describe "Snarker Leaderboard table", type: :system do
   let(:url) { "/analytics/snarker-leaderboard?epoch=0" }
   let(:heading) { "Snarker Leaderboard" }
-  let(:columns) { ["Username", "Public Key", "Total Fees", "Min Fee", "Max Fee", "Snarks Sold"].map(&:upcase) }
+  let(:columns) { ["SNARKer", "Total Fees", "Min Fee", "Max Fee", "Snarks Sold"].map(&:upcase) }
 
   before do
     visit url

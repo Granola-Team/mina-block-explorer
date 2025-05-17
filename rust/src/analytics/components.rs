@@ -226,11 +226,7 @@ pub fn SnarkerLeaderboard() -> impl IntoView {
             }
             let table_columns: Vec<TableColumn<AnySort>> = vec![
                 TableColumn {
-                    column: "Username".to_string(),
-                    ..Default::default()
-                },
-                TableColumn {
-                    column: "Public Key".to_string(),
+                    column: "SNARKer".to_string(),
                     ..Default::default()
                 },
                 TableColumn {

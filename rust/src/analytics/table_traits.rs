@@ -54,10 +54,9 @@ impl TableData for Vec<TopSnarkerStat> {
         self.iter()
             .map(|stat| {
                 vec![
-                    convert_to_span(stat.username.clone().unwrap_or("Unknown".to_string())),
-                    convert_to_copy_link(
-                        stat.public_key.clone(),
-                        format!("/addresses/accounts/{}/spotlight", stat.public_key),
+                    convert_to_linkable_address(
+                        &stat.username.clone().unwrap_or("Unknown".to_string()),
+                        &stat.public_key.clone(),
                     ),
                     convert_to_span(format_number_for_html(
                         nanomina_to_mina(stat.total_fees).as_str(),
