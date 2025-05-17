@@ -313,9 +313,7 @@ impl TransactionsTrait for PendingTxn {
     }
 
     fn get_from(&self) -> String {
-        self.from
-            .as_ref()
-            .map_or_else(String::new, |o| o.to_string())
+        "".to_string()
     }
 
     fn get_sender_username(&self) -> Option<String> {

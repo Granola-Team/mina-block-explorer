@@ -79,7 +79,6 @@ impl From<PooledUserCommand> for transactions_query::TransactionsQueryTransactio
 pub struct PendingTxn {
     pub txn_hash: Option<String>,
     pub kind: Option<String>,
-    pub from: Option<String>,
     pub sender_username: Option<String>,
     pub to: Option<String>,
     pub nonce: Option<i64>,
@@ -92,7 +91,6 @@ impl From<TransactionsQueryTransactions> for PendingTxn {
         PendingTxn {
             txn_hash: value.hash,
             kind: value.kind,
-            from: value.from,
             sender_username: value.sender_username,
             to: value.receiver,
             nonce: value.nonce,
