@@ -49,6 +49,7 @@ pub fn get_slot_win_likelihood(stake: &StakingLedgersQueryStakes) -> String {
 
     probability
         .and_then(|p| round_to_two_decimals(p * 100.0))
+        .map(|d| format!("{d}%"))
         .unwrap_or("n/a".to_string())
 }
 
