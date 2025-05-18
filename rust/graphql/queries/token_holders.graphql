@@ -2,7 +2,10 @@ query TokenHoldersQuery($query:TokenHoldersQueryInput!, $limit: Int!) {
   tokenHolders(query:$query, limit:$limit) {
     token
     supply
-    owner
+    owner_account {
+        publicKey
+        username
+    }
     symbol
     account {
       publicKey

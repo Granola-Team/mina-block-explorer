@@ -71,10 +71,14 @@ impl TokensTrait for TokensQueryTokens {
         self.token.to_string()
     }
     fn get_owner(&self) -> Option<String> {
-        self.owner.clone()
+        self.owner_account
+            .as_ref()
+            .and_then(|oa| oa.public_key.clone())
     }
     fn get_owner_username(&self) -> Option<String> {
-        None
+        self.owner_account
+            .as_ref()
+            .and_then(|oa| oa.username.clone())
     }
     fn get_symbol(&self) -> String {
         self.symbol

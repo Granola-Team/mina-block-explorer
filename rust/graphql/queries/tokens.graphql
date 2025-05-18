@@ -6,7 +6,10 @@ query TokensQuery(
   tokens(query: $query, sortBy: $sort_by, limit: $limit) {
     token
     supply
-    owner
+    owner_account {
+        publicKey
+        username
+    }
     symbol
     num_holders
     total_num_txns
