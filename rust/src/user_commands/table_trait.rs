@@ -122,14 +122,18 @@ impl TableData for Vec<Option<TransactionsQueryTransactions>> {
                     } else {
                         convert_to_pill(TXN_STATUS_FAILED.to_string(), ColorVariant::Orange)
                     },
-                    convert_to_linkable_address(
-                        transaction.get_sender_username(),
-                        transaction.get_from(),
-                    ),
-                    convert_to_linkable_address(
-                        transaction.get_receiver_username(),
-                        transaction.get_receiver_public_key(),
-                    ),
+                    transaction
+                        .get_from()
+                        .map(|from| {
+                            convert_to_linkable_address(transaction.get_sender_username(), from)
+                        })
+                        .unwrap_or(html::span().into()),
+                    transaction
+                        .get_receiver_public_key()
+                        .map(|to| {
+                            convert_to_linkable_address(transaction.get_receiver_username(), to)
+                        })
+                        .unwrap_or(html::span().into()),
                     convert_to_pill(transaction.get_nonce(), ColorVariant::Grey),
                     convert_to_span(transaction.get_fee()),
                     convert_to_span(transaction.get_amount()),
@@ -147,14 +151,18 @@ impl TableData for Vec<Option<PendingTxn>> {
                 Some(transaction) => vec![
                     convert_to_span(transaction.get_hash()),
                     convert_to_pill(transaction.get_kind(), ColorVariant::Grey),
-                    convert_to_linkable_address(
-                        transaction.get_sender_username(),
-                        transaction.get_from(),
-                    ),
-                    convert_to_linkable_address(
-                        transaction.get_receiver_username(),
-                        transaction.get_receiver_public_key(),
-                    ),
+                    transaction
+                        .get_from()
+                        .map(|from| {
+                            convert_to_linkable_address(transaction.get_sender_username(), from)
+                        })
+                        .unwrap_or(html::span().into()),
+                    transaction
+                        .get_receiver_public_key()
+                        .map(|to| {
+                            convert_to_linkable_address(transaction.get_receiver_username(), to)
+                        })
+                        .unwrap_or(html::span().into()),
                     convert_to_pill(transaction.get_nonce(), ColorVariant::Grey),
                     convert_to_span(transaction.get_fee()),
                     convert_to_span(transaction.get_amount()),
@@ -174,14 +182,13 @@ pub trait TransactionsTrait {
     fn get_nonce(&self) -> String;
     fn get_memo(&self) -> String;
     fn get_block_state_hash(&self) -> String;
-    fn get_from(&self) -> String;
+    fn get_from(&self) -> Option<String>;
     fn get_sender_username(&self) -> Option<String>;
-    fn get_receiver_public_key(&self) -> String;
+    fn get_receiver_public_key(&self) -> Option<String>;
     fn get_receiver_username(&self) -> Option<String>;
     fn get_fee(&self) -> String;
     fn get_hash(&self) -> String;
     fn get_amount(&self) -> String;
-    fn get_to(&self) -> String;
 }
 
 impl TransactionsTrait for TransactionsQueryTransactions {
@@ -229,14 +236,12 @@ impl TransactionsTrait for TransactionsQueryTransactions {
             .map_or_else(String::new, |o1| o1.to_string())
     }
 
-    fn get_from(&self) -> String {
-        self.from
-            .as_ref()
-            .map_or_else(String::new, |o| o.to_string())
+    fn get_from(&self) -> Option<String> {
+        self.from.clone()
     }
 
-    fn get_receiver_public_key(&self) -> String {
-        self.receiver.clone().unwrap_or_default()
+    fn get_receiver_public_key(&self) -> Option<String> {
+        self.receiver.clone()
     }
 
     fn get_fee(&self) -> String {
@@ -259,10 +264,6 @@ impl TransactionsTrait for TransactionsQueryTransactions {
             .map(nanomina_to_mina)
             .map(|number| format_number_for_html(&number, LHS_MAX_DIGIT_PADDING))
             .unwrap_or_default()
-    }
-
-    fn get_to(&self) -> String {
-        self.to.as_ref().map_or_else(String::new, |o| o.to_string())
     }
 
     fn get_receiver_username(&self) -> Option<String> {
@@ -312,16 +313,16 @@ impl TransactionsTrait for PendingTxn {
         String::new()
     }
 
-    fn get_from(&self) -> String {
-        "".to_string()
+    fn get_from(&self) -> Option<String> {
+        self.source.as_ref().and_then(|s| s.public_key.clone())
     }
 
     fn get_sender_username(&self) -> Option<String> {
         self.sender_username.clone()
     }
 
-    fn get_receiver_public_key(&self) -> String {
-        "".to_string()
+    fn get_receiver_public_key(&self) -> Option<String> {
+        self.receiver.as_ref().and_then(|s| s.public_key.clone())
     }
 
     fn get_receiver_username(&self) -> Option<String> {
@@ -348,10 +349,6 @@ impl TransactionsTrait for PendingTxn {
             .map(nanomina_to_mina)
             .map(|number| format_number_for_html(&number, LHS_MAX_DIGIT_PADDING))
             .unwrap_or_default()
-    }
-
-    fn get_to(&self) -> String {
-        self.to.as_ref().map_or_else(String::new, |o| o.to_string())
     }
 }
 
@@ -394,16 +391,16 @@ impl TransactionsTrait for TransactionsQueryOtherTransactions {
             .map_or_else(String::new, |o1| o1.to_string())
     }
 
-    fn get_from(&self) -> String {
-        String::new()
+    fn get_from(&self) -> Option<String> {
+        None
     }
 
     fn get_sender_username(&self) -> Option<String> {
         None
     }
 
-    fn get_receiver_public_key(&self) -> String {
-        "".to_string()
+    fn get_receiver_public_key(&self) -> Option<String> {
+        None
     }
 
     fn get_receiver_username(&self) -> Option<String> {
@@ -421,10 +418,6 @@ impl TransactionsTrait for TransactionsQueryOtherTransactions {
     }
 
     fn get_amount(&self) -> String {
-        String::new()
-    }
-
-    fn get_to(&self) -> String {
         String::new()
     }
 }

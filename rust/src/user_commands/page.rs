@@ -217,20 +217,26 @@ pub fn CommandSpotlightPage() -> impl IntoView {
                                 SpotlightEntry {
                                     label: "From/Fee Payer".to_string(),
                                     any_el: Some(
-                                        convert_to_linkable_address(
-                                            transaction.get_sender_username(),
-                                            transaction.get_from(),
-                                        ),
+                                        transaction
+                                            .get_from()
+                                            .map(|from| convert_to_linkable_address(
+                                                transaction.get_sender_username(),
+                                                from,
+                                            ))
+                                            .unwrap_or(html::span().into()),
                                     ),
                                     copiable: true,
                                 },
                                 SpotlightEntry {
                                     label: "To".to_string(),
                                     any_el: Some(
-                                        convert_to_linkable_address(
-                                            transaction.get_receiver_username(),
-                                            transaction.get_to(),
-                                        ),
+                                        transaction
+                                            .get_receiver_public_key()
+                                            .map(|to| convert_to_linkable_address(
+                                                transaction.get_receiver_username(),
+                                                to,
+                                            ))
+                                            .unwrap_or(html::span().into()),
                                     ),
                                     copiable: true,
                                 },

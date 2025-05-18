@@ -56,7 +56,7 @@ impl From<PooledUserCommand> for transactions_query::TransactionsQueryTransactio
                 None
             },
             kind: txn.kind,
-            to: match txn.receiver.clone() {
+            to: match txn.receiver.as_ref() {
                 Some(receiver) => receiver.public_key.clone(),
                 None => None,
             },
@@ -69,10 +69,16 @@ impl From<PooledUserCommand> for transactions_query::TransactionsQueryTransactio
             memo: txn.memo,
             hash: txn.hash,
             block: None,
-            receiver: None,
+            receiver: txn.receiver.as_ref().and_then(|r| r.public_key.clone()),
             receiver_account: None,
         }
     }
+}
+
+#[derive(Serialize, Deserialize, Clone)]
+pub struct PendingTxnParty {
+    #[serde(rename = "publicKey")]
+    pub public_key: Option<String>,
 }
 
 #[derive(Clone)]
@@ -80,10 +86,11 @@ pub struct PendingTxn {
     pub txn_hash: Option<String>,
     pub kind: Option<String>,
     pub sender_username: Option<String>,
-    pub to: Option<String>,
     pub nonce: Option<i64>,
     pub fee: Option<f64>,
     pub amount: Option<f64>,
+    pub source: Option<PendingTxnParty>,
+    pub receiver: Option<PendingTxnParty>,
 }
 
 impl From<TransactionsQueryTransactions> for PendingTxn {
@@ -92,10 +99,15 @@ impl From<TransactionsQueryTransactions> for PendingTxn {
             txn_hash: value.hash,
             kind: value.kind,
             sender_username: value.sender_username,
-            to: value.receiver,
             nonce: value.nonce,
             fee: value.fee,
             amount: value.amount,
+            source: Some(PendingTxnParty {
+                public_key: value.from,
+            }),
+            receiver: Some(PendingTxnParty {
+                public_key: value.receiver,
+            }),
         }
     }
 }
