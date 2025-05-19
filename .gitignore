@@ -22,3 +22,4 @@ Icon
 !/rust/.cargo/audit.toml
 /.build
 /ruby/spec-screenshots
+/ruby/vendor
