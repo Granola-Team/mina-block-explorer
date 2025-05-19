@@ -42,7 +42,6 @@ pub struct BlockchainSummary {
     pub total_num_applied_canonical_zkapp_commands: u64,
     pub total_num_failed_canonical_zkapp_commands: u64,
     pub total_num_accounts: u64,
-    pub total_num_mina_accounts: u64,
     pub indexer_version: String,
     pub chain: Option<HashMap<String, ChainSummary>>, // Keyed by chain ID hash
 }

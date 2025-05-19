@@ -197,7 +197,7 @@ fn AccountsPageContents() -> impl IntoView {
                                 )
                                 .available_records(
                                     move || q_type_sig.get().is_none(),
-                                    summary_sig.get().total_num_mina_accounts,
+                                    summary_sig.get().total_num_accounts,
                                 )
                                 .total_records_value(summary_sig.get().total_num_accounts)
                                 .build(),
