@@ -86,7 +86,7 @@ pub fn StakesPageContents(
     let query_params_map = use_query_map();
     let (row_limit_sig, _) = create_query_signal::<i64>("row-limit");
     let (genesis_state_hash_sig, _) = create_signal(genesis_state_hash);
-    let (account_sig, _) = create_query_signal::<String>("q-account");
+    let (account_sig, _) = create_query_signal::<String>(QUERY_PARAM_ACCOUNT);
 
     let (ledger_hash, set_ledger_hash) = create_signal(None::<String>);
 
@@ -177,7 +177,7 @@ pub fn StakesPageContents(
     create_effect(move |_| {
         let mut available_records = None;
         let qp_map = query_params_map.get();
-        let public_key = qp_map.get("q-account").cloned();
+        let public_key = qp_map.get(QUERY_PARAM_ACCOUNT).cloned();
         let delegate = qp_map.get(QUERY_PARAM_DELEGATE).cloned();
         let stake = qp_map.get(QUERY_PARAM_STAKE).cloned();
         if stake.is_none() && delegate.is_none() && public_key.is_none() {

@@ -26,7 +26,7 @@ fn AccountsPageContents() -> impl IntoView {
         use_local_storage::<BlockchainSummary, JsonSerdeCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
     let memo_params_map = use_params_map();
     let (data_sig, set_data) = create_signal(None);
-    let (account_sig, _) = create_query_signal::<String>("q-account");
+    let (account_sig, _) = create_query_signal::<String>(QUERY_PARAM_ACCOUNT);
     let (balance_sig, _) = create_query_signal::<f64>(QUERY_PARAM_BALANCE);
     let (delegate_sig, _) = create_query_signal::<String>(QUERY_PARAM_DELEGATE);
     let (row_limit_sig, _) = create_query_signal::<i64>("row-limit");
