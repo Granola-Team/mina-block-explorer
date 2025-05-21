@@ -18,7 +18,6 @@ use web_sys::VisibilityState;
 const QP_TXN_HASH: &str = "q-txn-hash";
 const QP_TXN_TYPE: &str = "txn-type";
 const QP_ROW_LIMIT: &str = "row-limit";
-const QP_HEIGHT: &str = "q-height";
 const QP_FROM: &str = "q-from";
 const QP_TO: &str = "q-to";
 const QP_TOKEN: &str = "q-token";
@@ -81,7 +80,7 @@ pub fn TransactionsSection() -> impl IntoView {
     let (row_limit_sig, _) = create_query_signal::<u64>(QP_ROW_LIMIT);
     let (txn_applied_sig, _) = create_query_signal::<String>(QUERY_PARAM_TXN_APPLIED);
     let query_params_map = use_query_map();
-    let (block_height_sig, _) = create_query_signal::<u64>(QP_HEIGHT);
+    let (block_height_sig, _) = create_query_signal::<u64>(QUERY_PARAM_HEIGHT);
     let (q_token_sig, _) = create_query_signal::<String>(QP_TOKEN);
     let (q_type_sig, _) = create_query_signal::<TransactionKind>(QUERY_PARAM_TYPE);
     let (token_sig, set_token) = create_signal(None);
@@ -231,7 +230,7 @@ pub fn TransactionsSection() -> impl IntoView {
             data_sig
             metadata=Signal::derive(move || {
                 let url_query_map = query_params_map.get();
-                let indexes_not_available = url_query_map.get(QP_HEIGHT).is_some()
+                let indexes_not_available = url_query_map.get(QUERY_PARAM_HEIGHT).is_some()
                     || url_query_map
                         .get(QUERY_PARAM_TYPE)
                         .is_some_and(|q_type| { *q_type != TransactionKind::Zkapp.to_string() })
