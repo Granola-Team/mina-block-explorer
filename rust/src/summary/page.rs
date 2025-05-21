@@ -70,7 +70,7 @@ pub fn SummaryLocalStorage() -> impl IntoView {
         get_data().map(|data: BlockchainSummary| {
             let mut chain = HashMap::new();
             chain.insert(
-                BERKELEY_CHAIN_ID.to_string(),
+                MAINNET_2_CHAIN_ID.to_string(),
                 ChainSummary {
                     #[allow(deprecated)]
                     latest_epoch: data.epoch,
@@ -79,7 +79,7 @@ pub fn SummaryLocalStorage() -> impl IntoView {
                 },
             );
             chain.insert(
-                MAINNET_CHAIN_ID.to_string(),
+                MAINNET_1_CHAIN_ID.to_string(),
                 ChainSummary {
                     latest_epoch: 79,
                     latest_slot: EPOCH_SLOTS as u64,

@@ -192,7 +192,7 @@ pub fn SnarkerLeaderboard() -> impl IntoView {
                 .get()
                 .chain
                 .as_ref()
-                .and_then(|c| c.get(BERKELEY_CHAIN_ID))
+                .and_then(|c| c.get(MAINNET_2_CHAIN_ID))
                 .map(|c| c.latest_epoch)
                 .unwrap_or_default(),
             set_epoch,
@@ -331,7 +331,7 @@ pub fn StakerLeaderboard() -> impl IntoView {
                 .get()
                 .chain
                 .as_ref()
-                .and_then(|c| c.get(BERKELEY_CHAIN_ID))
+                .and_then(|c| c.get(MAINNET_2_CHAIN_ID))
                 .map(|c| c.latest_epoch)
                 .unwrap_or_default(),
             set_epoch,

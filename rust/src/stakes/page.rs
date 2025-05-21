@@ -64,9 +64,9 @@ pub fn StakesPage() -> impl IntoView {
 
     let get_chain_id = move || {
         if is_berkeley_sig.get().unwrap_or(true) {
-            BERKELEY_CHAIN_ID
+            MAINNET_2_CHAIN_ID
         } else {
-            MAINNET_CHAIN_ID
+            MAINNET_1_CHAIN_ID
         }
     };
     let get_current_chain_info = move || {

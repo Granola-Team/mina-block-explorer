@@ -1,7 +1,7 @@
 use crate::{
     common::{
         components::*,
-        constants::{BERKELEY_CHAIN_ID, HARDFORK_STATE_HASH},
+        constants::{HARDFORK_STATE_HASH, MAINNET_2_CHAIN_ID},
         functions::*,
     },
     summary::models::*,
@@ -23,7 +23,7 @@ pub fn SummaryGrid(
                     summary
                         .as_ref()
                         .and_then(|s| s.chain.as_ref())
-                        .and_then(|c| c.get(BERKELEY_CHAIN_ID))
+                        .and_then(|c| c.get(MAINNET_2_CHAIN_ID))
                         .map(|c| c.latest_epoch.to_string())
                         .unwrap_or_default(),
                 )

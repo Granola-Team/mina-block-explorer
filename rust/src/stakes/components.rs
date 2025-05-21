@@ -216,8 +216,8 @@ pub fn StakesPageContents(
                                     labels=UrlParamSelectOptions {
                                         is_boolean_option: true,
                                         cases: vec![
-                                            format!("mainnet {}", BERKELEY_CHAIN_ID),
-                                            format!("mainnet {}", MAINNET_CHAIN_ID),
+                                            format!("mainnet {}", MAINNET_2_CHAIN_ID),
+                                            format!("mainnet {}", MAINNET_1_CHAIN_ID),
                                         ],
                                     }
                                 />
@@ -235,7 +235,7 @@ pub fn StakesPageContents(
                                         || next_epoch_opt
                                             .is_some_and(|ne| {
                                                 ne == LAST_EPOCH_OF_MAINNET_CHAIN
-                                                    && chain_id_clone == MAINNET_CHAIN_ID
+                                                    && chain_id_clone == MAINNET_1_CHAIN_ID
                                             })
                                     text="Next"
                                     style_variant=ButtonStyleVariant::Primary
