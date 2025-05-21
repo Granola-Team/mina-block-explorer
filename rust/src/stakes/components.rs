@@ -86,8 +86,30 @@ pub fn StakesPageContents(
     let query_params_map = use_query_map();
     let (row_limit_sig, _) = create_query_signal::<i64>("row-limit");
     let (genesis_state_hash_sig, _) = create_signal(genesis_state_hash);
+    let (account_sig, _) = create_query_signal::<String>("q-account");
 
     let (ledger_hash, set_ledger_hash) = create_signal(None::<String>);
+
+    let public_key_memo = Memo::new(move |_| {
+        account_sig
+            .get()
+            .and_then(|account| match PublicKey::new(account) {
+                Ok(public_key) => Some(public_key),
+                Err(_) => None,
+            })
+    });
+    let username_memo = Memo::new(move |_| {
+        account_sig
+            .get()
+            .and_then(|account| match PublicKey::new(account) {
+                Ok(_) => None,
+                Err(_) => Some(
+                    account_sig
+                        .get()
+                        .expect("Expected to find username in q-account"),
+                ),
+            })
+    });
 
     let resource = create_resource(
         move || {
@@ -97,10 +119,19 @@ pub fn StakesPageContents(
                 row_limit_sig.get(),
                 sort_dir.get(),
                 genesis_state_hash_sig.get(),
+                public_key_memo.get(),
+                username_memo.get(),
             )
         },
-        move |(epoch_opt, params_map, mut row_limit, sort_dir, genesis_state_hash)| async move {
-            let public_key = params_map.get("q-account").cloned();
+        move |(
+            epoch_opt,
+            params_map,
+            mut row_limit,
+            sort_dir,
+            genesis_state_hash,
+            public_key,
+            username,
+        )| async move {
             let delegate = params_map.get("q-delegate").cloned();
             let stake = params_map.get("q-stake").cloned();
             let mut sort_by = StakesSortByInput::STAKE_DESC;
@@ -122,6 +153,7 @@ pub fn StakesPageContents(
                 stake,
                 sort_by,
                 genesis_state_hash,
+                username,
             )
             .await
         },

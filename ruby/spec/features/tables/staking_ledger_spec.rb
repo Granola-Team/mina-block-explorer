@@ -40,6 +40,25 @@ RSpec.describe "Staking Ledger - Epoch 1 table", type: :system do
     )
   end
 
+  it "has working filter for column 'Account' with input 'MinaExplorer'" do
+    test_filter(
+      heading,
+      "Account",
+      "MinaExplorer",
+      nil,
+      lambda do
+        table_rows = get_table_rows("Staking Ledger - Epoch 1")
+        expect(table_rows.count).to eq(1), "Expected 'Staking Ledger - Epoch 1' table to have 1 row, but found #{table_rows.count}"
+        key_cells = all(table_column_selector("Staking Ledger - Epoch 1", "Account".upcase))
+        key_cells.each do |cell|
+          cleaned_text = cell.text.gsub(/[\n+-]/, "")
+          expect(cleaned_text).to include(Constants::STAKER_ADDRESS), "Expected 'Account' to contain '#{Constants::STAKER_ADDRESS}', but was '#{cleaned_text}'"
+          expect(cleaned_text).to include(Constants::MINA_EXPLORER_USERNAME), "Expected 'Account' to contain '#{Constants::MINA_EXPLORER_USERNAME}', but was '#{cleaned_text}'"
+        end
+      end
+    )
+  end
+
   # TODO: Fix broken selector
   xit "has working filter for column 'Stake' with input '7,399,987.246422696'" do
     test_filter(

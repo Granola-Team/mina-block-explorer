@@ -421,6 +421,7 @@ type Stake {
 }
 
 input StakesQueryInput {
+  username: String
   genesisStateHash: String
   stake_lte: String
   timing_exists: Boolean

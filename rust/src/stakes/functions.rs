@@ -85,14 +85,16 @@ pub fn get_delegators_count(stake: &StakingLedgersQueryStakes) -> String {
         .map_or("0".to_string(), |o| o.to_string())
 }
 
+#[allow(clippy::too_many_arguments)]
 pub async fn load_data(
     limit: Option<i64>,
     epoch: Option<u64>,
-    public_key: Option<String>,
+    public_key: Option<PublicKey>,
     delegate: Option<String>,
     stake: Option<String>,
     sort_by: staking_ledgers_query::StakesSortByInput,
     genesis_state_hash: Option<String>,
+    username: Option<String>,
 ) -> Result<staking_ledgers_query::ResponseData, MyError> {
     if stake.is_some() && normalize_number_format(stake.as_deref().unwrap()).is_err() {
         return Err(MyError::ParseError(
@@ -106,7 +108,8 @@ pub async fn load_data(
             stake_lte: stake
                 .as_deref()
                 .map(|num| normalize_number_format(num).ok().unwrap()),
-            public_key,
+            public_key: public_key.map(|pk| pk.as_str().to_string()),
+            username,
             delegate,
             genesis_state_hash,
             epoch: epoch.map(|x| x as i64),
