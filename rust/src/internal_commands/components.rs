@@ -14,7 +14,7 @@ pub fn InternalCommandsTab() -> impl IntoView {
     let (summary_sig, _, _) =
         use_local_storage::<BlockchainSummary, JsonSerdeCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
     let (data_sig, set_data) = create_signal(None);
-    let (recipient, _) = create_query_signal::<String>("q-recipient");
+    let (recipient, _) = create_query_signal::<String>(QUERY_PARAM_RECEIPIENT);
     let (height_sig, _) = create_query_signal::<u64>(QUERY_PARAM_HEIGHT);
     let (row_limit_sig, _) = create_query_signal::<u64>("row-limit");
     let (state_hash_sig, _) = create_query_signal::<String>("q-state-hash");
