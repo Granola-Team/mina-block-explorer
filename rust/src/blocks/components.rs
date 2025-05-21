@@ -637,7 +637,7 @@ pub fn BlocksSection() -> impl IntoView {
             if visibility.get_untracked() == VisibilityState::Visible {
                 load_data(
                     row_limit,
-                    q_map.get("q-block-producer").cloned(),
+                    q_map.get(QUERY_PARAM_BLOCK_PRODUCER).cloned(),
                     q_map.get(QUERY_PARAM_STATE_HASH).cloned(),
                     block_height,
                     slot,
