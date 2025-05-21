@@ -54,3 +54,4 @@ pub const QUERY_PARAM_TYPE: &str = "q-type";
 pub const QUERY_PARAM_TXN_APPLIED: &str = "q-status";
 pub const QUERY_PARAM_TO: &str = "q-to";
 pub const QUERY_PARAM_ID: &str = "q-id";
+pub const QUERY_PARAM_NONCE: &str = "q-nonce";
