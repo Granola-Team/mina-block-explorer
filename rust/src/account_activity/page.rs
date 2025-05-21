@@ -338,7 +338,7 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
                     qp_map.get(QUERY_PARAM_STATE_HASH).cloned(),
                     Some(id.clone()),
                     nonce,
-                    qp_map.get("q-counterparty").cloned(),
+                    qp_map.get(QUERY_PARAM_COUNTERPARTY).cloned(),
                     slot,
                     Some(id),
                     current_epoch_staking_ledger,
