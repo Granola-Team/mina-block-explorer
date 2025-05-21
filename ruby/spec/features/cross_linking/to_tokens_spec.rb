@@ -25,7 +25,7 @@ RSpec.describe "Tokens page navigation", type: :system do
   end
 
   it "is navigated to from the account token holding page" do
-    visit "/addresses/accounts/#{Constants::TOKEN_ACTIVITY_ONLY_ADDRESS}/tokens"
+    visit "/addresses/accounts/#{Constants::MINA_TOKEN_ADDRESS}/#{Constants::TOKEN_ACTIVITY_ONLY_ADDRESS}/tokens"
 
     # Wait for the "Tokens" table to load
     wait_until_table_loaded("Tokens")

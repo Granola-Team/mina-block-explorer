@@ -2,7 +2,7 @@
 require "spec_helper"
 
 RSpec.describe "MINA Token Accounts table", type: :system do
-  let(:url) { "/addresses/accounts" }
+  let(:url) { "/addresses/accounts/#{Constants::MINA_TOKEN_ADDRESS}" }
   let(:heading) { "MINA Token Accounts" }
   let(:columns) { ["Type", "Account", "Balance", "Nonce", "Delegate", "Time Locked"].map(&:upcase) }
 

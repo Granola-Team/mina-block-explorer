@@ -3,7 +3,7 @@ require "spec_helper"
 RSpec.describe "Block page navigation", type: :system do
   pages = [
     {
-      origin: "/addresses/accounts/#{Constants::FIRST_BLOCK_PRODUCER_ADDRESS}/block-production",
+      origin: "/addresses/accounts/#{Constants::MINA_TOKEN_ADDRESS}/#{Constants::FIRST_BLOCK_PRODUCER_ADDRESS}/block-production",
       dest: "blocks",
       href: "/blocks?q-block-producer=#{Constants::FIRST_BLOCK_PRODUCER_ADDRESS}"
     }

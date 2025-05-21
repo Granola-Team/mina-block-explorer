@@ -7,13 +7,13 @@ use crate::{
 use codee::string::JsonSerdeCodec;
 use leptos::*;
 use leptos_meta::*;
-use leptos_router::create_query_signal;
+use leptos_router::*;
 use leptos_use::storage::use_local_storage;
 
 #[component]
 pub fn AccountsPage() -> impl IntoView {
     view! {
-        <Title text="Mina Addresses | Search for Mina accounts on Mina Blockchain" />
+        <Title text="Mina Addresses | Search for accounts on Mina Blockchain" />
         <PageContainer>
             <AccountsPageContents />
         </PageContainer>
@@ -24,15 +24,17 @@ pub fn AccountsPage() -> impl IntoView {
 fn AccountsPageContents() -> impl IntoView {
     let (summary_sig, _, _) =
         use_local_storage::<BlockchainSummary, JsonSerdeCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
+    let memo_params_map = use_params_map();
     let (data_sig, set_data) = create_signal(None);
     let (account_sig, _) = create_query_signal::<String>("q-account");
     let (balance_sig, _) = create_query_signal::<f64>(QUERY_PARAM_BALANCE);
     let (delegate_sig, _) = create_query_signal::<String>("q-delegate");
-    let (q_token, _) = create_query_signal::<String>(QUERY_PARAM_TOKEN);
     let (row_limit_sig, _) = create_query_signal::<i64>("row-limit");
     let (sort_dir_sig, _) = create_query_signal::<String>("sort-dir");
     let (q_type_sig, _) = create_query_signal::<String>(QUERY_PARAM_TYPE);
     let (token_sig, set_token) = create_signal::<Option<TokenData>>(None);
+
+    let get_token_id = move || memo_params_map.get().get("token_id").cloned();
 
     let public_key_memo = Memo::new(move |_| {
         account_sig
@@ -65,7 +67,7 @@ fn AccountsPageContents() -> impl IntoView {
                 row_limit_sig.get(),
                 sort_dir_sig.get(),
                 q_type_sig.get(),
-                q_token.get(),
+                get_token_id(),
             )
         },
         |(public_key, username, balance, delegate, mut row_limit, sort_dir, q_type, q_token)| async move {
@@ -88,15 +90,14 @@ fn AccountsPageContents() -> impl IntoView {
                 delegate,
                 Some(sort_by),
                 Some(is_zk_app),
-                q_token.or(Some(MINA_TOKEN_ADDRESS.to_string())),
+                q_token,
             )
             .await
         },
     );
-    let token_resource = create_resource(
-        move || q_token.get().or(Some(MINA_TOKEN_ADDRESS.to_string())),
-        |token| async move { load_token_symbol(token).await },
-    );
+    let token_resource = create_resource(get_token_id, |token| async move {
+        load_token_symbol(token).await
+    });
 
     let get_data = move || resource.get().and_then(|res| res.ok());
     let get_token = move || token_resource.get().and_then(|res| res.ok());
@@ -182,22 +183,30 @@ fn AccountsPageContents() -> impl IntoView {
                                     data_sig.get().map(|a| a.len() as u64).unwrap_or_default(),
                                 )
                                 .available_records(
-                                    move || q_token.get().is_some(),
+                                    move || {
+                                        get_token_id().expect("expect token to be a URL param")
+                                            != MINA_TOKEN_ADDRESS && q_type_sig.get().is_none()
+                                    },
                                     token_sig.get().map(|t| t.num_holders).unwrap_or_default(),
                                 )
                                 .available_records(
                                     move || {
-                                        q_type_sig
-                                            .get()
-                                            .as_ref()
-                                            .map(|t| t == TYPE_SEARCH_OPTION_ZKAPP)
-                                            .unwrap_or(false)
+                                        get_token_id().expect("expect token to be a URL param")
+                                            == MINA_TOKEN_ADDRESS && q_type_sig.get().is_none()
                                     },
-                                    summary_sig.get().total_num_zkapp_accounts,
+                                    summary_sig.get().total_num_mina_accounts,
                                 )
                                 .available_records(
-                                    move || q_type_sig.get().is_none(),
-                                    summary_sig.get().total_num_mina_accounts,
+                                    move || {
+                                        get_token_id().expect("expect token to be a URL param")
+                                            == MINA_TOKEN_ADDRESS
+                                            && q_type_sig
+                                                .get()
+                                                .as_ref()
+                                                .map(|t| t == TYPE_SEARCH_OPTION_ZKAPP)
+                                                .unwrap_or(false)
+                                    },
+                                    summary_sig.get().total_num_zkapp_accounts,
                                 )
                                 .total_records_value(summary_sig.get().total_num_accounts)
                                 .build(),
@@ -206,7 +215,7 @@ fn AccountsPageContents() -> impl IntoView {
                     section_heading=token_sig
                         .get()
                         .map(|t| format!("{} Token Accounts", t.symbol))
-                        .unwrap_or("MINA Accounts".to_string())
+                        .unwrap_or("Accounts".to_string())
                     is_loading=resource.loading()
                     footer=move || {
                         view! {

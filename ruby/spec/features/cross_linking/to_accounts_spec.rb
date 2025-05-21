@@ -8,22 +8,22 @@ RSpec.describe "Account page navigation", type: :system do
       tableHeader: "Staker Leaderboard"
     },
     {
-      origin: "/addresses/accounts",
+      origin: "/addresses/accounts/#{Constants::MINA_TOKEN_ADDRESS}",
       column: "Account",
       tableHeader: "MINA Token Accounts"
     },
     {
-      origin: "/addresses/accounts/#{Constants::GENESIS_ACCOUNT_PK}",
+      origin: "/addresses/accounts/#{Constants::MINA_TOKEN_ADDRESS}/#{Constants::GENESIS_ACCOUNT_PK}",
       column: "Counterparty",
       tableHeader: "User Commands"
     },
     {
-      origin: "/addresses/accounts/#{Constants::GENESIS_ACCOUNT_PK}/block-production",
+      origin: "/addresses/accounts/#{Constants::MINA_TOKEN_ADDRESS}/#{Constants::GENESIS_ACCOUNT_PK}/block-production",
       column: "Coinbase Receiver",
       tableHeader: "Block Production"
     },
     {
-      origin: "/addresses/accounts/#{Constants::GENESIS_ACCOUNT_PK}/delegations",
+      origin: "/addresses/accounts/#{Constants::MINA_TOKEN_ADDRESS}/#{Constants::GENESIS_ACCOUNT_PK}/delegations",
       column: "Account",
       tableHeader: "Delegations"
     },
@@ -88,7 +88,7 @@ RSpec.describe "Account page navigation", type: :system do
     click_link_in_table_column("Tokens", "Holders".upcase, 2)
 
     # Verify the URL includes the expected parameters
-    expect(page.current_url).to include("/addresses/accounts?q-token=#{Constants::MINU_TOKEN_ADDRESS}"), "Expected URL to include '/addresses/accounts?q-token=#{Constants::MINU_TOKEN_ADDRESS}', but was '#{page.current_url}'"
+    expect(page.current_url).to include("/addresses/accounts/#{Constants::MINU_TOKEN_ADDRESS}"), "Expected URL to include '/addresses/accounts?q-token=#{Constants::MINU_TOKEN_ADDRESS}', but was '#{page.current_url}'"
 
     # Verify the "MINU Token Accounts" table has 1 row
     wait_until_table_loaded("MINU Token Accounts")

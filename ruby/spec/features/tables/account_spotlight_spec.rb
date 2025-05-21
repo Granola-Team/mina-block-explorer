@@ -2,7 +2,7 @@
 require "spec_helper"
 
 RSpec.describe "Internal Commands table", type: :system do
-  let(:url) { "/addresses/accounts/#{Constants::GENESIS_ACCOUNT_PK}/commands/internal" }
+  let(:url) { "/addresses/accounts/#{Constants::MINA_TOKEN_ADDRESS}/#{Constants::GENESIS_ACCOUNT_PK}/commands/internal" }
   let(:heading) { "Internal Commands" }
   let(:columns) { ["Height", "State Hash", "Fee", "Type", "Date"].map(&:upcase) }
 
@@ -64,7 +64,7 @@ RSpec.describe "Internal Commands table", type: :system do
 end
 
 RSpec.describe "Delegations table", type: :system do
-  let(:url) { "/addresses/accounts/#{Constants::GENESIS_ACCOUNT_PK}/delegations" }
+  let(:url) { "/addresses/accounts/#{Constants::MINA_TOKEN_ADDRESS}/#{Constants::GENESIS_ACCOUNT_PK}/delegations" }
   let(:heading) { "Delegations" }
   let(:columns) { ["Account", "Delegated Balance", "% of Delegation"].map(&:upcase) }
 

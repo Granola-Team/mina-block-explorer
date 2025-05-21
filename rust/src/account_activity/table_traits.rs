@@ -15,7 +15,9 @@ use crate::{
         },
     },
     common::{
-        constants::{LHS_MAX_DIGIT_PADDING, LHS_MAX_SPACE_FEES, QUERY_PARAM_ID},
+        constants::{
+            LHS_MAX_DIGIT_PADDING, LHS_MAX_SPACE_FEES, MINA_TOKEN_ADDRESS, QUERY_PARAM_ID,
+        },
         functions::*,
         models::*,
         table::TableData,
@@ -133,8 +135,8 @@ impl TableData for Vec<Option<AccountActivityQueryTokenHolders>> {
                             convert_to_link(
                                 "see more".to_string(),
                                 format!(
-                                    "/addresses/accounts/{}/tokens/{}",
-                                    token.account.public_key, token.token
+                                    "/addresses/accounts/{}/{}/tokens/{}",
+                                    MINA_TOKEN_ADDRESS, token.account.public_key, token.token
                                 ),
                             )
                         })

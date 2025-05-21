@@ -2,7 +2,7 @@
 require "spec_helper"
 
 RSpec.describe "User Commands table", type: :system do
-  let(:url) { "/addresses/accounts/#{Constants::FIRST_SENDER_ADDRESS}/commands/user" }
+  let(:url) { "/addresses/accounts/#{Constants::MINA_TOKEN_ADDRESS}/#{Constants::FIRST_SENDER_ADDRESS}/commands/user" }
   let(:heading) { "User Commands" }
   let(:columns) { ["Height", "Txn Hash", "Nonce", "Date", "Type", "Direction", "Counterparty", "Amount/Fee"].map(&:upcase) }
 

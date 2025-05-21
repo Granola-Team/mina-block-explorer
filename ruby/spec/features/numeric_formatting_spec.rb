@@ -68,7 +68,7 @@ RSpec.describe "Number or currency", type: :system do
       ]
     },
     {
-      url: "/addresses/accounts",
+      url: "/addresses/accounts/#{Constants::MINA_TOKEN_ADDRESS}",
       heading: "MINA Token Accounts",
       tests: [
         {name: "balance", selector: '[data-test="mina-token-accounts-table"] tr:has(:not(th)) td:nth-child(4)', type: "currency"},
@@ -76,7 +76,7 @@ RSpec.describe "Number or currency", type: :system do
       ]
     },
     {
-      url: "/addresses/accounts/#{Constants::COMMAND_SNARK_BLOCK_ACTIVITY_ADDRESS}",
+      url: "/addresses/accounts/#{Constants::MINA_TOKEN_ADDRESS}/#{Constants::COMMAND_SNARK_BLOCK_ACTIVITY_ADDRESS}",
       heading: "User Commands",
       tests: [
         {name: "height", selector: '[data-test="user-commands-table"] tr:has(:not(th)) td:first-child', type: "number"},
@@ -86,7 +86,7 @@ RSpec.describe "Number or currency", type: :system do
       ]
     },
     {
-      url: "/addresses/accounts/#{Constants::COMMAND_SNARK_BLOCK_ACTIVITY_ADDRESS}/snark-jobs",
+      url: "/addresses/accounts/#{Constants::MINA_TOKEN_ADDRESS}/#{Constants::COMMAND_SNARK_BLOCK_ACTIVITY_ADDRESS}/snark-jobs",
       heading: "SNARK Jobs",
       tests: [
         {name: "height", selector: '[data-test="snark-jobs-table"] tr:has(:not(th)) td:first-child', type: "number"},
@@ -94,7 +94,7 @@ RSpec.describe "Number or currency", type: :system do
       ]
     },
     {
-      url: "/addresses/accounts/#{Constants::COMMAND_SNARK_BLOCK_ACTIVITY_ADDRESS}/block-production",
+      url: "/addresses/accounts/#{Constants::MINA_TOKEN_ADDRESS}/#{Constants::COMMAND_SNARK_BLOCK_ACTIVITY_ADDRESS}/block-production",
       heading: "Block Production",
       tests: [
         {name: "height", selector: '[data-test="block-production-table"] tr:has(:not(th)) td:first-child', type: "number"},

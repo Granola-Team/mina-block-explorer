@@ -3,7 +3,7 @@ require "spec_helper"
 RSpec.describe "Staking ledger page navigation", type: :system do
   pages = [
     {
-      origin: "/addresses/accounts/#{Constants::GENESIS_ACCOUNT_PK}/delegations",
+      origin: "/addresses/accounts/#{Constants::MINA_TOKEN_ADDRESS}/#{Constants::GENESIS_ACCOUNT_PK}/delegations",
       dest: "staking-ledgers",
       href: "q-delegate=#{Constants::GENESIS_ACCOUNT_PK}"
     }

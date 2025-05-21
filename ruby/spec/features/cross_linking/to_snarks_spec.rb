@@ -3,7 +3,7 @@ require "spec_helper"
 RSpec.describe "Snarks page navigation", type: :system do
   pages = [
     {
-      origin: "/addresses/accounts/#{Constants::GENESIS_ACCOUNT_PK}/snark-jobs",
+      origin: "/addresses/accounts/#{Constants::MINA_TOKEN_ADDRESS}/#{Constants::GENESIS_ACCOUNT_PK}/snark-jobs",
       dest: "snarks",
       href: "/snarks?q-prover=#{Constants::GENESIS_ACCOUNT_PK}"
     }

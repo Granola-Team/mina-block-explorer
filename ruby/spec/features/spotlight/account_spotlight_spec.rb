@@ -2,14 +2,14 @@ require "spec_helper"
 
 RSpec.describe "Account spotlight", type: :system do
   it "displays appropriately for standard accounts" do
-    visit "/addresses/accounts/#{Constants::STANDARD_ACCOUNT_PK}"
+    visit "/addresses/accounts/#{Constants::MINA_TOKEN_ADDRESS}/#{Constants::STANDARD_ACCOUNT_PK}"
 
     # Verify the account creation fee message is displayed
     expect(page).to have_content("Includes 1 MINA account creation fee", wait: 30), "Expected 'Includes 1 MINA account creation fee' to be present"
   end
 
   it "displays appropriately for genesis accounts with zero balance" do
-    visit "/addresses/accounts/#{Constants::GENESIS_ACCOUNT_PK_ZERO_GENESIS}"
+    visit "/addresses/accounts/#{Constants::MINA_TOKEN_ADDRESS}/#{Constants::GENESIS_ACCOUNT_PK_ZERO_GENESIS}"
 
     # Verify the account creation fee message is not displayed
     expect(page).not_to have_content("Includes 1 MINA account creation fee", wait: 30), "Expected 'Includes 1 MINA account creation fee' to not be present"
@@ -22,7 +22,7 @@ RSpec.describe "Account spotlight", type: :system do
   end
 
   it "displays appropriately for genesis accounts with positive balances" do
-    visit "/addresses/accounts/#{Constants::GENESIS_ACCOUNT_PK}"
+    visit "/addresses/accounts/#{Constants::MINA_TOKEN_ADDRESS}/#{Constants::GENESIS_ACCOUNT_PK}"
 
     # Verify the genesis ledger balance message is displayed
     expect(page).to have_content("Includes balance from genesis ledger", wait: 30), "Expected 'Includes balance from genesis ledger' to be present"
@@ -35,7 +35,7 @@ RSpec.describe "Account spotlight", type: :system do
   end
 
   it "displays appropriately for token-only accounts" do
-    visit "/addresses/accounts/#{Constants::TOKEN_ACTIVITY_ONLY_ADDRESS}"
+    visit "/addresses/accounts/#{Constants::MINA_TOKEN_ADDRESS}/#{Constants::TOKEN_ACTIVITY_ONLY_ADDRESS}"
 
     wait_until_table_loaded("User Commands")
 
@@ -54,7 +54,7 @@ RSpec.describe "Account spotlight", type: :system do
   end
 
   it "renders More Details subpage on tokens tab" do
-    visit "/addresses/accounts/#{Constants::TOKEN_ACTIVITY_ONLY_ADDRESS}/tokens"
+    visit "/addresses/accounts/#{Constants::MINA_TOKEN_ADDRESS}/#{Constants::TOKEN_ACTIVITY_ONLY_ADDRESS}/tokens"
 
     # Wait for the "Tokens" table to load
     wait_until_table_loaded("Tokens")

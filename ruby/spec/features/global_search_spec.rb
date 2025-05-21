@@ -15,7 +15,7 @@ RSpec.describe "Global search", type: :system do
     {input: "359617", expected_url: "/blocks?q-height=359617"},
     {input: "      #{Constants::EPOCH_ZERO_STAKING_LEDGER_HASH}     ", expected_url: "/staking-ledgers?epoch=0"},
     {input: Constants::EPOCH_ZERO_STAKING_LEDGER_HASH, expected_url: "/staking-ledgers?epoch=0"},
-    {input: Constants::GENESIS_ACCOUNT_PK, expected_url: "/addresses/accounts/#{Constants::GENESIS_ACCOUNT_PK}"},
+    {input: Constants::GENESIS_ACCOUNT_PK, expected_url: "/addresses/accounts/#{Constants::MINA_TOKEN_ADDRESS}/#{Constants::GENESIS_ACCOUNT_PK}"},
     {input: Constants::GENESIS_BLOCK_BLOCK_HASH, expected_url: "/blocks/#{Constants::GENESIS_BLOCK_BLOCK_HASH}"},
     {input: Constants::FIRST_TXN_HASH, expected_url: "/commands/#{Constants::FIRST_TXN_HASH}"},
     {input: "1", expected_url: "/staking-ledgers?epoch=1"}

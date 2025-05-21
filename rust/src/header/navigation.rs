@@ -1,4 +1,4 @@
-use crate::common::{components::*, models::*};
+use crate::common::{components::*, constants::MINA_TOKEN_ADDRESS, models::*};
 use leptos::*;
 
 #[component]
@@ -44,8 +44,8 @@ pub fn Header() -> impl IntoView {
             ..Default::default()
         },
         NavEntry {
-            href: "/addresses/accounts".to_string(),
-            text: "Mina Accounts".to_string(),
+            href: format!("/addresses/accounts/{}", MINA_TOKEN_ADDRESS),
+            text: "Accounts".to_string(),
             icon: NavIcon::Addresses,
             match_type: Some(NavMatchType::Prefix),
             ..Default::default()

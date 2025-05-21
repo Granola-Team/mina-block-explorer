@@ -2,7 +2,7 @@ require "spec_helper"
 
 RSpec.describe "Empty table", type: :system do
   pages = [
-    "/addresses/accounts?q-account=B62fake",
+    "/addresses/accounts/#{Constants::MINA_TOKEN_ADDRESS}?q-account=B62fake",
     "/blocks?q-state-hash=3Nfake",
     "/commands/user?q-txn-hash=Cpkfake",
     "/commands/internal?q-recipient=B62qfake",

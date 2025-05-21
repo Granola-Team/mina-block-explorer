@@ -20,11 +20,7 @@ impl TableData for Vec<Option<TokensQueryTokens>> {
                         wrap_in_pill(
                             convert_to_link(
                                 token.get_number_of_holders(),
-                                format!(
-                                    "/addresses/accounts?{}={}",
-                                    QUERY_PARAM_TOKEN,
-                                    token.get_token()
-                                ),
+                                format!("/addresses/accounts/{}", token.get_token()),
                             ),
                             ColorVariant::Blue,
                         ),

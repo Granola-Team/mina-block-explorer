@@ -456,7 +456,11 @@ pub fn AccountSpotlightTabs() -> impl IntoView {
 
     let tabs = vec![
         NavEntry {
-            href: format!("/addresses/accounts/{}/commands/user", id()),
+            href: format!(
+                "/addresses/accounts/{}/{}/commands/user",
+                MINA_TOKEN_ADDRESS,
+                id()
+            ),
             text: "User Commands".to_string(),
             icon: NavIcon::Transactions,
             number_bubble: account.get().and_then(|a| {
@@ -466,7 +470,11 @@ pub fn AccountSpotlightTabs() -> impl IntoView {
             ..Default::default()
         },
         NavEntry {
-            href: format!("/addresses/accounts/{}/commands/internal", id()),
+            href: format!(
+                "/addresses/accounts/{}/{}/commands/internal",
+                MINA_TOKEN_ADDRESS,
+                id()
+            ),
             text: "Internal Commands".to_string(),
             icon: NavIcon::Transactions,
             number_bubble: account.get().and_then(|a| {
@@ -476,7 +484,11 @@ pub fn AccountSpotlightTabs() -> impl IntoView {
             ..Default::default()
         },
         NavEntry {
-            href: format!("/addresses/accounts/{}/snark-jobs", id()),
+            href: format!(
+                "/addresses/accounts/{}/{}/snark-jobs",
+                MINA_TOKEN_ADDRESS,
+                id()
+            ),
             text: "SNARK Jobs".to_string(),
             icon: NavIcon::SNARKs,
             number_bubble: account
@@ -485,7 +497,11 @@ pub fn AccountSpotlightTabs() -> impl IntoView {
             ..Default::default()
         },
         NavEntry {
-            href: format!("/addresses/accounts/{}/block-production", id()),
+            href: format!(
+                "/addresses/accounts/{}/{}/block-production",
+                MINA_TOKEN_ADDRESS,
+                id()
+            ),
             text: "Block Production".to_string(),
             icon: NavIcon::Blocks,
             number_bubble: account
@@ -494,14 +510,18 @@ pub fn AccountSpotlightTabs() -> impl IntoView {
             ..Default::default()
         },
         NavEntry {
-            href: format!("/addresses/accounts/{}/delegations", id()),
+            href: format!(
+                "/addresses/accounts/{}/{}/delegations",
+                MINA_TOKEN_ADDRESS,
+                id()
+            ),
             text: "Delegations".to_string(),
             icon: NavIcon::Delegates,
             number_bubble: Some(delegator_count.get().map(|c| c.0).unwrap_or(0)), // Wrap in Some
             ..Default::default()
         },
         NavEntry {
-            href: format!("/addresses/accounts/{}/tokens", id()),
+            href: format!("/addresses/accounts/{}/{}/tokens", MINA_TOKEN_ADDRESS, id()),
             text: "Tokens".to_string(),
             icon: NavIcon::Tokens,
             number_bubble: tokens.get().map(|tokens| tokens.len()), // Wrap in Some

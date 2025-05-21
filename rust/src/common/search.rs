@@ -139,7 +139,10 @@ pub fn GlobalSearchBar() -> impl IntoView {
         let trimmed_value = value.get().trim().to_string();
         match trimmed_value {
             val if val.starts_with("B62q") => {
-                navigate(&format!("/addresses/accounts/{}", val), Default::default());
+                navigate(
+                    &format!("/addresses/accounts/{}/{}", MINA_TOKEN_ADDRESS, val),
+                    Default::default(),
+                );
                 set_value.set("".to_string());
             }
             val if val.starts_with("3N") => {

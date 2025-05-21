@@ -18,23 +18,23 @@ RSpec.describe "Number bubble in tab", type: :system do
       comparison_method: "rows"
     },
     {
-      url: "/addresses/accounts/#{Constants::GENESIS_ACCOUNT_PK}/commands/user",
+      url: "/addresses/accounts/#{Constants::MINA_TOKEN_ADDRESS}/#{Constants::GENESIS_ACCOUNT_PK}/commands/user",
       tab: "User Commands"
     },
     {
-      url: "/addresses/accounts/#{Constants::GENESIS_ACCOUNT_PK}/block-production",
+      url: "/addresses/accounts/#{Constants::MINA_TOKEN_ADDRESS}/#{Constants::GENESIS_ACCOUNT_PK}/block-production",
       tab: "Block Production"
     },
     {
-      url: "/addresses/accounts/#{Constants::GENESIS_ACCOUNT_PK}/delegations",
+      url: "/addresses/accounts/#{Constants::MINA_TOKEN_ADDRESS}/#{Constants::GENESIS_ACCOUNT_PK}/delegations",
       tab: "Delegations"
     },
     {
-      url: "/addresses/accounts/#{Constants::GENESIS_ACCOUNT_PK}/snark-jobs",
+      url: "/addresses/accounts/#{Constants::MINA_TOKEN_ADDRESS}/#{Constants::GENESIS_ACCOUNT_PK}/snark-jobs",
       tab: "SNARK Jobs"
     },
     {
-      url: "/addresses/accounts/#{Constants::GENESIS_ACCOUNT_PK}/commands/internal",
+      url: "/addresses/accounts/#{Constants::MINA_TOKEN_ADDRESS}/#{Constants::GENESIS_ACCOUNT_PK}/commands/internal",
       tab: "Internal Commands"
     }
   ]

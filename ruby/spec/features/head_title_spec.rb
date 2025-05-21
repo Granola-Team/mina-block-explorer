@@ -6,7 +6,7 @@ RSpec.describe "Meta title", type: :system do
   pages = [
     {url: "/analytics/staker-leaderboard", title: "Analytics | Staker Leaderboard"},
     {url: "/analytics/snarker-leaderboard", title: "Analytics | Snarker Leaderboard"},
-    {url: "/addresses/accounts", title: "Mina Addresses | Search for Mina accounts on Mina Blockchain"},
+    {url: "/addresses/accounts/#{Constants::MINA_TOKEN_ADDRESS}", title: "Mina Addresses | Search for accounts on Mina Blockchain"},
     {url: "/analytics/commands/user", title: "Analytics | User Commands"},
     {url: "/analytics/blocks", title: "Analytics | Blocks"},
     {url: "/analytics/snarks", title: "Analytics | SNARKs"},
@@ -22,7 +22,7 @@ RSpec.describe "Meta title", type: :system do
     {url: "/staking-ledgers?epoch=1", title: "Staking Ledger | Epoch 1"},
     {url: "/snarks", title: "SNARKs | Search For SNARKs"},
     {url: "/commands/#{Constants::FIRST_TXN_HASH}", title: "Transaction Overview | No Memo"},
-    {url: "/addresses/accounts/#{Constants::ROMEK_ADDRESS}", title: "Account Overview | #{Constants::ROMEK_USERNAME}"}
+    {url: "/addresses/accounts/#{Constants::MINA_TOKEN_ADDRESS}/#{Constants::ROMEK_ADDRESS}", title: "Account Overview | #{Constants::ROMEK_USERNAME}"}
   ]
 
   pages.each do |p|

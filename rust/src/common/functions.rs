@@ -432,7 +432,10 @@ pub fn convert_to_linkable_address(
 ) -> HtmlElement<html::AnyElement> {
     let address = address.into();
     let address_str = address.as_str();
-    let href = format!("/addresses/accounts/{}/spotlight", address_str);
+    let href = format!(
+        "/addresses/accounts/{}/{}/spotlight",
+        MINA_TOKEN_ADDRESS, address_str
+    );
 
     match username {
         Some(username) => convert_array_to_span(vec![

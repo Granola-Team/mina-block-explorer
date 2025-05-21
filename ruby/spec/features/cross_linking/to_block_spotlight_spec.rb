@@ -13,7 +13,7 @@ RSpec.describe "Block spotlight navigation", type: :system do
       tableHeader: "Blocks"
     },
     {
-      origin: "/addresses/accounts/#{Constants::GENESIS_ACCOUNT_PK}/block-production",
+      origin: "/addresses/accounts/#{Constants::MINA_TOKEN_ADDRESS}/#{Constants::GENESIS_ACCOUNT_PK}/block-production",
       column: "STATE HASH",
       tableHeader: "Block Production"
     }

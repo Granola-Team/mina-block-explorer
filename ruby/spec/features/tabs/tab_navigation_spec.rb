@@ -17,34 +17,34 @@ TABS = [
     expected_url: "/commands/pending"
   },
   {
-    page: "/addresses/accounts/#{Constants::GENESIS_ACCOUNT_PK}/snark-jobs",
+    page: "/addresses/accounts/#{Constants::MINA_TOKEN_ADDRESS}/#{Constants::GENESIS_ACCOUNT_PK}/snark-jobs",
     tab: "User Commands",
-    expected_url: "/addresses/accounts/#{Constants::GENESIS_ACCOUNT_PK}/commands/user"
+    expected_url: "/addresses/accounts/#{Constants::MINA_TOKEN_ADDRESS}/#{Constants::GENESIS_ACCOUNT_PK}/commands/user"
   },
   {
-    page: "/addresses/accounts/#{Constants::GENESIS_ACCOUNT_PK}",
+    page: "/addresses/accounts/#{Constants::MINA_TOKEN_ADDRESS}/#{Constants::GENESIS_ACCOUNT_PK}",
     tab: "SNARK Jobs",
-    expected_url: "/addresses/accounts/#{Constants::GENESIS_ACCOUNT_PK}/snark-jobs"
+    expected_url: "/addresses/accounts/#{Constants::MINA_TOKEN_ADDRESS}/#{Constants::GENESIS_ACCOUNT_PK}/snark-jobs"
   },
   {
-    page: "/addresses/accounts/#{Constants::GENESIS_ACCOUNT_PK}",
+    page: "/addresses/accounts/#{Constants::MINA_TOKEN_ADDRESS}/#{Constants::GENESIS_ACCOUNT_PK}",
     tab: "Block Production",
-    expected_url: "/addresses/accounts/#{Constants::GENESIS_ACCOUNT_PK}/block-production"
+    expected_url: "/addresses/accounts/#{Constants::MINA_TOKEN_ADDRESS}/#{Constants::GENESIS_ACCOUNT_PK}/block-production"
   },
   {
-    page: "/addresses/accounts/#{Constants::GENESIS_ACCOUNT_PK}",
+    page: "/addresses/accounts/#{Constants::MINA_TOKEN_ADDRESS}/#{Constants::GENESIS_ACCOUNT_PK}",
     tab: "Internal Commands",
-    expected_url: "/addresses/accounts/#{Constants::GENESIS_ACCOUNT_PK}/commands/internal"
+    expected_url: "/addresses/accounts/#{Constants::MINA_TOKEN_ADDRESS}/#{Constants::GENESIS_ACCOUNT_PK}/commands/internal"
   },
   {
-    page: "/addresses/accounts/#{Constants::GENESIS_ACCOUNT_PK}",
+    page: "/addresses/accounts/#{Constants::MINA_TOKEN_ADDRESS}/#{Constants::GENESIS_ACCOUNT_PK}",
     tab: "Delegations",
-    expected_url: "/addresses/accounts/#{Constants::GENESIS_ACCOUNT_PK}/delegations"
+    expected_url: "/addresses/accounts/#{Constants::MINA_TOKEN_ADDRESS}/#{Constants::GENESIS_ACCOUNT_PK}/delegations"
   },
   {
-    page: "/addresses/accounts/#{Constants::GENESIS_ACCOUNT_PK}",
+    page: "/addresses/accounts/#{Constants::MINA_TOKEN_ADDRESS}/#{Constants::GENESIS_ACCOUNT_PK}",
     tab: "Tokens",
-    expected_url: "/addresses/accounts/#{Constants::GENESIS_ACCOUNT_PK}/tokens"
+    expected_url: "/addresses/accounts/#{Constants::MINA_TOKEN_ADDRESS}/#{Constants::GENESIS_ACCOUNT_PK}/tokens"
   },
   {
     page: "/analytics",

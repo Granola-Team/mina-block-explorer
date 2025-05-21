@@ -3,7 +3,7 @@ require "spec_helper"
 RSpec.describe "Accounts metadata", type: :system do
   [
     {
-      url: "/addresses/accounts?q-token=#{Constants::NFT_TOKEN_ID}",
+      url: "/addresses/accounts/#{Constants::NFT_TOKEN_ID}",
       table_header: "NFT Token Accounts",
       metadata: [1, Constants::TOTAL_NUM_NFT_HOLDERS, Constants::TOTAL_NUM_ACCOUNTS]
     }

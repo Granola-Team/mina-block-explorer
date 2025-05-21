@@ -3,7 +3,7 @@ require "spec_helper"
 RSpec.describe "Internal commands page navigation", type: :system do
   pages = [
     {
-      origin: "/addresses/accounts/#{Constants::GENESIS_ACCOUNT_PK}/commands/internal",
+      origin: "/addresses/accounts/#{Constants::MINA_TOKEN_ADDRESS}/#{Constants::GENESIS_ACCOUNT_PK}/commands/internal",
       dest: "internal commands",
       href: "/commands/internal?q-recipient=#{Constants::GENESIS_ACCOUNT_PK}"
     }
