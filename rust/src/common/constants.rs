@@ -56,3 +56,4 @@ pub const QUERY_PARAM_TO: &str = "q-to";
 pub const QUERY_PARAM_ID: &str = "q-id";
 pub const QUERY_PARAM_NONCE: &str = "q-nonce";
 pub const QUERY_PARAM_DIRECTION: &str = "q-direction";
+pub const QUERY_PARAM_TXN_HASH: &str = "q-txn-hash";

@@ -63,7 +63,7 @@ pub fn PendingCommandsPage() -> impl IntoView {
 pub fn CommandSpotlightPage() -> impl IntoView {
     let (metadata, _) = create_signal::<Option<TableMetadata>>(None);
     let memo_params_map = use_params_map();
-    let (state_hash_sig, _) = create_query_signal::<String>("q-state-hash");
+    let (state_hash_sig, _) = create_query_signal::<String>(QUERY_PARAM_STATE_HASH);
     let (txn_memo, set_txn_memo) = create_signal("No Memo".to_string());
     let resource = create_resource(
         move || (memo_params_map.get(), state_hash_sig.get()),

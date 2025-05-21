@@ -638,7 +638,7 @@ pub fn BlocksSection() -> impl IntoView {
                 load_data(
                     row_limit,
                     q_map.get("q-block-producer").cloned(),
-                    q_map.get("q-state-hash").cloned(),
+                    q_map.get(QUERY_PARAM_STATE_HASH).cloned(),
                     block_height,
                     slot,
                     match canonical {

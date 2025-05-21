@@ -17,7 +17,7 @@ pub fn InternalCommandsTab() -> impl IntoView {
     let (recipient, _) = create_query_signal::<String>(QUERY_PARAM_RECEIPIENT);
     let (height_sig, _) = create_query_signal::<u64>(QUERY_PARAM_HEIGHT);
     let (row_limit_sig, _) = create_query_signal::<u64>("row-limit");
-    let (state_hash_sig, _) = create_query_signal::<String>("q-state-hash");
+    let (state_hash_sig, _) = create_query_signal::<String>(QUERY_PARAM_STATE_HASH);
     let (canonical_sig, _) = create_query_signal::<bool>("canonical");
     let resource = create_resource(
         move || {

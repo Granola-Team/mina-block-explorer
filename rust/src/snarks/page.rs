@@ -48,7 +48,7 @@ fn SnarksPageContents() -> impl IntoView {
         move |(_, value, canonical, block_height, mut row_limit)| async move {
             if visibility.get_untracked() == VisibilityState::Visible {
                 let prover = value.get("q-prover");
-                let block_state_hash = value.get("q-state-hash");
+                let block_state_hash = value.get(QUERY_PARAM_STATE_HASH);
                 load_data(
                     Some(*row_limit.get_or_insert(25i64)),
                     prover.cloned(),
@@ -114,7 +114,7 @@ fn SnarksPageContents() -> impl IntoView {
             metadata=Signal::derive(move || {
                 let qp_map = query_params_map.get();
                 let prover = qp_map.get("q-prover");
-                let block_state_hash = qp_map.get("q-state-hash");
+                let block_state_hash = qp_map.get(QUERY_PARAM_STATE_HASH);
                 let mut available_records = None;
                 if prover.is_none() && block_state_hash.is_none()
                     && block_height_sig.get().is_none()
