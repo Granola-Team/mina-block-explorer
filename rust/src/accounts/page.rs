@@ -28,7 +28,7 @@ fn AccountsPageContents() -> impl IntoView {
     let (data_sig, set_data) = create_signal(None);
     let (account_sig, _) = create_query_signal::<String>("q-account");
     let (balance_sig, _) = create_query_signal::<f64>(QUERY_PARAM_BALANCE);
-    let (delegate_sig, _) = create_query_signal::<String>("q-delegate");
+    let (delegate_sig, _) = create_query_signal::<String>(QUERY_PARAM_DELEGATE);
     let (row_limit_sig, _) = create_query_signal::<i64>("row-limit");
     let (sort_dir_sig, _) = create_query_signal::<String>("sort-dir");
     let (q_type_sig, _) = create_query_signal::<String>(QUERY_PARAM_TYPE);
