@@ -15,12 +15,6 @@ use leptos_use::{
 };
 use web_sys::VisibilityState;
 
-const QP_TXN_HASH: &str = "q-txn-hash";
-const QP_TXN_TYPE: &str = "txn-type";
-const QP_ROW_LIMIT: &str = "row-limit";
-const QP_FROM: &str = "q-from";
-const QP_TO: &str = "q-to";
-const QP_TOKEN: &str = "q-token";
 const BACKSCAN_LIMIT: u64 = 2000;
 
 #[component]
@@ -76,12 +70,12 @@ pub fn TransactionsSection() -> impl IntoView {
         use_local_storage::<BlockchainSummary, JsonSerdeCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
     let visibility = use_document_visibility();
     let (data_sig, set_data) = create_signal(None);
-    let (txn_type_qp, _) = create_query_signal::<String>(QP_TXN_TYPE);
-    let (row_limit_sig, _) = create_query_signal::<u64>(QP_ROW_LIMIT);
+    let (txn_type_qp, _) = create_query_signal::<String>(QUERY_PARAM_TXN_TYPE);
+    let (row_limit_sig, _) = create_query_signal::<u64>(QUERY_PARAM_ROW_LIMIT);
     let (txn_applied_sig, _) = create_query_signal::<String>(QUERY_PARAM_TXN_APPLIED);
     let query_params_map = use_query_map();
     let (block_height_sig, _) = create_query_signal::<u64>(QUERY_PARAM_HEIGHT);
-    let (q_token_sig, _) = create_query_signal::<String>(QP_TOKEN);
+    let (q_token_sig, _) = create_query_signal::<String>(QUERY_PARAM_TOKEN);
     let (q_type_sig, _) = create_query_signal::<TransactionKind>(QUERY_PARAM_TYPE);
     let (token_sig, set_token) = create_signal(None);
     let UseIntervalReturn { counter, .. } = use_interval(LIVE_RELOAD_INTERVAL);
@@ -124,9 +118,9 @@ pub fn TransactionsSection() -> impl IntoView {
 
             load_fn(
                 row_limit,
-                url_query_map.get(QP_FROM).cloned(),
-                url_query_map.get(QP_TO).cloned(),
-                url_query_map.get(QP_TXN_HASH).cloned(),
+                url_query_map.get(QUERY_PARAM_FROM).cloned(),
+                url_query_map.get(QUERY_PARAM_TO).cloned(),
+                url_query_map.get(QUERY_PARAM_TXN_HASH).cloned(),
                 block_height,
                 if is_txn_applied.is_some_and(|t| !t) {
                     Some(BACKSCAN_LIMIT)
@@ -234,8 +228,9 @@ pub fn TransactionsSection() -> impl IntoView {
                     || url_query_map
                         .get(QUERY_PARAM_TYPE)
                         .is_some_and(|q_type| { *q_type != TransactionKind::Zkapp.to_string() })
-                    || url_query_map.get(QP_FROM).is_some() || url_query_map.get(QP_TO).is_some()
-                    || url_query_map.get(QP_TXN_HASH).is_some();
+                    || url_query_map.get(QUERY_PARAM_FROM).is_some()
+                    || url_query_map.get(QUERY_PARAM_TO).is_some()
+                    || url_query_map.get(QUERY_PARAM_TXN_HASH).is_some();
                 let indexes_available = !indexes_not_available;
                 let is_zk_app = q_type_sig.get().is_some_and(|p| p == TransactionKind::Zkapp);
                 let txn_all = txn_applied_sig.get().is_none();
@@ -450,9 +445,9 @@ pub fn PendingTransactionsSection() -> impl IntoView {
             data_sig
             metadata=Signal::derive(move || {
                 let mut otherQps = query_params_map.get();
-                otherQps.remove(QP_TXN_TYPE);
+                otherQps.remove(QUERY_PARAM_TXN_TYPE);
                 otherQps.remove(QUERY_PARAM_TXN_APPLIED);
-                otherQps.remove(QP_ROW_LIMIT);
+                otherQps.remove(QUERY_PARAM_ROW_LIMIT);
                 Some(TableMetadata {
                     total_records: None,
                     available_records: None,
