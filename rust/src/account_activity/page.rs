@@ -272,7 +272,7 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
     let (canonical_sig, _) = create_query_signal::<bool>("canonical");
     let (block_height_sig, _) = create_query_signal::<i64>(QUERY_PARAM_HEIGHT);
     let (nonce_sig, _) = create_query_signal::<u64>(QUERY_PARAM_NONCE);
-    let (slot_sig, _) = create_query_signal::<u64>("q-slot");
+    let (slot_sig, _) = create_query_signal::<u64>(QUERY_PARAM_SLOT);
     let (q_type_sig, _) = create_query_signal::<String>(QUERY_PARAM_TYPE);
     let (q_direction_sig, _) = create_query_signal::<String>("q-direction");
     let (row_limit_sig, _) = create_query_signal::<i64>("row-limit");

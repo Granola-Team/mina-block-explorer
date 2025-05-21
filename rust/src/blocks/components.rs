@@ -618,7 +618,7 @@ pub fn BlocksSection() -> impl IntoView {
     let (data_sig, set_data_sig) = create_signal(None);
     let (block_height_sig, _) = create_query_signal::<u64>(QUERY_PARAM_HEIGHT);
     let (row_limit_sig, _) = create_query_signal::<u64>("row-limit");
-    let (slot_sig, _) = create_query_signal::<u64>("q-slot");
+    let (slot_sig, _) = create_query_signal::<u64>(QUERY_PARAM_SLOT);
     let (canonical_sig, _) = create_query_signal::<String>("canonical");
     let UseIntervalReturn { counter, .. } = use_interval(LIVE_RELOAD_INTERVAL);
 
