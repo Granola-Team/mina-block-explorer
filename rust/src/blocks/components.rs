@@ -616,7 +616,7 @@ pub fn BlocksSection() -> impl IntoView {
     let visibility = use_document_visibility();
     let query_params_map = use_query_map();
     let (data_sig, set_data_sig) = create_signal(None);
-    let (block_height_sig, _) = create_query_signal::<u64>("q-height");
+    let (block_height_sig, _) = create_query_signal::<u64>(QUERY_PARAM_HEIGHT);
     let (row_limit_sig, _) = create_query_signal::<u64>("row-limit");
     let (slot_sig, _) = create_query_signal::<u64>("q-slot");
     let (canonical_sig, _) = create_query_signal::<String>("canonical");

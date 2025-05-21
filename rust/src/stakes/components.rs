@@ -133,7 +133,7 @@ pub fn StakesPageContents(
             username,
         )| async move {
             let delegate = params_map.get(QUERY_PARAM_DELEGATE).cloned();
-            let stake = params_map.get("q-stake").cloned();
+            let stake = params_map.get(QUERY_PARAM_STAKE).cloned();
             let mut sort_by = StakesSortByInput::STAKE_DESC;
             if let Some(s_dir) = sort_dir {
                 match StakesSort::try_from(s_dir) {
@@ -179,7 +179,7 @@ pub fn StakesPageContents(
         let qp_map = query_params_map.get();
         let public_key = qp_map.get("q-account").cloned();
         let delegate = qp_map.get(QUERY_PARAM_DELEGATE).cloned();
-        let stake = qp_map.get("q-stake").cloned();
+        let stake = qp_map.get(QUERY_PARAM_STAKE).cloned();
         if stake.is_none() && delegate.is_none() && public_key.is_none() {
             available_records = epoch_num_accounts;
         }
