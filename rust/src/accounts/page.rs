@@ -206,7 +206,7 @@ fn AccountsPageContents() -> impl IntoView {
                                                 .map(|t| t == TYPE_SEARCH_OPTION_ZKAPP)
                                                 .unwrap_or(false)
                                     },
-                                    summary_sig.get().total_num_zkapp_accounts,
+                                    summary_sig.get().total_num_mina_zkapp_accounts,
                                 )
                                 .total_records_value(summary_sig.get().total_num_accounts)
                                 .build(),
