@@ -58,12 +58,12 @@ async fn load_epoch_summary(epoch: Option<u64>) -> Result<EpochSummaryResponse, 
 #[component]
 pub fn StakesPage() -> impl IntoView {
     let epoch_sig = create_query_signal::<u64>("epoch");
-    let (is_berkeley_sig, _) = create_query_signal::<bool>("is-berkeley");
+    let (post_fork_sig, _) = create_query_signal::<bool>("post-fork");
     let (summary_sig, _, _) =
         use_local_storage::<BlockchainSummary, JsonSerdeCodec>(BLOCKCHAIN_SUMMARY_STORAGE_KEY);
 
     let get_chain_id = move || {
-        if is_berkeley_sig.get().unwrap_or(true) {
+        if post_fork_sig.get().unwrap_or(true) {
             MAINNET_2_CHAIN_ID
         } else {
             MAINNET_1_CHAIN_ID
@@ -76,7 +76,7 @@ pub fn StakesPage() -> impl IntoView {
         })
     };
 
-    // on first load, set the lastest epoch from berkeley chain
+    // on first load, set the lastest epoch from new mainnet chain
     if epoch_sig.0.get_untracked().is_none() {
         logging::log!("Setting latest epoch on first load, once");
         epoch_sig
@@ -84,13 +84,13 @@ pub fn StakesPage() -> impl IntoView {
             .set(get_current_chain_info().map(|chain| chain.latest_epoch));
     }
 
-    create_effect(move |last_berkeley_flag| {
-        let current = is_berkeley_sig.get();
+    create_effect(move |last_post_fork_flag| {
+        let current = post_fork_sig.get();
         let epoch = get_current_chain_info()
             .map(|chain| chain.latest_epoch)
             .unwrap_or_default();
 
-        if let (Some(curr), Some(last)) = (current, last_berkeley_flag) {
+        if let (Some(curr), Some(last)) = (current, last_post_fork_flag) {
             if curr != last {
                 epoch_sig.1.set(Some(epoch));
             }
@@ -134,10 +134,10 @@ pub fn StakesPage() -> impl IntoView {
                             .and_then(|res| res.ok())
                             .and_then(|s| s.data.stakes.first().cloned())
                             .map(|s| s.epoch_num_accounts)
-                        genesis_state_hash=is_berkeley_sig
+                        genesis_state_hash=post_fork_sig
                             .get()
-                            .map(|is_berkeley| {
-                                if is_berkeley {
+                            .map(|post_fork| {
+                                if post_fork {
                                     HARDFORK_STATE_HASH.to_string()
                                 } else {
                                     MAINNET_STATE_HASH.to_string()

@@ -211,8 +211,8 @@ pub fn StakesPageContents(
                             <div class="hidden md:flex justify-center items-center space-x-4">
                                 <RowLimit />
                                 <UrlParamSelectMenu
-                                    id="berkeley_selection"
-                                    query_str_key="is-berkeley"
+                                    id="fork_selection"
+                                    query_str_key="post-fork"
                                     labels=UrlParamSelectOptions {
                                         is_boolean_option: true,
                                         cases: vec![
