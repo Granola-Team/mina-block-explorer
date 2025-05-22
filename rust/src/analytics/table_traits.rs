@@ -56,18 +56,18 @@ impl TableData for Vec<TopSnarkerStat> {
                 vec![
                     convert_to_linkable_address(stat.username.clone(), stat.public_key.clone()),
                     convert_to_span(format_number_for_html(
-                        nanomina_to_mina(stat.total_fees).as_str(),
+                        nanomina_to_mina(stat.epoch_fees).as_str(),
                         TOP_SNARKER_FEE_MAX_LHS_DIGITS,
                     )),
                     convert_to_span(format_number_for_html(
-                        nanomina_to_mina(stat.min_fee).as_str(),
+                        nanomina_to_mina(stat.epoch_min_fee).as_str(),
                         TOP_SNARKER_FEE_MAX_LHS_DIGITS,
                     )),
                     convert_to_span(format_number_for_html(
-                        nanomina_to_mina(stat.max_fee).as_str(),
+                        nanomina_to_mina(stat.epoch_max_fee).as_str(),
                         TOP_SNARKER_FEE_MAX_LHS_DIGITS,
                     )),
-                    convert_to_span(stat.snarks_sold.to_string()),
+                    convert_to_span(stat.epoch_snarks_sold.to_string()),
                 ]
             })
             .collect()

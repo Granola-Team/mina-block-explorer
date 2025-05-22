@@ -204,9 +204,13 @@ pub struct TopSnarkerStat {
     pub username: Option<String>,
     pub public_key: String,
     pub total_fees: u64,
+    pub epoch_fees: u64,
     pub min_fee: u64,
+    pub epoch_min_fee: u64,
     pub max_fee: u64,
+    pub epoch_max_fee: u64,
     pub snarks_sold: u64,
+    pub epoch_snarks_sold: u64,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
