@@ -769,9 +769,6 @@ type Transaction {
 
 input TopStakersQueryInput {
   epoch: Int!
-  genesis_state_hash: String
-  public_key: String
-  username: String
 }
 
 input TransactionQueryInput {
