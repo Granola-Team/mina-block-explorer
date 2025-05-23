@@ -81,6 +81,13 @@ input TokensQueryInput {
   supply: Int
 }
 
+enum TopStakersSortByInput {
+  NUM_CANONICAL_BLOCKS_PRODUCED_DESC
+  NUM_CANONICAL_BLOCKS_PRODUCED_ASC
+  NUM_SLOTS_PRODUCED_DESC
+  NUM_SLOTS_PRODUCED_ASC
+}
+
 enum TokensSortByInput {
   SUPPLY_ASC
   SUPPLY_DESC
@@ -642,6 +649,11 @@ type Query {
     query: TokenHoldersQueryInput
     limit: Int = 100
   ): [TokenHolder]!
+  topStakers(
+    query: TopStakersQueryInput
+    limit: Int = 1
+    sortBy: TopStakersSortByInput
+  ): [TopStakerAccount]
 }
 
 scalar Long
@@ -753,6 +765,13 @@ type Transaction {
   receiver_account: ReceiverAccount
   to: String
   zkapp: TransactionZkapp
+}
+
+input TopStakersQueryInput {
+  epoch: Int!
+  genesis_state_hash: String
+  public_key: String
+  username: String
 }
 
 input TransactionQueryInput {
@@ -1307,6 +1326,20 @@ enum StakesSortByInput {
   STAKE_ASC
 }
 
+type StakesDelegationTotals {
+  totalStakePercentage: String!
+}
+
+type TopStakerAccount {
+  username: String
+  public_key: String!
+  num_blocks_produced: Int!
+  num_canonical_blocks_produced: Int!
+  num_supercharged_blocks_produced: Int!
+  num_slots_produced: Int!
+  delegation_totals: StakesDelegationTotals
+}
+
 type Block {
   blockHeight: Int
   canonical: Boolean
@@ -1321,6 +1354,9 @@ type Block {
   txFees: String
   winnerAccount: BlockWinnerAccount
   block_num_zkapp_commands: Int!
+  epoch_num_slots_produced: Int!
+  epoch_num_canonical_blocks: Int!
+  epoch_num_blocks: Int!
 }
 
 input BlockTransactionUserCommandReceiverQueryInput {
