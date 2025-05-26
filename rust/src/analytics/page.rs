@@ -160,18 +160,6 @@ pub fn SnarkerLeaderboardPage() -> impl IntoView {
 }
 
 #[component]
-pub fn StakerLeaderboardPage() -> impl IntoView {
-    view! {
-        <Title text="Analytics | Staker Leaderboard" />
-        <PageContainer>
-            <AppSection>
-                <StakerLeaderboard />
-            </AppSection>
-        </PageContainer>
-    }
-}
-
-#[component]
 pub fn UserCommandsAnalyticsPage() -> impl IntoView {
     let (blockheight_lte_sig, _) = create_query_signal::<u64>(QUERY_PARAM_BLOCKHEIGHT_LTE);
     let (blockheight_gte_sig, _) = create_query_signal::<u64>(QUERY_PARAM_BLOCKHEIGHT_GTE);

@@ -5,9 +5,12 @@ use crate::{
         AccountUserCommandsPage,
     },
     accounts::page::AccountsPage,
-    analytics::page::{
-        AnalyticsTabbedPage, BlocksAnalyticsPage, SnarkerLeaderboardPage, SnarksAnalyticsPage,
-        StakerLeaderboardPage, UserCommandsAnalyticsPage,
+    analytics::{
+        page::{
+            AnalyticsTabbedPage, BlocksAnalyticsPage, SnarkerLeaderboardPage, SnarksAnalyticsPage,
+            UserCommandsAnalyticsPage,
+        },
+        staker_leaderboard::page::StakerLeaderboardPage,
     },
     blocks::page::{
         BlockAnalyticsTab, BlockInternalCommandsTab, BlockSnarkJobsTab, BlockSpotlightTab,

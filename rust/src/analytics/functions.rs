@@ -64,34 +64,3 @@ pub async fn load_snarker_leaderboard_data(
         Err(MyError::NetworkError("Failed to fetch data".into()))
     }
 }
-
-pub async fn load_staker_leaderboard_data(
-    epoch: Option<u32>,
-    sort_by: StakerLeaderboardCanonicalBlocks,
-) -> Result<StakerLeaderboardResponse, MyError> {
-    if epoch.is_none() {
-        return Err(MyError::ParseError("Epoch must not be None".into()));
-    }
-    let query_body = format!(
-        r#"{{"query":"query TopStakers($query: TopStakersQueryInput!, $blocks_query: BlockQueryInput!, $limit: Int = 50, $sort_by: TopStakersSortByInput!) {{ blocks(limit: 1, query: $blocks_query) {{ epoch_num_slots_produced epoch_num_canonical_blocks epoch_num_blocks }} topStakers(query: $query, limit: $limit, sortBy: $sort_by) {{ username public_key num_blocks_produced num_canonical_blocks_produced num_supercharged_blocks_produced num_slots_produced delegation_totals {{ totalStakePercentage }} }} }}","variables":{{"limit": 50, "sort_by": "{}", "query": {{ "epoch": {} }}, "blocks_query": {{ "protocolState": {{ "consensusState": {{ "epoch": {} }} }} }} }},"operationName":"TopStakers"}}"#,
-        sort_by,
-        epoch.unwrap(),
-        epoch.unwrap()
-    );
-    let client = reqwest::Client::new();
-    let response = client
-        .post(GRAPHQL_ENDPOINT)
-        .body(query_body)
-        .send()
-        .await
-        .map_err(|e| MyError::NetworkError(e.to_string()))?;
-
-    if response.status().is_success() {
-        Ok(response
-            .json::<StakerLeaderboardResponse>()
-            .await
-            .map_err(|e| MyError::ParseError(e.to_string()))?)
-    } else {
-        Err(MyError::NetworkError("Failed to fetch data".into()))
-    }
-}

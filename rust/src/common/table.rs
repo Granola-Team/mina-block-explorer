@@ -2,9 +2,9 @@ use super::{components::*, functions::*, models::*};
 use crate::{
     account_activity::models::Delegators,
     accounts::models::AccountsSort,
-    analytics::models::{
-        SnarkerLeaderboardHighestFees, SnarkerLeaderboardTotalFees,
-        StakerLeaderboardCanonicalBlocks,
+    analytics::{
+        models::{SnarkerLeaderboardHighestFees, SnarkerLeaderboardTotalFees},
+        staker_leaderboard::graphql::top_stakers_query::TopStakersSortByInput,
     },
     common::constants::*,
     icons::*,
@@ -108,7 +108,7 @@ pub enum AnySort {
     SnarkerLeaderboardHighestFee(SnarkerLeaderboardHighestFees),
     Delegator(Delegators),
     Accounts(AccountsSort),
-    StakerLeaderboardCanonicalBlocks(StakerLeaderboardCanonicalBlocks),
+    TopStakersSortByInput(TopStakersSortByInput),
     Stakes(StakesSort),
 }
 
@@ -120,7 +120,7 @@ impl SortDirection for AnySort {
             AnySort::SnarkerLeaderboardHighestFee(sort) => sort.is_desc(),
             AnySort::Delegator(sort) => sort.is_desc(),
             AnySort::Accounts(sort) => sort.is_desc(),
-            AnySort::StakerLeaderboardCanonicalBlocks(sort) => sort.is_desc(),
+            AnySort::TopStakersSortByInput(sort) => sort.is_desc(),
             AnySort::Stakes(sort) => sort.is_desc(),
         }
     }
@@ -143,7 +143,7 @@ impl ToString for AnySort {
             AnySort::SnarkerLeaderboardHighestFee(sort) => sort.to_string(),
             AnySort::Delegator(sort) => sort.to_string(),
             AnySort::Accounts(sort) => sort.to_string(),
-            AnySort::StakerLeaderboardCanonicalBlocks(sort) => sort.to_string(),
+            AnySort::TopStakersSortByInput(sort) => sort.to_string(),
             AnySort::Stakes(sort) => sort.to_string(),
         }
     }
@@ -157,7 +157,7 @@ impl CycleSort for AnySort {
             AnySort::Accounts(sort) => sort.cycle(),
             AnySort::SnarkerLeaderboardHighestFee(sort) => sort.cycle(),
             AnySort::SnarkerLeaderboardTotalFees(sort) => sort.cycle(),
-            AnySort::StakerLeaderboardCanonicalBlocks(sort) => sort.cycle(),
+            AnySort::TopStakersSortByInput(sort) => sort.cycle(),
             _ => AnySort::None(Nil),
         }
     }
