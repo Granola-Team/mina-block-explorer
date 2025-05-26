@@ -25,6 +25,10 @@ RSpec.describe "Snarker Leaderboard table", type: :system do
   end
 
   it "has sortable column 'Canonical Blocks Produced'" do
-    test_sortable_column(heading, "Canonical Blocks Produced", [nil, "NUM_CANONICAL_BLOCKS_PRODUCED_ASC", "NUM_CANONICAL_BLOCKS_PRODUCED_DESC"])
+    test_sortable_column(heading, "Canonical Blocks Produced", [nil, "NumCanonicalBlocksProducedDesc", "NumCanonicalBlocksProducedAsc"])
+  end
+
+  it "has sortable column 'Slots Produced'" do
+    test_sortable_column(heading, "Slots Produced", [nil, "NumSlotsProducedDesc", "NumSlotsProducedAsc"])
   end
 end

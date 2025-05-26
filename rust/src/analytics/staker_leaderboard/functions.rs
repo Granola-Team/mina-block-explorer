@@ -12,7 +12,7 @@ use super::graphql::{
 
 pub async fn load_data(
     epoch: Option<u32>,
-    sort_by: TopStakersSortByInput,
+    sort_by: Option<TopStakersSortByInput>,
 ) -> Result<ResponseData, MyError> {
     if epoch.is_none() {
         return Err(MyError::ParseError("Epoch must not be None".into()));
@@ -37,7 +37,7 @@ pub async fn load_data(
             ..Default::default()
         },
         query,
-        sort_by,
+        sort_by: sort_by.unwrap_or(TopStakersSortByInput::NUM_CANONICAL_BLOCKS_PRODUCED_DESC),
     };
 
     let client = reqwest::Client::new();

@@ -42,7 +42,7 @@ module TableHelpers
         end
       end
       # Click the column to sort
-      find("th", text: column.upcase, wait: 0).find("svg").click
+      find("th", text: column.upcase, wait: 0).find_all("svg").last.click
       wait_until_table_loaded(heading) # Wait for table to reload after sorting
     end
   end

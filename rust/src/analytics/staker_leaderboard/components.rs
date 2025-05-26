@@ -1,7 +1,7 @@
 use super::{
     functions::*,
     graphql::top_stakers_query::TopStakersSortByInput,
-    models::{DelegationTotals, StakerStats},
+    models::{DelegationTotals, ExtendedTopStakersSortByInput, StakerStats},
 };
 use crate::{
     common::{components::*, constants::*, table::*},
@@ -24,9 +24,7 @@ pub fn StakerLeaderboard() -> impl IntoView {
         move |(epoch, sort_dir)| async move {
             load_data(
                 epoch,
-                sort_dir
-                    .and_then(|dir| TopStakersSortByInput::try_from(dir).ok())
-                    .unwrap_or(TopStakersSortByInput::NUM_CANONICAL_BLOCKS_PRODUCED_DESC),
+                sort_dir.and_then(|dir| TopStakersSortByInput::try_from(dir).ok()),
             )
             .await
         },
@@ -114,8 +112,17 @@ pub fn StakerLeaderboard() -> impl IntoView {
                     sort_direction: Some(AnySort::TopStakersSortByInput(
                         sort_dir_sig
                             .get()
-                            .and_then(|dir| TopStakersSortByInput::try_from(dir).ok())
-                            .unwrap_or(TopStakersSortByInput::NUM_CANONICAL_BLOCKS_PRODUCED_DESC),
+                            .and_then(|dir| ExtendedTopStakersSortByInput::try_from(dir).ok())
+                            .filter(|sd| {
+                                matches!(
+                                    sd,
+                                    ExtendedTopStakersSortByInput::NumCanonicalBlocksProducedAsc
+                                ) || matches!(
+                                    sd,
+                                    ExtendedTopStakersSortByInput::NumCanonicalBlocksProducedDesc
+                                )
+                            })
+                            .unwrap_or(ExtendedTopStakersSortByInput::CanonicalBlocksNil),
                     )),
                     alignment: Some(ColumnTextAlignment::Right),
                     is_sortable: true,
@@ -130,7 +137,21 @@ pub fn StakerLeaderboard() -> impl IntoView {
                 },
                 TableColumn {
                     column: "Slots Produced".to_string(),
+                    sort_direction: Some(AnySort::TopStakersSortByInput(
+                        sort_dir_sig
+                            .get()
+                            .and_then(|dir| ExtendedTopStakersSortByInput::try_from(dir).ok())
+                            .filter(|sd| {
+                                matches!(sd, ExtendedTopStakersSortByInput::NumSlotsProducedAsc)
+                                    || matches!(
+                                        sd,
+                                        ExtendedTopStakersSortByInput::NumSlotsProducedDesc
+                                    )
+                            })
+                            .unwrap_or(ExtendedTopStakersSortByInput::SlotsNil),
+                    )),
                     alignment: Some(ColumnTextAlignment::Center),
+                    is_sortable: true,
                     width: Some(String::from(TABLE_COL_NUMERIC_WIDTH)),
                     tooltip: Some("of total slots produced".to_string()),
                     ..Default::default()

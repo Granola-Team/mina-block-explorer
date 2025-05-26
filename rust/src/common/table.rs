@@ -4,7 +4,7 @@ use crate::{
     accounts::models::AccountsSort,
     analytics::{
         models::{SnarkerLeaderboardHighestFees, SnarkerLeaderboardTotalFees},
-        staker_leaderboard::graphql::top_stakers_query::TopStakersSortByInput,
+        staker_leaderboard::models::ExtendedTopStakersSortByInput,
     },
     common::constants::*,
     icons::*,
@@ -108,7 +108,7 @@ pub enum AnySort {
     SnarkerLeaderboardHighestFee(SnarkerLeaderboardHighestFees),
     Delegator(Delegators),
     Accounts(AccountsSort),
-    TopStakersSortByInput(TopStakersSortByInput),
+    TopStakersSortByInput(ExtendedTopStakersSortByInput),
     Stakes(StakesSort),
 }
 
@@ -130,6 +130,8 @@ impl SortDirection for AnySort {
             AnySort::None(_)
                 | AnySort::SnarkerLeaderboardHighestFee(SnarkerLeaderboardHighestFees::Nil)
                 | AnySort::SnarkerLeaderboardTotalFees(SnarkerLeaderboardTotalFees::Nil)
+                | AnySort::TopStakersSortByInput(ExtendedTopStakersSortByInput::SlotsNil)
+                | AnySort::TopStakersSortByInput(ExtendedTopStakersSortByInput::CanonicalBlocksNil)
         )
     }
 }
@@ -338,104 +340,108 @@ where
                 }
             }
         >
-            {column
-                .tooltip
-                .map(|title| {
-                    view! {
-                        <span class="flex justify-start items-center cursor-pointer" title=title>
-                            {column.column.to_string()}
-                            <span class="w-2" />
-                            <QuestionMark />
-                        </span>
-                    }
-                        .into_view()
-                })
-                .unwrap_or(view! { {column.column.to_string()} }.into_view())}
-            {match &column.sort_direction {
-                Some(direction) => {
-                    if direction.is_active() {
-                        if direction.is_desc() {
-                            view! {
-                                <span class=ICON_CLASS>
-                                    <DownArrow width=12 />
-                                </span>
-                            }
-                                .into_view()
-                        } else {
-                            view! {
-                                <span class=ICON_CLASS>
-                                    <UpArrow width=12 />
-                                </span>
-                            }
-                                .into_view()
-                        }
-                    } else {
+            <span class="flex justify-start items-center flex-wrap">
+                {column
+                    .tooltip
+                    .map(|title| {
                         view! {
-                            <span class=ICON_CLASS>
-                                <UpDownArrow width=12 />
+                            <span
+                                class="flex justify-start items-center cursor-pointer"
+                                title=title
+                            >
+                                {column.column.to_string()}
+                                <span class="w-2" />
+                                <QuestionMark />
                             </span>
                         }
                             .into_view()
-                    }
-                }
-                None => ().into_view(),
-            }}
-
-            {match column.search_type {
-                ColumnSearchType::Text => {
-                    view! {
-                        <input
-                            data-test=format!("input-{}", column.column)
-                            value=value
-                            type=column.html_input_type
-                            on:input=move |_| {
-                                update_value();
+                    })
+                    .unwrap_or(view! { {column.column.to_string()} }.into_view())}
+                {match &column.sort_direction {
+                    Some(direction) => {
+                        if direction.is_active() {
+                            if direction.is_desc() {
+                                view! {
+                                    <span class=ICON_CLASS>
+                                        <DownArrow width=12 />
+                                    </span>
+                                }
+                                    .into_view()
+                            } else {
+                                view! {
+                                    <span class=ICON_CLASS>
+                                        <UpArrow width=12 />
+                                    </span>
+                                }
+                                    .into_view()
                             }
-                            on:click=move |e| {
-                                e.stop_propagation();
+                        } else {
+                            view! {
+                                <span class=ICON_CLASS>
+                                    <UpDownArrow width=12 />
+                                </span>
                             }
-                            node_ref=input_element
-                            class=INPUT_CLASS.to_string() + &input_class + " p-2 pl-1"
-                            id=id_copy
-                        />
+                                .into_view()
+                        }
                     }
-                        .into_view()
-                }
-                ColumnSearchType::Select => {
-                    view! {
-                        <select
-                            data-test=format!("select-{}", column.column)
-                            value=value
-                            on:change=move |_| {
-                                update_value();
-                            }
-                            node_ref=select_element
-                            class=INPUT_CLASS.to_string() + &input_class + " p-0 text-xs bg-white "
-                            id=id_copy
-                        >
-                            {column
-                                .search_options
-                                .expect("Expected to have search options")
-                                .into_iter()
-                                .map(|text| {
-                                    view! {
-                                        <option
-                                            value=text.to_string()
-                                            selected=text == value.get_untracked().unwrap_or_default()
-                                        >
-                                            {ToTitleCase::to_title_case(text.as_str()).to_string()}
-                                        </option>
-                                    }
-                                })
-                                .collect::<Vec<_>>()
-                                .into_view()}
-                        </select>
+                    None => ().into_view(),
+                }}
+                {match column.search_type {
+                    ColumnSearchType::Text => {
+                        view! {
+                            <input
+                                data-test=format!("input-{}", column.column)
+                                value=value
+                                type=column.html_input_type
+                                on:input=move |_| {
+                                    update_value();
+                                }
+                                on:click=move |e| {
+                                    e.stop_propagation();
+                                }
+                                node_ref=input_element
+                                class=INPUT_CLASS.to_string() + &input_class + " p-2 pl-1"
+                                id=id_copy
+                            />
+                        }
+                            .into_view()
                     }
-                        .into_view()
-                }
-                _ => view! { <div class=INPUT_CLASS></div> }.into_view(),
-            }}
-
+                    ColumnSearchType::Select => {
+                        view! {
+                            <select
+                                data-test=format!("select-{}", column.column)
+                                value=value
+                                on:change=move |_| {
+                                    update_value();
+                                }
+                                node_ref=select_element
+                                class=INPUT_CLASS.to_string() + &input_class
+                                    + " p-0 text-xs bg-white "
+                                id=id_copy
+                            >
+                                {column
+                                    .search_options
+                                    .expect("Expected to have search options")
+                                    .into_iter()
+                                    .map(|text| {
+                                        view! {
+                                            <option
+                                                value=text.to_string()
+                                                selected=text == value.get_untracked().unwrap_or_default()
+                                            >
+                                                {ToTitleCase::to_title_case(text.as_str()).to_string()}
+                                            </option>
+                                        }
+                                    })
+                                    .collect::<Vec<_>>()
+                                    .into_view()}
+                            </select>
+                        }
+                            .into_view()
+                    }
+                    _ => view! { <div class=INPUT_CLASS></div> }.into_view(),
+                }}
+            </span>
         </th>
     }
 }

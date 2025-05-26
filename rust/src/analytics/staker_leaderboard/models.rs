@@ -3,21 +3,51 @@ use crate::common::{
     table::{AnySort, CycleSort, SortDirection},
 };
 
-use super::graphql::top_stakers_query::TopStakersSortByInput;
 use serde::*;
 use std::fmt;
+
+use super::graphql::top_stakers_query::TopStakersSortByInput;
+
+#[derive(Clone, Debug)]
+pub enum ExtendedTopStakersSortByInput {
+    SlotsNil,
+    CanonicalBlocksNil,
+    NumCanonicalBlocksProducedAsc,
+    NumCanonicalBlocksProducedDesc,
+    NumSlotsProducedAsc,
+    NumSlotsProducedDesc,
+}
 
 impl TryFrom<String> for TopStakersSortByInput {
     type Error = &'static str;
     fn try_from(str: String) -> Result<TopStakersSortByInput, Self::Error> {
         match str.as_str() {
-            "NUM_CANONICAL_BLOCKS_PRODUCED_ASC" => {
+            "NumCanonicalBlocksProducedAsc" => {
                 Ok(TopStakersSortByInput::NUM_CANONICAL_BLOCKS_PRODUCED_ASC)
             }
-            "NUM_CANONICAL_BLOCKS_PRODUCED_DESC" => {
+            "NumCanonicalBlocksProducedDesc" => {
                 Ok(TopStakersSortByInput::NUM_CANONICAL_BLOCKS_PRODUCED_DESC)
             }
-            _ => Err("Unable to parse the TopStakersSortByInput from string"),
+            "NumSlotsProducedAsc" => Ok(TopStakersSortByInput::NUM_SLOTS_PRODUCED_ASC),
+            "NumSlotsProducedDesc" => Ok(TopStakersSortByInput::NUM_SLOTS_PRODUCED_DESC),
+            _ => Err("Unable to convert from String"),
+        }
+    }
+}
+
+impl TryFrom<String> for ExtendedTopStakersSortByInput {
+    type Error = &'static str;
+    fn try_from(str: String) -> Result<ExtendedTopStakersSortByInput, Self::Error> {
+        match str.as_str() {
+            "NumCanonicalBlocksProducedAsc" => {
+                Ok(ExtendedTopStakersSortByInput::NumCanonicalBlocksProducedAsc)
+            }
+            "NumCanonicalBlocksProducedDesc" => {
+                Ok(ExtendedTopStakersSortByInput::NumCanonicalBlocksProducedDesc)
+            }
+            "NumSlotsProducedAsc" => Ok(ExtendedTopStakersSortByInput::NumSlotsProducedAsc),
+            "NumSlotsProducedDesc" => Ok(ExtendedTopStakersSortByInput::NumSlotsProducedDesc),
+            _ => Err("Unable to convert from String"),
         }
     }
 }
@@ -61,61 +91,64 @@ pub struct StakerLeaderboardResponse {
     pub data: TopStakers,
 }
 
-impl SortDirection for TopStakersSortByInput {
+impl SortDirection for ExtendedTopStakersSortByInput {
     fn is_desc(&self) -> bool {
         matches!(
             self,
-            TopStakersSortByInput::NUM_CANONICAL_BLOCKS_PRODUCED_DESC
-        ) || matches!(self, TopStakersSortByInput::NUM_SLOTS_PRODUCED_DESC)
+            ExtendedTopStakersSortByInput::NumCanonicalBlocksProducedDesc
+        ) || matches!(self, ExtendedTopStakersSortByInput::NumSlotsProducedDesc)
     }
     fn is_active(&self) -> bool {
-        true
+        !matches!(self, ExtendedTopStakersSortByInput::SlotsNil)
+            || !matches!(self, ExtendedTopStakersSortByInput::CanonicalBlocksNil)
     }
 }
 
-impl CycleSort for TopStakersSortByInput {
+impl CycleSort for ExtendedTopStakersSortByInput {
     fn cycle(&self) -> AnySort {
         match self {
-            TopStakersSortByInput::NUM_CANONICAL_BLOCKS_PRODUCED_DESC => {
-                AnySort::TopStakersSortByInput(
-                    TopStakersSortByInput::NUM_CANONICAL_BLOCKS_PRODUCED_ASC,
-                )
-            }
-            TopStakersSortByInput::NUM_CANONICAL_BLOCKS_PRODUCED_ASC => {
-                AnySort::TopStakersSortByInput(
-                    TopStakersSortByInput::NUM_CANONICAL_BLOCKS_PRODUCED_DESC,
-                )
-            }
-            TopStakersSortByInput::NUM_SLOTS_PRODUCED_ASC => {
-                AnySort::TopStakersSortByInput(TopStakersSortByInput::NUM_SLOTS_PRODUCED_DESC)
-            }
-            TopStakersSortByInput::NUM_SLOTS_PRODUCED_DESC => {
-                AnySort::TopStakersSortByInput(TopStakersSortByInput::NUM_SLOTS_PRODUCED_ASC)
-            }
-            &Self::Other(_) => AnySort::TopStakersSortByInput(
-                TopStakersSortByInput::NUM_CANONICAL_BLOCKS_PRODUCED_DESC,
+            ExtendedTopStakersSortByInput::CanonicalBlocksNil => AnySort::TopStakersSortByInput(
+                ExtendedTopStakersSortByInput::NumCanonicalBlocksProducedDesc,
             ),
+            ExtendedTopStakersSortByInput::NumCanonicalBlocksProducedDesc => {
+                AnySort::TopStakersSortByInput(
+                    ExtendedTopStakersSortByInput::NumCanonicalBlocksProducedAsc,
+                )
+            }
+            ExtendedTopStakersSortByInput::NumCanonicalBlocksProducedAsc => {
+                AnySort::TopStakersSortByInput(ExtendedTopStakersSortByInput::CanonicalBlocksNil)
+            }
+            ExtendedTopStakersSortByInput::SlotsNil => {
+                AnySort::TopStakersSortByInput(ExtendedTopStakersSortByInput::NumSlotsProducedDesc)
+            }
+            ExtendedTopStakersSortByInput::NumSlotsProducedDesc => {
+                AnySort::TopStakersSortByInput(ExtendedTopStakersSortByInput::NumSlotsProducedAsc)
+            }
+            ExtendedTopStakersSortByInput::NumSlotsProducedAsc => {
+                AnySort::TopStakersSortByInput(ExtendedTopStakersSortByInput::SlotsNil)
+            }
         }
     }
 }
 
-impl fmt::Display for TopStakersSortByInput {
+impl fmt::Display for ExtendedTopStakersSortByInput {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            TopStakersSortByInput::NUM_CANONICAL_BLOCKS_PRODUCED_ASC => {
-                write!(f, "NUM_CANONICAL_BLOCKS_PRODUCED_ASC")
+            ExtendedTopStakersSortByInput::NumCanonicalBlocksProducedAsc => {
+                write!(f, "NumCanonicalBlocksProducedAsc")
             }
-            TopStakersSortByInput::NUM_CANONICAL_BLOCKS_PRODUCED_DESC => {
-                write!(f, "NUM_CANONICAL_BLOCKS_PRODUCED_DESC")
+            ExtendedTopStakersSortByInput::NumCanonicalBlocksProducedDesc => {
+                write!(f, "NumCanonicalBlocksProducedDesc")
             }
-            TopStakersSortByInput::NUM_SLOTS_PRODUCED_ASC => {
-                write!(f, "NUM_SLOTS_PRODUCED_ASC")
+            ExtendedTopStakersSortByInput::NumSlotsProducedAsc => {
+                write!(f, "NumSlotsProducedAsc")
             }
-            TopStakersSortByInput::NUM_SLOTS_PRODUCED_DESC => {
-                write!(f, "NUM_SLOTS_PRODUCED_DESC")
+            ExtendedTopStakersSortByInput::NumSlotsProducedDesc => {
+                write!(f, "NumSlotsProducedDesc")
             }
-            &Self::Other(_) => {
-                write!(f, "NUM_CANONICAL_BLOCKS_PRODUCED_DESC")
+            ExtendedTopStakersSortByInput::SlotsNil
+            | ExtendedTopStakersSortByInput::CanonicalBlocksNil => {
+                write!(f, "")
             }
         }
     }
