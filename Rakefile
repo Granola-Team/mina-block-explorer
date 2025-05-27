@@ -169,6 +169,14 @@ file IDXR_FOLDER.to_s do
   sh "git submodule update --init"
 end
 
+desc "Shutdown all mina-indexer instances"
+task shutdown_mina_indexers: [] do
+  puts "--- Shutting down all instances of mina-indexer"
+  Dir.chdir("#{TOP}/lib/mina-indexer") do
+    sh "nix develop --command rake kill"
+  end
+end
+
 desc "Deploy mina-indexer"
 task deploy_mina_indexer: [:prepare_submodule] do
   ensure_env_vars(%w[VOLUMES_DIR], "Cannot deploy mina indexer")
@@ -405,6 +413,18 @@ task tier2_retry: tier2_prerequisites do
   Dir.chdir("#{TOP}/ruby") do
     run_tier2_task("bundle exec rspec --only-failures")
   end
+end
+
+Rake::Task["tier2"].enhance do
+  Rake::Task["shutdown_mina_indexers"].invoke
+end
+
+Rake::Task["tier2_retry"].enhance do
+  Rake::Task["shutdown_mina_indexers"].invoke
+end
+
+Rake::Task["dev"].enhance do
+  Rake::Task["shutdown_mina_indexers"].invoke
 end
 
 desc "Print all tasks and their dependencies as a tree"

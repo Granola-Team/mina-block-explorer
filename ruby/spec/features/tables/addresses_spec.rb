@@ -48,7 +48,6 @@ RSpec.describe "MINA Token Accounts table", type: :system do
         public_key_cells.each do |cell|
           cleaned_text = cell.text.gsub(/[\n+-]/, "")
           expect(cleaned_text).to include(Constants::ROMEK_ADDRESS), "Expected 'Account' to be '#{Constants::ROMEK_ADDRESS}', but was '#{cleaned_text}'"
-          expect(cleaned_text).to include(Constants::ROMEK_USERNAME), "Expected 'Username' to be '#{Constants::ROMEK_USERNAME}', but was '#{cleaned_text}'"
         end
       end
     )

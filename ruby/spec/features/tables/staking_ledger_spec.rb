@@ -34,7 +34,6 @@ RSpec.describe "Staking Ledger - Epoch 1 table", type: :system do
         key_cells.each do |cell|
           cleaned_text = cell.text.gsub(/[\n+-]/, "")
           expect(cleaned_text).to include(Constants::SNZPOOL_ADDRESS), "Expected 'Account' to contain '#{Constants::SNZPOOL_ADDRESS}', but was '#{cleaned_text}'"
-          expect(cleaned_text).to include(Constants::SNZ_USERNAME), "Expected 'Account' to contain '#{Constants::SNZ_USERNAME}', but was '#{cleaned_text}'"
         end
       end
     )

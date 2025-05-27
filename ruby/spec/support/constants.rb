@@ -31,7 +31,6 @@ module Constants
   FIRST_SENDER_ADDRESS = "B62qpjxUpgdjzwQfd8q2gzxi99wN7SCgmofpvw27MBkfNHfHoY2VH32".freeze
   FIRST_RECIPIENT_ADDRESS = "B62qpjxUpgdjzwQfd8q2gzxi99wN7SCgmofpvw27MBkfNHfHoY2VH32".freeze
   SNZPOOL_ADDRESS = "B62qq3tqfdj19hqaVCozJFM2q9gT2WezQMaJMKD6wxyvK3fMpHiP9va".freeze
-  SNZ_USERNAME = "Unknown".freeze
   MINA_EXPLORER_USERNAME = "MinaExplorer".freeze
   MINU_SYMBOL = "MINU".freeze
   TOTAL_NUMBER_USER_COMMANDS = 208310
