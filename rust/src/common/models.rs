@@ -105,98 +105,6 @@ pub enum ButtonStyleVariant {
     Tertiary,
 }
 
-#[derive(Clone, Default, Debug, PartialEq)]
-pub struct TableMetadata {
-    pub total_records: Option<u64>,
-    pub displayed_records: u64,
-    pub available_records: Option<u64>,
-}
-
-pub struct TableMetadataBuilder {
-    total_records_options: Vec<(Box<dyn Fn() -> bool>, u64)>,
-    displayed_records_options: Vec<(Box<dyn Fn() -> bool>, u64)>,
-    available_records_options: Vec<(Box<dyn Fn() -> bool>, u64)>,
-}
-
-impl TableMetadataBuilder {
-    pub fn new() -> Self {
-        Self {
-            total_records_options: Vec::new(),
-            displayed_records_options: Vec::new(),
-            available_records_options: Vec::new(),
-        }
-    }
-
-    // Add an option for total_records
-    #[allow(dead_code)]
-    pub fn total_records(mut self, condition: impl Fn() -> bool + 'static, value: u64) -> Self {
-        self.total_records_options
-            .push((Box::new(condition), value));
-        self
-    }
-
-    // Add an option for displayed_records
-    #[allow(dead_code)]
-    pub fn displayed_records(mut self, condition: impl Fn() -> bool + 'static, value: u64) -> Self {
-        self.displayed_records_options
-            .push((Box::new(condition), value));
-        self
-    }
-
-    // Add an option for available_records
-    pub fn available_records(mut self, condition: impl Fn() -> bool + 'static, value: u64) -> Self {
-        self.available_records_options
-            .push((Box::new(condition), value));
-        self
-    }
-
-    // Unconditional total_records
-    pub fn total_records_value(mut self, value: u64) -> Self {
-        self.total_records_options
-            .push((Box::new(move || true), value));
-        self
-    }
-
-    // Unconditional displayed_records
-    pub fn displayed_records_value(mut self, value: u64) -> Self {
-        self.displayed_records_options
-            .push((Box::new(move || true), value));
-        self
-    }
-
-    // Unconditional available_records
-    #[allow(dead_code)]
-    pub fn available_records_value(mut self, value: u64) -> Self {
-        self.available_records_options
-            .push((Box::new(move || true), value));
-        self
-    }
-
-    pub fn build(self) -> TableMetadata {
-        // Helper to select the first matching option or a default
-        let select_option = |options: Vec<(Box<dyn Fn() -> bool>, u64)>| -> u64 {
-            for (condition, value) in options {
-                if condition() {
-                    return value;
-                }
-            }
-            0 // Default value
-        };
-
-        TableMetadata {
-            total_records: {
-                let value = select_option(self.total_records_options);
-                if value == 0 { None } else { Some(value) }
-            },
-            displayed_records: select_option(self.displayed_records_options),
-            available_records: {
-                let value = select_option(self.available_records_options);
-                if value == 0 { None } else { Some(value) }
-            },
-        }
-    }
-}
-
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub enum MyError {
     NetworkError(String),
@@ -328,6 +236,98 @@ pub enum NavIcon {
 
 pub trait HasBlockHeight {
     fn block_height(&self) -> Option<i64>;
+}
+
+#[derive(Clone, Default, Debug, PartialEq)]
+pub struct TableMetadata {
+    pub total_records: Option<u64>,
+    pub displayed_records: u64,
+    pub available_records: Option<u64>,
+}
+
+pub struct TableMetadataBuilder {
+    total_records_options: Vec<(Box<dyn Fn() -> bool>, u64)>,
+    displayed_records_options: Vec<(Box<dyn Fn() -> bool>, u64)>,
+    available_records_options: Vec<(Box<dyn Fn() -> bool>, u64)>,
+}
+
+impl TableMetadataBuilder {
+    pub fn new() -> Self {
+        Self {
+            total_records_options: Vec::new(),
+            displayed_records_options: Vec::new(),
+            available_records_options: Vec::new(),
+        }
+    }
+
+    // Add an option for total_records
+    #[allow(dead_code)]
+    pub fn total_records(mut self, condition: impl Fn() -> bool + 'static, value: u64) -> Self {
+        self.total_records_options
+            .push((Box::new(condition), value));
+        self
+    }
+
+    // Add an option for displayed_records
+    #[allow(dead_code)]
+    pub fn displayed_records(mut self, condition: impl Fn() -> bool + 'static, value: u64) -> Self {
+        self.displayed_records_options
+            .push((Box::new(condition), value));
+        self
+    }
+
+    // Add an option for available_records
+    pub fn available_records(mut self, condition: impl Fn() -> bool + 'static, value: u64) -> Self {
+        self.available_records_options
+            .push((Box::new(condition), value));
+        self
+    }
+
+    // Unconditional total_records
+    pub fn total_records_value(mut self, value: u64) -> Self {
+        self.total_records_options
+            .push((Box::new(move || true), value));
+        self
+    }
+
+    // Unconditional displayed_records
+    pub fn displayed_records_value(mut self, value: u64) -> Self {
+        self.displayed_records_options
+            .push((Box::new(move || true), value));
+        self
+    }
+
+    // Unconditional available_records
+    #[allow(dead_code)]
+    pub fn available_records_value(mut self, value: u64) -> Self {
+        self.available_records_options
+            .push((Box::new(move || true), value));
+        self
+    }
+
+    pub fn build(self) -> TableMetadata {
+        // Helper to select the first matching option or a default
+        let select_option = |options: Vec<(Box<dyn Fn() -> bool>, u64)>| -> u64 {
+            for (condition, value) in options {
+                if condition() {
+                    return value;
+                }
+            }
+            0 // Default value
+        };
+
+        TableMetadata {
+            total_records: {
+                let value = select_option(self.total_records_options);
+                if value == 0 { None } else { Some(value) }
+            },
+            displayed_records: select_option(self.displayed_records_options),
+            available_records: {
+                let value = select_option(self.available_records_options);
+                if value == 0 { None } else { Some(value) }
+            },
+        }
+    }
 }
 
 #[cfg(test)]
