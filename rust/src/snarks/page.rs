@@ -138,6 +138,7 @@ fn SnarksPageContents() -> impl IntoView {
                             data_sig.get().map(|d| d.len()).unwrap_or_default(),
                         )
                         .unwrap_or_default(),
+                    ..Default::default()
                 })
             })
 

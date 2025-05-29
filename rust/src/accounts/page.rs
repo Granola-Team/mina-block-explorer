@@ -181,6 +181,7 @@ fn AccountsPageContents() -> impl IntoView {
                             TableMetadataBuilder::new()
                                 .displayed_records_value(
                                     data_sig.get().map(|a| a.len() as u64).unwrap_or_default(),
+                                    None,
                                 )
                                 .available_records(
                                     move || {
@@ -188,6 +189,7 @@ fn AccountsPageContents() -> impl IntoView {
                                             != MINA_TOKEN_ADDRESS && q_type_sig.get().is_none()
                                     },
                                     token_sig.get().map(|t| t.num_holders).unwrap_or_default(),
+                                    None,
                                 )
                                 .available_records(
                                     move || {
@@ -195,6 +197,7 @@ fn AccountsPageContents() -> impl IntoView {
                                             == MINA_TOKEN_ADDRESS && q_type_sig.get().is_none()
                                     },
                                     summary_sig.get().total_num_mina_accounts,
+                                    None,
                                 )
                                 .available_records(
                                     move || {
@@ -207,8 +210,9 @@ fn AccountsPageContents() -> impl IntoView {
                                                 .unwrap_or(false)
                                     },
                                     summary_sig.get().total_num_mina_zkapp_accounts,
+                                    None,
                                 )
-                                .total_records_value(summary_sig.get().total_num_accounts)
+                                .total_records_value(summary_sig.get().total_num_accounts, None)
                                 .build(),
                         )
                     })

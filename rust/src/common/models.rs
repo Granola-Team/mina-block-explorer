@@ -243,12 +243,17 @@ pub struct TableMetadata {
     pub total_records: Option<u64>,
     pub displayed_records: u64,
     pub available_records: Option<u64>,
+    pub total_records_hint: Option<String>,
+    pub displayed_records_hint: Option<String>,
+    pub available_records_hint: Option<String>,
 }
 
+type ConditionalTableMetadataRecords = Vec<(Box<dyn Fn() -> bool>, u64, Option<String>)>;
+
 pub struct TableMetadataBuilder {
-    total_records_options: Vec<(Box<dyn Fn() -> bool>, u64)>,
-    displayed_records_options: Vec<(Box<dyn Fn() -> bool>, u64)>,
-    available_records_options: Vec<(Box<dyn Fn() -> bool>, u64)>,
+    total_records_options: ConditionalTableMetadataRecords,
+    displayed_records_options: ConditionalTableMetadataRecords,
+    available_records_options: ConditionalTableMetadataRecords,
 }
 
 impl TableMetadataBuilder {
@@ -260,72 +265,91 @@ impl TableMetadataBuilder {
         }
     }
 
-    // Add an option for total_records
     #[allow(dead_code)]
-    pub fn total_records(mut self, condition: impl Fn() -> bool + 'static, value: u64) -> Self {
+    pub fn total_records(
+        mut self,
+        condition: impl Fn() -> bool + 'static,
+        value: u64,
+        hint: Option<String>,
+    ) -> Self {
         self.total_records_options
-            .push((Box::new(condition), value));
+            .push((Box::new(condition), value, hint));
         self
     }
 
-    // Add an option for displayed_records
     #[allow(dead_code)]
-    pub fn displayed_records(mut self, condition: impl Fn() -> bool + 'static, value: u64) -> Self {
+    pub fn displayed_records(
+        mut self,
+        condition: impl Fn() -> bool + 'static,
+        value: u64,
+        hint: Option<String>,
+    ) -> Self {
         self.displayed_records_options
-            .push((Box::new(condition), value));
+            .push((Box::new(condition), value, hint));
         self
     }
 
-    // Add an option for available_records
-    pub fn available_records(mut self, condition: impl Fn() -> bool + 'static, value: u64) -> Self {
+    pub fn available_records(
+        mut self,
+        condition: impl Fn() -> bool + 'static,
+        value: u64,
+        hint: Option<String>,
+    ) -> Self {
         self.available_records_options
-            .push((Box::new(condition), value));
+            .push((Box::new(condition), value, hint));
         self
     }
 
-    // Unconditional total_records
-    pub fn total_records_value(mut self, value: u64) -> Self {
+    pub fn total_records_value(mut self, value: u64, hint: Option<String>) -> Self {
         self.total_records_options
-            .push((Box::new(move || true), value));
+            .push((Box::new(|| true), value, hint));
         self
     }
 
-    // Unconditional displayed_records
-    pub fn displayed_records_value(mut self, value: u64) -> Self {
+    pub fn displayed_records_value(mut self, value: u64, hint: Option<String>) -> Self {
         self.displayed_records_options
-            .push((Box::new(move || true), value));
+            .push((Box::new(|| true), value, hint));
         self
     }
 
-    // Unconditional available_records
     #[allow(dead_code)]
-    pub fn available_records_value(mut self, value: u64) -> Self {
+    pub fn available_records_value(mut self, value: u64, hint: Option<String>) -> Self {
         self.available_records_options
-            .push((Box::new(move || true), value));
+            .push((Box::new(|| true), value, hint));
         self
     }
 
     pub fn build(self) -> TableMetadata {
-        // Helper to select the first matching option or a default
-        let select_option = |options: Vec<(Box<dyn Fn() -> bool>, u64)>| -> u64 {
-            for (condition, value) in options {
+        let select_option = |options: ConditionalTableMetadataRecords| {
+            for (condition, value, hint) in options {
                 if condition() {
-                    return value;
+                    return (value, hint);
                 }
             }
-            0 // Default value
+            (0, None) // Default value and hint
         };
 
+        let (total_records_value, total_records_hint) = select_option(self.total_records_options);
+        let (displayed_records_value, displayed_records_hint) =
+            select_option(self.displayed_records_options);
+        let (available_records_value, available_records_hint) =
+            select_option(self.available_records_options);
+
         TableMetadata {
-            total_records: {
-                let value = select_option(self.total_records_options);
-                if value == 0 { None } else { Some(value) }
+            total_records: if total_records_value == 0 {
+                None
+            } else {
+                Some(total_records_value)
             },
-            displayed_records: select_option(self.displayed_records_options),
-            available_records: {
-                let value = select_option(self.available_records_options);
-                if value == 0 { None } else { Some(value) }
+            displayed_records: displayed_records_value,
+            available_records: if available_records_value == 0 {
+                None
+            } else {
+                Some(available_records_value)
             },
+            total_records_hint,
+            displayed_records_hint,
+            available_records_hint,
         }
     }
 }
@@ -333,9 +357,7 @@ impl TableMetadataBuilder {
 #[cfg(test)]
 mod table_metadata_builder_tests {
     use super::*;
-    use std::{cell::Cell, rc::Rc};
 
-    // Helper to create a builder with no options
     fn empty_builder() -> TableMetadataBuilder {
         TableMetadataBuilder::new()
     }
@@ -349,6 +371,9 @@ mod table_metadata_builder_tests {
                 total_records: None,
                 displayed_records: 0,
                 available_records: None,
+                total_records_hint: None,
+                displayed_records_hint: None,
+                available_records_hint: None,
             },
             "Empty builder should return default metadata"
         );
@@ -357,9 +382,9 @@ mod table_metadata_builder_tests {
     #[test]
     fn test_unconditional_values() {
         let metadata = empty_builder()
-            .total_records_value(1000)
-            .displayed_records_value(50)
-            .available_records_value(200)
+            .total_records_value(1000, Some("Total rows in database".to_string()))
+            .displayed_records_value(50, Some("Rows shown on page".to_string()))
+            .available_records_value(200, Some("Rows accessible".to_string()))
             .build();
         assert_eq!(
             metadata,
@@ -367,8 +392,11 @@ mod table_metadata_builder_tests {
                 total_records: Some(1000),
                 displayed_records: 50,
                 available_records: Some(200),
+                total_records_hint: Some("Total rows in database".to_string()),
+                displayed_records_hint: Some("Rows shown on page".to_string()),
+                available_records_hint: Some("Rows accessible".to_string()),
             },
-            "Unconditional values should set fields directly"
+            "Unconditional values with hints should set fields directly"
         );
     }
 
@@ -377,25 +405,55 @@ mod table_metadata_builder_tests {
         let condition1 = true;
         let condition2 = false;
         let metadata = empty_builder()
-            .total_records(move || condition1, 1000)
-            .total_records(move || condition2, 2000)
+            .total_records(
+                move || condition1,
+                1000,
+                Some("Total rows when condition1".to_string()),
+            )
+            .total_records(
+                move || condition2,
+                2000,
+                Some("Total rows when condition2".to_string()),
+            )
             .build();
         assert_eq!(
-            metadata.total_records,
-            Some(1000),
-            "First true condition should set total_records"
+            metadata,
+            TableMetadata {
+                total_records: Some(1000),
+                displayed_records: 0,
+                available_records: None,
+                total_records_hint: Some("Total rows when condition1".to_string()),
+                displayed_records_hint: None,
+                available_records_hint: None,
+            },
+            "First true condition should set total_records with hint"
         );
 
         let condition1 = false;
         let condition2 = true;
         let metadata = empty_builder()
-            .total_records(move || condition1, 1000)
-            .total_records(move || condition2, 2000)
+            .total_records(
+                move || condition1,
+                1000,
+                Some("Total rows when condition1".to_string()),
+            )
+            .total_records(
+                move || condition2,
+                2000,
+                Some("Total rows when condition2".to_string()),
+            )
             .build();
         assert_eq!(
-            metadata.total_records,
-            Some(2000),
-            "Second true condition should set total_records"
+            metadata,
+            TableMetadata {
+                total_records: Some(2000),
+                displayed_records: 0,
+                available_records: None,
+                total_records_hint: Some("Total rows when condition2".to_string()),
+                displayed_records_hint: None,
+                available_records_hint: None,
+            },
+            "Second true condition should set total_records with hint"
         );
     }
 
@@ -404,23 +462,55 @@ mod table_metadata_builder_tests {
         let condition1 = true;
         let condition2 = false;
         let metadata = empty_builder()
-            .displayed_records(move || condition1, 50)
-            .displayed_records(move || condition2, 100)
+            .displayed_records(
+                move || condition1,
+                50,
+                Some("Displayed rows when condition1".to_string()),
+            )
+            .displayed_records(
+                move || condition2,
+                100,
+                Some("Displayed rows when condition2".to_string()),
+            )
             .build();
         assert_eq!(
-            metadata.displayed_records, 50,
-            "First true condition should set displayed_records"
+            metadata,
+            TableMetadata {
+                total_records: None,
+                displayed_records: 50,
+                available_records: None,
+                total_records_hint: None,
+                displayed_records_hint: Some("Displayed rows when condition1".to_string()),
+                available_records_hint: None,
+            },
+            "First true condition should set displayed_records with hint"
         );
 
         let condition1 = false;
         let condition2 = true;
         let metadata = empty_builder()
-            .displayed_records(move || condition1, 50)
-            .displayed_records(move || condition2, 100)
+            .displayed_records(
+                move || condition1,
+                50,
+                Some("Displayed rows when condition1".to_string()),
+            )
+            .displayed_records(
+                move || condition2,
+                100,
+                Some("Displayed rows when condition2".to_string()),
+            )
             .build();
         assert_eq!(
-            metadata.displayed_records, 100,
-            "Second true condition should set displayed_records"
+            metadata,
+            TableMetadata {
+                total_records: None,
+                displayed_records: 100,
+                available_records: None,
+                total_records_hint: None,
+                displayed_records_hint: Some("Displayed rows when condition2".to_string()),
+                available_records_hint: None,
+            },
+            "Second true condition should set displayed_records with hint"
         );
     }
 
@@ -429,34 +519,76 @@ mod table_metadata_builder_tests {
         let condition1 = true;
         let condition2 = false;
         let metadata = empty_builder()
-            .available_records(move || condition1, 200)
-            .available_records(move || condition2, 400)
+            .available_records(
+                move || condition1,
+                200,
+                Some("Available rows when condition1".to_string()),
+            )
+            .available_records(
+                move || condition2,
+                400,
+                Some("Available rows when condition2".to_string()),
+            )
             .build();
         assert_eq!(
-            metadata.available_records,
-            Some(200),
-            "First true condition should set available_records"
+            metadata,
+            TableMetadata {
+                total_records: None,
+                displayed_records: 0,
+                available_records: Some(200),
+                total_records_hint: None,
+                displayed_records_hint: None,
+                available_records_hint: Some("Available rows when condition1".to_string()),
+            },
+            "First true condition should set available_records with hint"
         );
 
         let condition1 = false;
         let condition2 = true;
         let metadata = empty_builder()
-            .available_records(move || condition1, 200)
-            .available_records(move || condition2, 400)
+            .available_records(
+                move || condition1,
+                200,
+                Some("Available rows when condition1".to_string()),
+            )
+            .available_records(
+                move || condition2,
+                400,
+                Some("Available rows when condition2".to_string()),
+            )
             .build();
         assert_eq!(
-            metadata.available_records,
-            Some(400),
-            "Second true condition should set available_records"
+            metadata,
+            TableMetadata {
+                total_records: None,
+                displayed_records: 0,
+                available_records: Some(400),
+                total_records_hint: None,
+                displayed_records_hint: None,
+                available_records_hint: Some("Available rows when condition2".to_string()),
+            },
+            "Second true condition should set available_records with hint"
         );
     }
 
     #[test]
     fn test_no_matching_conditions() {
         let metadata = empty_builder()
-            .total_records(move || false, 1000)
-            .displayed_records(move || false, 50)
-            .available_records(move || false, 200)
+            .total_records(
+                move || false,
+                1000,
+                Some("Total rows when false".to_string()),
+            )
+            .displayed_records(
+                move || false,
+                50,
+                Some("Displayed rows when false".to_string()),
+            )
+            .available_records(
+                move || false,
+                200,
+                Some("Available rows when false".to_string()),
+            )
             .build();
         assert_eq!(
             metadata,
@@ -464,17 +596,20 @@ mod table_metadata_builder_tests {
                 total_records: None,
                 displayed_records: 0,
                 available_records: None,
+                total_records_hint: None,
+                displayed_records_hint: None,
+                available_records_hint: None,
             },
-            "No matching conditions should return defaults"
+            "No matching conditions should return defaults with no hints"
         );
     }
 
     #[test]
     fn test_zero_values() {
         let metadata = empty_builder()
-            .total_records_value(0)
-            .displayed_records_value(0)
-            .available_records_value(0)
+            .total_records_value(0, Some("Zero total rows".to_string()))
+            .displayed_records_value(0, Some("Zero displayed rows".to_string()))
+            .available_records_value(0, Some("Zero available rows".to_string()))
             .build();
         assert_eq!(
             metadata,
@@ -482,8 +617,11 @@ mod table_metadata_builder_tests {
                 total_records: None,
                 displayed_records: 0,
                 available_records: None,
+                total_records_hint: Some("Zero total rows".to_string()),
+                displayed_records_hint: Some("Zero displayed rows".to_string()),
+                available_records_hint: Some("Zero available rows".to_string()),
             },
-            "Zero values should map to None for Option fields"
+            "Zero values should map to None for Option fields, keeping hints"
         );
     }
 
@@ -492,48 +630,77 @@ mod table_metadata_builder_tests {
         let q_type: Option<String> = Some("zkapp".to_string());
         let q_type_clone = q_type.clone();
         let metadata = empty_builder()
-            .available_records(move || q_type.is_none(), 1000)
+            .available_records(
+                move || q_type.is_none(),
+                1000,
+                Some("Available when no type".to_string()),
+            )
             .available_records(
                 move || q_type_clone.as_ref().map(|t| t == "zkapp").unwrap_or(false),
                 200,
+                Some("Available for zkapp".to_string()),
             )
-            .available_records(move || true, 500) // Fallback
+            .available_records(move || true, 500, Some("Default available".to_string()))
             .build();
         assert_eq!(
-            metadata.available_records,
-            Some(200),
-            "Correct condition should be selected based on q_type"
+            metadata,
+            TableMetadata {
+                total_records: None,
+                displayed_records: 0,
+                available_records: Some(200),
+                total_records_hint: None,
+                displayed_records_hint: None,
+                available_records_hint: Some("Available for zkapp".to_string()),
+            },
+            "Correct condition should be selected with hint"
         );
 
-        {
-            let q_type: Option<String> = None;
-            let q_type_clone = q_type.clone();
-            let metadata = empty_builder()
-                .available_records(move || q_type.is_none(), 1000)
-                .available_records(
-                    move || q_type_clone.as_ref().map(|t| t == "zkapp").unwrap_or(false),
-                    200,
-                )
-                .available_records(move || true, 500)
-                .build();
-            assert_eq!(
-                metadata.available_records,
-                Some(1000),
-                "Correct condition should be selected when q_type is None"
-            );
-        }
+        let q_type: Option<String> = None;
+        let q_type_clone = q_type.clone();
+        let metadata = empty_builder()
+            .available_records(
+                move || q_type.is_none(),
+                1000,
+                Some("Available when no type".to_string()),
+            )
+            .available_records(
+                move || q_type_clone.as_ref().map(|t| t == "zkapp").unwrap_or(false),
+                200,
+                Some("Available for zkapp".to_string()),
+            )
+            .available_records(move || true, 500, Some("Default available".to_string()))
+            .build();
+        assert_eq!(
+            metadata,
+            TableMetadata {
+                total_records: None,
+                displayed_records: 0,
+                available_records: Some(1000),
+                total_records_hint: None,
+                displayed_records_hint: None,
+                available_records_hint: Some("Available when no type".to_string()),
+            },
+            "Correct condition should be selected when q_type is None with hint"
+        );
     }
 
     #[test]
     fn test_conflicting_conditions() {
         let metadata = empty_builder()
-            .total_records(move || true, 1000)
-            .total_records(move || true, 2000) // Conflicting true condition
+            .total_records(move || true, 1000, Some("First total rows".to_string()))
+            .total_records(move || true, 2000, Some("Second total rows".to_string()))
             .build();
         assert_eq!(
-            metadata.total_records,
-            Some(1000),
-            "First true condition should take precedence"
+            metadata,
+            TableMetadata {
+                total_records: Some(1000),
+                displayed_records: 0,
+                available_records: None,
+                total_records_hint: Some("First total rows".to_string()),
+                displayed_records_hint: None,
+                available_records_hint: None,
+            },
+            "First true condition should take precedence with its hint"
         );
     }
 
@@ -542,14 +709,19 @@ mod table_metadata_builder_tests {
         let q_type: Option<String> = Some("zkapp".to_string());
         let q_type_clone = q_type.clone();
         let metadata = empty_builder()
-            .total_records_value(1000) // Unconditional
-            .displayed_records(move || false, 25)
-            .displayed_records_value(50) // Unconditional
+            .total_records_value(1000, Some("Total rows".to_string()))
+            .displayed_records(move || false, 25, Some("Displayed when false".to_string()))
+            .displayed_records_value(50, Some("Displayed rows".to_string()))
             .available_records(
                 move || q_type.as_ref().map(|t| t == "zkapp").unwrap_or(false),
                 200,
+                Some("Available for zkapp".to_string()),
             )
-            .available_records(move || q_type_clone.is_none(), 1000)
+            .available_records(
+                move || q_type_clone.is_none(),
+                1000,
+                Some("Available when no type".to_string()),
+            )
             .build();
         assert_eq!(
             metadata,
@@ -557,20 +729,23 @@ mod table_metadata_builder_tests {
                 total_records: Some(1000),
                 displayed_records: 50,
                 available_records: Some(200),
+                total_records_hint: Some("Total rows".to_string()),
+                displayed_records_hint: Some("Displayed rows".to_string()),
+                available_records_hint: Some("Available for zkapp".to_string()),
             },
-            "Mix of conditional and unconditional options should work"
+            "Mix of conditional and unconditional options should work with hints"
         );
     }
 
     #[test]
     fn test_chainability() {
         let metadata = TableMetadataBuilder::new()
-            .total_records_value(1000)
-            .total_records(move || false, 2000)
-            .displayed_records_value(50)
-            .displayed_records(move || false, 100)
-            .available_records_value(200)
-            .available_records(move || false, 400)
+            .total_records_value(1000, Some("Total rows".to_string()))
+            .total_records(move || false, 2000, Some("Total when false".to_string()))
+            .displayed_records_value(50, Some("Displayed rows".to_string()))
+            .displayed_records(move || false, 100, Some("Displayed when false".to_string()))
+            .available_records_value(200, Some("Available rows".to_string()))
+            .available_records(move || false, 400, Some("Available when false".to_string()))
             .build();
         assert_eq!(
             metadata,
@@ -578,17 +753,20 @@ mod table_metadata_builder_tests {
                 total_records: Some(1000),
                 displayed_records: 50,
                 available_records: Some(200),
+                total_records_hint: Some("Total rows".to_string()),
+                displayed_records_hint: Some("Displayed rows".to_string()),
+                available_records_hint: Some("Available rows".to_string()),
             },
-            "Chaining multiple calls should work correctly"
+            "Chaining multiple calls should work correctly with hints"
         );
     }
 
     #[test]
     fn test_large_values() {
         let metadata = empty_builder()
-            .total_records_value(u64::MAX)
-            .displayed_records_value(u64::MAX)
-            .available_records_value(u64::MAX)
+            .total_records_value(u64::MAX, Some("Max total rows".to_string()))
+            .displayed_records_value(u64::MAX, Some("Max displayed rows".to_string()))
+            .available_records_value(u64::MAX, Some("Max available rows".to_string()))
             .build();
         assert_eq!(
             metadata,
@@ -596,58 +774,52 @@ mod table_metadata_builder_tests {
                 total_records: Some(u64::MAX),
                 displayed_records: u64::MAX,
                 available_records: Some(u64::MAX),
+                total_records_hint: Some("Max total rows".to_string()),
+                displayed_records_hint: Some("Max displayed rows".to_string()),
+                available_records_hint: Some("Max available rows".to_string()),
             },
-            "Large values should be handled correctly"
+            "Large values should be handled correctly with hints"
         );
     }
 
     #[test]
     fn test_no_options_for_some_fields() {
-        let metadata = empty_builder().total_records_value(1000).build();
+        let metadata = empty_builder()
+            .total_records_value(1000, Some("Total rows".to_string()))
+            .build();
         assert_eq!(
             metadata,
             TableMetadata {
                 total_records: Some(1000),
                 displayed_records: 0,
                 available_records: None,
+                total_records_hint: Some("Total rows".to_string()),
+                displayed_records_hint: None,
+                available_records_hint: None,
             },
-            "Fields with no options should use defaults"
+            "Fields with no options should use defaults with no hints"
         );
-    }
-
-    #[test]
-    fn test_condition_side_effects() {
-        let counter = Rc::new(Cell::new(0));
-        let counter_clone = Rc::clone(&counter); // Clone for the closure
-        let condition = move || {
-            counter_clone.set(counter_clone.get() + 1);
-            true
-        };
-        let metadata = empty_builder().total_records(condition, 1000).build();
-        assert_eq!(
-            metadata.total_records,
-            Some(1000),
-            "Condition should be evaluated correctly"
-        );
-        assert_eq!(counter.get(), 1, "Condition should be called exactly once");
     }
 
     #[test]
     fn test_multiple_builds() {
         let builder = empty_builder()
-            .total_records_value(1000)
-            .displayed_records_value(50)
-            .available_records_value(200);
+            .total_records_value(1000, Some("Total rows".to_string()))
+            .displayed_records_value(50, Some("Displayed rows".to_string()))
+            .available_records_value(200, Some("Available rows".to_string()));
         let metadata1 = builder.build();
-        let metadata2 = empty_builder().build(); // Simulate reusing builder pattern
+        let metadata2 = empty_builder().build();
         assert_eq!(
             metadata1,
             TableMetadata {
                 total_records: Some(1000),
                 displayed_records: 50,
                 available_records: Some(200),
+                total_records_hint: Some("Total rows".to_string()),
+                displayed_records_hint: Some("Displayed rows".to_string()),
+                available_records_hint: Some("Available rows".to_string()),
             },
-            "First build should have correct values"
+            "First build should have correct values with hints"
         );
         assert_eq!(
             metadata2,
@@ -655,8 +827,11 @@ mod table_metadata_builder_tests {
                 total_records: None,
                 displayed_records: 0,
                 available_records: None,
+                total_records_hint: None,
+                displayed_records_hint: None,
+                available_records_hint: None,
             },
-            "New builder should start fresh"
+            "New builder should start fresh with no hints"
         );
     }
 }

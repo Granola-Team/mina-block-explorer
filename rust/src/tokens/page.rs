@@ -138,6 +138,7 @@ pub fn TokensPage() -> impl IntoView {
                             total_records: total_count_sig
                                 .get()
                                 .map(|count| u64::try_from(count).unwrap_or_default()),
+                            ..Default::default()
                         })
                 })
             />

@@ -246,6 +246,7 @@ pub fn TransactionsSection() -> impl IntoView {
                     TableMetadataBuilder::new()
                         .displayed_records_value(
                             data_sig.get().map(|d| d.len() as u64).unwrap_or_default(),
+                            None,
                         )
                         .available_records(
                             move || q_token_sig.get().is_some(),
@@ -253,62 +254,73 @@ pub fn TransactionsSection() -> impl IntoView {
                                 .get()
                                 .and_then(|t| t.total_num_txns.try_into().ok())
                                 .unwrap_or_default(),
+                            None,
                         )
                         .available_records(
                             move || { indexes_available && !is_zk_app && is_canonical && txn_all },
                             summary_sig.get().total_num_canonical_user_commands,
+                            None,
                         )
                         .available_records(
                             move || { indexes_available && !is_zk_app && !is_canonical && txn_all },
                             summary_sig.get().get_total_num_non_canonical_user_commands(),
+                            None,
                         )
                         .available_records(
                             move || {
                                 indexes_available && !is_zk_app && is_canonical && applied_opt
                             },
                             summary_sig.get().total_num_applied_canonical_user_commands,
+                            None,
                         )
                         .available_records(
                             move || {
                                 indexes_available && !is_zk_app && is_canonical && !applied_opt
                             },
                             summary_sig.get().total_num_failed_canonical_user_commands,
+                            None,
                         )
                         .available_records(
                             move || {
                                 indexes_available && !is_zk_app && !is_canonical && applied_opt
                             },
                             summary_sig.get().get_total_num_non_canonical_applied_user_commands(),
+                            None,
                         )
                         .available_records(
                             move || {
                                 indexes_available && !is_zk_app && !is_canonical && !applied_opt
                             },
                             summary_sig.get().get_total_num_non_canonical_failed_user_commands(),
+                            None,
                         )
                         .available_records(
                             move || {
                                 indexes_available && is_zk_app && is_canonical && applied_opt
                             },
                             summary_sig.get().total_num_applied_canonical_zkapp_commands,
+                            None,
                         )
                         .available_records(
                             move || {
                                 indexes_available && is_zk_app && is_canonical && !applied_opt
                             },
                             summary_sig.get().total_num_failed_canonical_zkapp_commands,
+                            None,
                         )
                         .available_records(
                             move || {
                                 indexes_available && is_zk_app && !is_canonical && applied_opt
                             },
                             summary_sig.get().get_total_num_non_canonical_applied_zkapp_commands(),
+                            None,
                         )
                         .available_records(
                             move || {
                                 indexes_available && is_zk_app && !is_canonical && !applied_opt
                             },
                             summary_sig.get().get_total_num_non_canonical_failed_zkapp_commands(),
+                            None,
                         )
                         .total_records_value(
                             summary_sig
@@ -317,6 +329,7 @@ pub fn TransactionsSection() -> impl IntoView {
                                 .try_into()
                                 .ok()
                                 .unwrap_or_default(),
+                            None,
                         )
                         .build(),
                 )
@@ -455,6 +468,7 @@ pub fn PendingTransactionsSection() -> impl IntoView {
                             data_sig.get().map(|d| d.len()).unwrap_or_default(),
                         )
                         .unwrap_or_default(),
+                    ..Default::default()
                 })
             })
 

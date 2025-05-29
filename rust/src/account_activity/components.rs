@@ -146,6 +146,7 @@ pub fn AccountTransactionsSection(
                         .and_then(|a| {
                             a.pk_total_num_user_commands.and_then(|t| u64::try_from(t).ok())
                         }),
+                    ..Default::default()
                 })
             })
 
@@ -248,6 +249,7 @@ pub fn AccountInternalCommandsSection(
                         .and_then(|a| {
                             a.pk_total_num_internal_commands.and_then(|t| u64::try_from(t).ok())
                         }),
+                    ..Default::default()
                 })
             })
 
@@ -329,6 +331,7 @@ pub fn AccountDelegationsSection(
                         )
                         .unwrap_or_default(),
                     available_records: None,
+                    ..Default::default()
                 })
             })
 
@@ -429,7 +432,10 @@ pub fn AccountOverviewSnarkJobTable(
                         .unwrap_or_default(),
                     available_records: account
                         .get()
-                        .and_then(|a| { a.pk_total_num_snarks.and_then(|t| u64::try_from(t).ok()) }),
+                        .and_then(|a| {
+                            a.pk_total_num_snarks.and_then(|t| u64::try_from(t).ok())
+                        }),
+                    ..Default::default()
                 })
             })
 
@@ -546,7 +552,10 @@ pub fn AccountOverviewBlocksTable(
                         .unwrap_or_default(),
                     available_records: account
                         .get()
-                        .and_then(|a| { a.pk_total_num_blocks.and_then(|t| u64::try_from(t).ok()) }),
+                        .and_then(|a| {
+                            a.pk_total_num_blocks.and_then(|t| u64::try_from(t).ok())
+                        }),
+                    ..Default::default()
                 })
             })
 

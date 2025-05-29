@@ -155,6 +155,7 @@ mod format_metadata_tests {
             displayed_records: 50,
             available_records: Some(100),
             total_records: Some(200),
+            ..Default::default()
         };
         assert_eq!(format_metadata(&meta, |a| a), "50 of 100 of 200");
     }
@@ -165,6 +166,7 @@ mod format_metadata_tests {
             displayed_records: TABLE_ROW_LIMIT - 1,
             available_records: None,
             total_records: Some(200),
+            ..Default::default()
         };
         assert_eq!(
             format_metadata(&meta, |a| a),
@@ -178,6 +180,7 @@ mod format_metadata_tests {
             displayed_records: TABLE_ROW_LIMIT,
             available_records: None,
             total_records: Some(300),
+            ..Default::default()
         };
         assert_eq!(
             format_metadata(&meta, |a| a),
@@ -191,6 +194,7 @@ mod format_metadata_tests {
             displayed_records: 150,
             available_records: Some(250),
             total_records: None,
+            ..Default::default()
         };
         assert_eq!(format_metadata(&meta, |a| a), "150 of 250 of ?");
     }
@@ -201,6 +205,7 @@ mod format_metadata_tests {
             displayed_records: 150,
             available_records: None,
             total_records: None,
+            ..Default::default()
         };
         assert_eq!(format_metadata(&meta, |a| a), "150+ of ?");
     }

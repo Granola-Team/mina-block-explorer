@@ -188,6 +188,7 @@ pub fn StakesPageContents(
             available_records,
             displayed_records: u64::try_from(data_sig.get().map(|d| d.len()).unwrap_or_default())
                 .unwrap_or_default(),
+            ..Default::default()
         }));
     });
 
