@@ -36,7 +36,7 @@ pub enum ColumnTextAlignment {
     Center,
 }
 
-#[derive(Clone)]
+#[derive(Clone, PartialEq)]
 pub enum ColumnSearchType {
     None,
     Text,
@@ -347,11 +347,11 @@ where
                         view! {
                             <span
                                 class="flex justify-start items-center cursor-pointer"
-                                title=title
+                                title=title.to_string()
                             >
                                 {column.column.to_string()}
                                 <span class="w-2" />
-                                <QuestionMark />
+                                {convert_to_tooltip(title).into_view()}
                             </span>
                         }
                             .into_view()
@@ -521,7 +521,6 @@ pub fn TableSection(
     metadata: Signal<Option<TableMetadata>>,
     #[prop(optional, into)] controls: ViewFn,
 ) -> impl IntoView {
-    let BASE_META_CLASS = "h-16 grow flex justify-start md:justify-center items-center text-slate-400 text-normal text-xs";
     let section_heading_clone = section_heading.clone();
     view! {
         <AppSection>
@@ -533,23 +532,17 @@ pub fn TableSection(
                     {move || {
                         metadata
                             .get()
-                            .map(|m| {
+                            .map(|meta| {
                                 view! {
-                                    <div
-                                        data-test=format!(
-                                            "metadata-{}",
-                                            section_heading
-                                                .get()
-                                                .as_str()
-                                                .to_lowercase()
-                                                .to_kebab_case(),
-                                        )
-                                        class="metadata pl-4 ".to_string() + BASE_META_CLASS
-                                    >
-                                        {format_metadata(&m, format_number)}
-                                    </div>
+                                    <Metadata
+                                        meta
+                                        section_heading=section_heading
+                                            .get()
+                                            .as_str()
+                                            .to_lowercase()
+                                            .to_kebab_case()
+                                    />
                                 }
-                                    .into_view()
                             })
                     }}
 
@@ -563,6 +556,55 @@ pub fn TableSection(
             </div>
             {children()}
         </AppSection>
+    }
+}
+
+#[component]
+pub fn Metadata(meta: TableMetadata, section_heading: String) -> impl IntoView {
+    let BASE_META_CLASS = "h-16 grow flex justify-start md:justify-center items-center text-slate-400 text-normal text-xs";
+    let displayed = format_number(meta.displayed_records.to_string());
+    let total = meta.total_records.map_or("?".to_string(), |records| {
+        format_number(records.to_string())
+    });
+
+    view! {
+        <div
+            data-test=format!("metadata-{}", section_heading)
+            class="metadata pl-4 ".to_string() + BASE_META_CLASS
+        >
+            <span>
+                {if meta.displayed_records >= TABLE_ROW_LIMIT {
+                    view! { <span>{format!("{displayed}+")}</span> }.into_view()
+                } else {
+                    view! { <span>{displayed.clone()}</span> }.into_view()
+                }}
+                {meta
+                    .displayed_records_hint
+                    .as_ref()
+                    .map(|hint| convert_to_tooltip(hint.clone()))
+                    .into_view()} <span>" of "</span>
+                {if let Some(available_records) = meta.available_records {
+                    let available = format_number(available_records.to_string());
+                    view! {
+                        <span>{available.clone()}</span>
+                        {meta
+                            .available_records_hint
+                            .as_ref()
+                            .map(|hint| convert_to_tooltip(hint.clone()))
+                            .into_view()}
+                        <span>" of "</span>
+                    }
+                        .into_view()
+                } else {
+                    ().into_view()
+                }} <span>{total.clone()}</span>
+                {meta
+                    .total_records_hint
+                    .as_ref()
+                    .map(|hint| convert_to_tooltip(hint.clone()))
+                    .into_view()}
+            </span>
+        </div>
     }
 }
 

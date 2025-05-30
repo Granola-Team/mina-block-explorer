@@ -1,8 +1,5 @@
 use super::models::*;
-use crate::{
-    common::{components::CopyToClipboard, constants::*},
-    icons::HelpIcon,
-};
+use crate::common::{components::CopyToClipboard, constants::*};
 use chrono::{DateTime, Duration, Utc};
 use leptos::*;
 use rust_decimal::prelude::*;
@@ -118,47 +115,6 @@ pub fn format_number(number: String) -> String {
 #[wasm_bindgen]
 pub fn format_mina(number: String) -> String {
     format_number_helper(&number, Some(9)) // Use 9 significant digits
-}
-
-pub fn format_metadata<F>(meta: &TableMetadata, format_number: F) -> HtmlElement<html::AnyElement>
-where
-    F: Fn(String) -> String,
-{
-    let displayed = format_number(meta.displayed_records.to_string());
-    let total = match meta.total_records {
-        Some(records) => format_number(records.to_string()),
-        None => String::from("?"),
-    };
-
-    let children: Vec<HtmlElement<html::AnyElement>> = match meta.available_records {
-        Some(available_records) => {
-            let available = format_number(available_records.to_string());
-            vec![
-                html::span().child(displayed).into(),
-                html::span().child(" of ").into(),
-                html::span().child(available).into(),
-                html::span().child(" of ").into(),
-                html::span().child(total).into(),
-            ]
-        }
-        None => {
-            if meta.displayed_records > (TABLE_ROW_LIMIT - 1) {
-                vec![
-                    html::span().child(format!("{}+", displayed)).into(),
-                    html::span().child(" of ").into(),
-                    html::span().child(total).into(),
-                ]
-            } else {
-                vec![
-                    html::span().child(displayed).into(),
-                    html::span().child(" of ").into(),
-                    html::span().child(total).into(),
-                ]
-            }
-        }
-    };
-
-    html::span().child(children).into()
 }
 
 fn split_number(number: &str) -> Result<(char, Vec<&str>), String> {
@@ -491,9 +447,9 @@ pub fn convert_to_tooltip(tooltip: String) -> HtmlElement<html::AnyElement> {
     view! {
         <span
             title=tooltip
-            class="tooltip text-slate-600 font-sans text-xs m-0.5 p-1 hover:bg-slate-200 rounded-full cursor-help"
+            class="inline-flex justify-center items-center tooltip text-inherit font-sans text-[smaller] m-0.5 w-4 h-4 hover:bg-slate-200 border border-inherit border-solid rounded-full cursor-help"
         >
-            <HelpIcon width=15 />
+            ?
         </span>
     }.into()
 }
