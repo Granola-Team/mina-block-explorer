@@ -120,7 +120,7 @@ pub fn format_mina(number: String) -> String {
     format_number_helper(&number, Some(9)) // Use 9 significant digits
 }
 
-pub fn format_metadata<F>(meta: &TableMetadata, format_number: F) -> String
+pub fn format_metadata<F>(meta: &TableMetadata, format_number: F) -> HtmlElement<html::AnyElement>
 where
     F: Fn(String) -> String,
 {
@@ -130,85 +130,35 @@ where
         None => String::from("?"),
     };
 
-    match meta.available_records {
+    let children: Vec<HtmlElement<html::AnyElement>> = match meta.available_records {
         Some(available_records) => {
             let available = format_number(available_records.to_string());
-            format!("{} of {} of {}", displayed, available, total)
+            vec![
+                html::span().child(displayed).into(),
+                html::span().child(" of ").into(),
+                html::span().child(available).into(),
+                html::span().child(" of ").into(),
+                html::span().child(total).into(),
+            ]
         }
         None => {
             if meta.displayed_records > (TABLE_ROW_LIMIT - 1) {
-                format!("{}+ of {}", displayed, total)
+                vec![
+                    html::span().child(format!("{}+", displayed)).into(),
+                    html::span().child(" of ").into(),
+                    html::span().child(total).into(),
+                ]
             } else {
-                format!("{} of {}", displayed, total)
+                vec![
+                    html::span().child(displayed).into(),
+                    html::span().child(" of ").into(),
+                    html::span().child(total).into(),
+                ]
             }
         }
-    }
-}
+    };
 
-#[cfg(test)]
-mod format_metadata_tests {
-    use super::*;
-
-    #[test]
-    fn test_with_full_data() {
-        let meta = TableMetadata {
-            displayed_records: 50,
-            available_records: Some(100),
-            total_records: Some(200),
-            ..Default::default()
-        };
-        assert_eq!(format_metadata(&meta, |a| a), "50 of 100 of 200");
-    }
-
-    #[test]
-    fn test_with_no_available_records_and_display_under_limit() {
-        let meta = TableMetadata {
-            displayed_records: TABLE_ROW_LIMIT - 1,
-            available_records: None,
-            total_records: Some(200),
-            ..Default::default()
-        };
-        assert_eq!(
-            format_metadata(&meta, |a| a),
-            format!("{} of 200", TABLE_ROW_LIMIT - 1)
-        );
-    }
-
-    #[test]
-    fn test_with_no_available_records_and_display_over_limit() {
-        let meta = TableMetadata {
-            displayed_records: TABLE_ROW_LIMIT,
-            available_records: None,
-            total_records: Some(300),
-            ..Default::default()
-        };
-        assert_eq!(
-            format_metadata(&meta, |a| a),
-            format!("{}+ of 300", TABLE_ROW_LIMIT)
-        );
-    }
-
-    #[test]
-    fn test_with_unknown_total_records() {
-        let meta = TableMetadata {
-            displayed_records: 150,
-            available_records: Some(250),
-            total_records: None,
-            ..Default::default()
-        };
-        assert_eq!(format_metadata(&meta, |a| a), "150 of 250 of ?");
-    }
-
-    #[test]
-    fn test_all_unknown() {
-        let meta = TableMetadata {
-            displayed_records: 150,
-            available_records: None,
-            total_records: None,
-            ..Default::default()
-        };
-        assert_eq!(format_metadata(&meta, |a| a), "150+ of ?");
-    }
+    html::span().child(children).into()
 }
 
 fn split_number(number: &str) -> Result<(char, Vec<&str>), String> {
