@@ -15,7 +15,7 @@ module TableHelpers
       JS
 
       # Extract the remaining text from the <th>
-      th.text.gsub(/\s+/, " ").gsub(/[^\w\s]/, "").strip
+      th.text.gsub(/\s+/, " ").gsub(/[?]/, "").strip
     end
     expect(cleaned_headers).to eq(expected_columns), "Expected table headers to be #{expected_columns}, but found #{headers}"
   end
