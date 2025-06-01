@@ -743,7 +743,10 @@ pub fn BlocksSection() -> impl IntoView {
                     .is_some_and(|canonical| canonical == "Non-Canonical");
                 Some(
                     TableMetadataBuilder::new()
-                        .total_records_value(summary_sig.get().total_num_blocks, None)
+                        .total_records_value(
+                            summary_sig.get().total_num_blocks,
+                            Some("Total blocks".to_string()),
+                        )
                         .displayed_records_value(
                             data_sig
                                 .get()
@@ -754,12 +757,12 @@ pub fn BlocksSection() -> impl IntoView {
                         .available_records(
                             move || indexes_available && canonical_blocks,
                             summary_sig.get().blockchain_length,
-                            None,
+                            Some("Total canonical blocks".to_string()),
                         )
                         .available_records(
                             move || indexes_available && non_canonical_blocks,
                             summary_sig.get().get_total_num_non_canonical_blocks(),
-                            None,
+                            Some("Total non-canonical blocks".to_string()),
                         )
                         .build(),
                 )

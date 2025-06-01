@@ -254,73 +254,73 @@ pub fn TransactionsSection() -> impl IntoView {
                                 .get()
                                 .and_then(|t| t.total_num_txns.try_into().ok())
                                 .unwrap_or_default(),
-                            None,
+                            Some("Total transactions for token".to_string()),
                         )
                         .available_records(
                             move || { indexes_available && !is_zk_app && is_canonical && txn_all },
                             summary_sig.get().total_num_canonical_user_commands,
-                            None,
+                            Some("Total canonical user commands".to_string()),
                         )
                         .available_records(
                             move || { indexes_available && !is_zk_app && !is_canonical && txn_all },
                             summary_sig.get().get_total_num_non_canonical_user_commands(),
-                            None,
+                            Some("Total non-canonical user commands".to_string()),
                         )
                         .available_records(
                             move || {
                                 indexes_available && !is_zk_app && is_canonical && applied_opt
                             },
                             summary_sig.get().total_num_applied_canonical_user_commands,
-                            None,
+                            Some("Total applied, canonical user commands".to_string()),
                         )
                         .available_records(
                             move || {
                                 indexes_available && !is_zk_app && is_canonical && !applied_opt
                             },
                             summary_sig.get().total_num_failed_canonical_user_commands,
-                            None,
+                            Some("Total failed, canonical user commands".to_string()),
                         )
                         .available_records(
                             move || {
                                 indexes_available && !is_zk_app && !is_canonical && applied_opt
                             },
                             summary_sig.get().get_total_num_non_canonical_applied_user_commands(),
-                            None,
+                            Some("Total applied, non-canonical user commands".to_string()),
                         )
                         .available_records(
                             move || {
                                 indexes_available && !is_zk_app && !is_canonical && !applied_opt
                             },
                             summary_sig.get().get_total_num_non_canonical_failed_user_commands(),
-                            None,
+                            Some("Total failed, non-canonical user commands".to_string()),
                         )
                         .available_records(
                             move || {
                                 indexes_available && is_zk_app && is_canonical && applied_opt
                             },
                             summary_sig.get().total_num_applied_canonical_zkapp_commands,
-                            None,
+                            Some("Total applied, canonical zkApp commands".to_string()),
                         )
                         .available_records(
                             move || {
                                 indexes_available && is_zk_app && is_canonical && !applied_opt
                             },
                             summary_sig.get().total_num_failed_canonical_zkapp_commands,
-                            None,
+                            Some("Total failed, canonical zkApp commands".to_string()),
                         )
                         .available_records(
                             move || {
                                 indexes_available && is_zk_app && !is_canonical && applied_opt
                             },
                             summary_sig.get().get_total_num_non_canonical_applied_zkapp_commands(),
-                            None,
+                            Some("Total applied, non-canonical zkApp commands".to_string()),
                         )
                         .available_records(
                             move || {
                                 indexes_available && is_zk_app && !is_canonical && !applied_opt
                             },
                             summary_sig.get().get_total_num_non_canonical_failed_zkapp_commands(),
-                            None,
+                            Some("Total failed, non-canonical zkApp commands".to_string()),
                         )
                         .total_records_value(
                             summary_sig
@@ -329,7 +329,7 @@ pub fn TransactionsSection() -> impl IntoView {
                                 .try_into()
                                 .ok()
                                 .unwrap_or_default(),
-                            None,
+                            Some("Total user commands".to_string()),
                         )
                         .build(),
                 )
