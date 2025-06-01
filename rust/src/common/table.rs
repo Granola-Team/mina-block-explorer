@@ -573,16 +573,13 @@ pub fn Metadata(meta: TableMetadata, section_heading: String) -> impl IntoView {
             class="metadata pl-4 ".to_string() + BASE_META_CLASS
         >
             <span>
-                {if meta.displayed_records >= TABLE_ROW_LIMIT {
-                    view! { <span>{format!("{displayed}+")}</span> }.into_view()
-                } else {
-                    view! { <span>{displayed.clone()}</span> }.into_view()
-                }}
+                <span>{displayed.clone()}</span>
                 {meta
                     .displayed_records_hint
                     .as_ref()
                     .map(|hint| convert_to_tooltip(hint.clone()))
-                    .into_view()} <span>" of "</span>
+                    .into_view()}
+                <span>" of "</span>
                 {if let Some(available_records) = meta.available_records {
                     let available = format_number(available_records.to_string());
                     view! {
@@ -597,7 +594,8 @@ pub fn Metadata(meta: TableMetadata, section_heading: String) -> impl IntoView {
                         .into_view()
                 } else {
                     ().into_view()
-                }} <span>{total.clone()}</span>
+                }}
+                <span>{total.clone()}</span>
                 {meta
                     .total_records_hint
                     .as_ref()

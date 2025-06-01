@@ -189,7 +189,12 @@ fn AccountsPageContents() -> impl IntoView {
                                             != MINA_TOKEN_ADDRESS && q_type_sig.get().is_none()
                                     },
                                     token_sig.get().map(|t| t.num_holders).unwrap_or_default(),
-                                    None,
+                                    Some(
+                                        format!(
+                                            "Total {} accounts",
+                                            token_sig.get().map(|t| t.symbol).unwrap_or_default(),
+                                        ),
+                                    ),
                                 )
                                 .available_records(
                                     move || {
@@ -197,7 +202,7 @@ fn AccountsPageContents() -> impl IntoView {
                                             == MINA_TOKEN_ADDRESS && q_type_sig.get().is_none()
                                     },
                                     summary_sig.get().total_num_mina_accounts,
-                                    None,
+                                    Some("Total MINA accounts".to_string()),
                                 )
                                 .available_records(
                                     move || {
@@ -210,9 +215,12 @@ fn AccountsPageContents() -> impl IntoView {
                                                 .unwrap_or(false)
                                     },
                                     summary_sig.get().total_num_mina_zkapp_accounts,
-                                    None,
+                                    Some("All MINA zkApp accounts".to_string()),
                                 )
-                                .total_records_value(summary_sig.get().total_num_accounts, None)
+                                .total_records_value(
+                                    summary_sig.get().total_num_accounts,
+                                    Some("All accounts for all tokens".to_string()),
+                                )
                                 .build(),
                         )
                     })
