@@ -204,7 +204,7 @@ task :clean_target do
 end
 
 desc "Clean the repo of built artifacts"
-task clean: [:clean_test, :clean_node_modules, :clean_build, :clean_target]
+multitask clean: [:clean_test, :clean_node_modules, :clean_build, :clean_target]
 
 desc "Format the source code"
 task format: ["pnpm/node_modules"] do
