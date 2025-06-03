@@ -250,13 +250,13 @@ pub struct TableMetadata {
 
 type ConditionalTableMetadataRecords = Vec<(Box<dyn Fn() -> bool>, u64, Option<String>)>;
 
-pub struct TableMetadataBuilder {
+pub struct InternalCommandQueryInput {
     total_records_options: ConditionalTableMetadataRecords,
     displayed_records_options: ConditionalTableMetadataRecords,
     available_records_options: ConditionalTableMetadataRecords,
 }
 
-impl TableMetadataBuilder {
+impl InternalCommandQueryInput {
     pub fn new() -> Self {
         Self {
             total_records_options: Vec::new(),
@@ -358,8 +358,8 @@ impl TableMetadataBuilder {
 mod table_metadata_builder_tests {
     use super::*;
 
-    fn empty_builder() -> TableMetadataBuilder {
-        TableMetadataBuilder::new()
+    fn empty_builder() -> InternalCommandQueryInput {
+        InternalCommandQueryInput::new()
     }
 
     #[test]
@@ -739,7 +739,7 @@ mod table_metadata_builder_tests {
 
     #[test]
     fn test_chainability() {
-        let metadata = TableMetadataBuilder::new()
+        let metadata = InternalCommandQueryInput::new()
             .total_records_value(1000, Some("Total rows".to_string()))
             .total_records(move || false, 2000, Some("Total when false".to_string()))
             .displayed_records_value(50, Some("Displayed rows".to_string()))

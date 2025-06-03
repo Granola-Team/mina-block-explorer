@@ -8,7 +8,7 @@ use crate::{
     account_activity::{
         functions::*,
         graphql::account_activity_query::{
-            AccountActivityQueryAccounts, AccountActivityQueryFeetransfers,
+            AccountActivityQueryAccounts, AccountActivityQueryInternalCommands,
             AccountActivityQueryTokenHolders,
         },
         models::AccountActivityQueryDelegatorExt,
@@ -192,7 +192,7 @@ pub fn AccountTransactionsSection(
 
 #[component]
 pub fn AccountInternalCommandsSection(
-    txn_sig: ReadSignal<Option<Vec<Option<AccountActivityQueryFeetransfers>>>>,
+    txn_sig: ReadSignal<Option<Vec<Option<AccountActivityQueryInternalCommands>>>>,
     is_loading: Signal<bool>,
 ) -> impl IntoView {
     let account = use_context::<ReadSignal<Option<AccountActivityQueryAccounts>>>()

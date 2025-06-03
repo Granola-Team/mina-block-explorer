@@ -14,9 +14,9 @@ pub async fn load_data(
     canonical: Option<bool>,
 ) -> Result<internal_commands_query::ResponseData, MyError> {
     let variables = internal_commands_query::Variables {
-        sort_by: internal_commands_query::FeetransferSortByInput::BLOCKHEIGHT_DESC,
+        sort_by: internal_commands_query::InternalCommandSortByInput::BLOCK_HEIGHT_DESC,
         limit: Some(*limit.get_or_insert(25i64)),
-        query: internal_commands_query::FeetransferQueryInput {
+        query: internal_commands_query::InternalCommandQueryInput {
             block_height_lte: block_height.map(|x| x as i64),
             block_state_hash: state_hash.map(|sh| BlockQueryInput {
                 state_hash: Some(sh),

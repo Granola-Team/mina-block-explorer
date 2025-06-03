@@ -7,7 +7,7 @@ use super::{
 use crate::{
     account_activity::{
         graphql::account_activity_query::{
-            AccountActivityQueryBlocks, AccountActivityQueryFeetransfers,
+            AccountActivityQueryBlocks, AccountActivityQueryInternalCommands,
         },
         models::{
             AccountActivityQueryDirectionalTransactionTrait,
@@ -340,7 +340,7 @@ impl TableData for Vec<Option<AccountActivityQueryDelegatorExt>> {
     }
 }
 
-impl TableData for Vec<Option<AccountActivityQueryFeetransfers>> {
+impl TableData for Vec<Option<AccountActivityQueryInternalCommands>> {
     fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
         self.iter()
             .map(|opt_internal_command| match opt_internal_command {
@@ -401,7 +401,7 @@ pub trait InternalCommandTrait {
     fn get_block_datetime(&self) -> String;
 }
 
-impl InternalCommandTrait for AccountActivityQueryFeetransfers {
+impl InternalCommandTrait for AccountActivityQueryInternalCommands {
     fn get_height(&self) -> String {
         self.block_height
             .map_or_else(String::new, |t| format_number(t.to_string()))

@@ -243,7 +243,7 @@ pub fn TransactionsSection() -> impl IntoView {
                     .map(|tt| tt != "Non-Canonical")
                     .unwrap_or(true);
                 Some(
-                    TableMetadataBuilder::new()
+                    InternalCommandQueryInput::new()
                         .displayed_records_value(
                             data_sig.get().map(|d| d.len() as u64).unwrap_or_default(),
                             None,

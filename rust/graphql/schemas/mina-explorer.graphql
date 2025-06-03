@@ -340,12 +340,12 @@ input BlockTransactionQueryInput {
   userCommands: [BlockTransactionUserCommandQueryInput]
   coinbase_gte: Long
   coinbaseReceiverAccount: BlockTransactionCoinbaseReceiverAccountQueryInput
-  feeTransfer: [BlockTransactionFeeTransferQueryInput]
+  feeTransfer: [BlockTransactionInternalCommandQueryInput]
   coinbase_nin: [Long]
   coinbase_lt: Long
   feeTransfer_exists: Boolean
   userCommands_in: [BlockTransactionUserCommandQueryInput]
-  feeTransfer_in: [BlockTransactionFeeTransferQueryInput]
+  feeTransfer_in: [BlockTransactionInternalCommandQueryInput]
   userCommands_nin: [BlockTransactionUserCommandQueryInput]
   AND: [BlockTransactionQueryInput!]
   coinbase_gt: Long
@@ -355,7 +355,7 @@ input BlockTransactionQueryInput {
   coinbaseReceiverAccount_exists: Boolean
   coinbase_exists: Boolean
   coinbase_lte: Long
-  feeTransfer_nin: [BlockTransactionFeeTransferQueryInput]
+  feeTransfer_nin: [BlockTransactionInternalCommandQueryInput]
   OR: [BlockTransactionQueryInput!]
 }
 
@@ -373,7 +373,7 @@ input BlockTransactionCoinbaseReceiverAccountQueryInput {
   AND: [BlockTransactionCoinbaseReceiverAccountQueryInput!]
 }
 
-input BlockTransactionFeeTransferQueryInput {
+input BlockTransactionInternalCommandQueryInput {
   type_ne: String
   recipient: String
   recipient_nin: [String]
@@ -385,7 +385,7 @@ input BlockTransactionFeeTransferQueryInput {
   type_gte: String
   recipient_gte: String
   fee_exists: Boolean
-  OR: [BlockTransactionFeeTransferQueryInput!]
+  OR: [BlockTransactionInternalCommandQueryInput!]
   type_gt: String
   fee_in: [Long]
   type: String
@@ -402,7 +402,7 @@ input BlockTransactionFeeTransferQueryInput {
   fee_ne: Long
   type_exists: Boolean
   recipient_exists: Boolean
-  AND: [BlockTransactionFeeTransferQueryInput!]
+  AND: [BlockTransactionInternalCommandQueryInput!]
 }
 
 type BlockWinnerAccount {
@@ -620,11 +620,11 @@ type Query {
     sortBy: BlockSortByInput
     query: BlockQueryInput
   ): [Block]!
-  feetransfers(
-    query: FeetransferQueryInput
+  internalCommands(
+    query: InternalCommandQueryInput
     limit: Int = 100
-    sortBy: FeetransferSortByInput
-  ): [Feetransfer]!
+    sortBy: InternalCommandSortByInput
+  ): [InternalCommandWithMeta]!
   snarks(
     query: SnarkQueryInput
     limit: Int = 100
@@ -670,7 +670,7 @@ type BlockProtocolStateConsensusState {
   totalCurrency: Float
 }
 
-type Feetransfer {
+type InternalCommandWithMeta {
   blockHeight: Int
   blockStateHash: Block
   canonical: Boolean
@@ -681,59 +681,15 @@ type Feetransfer {
   type: String
 }
 
-input FeetransferQueryInput {
-  dateTime_nin: [DateTime]
-  recipient: String
-  blockStateHash: BlockQueryInput
-  recipient_lt: String
-  type_lte: String
-  fee_gte: Int
-  fee_nin: [Int]
-  blockHeight_in: [Int]
-  type: String
-  dateTime_gte: DateTime
-  type_in: [String]
-  blockHeight_ne: Int
-  dateTime: DateTime
-  fee_ne: Int
-  blockHeight_exists: Boolean
-  OR: [FeetransferQueryInput!]
-  type_gte: String
-  canonical_exists: Boolean
-  dateTime_lt: DateTime
-  fee_exists: Boolean
-  dateTime_gt: DateTime
-  type_lt: String
-  blockHeight_gte: Int
-  recipient_lte: String
-  blockHeight_nin: [Int]
-  blockHeight_gt: Int
-  blockHeight: Int
-  blockHeight_lt: Int
-  canonical: Boolean
-  type_gt: String
-  blockStateHash_exists: Boolean
-  canonical_ne: Boolean
-  fee_gt: Int
-  recipient_gte: String
-  AND: [FeetransferQueryInput!]
-  fee_lt: Int
-  type_exists: Boolean
-  recipient_in: [String]
-  recipient_exists: Boolean
-  blockHeight_lte: Int
-  dateTime_in: [DateTime]
-  dateTime_exists: Boolean
-  fee_lte: Int
-  dateTime_lte: DateTime
-  recipient_nin: [String]
-  type_nin: [String]
-  fee: Int
-  fee_in: [Int]
-  type_ne: String
-  dateTime_ne: DateTime
-  recipient_ne: String
-  recipient_gt: String
+input InternalCommandQueryInput {
+    blockHeight: Int
+    blockStateHash: BlockQueryInput
+    canonical: Boolean
+    recipient: String
+    blockHeightGt: Int
+    blockHeightGte: Int
+    blockHeightLt: Int
+    blockHeightLte: Int
 }
 
 type BlockProtocolState {
@@ -1281,19 +1237,9 @@ enum TransactionSortByInput {
   TOKEN_ASC
 }
 
-enum FeetransferSortByInput {
-  RECIPIENT_ASC
-  RECIPIENT_DESC
-  TYPE_ASC
-  BLOCKHEIGHT_DESC
-  BLOCKSTATEHASH_ASC
-  DATETIME_DESC
-  FEE_ASC
-  FEE_DESC
-  BLOCKHEIGHT_ASC
-  BLOCKSTATEHASH_DESC
-  DATETIME_ASC
-  TYPE_DESC
+enum InternalCommandSortByInput {
+  BLOCK_HEIGHT_DESC
+  BLOCK_HEIGHT_ASC
 }
 
 enum StakesSortByInput {

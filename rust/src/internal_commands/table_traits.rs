@@ -1,4 +1,4 @@
-use super::graphql::internal_commands_query::InternalCommandsQueryFeetransfers;
+use super::graphql::internal_commands_query::InternalCommandsQueryInternalCommands;
 use crate::common::{
     constants::LHS_MAX_SPACE_FEES,
     functions::*,
@@ -7,7 +7,7 @@ use crate::common::{
 };
 use leptos::*;
 
-impl TableData for Vec<Option<InternalCommandsQueryFeetransfers>> {
+impl TableData for Vec<Option<InternalCommandsQueryInternalCommands>> {
     fn get_rows(&self) -> Vec<Vec<HtmlElement<html::AnyElement>>> {
         self.iter()
             .map(|opt_internal_command| match opt_internal_command {
@@ -44,7 +44,7 @@ pub trait InternalCommandTrait {
     fn get_block_datetime(&self) -> String;
 }
 
-impl InternalCommandTrait for InternalCommandsQueryFeetransfers {
+impl InternalCommandTrait for InternalCommandsQueryInternalCommands {
     fn get_height(&self) -> String {
         self.block_height
             .map_or_else(String::new, |t| format_number(t.to_string()))
@@ -79,7 +79,7 @@ impl InternalCommandTrait for InternalCommandsQueryFeetransfers {
     }
 }
 
-impl HasBlockHeight for InternalCommandsQueryFeetransfers {
+impl HasBlockHeight for InternalCommandsQueryInternalCommands {
     fn block_height(&self) -> Option<i64> {
         self.block_height
     }

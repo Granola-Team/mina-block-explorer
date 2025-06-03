@@ -178,7 +178,7 @@ fn AccountsPageContents() -> impl IntoView {
                     data_sig
                     metadata=Signal::derive(move || {
                         Some(
-                            TableMetadataBuilder::new()
+                            InternalCommandQueryInput::new()
                                 .displayed_records_value(
                                     data_sig.get().map(|a| a.len() as u64).unwrap_or_default(),
                                     None,

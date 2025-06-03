@@ -10,7 +10,7 @@ use crate::{
         },
         graphql::account_activity_query::{
             AccountActivityQueryAccounts, AccountActivityQueryBlocks,
-            AccountActivityQueryFeetransfers, AccountActivityQuerySnarks,
+            AccountActivityQueryInternalCommands, AccountActivityQuerySnarks,
             AccountActivityQueryTokenHolders,
         },
         models::AccountActivityQueryDirectionalTransactions,
@@ -193,9 +193,9 @@ pub fn AccountTokensPage() -> impl IntoView {
 #[component]
 pub fn AccountInternalCommandsPage() -> impl IntoView {
     let txn: ReadSignal<Option<Vec<Option<_>>>> = use_context::<
-        ReadSignal<Option<Vec<Option<AccountActivityQueryFeetransfers>>>>,
+        ReadSignal<Option<Vec<Option<AccountActivityQueryInternalCommands>>>>,
     >()
-    .expect("Expectedthere to be an optional AccountActivityQueryFeetransfers signal provided");
+    .expect("Expectedthere to be an optional AccountActivityQueryInternalCommands signal provided");
     view! {
         <AccountInternalCommandsSection
             txn_sig=txn
@@ -208,7 +208,7 @@ pub fn AccountInternalCommandsPage() -> impl IntoView {
 pub fn AccountAccountTokensPageDelegationsPage() -> impl IntoView {
     let delegations_sig: ReadSignal<Option<Vec<Option<AccountActivityQueryDelegatorExt>>>> =
         use_context::<ReadSignal<Option<Vec<Option<AccountActivityQueryDelegatorExt>>>>>().expect(
-            "Expected there to be an optional AccountActivityQueryFeetransfers signal provided",
+            "Expected there to be an optional AccountActivityQueryInternalCommands signal provided",
         );
     let delegator_count: ReadSignal<Option<DelegateCount>> =
         use_context::<ReadSignal<Option<DelegateCount>>>()
@@ -230,7 +230,7 @@ pub fn AccountAccountTokensPageDelegationsPage() -> impl IntoView {
 pub fn AccountDelegationsPage() -> impl IntoView {
     let delegations_sig: ReadSignal<Option<Vec<Option<AccountActivityQueryDelegatorExt>>>> =
         use_context::<ReadSignal<Option<Vec<Option<AccountActivityQueryDelegatorExt>>>>>().expect(
-            "Expected there to be an optional AccountActivityQueryFeetransfers signal provided",
+            "Expected there to be an optional AccountActivityQueryInternalCommands signal provided",
         );
     let delegator_count: ReadSignal<Option<DelegateCount>> =
         use_context::<ReadSignal<Option<DelegateCount>>>()
@@ -375,7 +375,7 @@ pub fn AccountSpotlightTabbedPage() -> impl IntoView {
             set_transactions.set(Some(transactions));
             set_snarks.set(Some(res.snarks[..end_index].to_vec()));
             set_blocks.set(Some(res.blocks));
-            set_int_txn.set(Some(res.feetransfers));
+            set_int_txn.set(Some(res.internal_commands));
             if let Some(Some(account)) = res.accounts.first() {
                 set_account.set(Some(account.clone()));
             }

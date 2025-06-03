@@ -44,7 +44,7 @@ pub fn InternalCommandsTab() -> impl IntoView {
         resource
             .get()
             .and_then(|res| res.ok())
-            .map(|data| set_data.set(Some(data.feetransfers)))
+            .map(|data| set_data.set(Some(data.internal_commands)))
     });
 
     let table_columns: Vec<TableColumn<AnySort>> = vec![

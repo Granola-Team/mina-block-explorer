@@ -12,8 +12,8 @@ query AccountActivityQuery(
   $incoming_trans_query: TransactionQueryInput!
   $account_query: AccountQueryInput!
   $internal_commands_limit: Int = 3
-  $internal_commands_sort_by: FeetransferSortByInput!
-  $internal_commands_query: FeetransferQueryInput!
+  $internal_commands_sort_by: InternalCommandSortByInput!
+  $internal_commands_query: InternalCommandQueryInput!
   $delegators_limit: Int = 3
   $delegators_sort_by: StakesSortByInput!
   $delegators_query: StakesQueryInput!
@@ -68,7 +68,7 @@ query AccountActivityQuery(
         username
     }
   }
-  feetransfers(
+  internalCommands(
     sortBy: $internal_commands_sort_by
     limit: $internal_commands_limit
     query: $internal_commands_query

@@ -58,7 +58,8 @@ pub async fn load_data(
         blocks_sort_by: account_activity_query::BlockSortByInput::BLOCKHEIGHT_DESC,
         snarks_sort_by: account_activity_query::SnarkSortByInput::BLOCKHEIGHT_DESC,
         trans_sort_by: account_activity_query::TransactionSortByInput::BLOCKHEIGHT_DESC,
-        internal_commands_sort_by: account_activity_query::FeetransferSortByInput::BLOCKHEIGHT_DESC,
+        internal_commands_sort_by:
+            account_activity_query::InternalCommandSortByInput::BLOCK_HEIGHT_DESC,
         delegators_sort_by: account_activity_query::StakesSortByInput::BALANCE_DESC,
         blocks_limit,
         snarks_limit,
@@ -164,7 +165,7 @@ pub async fn load_data(
             zkapp: all_account_types.filter(|&b| !b).map(|_| true),
             ..Default::default()
         },
-        internal_commands_query: account_activity_query::FeetransferQueryInput {
+        internal_commands_query: account_activity_query::InternalCommandQueryInput {
             recipient: public_key.clone(),
             block_height_lte: block_height,
             block_state_hash: state_hash.map(|sh| BlockQueryInput {

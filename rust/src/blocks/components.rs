@@ -742,7 +742,7 @@ pub fn BlocksSection() -> impl IntoView {
                     .get(QUERY_PARAM_CANONICAL)
                     .is_some_and(|canonical| canonical == "Non-Canonical");
                 Some(
-                    TableMetadataBuilder::new()
+                    InternalCommandQueryInput::new()
                         .total_records_value(
                             summary_sig.get().total_num_blocks,
                             Some("Total blocks".to_string()),

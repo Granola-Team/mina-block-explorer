@@ -1,9 +1,9 @@
 query InternalCommandsQuery(
-  $sort_by: FeetransferSortByInput!
+  $sort_by: InternalCommandSortByInput!
   $limit: Int = 10
-  $query: FeetransferQueryInput!
+  $query: InternalCommandQueryInput!
 ) {
-  feetransfers(sortBy: $sort_by, limit: $limit, query: $query) {
+  internalCommands(sortBy: $sort_by, limit: $limit, query: $query) {
     blockHeight
     blockStateHash {
       stateHash
