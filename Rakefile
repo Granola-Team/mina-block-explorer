@@ -415,18 +415,6 @@ task tier2_retry: tier2_prerequisites do
   end
 end
 
-Rake::Task["tier2"].enhance do
-  Rake::Task["shutdown_mina_indexers"].invoke
-end
-
-Rake::Task["tier2_retry"].enhance do
-  Rake::Task["shutdown_mina_indexers"].invoke
-end
-
-Rake::Task["dev"].enhance do
-  Rake::Task["shutdown_mina_indexers"].invoke
-end
-
 desc "Print all tasks and their dependencies as a tree"
 task :print_tree do
   def print_task_tree(task, prefix = "", is_last = true, visited = Set.new)
