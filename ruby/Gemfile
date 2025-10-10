@@ -8,7 +8,7 @@ group :test do
 end
 group :development do
   gem "solargraph", "~> 0.50.0"
-  gem 'sinatra', "~> 4.1.1"
+  gem 'sinatra', "~> 4.2.0"
   gem 'launchy', "~> 3.1.1"
   gem 'rackup', "~> 2.2.1"
   gem 'puma', "~> 6.6.0"
